@@ -1,0 +1,94 @@
+# Wymagaj tej wersji - dopier w niej jest nowe makro FindPkgConfig
+CMAKE_MINIMUM_REQUIRED (VERSION 2.4.7 FATAL_ERROR)
+
+if(COMMAND cmake_policy)
+    cmake_policy(SET CMP0003 NEW)
+endif(COMMAND cmake_policy)
+
+#ADD_DEFINITIONS (-O3)
+ADD_DEFINITIONS (-g)
+#ADD_DEFINITIONS (-Wall)
+#ADD_DEFINITIONS (-fsyntax-only)
+
+SET (EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR})
+SET (LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR})
+#SET (CMAKE_VERBOSE_MAKEFILE true)
+
+# Boost, można zakomentowa, you can skip this
+SET(Boost_ADDITIONAL_VERSIONS "1.39" "1.39.0")
+find_package (Boost 1.39.0)
+include_directories(${Boost_INCLUDE_DIRS})
+
+include (FindPkgConfig)
+pkg_check_modules (TILIAE "tiliae")
+INCLUDE_DIRECTORIES (${TILIAE_INCLUDE_DIRS})
+link_directories(${TILIAE_LIBRARY_DIRS})
+
+# Find GL
+include (FindOpenGL)
+INCLUDE_DIRECTORIES (${OPENGL_INCLUDE_DIR})
+
+# sdl
+include (FindSDL)
+INCLUDE_DIRECTORIES (${SDL_INCLUDE_DIR})
+
+# sdl_image
+include (FindSDL_image)
+INCLUDE_DIRECTORIES (${SDL_SDLIMAGE_INCLUDE_DIR})
+
+# Sources
+AUX_SOURCE_DIRECTORY (../view SOURCES)
+AUX_SOURCE_DIRECTORY (../model SOURCES)
+AUX_SOURCE_DIRECTORY (../util SOURCES)
+AUX_SOURCE_DIRECTORY (../events SOURCES)
+AUX_SOURCE_DIRECTORY (../events/dispatcher SOURCES)
+AUX_SOURCE_DIRECTORY (../sdl SOURCES)
+AUX_SOURCE_DIRECTORY (../openGl SOURCES)
+AUX_SOURCE_DIRECTORY (../controller SOURCES)
+AUX_SOURCE_DIRECTORY (../controller/sequence SOURCES)
+AUX_SOURCE_DIRECTORY (../controller/mapping SOURCES)
+
+AUX_SOURCE_DIRECTORY (../fluids/common SOURCES)
+AUX_SOURCE_DIRECTORY (../fluids/common/GL SOURCES)
+AUX_SOURCE_DIRECTORY (../fluids/fluids SOURCES)
+AUX_SOURCE_DIRECTORY (../fluids/sandBox SOURCES)
+
+# Local includes (inside project).
+INCLUDE_DIRECTORIES (../view)
+INCLUDE_DIRECTORIES (../model)
+INCLUDE_DIRECTORIES (../fluids)
+INCLUDE_DIRECTORIES (../util)
+INCLUDE_DIRECTORIES (../events)
+INCLUDE_DIRECTORIES (../controller)
+INCLUDE_DIRECTORIES (../sdl)
+INCLUDE_DIRECTORIES (../openGl)
+
+# Biblioteka z silnikiem bajka.
+add_library (bajka SHARED ${SOURCES})
+
+# Executable test.
+IF (0)
+    AUX_SOURCE_DIRECTORY (../test TEST_SOURCES)
+    
+    #if (true)
+    add_executable (test ${TEST_SOURCES})
+    TARGET_LINK_LIBRARIES (test ${OPENGL_LIBRARIES})
+    TARGET_LINK_LIBRARIES (test ${JPEG_LIBRARIES})
+    TARGET_LINK_LIBRARIES (test ${SDL_LIBRARY})
+    TARGET_LINK_LIBRARIES (test ${SDLIMAGE_LIBRARY})
+    TARGET_LINK_LIBRARIES (test ${TILIAE_LIBRARIES})
+    TARGET_LINK_LIBRARIES (test bajka)
+ENDIF ()
+
+# Executable demo.
+AUX_SOURCE_DIRECTORY (../demo DEMO_SOURCES)
+#LIST(APPEND DEMO_SOURCES ${SOURCES})
+
+add_executable (demo ${DEMO_SOURCES})
+TARGET_LINK_LIBRARIES (demo ${OPENGL_LIBRARIES})
+TARGET_LINK_LIBRARIES (demo ${JPEG_LIBRARIES})
+TARGET_LINK_LIBRARIES (demo ${SDL_LIBRARY})
+TARGET_LINK_LIBRARIES (demo ${SDLIMAGE_LIBRARY})
+TARGET_LINK_LIBRARIES (demo ${TILIAE_LIBRARIES})
+TARGET_LINK_LIBRARIES (demo bajka)
+

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
+        "file:///home/iwasz/program/projects/tiliae/sandBox/sandBox/tiliae-container-1.0.dtd">
+
+<beans>
+
+
+
+    <!--Definicja obrazka. Jest tu M, V i C, gotowe do użycia. Z tej-->
+    <!--definicji należy dziedziczyć (parent) i ustawiać model.path i-->
+    <!--na przykłąd model.translatePont.-->
+    <bean id="image" class="TmpController" init-method="init">
+        
+        <!--Model-->
+        <property name="model2" ref="imageModel">
+            <bean id="imageModel" class="Model::Image" scope="bean">
+                <property name="path" value="../gfx/main02.png" />
+                <property name="translatePoint">
+                    <bean class="Point">
+                        <property name="x"><value type="double">-512.0</value></property>
+                        <property name="y"><value type="double">-512.0</value></property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+
+        <!--View-->
+        <property name="widget">
+            <bean class="View::Image">
+                <property name="model" ref="imageModel" />
+            </bean>
+        </property>
+    </bean>
+
+
+
+    <!--Uwaga! Ustawiam property "widget.model", ale to jest inny-->
+    <!--obiekt niż "model". Kiedy się zaimplementuje scope bean, to-->
+    <!--będzie tylko jeden obiekt i ustawienie takie jak poniżej-->
+    <!--będzie OK. Teraz path będzie zmieniony tylko w kopii, którą-->
+    <!--posiada widget, a w kopii którą posiada kontroler jest stara-->
+    <!--ścieżka. TODO.-->
+    <bean id="background" parent="image">
+        <!-- Nie działa :( TODO to ma działać!-->
+<!--        <property name="model.path" value="../gfx/snowflake2.png"/>-->
+<!--        <property name="model2.path" value="../gfx/snowflake2.png"/>-->
+    </bean>
+
+
+
+    <bean id="box1" parent="image">
+        <property name="model2.path" value="../gfx/box/1.png"/>    
+    </bean>
+
+
+
+    <bean id="box2" parent="image">
+        <property name="model2.path" value="../gfx/box/2.png"/>    
+    </bean>
+
+
+
+    <bean id="box3" parent="image">
+        <property name="model2.path" value="../gfx/box/3.png"/>    
+    </bean>
+
+
+
+    <bean id="box4" parent="image">
+        <property name="model2.path" value="../gfx/box/4.png"/>    
+    </bean>
+
+
+
+    <bean id="cursor" parent="image">
+        <property name="model2.path" value="../gfx/pointer64.png"/>    
+    </bean>
+
+
+
+    <bean id="snowFlake" class="SnowflakeController" parent="image">
+        <property name="model2.path" value="../gfx/snowflake2.png"/>    
+    </bean>
+    
+    
+    
+
+    <!-- Nie podoba mi się, że to musi być singleton. -->
+    <bean id="screenModel" class="Primitive" singleton="true">
+        <property name="fillColor">
+            <bean class="Color">
+                <property name="r"><value type="double">0.35</value></property>
+                <property name="g"><value type="double">0.75</value></property>
+                <property name="b"><value type="double">1</value></property>
+            </bean>
+        </property>
+    </bean>
+
+
+
+    <bean id="screen" class="SimpleController" singleton="true">
+        <property name="widget">
+            <bean class="Screen">
+                <property name="model" ref="screenModel" />
+            </bean>
+        </property>
+        <property name="model" ref="screenModel" />
+    </bean>
+
+</beans>

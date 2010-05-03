@@ -1,0 +1,91 @@
+/****************************************************************************
+ *                                                                          *
+ *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
+ *  ~~~~~~~~                                                                *
+ *  License : see COPYING file for details.                                 *
+ *  ~~~~~~~~~                                                               *
+ ****************************************************************************/
+
+#ifndef IMAGE_H_
+#define IMAGE_H_
+
+#include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_opengl.h>
+#include <String.h>
+
+#include "AbstractWidget.h"
+
+namespace View {
+
+/**
+ * Simple image ie. from file. Caution! When model object
+ * is set for the first time, Image object will detect this
+ * and load desired image and show it on the screen. This is
+ * true whenever you use Image::setModel method. But when
+ * model object will be chainged internally (i.e. some properties
+ * will be changed), this won't be shown. You rather would use
+ * Image:setModel after every change in the model.
+ *
+ * TODO Co się stanie, gdy będę chciał zmienić obrazek już
+ * po utworzeniu!?
+ */
+class Image : public AbstractWidget {
+public:
+        __c (void)
+//        _b ("AbstractWidget")
+
+        Image () : texName (0), texWidth (0), texHeight (0)/*, needRefresh (true)*/ {}
+        virtual ~Image () {}
+
+        virtual void init ();
+
+//        virtual void setModel (Ptr <Model::IModel> model) { needRefresh = true; AbstractWidget::setModel (model); /*refreshView ();*/ }
+
+//        virtual void preDraw ();
+
+        /// Do the drawing.
+        virtual void doDraw ();
+
+        _m (getModel)
+        _m (setModel)
+
+private:
+
+        GLuint texName;
+        int texWidth, texHeight;
+        Ptr <Model::Image> model;
+//        bool needRefresh; /// Tells if new model was set and view need to be refreshed.
+
+        _ne (View::Image, View_Image)
+};
+
+/**
+ *
+ */
+struct Exception {
+
+};
+
+/**
+ *
+ */
+struct ImageException : public Exception {
+
+};
+
+/*##########################################################################*/
+
+
+
+///**
+// *
+// */
+//class Layer : public Primitive {
+//public:
+//
+//};
+
+}
+
+#	endif /* IMAGE_H_ */
