@@ -26,12 +26,12 @@ namespace View {
  */
 class AbstractWidget : public IWidget {
 public:
-//        __c (void)
+        __d
 
         virtual ~AbstractWidget () {}
 
-        /*_m (setModel) */virtual void setModel (Ptr <Model::IModel> model);
-        /*_m (getModel) */virtual Ptr <Model::IModel> getModel () const { return model; }
+        _m (setModel) virtual void setModel (Ptr <Model::IModel> model);
+        _m (getModel) virtual Ptr <Model::IModel> getModel () const { return model; }
 
         // Domyślnie nic się tu nie dzieje.
         void init () {}
@@ -51,14 +51,20 @@ public:
 protected:
 
         Ptr <Model::Item> model;
-//        _e (AbstractWidget)
+        _e (AbstractWidget)
 };
 
+/**
+ * Nic nie rysuje (potrzebne w kontrolerze
+ * do transformacji na wszystkich dzieciach).
+ */
 class EmptyWidget : public AbstractWidget {
 public:
+        __c (void)
+        _b ("AbstractWidget")
         virtual ~EmptyWidget () {}
-        void doDraw () {};
-        __e (EmptyWidget)
+        void doDraw () {}
+        _e (EmptyWidget)
 };
 
 }

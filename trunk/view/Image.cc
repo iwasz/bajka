@@ -16,10 +16,8 @@
 
 namespace View {
 
-//void Image::setModel (Ptr <Model::IModel> m)
 void Image::init ()
 {
-//        AbstractWidget::setModel (m);
         model = dynamic_pointer_cast <Model::Image> (getModel ());
         assert (model);
 
@@ -122,18 +120,6 @@ void Image::init ()
 
         SDL_FreeSurface (texSurface);
 }
-
-/****************************************************************************/
-
-//void Image::preDraw ()
-//{
-//        if (needRefresh) {
-//                refreshView();
-//                needRefresh = false;
-//        }
-//
-//        AbstractWidget::preDraw ();
-//}
 
 /****************************************************************************/
 

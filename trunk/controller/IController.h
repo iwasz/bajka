@@ -14,6 +14,8 @@
 #include <Pointer.h>
 #include <List.h>
 #include <Object.h>
+#include <Reflection.h>
+#include <collection/List.h>
 
 #include "IWidget.h"
 #include "mapping/IMapping.h"
@@ -25,30 +27,32 @@
 namespace Controller {
 
 class IController;
-typedef Core::List <Ptr <IController> > ControllerList;
+typedef Reflection::List <Ptr <IController> > ControllerList;
+_f (ControllerList)
 
 struct IController : public Events::IObserver <Events::KeyboardEvent>,
                         public Events::IObserver <Events::MouseButtonEvent>,
                         public Events::IObserver <Events::MouseMotionEvent>,
                         public Events::IObserver <Events::TimerEvent>,
                         public Core::Object {
+        __d
 
         virtual ~IController () {}
 
         /// After properties are set. TODO to jest propozycja.
-        virtual void init () = 0;
+        _m (init) virtual void init () = 0;
         /// Do the drawiang.
         virtual void draw () = 0;
 
 /*------Properties----------------------------------------------------------*/
 
-        virtual Ptr<View::IWidget> getWidget () const = 0;
-        virtual void setWidget (Ptr<View::IWidget> widget) = 0;
+        _m (getWidget) virtual Ptr<View::IWidget> getWidget () const = 0;
+        _m (setWidget) virtual void setWidget (Ptr<View::IWidget> widget) = 0;
 
-        virtual Ptr <IMapping> getMapping () const = 0;
+        _m (getMapping) virtual Ptr <IMapping> getMapping () const = 0;
 
-        virtual Ptr<Model::IModel> getModel () const = 0;
-        virtual void setModel (Ptr<Model::IModel> model) = 0;
+        _m (getModel) virtual Ptr<Model::IModel> getModel () const = 0;
+        _m (setModel) virtual void setModel (Ptr<Model::IModel> model) = 0;
 
 /*------Containing----------------------------------------------------------*/
 
@@ -60,10 +64,11 @@ struct IController : public Events::IObserver <Events::KeyboardEvent>,
 
         virtual ControllerList &getChildren () = 0;
         virtual const ControllerList &getChildren () const = 0;
-        virtual void setChildren (const ControllerList &list) = 0;
+        _m (setChildren) virtual void setChildren (const ControllerList &list) = 0;
         virtual void addChildren (const ControllerList &list) = 0;
         virtual void addChild (Ptr <IController> widget) = 0;
 
+        _e (IController)
 };
 
 }
