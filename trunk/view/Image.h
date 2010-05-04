@@ -19,16 +19,9 @@
 namespace View {
 
 /**
- * Simple image ie. from file. Caution! When model object
- * is set for the first time, Image object will detect this
- * and load desired image and show it on the screen. This is
- * true whenever you use Image::setModel method. But when
- * model object will be chainged internally (i.e. some properties
- * will be changed), this won't be shown. You rather would use
- * Image:setModel after every change in the model.
- *
- * TODO Co się stanie, gdy będę chciał zmienić obrazek już
- * po utworzeniu!?
+ * Simple image ie. from file. Caution! After seting a new model
+ * with setModel method, you should call init to reload image, and
+ * update model.width/height.
  */
 class Image : public AbstractWidget {
 public:

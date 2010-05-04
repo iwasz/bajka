@@ -48,6 +48,7 @@ public:
         Point operator- (const Point &p) const { Point tmp = *this; tmp -= p; return tmp; }
 
         bool operator== (const Model::Point &p) const { return x == p.x && y == p.y; }
+        bool operator! () const { return x == 0.0 && y == 0.0; }
 
 //        bool operator<= (const Model::Point &p) const { return x <= p.x || y <= p.y; }
 //        bool operator< (const Model::Point &p) const { return x < p.x || y < p.y; }

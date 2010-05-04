@@ -43,9 +43,17 @@ void Image::init ()
                 throw ImageException ();
         }
 
-        model->setCenter (Model::Point (image->w / 2.0, image->h / 2.0));
-        model->setWidth (image->w);
-        model->setHeight (image->h);
+//        if (!model->getCenter ()) {
+//                model->setCenter (Model::Point (image->w / 2.0, image->h / 2.0));
+//        }
+
+//        if (!model->getWidth ()) {
+                model->setWidth (image->w);
+//        }
+//
+//        if (!model->getHeight ()) {
+                model->setHeight (image->h);
+//        }
 
         // Podniesione do następnej potęgi
         unsigned int width = Util::Math::nextSqr (image->w);

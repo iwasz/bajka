@@ -79,6 +79,24 @@
 
     <bean id="snowFlake" class="SnowflakeController" parent="image">
         <property name="model.path" value="../gfx/snowflake2.png"/>    
+
+        <!--To jest moje marzenie, zeby takj się dało :-->
+        <!--<property name="model.center" value="0, 0" />-->
+        
+        <property name="model.translatePoint">
+            <bean class="Point">
+                <property name="x"><value type="double">0</value></property>
+                <property name="y"><value type="double">0</value></property>
+            </bean>
+        </property>
+        
+        <property name="model.center">
+            <bean class="Point">
+                <property name="x"><value type="double">-2</value></property>
+                <property name="y"><value type="double">-2</value></property>            
+            </bean>
+        </property>
+        
     </bean>
     
 

@@ -97,10 +97,10 @@ Ptr <Events::MouseMotionDispatcher> mouseMotionDispatcher;
 Ptr <Events::MouseMotionDispatcher> mouseMotionScreenMargin;
 Ptr <Sdl::TimerDispatcher> timeDispatcher;
 
-Ptr <C::SimpleController> fluidCtr;
+//Ptr <C::SimpleController> fluidCtr;
 
 //Ptr <M::Primitive> screen;
-Ptr <M::PointSet> fluid;
+//Ptr <M::PointSet> fluid;
 Ptr <M::Item> image01;
 Ptr <M::Item> sniezynka;
 Ptr <M::Item> background;
@@ -207,30 +207,27 @@ void InitGL (int w, int h)
 
 //                table->init ();
 
-                sdlDispatcher = Ptr <Sdl::EventDispatcher> (new Sdl::EventDispatcher ());
-                mouseButtonDispatcher = Ptr <Events::MouseButtonDispatcher> (new Events::MouseButtonDispatcher ());
-                mouseMotionDispatcher = Ptr <Events::MouseMotionDispatcher> (new Events::MouseMotionDispatcher ());
-                mouseMotionScreenMargin = Ptr <Events::MouseMotionDispatcher> (new Events::MouseMotionDispatcher ());
-                timeDispatcher = Ptr <Sdl::TimerDispatcher> (new Sdl::TimerDispatcher ());
 
-                fluidCtr = DemoFactory::createFluid ();
+//                fluidCtr = DemoFactory::createFluid ();
 
         //        screen = dynamic_pointer_cast <M::Primitive> (screenCtr->getModel ());
-                fluid = dynamic_pointer_cast <M::PointSet> (fluidCtr->getModel ());
+//                fluid = dynamic_pointer_cast <M::PointSet> (fluidCtr->getModel ());
                 image01 = dynamic_pointer_cast <M::Item> (image01Ctr->getModel ());
                 sniezynka = dynamic_pointer_cast <M::Item> (sniezynkaCtr->getModel ());
 //                background = dynamic_pointer_cast <M::Item> (backgroundCtr->getModel ());
 
         /*--------------------------------------------------------------------------*/
 
-                fluid->setColor (Model::Color::fromInt (65, 105, 225));
-                fluid->setPoints (psys.getPoints ());
+//                fluid->setColor (Model::Color::fromInt (65, 105, 225));
+//                fluid->setPoints (psys.getPoints ());
+//                fluid->translate (Model::Point (0.0, -200.0));
 
-                fluid->translate (Model::Point (0.0, -200.0));
 //                background->translate (Model::Point (-512.0, -512.0));
 
-                sniezynka->setTranslatePoint (Model::Point (-100, 120));
-                sniezynka->setCenter (Model::Point (0, 0));
+//                sniezynka->setTranslatePoint (Model::Point (-100, 120));
+//                sniezynka->setCenter (Model::Point (0, 0));
+//                sniezynka->setTranslatePoint (Model::Point (0, 0));
+//                sniezynka->setCenter (Model::Point (0, 0));
 
                 Ptr <Controller::StepSequence <double> > seq (new Controller::StepSequence <double> ());
                 seq->setInitial (0.0);
@@ -252,7 +249,7 @@ void InitGL (int w, int h)
                 mov->setSequence (seqMove);
                 sniezynkaCtr->movMap = mov;
 
-                screenCtr->addChild (fluidCtr);
+//                screenCtr->addChild (fluidCtr);
                 screenCtr->addChild (sniezynkaCtr);
                 screenCtr->addChild (backgroundCtr);
                 screenCtr->addChild (table);
@@ -261,6 +258,13 @@ void InitGL (int w, int h)
 //        screen->setFillColor (Model::Color::fromInt (89, 191, 255));
 
 /*##########################################################################*/
+
+                sdlDispatcher = Ptr <Sdl::EventDispatcher> (new Sdl::EventDispatcher ());
+                mouseButtonDispatcher = Ptr <Events::MouseButtonDispatcher> (new Events::MouseButtonDispatcher ());
+                mouseMotionDispatcher = Ptr <Events::MouseMotionDispatcher> (new Events::MouseMotionDispatcher ());
+                mouseMotionScreenMargin = Ptr <Events::MouseMotionDispatcher> (new Events::MouseMotionDispatcher ());
+                timeDispatcher = Ptr <Sdl::TimerDispatcher> (new Sdl::TimerDispatcher ());
+
 
         //        sdlDispatcher->Events::AbstractObservable <Events::MouseButtonEvent>::addObserver (mouseButtonDispatcher);
         ////        sdlDispatcher->addMouseMotionObservable (mouseMotionDispatcher);
@@ -327,7 +331,7 @@ void DrawGLScene ()
 //        psys.Run ();
 
         // Do wywalenia kiedyś.
-        fluid->setPoints (psys.getPoints ());
+//        fluid->setPoints (psys.getPoints ());
         image01->setTranslatePoint (Model::Point (mouseX - 320, 240 - mouseY));
 
         screenCtr->draw ();
