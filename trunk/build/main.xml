@@ -9,10 +9,10 @@
     <!--Definicja obrazka. Jest tu M, V i C, gotowe do użycia. Z tej-->
     <!--definicji należy dziedziczyć (parent) i ustawiać model.path i-->
     <!--na przykłąd model.translatePont.-->
-    <bean id="image" class="TmpController" init-method="init">
+    <bean id="image" class="SimpleController" init-method="init">
         
         <!--Model-->
-        <property name="model2" ref="imageModel">
+        <property name="model" ref="imageModel">
             <bean id="imageModel" class="Model::Image" scope="bean">
                 <property name="path" value="../gfx/main02.png" />
                 <property name="translatePoint">
@@ -43,47 +43,82 @@
     <bean id="background" parent="image">
         <!-- Nie działa :( TODO to ma działać!-->
 <!--        <property name="model.path" value="../gfx/snowflake2.png"/>-->
-<!--        <property name="model2.path" value="../gfx/snowflake2.png"/>-->
     </bean>
 
 
 
     <bean id="box1" parent="image">
-        <property name="model2.path" value="../gfx/box/1.png"/>    
+        <property name="model.path" value="../gfx/box/1.png"/>    
     </bean>
 
 
 
     <bean id="box2" parent="image">
-        <property name="model2.path" value="../gfx/box/2.png"/>    
+        <property name="model.path" value="../gfx/box/2.png"/>    
     </bean>
 
 
 
     <bean id="box3" parent="image">
-        <property name="model2.path" value="../gfx/box/3.png"/>    
+        <property name="model.path" value="../gfx/box/3.png"/>    
     </bean>
 
 
 
     <bean id="box4" parent="image">
-        <property name="model2.path" value="../gfx/box/4.png"/>    
+        <property name="model.path" value="../gfx/box/4.png"/>    
     </bean>
 
 
 
     <bean id="cursor" parent="image">
-        <property name="model2.path" value="../gfx/pointer64.png"/>    
+        <property name="model.path" value="../gfx/pointer64.png"/>    
     </bean>
 
 
 
     <bean id="snowFlake" class="SnowflakeController" parent="image">
-        <property name="model2.path" value="../gfx/snowflake2.png"/>    
+        <property name="model.path" value="../gfx/snowflake2.png"/>    
     </bean>
     
+
+
+<!--    <bean id="emptyWidget" class="EmptyWidget" singleton="true" />-->
+
     
     
+    <bean id="table" class="Table" init-method="init">
+        <constructor-arg><value type="int">2</value></constructor-arg>
+        <constructor-arg><value type="int">2</value></constructor-arg>
+        
+        <property name="model">
+            <bean id="model" class="Item" scope="bean">
+                <property name="translatePoint">
+                    <bean class="Point">
+                        <property name="x"><value type="double">-320.0</value></property>
+                        <property name="y"><value type="double">-70.0</value></property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+        
+        <property name="widget">
+            <bean id="emptyWidget" class="EmptyWidget">        
+                <property name="model" ref="model" />            
+            </bean>
+        </property>
+        
+        <property name="children">
+            <list class="ControllerList">
+                <ref bean="box1"/>
+                <ref bean="box2"/>
+                <ref bean="box3"/>
+                <ref bean="box4"/>
+            </list>
+        </property>
+    </bean>
+
+
 
     <!-- Nie podoba mi się, że to musi być singleton. -->
     <bean id="screenModel" class="Primitive" singleton="true">

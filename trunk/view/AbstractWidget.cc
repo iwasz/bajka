@@ -23,7 +23,7 @@ void AbstractWidget::doTransform ()
 {
         if (!model) {
                 // TODO nie wiem, czy to ma być sytuacja wyjątkowa.
-                throw 1;
+                throw 667;
         }
 
         glTranslated (model->getTranslatePoint ().getX () + model->getCenter ().getX (),

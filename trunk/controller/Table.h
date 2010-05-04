@@ -32,7 +32,7 @@ public:
 
         void init ();
 
-        _m (setChildren) virtual void setChildren (const ControllerList &list);
+        virtual void setChildren (const ControllerList &list);
         virtual void addChildren (const ControllerList &list);
         virtual void addChild (Ptr <IController> widget);
 

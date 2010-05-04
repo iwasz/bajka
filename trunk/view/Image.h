@@ -33,29 +33,21 @@ namespace View {
 class Image : public AbstractWidget {
 public:
         __c (void)
-//        _b ("AbstractWidget")
+        _b ("AbstractWidget")
 
-        Image () : texName (0), texWidth (0), texHeight (0)/*, needRefresh (true)*/ {}
+        Image () : texName (0), texWidth (0), texHeight (0) {}
         virtual ~Image () {}
 
         virtual void init ();
 
-//        virtual void setModel (Ptr <Model::IModel> model) { needRefresh = true; AbstractWidget::setModel (model); /*refreshView ();*/ }
-
-//        virtual void preDraw ();
-
         /// Do the drawing.
         virtual void doDraw ();
-
-        _m (getModel)
-        _m (setModel)
 
 private:
 
         GLuint texName;
         int texWidth, texHeight;
         Ptr <Model::Image> model;
-//        bool needRefresh; /// Tells if new model was set and view need to be refreshed.
 
         _ne (View::Image, View_Image)
 };
