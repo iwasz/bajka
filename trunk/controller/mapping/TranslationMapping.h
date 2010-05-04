@@ -27,6 +27,7 @@ public:
                 }
         }
 
+        __e (TranslationMapping)
 };
 
 } // nam

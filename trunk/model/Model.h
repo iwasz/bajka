@@ -72,6 +72,18 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
+        /* TODO
+         * - absolute transformations:
+         * setPosition
+         * setAngle
+         * setSize
+         *
+         * - relative
+         * setMove
+         * setRotate
+         * setResize
+         */
+
         virtual void translate (const Model::Point &p) { translatePoint += p; }
         virtual void rotate (double r) { rotateAngle += r; }
         virtual void scale (double w, double h) { scaleW += w; scaleH += h; }

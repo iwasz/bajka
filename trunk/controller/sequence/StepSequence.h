@@ -11,6 +11,7 @@
 #ifndef STEPSEQUENCE_H_
 #define STEPSEQUENCE_H_
 
+#include <Reflection.h>
 #include "ISequence.h"
 
 namespace Controller {
@@ -21,6 +22,7 @@ namespace Controller {
 template <typename T>
 class StepSequence : public ISequence <T> {
 public:
+        __c (void)
 
         StepSequence () : current (0.0), initial (0.0), step (0.0), decrement (false), stepNumber (0), currentStep (0) {}
 
@@ -32,19 +34,19 @@ public:
 /*--------------------------------------------------------------------------*/
 
         const T &getCurrent () const { return current; }
-        void setCurrent (const T &current) { this->current = current; }
+        _m (setCurrent) void setCurrent (const T &current) { this->current = current; }
 
         bool getDecrement () const { return decrement; }
-        void setDecrement (bool decrement) { this->decrement = decrement; }
+        _m (setDecrement) void setDecrement (bool decrement) { this->decrement = decrement; }
 
         const T &getInitial () const { return initial; }
-        void setInitial (const T &initial) { this->initial = initial; current = initial; }
+        _m (setInitial) void setInitial (const T &initial) { this->initial = initial; current = initial; }
 
         const T &getStep () const { return step; }
-        void setStep (const T &step) { this->step = step; }
+        _m (setStep) void setStep (const T &step) { this->step = step; }
 
         int getStepNumber () const { return stepNumber; }
-        void setStepNumber (int stepNumber) { this->stepNumber = stepNumber; }
+        _m (setStepNumber) void setStepNumber (int stepNumber) { this->stepNumber = stepNumber; }
 
 private:
 
@@ -55,6 +57,7 @@ private:
         int stepNumber;
         mutable int currentStep;
 
+        _e (StepSequence)
 };
 
 /****************************************************************************/
