@@ -12,12 +12,15 @@
 #define ABSOLUTEMOVEMENTMAPPING_H_
 
 #include <iostream>
+#include <Reflection.h>
+
 #include "AbstractMapping.h"
 
 namespace Controller {
 
 class TranslationMapping : public AbstractMapping <Model::Point, Model::Item> {
 public:
+        __c (void)
 
         virtual ~TranslationMapping () {}
 
@@ -27,7 +30,9 @@ public:
                 }
         }
 
-        __e (TranslationMapping)
+        _m (setModel)
+        _m (setSequence)
+        _e (TranslationMapping)
 };
 
 } // nam

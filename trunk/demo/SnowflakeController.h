@@ -39,6 +39,7 @@ public:
                 movMap->run ();
         }
 
+        _m (setMovMap) void setMovMap (Ptr <Controller::IMapping> m) { movMap = m; }
         Ptr <Controller::IMapping> movMap;
 
         _e (SnowflakeController)

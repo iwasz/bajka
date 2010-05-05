@@ -167,7 +167,7 @@ public:
 private:
 
         Core::String path;
-        _ne (Model::Image, Model_Image);
+        _e (Model::Image);
 };
 
 /**

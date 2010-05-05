@@ -13,6 +13,7 @@
 
 #include <Reflection.h>
 #include "ISequence.h"
+#include "../model/Point.h"
 
 namespace Controller {
 
@@ -57,7 +58,10 @@ private:
         int stepNumber;
         mutable int currentStep;
 
-        _e (StepSequence)
+        _tb
+        _t (StepSequence<double>)
+        _t (StepSequence<Model::Point>)
+        _te
 };
 
 /****************************************************************************/

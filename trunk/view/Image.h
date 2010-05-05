@@ -42,7 +42,7 @@ private:
         int texWidth, texHeight;
         Ptr <Model::Image> model;
 
-        _ne (View::Image, View_Image)
+        _e (View::Image)
 };
 
 /**
