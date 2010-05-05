@@ -4,12 +4,10 @@
 
 <beans>
 
-
-
     <!--Definicja obrazka. Jest tu M, V i C, gotowe do użycia. Z tej-->
     <!--definicji należy dziedziczyć (parent) i ustawiać model.path i-->
     <!--na przykłąd model.translatePont.-->
-    <bean id="image" class="SimpleController" init-method="init">
+    <bean id="image" class="SimpleController" init-method="init" singleton="true">
         
         <!--Model-->
         <property name="model" ref="imageModel">
@@ -40,10 +38,7 @@
     <!--będzie OK. Teraz path będzie zmieniony tylko w kopii, którą-->
     <!--posiada widget, a w kopii którą posiada kontroler jest stara-->
     <!--ścieżka. TODO.-->
-    <bean id="background" parent="image">
-        <!-- Nie działa :( TODO to ma działać!-->
-<!--        <property name="model.path" value="../gfx/snowflake2.png"/>-->
-    </bean>
+    <bean id="background" parent="image" />
 
 
 
@@ -97,15 +92,51 @@
             </bean>
         </property>
         
+        <property name="mapping">
+            <bean class="RotationMapping">
+                <property name="sequence">
+                    <!--Kiepsko to wygląda z tymi &lt/gt...    -->
+                    <bean id="seq1" class="StepSequence&lt;double&gt;">
+                        <property name="initial"><value type="double">0</value></property>
+                        <property name="step"><value type="double">2</value></property>
+                        <property name="stepNumber"><value type="int">180</value></property>
+                    </bean>
+                </property>
+                                
+                <property name="model" ref="imageModel"/>                
+            </bean>
+        </property>
+
+        <property name="movMap">
+            <bean class="TranslationMapping">
+                <property name="model" ref="imageModel"/>                
+
+                <property name="sequence">
+                    <bean id="seq2" class="StepSequence&lt;Model::Point&gt;">
+                        <property name="initial">
+                            <bean class="Point">
+                                <property name="x"><value type="double">-50</value></property>
+                                <property name="y"><value type="double">250</value></property>            
+                            </bean>
+                        </property>
+                        
+                        <property name="step">
+                            <bean class="Point">
+                                <property name="x"><value type="double">0.25</value></property>
+                                <property name="y"><value type="double">-1.75</value></property>            
+                            </bean>
+                        </property>
+                        
+                        <property name="stepNumber"><value type="int">400</value></property>
+                    </bean>
+                </property>                
+            </bean>
+        </property>
     </bean>
     
 
 
-<!--    <bean id="emptyWidget" class="EmptyWidget" singleton="true" />-->
-
-    
-    
-    <bean id="table" class="Table" init-method="init">
+    <bean id="table" class="Table" init-method="init" singleton="true">
         <constructor-arg><value type="int">2</value></constructor-arg>
         <constructor-arg><value type="int">2</value></constructor-arg>
         
@@ -157,7 +188,17 @@
                 <property name="model" ref="screenModel" />
             </bean>
         </property>
+        
         <property name="model" ref="screenModel" />
+        
+        <property name="children">
+            <list class="ControllerList">
+                <ref bean="snowFlake"/>
+                <ref bean="background"/>
+                <ref bean="table"/>
+                <ref bean="cursor"/>
+            </list>        
+        </property>
     </bean>
 
 </beans>

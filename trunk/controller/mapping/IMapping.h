@@ -11,9 +11,11 @@
 #ifndef IMAPPING_H_
 #define IMAPPING_H_
 
+#include <Object.h>
+
 namespace Controller {
 
-class IMapping {
+class IMapping : public Core::Object {
 public:
         virtual ~IMapping () {}
         virtual void run () = 0;

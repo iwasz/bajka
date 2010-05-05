@@ -88,7 +88,6 @@ Ptr <Container2::BeanFactoryContainer> container;
 
 Ptr <C::SimpleController> image01Ctr;
 Ptr <SnowflakeController> sniezynkaCtr;
-Ptr <C::SimpleController> backgroundCtr;
 Ptr <C::SimpleController> screenCtr;
 
 Ptr <Sdl::EventDispatcher> sdlDispatcher;
@@ -97,21 +96,8 @@ Ptr <Events::MouseMotionDispatcher> mouseMotionDispatcher;
 Ptr <Events::MouseMotionDispatcher> mouseMotionScreenMargin;
 Ptr <Sdl::TimerDispatcher> timeDispatcher;
 
-//Ptr <C::SimpleController> fluidCtr;
-
-//Ptr <M::Primitive> screen;
-//Ptr <M::PointSet> fluid;
 Ptr <M::Item> image01;
 Ptr <M::Item> sniezynka;
-Ptr <M::Item> background;
-
-
-Ptr <C::SimpleController> asia1;
-Ptr <C::SimpleController> asia2;
-Ptr <C::SimpleController> asia3;
-Ptr <C::SimpleController> asia4;
-
-Ptr <C::Table> table;
 
 void InitGL (int w, int h)
 {
@@ -127,14 +113,6 @@ void InitGL (int w, int h)
         glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 /*##########################################################################*/
-
-        // Widget structure (can be set in IoC container).
-//        image01->setPath ("../gfx/pointer64.png");
-//        sniezynka->setPath ("../gfx/snowflake2.png");
-//        sniezynka->setPath ("../gfx/fx_leaf4.png");
-//        sniezynka->setScale (0.25, 0.25);
-
-//        background->setPath ("../gfx/main02.png");
 
         obj_from.x = 0;
         obj_from.y = 0;
@@ -162,100 +140,12 @@ void InitGL (int w, int h)
         try {
 #endif
                 container = Container2::XmlContainerFactory::createContainer ("main.xml");
-
-//                image01Ctr = Util::WidgetFactory::createImage ("../gfx/pointer64.png");
                 image01Ctr = vcast <Ptr <C::SimpleController> > (container->getBean ("cursor"));
-
-
-//                sniezynkaCtr = DemoFactory::createSniezynka ("../gfx/snowflake2.png");
                 sniezynkaCtr = vcast <Ptr <SnowflakeController> > (container->getBean ("snowFlake"));
-
-        //        backgroundCtr = Util::WidgetFactory::createImage ("../gfx/main02.png");
-        //        screenCtr = Util::WidgetFactory::createScreen ();
-
-
                 screenCtr = vcast <Ptr <C::SimpleController> > (container->getBean ("screen"));
-                backgroundCtr = vcast <Ptr <C::SimpleController> > (container->getBean ("background"));
 
-//                asia1 = Util::WidgetFactory::createImage ("../gfx/box/1.png");
-//                asia2 = Util::WidgetFactory::createImage ("../gfx/box/2.png");
-//                asia3 = Util::WidgetFactory::createImage ("../gfx/box/3.png");
-//                asia4 = Util::WidgetFactory::createImage ("../gfx/box/4.png");
-
-//                asia1 = vcast <Ptr <C::SimpleController> > (container->getBean ("box1"));
-//                asia2 = vcast <Ptr <C::SimpleController> > (container->getBean ("box2"));
-//                asia3 = vcast <Ptr <C::SimpleController> > (container->getBean ("box3"));
-//                asia4 = vcast <Ptr <C::SimpleController> > (container->getBean ("box4"));
-
-
-//                table = Util::WidgetFactory::createTable (2, 2);
-                table = vcast <Ptr <C::Table> > (container->getBean ("table"));
-//                Ptr <M::Item> tableM = dynamic_pointer_cast <M::Item> (table->getModel ());
-//                tableM->translate (Model::Point (-320, -70));
-
-//                C::ControllerList list;
-//                list.add (asia1);
-//                list.add (asia2);
-//                list.add (asia3);
-//                list.add (asia4);
-//                table->setChildren (list);
-
-//                table->addChild (asia1);
-//                table->addChild (asia2);
-//                table->addChild (asia3);
-//                table->addChild (asia4);
-
-//                table->init ();
-
-
-//                fluidCtr = DemoFactory::createFluid ();
-
-        //        screen = dynamic_pointer_cast <M::Primitive> (screenCtr->getModel ());
-//                fluid = dynamic_pointer_cast <M::PointSet> (fluidCtr->getModel ());
                 image01 = dynamic_pointer_cast <M::Item> (image01Ctr->getModel ());
                 sniezynka = dynamic_pointer_cast <M::Item> (sniezynkaCtr->getModel ());
-//                background = dynamic_pointer_cast <M::Item> (backgroundCtr->getModel ());
-
-        /*--------------------------------------------------------------------------*/
-
-//                fluid->setColor (Model::Color::fromInt (65, 105, 225));
-//                fluid->setPoints (psys.getPoints ());
-//                fluid->translate (Model::Point (0.0, -200.0));
-
-//                background->translate (Model::Point (-512.0, -512.0));
-
-//                sniezynka->setTranslatePoint (Model::Point (-100, 120));
-//                sniezynka->setCenter (Model::Point (0, 0));
-//                sniezynka->setTranslatePoint (Model::Point (0, 0));
-//                sniezynka->setCenter (Model::Point (0, 0));
-
-                Ptr <Controller::StepSequence <double> > seq (new Controller::StepSequence <double> ());
-                seq->setInitial (0.0);
-                seq->setStep (2);
-                seq->setStepNumber (180);
-
-                Ptr <Controller::RotationMapping> rot (new Controller::RotationMapping ());
-                rot->setModel (sniezynka);
-                rot->setSequence (seq);
-                sniezynkaCtr->setMapping (rot);
-
-                Ptr <Controller::StepSequence <Model::Point> > seqMove (new Controller::StepSequence <Model::Point> ());
-                seqMove->setInitial (Model::Point (-50, 250));
-                seqMove->setStep (Model::Point (0.25, -1.75));
-                seqMove->setStepNumber (400);
-
-                Ptr <Controller::TranslationMapping> mov (new Controller::TranslationMapping ());
-                mov->setModel (sniezynka);
-                mov->setSequence (seqMove);
-                sniezynkaCtr->movMap = mov;
-
-//                screenCtr->addChild (fluidCtr);
-                screenCtr->addChild (sniezynkaCtr);
-                screenCtr->addChild (backgroundCtr);
-                screenCtr->addChild (table);
-                screenCtr->addChild (image01Ctr);
-
-//        screen->setFillColor (Model::Color::fromInt (89, 191, 255));
 
 /*##########################################################################*/
 
@@ -265,9 +155,6 @@ void InitGL (int w, int h)
                 mouseMotionScreenMargin = Ptr <Events::MouseMotionDispatcher> (new Events::MouseMotionDispatcher ());
                 timeDispatcher = Ptr <Sdl::TimerDispatcher> (new Sdl::TimerDispatcher ());
 
-
-        //        sdlDispatcher->Events::AbstractObservable <Events::MouseButtonEvent>::addObserver (mouseButtonDispatcher);
-        ////        sdlDispatcher->addMouseMotionObservable (mouseMotionDispatcher);
                 sdlDispatcher->Events::AbstractObservable <Events::MouseMotionEvent>::addObserver (mouseMotionScreenMargin);
 
                 // To powinno iść ze screen (screen->getViewPort, albo coś).
