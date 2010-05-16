@@ -1,28 +1,20 @@
-/****************************************************************************
- *                                                                          *
- *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
- *  ~~~~~~~~                                                                *
- *  Date : Nov 22, 2009                                                     *
- *  ~~~~~~                                                                  *
- *  License : see COPYING file for details.                                 *
- *  ~~~~~~~~~                                                               *
- ****************************************************************************/
-
+#include <boost/test/unit_test.hpp>
 #include <iostream>
 #include <cassert>
 
-#include "UtilTest.h"
 #include "Util.h"
 
-void UtilTest::testNextPowerOfTwo ()
+BOOST_AUTO_TEST_SUITE (UtilTest);
+ 
+BOOST_AUTO_TEST_CASE (testBasic)
 {
-        assert (Util::Math::nextSqr (1) == 1);
-        assert (Util::Math::nextSqr (2) == 2);
-        assert (Util::Math::nextSqr (3) == 4);
-        assert (Util::Math::nextSqr (5) == 8);
-        assert (Util::Math::nextSqr (9) == 16);
-        assert (Util::Math::nextSqr (1000) == 1024);
-        assert (Util::Math::nextSqr (1024) == 1024);
-
-        std::cerr << "OK UtilTest::testNextPowerOfTwo" << std::endl;
+        BOOST_CHECK (Util::Math::nextSqr (1) == 1);
+        BOOST_CHECK (Util::Math::nextSqr (2) == 2);
+        BOOST_CHECK (Util::Math::nextSqr (3) == 4);
+        BOOST_CHECK (Util::Math::nextSqr (5) == 8);
+        BOOST_CHECK (Util::Math::nextSqr (9) == 16);
+        BOOST_CHECK (Util::Math::nextSqr (1000) == 1024);
+        BOOST_CHECK (Util::Math::nextSqr (1024) == 1024);
 }
+ 
+BOOST_AUTO_TEST_SUITE_END ();

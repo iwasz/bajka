@@ -36,7 +36,7 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        Core::String toString (unsigned int = 0) const { return Core::String ("Point(") + x + ", " + y + ")"; }
+        Core::String toString (unsigned int = 0) const { return Core::String ("Point (") + x + ", " + y + ")"; }
 
 /*--------------------------------------------------------------------------*/
 

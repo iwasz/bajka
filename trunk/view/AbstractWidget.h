@@ -2,8 +2,6 @@
  *                                                                          *
  *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 22, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
@@ -12,7 +10,9 @@
 #define ABSTRACTWIDGET_H_
 
 #include <Reflection.h>
+
 #include "IWidget.h"
+#include "IModel.h"
 
 namespace View {
 
@@ -29,6 +29,8 @@ public:
         __d
 
         virtual ~AbstractWidget () {}
+
+        _m (setModel2) virtual void setModel2 (Ptr <Model2::IModel> model) { model2 = model; }
 
         _m (setModel) virtual void setModel (Ptr <Model::IModel> model);
         _m (getModel) virtual Ptr <Model::IModel> getModel () const { return model; }
@@ -51,6 +53,7 @@ public:
 protected:
 
         Ptr <Model::Item> model;
+        Ptr <Model2::IModel> model2;
         _e (AbstractWidget)
 };
 

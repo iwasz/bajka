@@ -1,6 +1,6 @@
 /****************************************************************************
  *                                                                          *
- *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
+ *  Author : lukasz.iwaszkiewicz@tiliae.eu                                  *
  *  ~~~~~~~~                                                                *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
@@ -38,16 +38,58 @@
 #include "SnowflakeController.h"
 #include "DemoFactory.h"
 
+#include <boost/geometry/geometry.hpp>
+#include <boost/geometry/geometries/cartesian2d.hpp>
+// Optional includes to handle c-arrays as points, std::vectors as linestrings
+#include <boost/geometry/geometries/adapted/c_array_cartesian.hpp>
+#include <boost/geometry/geometries/adapted/std_as_linestring.hpp>
+
 namespace M = Model;
 namespace V = View;
 namespace C = Controller;
 namespace R = Reflection;
 
-/*--------------------------------------------------------------------------*/
+/*##########################################################################*/
 
+using namespace boost;
+using namespace boost::geometry;
 
+namespace Model {
 
-/*--------------------------------------------------------------------------*/
+}
+
+namespace View {
+
+class PolyLine : public AbstractWidget {
+public:
+
+        virtual ~PolyLine () {}
+
+//        virtual void init ();
+
+        /// Do the drawing.
+        virtual void doDraw ();
+
+        void setLine (Ptr <linestring_2d> l) { model = l; }
+
+private:
+
+        Ptr <linestring_2d> model;
+};
+
+void PolyLine::doDraw ()
+{
+        glColor3f (1.0, 0.0, 0.0);
+        glBegin(GL_LINE_STRIP);
+                for (linestring_2d::const_iterator i = model->begin (); i != model->end (); i++) {
+                        glVertex2f (i->x (), i->y ());
+                }
+        glEnd();
+}
+
+} // nam View
+
+/*##########################################################################*/
 
 bool bTiming = false;
 bool bRec = false;
@@ -143,6 +185,17 @@ void InitGL (int w, int h)
                 image01Ctr = vcast <Ptr <C::SimpleController> > (container->getBean ("cursor"));
                 sniezynkaCtr = vcast <Ptr <SnowflakeController> > (container->getBean ("snowFlake"));
                 screenCtr = vcast <Ptr <C::SimpleController> > (container->getBean ("screen"));
+
+/*--------------------------------------------------------------------------*/
+
+
+//                Ptr <C::SimpleController> line (new C::SimpleController);
+//                Ptr <V::PolyLine> polyLine (new V::PolyLine ());
+//                polyLine->setLine (ls);
+//                line->setWidget (polyLine);
+//
+//                screenCtr->addChild (line);
+
 
                 image01 = dynamic_pointer_cast <M::Item> (image01Ctr->getModel ());
                 sniezynka = dynamic_pointer_cast <M::Item> (sniezynkaCtr->getModel ());

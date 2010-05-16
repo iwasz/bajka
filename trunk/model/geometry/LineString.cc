@@ -1,20 +1,23 @@
 /****************************************************************************
  *                                                                          *
- *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
+ *  Author : lukasz.iwaszkiewicz@tiliae.eu                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 18, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "EventsTest.h"
-#include "UtilTest.h"
+#include <boost/geometry/util/write_dsv.hpp>
+#include "LineString.h"
 
-int main (int argc, char **argv)
+namespace Model2 {
+using namespace boost::geometry;
+
+/****************************************************************************/
+
+Core::String LineString::toString (unsigned int) const
 {
-        EventsTest::testSimpleObserver ();
-        UtilTest::testNextPowerOfTwo ();
-
-        return 0;
+        std::ostringstream o;
+        o << "LineString " << boost::geometry::dsv (*this);
+        return o.str ();
+}
 }

@@ -1,20 +1,17 @@
 /****************************************************************************
  *                                                                          *
- *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
+ *  Author : lukasz.iwaszkiewicz@tiliae.eu                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 22, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef UTILTEST_H_
-#define UTILTEST_H_
+#ifndef GEOM_PRIMITIVE_H_
+#define GEOM_PRIMITIVE_H_
 
-struct UtilTest {
+#include "Point.h"
+#include "Box.h"
+#include "LineString.h"
+#include "Utils.h"
 
-        static void testNextPowerOfTwo ();
-
-};
-
-#	endif /* UTILTEST_H_ */
+#	endif /* PRIMITIVE_H_ */

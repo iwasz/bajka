@@ -39,6 +39,7 @@ INCLUDE_DIRECTORIES (${SDL_SDLIMAGE_INCLUDE_DIR})
 # Sources
 AUX_SOURCE_DIRECTORY (../view SOURCES)
 AUX_SOURCE_DIRECTORY (../model SOURCES)
+AUX_SOURCE_DIRECTORY (../model/geometry SOURCES)
 AUX_SOURCE_DIRECTORY (../util SOURCES)
 AUX_SOURCE_DIRECTORY (../events SOURCES)
 AUX_SOURCE_DIRECTORY (../events/dispatcher SOURCES)
@@ -67,7 +68,7 @@ INCLUDE_DIRECTORIES (../openGl)
 add_library (bajka SHARED ${SOURCES})
 
 # Executable test.
-IF (0)
+IF (1)
     AUX_SOURCE_DIRECTORY (../test TEST_SOURCES)
     
     #if (true)
@@ -78,6 +79,7 @@ IF (0)
     TARGET_LINK_LIBRARIES (test ${SDLIMAGE_LIBRARY})
     TARGET_LINK_LIBRARIES (test ${TILIAE_LIBRARIES})
     TARGET_LINK_LIBRARIES (test bajka)
+    TARGET_LINK_LIBRARIES (test boost_unit_test_framework)
 ENDIF ()
 
 # Executable demo.

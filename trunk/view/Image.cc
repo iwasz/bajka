@@ -147,4 +147,32 @@ void Image::doDraw ()
         glDisable (GL_TEXTURE_2D);
 }
 
+/*##########################################################################*/
+
+void Rectangle::setModel2 (Ptr <Model2::IModel> model)
+{
+        AbstractWidget::setModel2 (model);
+
+        if (!model) {
+                return;
+        }
+
+        box = dynamic_cast <Model2::Box2 *> (model.get ());
+        ASSERT (box, "dynamic_cast <Model2::Box2 *> (model.get ()) failed.");
+}
+
+void Rectangle::doDraw ()
+{
+        // TODO Do wywalenia.
+        glColor3f (1.0, 0.0, 0.0);
+
+        ASSERT (box, "No model @ Rectangle::doDraw. Model is required in Rectangle widget.");
+        glBegin (GL_LINE_LOOP);
+                glVertex2f (box->getX1 (), box->getY1 ());
+                glVertex2f (box->getX2 (), box->getY1 ());
+                glVertex2f (box->getX2 (), box->getY2 ());
+                glVertex2f (box->getX1 (), box->getY2 ());
+        glEnd ();
+}
+
 } // nam

@@ -2,8 +2,6 @@
  *                                                                          *
  *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 22, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
@@ -21,9 +19,16 @@ void AbstractWidget::setModel (Ptr <Model::IModel> m)
 
 void AbstractWidget::doTransform ()
 {
+        if (model2) {
+                glMultMatrixd (model2->getMatrix ().data ().begin ());
+        }
+
         if (!model) {
-                // TODO nie wiem, czy to ma być sytuacja wyjątkowa.
-                throw 667;
+                /*
+                 * Nie wiem, czy to ma być sytuacja wyjątkowa. IMHO nie. Bo
+                 * jeśli nie ma modelu, to rysujemy z aktualną macierzą transformacji.
+                 */
+                return;
         }
 
         glTranslated (model->getTranslatePoint ().getX () + model->getCenter ().getX (),

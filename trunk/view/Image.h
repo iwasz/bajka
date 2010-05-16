@@ -16,6 +16,9 @@
 
 #include "AbstractWidget.h"
 
+// TODO Przenieść do pliku z View::Rectangle
+#include "AbstractModel.h"
+
 namespace View {
 
 /**
@@ -60,6 +63,22 @@ struct ImageException : public Exception {
 };
 
 /*##########################################################################*/
+
+class Rectangle : public AbstractWidget {
+public:
+        __c (void)
+        _b ("AbstractWidget")
+
+        virtual ~Rectangle () {}
+
+        virtual void setModel2 (Ptr <Model2::IModel> model);
+        virtual void doDraw ();
+
+private:
+
+        Model2::Box2 *box;
+        _e (Rectangle)
+};
 
 
 
