@@ -1,30 +1,26 @@
 /****************************************************************************
  *                                                                          *
- *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
+ *  Author : lukasz.iwaszkiewicz@tiliae.eu                                  *
  *  ~~~~~~~~                                                                *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef GLUTIL_H_
-#define GLUTIL_H_
+#include <sstream>
+#include <boost/geometry/util/write_dsv.hpp>
 
-#include "Point.h"
-#include "painting/Color.h"
+#include "Box.h"
 
-namespace OpenGL {
+namespace Model2 {
+using namespace boost::geometry;
 
-struct GLUtil {
+/****************************************************************************/
 
-        static void init ();
-        static void drawPoint (const Model::Point &point, const Model::Color &color);
-
-private:
-
-        static Model::PointList pointCircle;
-
-};
-
+Core::String Box::toString (unsigned int) const
+{
+        std::ostringstream o;
+        o << "Box " << boost::geometry::dsv (*this);
+        return o.str ();
 }
 
-#	endif /* GLUTIL_H_ */
+} // names

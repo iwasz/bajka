@@ -25,7 +25,7 @@ void MouseMotionDispatcher::update (const IObservable <MouseMotionEvent> &observ
                 return;
         }
 
-        std::cerr << "We're goin' into area. To area. " << event.getPosition () << std::endl;
+        std::cerr << "Mouse over : " << event.getPosition () << std::endl;
 
         notifyObservers (event);
 }

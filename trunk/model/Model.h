@@ -2,8 +2,6 @@
  *                                                                          *
  *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 17, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
@@ -17,10 +15,10 @@
 #include <Reflection.h>
 #include <Object.h>
 
-#include "Color.h"
-#include "Line.h"
+#include "painting/Color.h"
+//#include "Line.h"
 #include "Point.h"
-#include "Rectangle.h"
+//#include "Rectangle.h"
 //#include ""
 //#include ""
 
@@ -121,7 +119,6 @@ private:
 
         _e (Item)
 };
-
 
 class Primitive : public Item {
 public:

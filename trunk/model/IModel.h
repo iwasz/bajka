@@ -1,20 +1,32 @@
 /****************************************************************************
  *                                                                          *
- *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
+ *  Author : lukasz.iwaszkiewicz@tiliae.eu                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 18, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef EVENTSTEST_H_
-#define EVENTSTEST_H_
+#ifndef IMODEL_H_
+#define IMODEL_H_
 
-struct EventsTest {
+#include <Object.h>
+#include "geometry/Utils.h"
 
-        static void testSimpleObserver ();
+namespace Model2 {
+
+/// Marker
+struct IModel : virtual public Core::Object {
+        virtual ~IModel () {}
+
+        /**
+         * Returns affine transformation matrix for this object.
+         */
+        virtual
+        AffineMatrix const &
+        getMatrix () const = 0;
 
 };
 
-#	endif /* EVENTSTEST_H_ */
+}
+
+#	endif /* IMODEL_H_ */

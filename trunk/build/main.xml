@@ -198,9 +198,34 @@
         </property>
     </bean>
 
+<!-- ===================================================================================== -->
 
+    <bean id="rect" class="SimpleController" init-method="init">
+      
+        <!--View-->
+        <property name="widget">
+            <bean class="Rectangle">
+                <property name="model2">
+                    <bean class="Box2">
+                        <property name="x1"><value type="double">-50</value></property>
+                        <property name="y1"><value type="double">50</value></property>
+                        <property name="x2"><value type="double">50</value></property>
+                        <property name="y2"><value type="double">-50</value></property>
 
-    <!-- Nie podoba mi się, że to musi być singleton. -->
+                        <property name="move">
+                            <bean class="Model2::Point">
+                                <property name="x"><value type="double">50</value></property>
+                                <property name="y"><value type="double">50</value></property>
+                            </bean>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+<!-- ===================================================================================== -->
+
     <bean id="screenModel" class="Primitive" singleton="true">
         <property name="fillColor">
             <bean class="Color">
@@ -228,6 +253,7 @@
                 <ref bean="background"/>
                 <ref bean="table"/>
                 <ref bean="tableAsia"/>
+                <ref bean="rect"/>
                 <ref bean="cursor"/>
             </list>        
         </property>
