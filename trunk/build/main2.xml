@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
-        "file:///home/iwasz/program/projects/tiliae/sandBox/sandBox/tiliae-container-1.0.dtd">
+        "file:///home/iwasz/program/projects/tiliae/base/container/tiliae-container-1.0.dtd">
 
 <beans>
 
@@ -81,4 +81,24 @@
         </property>
     </bean>
 
+
+
+    <!--Konfiguracja-->
+    <bean id="cfg" class="BajkaConfig" init-method="init" singleton="true">
+        <property name="fullScreen"><value type="bool">false</value></property>
+        <property name="resX"><value type="int">640</value></property>
+        <property name="resY"><value type="int">480</value></property>
+        <property name="windowCaption" value="Bajka DEMO"/>
+    </bean>
+
+
+
+    <!--Obiekt app, czyli aplikacja :)-->
+    <bean id="app" class="BajkaApp" singleton="true">
+        <property name="config" ref="cfg" />
+        <property name="rootController" ref="screen"/>
+    </bean>
+    
+    
+    
 </beans>

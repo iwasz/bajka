@@ -14,6 +14,6 @@
 #include "InclusionService.h"
 #include "IntersectionService.h"
 #include "Math.h"
-#include "WidgetFactory.h"
+#include "BajkaApp.h"
 
 #	endif /* UTIL_H_ */
