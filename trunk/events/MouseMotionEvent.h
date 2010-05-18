@@ -13,7 +13,7 @@
 
 #include "Common.h"
 #include "IEvent.h"
-#include "Point.h"
+#include "geometry/Point.h"
 
 namespace Events {
 
@@ -21,22 +21,22 @@ class MouseMotionEvent : public IEvent {
 public:
 
         MouseMotionEvent () {}
-        MouseMotionEvent (const Model::Point &position, const Model::Point &movement, MouseButton b) : position (position), movement (movement), button (button) {}
+        MouseMotionEvent (const Geometry::Point &position, const Geometry::Point &movement, MouseButton b) : position (position), movement (movement), button (button) {}
         virtual ~MouseMotionEvent () {}
 
         MouseButton getButton () const { return button; }
         void setButton (MouseButton button) { this->button = button; }
 
-        const Model::Point &getMovement () const { return movement; }
-        void setMovement (const Model::Point &movement) { this->movement = movement; }
+        const Geometry::Point &getMovement () const { return movement; }
+        void setMovement (const Geometry::Point &movement) { this->movement = movement; }
 
-        const Model::Point &getPosition () const {  return position; }
-        void setPosition (const Model::Point &position) { this->position = position; }
+        const Geometry::Point &getPosition () const {  return position; }
+        void setPosition (const Geometry::Point &position) { this->position = position; }
 
 private:
 
-        Model::Point position;
-        Model::Point movement;
+        Geometry::Point position;
+        Geometry::Point movement;
         MouseButton button;
 
 };

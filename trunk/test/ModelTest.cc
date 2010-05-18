@@ -9,7 +9,7 @@
 using namespace boost;
 using namespace boost::geometry;
 
-using namespace Model2;
+using namespace Geometry;
 
 BOOST_AUTO_TEST_SUITE (ModelTest);
 

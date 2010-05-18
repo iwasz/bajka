@@ -7,9 +7,11 @@
  ****************************************************************************/
 
 #include "AbstractModel.h"
+#include "geometry/Point.h"
 
-namespace Model2 {
+namespace Model {
 using namespace boost::numeric::ublas;
+using namespace Geometry;
 
 /****************************************************************************/
 

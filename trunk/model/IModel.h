@@ -12,7 +12,7 @@
 #include <Object.h>
 #include "geometry/Utils.h"
 
-namespace Model2 {
+namespace Model {
 
 /// Marker
 struct IModel : virtual public Core::Object {
@@ -22,7 +22,7 @@ struct IModel : virtual public Core::Object {
          * Returns affine transformation matrix for this object.
          */
         virtual
-        AffineMatrix const &
+        Geometry::AffineMatrix const &
         getMatrix () const = 0;
 
 };

@@ -12,7 +12,7 @@
 
 #include "Point.h"
 
-namespace Model2 {
+namespace Geometry {
 using namespace boost::geometry;
 
 /****************************************************************************/

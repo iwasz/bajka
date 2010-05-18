@@ -14,14 +14,14 @@
 #include <Reflection.h>
 
 #include "AbstractMapping.h"
-#include "Model.h"
+#include "AbstractModel.h"
 
 namespace Controller {
 
 /**
  * Absolute rotation.
  */
-class RotationMapping : public AbstractMapping <double, Model::Item> {
+class RotationMapping : public AbstractMapping <double, Model::AbstractModel> {
 public:
         __c (void)
 
@@ -29,7 +29,7 @@ public:
 
         virtual void run () {
                 if (getSequence ()->hasNext ()) {
-                        getModel ()->setRotateAngle (getSequence ()->next ());
+                        getModel ()->setRotate (getSequence ()->next ());
                 }
         }
 

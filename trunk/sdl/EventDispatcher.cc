@@ -48,8 +48,8 @@ const MouseMotionEvent &EventDispatcher::updateMouseMotionEvent (SDL_Event *even
         // TODO Implement!
         MouseButton btn = static_cast <MouseButton> (event->motion.state & SDL_BUTTON (1));
         mouseMotionEvent.setButton (btn);
-        mouseMotionEvent.setPosition (Model::Point (event->motion.x, event->motion.y));
-        mouseMotionEvent.setMovement (Model::Point (event->motion.xrel, event->motion.yrel));
+        mouseMotionEvent.setPosition (Geometry::Point (event->motion.x, event->motion.y));
+        mouseMotionEvent.setMovement (Geometry::Point (event->motion.xrel, event->motion.yrel));
         return mouseMotionEvent;
 }
 
@@ -78,7 +78,7 @@ const MouseButtonEvent &EventDispatcher::updateMouseButtonEvent (SDL_Event *even
 
         mouseButtonEvent.setType (t);
         mouseButtonEvent.setButton (btn);
-        mouseButtonEvent.setPosition (Model::Point (event->button.x, event->button.y));
+        mouseButtonEvent.setPosition (Geometry::Point (event->button.x, event->button.y));
         return mouseButtonEvent;
 }
 

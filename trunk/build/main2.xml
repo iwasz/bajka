@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
+        "file:///home/iwasz/program/projects/tiliae/sandBox/sandBox/tiliae-container-1.0.dtd">
+
+<beans>
+
+    <!--Definicja obrazka. Jest tu M, V i C, gotowe do użycia. Z tej-->
+    <!--definicji należy dziedziczyć (parent) i ustawiać model.path i-->
+    <!--na przykłąd model.translatePont.-->
+    <bean id="image" class="SimpleController" init-method="init">
+        
+        <!--Model-->
+        <property name="model" ref="imageModel">
+            <bean id="imageModel" class="Model::Image" scope="bean">
+                <property name="path" value="../gfx/main02.png" />
+                <property name="move">
+                    <bean class="Point">
+                        <property name="x"><value type="double">-512.0</value></property>
+                        <property name="y"><value type="double">-512.0</value></property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+
+        <!--View-->
+        <property name="widget">
+            <bean class="View::Image">
+                <property name="model" ref="imageModel" />
+            </bean>
+        </property>
+    </bean>
+
+
+
+    <!--Uwaga! Ustawiam property "widget.model", ale to jest inny-->
+    <!--obiekt niż "model". Kiedy się zaimplementuje scope bean, to-->
+    <!--będzie tylko jeden obiekt i ustawienie takie jak poniżej-->
+    <!--będzie OK. Teraz path będzie zmieniony tylko w kopii, którą-->
+    <!--posiada widget, a w kopii którą posiada kontroler jest stara-->
+    <!--ścieżka. TODO.-->
+    <bean id="background" parent="image" singleton="true"/>
+
+<!-- ===================================================================================== -->
+
+    <bean id="rect" class="SimpleController" init-method="init">
+      
+        <!--View-->
+        <property name="widget">
+            <bean class="Rectangle">
+                <property name="model">
+                    <bean class="Model::Box">
+                        <property name="x1"><value type="double">-50</value></property>
+                        <property name="y1"><value type="double">50</value></property>
+                        <property name="x2"><value type="double">50</value></property>
+                        <property name="y2"><value type="double">-50</value></property>
+
+                        <property name="move">
+                            <bean class="Point">
+                                <property name="x"><value type="double">50</value></property>
+                                <property name="y"><value type="double">50</value></property>
+                            </bean>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+<!-- ===================================================================================== -->
+
+    <bean id="screen" class="SimpleController" singleton="true">
+        <property name="widget">
+            <bean class="Screen"/>
+        </property>
+              
+        <property name="children">
+            <list class="ControllerList">
+                <ref bean="background"/>
+                <ref bean="rect"/>
+            </list>        
+        </property>
+    </bean>
+
+</beans>

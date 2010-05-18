@@ -21,11 +21,11 @@ namespace C = Controller;
 Ptr <Controller::SimpleController> DemoFactory::createFluid ()
 {
         Ptr <C::SimpleController> simple (new C::SimpleController);
-        Ptr <M::PointSet> m (new M::PointSet);
-        Ptr <V::PointSet> v (new V::PointSet);
-        v->init (m);
-        simple->setModel (m);
-        simple->setWidget (v);
+//        Ptr <M::PointSet> m (new M::PointSet);
+//        Ptr <V::PointSet> v (new V::PointSet);
+//        v->init (m);
+//        simple->setModel (m);
+//        simple->setWidget (v);
         return simple;
 }
 

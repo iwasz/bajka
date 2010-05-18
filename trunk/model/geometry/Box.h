@@ -14,10 +14,14 @@
 
 #include "Point.h"
 
-namespace Model2 {
+namespace Geometry {
 
 /**
  * Box Type.
+ *
+ *          +----+ (x2, y2)
+ *          |    |
+ * (x1, y1) +----+
  */
 class Box : public Core::IToStringEnabled, virtual public Core::Object {
 public:
@@ -49,15 +53,15 @@ public:
 
 private:
 
-        double x1, y1;
-        double x2, y2;
+        double x1, y1; // Lower Left
+        double x2, y2; // Upper right
 
         _e (Box)
 };
 
 }
 
-typedef Model2::Box __BAJKA_BOX__;
+typedef Geometry::Box __BAJKA_BOX__;
 
 /*
  * BOOST definitions.

@@ -13,7 +13,7 @@
 
 #include "IEvent.h"
 #include "Common.h"
-#include "Point.h"
+#include "geometry/Point.h"
 
 namespace Events {
 
@@ -23,7 +23,7 @@ public:
         enum Type { DOWN, UP };
 
         MouseButtonEvent () {}
-        MouseButtonEvent (Type type, MouseButton button, const Model::Point &position) : type (type), button (button), position (position) {}
+        MouseButtonEvent (Type type, MouseButton button, const Geometry::Point &position) : type (type), button (button), position (position) {}
         virtual ~MouseButtonEvent () {}
 
         Type getType () const { return type; }
@@ -32,14 +32,14 @@ public:
         MouseButton getButton () const { return button; }
         void setButton (MouseButton button) { this->button = button; }
 
-        const Model::Point &getPosition () const {  return position; }
-        void setPosition (const Model::Point &position) { this->position = position; }
+        const Geometry::Point &getPosition () const {  return position; }
+        void setPosition (const Geometry::Point &position) { this->position = position; }
 
 private:
 
         Type type;
         MouseButton button;
-        Model::Point position;
+        Geometry::Point position;
 
 };
 

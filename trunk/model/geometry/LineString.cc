@@ -9,7 +9,7 @@
 #include <boost/geometry/util/write_dsv.hpp>
 #include "LineString.h"
 
-namespace Model2 {
+namespace Geometry {
 using namespace boost::geometry;
 
 /****************************************************************************/

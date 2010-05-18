@@ -15,21 +15,21 @@
 
 namespace View {
 
-void PointSet::init (Ptr <Model::IModel> m)
-{
-        AbstractWidget::setModel (m);
-        model = dynamic_pointer_cast <Model::PointSet> (m);
-        assert (model);
-}
-
-/****************************************************************************/
-
-void PointSet::doDraw ()
-{
-        foreach (Model::Point p, *model->getPoints ()) {
-                OpenGL::GLUtil::drawPoint (p, model->getColor ());
-        }
-}
+//void PointSet::init (Ptr <Model::IModel> m)
+//{
+//        AbstractWidget::setModel (m);
+//        model = dynamic_pointer_cast <Model::PointSet> (m);
+//        assert (model);
+//}
+//
+///****************************************************************************/
+//
+//void PointSet::doDraw ()
+//{
+//        foreach (Geometry::Point p, *model->getPoints ()) {
+//                OpenGL::GLUtil::drawPoint (p, model->getColor ());
+//        }
+//}
 
 
 }

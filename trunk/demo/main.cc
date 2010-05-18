@@ -33,16 +33,9 @@
 #include "mapping/Mapping.h"
 
 #include "Sdl.h"
-#include "Fluids.h"
 #include "View.h"
 #include "SnowflakeController.h"
 #include "DemoFactory.h"
-
-#include <boost/geometry/geometry.hpp>
-#include <boost/geometry/geometries/cartesian2d.hpp>
-// Optional includes to handle c-arrays as points, std::vectors as linestrings
-#include <boost/geometry/geometries/adapted/c_array_cartesian.hpp>
-#include <boost/geometry/geometries/adapted/std_as_linestring.hpp>
 
 namespace M = Model;
 namespace V = View;
@@ -51,57 +44,12 @@ namespace R = Reflection;
 
 /*##########################################################################*/
 
-using namespace boost;
-using namespace boost::geometry;
-
-namespace Model {
-
-}
-
-namespace View {
-
-class PolyLine : public AbstractWidget {
-public:
-
-        virtual ~PolyLine () {}
-
-//        virtual void init ();
-
-        /// Do the drawing.
-        virtual void doDraw ();
-
-        void setLine (Ptr <linestring_2d> l) { model = l; }
-
-private:
-
-        Ptr <linestring_2d> model;
-};
-
-void PolyLine::doDraw ()
-{
-        glColor3f (1.0, 0.0, 0.0);
-        glBegin(GL_LINE_STRIP);
-                for (linestring_2d::const_iterator i = model->begin (); i != model->end (); i++) {
-                        glVertex2f (i->x (), i->y ());
-                }
-        glEnd();
-}
-
-} // nam View
-
-/*##########################################################################*/
-
 bool bTiming = false;
 bool bRec = false;
 int mFrame = 0;
 
-// Globals
-FluidSystem psys;
-
 float window_width = 1024;
 float window_height = 768;
-
-Vector3DF obj_from, obj_angs;
 
 float cam_fov;
 
@@ -138,8 +86,8 @@ Ptr <Events::MouseMotionDispatcher> mouseMotionDispatcher;
 Ptr <Events::MouseMotionDispatcher> mouseMotionScreenMargin;
 Ptr <Sdl::TimerDispatcher> timeDispatcher;
 
-Ptr <M::Item> image01;
-Ptr <M::Item> sniezynka;
+Ptr <M::AbstractModel> image01;
+Ptr <M::AbstractModel> sniezynka;
 
 void InitGL (int w, int h)
 {
@@ -154,68 +102,39 @@ void InitGL (int w, int h)
         glEnable (GL_BLEND);
         glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-/*##########################################################################*/
-
-        obj_from.x = 0;
-        obj_from.y = 0;
-        obj_from.z = 20; // emitter
-
-        obj_angs.x = 118.7;
-        obj_angs.y = 200;
-        obj_angs.z = 1.0;
-
-        psys.Initialize (BFLUID, psys_nmax);
-
-        // Kod usunięty z FluidSystem
-        DemoHelper::createDemo (&psys, 1, psys_nmax);
-
-        psys.SetVec (EMIT_ANG, Vector3DF (obj_angs.x, obj_angs.y, obj_angs.z));
-        psys.SetVec (EMIT_POS, Vector3DF (obj_from.x, obj_from.y, obj_from.z));
-
-        psys.SetParam (PNT_DRAWMODE, int(bPntDraw ? 1 : 0));
-        psys.SetParam (CLR_MODE, iClrMode);
-
 /*--------------------------------------------------------------------------*/
 #define TRY_CATCH
 
 #if defined (TRY_CATCH)
         try {
 #endif
-                container = Container2::XmlContainerFactory::createContainer ("main.xml");
-                image01Ctr = vcast <Ptr <C::SimpleController> > (container->getBean ("cursor"));
-                sniezynkaCtr = vcast <Ptr <SnowflakeController> > (container->getBean ("snowFlake"));
+                container = Container2::XmlContainerFactory::createContainer ("main2.xml");
+//                image01Ctr = vcast <Ptr <C::SimpleController> > (container->getBean ("cursor"));
+//                sniezynkaCtr = vcast <Ptr <SnowflakeController> > (container->getBean ("snowFlake"));
                 screenCtr = vcast <Ptr <C::SimpleController> > (container->getBean ("screen"));
 
 /*--------------------------------------------------------------------------*/
 
-
-//                Ptr <C::SimpleController> line (new C::SimpleController);
-//                Ptr <V::PolyLine> polyLine (new V::PolyLine ());
-//                polyLine->setLine (ls);
-//                line->setWidget (polyLine);
-//
-//                screenCtr->addChild (line);
-
-
-                image01 = dynamic_pointer_cast <M::Item> (image01Ctr->getModel ());
-                sniezynka = dynamic_pointer_cast <M::Item> (sniezynkaCtr->getModel ());
+//                image01 = dynamic_pointer_cast <M::AbstractModel> (image01Ctr->getModel ());
+//                sniezynka = dynamic_pointer_cast <M::AbstractModel> (sniezynkaCtr->getModel ());
 
 /*##########################################################################*/
 
                 sdlDispatcher = Ptr <Sdl::EventDispatcher> (new Sdl::EventDispatcher ());
-                mouseButtonDispatcher = Ptr <Events::MouseButtonDispatcher> (new Events::MouseButtonDispatcher ());
-                mouseMotionDispatcher = Ptr <Events::MouseMotionDispatcher> (new Events::MouseMotionDispatcher ());
+//                mouseButtonDispatcher = Ptr <Events::MouseButtonDispatcher> (new Events::MouseButtonDispatcher ());
+//                mouseMotionDispatcher = Ptr <Events::MouseMotionDispatcher> (new Events::MouseMotionDispatcher ());
                 mouseMotionScreenMargin = Ptr <Events::MouseMotionDispatcher> (new Events::MouseMotionDispatcher ());
                 timeDispatcher = Ptr <Sdl::TimerDispatcher> (new Sdl::TimerDispatcher ());
 
                 sdlDispatcher->Events::AbstractObservable <Events::MouseMotionEvent>::addObserver (mouseMotionScreenMargin);
 
                 // To powinno iść ze screen (screen->getViewPort, albo coś).
-                mouseMotionScreenMargin->setArea (Model::Rectangle (1, 1, 638, 478));
+                // TODO to będzie zorganizowane inaczej, będą marginesy.
+                mouseMotionScreenMargin->setArea (Geometry::Box (1, 1, 638, 478));
                 mouseMotionScreenMargin->setMode (Events::MouseMotionDispatcher::OUT);
 
                 timeDispatcher->setTickInterval (15);
-                timeDispatcher->addObserver (sniezynkaCtr);
+//                timeDispatcher->addObserver (sniezynkaCtr);
 
 #if defined (TRY_CATCH)
         }
@@ -272,7 +191,7 @@ void DrawGLScene ()
 
         // Do wywalenia kiedyś.
 //        fluid->setPoints (psys.getPoints ());
-        image01->setTranslatePoint (Model::Point (mouseX - 320, 240 - mouseY));
+//        image01->setMove (Geometry::Point (mouseX - 320, 240 - mouseY));
 
         screenCtr->draw ();
 
@@ -327,7 +246,7 @@ int main (int argc, char **argv)
 //        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         done = 0;
 
-        OpenGL::GLUtil::init ();
+//        OpenGL::GLUtil::init ();
 
         while (!done) {
 

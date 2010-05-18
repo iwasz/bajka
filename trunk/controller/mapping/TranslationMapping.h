@@ -15,10 +15,11 @@
 #include <Reflection.h>
 
 #include "AbstractMapping.h"
+#include "AbstractModel.h"
 
 namespace Controller {
 
-class TranslationMapping : public AbstractMapping <Model::Point, Model::Item> {
+class TranslationMapping : public AbstractMapping <Geometry::Point, Model::AbstractModel> {
 public:
         __c (void)
 
@@ -26,7 +27,7 @@ public:
 
         virtual void run () {
                 if (getSequence ()->hasNext ()) {
-                        getModel ()->setTranslatePoint (getSequence ()->next ());
+                        getModel ()->setMove (getSequence ()->next ());
                 }
         }
 

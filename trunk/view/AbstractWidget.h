@@ -30,9 +30,7 @@ public:
 
         virtual ~AbstractWidget () {}
 
-        _m (setModel2) virtual void setModel2 (Ptr <Model2::IModel> model) { model2 = model; }
-
-        _m (setModel) virtual void setModel (Ptr <Model::IModel> model);
+        _m (setModel) virtual void setModel (Ptr <Model::IModel> model) { this->model = model; }
         _m (getModel) virtual Ptr <Model::IModel> getModel () const { return model; }
 
         // Domyślnie nic się tu nie dzieje.
@@ -52,8 +50,7 @@ public:
 
 protected:
 
-        Ptr <Model::Item> model;
-        Ptr <Model2::IModel> model2;
+        Ptr <Model::IModel> model;
         _e (AbstractWidget)
 };
 

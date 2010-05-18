@@ -73,7 +73,7 @@ public:
 class GeomX {
 public:
 
-        GeomX () : points (new Model::PointList) {}
+        GeomX () : points (new Geometry::PointList) {}
 
         // Basic geometry setup
 

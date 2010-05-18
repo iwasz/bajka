@@ -11,7 +11,7 @@
 
 #include "Box.h"
 
-namespace Model2 {
+namespace Geometry {
 using namespace boost::geometry;
 
 /****************************************************************************/
