@@ -11,18 +11,16 @@
 #ifndef INCLUSIONSERVICE_H_
 #define INCLUSIONSERVICE_H_
 
-namespace Model {
-
-struct Rectangle;
+namespace Geometry {
+struct Box;
 struct Point;
-
 }
 
 namespace Util {
 
 struct InclusionService {
 
-        static bool include (const Model::Rectangle &rect, const Model::Point &point);
+        static bool include (const Geometry::Box &rect, const Geometry::Point &point);
 
 };
 

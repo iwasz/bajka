@@ -24,15 +24,15 @@ public:
         __c (void)
 
         virtual ~Screen () {}
-        _m (setModel) virtual void setModel (Ptr <Model::IModel> model);
+//        _m (setModel) virtual void setModel (Ptr <Model::IModel> model);
 
         void preDraw ();
         void postDraw ();
         void doDraw ();
 
-private:
-
-        Ptr <Model::Primitive> model;
+//private:
+//
+//        Ptr <Model::Primitive> model;
 
         _e (Screen)
 };

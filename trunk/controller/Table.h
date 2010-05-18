@@ -24,7 +24,7 @@ public:
         __c (int, int)
         _b ("SimpleController")
 
-        typedef std::vector <Ptr <Model::Item> > RowType;
+        typedef std::vector <Ptr <Model::AbstractModel> > RowType;
         typedef std::vector <RowType> TableType;
 
         Table (int columnNo, int rowNo);

@@ -9,21 +9,21 @@
 #ifndef GLUTIL_H_
 #define GLUTIL_H_
 
-#include "Point.h"
+#include "geometry/Point.h"
 #include "painting/Color.h"
 
 namespace OpenGL {
 
-struct GLUtil {
+//struct GLUtil {
+//
+//        static void init ();
+//        static void drawPoint (const Geometry::Point &point, const Model::Color &color);
+//
+//private:
 
-        static void init ();
-        static void drawPoint (const Model::Point &point, const Model::Color &color);
-
-private:
-
-        static Model::PointList pointCircle;
-
-};
+//        static Model::PointList pointCircle;
+//
+//};
 
 }
 

@@ -13,7 +13,7 @@
 #include <boost/geometry/geometries/cartesian2d.hpp>
 #include <boost/geometry/strategies/transform/matrix_transformers.hpp>
 
-namespace Model2 {
+namespace Geometry {
 
 /**
  *

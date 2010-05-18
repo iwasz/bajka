@@ -2,8 +2,6 @@
  *                                                                          *
  *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 21, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
@@ -12,17 +10,19 @@
 #define RELATIVEMOVEMENTMAPPING_H_
 
 #include "AbstractMapping.h"
+#include "AbstractModel.h"
+#include "geometry/Point.h"
 
 namespace Controller {
 
-class RelativeMovementMapping : public AbstractMapping <Model::Point, Model::Item> {
+class RelativeMovementMapping : public AbstractMapping <Geometry::Point, Model::AbstractModel> {
 public:
 
         virtual ~RelativeMovementMapping () {}
 
         virtual void run () {
                 if (getSequence ()->hasNext ()) {
-                        getModel ()->translate (getSequence ()->next ());
+                        getModel ()->setMove (getSequence ()->next ());
                 }
         }
 

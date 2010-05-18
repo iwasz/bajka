@@ -18,7 +18,7 @@
 #include <boost/geometry/geometries/adapted/c_array_cartesian.hpp>
 #include <boost/geometry/geometries/register/point.hpp>
 
-namespace Model2 {
+namespace Geometry {
 
 /**
  * Punkt.
@@ -76,16 +76,16 @@ private:
         double x;
         double y;
 
-        _e (Model2::Point)
+        _e (Point)
 };
 
 } // namespace
 
 /*
- * Can't pass 'Model2::Point' to BOOST_GEOMETRY_REGISTER_POINT_2D_GET_SET (:: chars confuse
+ * Can't pass 'Geometry::Point' to BOOST_GEOMETRY_REGISTER_POINT_2D_GET_SET (:: chars confuse
  * those macros).
  */
-typedef Model2::Point __BAJKA_POINT__;
+typedef Geometry::Point __BAJKA_POINT__;
 
 /*
  * Register my custom point Type.

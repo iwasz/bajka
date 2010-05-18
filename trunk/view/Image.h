@@ -71,12 +71,12 @@ public:
 
         virtual ~Rectangle () {}
 
-        virtual void setModel2 (Ptr <Model2::IModel> model);
+        virtual void setModel (Ptr <Model::IModel> model);
         virtual void doDraw ();
 
 private:
 
-        Model2::Box2 *box;
+        Model::Box *box;
         _e (Rectangle)
 };
 

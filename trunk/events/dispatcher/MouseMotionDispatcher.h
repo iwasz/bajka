@@ -12,8 +12,8 @@
 #define MOUSEMOTIONDISPATCHER_H_
 
 #include "IEvent.h"
-#include "Rectangle.h"
 #include "MouseMotionEvent.h"
+#include "geometry/Box.h"
 
 namespace Events {
 
@@ -28,8 +28,8 @@ public:
 
         virtual void update (const IObservable <MouseMotionEvent> &observable, const MouseMotionEvent &event);
 
-        Model::Rectangle getArea () const { return area; }
-        void setArea (const Model::Rectangle &area) { this->area = area; }
+        const Geometry::Box &getArea () const { return area; }
+        void setArea (const Geometry::Box  &area) { this->area = area; }
 
         Mode getMode () const { return mode; }
         void setMode (Mode mode) { this->mode = mode; }
@@ -37,7 +37,7 @@ public:
 private:
 
         Mode mode;
-        Model::Rectangle area;
+        Geometry::Box area;
 
 };
 

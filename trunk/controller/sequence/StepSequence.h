@@ -12,8 +12,9 @@
 #define STEPSEQUENCE_H_
 
 #include <Reflection.h>
+
 #include "ISequence.h"
-#include "../model/Point.h"
+#include "geometry/Point.h"
 
 namespace Controller {
 
@@ -60,7 +61,7 @@ private:
 
         _tb
         _t (StepSequence<double>)
-        _t (StepSequence<Model::Point>)
+        _t (StepSequence<Geometry::Point>)
         _te
 };
 

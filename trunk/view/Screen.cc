@@ -16,19 +16,21 @@
 
 namespace View {
 
-void Screen::setModel (Ptr <Model::IModel> m)
-{
-        AbstractWidget::setModel (m);
-        model = dynamic_pointer_cast <Model::Primitive> (m);
-        assert (model);
-}
+//void Screen::setModel (Ptr <Model::IModel> m)
+//{
+//        AbstractWidget::setModel (m);
+//        model = dynamic_pointer_cast <Model::Primitive> (m);
+//        assert (model);
+//}
 
 /****************************************************************************/
 
 void Screen::doDraw ()
 {
-        glClearColor (model->getFillColor ().getR (), model->getFillColor ().getG (),
-                        model->getFillColor ().getB (), 1.0);
+//        glClearColor (model->getFillColor ().getR (), model->getFillColor ().getG (),
+//                        model->getFillColor ().getB (), 1.0);
+// TODO
+        glClearColor (0.35, 0.75, 1.0, 1.0);
 
         glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

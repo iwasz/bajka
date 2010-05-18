@@ -10,8 +10,10 @@
 
 #include <Foreach.h>
 #include "Table.h"
+#include "geometry/Point.h"
 
 namespace Controller {
+using namespace Geometry;
 
 Table::Table (int cols, int rows)
 {
@@ -53,9 +55,9 @@ void Table::init ()
                 }
 
                 for (int c = 0; c < columnNo; c++) {
-                        Ptr <Model::Item> it = table[r][c];
-                        it->setTranslatePoint (Model::Point (x, y));
-                        std::cerr << Model::Point (x, y) << std::endl;
+                        Ptr <Model::AbstractModel> it = table[r][c];
+                        it->setMove (Geometry::Point (x, y));
+                        std::cerr << Geometry::Point (x, y) << std::endl;
                         x += it->getWidth ();
 
                         if (c == columnNo - 1) {
@@ -73,6 +75,8 @@ void Table::setChildren (const ControllerList &list)
         addChildren (list);
 }
 
+/****************************************************************************/
+
 void Table::addChildren (const ControllerList &list)
 {
         foreach (Ptr <IController> child, list) {
@@ -80,12 +84,14 @@ void Table::addChildren (const ControllerList &list)
         }
 }
 
+/****************************************************************************/
+
 void Table::addChild (Ptr <IController> widget)
 {
         SimpleController::addChild (widget);
 
         Ptr <Model::IModel> mod = widget->getModel ();
-        Ptr <Model::Item> item = dynamic_pointer_cast <Model::Item> (mod);
+        Ptr <Model::AbstractModel> item = dynamic_pointer_cast <Model::AbstractModel> (mod);
 
         assert (item);
 
