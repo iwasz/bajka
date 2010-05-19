@@ -26,19 +26,12 @@
 #include "sequence/Sequence.h"
 #include "mapping/Mapping.h"
 
-#include "Sdl.h"
+//#include "Sdl.h"
 #include "View.h"
 
 #include "BajkaApp.h"
 #include "Controller.h"
 #include "Model.h"
-
-// TODO Gdzieś to przenieść, coś wymyślić. Moze też do kontenera, a może to będzie stałe.
-Ptr <Sdl::EventDispatcher> sdlDispatcher;
-Ptr <Events::MouseButtonDispatcher> mouseButtonDispatcher;
-Ptr <Events::MouseMotionDispatcher> mouseMotionDispatcher;
-Ptr <Events::MouseMotionDispatcher> mouseMotionScreenMargin;
-Ptr <Sdl::TimerDispatcher> timeDispatcher;
 
 namespace Util {
 namespace M = Model;
@@ -98,81 +91,34 @@ void BajkaConfig::init ()
         glEnable (GL_BLEND);
         glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+/*##########################################################################*/
 
-        /*--------------------------------------------------------------------------*/
-        #define TRY_CATCH
+        // Transformacje.
+        glViewport (0, 0, (GLsizei) resX, (GLsizei) resY);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        // gluPerspective(60.0, (GLfloat) w/(GLfloat) h, 1.0, 30.0);
+        gluOrtho2D (-resX/2, resX/2, -resY/2, resY/2);
 
-        #if defined (TRY_CATCH)
-                try {
-        #endif
-//                        container = Container2::XmlContainerFactory::createContainer ("main2.xml");
-        //                image01Ctr = vcast <Ptr <C::SimpleController> > (container->getBean ("cursor"));
-        //                sniezynkaCtr = vcast <Ptr <SnowflakeController> > (container->getBean ("snowFlake"));
-//                        screenCtr = vcast <Ptr <C::SimpleController> > (container->getBean ("screen"));
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
 
-        /*--------------------------------------------------------------------------*/
+        GLfloat params[100];
+        glGetFloatv (GL_ALIASED_POINT_SIZE_RANGE, params);
+        std::cerr << "GL_ALIASED_POINT_SIZE_RANGE : " << params[0] << ", " << params[1] << std::endl;
 
-        //                image01 = dynamic_pointer_cast <M::AbstractModel> (image01Ctr->getModel ());
-        //                sniezynka = dynamic_pointer_cast <M::AbstractModel> (sniezynkaCtr->getModel ());
+        glGetFloatv (GL_SMOOTH_POINT_SIZE_RANGE, params);
+        std::cerr << "GL_SMOOTH_POINT_SIZE_RANGE : " << params[0] << ", " << params[1] << std::endl;
 
-        /*##########################################################################*/
+        glGetFloatv (GL_SMOOTH_POINT_SIZE_GRANULARITY, params);
+        std::cerr << "GL_SMOOTH_POINT_SIZE_GRANULARITY : " << params[0] << ", " << params[1] << std::endl;
 
-                        sdlDispatcher = Ptr <Sdl::EventDispatcher> (new Sdl::EventDispatcher ());
-                        mouseButtonDispatcher = Ptr <Events::MouseButtonDispatcher> (new Events::MouseButtonDispatcher ());
-                        mouseMotionDispatcher = Ptr <Events::MouseMotionDispatcher> (new Events::MouseMotionDispatcher ());
-                        mouseMotionScreenMargin = Ptr <Events::MouseMotionDispatcher> (new Events::MouseMotionDispatcher ());
-                        timeDispatcher = Ptr <Sdl::TimerDispatcher> (new Sdl::TimerDispatcher ());
+        glDisable (GL_POINT_SMOOTH);
+        std::cerr << "is enabled GL_POINT_SMOOTH : " << ((glIsEnabled (GL_POINT_SMOOTH)) ? ("true") : ("false")) << std::endl;
 
-                        sdlDispatcher->Events::AbstractObservable <Events::MouseMotionEvent>::addObserver (mouseMotionScreenMargin);
-
-                        // To powinno iść ze screen (screen->getViewPort, albo coś).
-                        // TODO to będzie zorganizowane inaczej, będą marginesy.
-                        mouseMotionScreenMargin->setArea (Geometry::Box (1, 1, 638, 478));
-                        mouseMotionScreenMargin->setMode (Events::MouseMotionDispatcher::OUT);
-
-                        timeDispatcher->setTickInterval (15);
-        //                timeDispatcher->addObserver (sniezynkaCtr);
-
-        #if defined (TRY_CATCH)
-                }
-                catch (const Core::Exception &e) {
-                        std::cerr << e.getMessage () << std::endl;
-                        exit (1);
-                }
-                catch (...) {
-                        std::cerr << "Unknown exception" << std::endl;
-                        exit (1);
-                }
-        #endif
-
-        /*##########################################################################*/
-
-                // Transformacje.
-                glViewport (0, 0, (GLsizei) resX, (GLsizei) resY);
-                glMatrixMode(GL_PROJECTION);
-                glLoadIdentity();
-                // gluPerspective(60.0, (GLfloat) w/(GLfloat) h, 1.0, 30.0);
-                gluOrtho2D (-resX/2, resX/2, -resY/2, resY/2);
-
-                glMatrixMode(GL_MODELVIEW);
-                glLoadIdentity();
-
-                GLfloat params[100];
-                glGetFloatv (GL_ALIASED_POINT_SIZE_RANGE, params);
-                std::cerr << "GL_ALIASED_POINT_SIZE_RANGE : " << params[0] << ", " << params[1] << std::endl;
-
-                glGetFloatv (GL_SMOOTH_POINT_SIZE_RANGE, params);
-                std::cerr << "GL_SMOOTH_POINT_SIZE_RANGE : " << params[0] << ", " << params[1] << std::endl;
-
-                glGetFloatv (GL_SMOOTH_POINT_SIZE_GRANULARITY, params);
-                std::cerr << "GL_SMOOTH_POINT_SIZE_GRANULARITY : " << params[0] << ", " << params[1] << std::endl;
-
-                glDisable (GL_POINT_SMOOTH);
-                std::cerr << "is enabled GL_POINT_SMOOTH : " << ((glIsEnabled (GL_POINT_SMOOTH)) ? ("true") : ("false")) << std::endl;
-
-                glPointSize (3);
-                glGetFloatv (GL_POINT_SIZE, params);
-                std::cerr << "GL_POINT_SIZE : " << params[0] << std::endl;
+        glPointSize (3);
+        glGetFloatv (GL_POINT_SIZE, params);
+        std::cerr << "GL_POINT_SIZE : " << params[0] << std::endl;
 }
 
 /*##########################################################################*/
@@ -190,25 +136,9 @@ void BajkaApp::loop ()
 
         while (!done) {
 
-                timeDispatcher->run ();
-
-                SDL_Event event;
-
-                // To do wywalenia.
-                while (SDL_PollEvent (&event)) {
-
-                        sdlDispatcher->run (&event);
-
-
-                        if (event.type == SDL_QUIT) {
-                                done = 1;
-                        }
-                        if (event.type == SDL_KEYDOWN) {
-                                if (event.key.keysym.sym == SDLK_ESCAPE) {
-                                        done = 1;
-                                }
-                        }
-
+                // Generuj eventy.
+                for (Event::DispatcherList::const_iterator i = dispatchers->begin (); i != dispatchers->end (); i++) {
+                        (*i)->run ();
                 }
 
                 rootController->draw ();

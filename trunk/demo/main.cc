@@ -21,6 +21,10 @@ int main (int argc, char **argv)
         Ptr <Container2::BeanFactoryContainer> container = Container2::XmlContainerFactory::createContainer ("main2.xml");
         Ptr <Util::BajkaApp> app = vcast <Ptr <Util::BajkaApp> > (container->getBean ("app"));
 
+        // TODO to będzie do usunięcia, kiedy singletony będą się same instancjonowały.
+        container->getBean ("timerDispatcher");
+        container->getBean ("eventDispatcher");
+
         app->run (argc, argv);
         app->loop ();
         app->destroy ();

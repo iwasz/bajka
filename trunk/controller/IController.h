@@ -13,7 +13,6 @@
 
 #include <Pointer.h>
 #include <List.h>
-#include <Object.h>
 #include <Reflection.h>
 #include <collection/List.h>
 
@@ -23,6 +22,7 @@
 #include "MouseButtonEvent.h"
 #include "MouseMotionEvent.h"
 #include "TimerEvent.h"
+#include "IObserver.h"
 
 namespace Controller {
 
@@ -30,11 +30,10 @@ class IController;
 typedef Reflection::List <Ptr <IController> > ControllerList;
 _f (ControllerList)
 
-struct IController : public Events::IObserver <Events::KeyboardEvent>,
-                        public Events::IObserver <Events::MouseButtonEvent>,
-                        public Events::IObserver <Events::MouseMotionEvent>,
-                        public Events::IObserver <Events::TimerEvent>,
-                        public Core::Object {
+/**
+ *
+ */
+struct IController : public Event::IObserver {
         __d
 
         virtual ~IController () {}

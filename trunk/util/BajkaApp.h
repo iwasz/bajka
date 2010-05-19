@@ -12,6 +12,8 @@
 #include <String.h>
 #include <Reflection.h>
 
+#include "IDispatcher.h"
+
 namespace Controller {
 class IController;
 }
@@ -75,6 +77,8 @@ public:
 
        __c (void)
 
+       BajkaApp () : dispatchers (new Event::DispatcherList) {}
+
        void run (int argc, char **argv);
        void loop ();
        void destroy ();
@@ -87,10 +91,14 @@ public:
        Ptr <Controller::IController> getRootController () const { return rootController; }
        _m (setRootController) void setRootController (Ptr <Controller::IController> r) { rootController = r; }
 
+       Ptr <Event::DispatcherList> getDispatchers () const { return dispatchers; }
+       _m (setDispatchers) void setDispatchers (Ptr <Event::DispatcherList> d) { dispatchers = d; }
+
 private:
 
        Ptr <BajkaConfig> config;
        Ptr <Controller::IController> rootController;
+       Ptr <Event::DispatcherList> dispatchers;
 
        _e (BajkaApp)
 };
