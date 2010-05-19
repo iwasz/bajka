@@ -2,8 +2,6 @@
  *                                                                          *
  *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 18, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
@@ -13,7 +11,7 @@
 
 #include "IEvent.h"
 
-class TestEvent : public Events::IEvent {
+class TestEvent : public Event::IEvent {
 public:
         virtual ~TestEvent () {}
 };

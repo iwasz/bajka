@@ -56,10 +56,7 @@ public:
 
 /*------Events--------------------------------------------------------------*/
 
-        virtual void update (const Events::IObservable <Events::KeyboardEvent> &observable, const Events::KeyboardEvent &event) {}
-        virtual void update (const Events::IObservable <Events::MouseButtonEvent> &observable, const Events::MouseButtonEvent &event) {}
-        virtual void update (const Events::IObservable <Events::MouseMotionEvent> &observable, const Events::MouseMotionEvent &event) {}
-        virtual void update (const Events::IObservable <Events::TimerEvent> &observable, const Events::TimerEvent &event) {}
+        virtual void onEvent (const Event::IEvent &event);
 
 private:
 

@@ -33,11 +33,11 @@ public:
         _m (getModel2) Ptr <Model::Image> getModel2 () const { return model; }
         Ptr <Model::Image> model;
 
-        virtual void update (const Events::IObservable <Events::TimerEvent> &observable, const Events::TimerEvent &event)
-        {
-                getMapping()->run ();
-                movMap->run ();
-        }
+//        virtual void onEvent (const Event::TimerEvent &event)
+//        {
+//                getMapping()->run ();
+//                movMap->run ();
+//        }
 
         _m (setMovMap) void setMovMap (Ptr <Controller::IMapping> m) { movMap = m; }
         Ptr <Controller::IMapping> movMap;

@@ -50,4 +50,12 @@ void SimpleController::doChildren ()
         }
 }
 
+/****************************************************************************/
+
+void SimpleController::onEvent (const Event::IEvent &event)
+{
+        static int i = 0;
+        std::cerr << "onEvent : " << i++ << ", type : " << event.getType() << std::endl;
+}
+
 }

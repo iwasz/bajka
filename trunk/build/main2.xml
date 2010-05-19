@@ -97,8 +97,21 @@
     <bean id="app" class="BajkaApp" singleton="true">
         <property name="config" ref="cfg" />
         <property name="rootController" ref="screen"/>
+        
+        <!--Dispatcher-y eventów. Generują evenyt. Przekształcają eventy -->
+        <!--SDL (lub innej biblioteki) na wewnętrzne eventy.-->
+        <property name="dispatchers">
+            <list class="DispatcherList">
+<!--                <bean class="TimerDispatcher" singleton="true">-->
+<!--                    <property name="observer" ref="screen" />-->
+<!--                    <property name="tickInterval"><value type="int">15</value></property>-->
+<!--                </bean>-->
+            
+                <bean class="EventDispatcher" singleton="true">
+                    <property name="observer" ref="screen" />
+                </bean>
+            </list>
+        </property>
     </bean>
-    
-    
     
 </beans>

@@ -13,12 +13,12 @@
 
 #include "TestEvent.h"
 
-struct TestObserver : public Events::IObserver <TestEvent> {
+struct TestObserver : public Event::IObserver {
 
         TestObserver () : eventCount (0) {}
         virtual ~TestObserver () {}
 
-        virtual void update (const Events::IObservable <TestEvent> &observable, const TestEvent &event)
+        virtual void onEvent (const TestEvent &event)
         {
                 eventCount++;
         }
