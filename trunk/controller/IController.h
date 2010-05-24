@@ -33,7 +33,7 @@ _f (ControllerList)
 /**
  *
  */
-struct IController : public Event::IObserver {
+struct IController : public virtual Core::Object {
         __d
 
         virtual ~IController () {}

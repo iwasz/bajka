@@ -2,8 +2,6 @@
  *                                                                          *
  *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 20, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
@@ -12,10 +10,11 @@
 #define TIMEREVENT_H_
 
 #include "IEvent.h"
+#include "IObserver.h"
 
 namespace Event {
 
-class TimerEvent : public IEvent {
+class TimerEvent : public AbstractEvent {
 public:
 
         TimerEvent () : ticks (0) {}
@@ -25,6 +24,7 @@ public:
         void setTicks (unsigned int ticks) { this->ticks = ticks; }
 
         Type getType () const { return TIMER_EVENT; }
+        virtual void runObserver (IObserver *o) { o->onTimer (static_cast <TimerEvent *> (this)); }
 
 private:
 

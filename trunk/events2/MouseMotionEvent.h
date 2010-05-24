@@ -14,10 +14,11 @@
 #include "Common.h"
 #include "IEvent.h"
 #include "geometry/Point.h"
+#include "IObserver.h"
 
 namespace Event {
 
-class MouseMotionEvent : public IEvent {
+class MouseMotionEvent : public AbstractEvent {
 public:
 
         MouseMotionEvent () {}
@@ -34,6 +35,7 @@ public:
         void setPosition (const Geometry::Point &position) { this->position = position; }
 
         Type getType () const { return MOUSE_MOTION_EVENT; }
+        virtual void runObserver (IObserver *o) { o->onMouseMotion (static_cast <MouseMotionEvent *> (this)); }
 
 private:
 

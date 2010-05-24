@@ -38,37 +38,44 @@
     <!--będzie OK. Teraz path będzie zmieniony tylko w kopii, którą-->
     <!--posiada widget, a w kopii którą posiada kontroler jest stara-->
     <!--ścieżka. TODO.-->
-    <bean id="background" parent="image" singleton="true"/>
-
-<!-- ===================================================================================== -->
-
-    <bean id="rect" class="SimpleController" init-method="init">
-      
-        <!--View-->
-        <property name="widget">
-            <bean class="Rectangle">
-                <property name="model">
-                    <bean class="Model::Box">
-                        <property name="x1"><value type="double">-50</value></property>
-                        <property name="y1"><value type="double">50</value></property>
-                        <property name="x2"><value type="double">50</value></property>
-                        <property name="y2"><value type="double">-50</value></property>
-
-                        <property name="move">
-                            <bean class="Point">
-                                <property name="x"><value type="double">50</value></property>
-                                <property name="y"><value type="double">50</value></property>
-                            </bean>
-                        </property>
-                    </bean>
-                </property>
-            </bean>
-        </property>
+    <bean id="background" parent="image" singleton="true">
+        <property name="bitMask"><value type="unsigned int">0</value></property>       
     </bean>
 
 <!-- ===================================================================================== -->
 
-    <bean id="screen" class="SimpleController" singleton="true">
+    <bean id="rect" class="SimpleController" init-method="init">
+
+        <!--Model-->
+        <property name="model">
+            <bean id="model" class="Model::Box" scope="bean">
+                <property name="x1"><value type="double">-50</value></property>
+                <property name="y1"><value type="double">50</value></property>
+                <property name="x2"><value type="double">50</value></property>
+                <property name="y2"><value type="double">-50</value></property>
+
+                <property name="move">
+                    <bean class="Point">
+                        <property name="x"><value type="double">50</value></property>
+                        <property name="y"><value type="double">50</value></property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+                
+        <!--View-->
+        <property name="widget">
+            <bean class="Rectangle">
+                <property name="model" ref="model"/>
+            </bean>
+        </property>
+                
+        <property name="bitMask"><value type="unsigned int">1</value></property>       
+    </bean>
+
+<!-- ===================================================================================== -->
+
+    <bean id="screen" class="SimpleController" init-method="init" singleton="true">
         <property name="widget">
             <bean class="Screen"/>
         </property>
@@ -79,6 +86,11 @@
                 <ref bean="rect"/>
             </list>        
         </property>
+
+        <!--Nie ma za bardzo jak robić iloczynów logicznych, -->
+        <!--wiec trzeba podawać gotowe bit-maski. Pierwszy bit-->
+        <!--to mouse move.-->
+        <property name="bitMask"><value type="unsigned int">1</value></property>
     </bean>
 
 
@@ -102,13 +114,20 @@
         <!--SDL (lub innej biblioteki) na wewnętrzne eventy.-->
         <property name="dispatchers">
             <list class="DispatcherList">
+                <bean class="TimerDispatcher" singleton="true">
+                    <property name="observer" ref="screen" />
+                    <property name="tickInterval"><value type="int">1000</value></property>
+                </bean>
+                
+                <!--Można dodać więcej inż 1 timer o różnych interwałach.-->
 <!--                <bean class="TimerDispatcher" singleton="true">-->
 <!--                    <property name="observer" ref="screen" />-->
-<!--                    <property name="tickInterval"><value type="int">15</value></property>-->
+<!--                    <property name="tickInterval"><value type="int">2000</value></property>-->
 <!--                </bean>-->
             
-                <bean class="EventDispatcher" singleton="true">
+                <bean class="EventDispatcher" singleton="true" init-method="init">
                     <property name="observer" ref="screen" />
+                    <property name="config" ref="cfg" />
                 </bean>
             </list>
         </property>

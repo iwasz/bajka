@@ -1,26 +1,31 @@
 /****************************************************************************
  *                                                                          *
- *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
+ *  Author : lukasz.iwaszkiewicz@tiliae.eu                                  *
  *  ~~~~~~~~                                                                *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef EVENTS_H_
-#define EVENTS_H_
-
+#include "AbstractObserver.h"
 #include "IEvent.h"
-#include "MouseButtonEvent.h"
-#include "MouseMotionEvent.h"
-#include "KeyboardEvent.h"
-#include "TimerEvent.h"
-#include "Common.h"
-#include "QuitEvent.h"
-
-#include "sdl/Sdl.h"
 
 namespace Event {
 
+bool AbstractObserver::onEvent (IEvent *event)
+{
+        if (!acceptEvent (event)) {
+                return false;
+        }
+
+        event->runObserver (this);
+        return true;
 }
 
-#	endif /* EVENTS_H_ */
+/****************************************************************************/
+
+inline bool AbstractObserver::acceptEvent (IEvent *event) const
+{
+        return event->getType () & bitMask;
+}
+
+}

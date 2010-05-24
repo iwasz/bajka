@@ -11,6 +11,7 @@
 
 #include <Object.h>
 #include "geometry/Utils.h"
+#include "geometry/Point.h"
 
 namespace Model {
 
@@ -24,6 +25,13 @@ struct IModel : virtual public Core::Object {
         virtual
         Geometry::AffineMatrix const &
         getMatrix () const = 0;
+
+        /**
+         * Sprawdza, czy punkt znajduje się w środku danego modelu.
+         */
+        virtual bool enclose (const Geometry::Point &p) const = 0;
+        //virtual bool enclose (const Geometry::Box &p) const = 0;
+        // ...
 
 };
 

@@ -2,8 +2,6 @@
  *                                                                          *
  *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 21, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
@@ -12,14 +10,44 @@
 #define SIMPLECONTROLLER_H_
 
 #include "IController.h"
+#include "AbstractObserver.h"
 
 namespace Controller {
 
-class SimpleController : public IController {
+/**
+ *
+ */
+class SimpleControllerContext : public Event::IEventContext {
+public:
+
+        virtual ~SimpleControllerContext () {}
+
+        /**
+         * Odkłada na stosie macierz mnożąc ją przez poprzednią. Czyli
+         * Odkładając kolejno macierze m1, m2, m3 stos będzie wyglądał :
+         * m1 x m2 x m3
+         * m1 x m2
+         * m1
+         * @param m
+         */
+        void pushMatrix (const Geometry::AffineMatrix &m);
+        void popMatrix ();
+        const Geometry::AffineMatrix &topMaptrix () const;
+
+private:
+
+        Geometry::AffineMatrixStack stack;
+};
+
+/**
+ * Implementuje zawieranie i obsługę eventów w drzewie.
+ */
+class SimpleController : public IController, public Event::AbstractObserver {
 public:
 
         __c (void)
         _b ("IController")
+        _m (setBitMask)
 
         SimpleController (Ptr <View::IWidget> widget = Ptr <View::IWidget> (),
                           Ptr <IMapping> mapping = Ptr <IMapping> ()) : widget (widget), mapping (mapping), render (true) {}
@@ -56,7 +84,18 @@ public:
 
 /*------Events--------------------------------------------------------------*/
 
-        virtual void onEvent (const Event::IEvent &event);
+        /**
+         * Tu zaimplementowane jest przekazywanie eventu wgłąb struktury
+         * drzewiastej. Najpierw przetwarza go rodzic, potem jego potomkowie,
+         * potem potomkowie potomków etc. Jeśli któraś metoda obsługi zwróci
+         * false, to łańcuch jest perywany.
+         * @param event
+         * @return
+         */
+        bool onEvent (Event::IEvent *event);
+
+        bool onMouseMotion (Event::MouseMotionEvent *e);
+        bool onTimer (Event::TimerEvent *e);
 
 private:
 

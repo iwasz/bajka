@@ -29,7 +29,7 @@ public:
         _m (setMove) void setMove (const Geometry::Point &p);
         void setRotate (double r);
         void setResize (double w, double h);
-        void resetMatrix ();
+//        void resetMatrix ();
 
         Geometry::AffineMatrix const &
         getMatrix () const { return matrix; }
@@ -58,6 +58,10 @@ public:
         Box () : AbstractModel (), Geometry::Box () {}
         Box (double a, double b, double c, double d) : AbstractModel (), Geometry::Box (a, b, c, d) {}
         virtual ~Box () {}
+
+/*--------------------------------------------------------------------------*/
+
+        bool enclose (const Geometry::Point &p) const;
 
 /*--------------------------------------------------------------------------*/
 

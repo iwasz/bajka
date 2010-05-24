@@ -15,7 +15,6 @@
 #include <Vector.h>
 
 #include "IView.h"
-#include "Point.h"
 
 namespace View {
 

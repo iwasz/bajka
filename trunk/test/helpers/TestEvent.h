@@ -11,7 +11,7 @@
 
 #include "IEvent.h"
 
-class TestEvent : public Event::IEvent {
+class TestEvent : public Event::AbstractEvent {
 public:
         virtual ~TestEvent () {}
 };

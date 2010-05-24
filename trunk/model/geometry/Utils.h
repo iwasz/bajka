@@ -12,25 +12,12 @@
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/geometry/geometries/cartesian2d.hpp>
 #include <boost/geometry/strategies/transform/matrix_transformers.hpp>
+#include <stack>
+#include <IToStringEnabled.h>
+
+#include "geometry/Point.h"
 
 namespace Geometry {
-
-/**
- *
- */
-typedef boost::geometry::strategy::transform::ublas_transformer
-        <boost::geometry::point_2d, boost::geometry::point_2d, 2, 2> UblasTransformer;
-
-/**
- *
- */
-struct AffineTransformation : public UblasTransformer {
-
-        typedef UblasTransformer::matrix_type matrix_type;
-        matrix_type &matrix () { return m_matrix; }
-
-};
-
 
 /**
  * Affine matrix type optimised to use with OpenGL.
@@ -39,7 +26,41 @@ struct AffineTransformation : public UblasTransformer {
  * Tu jest podany parametr szablonowy column_major, który mówi o ustawieniu
  * elementów w pamięci (kolumnami, czy wierszami).
  */
-typedef boost::numeric::ublas::matrix <double, boost::numeric::ublas::column_major> AffineMatrix;
+typedef boost::numeric::ublas::matrix <double, boost::numeric::ublas::column_major> AffineMatrixType;
+
+/**
+ *
+ */
+struct AffineMatrix : public AffineMatrixType, public Core::IToStringEnabled {
+
+        AffineMatrix () : AffineMatrixType (4, 4) {}
+        AffineMatrix (const AffineMatrix &m) : AffineMatrixType (m) {}
+
+        template<class AE>
+        AffineMatrix (const boost::numeric::ublas::matrix_expression<AE> &ae) : AffineMatrixType (ae) {}
+
+/*------transformations-----------------------------------------------------*/
+
+        void resetIdentity ();
+        void move (const Geometry::Point &p);
+        void rotate (double r);
+        void resize (double w, double h);
+
+/*------apply-transformation------------------------------------------------*/
+
+        void transform (Point *) const;
+        Point transform (const Point &) const;
+
+/*--------------------------------------------------------------------------*/
+
+        Core::String toString (unsigned int = 0) const;
+
+};
+
+/**
+ * Stos - dla eventów.
+ */
+typedef std::stack <AffineMatrix> AffineMatrixStack;
 
 } // namespace
 
