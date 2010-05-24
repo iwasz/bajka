@@ -11,13 +11,14 @@
 #ifndef MOUSEBUTTONEVENT_H_
 #define MOUSEBUTTONEVENT_H_
 
+#include "IObserver.h"
 #include "IEvent.h"
 #include "Common.h"
 #include "geometry/Point.h"
 
 namespace Event {
 
-class MouseButtonEvent : public IEvent {
+class MouseButtonEvent : public AbstractEvent {
 public:
 
         enum Press { DOWN, UP };
@@ -35,7 +36,7 @@ public:
         const Geometry::Point &getPosition () const {  return position; }
         void setPosition (const Geometry::Point &position) { this->position = position; }
 
-        Type getType () const { return MOUSE_BUTTON_EVENT; }
+//        Type getType () const { return MOUSE_BUTTON_EVENT; }
 
 private:
 
@@ -43,6 +44,25 @@ private:
         MouseButton button;
         Geometry::Point position;
 
+};
+
+/**
+ *
+ */
+struct ButtonPressEvent : public MouseButtonEvent {
+        virtual ~ButtonPressEvent () {}
+        Type getType () const { return  BUTTON_PRESS_EVENT; }
+        // Jesli to zadziała, to wywalić getType.
+        virtual void runObserver (IObserver *o) { o->onButtonPress (static_cast <ButtonPressEvent *> (this)); }
+};
+
+/**
+ *
+ */
+struct ButtonReleaseEvent : public MouseButtonEvent {
+        virtual ~ButtonReleaseEvent () {}
+        Type getType () const { return  BUTTON_RELEASE_EVENT; }
+        virtual void runObserver (IObserver *o) { o->onButtonRelease (static_cast <ButtonReleaseEvent *> (this)); }
 };
 
 }

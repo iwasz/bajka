@@ -27,7 +27,7 @@ void TimerDispatcher::run ()
         timerEvent.setTicks (now);
 
         if (observer) {
-                observer->onEvent (timerEvent);
+                observer->onEvent (&timerEvent);
         }
 }
 

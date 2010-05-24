@@ -1,21 +1,25 @@
 /****************************************************************************
  *                                                                          *
- *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
+ *  Author : lukasz.iwaszkiewicz@tiliae.eu                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 18, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include <iostream>
-#include "MouseButtonDispatcher.h"
+#ifndef QUITEVENT_H_
+#define QUITEVENT_H_
 
-namespace Events {
+#include "IEvent.h"
+#include "IObserver.h"
 
-void MouseButtonDispatcher::notifyObservers (const IEvent &event)
-{
-        std::cerr << "Hello world" << std::endl;
+namespace Event {
+
+struct QuitEvent : public AbstractEvent {
+        virtual ~QuitEvent () {}
+        Type getType () const { return QUIT_EVENT; }
+        virtual void runObserver (IObserver *o) { o->onQuit (static_cast <QuitEvent *> (this)); }
+};
+
 }
 
-}
+#	endif /* QUITEVENT_H_ */

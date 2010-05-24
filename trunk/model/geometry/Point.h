@@ -30,6 +30,9 @@ public:
         Point () : x (0.0), y (0.0) {}
         explicit Point (double d) : x (d), y (d) {}
         Point (double x, double y) : x (x), y (y) {}
+        Point (const Point &p) : x (p.x), y (p.y) {}
+
+/*--------------------------------------------------------------------------*/
 
         double getX () const { return x; }
         _m (setX) void setX (double x) { this->x = x; }
