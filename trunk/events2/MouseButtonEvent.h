@@ -12,19 +12,19 @@
 #define MOUSEBUTTONEVENT_H_
 
 #include "IObserver.h"
-#include "IEvent.h"
+#include "MouseEvent.h"
 #include "Common.h"
 #include "geometry/Point.h"
 
 namespace Event {
 
-class MouseButtonEvent : public AbstractEvent {
+class MouseButtonEvent : public MouseEvent {
 public:
 
         enum Press { DOWN, UP };
 
         MouseButtonEvent () {}
-        MouseButtonEvent (Press type, MouseButton button, const Geometry::Point &position) : press (type), button (button), position (position) {}
+        MouseButtonEvent (Press type, MouseButton button, const Geometry::Point &position) : MouseEvent (position), press (type), button (button) {}
         virtual ~MouseButtonEvent () {}
 
         Press getPress () const { return press; }
@@ -33,16 +33,10 @@ public:
         MouseButton getButton () const { return button; }
         void setButton (MouseButton button) { this->button = button; }
 
-        const Geometry::Point &getPosition () const {  return position; }
-        void setPosition (const Geometry::Point &position) { this->position = position; }
-
-//        Type getType () const { return MOUSE_BUTTON_EVENT; }
-
 private:
 
         Press press;
         MouseButton button;
-        Geometry::Point position;
 
 };
 

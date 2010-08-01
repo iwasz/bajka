@@ -27,19 +27,20 @@ public:
 /*------affine-transformations----------------------------------------------*/
 
         _m (setMove) void setMove (const Geometry::Point &p);
-        void setRotate (double r);
+        _m (setRotate) void setRotate (double r);
         void setResize (double w, double h);
-//        void resetMatrix ();
+        _m (setResizeW) void setResizeW (double w) { setResize (w, 1); }
+        _m (setResizeH) void setResizeH (double h) { setResize (1, h); }
 
         Geometry::AffineMatrix const &
         getMatrix () const { return matrix; }
 
 /*------dimensions----------------------------------------------------------*/
 
-        virtual double getWidth () const = 0;
-        virtual double getHeight () const = 0;
+//        virtual double getWidth () const = 0;
+//        virtual double getHeight () const = 0;
 
-private:
+protected:
 
         // Relative to root-element
         Geometry::AffineMatrix matrix;
@@ -63,6 +64,8 @@ public:
 
         bool enclose (const Geometry::Point &p) const;
 
+        const Geometry::Box &toScreenCoords () const { updateScreenCoords (); return screenCoords; }
+
 /*--------------------------------------------------------------------------*/
 
         virtual double getWidth () const { return getX2() - getX1 (); }
@@ -70,6 +73,12 @@ public:
 
         virtual double getHeight () const { return getY2 () - getY1 (); }
         void setHeight (double d) { setY2 (getY1 () + d); }
+
+private:
+
+        // TODO Test
+        void updateScreenCoords () const;
+        mutable Geometry::Box screenCoords;
 
         _e (Model::Box)
 };

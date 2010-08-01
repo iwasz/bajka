@@ -19,31 +19,41 @@ namespace Geometry {
 /**
  * Box Type.
  *
- *          +----+ (x2, y2)
- *          |    |
- * (x1, y1) +----+
+ *             +----+ ur (x2, y2)
+ *             |    |
+ * ll (x1, y1) +----+
  */
 class Box : public Core::IToStringEnabled, virtual public Core::Object {
 public:
         __c (void)
 
-        Box () : x1 (0.0), y1 (0.0), x2 (0.0), y2 (0.0) {}
-        Box (double a, double b, double c, double d) : x1 (a), y1 (b), x2 (c), y2 (d) {}
+        Box () {}
+        Box (const Point &ll, const Point &ur) : ll (ll), ur (ur) {}
+        Box (double a, double b, double c, double d) : ll (a, b), ur (c, d) {}
         virtual ~Box () {}
 
 /*------access-methods------------------------------------------------------*/
 
-        double getX1 () const { return x1; }
-        _m (setX1) void setX1 (double x) { this->x1 = x; }
+        double getX1 () const { return ll.getX (); }
+        _m (setX1) void setX1 (double x) { ll.setX (x); }
 
-        double getY1 () const { return y1; }
-        _m (setY1) void setY1 (double y) { this->y1 = y; }
+        double getY1 () const { return ll.getY (); }
+        _m (setY1) void setY1 (double y) { ll.setY (y); }
 
-        double getX2 () const { return x2; }
-        _m (setX2) void setX2 (double x) { this->x2 = x; }
+        double getX2 () const { return ur.getX (); }
+        _m (setX2) void setX2 (double x) { ur.setX (x); }
 
-        double getY2 () const { return y2; }
-        _m (setY2) void setY2 (double y) { this->y2 = y; }
+        double getY2 () const { return ur.getY (); }
+        _m (setY2) void setY2 (double y) { ur.setY (y); }
+
+        const Point &getLL () const { return ll; }
+        const Point &getUR () const { return ur; }
+
+        Point &getLL () { return ll; }
+        Point &getUR () { return ur; }
+
+        void setLL (const Point &p) { ll = p; }
+        void setUR (const Point &p) { ur = p; }
 
 /*--------------------------------------------------------------------------*/
 
@@ -53,8 +63,8 @@ public:
 
 private:
 
-        double x1, y1; // Lower Left
-        double x2, y2; // Upper right
+        Point ll;
+        Point ur;
 
         _e (Box)
 };
@@ -81,8 +91,8 @@ namespace boost { namespace geometry { namespace traits {
         struct indexed_access<__BAJKA_BOX__, min_corner, 1>
         {
             typedef coordinate_type<__BAJKA_POINT__>::type ct;
-            static inline ct get(__BAJKA_BOX__ const& b) { return b.getY2 ();  }
-            static inline void set(__BAJKA_BOX__& b, ct const& value) { b.setY2 (value); }
+            static inline ct get(__BAJKA_BOX__ const& b) { return b.getY1 ();  }
+            static inline void set(__BAJKA_BOX__& b, ct const& value) { b.setY1 (value); }
         };
 
         template <>
@@ -97,8 +107,8 @@ namespace boost { namespace geometry { namespace traits {
         struct indexed_access<__BAJKA_BOX__, max_corner, 1>
         {
             typedef coordinate_type<__BAJKA_POINT__>::type ct;
-            static inline ct get(__BAJKA_BOX__ const& b) { return b.getY1 ();  }
-            static inline void set(__BAJKA_BOX__& b, ct const& value) { b.setY1 (value); }
+            static inline ct get(__BAJKA_BOX__ const& b) { return b.getY2 ();  }
+            static inline void set(__BAJKA_BOX__& b, ct const& value) { b.setY2 (value); }
         };
 }}}
 

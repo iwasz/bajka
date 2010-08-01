@@ -31,10 +31,11 @@ typedef boost::numeric::ublas::matrix <double, boost::numeric::ublas::column_maj
 /**
  *
  */
-struct AffineMatrix : public AffineMatrixType, public Core::IToStringEnabled {
+class AffineMatrix : public AffineMatrixType, public Core::IToStringEnabled {
+public:
 
-        AffineMatrix () : AffineMatrixType (4, 4) {}
-        AffineMatrix (const AffineMatrix &m) : AffineMatrixType (m) {}
+        AffineMatrix ();
+        AffineMatrix (const AffineMatrix &m);
 
         template<class AE>
         AffineMatrix (const boost::numeric::ublas::matrix_expression<AE> &ae) : AffineMatrixType (ae) {}
@@ -42,6 +43,8 @@ struct AffineMatrix : public AffineMatrixType, public Core::IToStringEnabled {
 /*------transformations-----------------------------------------------------*/
 
         void resetIdentity ();
+        void inverse ();
+
         void move (const Geometry::Point &p);
         void rotate (double r);
         void resize (double w, double h);
@@ -55,6 +58,9 @@ struct AffineMatrix : public AffineMatrixType, public Core::IToStringEnabled {
 
         Core::String toString (unsigned int = 0) const;
 
+private:
+
+        bool invertMatrix (const double m[16], double invOut[16]);
 };
 
 /**

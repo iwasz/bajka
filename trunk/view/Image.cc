@@ -177,4 +177,31 @@ void Rectangle::doDraw ()
         glEnd ();
 }
 
+/****************************************************************************/
+
+void Rectangle::doTransform ()
+{
+        if (model) {
+//                std::cerr << model->getMatrix ().toString () << std::endl;
+                glMultMatrixd (model->getMatrix ().data ().begin ());
+        }
+//        glRotated (45, 0.0, 0.0, 1.0);
+
+//        GLdouble modelview[16];                                 // Where The 16 Doubles Of The Modelview Matrix Are To Be Stored
+//        glGetDoublev(GL_MODELVIEW_MATRIX, modelview);           // Retrieve The Modelview Matrix
+//
+//        for (int i = 0; i < 16; i++) {
+//                std::cerr << modelview[i] << ",";
+//        }
+//        std::cerr <<"M"<< std::endl;
+//
+//        GLdouble projection[16];                                // Where The 16 Doubles Of The Projection Matrix Are To Be Stored
+//        glGetDoublev(GL_PROJECTION_MATRIX, projection);         // Retrieve The Projection Matrix
+//
+//        for (int i = 0; i < 16; i++) {
+//                std::cerr << projection[i] << ",";
+//        }
+//        std::cerr <<"P"<< std::endl;
+}
+
 } // nam

@@ -12,17 +12,17 @@
 #define MOUSEMOTIONEVENT_H_
 
 #include "Common.h"
-#include "IEvent.h"
+#include "MouseEvent.h"
 #include "geometry/Point.h"
 #include "IObserver.h"
 
 namespace Event {
 
-class MouseMotionEvent : public AbstractEvent {
+class MouseMotionEvent : public MouseEvent {
 public:
 
         MouseMotionEvent () {}
-        MouseMotionEvent (const Geometry::Point &position, const Geometry::Point &movement, MouseButton b) : position (position), movement (movement), button (button) {}
+        MouseMotionEvent (const Geometry::Point &position, const Geometry::Point &movement, MouseButton b) : MouseEvent (position), movement (movement), button (button) {}
         virtual ~MouseMotionEvent () {}
 
         MouseButton getButton () const { return button; }
@@ -31,15 +31,11 @@ public:
         const Geometry::Point &getMovement () const { return movement; }
         void setMovement (const Geometry::Point &movement) { this->movement = movement; }
 
-        const Geometry::Point &getPosition () const {  return position; }
-        void setPosition (const Geometry::Point &position) { this->position = position; }
-
         Type getType () const { return MOUSE_MOTION_EVENT; }
         virtual void runObserver (IObserver *o) { o->onMouseMotion (static_cast <MouseMotionEvent *> (this)); }
 
 private:
 
-        Geometry::Point position;
         Geometry::Point movement;
         MouseButton button;
 

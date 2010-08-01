@@ -59,4 +59,13 @@ bool Box::enclose (const Geometry::Point &p) const
         boost::geometry::within (p, *(static_cast <const Geometry::Box *> (this)));
 }
 
+/****************************************************************************/
+
+void Box::updateScreenCoords () const
+{
+        screenCoords = *this;
+        matrix.transform (&screenCoords.getLL ());
+        matrix.transform (&screenCoords.getUR ());
+}
+
 }

@@ -22,7 +22,8 @@ class TimerEvent;
 class QuitEvent;
 
 /**
- *
+ * IObserver
+ * TODO Nie jest napisane co oznacza wartość zwracana z metod.
  */
 struct IObserver : public virtual Core::Object {
 

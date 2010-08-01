@@ -15,6 +15,9 @@
 
 namespace Controller {
 
+/**
+ * A Mediator for some objects.
+ */
 class IMapping : public Core::Object {
 public:
         virtual ~IMapping () {}
