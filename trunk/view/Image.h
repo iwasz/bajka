@@ -74,6 +74,8 @@ public:
         virtual void setModel (Ptr <Model::IModel> model);
         virtual void doDraw ();
 
+        void doTransform ();
+
 private:
 
         Model::Box *box;

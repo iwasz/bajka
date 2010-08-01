@@ -16,6 +16,9 @@
 
 namespace Controller {
 
+/**
+ * Mediator between ISequence of some type and some arbitrary object ModelType.
+ */
 template <typename ParameterType, typename ModelType>
 class AbstractMapping : public IMapping {
 public:

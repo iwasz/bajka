@@ -12,6 +12,9 @@
 
 #include "BajkaApp.h"
 
+// TODO wywalić
+#include <Signal.h>
+
 /**
  * Main entry.
  */
@@ -20,6 +23,9 @@ int main (int argc, char **argv)
         // Nie roine try-catch, bo i tak info zostanie wypisane.
         Ptr <Container2::BeanFactoryContainer> container = Container2::XmlContainerFactory::createContainer ("main2.xml");
         Ptr <Util::BajkaApp> app = vcast <Ptr <Util::BajkaApp> > (container->getBean ("app"));
+
+        // TODO Do wywalenia, kiedy beany singleton będą się same instancjonowac (TODO).
+        Core::Variant v = container->getBean ("scrollService");
 
         app->run (argc, argv);
         app->loop ();

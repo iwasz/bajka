@@ -31,7 +31,7 @@ typedef Reflection::List <Ptr <IController> > ControllerList;
 _f (ControllerList)
 
 /**
- *
+ * Base class of all controllers. Controllers are the "C" in MVC.
  */
 struct IController : public virtual Core::Object {
         __d

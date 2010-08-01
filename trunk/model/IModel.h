@@ -33,6 +33,9 @@ struct IModel : virtual public Core::Object {
         //virtual bool enclose (const Geometry::Box &p) const = 0;
         // ...
 
+        // TODO Zastanowić się jakie właściwie tu powinny być metody.
+        virtual double getWidth () const = 0;
+        virtual double getHeight () const = 0;
 };
 
 }

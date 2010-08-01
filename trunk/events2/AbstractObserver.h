@@ -37,6 +37,7 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
+        // TODO EventBitMask, a nie bitMask
         unsigned int getBitMask () const { return bitMask; }
         void setBitMask (unsigned int b) { bitMask = b; }
 

@@ -68,7 +68,7 @@ void BajkaConfig::init ()
                 flags = SDL_OPENGL;
         }
 
-        /* Create a 640x480 OpenGL screen */
+        /* Create a OpenGL screen */
         if (SDL_SetVideoMode (resX, resY, 0, flags) == NULL) {
                 fprintf (stderr, "Unable to create OpenGL screen: %s\n", SDL_GetError ());
                 SDL_Quit ();
@@ -94,7 +94,6 @@ void BajkaConfig::init ()
 /*##########################################################################*/
 
         // Transformacje.
-        glViewport (0, 0, (GLsizei) resX, (GLsizei) resY);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         // gluPerspective(60.0, (GLfloat) w/(GLfloat) h, 1.0, 30.0);
@@ -102,6 +101,8 @@ void BajkaConfig::init ()
 
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
+        gluOrtho2D (-resX/2, resX/2, -resY/2, resY/2);
+//        glViewport (0, 0, (GLsizei) resX, (GLsizei) resY);
 
         GLfloat params[100];
         glGetFloatv (GL_ALIASED_POINT_SIZE_RANGE, params);
