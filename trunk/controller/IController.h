@@ -23,6 +23,7 @@
 #include "MouseMotionEvent.h"
 #include "TimerEvent.h"
 #include "IObserver.h"
+#include "tree/TreeMaster.h"
 
 namespace Controller {
 
@@ -33,7 +34,7 @@ _f (ControllerList)
 /**
  * Base class of all controllers. Controllers are the "C" in MVC.
  */
-struct IController : public virtual Core::Object {
+struct IController : public virtual Core::Object, public Util::ITreeMaster <IController> {
         __d
 
         virtual ~IController () {}
@@ -55,17 +56,17 @@ struct IController : public virtual Core::Object {
 
 /*------Containing----------------------------------------------------------*/
 
-        /**
-         * Every widget except the root has a parent.
-         * @return Parent.
-         */
-        virtual Ptr <IController> getParent () const = 0;
-
-        virtual ControllerList &getChildren () = 0;
-        virtual const ControllerList &getChildren () const = 0;
-        _m (setChildren) virtual void setChildren (const ControllerList &list) = 0;
-        virtual void addChildren (const ControllerList &list) = 0;
-        virtual void addChild (Ptr <IController> widget) = 0;
+//        /**
+//         * Every widget except the root has a parent.
+//         * @return Parent.
+//         */
+//        virtual Ptr <IController> getParent () const = 0;
+//
+//        virtual ControllerList &getChildren () = 0;
+//        virtual const ControllerList &getChildren () const = 0;
+//        _m (setChildren) virtual void setChildren (const ControllerList &list) = 0;
+//        virtual void addChildren (const ControllerList &list) = 0;
+//        virtual void addChild (Ptr <IController> widget) = 0;
 
         _e (IController)
 };

@@ -11,47 +11,45 @@
 
 namespace Util {
 
-template <typename Class,
-          typename ReturnType,
-          ReturnType (Class::*ptrToMemberFunction)() const,
-          typename ChildInstanceType,
-          typename ParentInstanceType = ChildInstanceType>
+//template <typename Class,
+//          typename ReturnType,
+//          ReturnType (Class::*ptrToMemberFunction)() const,
+//          typename ChildInstanceType,
+//          typename ParentInstanceType = ChildInstanceType>
+//struct ConstMemFunExtractor
+//{
+//        typedef typename boost::remove_reference<ReturnType>::type result_type;
+//
+//        ReturnType operator()(ChildInstanceType const &x) const
+//        {
+//                return (x.*ptrToMemberFunction)();
+//        }
+//
+//        ReturnType operator()(ParentInstanceType const &x) const
+//        {
+//                return (x.*ptrToMemberFunction)();
+//        }
+//};
+
+template <typename SlaveElement,
+        typename MasterElement,
+        Ptr <SlaveElement> (MasterElement::*ptrToMemberFunction)() const>
+
 struct ConstMemFunExtractor
 {
-        typedef typename boost::remove_reference<ReturnType>::type result_type;
-
-        ReturnType operator()(ChildInstanceType const &x) const
-        {
-                return (x.*ptrToMemberFunction)();
-        }
-
-        ReturnType operator()(ParentInstanceType const &x) const
-        {
-                return (x.*ptrToMemberFunction)();
-        }
-};
-
-template <typename Class,
-          typename ReturnType,
-          ReturnType (Class::*ptrToMemberFunction)() const,
-          typename ChildInstanceType,
-          typename ParentInstanceType>
-
-struct ConstMemFunExtractor <Class, ReturnType, ptrToMemberFunction, Ptr <ChildInstanceType>, ParentInstanceType*>
-{
-        typedef typename boost::remove_reference<ReturnType>::type result_type;
+        typedef typename boost::remove_reference<SlaveElement>::type result_type;
 
         /**
          * Uruchamia zadaną metodę i zwraca wynik typu Type.
          * @param x
          * @return
          */
-        ReturnType operator()(Ptr <ChildInstanceType> const &x) const
+        Ptr <SlaveElement> operator()(Ptr <MasterElement> const &x) const
         {
                 return ((*x).*ptrToMemberFunction)();
         }
 
-        ReturnType operator()(ParentInstanceType* const &x) const
+        Ptr <SlaveElement> operator()(MasterElement* const &x) const
         {
                 return ((*x).*ptrToMemberFunction)();
         }

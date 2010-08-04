@@ -25,7 +25,7 @@ BOOST_AUTO_TEST_CASE (testBasic)
 
 class Model;
 
-class Controller : public Util::TreeMaster <Ptr <Controller>, Controller *> {
+class Controller : public Util::TreeMaster <Controller> {
 public:
 
         Controller (const std::string &n) : name (n) {}
@@ -41,16 +41,10 @@ private:
 };
 
 
-class Model : public Util::TreeSlave <
-                        Ptr <Model>,
-                        Util::TreeMaster <Ptr <Controller>, Controller *>,
-                        Util::ConstMemFunExtractor <
+class Model : public Util::TreeSlave <Model,
                                 Controller,
-                                Ptr <Model>,
-                                &Controller::getModel,
-                                Ptr <Controller>,
-                                Controller *>
-                        > {
+                                &Controller::getModel> {
+
 public:
 
         Model (const std::string &n) : name (n) {}
