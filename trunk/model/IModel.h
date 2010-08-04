@@ -15,7 +15,10 @@
 
 namespace Model {
 
-/// Marker
+/**
+ * Marker
+ * TODO Zastanowić się jakie właściwie tu powinny być metody.
+ */
 struct IModel : virtual public Core::Object {
         virtual ~IModel () {}
 
@@ -33,7 +36,12 @@ struct IModel : virtual public Core::Object {
         //virtual bool enclose (const Geometry::Box &p) const = 0;
         // ...
 
-        // TODO Zastanowić się jakie właściwie tu powinny być metody.
+        virtual void setMove (const Geometry::Point &p) = 0;
+        virtual void setRotate (double r) = 0;
+        virtual void setResize (double w, double h) = 0;
+        virtual void setResizeW (double w) = 0;
+        virtual void setResizeH (double h) = 0;
+
         virtual double getWidth () const = 0;
         virtual double getHeight () const = 0;
 };

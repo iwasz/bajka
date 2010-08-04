@@ -22,61 +22,15 @@ BOOST_AUTO_TEST_CASE (testBasic)
         BOOST_CHECK (Util::Math::nextSqr (1024) == 1024);
 }
 
-/**
- * T musi mieć konstruktor bezargumentowy. W przeciwnym wypadku będzie
- * niezainicjowany (jeśli T będzie wskaźnikiem), lub będzie błąd kompilacji.
- *
- * TODO Zawęzić dla wskaźników jakoś (żeby się nie dało innych typów niż wskaźniki?)
- * TODO Iterator zmienić na ForwardIterator, bo ma tylko operator* const.
- */
-template <typename T>
-class TreeMaster {
-public:
-
-        typedef T Element;
-        typedef typename std::vector <T> ElementList;
-        typedef typename ElementList::iterator Iterator;
-//        typedef typename ElementList::const_iterator ConstIterator;
-
-        TreeMaster () : parent () {}
-
-        Element getParent () { return parent; }
-        const Element &getParent () const { return parent; }
-
-        const ElementList &getChildren () const { return children; }
-        void setChildren (const ElementList &e) { children = e; }
-        void addChild (const Element &e)
-        {
-                children.push_back (e);
-//                e->setParent (*this);
-        }
-        void removeChild (const Element &e) { children.erase (std::find (children.begin (), children.end (), e)); }
-        void clearChildren () { children.clear (); }
-
-//        ConstIterator begin () const { return children.begin (); }
-        Iterator begin () { return children.begin (); }
-//        ConstIterator end () const { return children.end (); }
-        Iterator end () { return children.end (); }
-
-private:
-
-        void setParent (const Element &p) { parent = p; }
-
-private:
-
-        Element parent;
-        ElementList children;
-};
 
 class Model;
 
-class Controller : public TreeMaster <Ptr <Controller> > {
+class Controller : public Util::TreeMaster <Ptr <Controller>, Controller *> {
 public:
 
         Controller (const std::string &n) : name (n) {}
 
         Ptr <Model> getModel () const { return model; }
-//        Ptr <Model> getModel () { return model; }
         void setModel (Ptr <Model> m);
 
         std::string name;
@@ -87,159 +41,16 @@ private:
 };
 
 
-//template <class Class, typename Type, Type (Class::*ptrToMemberFunction) () const>
-//struct ConstMemFun
-//{
-//        typedef typename boost::remove_reference<Type>::type result_type;
-//
-//        const Type &operator () (const Class& x) const
-//        {
-//                return (x.*ptrToMemberFunction)();
-//        }
-//};
-
-//template <typename Class, typename Type, Type (Class::*ptrToMemberFunction) () const>
-//struct ConstMemFun
-//{
-//        typedef typename boost::remove_reference<Type>::type result_type;
-//
-//        Type operator () (Ptr <Class> const &x) const
-//        {
-//                return ((*x).*ptrToMemberFunction)();
-//        }
-//};
-
-
-template <class Class, typename Type, Type (Class::*ptrToMemberFunction)() const, typename ClassInstanceType = Class>
-struct ConstMemFun
-{
-        typedef typename boost::remove_reference<Type>::type result_type;
-
-        Type operator()(ClassInstanceType const &x) const
-        {
-                return (x.*ptrToMemberFunction)();
-//                return ((*x).*ptrToMemberFunction)();
-        }
-
-};
-
-template <class Class, typename Type, Type (Class::*ptrToMemberFunction)(), typename ClassInstanceType>
-struct ConstMemFun <Class, Type, ptrToMemberFunction, Ptr <ClassInstanceType> >
-{
-        typedef typename boost::remove_reference<Type>::type result_type;
-
-        Type operator()(Ptr <ClassInstanceType> const &x) const
-        {
-                return ((*x).*ptrToMemberFunction)();
-        }
-
-};
-
-
-template <class Class, typename Type,Type (Class::*ptrToMemberFunction)()>
-struct MemFun
-{
-        typedef typename boost::remove_reference<Type>::type result_type;
-
-        Type operator()(Class& x)const
-        {
-                return (x.*ptrToMemberFunction)();
-        }
-
-};
-
-
-/**
- * Iterator dla TreeSlave.
- */
-template <typename T, typename TreeMasterType, typename Extractor>
-class TreeSlaveIterator : public std::iterator <std::input_iterator_tag, T> {
-public:
-
-        typedef typename TreeMasterType::Iterator TreeMasterIterator;
-
-        TreeSlaveIterator (const TreeMasterIterator &b) : extractor (), body (b) {}
-        TreeSlaveIterator(const TreeSlaveIterator &i) : body (i.body) {}
-
-//        const T& operator* () const
-        T operator* () const
-        {
-                return extractor (*body);
-        }
-
-        const T* operator-> () const {
-                return &(operator* ());
-        }
-
-        TreeSlaveIterator&
-        operator++()
-        {
-                body++;
-                return *this;
-        }
-
-        TreeSlaveIterator
-        operator++(int)
-        {
-                TreeSlaveIterator tmp = *this;
-                body++;
-                return tmp;
-        }
-
-        bool operator== (const TreeSlaveIterator &i) const { return body == i.body; }
-        bool operator!= (const TreeSlaveIterator &i) const { return body == i.body; }
-
-private :
-
-        Extractor extractor;
-        TreeMasterIterator body;
-
-};
-
-
-
-
-
-
-template <typename T, typename TreeMasterType, typename Extractor>
-class TreeSlave {
-public:
-
-        typedef T Element;
-        typedef typename std::list <T> ElementList;
-        typedef TreeSlaveIterator <T, TreeMasterType, Extractor> Iterator;
-        typedef TreeMasterType * TreeMasterPtr;
-
-
-        TreeSlave () : treeMaster (NULL) {}
-
-        TreeMasterPtr getTreeMaster () { return treeMaster; }
-        void setTreeMaster (TreeMasterPtr t) { treeMaster = t; }
-
-        Element getParent () { return extractor (treeMaster->getParent ()); }
-
-        const ElementList &getChildren () const
-        {
-                ElementList ret;
-                std::for_each (begin (), end (), std::mem_fun (&ElementList::push_back));
-                return ret;
-        }
-
-        Iterator begin () { return Iterator (treeMaster->begin ()); }
-        Iterator end () { return Iterator (treeMaster->end ()); }
-
-private:
-
-        Extractor extractor;
-        TreeMasterPtr treeMaster;
-};
-
-
-class Model : public TreeSlave <
+class Model : public Util::TreeSlave <
                         Ptr <Model>,
-                        TreeMaster <Ptr <Controller> >,
-                        ConstMemFun <Controller, Ptr <Model>, &Controller::getModel, Ptr <Controller> >
-                                > {
+                        Util::TreeMaster <Ptr <Controller>, Controller *>,
+                        Util::ConstMemFunExtractor <
+                                Controller,
+                                Ptr <Model>,
+                                &Controller::getModel,
+                                Ptr <Controller>,
+                                Controller *>
+                        > {
 public:
 
         Model (const std::string &n) : name (n) {}
@@ -278,30 +89,41 @@ BOOST_AUTO_TEST_CASE (testTree)
         cD->setModel (mD);
         cE->setModel (mE);
 
-
         cA->addChild (cB);
         cA->addChild (cC);
-
         cB->addChild (cD);
         cC->addChild (cE);
 
-//        mA->begin ();
-        for (Model::Iterator i = mA->begin (); i != mA->end (); ++i) {
-                std::cout << (*i)->name << std::endl;
-        }
+        Controller::Iterator i = cA->begin ();
+        BOOST_CHECK ((*i)->name == "cB");
+        BOOST_CHECK ((*i)->getParent () == cA.get ());
+        ++i;
+        BOOST_CHECK ((*i)->name == "cC");
+        BOOST_CHECK ((*i)->getParent () == cA.get ());
 
-//        std::for_each (mA->begin (), mA->end (), );
+        i = cB->begin ();
+        BOOST_CHECK ((*i)->name == "cD");
+        BOOST_CHECK ((*i)->getParent () == cB.get ());
 
-//        cA.setModel()
+        i = cC->begin ();
+        BOOST_CHECK ((*i)->name == "cE");
+        BOOST_CHECK ((*i)->getParent () == cC.get ());
 
+        Model::Iterator j = mA->begin ();
+        BOOST_CHECK ((*j)->name == "mB");
+        BOOST_CHECK ((*j)->getParent () == mA);
+        ++j;
+        BOOST_CHECK ((*j)->name == "mC");
+        BOOST_CHECK ((*j)->getParent () == mA);
 
-//        ConstMemFun <A, std::string, &A::getBla> functionObject;
-//        A a;
-//
-//        std::string s = functionObject (a);
-//        std::cerr << s << std::endl;
+        j = mB->begin ();
+        BOOST_CHECK ((*j)->name == "mD");
+        BOOST_CHECK ((*j)->getParent () == mB);
 
-//        std::cerr << std::mem_fun (&A::getBla) (&a) << std::endl;
+        j = mC->begin ();
+        BOOST_CHECK ((*j)->name == "mE");
+        BOOST_CHECK ((*j)->getParent () == mC);
 }
+
 
 BOOST_AUTO_TEST_SUITE_END ();
