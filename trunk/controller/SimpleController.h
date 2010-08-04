@@ -11,13 +11,14 @@
 
 #include "IController.h"
 #include "AbstractObserver.h"
+#include "tree/TreeMaster.h"
 
 namespace Controller {
 
 /**
  *
  */
-class SimpleControllerContext : public Event::IEventContext {
+class SimpleControllerContext : public Event::IEventContext, public Util::TreeMaster <IController> {
 public:
 
         virtual ~SimpleControllerContext () {}
@@ -83,13 +84,13 @@ public:
 
 /*------Containing----------------------------------------------------------*/
 
-        virtual Ptr <IController> getParent () const { return parent; }
-
-        virtual ControllerList &getChildren () { return children; }
-        virtual const ControllerList &getChildren () const { return children; }
-        virtual void setChildren (const ControllerList &list) { children = list; }
-        virtual void addChildren (const ControllerList &list) { children.addAll (list); }
-        virtual void addChild (Ptr <IController> widget) { children.add (widget); }
+//        virtual Ptr <IController> getParent () const { return parent; }
+//
+//        virtual ControllerList &getChildren () { return children; }
+//        virtual const ControllerList &getChildren () const { return children; }
+//        virtual void setChildren (const ControllerList &list) { children = list; }
+//        virtual void addChildren (const ControllerList &list) { children.addAll (list); }
+//        virtual void addChild (Ptr <IController> widget) { children.add (widget); }
 
 /*------Events--------------------------------------------------------------*/
 
@@ -152,11 +153,11 @@ private:
         Ptr <View::IWidget> widget;
         Ptr <Model::IModel> model;
         Ptr <IMapping> mapping;
-        Ptr <IController> parent;
+//        Ptr <IController> parent;
 
         bool render;
 
-        ControllerList children;
+//        ControllerList children;
 
         _e (SimpleController)
 };

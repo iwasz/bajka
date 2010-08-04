@@ -9,6 +9,7 @@
 #ifndef TREEMASTER_H_
 #define TREEMASTER_H_
 
+#include <Pointer.h>
 #include <algorithm>
 
 namespace Util {
@@ -18,18 +19,22 @@ namespace Util {
  * głownego drzewa. Do tego drzewa podłącza się poboczne drzewa,
  * które mją wtedy dostęp do swoich dzieci (swoich typów).
  *
- * Przykład:
+ * TreeMaster ma typ elementu Element i następujące metody:
+ * Element *getParent ();
+ * std::vector <Ptr <Element> > getChildren ();
  *
- * class Controller : public Util::TreeMaster <Ptr <Controller>, Controller *> {};
+ * TreeSlave o elemencie ChildElement zaś wszystko zwraca jako Ptr:
  *
- * Wymagania dotyczące typów:
- * - ChildType : Powinien to być jakiś rodzaj smart-pointera.
- * - ParentType : to musi być zwykły wskaźnik.
+ * Ptr <ChildElement> getParent ();
+ * std::vector <Ptr <ChildElement> > getChildren ();
  */
-template <typename ChildType, typename ParentType>
+template <typename Element>
 class TreeMaster {
 public:
 
+        typedef Element ElementType;
+        typedef Ptr <Element> ChildType;
+        typedef Element *ParentType;
         typedef typename std::vector <ChildType> ElementList;
         typedef typename ElementList::iterator Iterator;
 
@@ -42,7 +47,7 @@ public:
         const ElementList &getChildren () const { return children; }
         void setChildren (const ElementList &e) { children = e; }
 
-        void addChild (ChildType &e)
+        void addChild (ChildType e)
         {
                 children.push_back (e);
                 e->setParent (dynamic_cast <ParentType> (this));
@@ -64,6 +69,32 @@ private:
         ElementList children;
 };
 
+
+template <typename Element>
+class ITreeMaster {
+public:
+
+        typedef Element ElementType;
+        typedef Ptr <Element> ChildType;
+        typedef Element *ParentType;
+        typedef typename std::vector <ChildType> ElementList;
+        typedef typename ElementList::iterator Iterator;
+
+        virtual ~ITreeMaster () {}
+
+        virtual ParentType getParent () = 0;
+        virtual ParentType const getParent () const = 0;
+
+        virtual const ElementList &getChildren () const = 0;
+        virtual void setChildren (const ElementList &e) = 0;
+        virtual void addChild (ChildType e) = 0;
+        virtual void removeChild (const ChildType &e) = 0;
+        virtual void clearChildren () = 0;
+
+        virtual Iterator begin () = 0;
+        virtual Iterator end () = 0;
+
+};
 } // namespace Util
 
 #	endif /* TREEMASTER_H_ */
