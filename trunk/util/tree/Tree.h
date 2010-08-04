@@ -1,20 +1,17 @@
 /****************************************************************************
  *                                                                          *
- *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
+ *  Author : lukasz.iwaszkiewicz@tiliae.eu                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 19, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef UTIL_H_
-#define UTIL_H_
+#ifndef TREE_H_
+#define TREE_H_
 
-#include "InclusionService.h"
-#include "IntersectionService.h"
-#include "Math.h"
-#include "BajkaApp.h"
-#include "tree/Tree.h"
+#include "Extractors.h"
+#include "TreeMaster.h"
+#include "TreeSlave.h"
+#include "TreeSlaveIterator.h"
 
-#	endif /* UTIL_H_ */
+#	endif /* TREE_H_ */
