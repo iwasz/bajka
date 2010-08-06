@@ -7,6 +7,7 @@
  ****************************************************************************/
 
 #include "ScrollMarginController.h"
+#include "geometry/Utils.h"
 
 namespace Service {
 using namespace Core;

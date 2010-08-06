@@ -9,9 +9,15 @@
 #ifndef SIMPLECONTROLLER_H_
 #define SIMPLECONTROLLER_H_
 
+#include <stack>
 #include "IController.h"
 #include "AbstractObserver.h"
 #include "tree/TreeMaster.h"
+
+namespace Geometry {
+class AffineMatrix;
+typedef std::stack <AffineMatrix> AffineMatrixStack;
+}
 
 namespace Controller {
 
@@ -47,7 +53,11 @@ private:
  * - obsługę eventów w drzewie
  * - odfiltrowywanie eventów, które nie są w obszarze.
  */
-class SimpleController : public IController, public Event::AbstractObserver {
+class SimpleController :
+        public IController,
+        public Event::AbstractObserver/*,
+        public Util::TreeMaster <IController>*/  {
+
 public:
 
         __c (void)
@@ -84,13 +94,9 @@ public:
 
 /*------Containing----------------------------------------------------------*/
 
-//        virtual Ptr <IController> getParent () const { return parent; }
-//
-//        virtual ControllerList &getChildren () { return children; }
-//        virtual const ControllerList &getChildren () const { return children; }
-//        virtual void setChildren (const ControllerList &list) { children = list; }
-//        virtual void addChildren (const ControllerList &list) { children.addAll (list); }
-//        virtual void addChild (Ptr <IController> widget) { children.add (widget); }
+        // Implementacja, która działa z kontenerem (szablonowe nie działają z kontenerem).
+        _m (setChildren)
+        void setChildren (const ControllerList &list) { IController::setChildren (list); }
 
 /*------Events--------------------------------------------------------------*/
 

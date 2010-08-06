@@ -7,7 +7,11 @@
  ****************************************************************************/
 
 #include <Foreach.h>
+
 #include "SimpleController.h"
+#include "geometry/Utils.h"
+#include "IModel.h"
+#include "IWidget.h"
 
 namespace Controller {
 using namespace Geometry;
@@ -171,8 +175,8 @@ void SimpleController::draw ()
 
 void SimpleController::doChildren ()
 {
-        foreach (Ptr <IController> child, children) {
-                child->draw ();
+        for (SimpleController::Iterator i = begin (); i != end (); ++i) {
+                (*i)->draw ();
         }
 }
 
@@ -223,9 +227,9 @@ bool SimpleController::onEvent (Event::IEvent *event)
         event->runObserver (&myHelper);
 
         // Wywołania dla dzieci.
-        foreach (Ptr <IController> ctr, children) {
+        for (SimpleController::Iterator i = begin (); i != end (); ++i) {
                 // TODO Zastanowić się jak to zrobić bez dynamic_cast!!!
-                Event::AbstractObserver *a = dynamic_cast <Event::AbstractObserver *> (ctr.get ());
+                Event::AbstractObserver *a = dynamic_cast <Event::AbstractObserver *> (i->get ());
 
                 if (!a->onEvent (event)) {
                         return false;

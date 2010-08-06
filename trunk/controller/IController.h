@@ -25,6 +25,15 @@
 #include "IObserver.h"
 #include "tree/TreeMaster.h"
 
+namespace Model {
+class IModel;
+}
+
+//namespace View {
+//class IView;
+//class IWidget;
+//}
+
 namespace Controller {
 
 class IController;
@@ -32,9 +41,13 @@ typedef Reflection::List <Ptr <IController> > ControllerList;
 _f (ControllerList)
 
 /**
- * Base class of all controllers. Controllers are the "C" in MVC.
+ * Base class of all controllers. Controllers are the "C" in MVC. There
+ * are some OO rules broken here becuse Icontroller isnt really a pure interface.
+ * It has non pure-virtual methods inherited from TreeMaster.
  */
-struct IController : public virtual Core::Object, public Util::ITreeMaster <IController> {
+struct IController :
+        public virtual Core::Object,
+        public Util::TreeMaster <IController> {
         __d
 
         virtual ~IController () {}
@@ -53,20 +66,6 @@ struct IController : public virtual Core::Object, public Util::ITreeMaster <ICon
 
         _m (getModel) virtual Ptr<Model::IModel> getModel () const = 0;
         _m (setModel) virtual void setModel (Ptr<Model::IModel> model) = 0;
-
-/*------Containing----------------------------------------------------------*/
-
-//        /**
-//         * Every widget except the root has a parent.
-//         * @return Parent.
-//         */
-//        virtual Ptr <IController> getParent () const = 0;
-//
-//        virtual ControllerList &getChildren () = 0;
-//        virtual const ControllerList &getChildren () const = 0;
-//        _m (setChildren) virtual void setChildren (const ControllerList &list) = 0;
-//        virtual void addChildren (const ControllerList &list) = 0;
-//        virtual void addChild (Ptr <IController> widget) = 0;
 
         _e (IController)
 };
