@@ -26,13 +26,13 @@ public:
 
 /*------affine-transformations----------------------------------------------*/
 
-        _m (setMove) void setMove (const Geometry::Point &p);
-        _m (setRotate) void setRotate (double r);
-        void setResize (double w, double h);
-        _m (setResizeW) void setResizeW (double w) { setResize (w, 1); }
-        _m (setResizeH) void setResizeH (double h) { setResize (1, h); }
+        _m (setMove) virtual void setMove (const Geometry::Point &p);
+        _m (setRotate) virtual void setRotate (double r);
+        virtual void setResize (double w, double h);
+        _m (setResizeW) virtual void setResizeW (double w) { setResize (w, 1); }
+        _m (setResizeH) virtual void setResizeH (double h) { setResize (1, h); }
 
-        Geometry::AffineMatrix const &
+        virtual Geometry::AffineMatrix const &
         getMatrix () const { return matrix; }
 
 /*------dimensions----------------------------------------------------------*/

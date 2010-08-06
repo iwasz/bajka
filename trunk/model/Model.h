@@ -23,6 +23,8 @@
 //#include ""
 //#include ""
 
+#include "ParalaxModel.h"
+
 namespace Model {
 
 //class IModel;
