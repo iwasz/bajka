@@ -13,6 +13,7 @@
 
 #include "SimpleController.h"
 #include "mapping/IMapping.h"
+#include "Model.h"
 
 /**
  *

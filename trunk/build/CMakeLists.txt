@@ -85,7 +85,7 @@ IF (1)
     TARGET_LINK_LIBRARIES (test boost_unit_test_framework)
 ENDIF ()
 
-IF (0)
+IF (1)
     # Executable demo.
     AUX_SOURCE_DIRECTORY (../demo DEMO_SOURCES)
     #LIST(APPEND DEMO_SOURCES ${SOURCES})

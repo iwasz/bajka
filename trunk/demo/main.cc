@@ -7,6 +7,8 @@
  ****************************************************************************/
 
 #include <cstdlib>
+#include "IWidget.h"
+
 #include <Container.h>
 #include <ContainerFactory.h>
 

@@ -9,8 +9,10 @@
  ****************************************************************************/
 
 #include <Foreach.h>
+
 #include "Table.h"
 #include "geometry/Point.h"
+#include "AbstractModel.h"
 
 namespace Controller {
 using namespace Geometry;
@@ -69,20 +71,21 @@ void Table::init ()
 
 /****************************************************************************/
 
-void Table::setChildren (const ControllerList &list)
-{
-        SimpleController::setChildren (ControllerList ());
-        addChildren (list);
-}
-
-/****************************************************************************/
-
-void Table::addChildren (const ControllerList &list)
-{
-        foreach (Ptr <IController> child, list) {
-                addChild (child);
-        }
-}
+//void Table::setChildren (const ControllerList &list)
+//{
+//        SimpleController::setChildren (ControllerList ());
+//
+//        addChildren (list);
+//}
+//
+///****************************************************************************/
+//
+//void Table::addChildren (const ControllerList &list)
+//{
+//        foreach (Ptr <IController> child, list) {
+//                addChild (child);
+//        }
+//}
 
 /****************************************************************************/
 

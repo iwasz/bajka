@@ -14,6 +14,10 @@
 #include <vector>
 #include "SimpleController.h"
 
+namespace Model {
+class AbstractModel;
+}
+
 namespace Controller {
 
 /**
@@ -32,8 +36,8 @@ public:
 
         void init ();
 
-        virtual void setChildren (const ControllerList &list);
-        virtual void addChildren (const ControllerList &list);
+//        virtual void setChildren (const ControllerList &list);
+//        virtual void addChildren (const ControllerList &list);
         virtual void addChild (Ptr <IController> widget);
 
 private:

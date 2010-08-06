@@ -14,14 +14,12 @@
 #include <List.h>
 #include <Object.h>
 
-#include "Model.h"
-
 namespace View {
 
 /**
  * Everything that can be drawn.
  */
-struct IView : public Core::Object {
+struct IView : public virtual Core::Object {
 
         virtual ~IView () {}
 

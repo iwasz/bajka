@@ -6,8 +6,8 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef TREESLAVE_H_
-#define TREESLAVE_H_
+#ifndef BAJKA_TREESLAVE_H_
+#define BAJKA_TREESLAVE_H_
 
 #include <Pointer.h>
 

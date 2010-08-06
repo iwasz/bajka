@@ -10,8 +10,11 @@
 #define IMODEL_H_
 
 #include <Object.h>
+
 #include "geometry/Utils.h"
 #include "geometry/Point.h"
+#include "tree/TreeSlave.h"
+#include "IController.h"
 
 namespace Model {
 
@@ -19,7 +22,10 @@ namespace Model {
  * Marker
  * TODO Zastanowić się jakie właściwie tu powinny być metody.
  */
-struct IModel : virtual public Core::Object {
+struct IModel :
+        virtual public Core::Object,
+        public Util::TreeSlave <IModel, Controller::IController, &Controller::IController::getModel> {
+
         virtual ~IModel () {}
 
         /**

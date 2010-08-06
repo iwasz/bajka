@@ -16,6 +16,10 @@
 
 #include "IView.h"
 
+namespace Model {
+class IModel;
+}
+
 namespace View {
 
 class IWidget;

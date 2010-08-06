@@ -6,8 +6,8 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef UTILS_H_
-#define UTILS_H_
+#ifndef BAJKA_UTILS_H_
+#define BAJKA_UTILS_H_
 
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/geometry/geometries/cartesian2d.hpp>

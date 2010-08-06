@@ -13,6 +13,7 @@
 #include <SDL_opengl.h>
 #include "Image.h"
 #include "Math.h"
+#include "Model.h"
 
 namespace View {
 
