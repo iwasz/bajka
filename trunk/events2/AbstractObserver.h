@@ -14,18 +14,24 @@
 namespace Event {
 
 /**
- *
+ * Obserwator z zaimplementowanymi powtarzalnymi metodami - klasa
+ * ułątwiająca implementowanie obserwatorów. Nie można jej zinstancjonować.
  */
 class AbstractObserver : public IObserver {
 public:
 
-        AbstractObserver () : bitMask (0) {}
+        __c (void)
+
+        AbstractObserver () : bitMask (0), active (true) {}
         virtual ~AbstractObserver () {}
 
         virtual bool onEvent (IEvent *event);
 
         /// Sprawdza, czy ten obserwer jest zainteresowany danym wyjątkiem.
         virtual bool acceptEvent (IEvent *event) const;
+
+        bool getActive () const { return active; }
+        _m (setActive) void setActive (bool a) { active = a; }
 
         virtual bool onButtonPress (ButtonPressEvent *e) { return true; }
         virtual bool onButtonRelease (ButtonReleaseEvent *e) { return true; }
@@ -39,11 +45,14 @@ public:
 
         // TODO EventBitMask, a nie bitMask
         unsigned int getBitMask () const { return bitMask; }
-        void setBitMask (unsigned int b) { bitMask = b; }
+        _m (setBitMask) void setBitMask (unsigned int b) { bitMask = b; }
 
 public:
 
         unsigned int bitMask;
+        bool active;
+
+        _e (AbstractObserver)
 };
 
 }

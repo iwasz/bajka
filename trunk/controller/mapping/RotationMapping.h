@@ -19,7 +19,8 @@
 namespace Controller {
 
 /**
- * Absolute rotation.
+ * Używając sekwencji wywołuje metodę abslutnej (?) rotacji Model::IModel::setRotate.
+ * \ingroup Mapping
  */
 class RotationMapping : public AbstractMapping <double, Model::AbstractModel> {
 public:

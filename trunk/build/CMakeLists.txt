@@ -71,7 +71,7 @@ INCLUDE_DIRECTORIES (../openGl)
 add_library (bajka SHARED ${SOURCES})
 
 # Executable test.
-IF (1)
+IF (0)
     AUX_SOURCE_DIRECTORY (../test TEST_SOURCES)
     
     #if (true)

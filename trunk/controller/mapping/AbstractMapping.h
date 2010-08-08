@@ -18,6 +18,7 @@ namespace Controller {
 
 /**
  * Mediator between ISequence of some type and some arbitrary object ModelType.
+ * \ingroup Mapping
  */
 template <typename ParameterType, typename ModelType>
 class AbstractMapping : public IMapping {
@@ -28,7 +29,16 @@ public:
         Ptr<ModelType> getModel () const { return model; }
         void setModel (Ptr<ModelType> model) { this->model = model; }
 
+        /**
+         * Zwraca sekwencję (obiekt typu ISequence) związany z tym obiektem IMapping.
+         * @return Obiekt typu ISequence.
+         */
         Ptr<ISequence<ParameterType> > getSequence () const { return sequence; }
+
+        /**
+         * Ustawia sekwencję (obiekt typu ISequence) związany z tym obiektem IMapping.
+         * @param sequence Obiekt typu ISequence.
+         */
         void setSequence (Ptr<ISequence<ParameterType> > sequence) { this->sequence = sequence; }
 
 protected:

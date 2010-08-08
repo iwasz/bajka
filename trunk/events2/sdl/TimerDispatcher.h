@@ -21,14 +21,17 @@ class TimerDispatcher : public Event::IDispatcher {
 public:
         __c (void)
 
-        TimerDispatcher () : tickInterval (30), prevTime (0), observer (NULL) {}
+        TimerDispatcher () : tickInterval (30), prevTime (0)/*, observer (NULL)*/ {}
 
         void run ();
 
 /*--------------------------------------------------------------------------*/
 
-        Event::IObserver *getObserver () const { return observer; }
-        _m (setObserver) void setObserver (Event::IObserver *o) { observer = o; }
+//        Event::IObserver *getObserver () const { return observer; }
+//        _m (setObserver) void setObserver (Event::IObserver *o) { observer = o; }
+
+        _m (setObservers) void setObservers (Event::ObserverVector const &o) { observers = o; }
+        Event::ObserverVector const &getObservers () const { return observers; }
 
         int getTickInterval () const { return tickInterval; }
         _m (setTickInterval) void setTickInterval (int tickInterval) { this->tickInterval = tickInterval; }
@@ -38,7 +41,8 @@ private:
         int tickInterval;
         unsigned int prevTime;
         Event::TimerEvent timerEvent;
-        Event::IObserver *observer;
+//        Event::IObserver *observer;
+        Event::ObserverVector observers;
 
         _e (TimerDispatcher)
 };

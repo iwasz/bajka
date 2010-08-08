@@ -14,6 +14,10 @@
 
 namespace Event {
 
+/**
+ * Event pojawiający się po naciśnięciu "x" na oknie.
+ * \ingroup Events
+ */
 struct QuitEvent : public AbstractEvent {
         virtual ~QuitEvent () {}
         Type getType () const { return QUIT_EVENT; }

@@ -9,6 +9,7 @@
  ****************************************************************************/
 
 #include <iostream>
+#include <algorithm>
 #include <SDL.h>
 
 #include "TimerDispatcher.h"
@@ -26,8 +27,12 @@ void TimerDispatcher::run ()
         prevTime = now;
         timerEvent.setTicks (now);
 
-        if (observer) {
-                observer->onEvent (&timerEvent);
+//        if (observer) {
+//                observer->onEvent (&timerEvent);
+//        }
+
+        for (Event::ObserverVector::iterator i = observers.begin (); i != observers.end (); ++i) {
+                (*i)->onEvent (&timerEvent);
         }
 }
 

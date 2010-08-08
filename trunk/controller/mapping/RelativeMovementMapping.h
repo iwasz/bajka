@@ -15,6 +15,10 @@
 
 namespace Controller {
 
+/**
+ * Używając sekwencji wywołuje metodę relatywnego ruchu Model::IModel::setMove.
+ * \ingroup Mapping
+ */
 class RelativeMovementMapping : public AbstractMapping <Geometry::Point, Model::AbstractModel> {
 public:
 

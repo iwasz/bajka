@@ -49,21 +49,30 @@ void EventDispatcher::run ()
 
 void EventDispatcher::translate (SDL_Event *event)
 {
-        if (!observer) {
-                return;
-        }
+//        if (!observer) {
+//                return;
+//        }
 
         // Run inherited and overloaded methods.
         if (event->type == SDL_MOUSEMOTION) {
-                observer->onEvent (updateMouseMotionEvent (event));
+                for (Event::ObserverVector::iterator i = observers.begin (); i != observers.end (); ++i) {
+                        (*i)->onEvent (updateMouseMotionEvent (event));
+                }
+//                observer->onEvent (updateMouseMotionEvent (event));
         }
 
         if (event->type == SDL_MOUSEBUTTONDOWN || event->type == SDL_MOUSEBUTTONUP) {
-                observer->onEvent (updateMouseButtonEvent (event));
+                for (Event::ObserverVector::iterator i = observers.begin (); i != observers.end (); ++i) {
+                        (*i)->onEvent (updateMouseButtonEvent (event));
+                }
+//                observer->onEvent (updateMouseButtonEvent (event));
         }
 
         if (event->type == SDL_KEYDOWN || event->type == SDL_KEYUP) {
-                observer->onEvent (updateKeyboardEvent (event));
+                for (Event::ObserverVector::iterator i = observers.begin (); i != observers.end (); ++i) {
+                        (*i)->onEvent (updateKeyboardEvent (event));
+                }
+//                observer->onEvent (updateKeyboardEvent (event));
         }
 }
 

@@ -23,11 +23,14 @@
 
 namespace Sdl {
 
+/**
+ *
+ */
 class EventDispatcher : public Event::IDispatcher {
 public:
         __c (void)
 
-        EventDispatcher () : observer (NULL), resX2 (0), resY2 (0) {}
+        EventDispatcher () : /*observer (NULL),*/ resX2 (0), resY2 (0) {}
         virtual ~EventDispatcher () {}
 
         _m (init) void init ();
@@ -37,8 +40,11 @@ public:
 
 /*------getters-setters-----------------------------------------------------*/
 
-        Event::IObserver *getObserver () const { return observer; }
-        _m (setObserver) void setObserver (Event::IObserver *o) { observer = o; }
+//        Event::IObserver *getObserver () const { return observer; }
+//        _m (setObserver) void setObserver (Event::IObserver *o) { observer = o; }
+
+        Event::ObserverVector const &getObservers () const { return observers; }
+        _m (setObservers) void setObservers (Event::ObserverVector const &o) { observers = o; }
 
         Ptr <Util::BajkaConfig> getConfig () const { return config; }
         _m (setConfig) void setConfig (Ptr <Util::BajkaConfig> b) { config = b; }
@@ -59,7 +65,8 @@ private:
         Event::ButtonReleaseEvent buttonReleaseEvent;
         Event::QuitEvent quitEvent;
 
-        Event::IObserver *observer;
+//        Event::IObserver *observer;
+        Event::ObserverVector observers;
         Ptr <Util::BajkaConfig> config;
 
         // Screen resolution / 2

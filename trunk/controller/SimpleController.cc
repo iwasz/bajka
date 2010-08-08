@@ -139,7 +139,7 @@ void SimpleController::init ()
                 widget->init ();
         }
 
-        std::cerr << "this = " << this << std::endl;
+//        std::cerr << "this = " << this << std::endl;
 }
 
 /****************************************************************************/

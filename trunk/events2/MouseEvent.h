@@ -16,6 +16,10 @@
 
 namespace Event {
 
+/**
+ * Event związany jakoś z myszą.
+ * \ingroup Events
+ */
 class MouseEvent : public AbstractEvent {
 public:
 

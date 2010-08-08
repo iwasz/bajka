@@ -34,6 +34,9 @@ class IModel;
 //class IWidget;
 //}
 
+/**
+ * Sprawy związane z kontrolerami i klasami pomocniczymi.
+ */
 namespace Controller {
 
 class IController;
@@ -44,6 +47,7 @@ _f (ControllerList)
  * Base class of all controllers. Controllers are the "C" in MVC. There
  * are some OO rules broken here becuse Icontroller isnt really a pure interface.
  * It has non pure-virtual methods inherited from TreeMaster.
+ * \ingroup Kontroler
  */
 struct IController :
         public virtual Core::Object,

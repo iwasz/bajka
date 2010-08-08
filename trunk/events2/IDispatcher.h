@@ -24,7 +24,7 @@ public:
         virtual ~IDispatcher () {}
 
         virtual void run () = 0;
-        virtual void setObserver (Event::IObserver *o) = 0;
+        virtual void setObservers (Event::ObserverVector const &o) = 0;
 };
 
 /**

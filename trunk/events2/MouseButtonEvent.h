@@ -18,6 +18,10 @@
 
 namespace Event {
 
+/**
+ * Event kliknięcia klawisza myszy.
+ * \ingroup Events
+ */
 class MouseButtonEvent : public MouseEvent {
 public:
 
