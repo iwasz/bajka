@@ -44,7 +44,11 @@
         <property name="model.resizeH"><value type="double">1</value></property>
     </bean>
 
+
+
 <!-- ===================================================================================== -->
+
+
 
     <bean id="rect" class="SimpleController" init-method="init">
 
@@ -87,6 +91,8 @@
 <!--| Scroll Layer |-->
 <!--+==============+-->
 
+
+
     <bean id="scrollEventMargin" class="ScrollMarginController" init-method="init">
 
         <!--Model-->
@@ -114,12 +120,16 @@
         <property name="model.y2"><value type="double">240</value></property>
     </bean>
 
+
+
     <bean id="scrollEventMarginRight" parent="scrollEventMargin">
         <property name="model.x1"><value type="double">220</value></property>
         <property name="model.y1"><value type="double">-239</value></property>
         <property name="model.x2"><value type="double">320</value></property>
         <property name="model.y2"><value type="double">240</value></property>
     </bean>
+
+
 
     <bean id="scrollEventMarginTop" parent="scrollEventMargin">
         <property name="model.x1"><value type="double">-319</value></property>
@@ -128,12 +138,16 @@
         <property name="model.y2"><value type="double">240</value></property>
     </bean>
     
+    
+    
     <bean id="scrollEventMarginBottom" parent="scrollEventMargin">
         <property name="model.x1"><value type="double">-319</value></property>
         <property name="model.y1"><value type="double">-239</value></property>
         <property name="model.x2"><value type="double">320</value></property>
         <property name="model.y2"><value type="double">-140</value></property>
     </bean>
+
+
 
     <bean id="scrollMargins" class="SimpleController" init-method="init" singleton="true">
 <!--        <property name="model">-->
@@ -162,6 +176,82 @@
     
     </bean>
 <!-- ===================================================================================== -->
+<!--+===============+-->
+<!--| Paralax stuff |-->
+<!--+===============+-->
+    
+    <bean id="modeltmp1" class="Model::Box" scope="singleton">
+        <property name="x1"><value type="double">-50</value></property>
+        <property name="y1"><value type="double">-50</value></property>
+        <property name="x2"><value type="double">50</value></property>
+        <property name="y2"><value type="double">50</value></property>
+    </bean>
+    
+    <bean id="tmp1" class="SimpleController" init-method="init">
+        <!--Model-->
+        <property name="model" ref="modeltmp1"/>
+
+        <!--View-->
+        <property name="widget">
+            <bean class="Rectangle">
+                <property name="model" ref="modeltmp1"/>
+            </bean>
+        </property>
+    </bean>
+    
+    
+    
+    <bean id="paralaxModel" class="ParalaxModel" />
+
+
+    
+    <bean id="paralaxLayer" class="SimpleController" init-method="init">
+        <property name="model" ref="paralaxModel"/>
+
+        <property name="children">
+            <list class="ControllerList">
+                <ref bean="background"/>
+            </list>
+        </property>
+
+        <property name="bitMask"><value type="unsigned int">0</value></property>
+    </bean>
+
+    
+        
+    <bean id="translationMapping" class="TranslationMapping">    
+        <property name="model" ref="modeltmp1"/>
+<!--        <property name="model" ref="paralaxModel"/>-->
+<!--        Tak się nie da, a było by miło... -->
+<!--        <property name="model" ref="background.model"/> -->
+
+        <property name="sequence">
+            <bean id="seq2" class="StepSequence&lt;Geometry::Point&gt;">
+                <property name="initial">
+                    <bean class="Point">
+                        <property name="x"><value type="double">1</value></property>
+                        <property name="y"><value type="double">1</value></property>            
+                    </bean>
+                </property>
+                
+                <property name="step">
+                    <bean class="Point">
+                        <property name="x"><value type="double">10</value></property>
+                        <property name="y"><value type="double">1</value></property>            
+                    </bean>
+                </property>
+                
+                <property name="stepNumber"><value type="int">5</value></property>
+            </bean>
+        </property>                
+    </bean>
+    
+    <bean id="ruchJednostajny" class="ObserverWithMapping">
+        <property name="mapping" ref="translationMapping" />
+        <property name="bitMask"><value type="unsigned int">255</value></property>
+    </bean>
+    
+<!-- ===================================================================================== -->
 
     <bean id="screen" class="SimpleController" init-method="init" singleton="true">
         <property name="widget">
@@ -170,9 +260,11 @@
 
         <property name="children">
             <list class="ControllerList">
-                <ref bean="background"/>
+                <ref bean="paralaxLayer"/>
+<!--                <ref bean="background"/>-->
                 <ref bean="rect"/>
-                <ref bean="scrollMargins"/>                
+                <ref bean="scrollMargins"/>         
+                <ref bean="tmp1"/>       
             </list>
         </property>
 
@@ -209,19 +301,32 @@
         <!--SDL (lub innej biblioteki) na wewnętrzne eventy.-->
         <property name="dispatchers">
             <list class="DispatcherList">
-<!--                <bean class="TimerDispatcher" singleton="true">-->
-<!--                    <property name="observer" ref="screen" />-->
-<!--                    <property name="tickInterval"><value type="int">1000</value></property>-->
-<!--                </bean>-->
+                <bean class="TimerDispatcher" singleton="true">
+                    <property name="observers">
+                        <list class="ObserverVector">
+                            <ref bean="screen" />
+                            <ref bean="ruchJednostajny"/>
+                        </list>
+                    </property>
+                    <property name="tickInterval"><value type="int">1000</value></property>
+                </bean>
 
                 <!--Można dodać więcej inż 1 timer o różnych interwałach.-->
 <!--                <bean class="TimerDispatcher" singleton="true">-->
-<!--                    <property name="observer" ref="screen" />-->
+<!--                    <property name="observers">-->
+<!--                        <list class="ObserverVector">-->
+<!--                            <ref bean="screen" />-->
+<!--                        </list>-->
+<!--                    </property>-->
 <!--                    <property name="tickInterval"><value type="int">2000</value></property>-->
 <!--                </bean>-->
 
                 <bean class="EventDispatcher" singleton="true" init-method="init">
-                    <property name="observer" ref="screen" />
+                    <property name="observers">
+                        <list class="ObserverVector">
+                            <ref bean="screen" />
+                        </list>
+                    </property>
                     <property name="config" ref="cfg" />
                 </bean>
             </list>

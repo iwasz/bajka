@@ -28,6 +28,8 @@ struct IModel :
 
         virtual ~IModel () {}
 
+/*------przekształcenia-----------------------------------------------------*/
+
         /**
          * Returns affine transformation matrix for this object.
          */
@@ -35,18 +37,20 @@ struct IModel :
         Geometry::AffineMatrix const &
         getMatrix () const = 0;
 
+        virtual void setMove (const Geometry::Point &p) = 0;
+        virtual void setRotate (double r) = 0;
+        virtual void setResize (double w, double h) = 0;
+        virtual void setResizeW (double w) = 0;
+        virtual void setResizeH (double h) = 0;
+
+/*------kształt-------------------------------------------------------------*/
+
         /**
          * Sprawdza, czy punkt znajduje się w środku danego modelu.
          */
         virtual bool enclose (const Geometry::Point &p) const = 0;
         //virtual bool enclose (const Geometry::Box &p) const = 0;
         // ...
-
-        virtual void setMove (const Geometry::Point &p) = 0;
-        virtual void setRotate (double r) = 0;
-        virtual void setResize (double w, double h) = 0;
-        virtual void setResizeW (double w) = 0;
-        virtual void setResizeH (double h) = 0;
 
         virtual double getWidth () const = 0;
         virtual double getHeight () const = 0;

@@ -17,7 +17,8 @@
 namespace View {
 
 /**
- *
+ * Widok przeznaczony do stosowania z głownym kontrolerem (root
+ * kontrolerem). Czyści ekran etc.
  */
 class Screen : public AbstractWidget {
 public:

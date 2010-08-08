@@ -19,6 +19,10 @@
 
 namespace Controller {
 
+/**
+ * Używając sekwencji wywołuje metodę abslutnego ruchu ???.
+ * \ingroup Mapping
+ */
 class TranslationMapping : public AbstractMapping <Geometry::Point, Model::AbstractModel> {
 public:
         __c (void)

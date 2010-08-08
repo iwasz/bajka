@@ -19,7 +19,10 @@
 namespace Controller {
 
 /**
- * Simple (test) sequence.
+ * Simple (test) sequence. To powinno się nazywac "sekwencja liniowa", czy może
+ * LinearSequence, ponieważ w funkcji czasu zwraca nawrość zmienia się liniowo.
+ * Pisząc w funkcji czasu mam na myśli kolejne wywołania metody StepSequence::next().
+ * \ingroup Sequence
  */
 template <typename T>
 class StepSequence : public ISequence <T> {

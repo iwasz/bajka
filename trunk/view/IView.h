@@ -14,6 +14,9 @@
 #include <List.h>
 #include <Object.h>
 
+/**
+ * Klasy generujące widoki.
+ */
 namespace View {
 
 /**

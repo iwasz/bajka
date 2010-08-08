@@ -18,6 +18,10 @@
 
 namespace Event {
 
+/**
+ * Event ruchu myszy.
+ * \ingroup Events
+ */
 class MouseMotionEvent : public MouseEvent {
 public:
 

@@ -1,26 +1,31 @@
 /****************************************************************************
  *                                                                          *
- *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
+ *  Author : lukasz.iwaszkiewicz@tiliae.eu                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 21, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef CONTROLLER_H_
-#define CONTROLLER_H_
+#ifndef UTILS_H_
+#define UTILS_H_
 
-/**
- * \defgroup Kontroler
- * \{
- * \defgroup Sequence
- * \defgroup Mapping
- * \}
- */
+#include <collection/List.h>
+#include <collection/Vector.h>
 
-#include "IController.h"
-#include "SimpleController.h"
-#include "Table.h"
+namespace Util {
 
-#	endif /* CONTROLLER_H_ */
+typedef Reflection::List <int> IntList;
+_f (IntList)
+
+typedef Reflection::Vector <int> IntVector;
+_f (IntVector)
+
+typedef Reflection::List <double> DoubleList;
+_f (IntList)
+
+typedef Reflection::Vector <double> DoubleVector;
+_f (IntVector)
+
+}
+
+#	endif /* UTILS_H_ */

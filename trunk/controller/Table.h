@@ -22,6 +22,8 @@ namespace Controller {
 
 /**
  * Layout thing.
+ * \deprecated To będzie specjalny model tabelowy.
+ * \ingroup Kontroler
  */
 class Table : public Controller::SimpleController {
 public:

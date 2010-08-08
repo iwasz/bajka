@@ -9,11 +9,14 @@
 #ifndef PARALAXMODEL_H_
 #define PARALAXMODEL_H_
 
-#include "AbstracModel.h"
+#include <Reflection.h>
+#include "ShapelessModel.h"
+#include "Commons.h"
+#include "geometry/Point.h"
 
 namespace Model {
 
-class ParalaxModel : public AbstracModel {
+class ParalaxModel : public ShapelessModel {
 public:
         __c (void)
         _b ("AbstracModel")
@@ -21,9 +24,13 @@ public:
         virtual ~ParalaxModel () {}
         virtual void setMove (const Geometry::Point &p);
 
+        const Util::DoubleVector &getDepths () const { return depths; }
+        void setDepths (const Util::DoubleVector &depths) { this->depths = depths; }
+
 private:
 
-        // Tu lista doubli.
+        Util::DoubleVector depths;
+
         _e (ParalaxModel)
 };
 

@@ -22,7 +22,10 @@ typedef std::stack <AffineMatrix> AffineMatrixStack;
 namespace Controller {
 
 /**
- *
+ * Kontekst typu Event::IEventContext, który zawiera stos macierzy
+ * przekszatłceń dla eventów. Możliwe, że to będzie zastąpione przez
+ * stos macierzy bezpośrednio w modelu.
+ * \ingroup Kontroler
  */
 class SimpleControllerContext : public Event::IEventContext, public Util::TreeMaster <IController> {
 public:
@@ -52,17 +55,16 @@ private:
  * - zawieranie
  * - obsługę eventów w drzewie
  * - odfiltrowywanie eventów, które nie są w obszarze.
+ * \ingroup Kontroler
  */
 class SimpleController :
         public IController,
-        public Event::AbstractObserver/*,
-        public Util::TreeMaster <IController>*/  {
+        public Event::AbstractObserver  {
 
 public:
 
         __c (void)
-        _b ("IController")
-        _m (setBitMask)
+        _b ("IController", "AbstractObserver")
 
         SimpleController (Ptr <View::IWidget> widget = Ptr <View::IWidget> (),
                           Ptr <IMapping> mapping = Ptr <IMapping> ()) :
@@ -132,6 +134,7 @@ private:
 
                 bool onEvent (Event::IEvent *event) { return true; }
                 bool acceptEvent (Event::IEvent *event) const { return true; }
+                bool getActive () const { return true; }
 
                 bool onButtonPress (Event::ButtonPressEvent *e);
                 bool onButtonRelease (Event::ButtonReleaseEvent *e);

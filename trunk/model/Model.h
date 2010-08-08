@@ -23,6 +23,7 @@
 //#include ""
 //#include ""
 
+#include "ShapelessModel.h"
 #include "ParalaxModel.h"
 
 namespace Model {

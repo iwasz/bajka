@@ -13,14 +13,18 @@
 
 namespace Event {
 
+/**
+ * Typ eventu.
+ * \ingroup Events
+ */
 enum Type {
-        MOUSE_MOTION_EVENT      = 0x01,
-        BUTTON_PRESS_EVENT      = 0x01 << 1,
-        BUTTON_RELEASE_EVENT    = 0x01 << 2,
-        TIMER_EVENT             = 0x01 << 3,
-        KEY_DOWN_EVENT          = 0x01 << 4,
-        KEY_UP_EVENT            = 0x01 << 5,
-        QUIT_EVENT              = 0x01 << 6
+        MOUSE_MOTION_EVENT      = 0x01,     //!< MOUSE_MOTION_EVENT
+        BUTTON_PRESS_EVENT      = 0x01 << 1,//!< BUTTON_PRESS_EVENT
+        BUTTON_RELEASE_EVENT    = 0x01 << 2,//!< BUTTON_RELEASE_EVENT
+        TIMER_EVENT             = 0x01 << 3,//!< TIMER_EVENT
+        KEY_DOWN_EVENT          = 0x01 << 4,//!< KEY_DOWN_EVENT
+        KEY_UP_EVENT            = 0x01 << 5,//!< KEY_UP_EVENT
+        QUIT_EVENT              = 0x01 << 6 //!< QUIT_EVENT
 };
 
 class IObserver;
@@ -28,6 +32,7 @@ class IObserver;
 /**
  * Służy do przekazywania danych dodatkowych - coś takiego jak void *data
  * w niektórych bibliotekach C.
+ * \ingroup Events
  */
 struct IEventContext {
         virtual ~IEventContext () {}
@@ -35,6 +40,7 @@ struct IEventContext {
 
 /**
  * Typowy visitor-pattern się zrobił.
+ * \ingroup Events
  */
 class IEvent {
 public:
@@ -47,7 +53,8 @@ public:
 };
 
 /**
- *
+ * Implementuje powtarzalne metody interfejsu IEvent.
+ * \ingroup Events
  */
 class AbstractEvent : public IEvent {
 public:

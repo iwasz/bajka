@@ -13,7 +13,7 @@ namespace Event {
 
 bool AbstractObserver::onEvent (IEvent *event)
 {
-        if (!acceptEvent (event)) {
+        if (getActive () && !acceptEvent (event)) {
                 return false;
         }
 

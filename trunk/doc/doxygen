@@ -12,7 +12,7 @@ OUTPUT_LANGUAGE        = English
 BRIEF_MEMBER_DESC      = YES
 REPEAT_BRIEF           = YES
 ABBREVIATE_BRIEF       =
-ALWAYS_DETAILED_SEC    = NO
+ALWAYS_DETAILED_SEC    = 
 INLINE_INHERITED_MEMB  = NO
 FULL_PATH_NAMES        = YES
 STRIP_FROM_PATH        =
@@ -48,7 +48,7 @@ EXTRACT_LOCAL_CLASSES  = YES
 EXTRACT_LOCAL_METHODS  = NO
 EXTRACT_ANON_NSPACES   = NO
 HIDE_UNDOC_MEMBERS     = NO
-HIDE_UNDOC_CLASSES     = NO
+HIDE_UNDOC_CLASSES     = YES
 HIDE_FRIEND_COMPOUNDS  = NO
 HIDE_IN_BODY_DOCS      = NO
 INTERNAL_DOCS          = NO
@@ -87,7 +87,7 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = ../controller
+INPUT                  = ../controller ../events2 ../model ../openGl ../services ../util ../view
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *cc *.h
 RECURSIVE              = YES
@@ -214,12 +214,12 @@ PERLMOD_MAKEVAR_PREFIX =
 # Configuration options related to the preprocessor
 #---------------------------------------------------------------------------
 ENABLE_PREPROCESSING   = YES
-MACRO_EXPANSION        = NO
-EXPAND_ONLY_PREDEF     = NO
+MACRO_EXPANSION        = YES
+EXPAND_ONLY_PREDEF     = YES
 SEARCH_INCLUDES        = YES
 INCLUDE_PATH           =
 INCLUDE_FILE_PATTERNS  =
-PREDEFINED             =
+PREDEFINED             = _f(x)= _b(x)= __b(x)= __d= _c(x)= __c(x)= _m(x)= __m(x)=
 EXPAND_AS_DEFINED      =
 SKIP_FUNCTION_MACROS   = YES
 #---------------------------------------------------------------------------
@@ -236,8 +236,8 @@ PERL_PATH              = /usr/bin/perl
 CLASS_DIAGRAMS         = YES
 MSCGEN_PATH            =
 HIDE_UNDOC_RELATIONS   = YES
-HAVE_DOT               = NO
-DOT_FONTNAME           = FreeSans
+HAVE_DOT               = YES
+DOT_FONTNAME           = Arial
 DOT_FONTSIZE           = 10
 DOT_FONTPATH           =
 CLASS_GRAPH            = YES

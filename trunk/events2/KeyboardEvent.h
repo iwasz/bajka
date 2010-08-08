@@ -16,6 +16,10 @@
 
 namespace Event {
 
+/**
+ * Event związany z klawiaturą.
+ * \ingroup Events
+ */
 class KeyboardEvent : public AbstractEvent {
 public:
 
@@ -36,7 +40,8 @@ private:
 };
 
 /**
- *
+ * Event naciśnięcie klawisza na klawiaturze.
+ * \ingroup Events
  */
 struct KeyDownEvent : public KeyboardEvent {
         virtual ~KeyDownEvent () {}
@@ -45,7 +50,8 @@ struct KeyDownEvent : public KeyboardEvent {
 };
 
 /**
- *
+ * Event zwolnienie klawisza na klawiaturze.
+ * \ingroup Events
  */
 struct KeyUpEvent : public KeyboardEvent {
         virtual ~KeyUpEvent () {}

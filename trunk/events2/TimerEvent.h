@@ -14,6 +14,10 @@
 
 namespace Event {
 
+/**
+ * Event zegarowy.
+ * \ingroup Events
+ */
 class TimerEvent : public AbstractEvent {
 public:
 
