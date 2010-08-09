@@ -13,6 +13,7 @@
 #include <ContainerFactory.h>
 
 #include "BajkaApp.h"
+#include "sequence/ConstSequence.h"
 
 // TODO wywalić
 #include <Signal.h>

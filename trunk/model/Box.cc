@@ -6,16 +6,25 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "ParalaxModel.h"
+#include <boost/geometry/algorithms/within.hpp>
+#include "Box.h"
 
 namespace Model {
+using namespace boost::numeric::ublas;
+using namespace Geometry;
 
-void ParalaxModel::setMove (const Geometry::Point &p)
-{
-        // TODO
-        AbstractModel::setMove (p);
-        // A tu wpęti trzeba będzie zrobić jakąś korekcję.
-        std::cerr << "--> " << __FILE__ << "," << __FUNCTION__ << " @ " << __LINE__ << " : " << p << std::endl;
-}
+//bool Box::enclose (const Geometry::Point &p) const
+//{
+//        return boost::geometry::within (p, *(static_cast <const Geometry::Box *> (this)));
+//}
+//
+///****************************************************************************/
+//
+//void Box::updateScreenCoords () const
+//{
+//        screenCoords = *this;
+//        matrix.transform (&screenCoords.getLL ());
+//        matrix.transform (&screenCoords.getUR ());
+//}
 
 }

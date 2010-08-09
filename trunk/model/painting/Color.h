@@ -16,7 +16,7 @@
 namespace Model {
 
 /**
- * Kolor.
+ * Model reprezentujący kolor.
  */
 class Color {
 public:

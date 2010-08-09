@@ -219,7 +219,7 @@ EXPAND_ONLY_PREDEF     = YES
 SEARCH_INCLUDES        = YES
 INCLUDE_PATH           =
 INCLUDE_FILE_PATTERNS  =
-PREDEFINED             = _f(x)= _b(x)= __b(x)= __d= _c(x)= __c(x)= _m(x)= __m(x)=
+PREDEFINED             = _f(x)= _b(x)= __b(x)= __d= _c(x)= __c(x)= _m(x)= __m(x)= _tb= _te= _t(x)=
 EXPAND_AS_DEFINED      =
 SKIP_FUNCTION_MACROS   = YES
 #---------------------------------------------------------------------------

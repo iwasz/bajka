@@ -9,22 +9,21 @@
 #ifndef MODEL_H_
 #define MODEL_H_
 
-#include <cassert>
-#include <List.h>
-#include <Vector.h>
-#include <Reflection.h>
-#include <Object.h>
+/**
+ * \defgroup Model Model - klasy związane z modelem danych.
+ * \{
+ * \defgroup Geometry Geometry - klasy modelowe strikte geometryczne.
+ * \defgroup Painting Painting - klasy modelowe strikte związane z malowaniem (kolory, grubości linii).
+ * \}
+ */
 
-#include "painting/Color.h"
-//#include "Line.h"
-#include "geometry/Geometry.h"
 #include "AbstractModel.h"
-//#include "Rectangle.h"
-//#include ""
-//#include ""
-
-#include "ShapelessModel.h"
+#include "Shape.h"
 #include "ParalaxModel.h"
+#include "Box.h"
+#include "Image.h"
+#include "painting/Painting.h"
+#include "geometry/Geometry.h"
 
 namespace Model {
 
@@ -155,21 +154,6 @@ namespace Model {
 //        _e (Primitive)
 //};
 
-class Image : public Model::Box {
-public:
-        __c (void)
-        _b ("Model::Box")
-
-        virtual ~Image () {}
-
-        virtual Core::String getPath() const { return path; }
-        _m (setPath) virtual void setPath (const Core::String &path) { this->path = path; }
-
-private:
-
-        Core::String path;
-        _e (Model::Image);
-};
 
 ///**
 // * Set of points with color and tranformations (ie,. you can

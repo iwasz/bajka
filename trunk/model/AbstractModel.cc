@@ -52,20 +52,41 @@ void AbstractModel::setResize (double w, double h)
         matrix.resize (w, h);
 }
 
-/*##########################################################################*/
+/****************************************************************************/
 
-bool Box::enclose (const Geometry::Point &p) const
+Geometry::AffineMatrix const &AbstractModel::updateMatrixStack () const
 {
-        boost::geometry::within (p, *(static_cast <const Geometry::Box *> (this)));
+        // TODO Tu można sporo zoptymalizować kiedyś.
+        Model::IModel *parent = getParent ().get ();
+
+        if (parent) {
+                matrixStack = parent->updateMatrixStack ();
+                boost::numeric::ublas::prod (matrixStack, matrix);
+        }
+        else {
+                matrixStack = matrix;
+        }
 }
 
 /****************************************************************************/
 
-void Box::updateScreenCoords () const
+Geometry::Point const &AbstractModel::screenToModel (Geometry::Point const &p) const
 {
-        screenCoords = *this;
-        matrix.transform (&screenCoords.getLL ());
-        matrix.transform (&screenCoords.getUR ());
+        updateMatrixStack ();
+        matrixStack.inverse ();
+        tmpPoint = p;
+        matrixStack.transform (&tmpPoint);
+        return tmpPoint;
+}
+
+/****************************************************************************/
+
+Geometry::Point const &AbstractModel::modelToScreen (Geometry::Point const &p) const
+{
+        updateMatrixStack ();
+        tmpPoint = p;
+        matrixStack.transform (&tmpPoint);
+        return tmpPoint;
 }
 
 }

@@ -58,12 +58,16 @@ bool SimpleController::ObserverHelper::checkArea (Event::MouseEvent *e)
         }
 
         Geometry::Point p = e->getPosition();
-        SimpleControllerContext *ctx = static_cast <SimpleControllerContext *> (e->getContext ());
-        AffineMatrix matrix = ctx->topMaptrix ();
-        matrix.inverse ();
-        matrix.transform (&p);
+//        SimpleControllerContext *ctx = static_cast <SimpleControllerContext *> (e->getContext ());
+//        AffineMatrix matrix = ctx->topMaptrix ();
+//        matrix.inverse ();
+//        matrix.transform (&p);
 
-        if (myModel->enclose (p)) {
+        Point p2 = myModel->screenToModel (p);
+//        std::cerr << "---> [" << p2 << "], enclose [" << myModel->enclose (p2) << "]" << std::endl;
+
+//        if (myModel->enclose (p)) {
+        if (myModel->enclose (p2)) {
                 return true;
         }
 
@@ -148,6 +152,7 @@ void SimpleController::setModel (Ptr<Model::IModel> model)
 {
         this->model = model;
         myHelper.myModel = model.get ();
+        model->setTreeMaster (this);
 }
 
 /****************************************************************************/

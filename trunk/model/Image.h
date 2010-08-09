@@ -6,16 +6,34 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "ParalaxModel.h"
+#ifndef IMAGE_MODEL_H_
+#define IMAGE_MODEL_H_
+
+#include <string>
+#include <Reflection.h>
+#include "Box.h"
 
 namespace Model {
 
-void ParalaxModel::setMove (const Geometry::Point &p)
-{
-        // TODO
-        AbstractModel::setMove (p);
-        // A tu wpęti trzeba będzie zrobić jakąś korekcję.
-        std::cerr << "--> " << __FILE__ << "," << __FUNCTION__ << " @ " << __LINE__ << " : " << p << std::endl;
-}
+/**
+ * TODO To powinno dziedziczyć z shape
+ */
+class Image : public Model::Box {
+public:
+        __c (void)
+        _b ("Model::Box")
+
+        virtual ~Image () {}
+
+        virtual Core::String getPath() const { return path; }
+        _m (setPath) virtual void setPath (Core::String const &path) { this->path = path; }
+
+private:
+
+        Core::String path;
+        _e (Model::Image);
+};
 
 }
+
+#	endif /* IMAGE_H_ */

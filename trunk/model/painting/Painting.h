@@ -1,19 +1,14 @@
 /****************************************************************************
  *                                                                          *
- *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
+ *  Author : lukasz.iwaszkiewicz@tiliae.eu                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 21, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef SEQUENCE_H_
-#define SEQUENCE_H_
+#ifndef PAINTING_H_
+#define PAINTING_H_
 
-#include "ISequence.h"
-#include "FixedSequence.h"
-#include "StepSequence.h"
-#include "ConstSequence.h"
+#include "Color.h"
 
-#	endif /* SEQUENCE_H_ */
+#	endif /* PAINTING_H_ */

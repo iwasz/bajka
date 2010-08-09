@@ -18,6 +18,7 @@
 
 // TODO Przenieść do pliku z View::Rectangle
 #include "AbstractModel.h"
+#include "../model/Box.h"
 
 namespace Model {
 class Image;

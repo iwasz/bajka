@@ -8,10 +8,12 @@
 
 #include "ScrollMarginController.h"
 #include "geometry/Utils.h"
+#include "IModel.h"
 
 namespace Service {
 using namespace Core;
 using namespace Signal;
+namespace G = Geometry;
 
 bool ScrollMarginController::onMouseMotion (Event::MouseMotionEvent *e)
 {
@@ -23,10 +25,10 @@ bool ScrollMarginController::onMouseMotion (Event::MouseMotionEvent *e)
 
         // TODO ale, ale! Pozycja kursora powinna być tutaj względem widgetu!
         // Co mnie obchodzą world coordinates?
-        e->getPosition ();
+        G::Point p = getModel ()->screenToModel (e->getPosition ());
 
-        std::cerr << e->getPosition () << std::endl;
 
+        std::cerr << p << std::endl;
 
         // bottom margin
         if (type == "bottom") {

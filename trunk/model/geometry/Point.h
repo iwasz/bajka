@@ -18,6 +18,9 @@
 #include <boost/geometry/geometries/adapted/c_array_cartesian.hpp>
 #include <boost/geometry/geometries/register/point.hpp>
 
+/**
+ * Prymitywy geometryczne.
+ */
 namespace Geometry {
 
 /**

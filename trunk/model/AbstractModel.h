@@ -11,8 +11,6 @@
 
 #include "IModel.h"
 #include "geometry/Point.h"
-
-// TODO Usunąć, tylko dla Box.
 #include "geometry/Box.h"
 
 namespace Model {
@@ -21,7 +19,6 @@ class AbstractModel : public IModel {
 public:
         __d
 
-        AbstractModel ();
         virtual ~AbstractModel () {}
 
 /*------affine-transformations----------------------------------------------*/
@@ -35,52 +32,39 @@ public:
         virtual Geometry::AffineMatrix const &
         getMatrix () const { return matrix; }
 
-/*------dimensions----------------------------------------------------------*/
+        virtual Geometry::Point const &screenToModel (Geometry::Point const &) const;
+        virtual Geometry::Point const &modelToScreen (Geometry::Point const &) const;
 
-//        virtual double getWidth () const = 0;
-//        virtual double getHeight () const = 0;
+        // TODO To do zastanowienia.
+        Geometry::AffineMatrix const &updateMatrixStack () const;
+
+        /// Zwraca 0. AbstractModel sam w sobie ma wielkość punktu.
+        virtual double getWidth () const { return 0.0; }
+
+        /// Zwraca 0. AbstractModel sam w sobie ma wielkość punktu.
+        virtual double getHeight () const { return 0.0; }
+
+        /// Zwraca false. AbstractModel sam w sobie ma wielkość punktu, więc nigdy nic nie jest w jego środku.
+        virtual bool enclose (const Geometry::Point &) const { return false; }
+
+        /// Pudełko o zerowym rozmiarze.
+        virtual Geometry::Box const &getBoundingBox () const { static Geometry::Box b; return b; }
+
+protected:
+
+        AbstractModel ();
 
 protected:
 
         // Relative to root-element
         Geometry::AffineMatrix matrix;
 
-        _e (AbstractModel)
-};
-
-/**
- *
- */
-class Box : public AbstractModel, public Geometry::Box {
-public:
-        __c (void)
-        _b ("AbstractModel", "Box")
-
-        Box () : AbstractModel (), Geometry::Box () {}
-        Box (double a, double b, double c, double d) : AbstractModel (), Geometry::Box (a, b, c, d) {}
-        virtual ~Box () {}
-
-/*--------------------------------------------------------------------------*/
-
-        bool enclose (const Geometry::Point &p) const;
-
-        const Geometry::Box &toScreenCoords () const { updateScreenCoords (); return screenCoords; }
-
-/*--------------------------------------------------------------------------*/
-
-        virtual double getWidth () const { return getX2() - getX1 (); }
-        void setWidth (double d) { setX2 (getX1 () + d); }
-
-        virtual double getHeight () const { return getY2 () - getY1 (); }
-        void setHeight (double d) { setY2 (getY1 () + d); }
-
 private:
 
-        // TODO Test
-        void updateScreenCoords () const;
-        mutable Geometry::Box screenCoords;
+        mutable Geometry::AffineMatrix matrixStack;
+        mutable Geometry::Point tmpPoint;
 
-        _e (Model::Box)
+        _e (AbstractModel)
 };
 
 } // namespace
