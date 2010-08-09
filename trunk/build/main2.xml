@@ -226,22 +226,23 @@
 <!--        <property name="model" ref="background.model"/> -->
 
         <property name="sequence">
-            <bean id="seq2" class="StepSequence&lt;Geometry::Point&gt;">
-                <property name="initial">
-                    <bean class="Point">
-                        <property name="x"><value type="double">1</value></property>
-                        <property name="y"><value type="double">1</value></property>            
-                    </bean>
-                </property>
+<!--            <bean id="seq2" class="StepSequence&lt;Geometry::Point&gt;">-->
+            <bean id="seq2" class="ConstSequence&lt;Geometry::Point&gt;">
+<!--                <property name="initial">-->
+<!--                    <bean class="Point">-->
+<!--                        <property name="x"><value type="double">1</value></property>-->
+<!--                        <property name="y"><value type="double">1</value></property>            -->
+<!--                    </bean>-->
+<!--                </property>-->
                 
                 <property name="step">
                     <bean class="Point">
-                        <property name="x"><value type="double">10</value></property>
-                        <property name="y"><value type="double">1</value></property>            
+                        <property name="x"><value type="double">1</value></property>
+                        <property name="y"><value type="double">0</value></property>            
                     </bean>
                 </property>
                 
-                <property name="stepNumber"><value type="int">5</value></property>
+<!--                <property name="stepNumber"><value type="int">5</value></property>-->
             </bean>
         </property>                
     </bean>
