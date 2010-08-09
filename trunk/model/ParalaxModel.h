@@ -10,13 +10,13 @@
 #define PARALAXMODEL_H_
 
 #include <Reflection.h>
-#include "ShapelessModel.h"
 #include "Commons.h"
 #include "geometry/Point.h"
+#include "AbstractModel.h"
 
 namespace Model {
 
-class ParalaxModel : public ShapelessModel {
+class ParalaxModel : public AbstractModel {
 public:
         __c (void)
         _b ("AbstracModel")

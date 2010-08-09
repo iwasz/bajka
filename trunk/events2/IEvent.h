@@ -11,6 +11,9 @@
 
 #include <cstddef>
 
+/**
+ * Eventy.
+ */
 namespace Event {
 
 /**

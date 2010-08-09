@@ -27,7 +27,7 @@ namespace Controller {
  * stos macierzy bezpośrednio w modelu.
  * \ingroup Kontroler
  */
-class SimpleControllerContext : public Event::IEventContext, public Util::TreeMaster <IController> {
+class SimpleControllerContext : public Event::IEventContext {
 public:
 
         virtual ~SimpleControllerContext () {}

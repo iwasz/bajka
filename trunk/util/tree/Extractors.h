@@ -46,11 +46,19 @@ struct ConstMemFunExtractor
          */
         Ptr <SlaveElement> operator()(Ptr <MasterElement> const &x) const
         {
+                if (!x) {
+                        return Ptr <SlaveElement> ();
+                }
+
                 return ((*x).*ptrToMemberFunction)();
         }
 
         Ptr <SlaveElement> operator()(MasterElement* const &x) const
         {
+                if (!x) {
+                        return Ptr <SlaveElement> ();
+                }
+
                 return ((*x).*ptrToMemberFunction)();
         }
 };

@@ -15,12 +15,31 @@
 #include "geometry/Point.h"
 #include "tree/TreeSlave.h"
 #include "IController.h"
+#include "geometry/Box.h"
 
+/**
+ * Klasy związane z modelem. Klasy z warstwy domenowej.
+ */
 namespace Model {
 
 /**
  * Marker
  * TODO Zastanowić się jakie właściwie tu powinny być metody.
+ *
+ * Rodzaje układów współrzędznych w Bajce.
+ * - Device coordinates : to są współrzędne ekranowe po naszemu i w ich przypadku
+ * w górnym lewym rogu ekranu zawsze wypada 0,0. Oś Y rośnie do dołu, jednostki są
+ * całkowite.
+ * - Screen coordinates : to są współrzędne root-modelu. Jeśli rot-model nie ma ustawionej
+ * żadnej transformacji, to jedyna różnica polega na tym, że oś Y rośnie do góry, a środek
+ * ukłądu przebiega przez środek ekranu. Po nałożeniu transofmracji (czyli przemnożeniu
+ * macierzy transofmracji root-modelu przez jakąś macierz przekształacającą) środek układu
+ * może wylądować gdzieś indziej, układ może się też obrócić o jakiś kąt etc.
+ * - Model coordinates / item coordinates : to są współrzędne układu odniesieina dla
+ * konkretnego modelu. Zasada jest ta sama co w przypadku screen-coordinates, tylko, że
+ * modele można zagnieżdżać i każdy ma macierz transformacji. Z tego wynika, że model na
+ * samym dole tej chierarchii (ostatnie dziecko) ma transformację skłądającą się z
+ * przemnożonych macierzy swoich rodziców i swojej.
  */
 struct IModel :
         virtual public Core::Object,
@@ -43,6 +62,9 @@ struct IModel :
         virtual void setResizeW (double w) = 0;
         virtual void setResizeH (double h) = 0;
 
+        virtual Geometry::Point const &screenToModel (Geometry::Point const &) const = 0;
+        virtual Geometry::Point const &modelToScreen (Geometry::Point const &) const = 0;
+
 /*------kształt-------------------------------------------------------------*/
 
         /**
@@ -54,6 +76,16 @@ struct IModel :
 
         virtual double getWidth () const = 0;
         virtual double getHeight () const = 0;
+
+        /**
+         * TODO Terac to zwraca boundingBox w Screen coordinates. Czy to na pewno OK?
+         * @return
+         */
+        virtual Geometry::Box const &getBoundingBox () const = 0;
+
+
+        virtual Geometry::AffineMatrix const &updateMatrixStack () const = 0;
+
 };
 
 }

@@ -47,7 +47,7 @@ public:
         TreeMasterPtr getTreeMaster () { return treeMaster; }
         void setTreeMaster (TreeMasterPtr t) { treeMaster = t; }
 
-        ParentType getParent () { return extractor (treeMaster->getParent ()); }
+        ParentType getParent () const { return extractor (treeMaster->getParent ()); }
 
         const ElementList &getChildren () const;
 

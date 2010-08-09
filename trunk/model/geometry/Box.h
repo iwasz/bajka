@@ -6,8 +6,8 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef MODEL_BOX_H_
-#define MODEL_BOX_H_
+#ifndef GEOMETRY_MODEL_BOX_H_
+#define GEOMETRY_MODEL_BOX_H_
 
 #include <boost/geometry/geometries/register/box.hpp>
 #include <Object.h>
@@ -18,10 +18,11 @@ namespace Geometry {
 
 /**
  * Box Type.
- *
+ * <pre>
  *             +----+ ur (x2, y2)
  *             |    |
  * ll (x1, y1) +----+
+ * </pre>
  */
 class Box : public Core::IToStringEnabled, virtual public Core::Object {
 public:

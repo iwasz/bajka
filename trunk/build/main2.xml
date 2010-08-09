@@ -309,7 +309,7 @@
                             <ref bean="ruchJednostajny"/>
                         </list>
                     </property>
-                    <property name="tickInterval"><value type="int">1000</value></property>
+                    <property name="tickInterval"><value type="int">100</value></property>
                 </bean>
 
                 <!--Można dodać więcej inż 1 timer o różnych interwałach.-->

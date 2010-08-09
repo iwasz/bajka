@@ -1,15 +1,21 @@
 #include <boost/test/unit_test.hpp>
-#include <sstream>
 #include <boost/geometry/geometry.hpp>
+#include <sstream>
+#include <Pointer.h>
 
 
 #include "geometry/Geometry.h"
 #include "IModel.h"
+#include "../controller/SimpleController.h"
+#include "../model/Box.h"
 
 using namespace boost;
 using namespace boost::geometry;
 
 using namespace Geometry;
+
+namespace M = Model;
+namespace C = Controller;
 
 BOOST_AUTO_TEST_SUITE (ModelTest);
 
@@ -48,10 +54,9 @@ BOOST_AUTO_TEST_CASE (testPoint)
 BOOST_AUTO_TEST_CASE (testBox)
 {
         {
-                Box box (-10, 10, 10, -10);
+                Box box (-10, -10, 10, 10);
                 BOOST_CHECK (box.toString () == "Box ((-10, -10), (10, 10))");
                 BOOST_CHECK (area (box) == 400);
-
         }
 
 }
@@ -103,5 +108,28 @@ BOOST_AUTO_TEST_CASE (testBasic)
 
         BOOST_CHECK (true);
 }
- 
+
+BOOST_AUTO_TEST_CASE (testAffine)
+{
+        Ptr <C::IController> c0 = Ptr <C::IController> (new C::SimpleController);
+//        Ptr <Model::IModel> b0 = Ptr <Model::IModel> (new Model::Box (-50, -50, 50, 50));
+        Ptr <Model::IModel> b0 = Ptr <Model::IModel> (new Model::Box (-50, -50, 50, 50));
+        c0->setModel (b0);
+
+        Ptr <C::IController> c1 = Ptr <C::IController> (new C::SimpleController);
+        Ptr <Model::IModel> b1 = Ptr <Model::IModel> (new Model::Box (-40, -40, 40, 40));
+        c1->setModel (b1);
+
+        Ptr <C::IController> c2 = Ptr <C::IController> (new C::SimpleController);
+        Ptr <Model::IModel> b2 = Ptr <Model::IModel> (new Model::Box (-30, -30, 30, 30));
+        c2->setModel (b2);
+
+        c0->addChild (c1);
+        c1->addChild (c2);
+
+
+        BOOST_CHECK (Point (0, 0) == b0->modelToScreen (Point (0, 0)));
+
+}
+
 BOOST_AUTO_TEST_SUITE_END ();
