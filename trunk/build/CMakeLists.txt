@@ -7,6 +7,8 @@ endif(COMMAND cmake_policy)
 
 #ADD_DEFINITIONS (-O3)
 ADD_DEFINITIONS (-g)
+ADD_DEFINITIONS (-Winvalid-pch)
+#ADD_DEFINITIONS (-H)
 #ADD_DEFINITIONS (-Wall)
 #ADD_DEFINITIONS (-fsyntax-only)
 

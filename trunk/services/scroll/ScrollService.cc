@@ -16,9 +16,9 @@ void ScrollService::down (/*double speed*/)
         std::cerr << "--> " << __FILE__ << "," << __FUNCTION__ << " @ " << __LINE__ << " : " << "ScrollService::down (" /*<< speed*/ << ")" << std::endl;
 }
 
-void ScrollService::up (double speed)
+void ScrollService::up (/*double speed*/)
 {
-        std::cerr << "--> " << __FILE__ << "," << __FUNCTION__ << " @ " << __LINE__ << " : " << "ScrollService::up (" << speed << ")" << std::endl;
+        std::cerr << "--> " << __FILE__ << "," << __FUNCTION__ << " @ " << __LINE__ << " : " << "ScrollService::up (" /*<< speed*/ << ")" << std::endl;
 
 }
 

@@ -27,20 +27,26 @@ public:
         __c (void)
         _b ("SimpleController")
 
+        /**
+         * Typ marginesu (jego pozycja). Zgodnie ze
+         * wskazówkami zegara, czyli TOP = 0, RIGHT = 1,
+         * BOTTOM = 2, LEFT = 3
+         */
+        enum Type { TOP, RIGHT, BOTTOM, LEFT };
 
         ScrollMarginController () : sender (this) {}
         virtual ~ScrollMarginController () {}
 
         bool onMouseMotion (Event::MouseMotionEvent *e);
 
-        // TODO to powinno być jakieś ENUM (ale jak tego użyć w kontenerze wtedy!?).
-        std::string getType () { return type; }
-        void setType (const std::string &t) { type = t; }
+        Type getType () { return type; }
+        // TODO kiedyś kontener będzie obsługiwał enumy, to zamienić typ.
+        _m (setType) void setType (/*Type t*/int t) { type = (Type)t; }
 
 private:
 
         Signal::Sender sender;
-        std::string type;
+        Type type;
 
         _e (ScrollMarginController)
 };

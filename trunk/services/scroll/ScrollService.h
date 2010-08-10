@@ -18,18 +18,21 @@ class ScrollService {
 public:
         __c (void)
 
-        ScrollService () : onDown (this, "/a/down", "$down()") {}
+        ScrollService () :
+                onDown (this, "/a/down", "$down()"),
+                onUp (this, "/a/up", "$up()") {}
+
         virtual ~ScrollService () {}
 
         _m (down) void down (/*double speed*/);
-        void up (double speed);
+        _m (up) void up (/*double speed*/);
         void left (double speed);
         void right (double speed);
 
 //        void move (const Distance &d);
 private:
 
-        Signal::Listener onDown/*, onUp, onLeft, onRight*/;
+        Signal::Listener onDown, onUp/*, onLeft, onRight*/;
 
         _e (ScrollService)
 };
