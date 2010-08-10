@@ -11,9 +11,9 @@
 #ifndef ICONTROLLER_H_
 #define ICONTROLLER_H_
 
+#include <Reflection.h>
 #include <Pointer.h>
 #include <List.h>
-#include <Reflection.h>
 #include <collection/List.h>
 
 #include "IWidget.h"

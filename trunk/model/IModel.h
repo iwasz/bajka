@@ -78,7 +78,7 @@ struct IModel :
         virtual double getHeight () const = 0;
 
         /**
-         * TODO Terac to zwraca boundingBox w Screen coordinates. Czy to na pewno OK?
+         * Zwraca boundingBox w układzie współrzędnych swojego rodzica.
          * @return
          */
         virtual Geometry::Box const &getBoundingBox () const = 0;

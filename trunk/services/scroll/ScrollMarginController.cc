@@ -21,23 +21,47 @@ bool ScrollMarginController::onMouseMotion (Event::MouseMotionEvent *e)
                 return true;
         }
 
-        VariantVector args;
 
-        // TODO ale, ale! Pozycja kursora powinna być tutaj względem widgetu!
-        // Co mnie obchodzą world coordinates?
         G::Point p = getModel ()->screenToModel (e->getPosition ());
 
+        if (type == TOP) {
+                VariantVector args;
+                double h = getModel ()->getHeight ();
+                double speed = p.getY () / h;
+                std::cerr << speed << std::endl;
 
-        std::cerr << p << std::endl;
-
-        // bottom margin
-        if (type == "bottom") {
-                args.add (variant_cast <Variant> (1));
-                // TODO To trzeba zbindować dynamicznie w kontenerze, a nie ściezka na sztywno.
-                sender.emit ("/a/down", args);
-
+                // TODO to nie może być przez taką listę. To bez sensu jest.
+                Variant v /*= variant_cast <Variant> (speed)*/;
+                args.add (v);
+                sender.emit ("/a/up", args);
         }
 
+//        if (type == BOTTOM) {
+//                double h = getModel ()->getHeight ();
+//                double speed = ((h - p.getY ()) / h);
+//                std::cerr << speed << std::endl;
+//
+//                args.add (variant_cast <Variant> (speed));
+//                sender.emit ("/a/down");
+//        }
+//
+//        if (type == LEFT) {
+//                double w = getModel ()->getWidth ();
+//                double speed = ((w - p.getX ()) / w);
+//                std::cerr << speed << std::endl;
+//
+//                args.add (variant_cast <Variant> (speed));
+//                sender.emit ("/a/left");
+//        }
+//
+//        if (type == RIGHT) {
+//                double w = getModel ()->getWidth ();
+//                double speed = (p.getX () / w);
+//                std::cerr << speed << std::endl;
+//
+//                args.add (variant_cast <Variant> (speed));
+//                sender.emit ("/a/right");
+//        }
 }
 
 }

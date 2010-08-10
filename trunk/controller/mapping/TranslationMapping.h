@@ -11,8 +11,8 @@
 #ifndef ABSOLUTEMOVEMENTMAPPING_H_
 #define ABSOLUTEMOVEMENTMAPPING_H_
 
-#include <iostream>
 #include <Reflection.h>
+#include <iostream>
 
 #include "AbstractMapping.h"
 #include "AbstractModel.h"

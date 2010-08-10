@@ -118,6 +118,7 @@
         <property name="model.y1"><value type="double">-239</value></property>
         <property name="model.x2"><value type="double">-220</value></property>
         <property name="model.y2"><value type="double">240</value></property>
+        <property name="type"><value type="int">3</value></property>
     </bean>
 
 
@@ -127,6 +128,7 @@
         <property name="model.y1"><value type="double">-239</value></property>
         <property name="model.x2"><value type="double">320</value></property>
         <property name="model.y2"><value type="double">240</value></property>
+        <property name="type"><value type="int">1</value></property>
     </bean>
 
 
@@ -136,6 +138,7 @@
         <property name="model.y1"><value type="double">140</value></property>
         <property name="model.x2"><value type="double">320</value></property>
         <property name="model.y2"><value type="double">240</value></property>
+        <property name="type"><value type="int">0</value></property>
     </bean>
     
     
@@ -145,6 +148,7 @@
         <property name="model.y1"><value type="double">-239</value></property>
         <property name="model.x2"><value type="double">320</value></property>
         <property name="model.y2"><value type="double">-140</value></property>
+        <property name="type"><value type="int">2</value></property>
     </bean>
 
 

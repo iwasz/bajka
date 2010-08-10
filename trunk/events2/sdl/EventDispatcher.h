@@ -9,8 +9,8 @@
 #ifndef EVENTDISPATCHER_H_
 #define EVENTDISPATCHER_H_
 
-#include <SDL.h>
 #include <Reflection.h>
+#include <SDL.h>
 
 #include "IEvent.h"
 #include "KeyboardEvent.h"

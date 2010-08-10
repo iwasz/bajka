@@ -8,10 +8,10 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#include "Common.h"
 #include <Foreach.h>
 
 #include "EventDispatcher.h"
-#include "Common.h"
 
 using namespace Event;
 
