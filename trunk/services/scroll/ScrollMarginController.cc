@@ -22,46 +22,48 @@ bool ScrollMarginController::onMouseMotion (Event::MouseMotionEvent *e)
         }
 
 
+        VariantVector args;
         G::Point p = getModel ()->screenToModel (e->getPosition ());
 
         if (type == TOP) {
-                VariantVector args;
                 double h = getModel ()->getHeight ();
                 double speed = p.getY () / h;
-                std::cerr << speed << std::endl;
 
                 // TODO to nie może być przez taką listę. To bez sensu jest.
-                Variant v /*= variant_cast <Variant> (speed)*/;
-                args.add (v);
-                sender.emit ("/a/up", args);
+                args.add (vcast <Variant> (speed));
+                sender.emit ("/scroll/up", args);
         }
 
-//        if (type == BOTTOM) {
-//                double h = getModel ()->getHeight ();
-//                double speed = ((h - p.getY ()) / h);
-//                std::cerr << speed << std::endl;
-//
-//                args.add (variant_cast <Variant> (speed));
-//                sender.emit ("/a/down");
-//        }
-//
-//        if (type == LEFT) {
-//                double w = getModel ()->getWidth ();
-//                double speed = ((w - p.getX ()) / w);
-//                std::cerr << speed << std::endl;
-//
-//                args.add (variant_cast <Variant> (speed));
-//                sender.emit ("/a/left");
-//        }
-//
-//        if (type == RIGHT) {
-//                double w = getModel ()->getWidth ();
-//                double speed = (p.getX () / w);
-//                std::cerr << speed << std::endl;
-//
-//                args.add (variant_cast <Variant> (speed));
-//                sender.emit ("/a/right");
-//        }
+        if (type == BOTTOM) {
+                double h = getModel ()->getHeight ();
+                double speed = ((h - p.getY ()) / h);
+
+                args.add (variant_cast <Variant> (speed));
+                sender.emit ("/scroll/down", args);
+        }
+
+        if (type == LEFT) {
+                double w = getModel ()->getWidth ();
+                double speed = ((w - p.getX ()) / w);
+
+                args.add (variant_cast <Variant> (speed));
+                sender.emit ("/scroll/left", args);
+        }
+
+        if (type == RIGHT) {
+                double w = getModel ()->getWidth ();
+                double speed = (p.getX () / w);
+
+                args.add (variant_cast <Variant> (speed));
+                sender.emit ("/scroll/right", args);
+        }
+}
+
+/****************************************************************************/
+
+bool ScrollMarginController::onMouseOut (Event::MouseMotionEvent *e)
+{
+        sender.emit ("/scroll/stop");
 }
 
 }

@@ -13,11 +13,12 @@
 #include "IController.h"
 #include "AbstractObserver.h"
 #include "tree/TreeMaster.h"
+#include "geometry/Utils.h"
 
-namespace Geometry {
-class AffineMatrix;
-typedef std::stack <AffineMatrix> AffineMatrixStack;
-}
+//namespace Geometry {
+//class AffineMatrix;
+//typedef std::stack <AffineMatrix> AffineMatrixStack;
+//}
 
 namespace Controller {
 
