@@ -38,6 +38,7 @@ public:
         virtual ~ScrollMarginController () {}
 
         bool onMouseMotion (Event::MouseMotionEvent *e);
+        bool onMouseOut (Event::MouseMotionEvent *e);
 
         Type getType () { return type; }
         // TODO kiedyś kontener będzie obsługiwał enumy, to zamienić typ.
