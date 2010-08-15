@@ -28,8 +28,7 @@ public:
                 onDown (this, "/scroll/down", "$down (%0)"),
                 onUp (this, "/scroll/up", "$up (%0)"),
                 onRight (this, "/scroll/right", "$right (%0)"),
-                onLeft (this, "/scroll/left", "$left (%0)"),
-                onStop (this, "/scroll/stop", "$stop ()")
+                onLeft (this, "/scroll/left", "$left (%0)")
                 {}
 
         virtual ~ScrollController () {}
@@ -46,14 +45,15 @@ public:
         _m (right)
         void right (double speed);
 
-        _m (stop)
-        void stop ();
-
 //        TODO
 //        void move (const Distance &d);
+
+        virtual bool onTimer (Event::TimerEvent *e);
+
 private:
 
-        Signal::Listener onDown, onUp, onLeft, onRight, onStop;
+        Signal::Listener onDown, onUp, onLeft, onRight;
+        Geometry::Point currentMove;
 
         _e (ScrollController)
 };

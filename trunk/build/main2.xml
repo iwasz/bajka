@@ -44,6 +44,12 @@
         <property name="model.resizeH"><value type="double">1</value></property>
     </bean>
 
+    <bean id="background2" parent="image" singleton="true">
+        <property name="model.path" value="../gfx/ralervegen.jpg" />
+<!--        <property name="model.resizeW"><value type="double">2</value></property>-->
+<!--        <property name="model.resizeH"><value type="double">2</value></property>-->
+    </bean>
+
 
 
 <!-- ===================================================================================== -->
@@ -154,15 +160,6 @@
 
 
     <bean id="scrollMargins" class="SimpleController" init-method="init" singleton="true">
-<!--        <property name="model">-->
-<!--            <bean id="model" class="Model::Box" scope="bean">-->
-<!--                <property name="x1"><value type="double">-319</value></property>-->
-<!--                <property name="y1"><value type="double">-240</value></property>-->
-<!--                <property name="x2"><value type="double">320</value></property>-->
-<!--                <property name="y2"><value type="double">240</value></property>-->
-<!--            </bean>-->
-<!--        </property>-->
-
         <property name="children">
             <list class="ControllerList">
                 <ref bean="scrollEventMarginLeft"/>                
@@ -176,9 +173,31 @@
         <property name="bitMask"><value type="unsigned int">1</value></property>
     </bean>
     
-    <bean id="scrollService" class="ScrollService">
     
+    
+    <bean id="scrollController" class="ScrollController">
+        <property name="model">
+            <bean class="ParalaxModel">
+                <property name="depths">
+                    <list class="DoubleVector">
+                        <value type="double">0.5</value>
+                        <value type="double">1.0</value>
+                    </list>
+                </property>
+            </bean>
+        </property>
+    
+        <property name="children">
+            <list class="ControllerList">
+                <ref bean="background2"/>
+                <ref bean="background"/>
+            </list>
+        </property>
+    
+        <!-- Zegarowy -->
+        <property name="bitMask"><value type="unsigned int">8</value></property>
     </bean>
+    
 <!-- ===================================================================================== -->
 <!--+===============+-->
 <!--| Paralax stuff |-->
@@ -205,21 +224,6 @@
     
     
     
-    <bean id="paralaxModel" class="ParalaxModel" />
-
-
-    
-    <bean id="paralaxLayer" class="SimpleController" init-method="init">
-        <property name="model" ref="paralaxModel"/>
-
-        <property name="children">
-            <list class="ControllerList">
-                <ref bean="background"/>
-            </list>
-        </property>
-
-        <property name="bitMask"><value type="unsigned int">0</value></property>
-    </bean>
 
     
         
@@ -230,23 +234,13 @@
 <!--        <property name="model" ref="background.model"/> -->
 
         <property name="sequence">
-<!--            <bean id="seq2" class="StepSequence&lt;Geometry::Point&gt;">-->
             <bean id="seq2" class="ConstSequence&lt;Geometry::Point&gt;">
-<!--                <property name="initial">-->
-<!--                    <bean class="Point">-->
-<!--                        <property name="x"><value type="double">1</value></property>-->
-<!--                        <property name="y"><value type="double">1</value></property>            -->
-<!--                    </bean>-->
-<!--                </property>-->
-                
                 <property name="step">
                     <bean class="Point">
                         <property name="x"><value type="double">1</value></property>
                         <property name="y"><value type="double">0</value></property>            
                     </bean>
                 </property>
-                
-<!--                <property name="stepNumber"><value type="int">5</value></property>-->
             </bean>
         </property>                
     </bean>
@@ -265,11 +259,10 @@
 
         <property name="children">
             <list class="ControllerList">
-                <ref bean="paralaxLayer"/>
-<!--                <ref bean="background"/>-->
+                <ref bean="tmp1"/>
                 <ref bean="rect"/>
                 <ref bean="scrollMargins"/>         
-                <ref bean="tmp1"/>       
+                <ref bean="scrollController" /> 
             </list>
         </property>
 
@@ -310,10 +303,11 @@
                     <property name="observers">
                         <list class="ObserverVector">
                             <ref bean="screen" />
-                            <ref bean="ruchJednostajny"/>
+<!--                            <ref bean="ruchJednostajny"/>-->
+                            <ref bean="scrollController" />
                         </list>
                     </property>
-                    <property name="tickInterval"><value type="int">100</value></property>
+                    <property name="tickInterval"><value type="int">40</value></property>
                 </bean>
 
                 <!--Można dodać więcej inż 1 timer o różnych interwałach.-->

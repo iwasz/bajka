@@ -111,13 +111,13 @@ public:
          * @param event
          * @return
          */
-        bool onEvent (Event::IEvent *event);
+        virtual bool onEvent (Event::IEvent *event);
 
-        bool onMouseMotion (Event::MouseMotionEvent *e);
-        bool onMouseOver (Event::MouseMotionEvent *e);
-        bool onMouseOut (Event::MouseMotionEvent *e);
+        virtual bool onMouseMotion (Event::MouseMotionEvent *e);
+        virtual bool onMouseOver (Event::MouseMotionEvent *e);
+        virtual bool onMouseOut (Event::MouseMotionEvent *e);
 
-        bool onTimer (Event::TimerEvent *e);
+//        bool onTimer (Event::TimerEvent *e);
 
 private:
 

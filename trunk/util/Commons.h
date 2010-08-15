@@ -21,10 +21,10 @@ typedef Reflection::Vector <int> IntVector;
 _f (IntVector)
 
 typedef Reflection::List <double> DoubleList;
-_f (IntList)
+_f (DoubleList)
 
 typedef Reflection::Vector <double> DoubleVector;
-_f (IntVector)
+_f (DoubleVector)
 
 }
 

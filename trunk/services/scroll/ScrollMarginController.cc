@@ -21,7 +21,6 @@ bool ScrollMarginController::onMouseMotion (Event::MouseMotionEvent *e)
                 return true;
         }
 
-
         VariantVector args;
         G::Point p = getModel ()->screenToModel (e->getPosition ());
 
@@ -63,7 +62,24 @@ bool ScrollMarginController::onMouseMotion (Event::MouseMotionEvent *e)
 
 bool ScrollMarginController::onMouseOut (Event::MouseMotionEvent *e)
 {
-        sender.emit ("/scroll/stop");
+        VariantVector args;
+        args.add (variant_cast <Variant> (0.0));
+
+        if (type == TOP) {
+                sender.emit ("/scroll/up", args);
+        }
+
+        if (type == BOTTOM) {
+                sender.emit ("/scroll/down", args);
+        }
+
+        if (type == LEFT) {
+                sender.emit ("/scroll/left", args);
+        }
+
+        if (type == RIGHT) {
+                sender.emit ("/scroll/right", args);
+        }
 }
 
 }
