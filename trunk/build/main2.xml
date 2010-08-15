@@ -259,10 +259,10 @@
 
         <property name="children">
             <list class="ControllerList">
+                <ref bean="scrollController" /> 
                 <ref bean="tmp1"/>
                 <ref bean="rect"/>
                 <ref bean="scrollMargins"/>         
-                <ref bean="scrollController" /> 
             </list>
         </property>
 
