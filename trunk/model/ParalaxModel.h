@@ -19,13 +19,13 @@ namespace Model {
 class ParalaxModel : public AbstractModel {
 public:
         __c (void)
-        _b ("AbstracModel")
+        _b ("AbstractModel")
 
         virtual ~ParalaxModel () {}
         virtual void setMove (const Geometry::Point &p);
 
         const Util::DoubleVector &getDepths () const { return depths; }
-        void setDepths (const Util::DoubleVector &depths) { this->depths = depths; }
+        _m (setDepths) void setDepths (const Util::DoubleVector &depths) { this->depths = depths; }
 
 private:
 

@@ -12,10 +12,16 @@ namespace Model {
 
 void ParalaxModel::setMove (const Geometry::Point &p)
 {
-        // TODO
-        AbstractModel::setMove (p);
-        // A tu wpęti trzeba będzie zrobić jakąś korekcję.
-        std::cerr << "--> " << __FILE__ << "," << __FUNCTION__ << " @ " << __LINE__ << " : " << p << std::endl;
+        // Siebie w ogóle nie przesuwa.
+        //AbstractModel::setMove (p);
+
+        Util::DoubleVector::const_iterator j = depths.begin ();
+
+        for (Iterator i = begin (); i != end (); ++i, ++j) {
+//                double factor = 1
+                (*i)->setMove (p * *j);
+        }
+
 }
 
 }

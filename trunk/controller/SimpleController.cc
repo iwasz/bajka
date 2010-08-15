@@ -264,17 +264,17 @@ bool SimpleController::onMouseMotion (Event::MouseMotionEvent *e)
 
 /****************************************************************************/
 
-bool SimpleController::onTimer (Event::TimerEvent *e)
-{
-        std::cerr << "SimpleController::onTimer : " << e->getTicks () << ", this=[" << this << "]" << std::endl;
-        return true;
-}
+//bool SimpleController::onTimer (Event::TimerEvent *e)
+//{
+//        std::cerr << "SimpleController::onTimer : " << e->getTicks () << ", this=[" << this << "]" << std::endl;
+//        return true;
+//}
 
 /****************************************************************************/
 
 bool SimpleController::onMouseOver (Event::MouseMotionEvent *e)
 {
-        std::cerr << "SimpleController::onMouse-OVER : " << e->getPosition() << ", this=[" << this << "]" << std::endl;
+//        std::cerr << "SimpleController::onMouse-OVER : " << e->getPosition() << ", this=[" << this << "]" << std::endl;
         return true;
 }
 
@@ -282,7 +282,7 @@ bool SimpleController::onMouseOver (Event::MouseMotionEvent *e)
 
 bool SimpleController::onMouseOut (Event::MouseMotionEvent *e)
 {
-        std::cerr << "SimpleController::onMouse-OUT : " << e->getPosition() << ", this=[" << this << "]" << std::endl;
+//        std::cerr << "SimpleController::onMouse-OUT : " << e->getPosition() << ", this=[" << this << "]" << std::endl;
         return true;
 }
 

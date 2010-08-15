@@ -28,7 +28,7 @@ int main (int argc, char **argv)
         Ptr <Util::BajkaApp> app = vcast <Ptr <Util::BajkaApp> > (container->getBean ("app"));
 
         // TODO Do wywalenia, kiedy beany singleton będą się same instancjonowac (TODO).
-        Core::Variant v = container->getBean ("scrollService");
+//        Core::Variant v = container->getBean ("scrollService");
 
         app->run (argc, argv);
         app->loop ();
