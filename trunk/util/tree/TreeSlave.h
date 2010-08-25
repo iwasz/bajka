@@ -19,6 +19,7 @@ namespace Util {
 
 /**
  * Slave dla struktury drzewiastej.
+ * \ingroup Tree
  */
 template <typename SlaveElement,
         typename MasterElement,

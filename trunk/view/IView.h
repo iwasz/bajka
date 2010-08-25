@@ -20,7 +20,9 @@
 namespace View {
 
 /**
- * Everything that can be drawn.
+ * Interfejs dowlonej rzeczy, którą da się narysować. Mogą to być przeróżne elementy graficzne, sekwencje
+ * animacji, przejścia i inne.
+ * \ingroup View
  */
 struct IView : public virtual Core::Object {
 

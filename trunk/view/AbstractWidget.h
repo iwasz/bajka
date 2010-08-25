@@ -18,11 +18,13 @@ namespace View {
 
 /**
  * Convenience class.
- *
- * Every widget is also a container for other widgets. It simply
+ * Every widget is also a "container" for other widgets. It simply
  * means that transformations aplied to the prent will be also
  * applied to its children (for example translating the parent
  * means also to translate the children).
+ *
+ * Oczywiście zawieranie nie jest zaimplementowane w warstwie widoku, tylko w warstwie kontrolera.
+ * \ingroup View
  */
 class AbstractWidget : public IWidget {
 public:

@@ -21,7 +21,7 @@
 #include "Model.h"
 #include "Events.h"
 #include "Util.h"
-#include "OpenGL.h"
+#include "OpenGl.h"
 
 #include "sequence/Sequence.h"
 #include "mapping/Mapping.h"

@@ -27,6 +27,7 @@ namespace Util {
  *
  * Ptr <ChildElement> getParent ();
  * std::vector <Ptr <ChildElement> > getChildren ();
+ * \ingroup Tree
  */
 template <typename Element>
 class TreeMaster {

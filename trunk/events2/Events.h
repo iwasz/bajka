@@ -11,6 +11,8 @@
 
 /**
  * \defgroup Events
+ * Podsystem eventów. W tym module znajdują się klasy implementujące poszczególne eventy, oraz serwisy
+ * implementujące generowanie tych eventów.
  * \{
  * \}
  */

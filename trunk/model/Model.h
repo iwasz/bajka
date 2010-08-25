@@ -10,10 +10,13 @@
 #define MODEL_H_
 
 /**
- * \defgroup Model Model - klasy związane z modelem danych.
+ * \defgroup Model
+ * Klasy związane z modelem danych.
  * \{
- * \defgroup Geometry Geometry - klasy modelowe strikte geometryczne.
- * \defgroup Painting Painting - klasy modelowe strikte związane z malowaniem (kolory, grubości linii).
+ * \defgroup Geometry
+ * Klasy modelowe strikte geometryczne.
+ * \defgroup Painting
+ * Klasy modelowe strikte związane z malowaniem (kolory, grubości linii).
  * \}
  */
 

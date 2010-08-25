@@ -78,6 +78,8 @@ public:
 
 /*------Drawing-------------------------------------------------------------*/
 
+        /// \name Rysowanie
+        //\{
         virtual void init ();
         virtual void draw ();
         virtual void doChildren ();
@@ -94,6 +96,7 @@ public:
 
         Ptr<IMapping> getMapping () const { return mapping; }
         _m (setMapping) void setMapping (Ptr<IMapping> mapping) { this->mapping = mapping; }
+        //\}
 
 /*------Containing----------------------------------------------------------*/
 
@@ -102,6 +105,9 @@ public:
         void setChildren (const ControllerList &list) { IController::setChildren (list); }
 
 /*------Events--------------------------------------------------------------*/
+
+        /// \name Eventy
+        //\{
 
         /**
          * Tu zaimplementowane jest przekazywanie eventu wgłąb struktury
@@ -118,6 +124,8 @@ public:
         virtual bool onMouseOut (Event::MouseMotionEvent *e);
 
 //        bool onTimer (Event::TimerEvent *e);
+
+        //\}
 
 private:
 
