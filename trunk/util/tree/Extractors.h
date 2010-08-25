@@ -31,6 +31,10 @@ namespace Util {
 //        }
 //};
 
+/**
+ * Definiuje metodę za pomocą której master wyciąga swoje slave-y.
+ * \ingroup Tree
+ */
 template <typename SlaveElement,
         typename MasterElement,
         Ptr <SlaveElement> (MasterElement::*ptrToMemberFunction)() const>

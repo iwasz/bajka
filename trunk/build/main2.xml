@@ -307,7 +307,7 @@
                             <ref bean="scrollController" />
                         </list>
                     </property>
-                    <property name="tickInterval"><value type="int">40</value></property>
+                    <property name="tickInterval"><value type="int">20</value></property>
                 </bean>
 
                 <!--Można dodać więcej inż 1 timer o różnych interwałach.-->

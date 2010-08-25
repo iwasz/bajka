@@ -9,10 +9,6 @@
 #ifndef SCROLL_H_
 #define SCROLL_H_
 
-/**
- * \defgroup Scroll
- */
-
 #include "ScrollMarginController.h"
 #include "ScrollService.h"
 

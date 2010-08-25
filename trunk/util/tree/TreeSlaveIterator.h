@@ -15,6 +15,7 @@ namespace Util {
 
 /**
  * Iterator dla TreeSlave.
+ * \ingroup Tree
  */
 template <typename T, typename TreeMasterType, typename Extractor>
 class TreeSlaveIterator : public std::iterator <std::forward_iterator_tag, T> {

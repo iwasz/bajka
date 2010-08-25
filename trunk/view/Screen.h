@@ -17,8 +17,9 @@
 namespace View {
 
 /**
- * Widok przeznaczony do stosowania z głownym kontrolerem (root
+ * Widok ekranu. Widok przeznaczony do stosowania z głownym kontrolerem (root
  * kontrolerem). Czyści ekran etc.
+ * \ingroup View
  */
 class Screen : public AbstractWidget {
 public:

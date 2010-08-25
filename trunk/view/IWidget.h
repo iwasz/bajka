@@ -26,7 +26,7 @@ class IWidget;
 typedef Core::List <Ptr <IWidget> > WidgetList;
 typedef Core::Vector <Ptr <IWidget> > WidgetVector;
 
-/**
+/*
  * TODO Chyba już niepotrzebne, wystarczy sam IView.
  */
 struct IWidget : public IView {

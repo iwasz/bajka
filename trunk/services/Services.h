@@ -1,23 +1,21 @@
 /****************************************************************************
  *                                                                          *
- *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
+ *  Author : lukasz.iwaszkiewicz@tiliae.eu                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 18, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef SDL_H_
-#define SDL_H_
+#ifndef SERVICES_H_
+#define SERVICES_H_
 
 /**
- * \defgroup Sdl
- * \ingroup Events
- * Klasy implementujące podystem eventów zależne od Sdl.
+ * \defgroup Service
+ * Część serwisowa. Serwisy wykonują operacje (ale nie tylko na modelach, więc nie jest to prawdziwa warstwa).
+ * \{
+ * \defgroup Scroll
+ * Scrollowanie ekranu. Różne klasy związane ze scrollowaniem ekranu. Jak na razie zaimplementowane jest scrollowanie w stylu WorldOfGoo.
+ * \}
  */
 
-#include "EventDispatcher.h"
-#include "TimerDispatcher.h"
-
-#	endif /* SDL_H_ */
+#	endif /* SERVICES_H_ */

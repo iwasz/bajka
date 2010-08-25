@@ -27,9 +27,10 @@ class Image;
 namespace View {
 
 /**
- * Simple image ie. from file. Caution! After seting a new model
+ * Simple image ie.\ from file. Caution! After seting a new model
  * with setModel method, you should call init to reload image, and
  * update model.width/height.
+ * \ingroup View
  */
 class Image : public AbstractWidget {
 public:

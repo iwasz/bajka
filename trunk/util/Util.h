@@ -11,6 +11,11 @@
 #ifndef UTIL_H_
 #define UTIL_H_
 
+/**
+ * \defgroup Util
+ * Klasy pomocnicze. Matematyka, geometria, struktury drzewiaste. Rożne klasy pomocnicze.
+ */
+
 #include "InclusionService.h"
 #include "IntersectionService.h"
 #include "Math.h"
