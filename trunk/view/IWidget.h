@@ -11,6 +11,9 @@
 #ifndef IWIDGET_H_
 #define IWIDGET_H_
 
+#include <Reflection.h>
+#include <collection/Map.h>
+
 #include <List.h>
 #include <Vector.h>
 
@@ -22,33 +25,14 @@ class IModel;
 
 namespace View {
 
-class IWidget;
-typedef Core::List <Ptr <IWidget> > WidgetList;
-typedef Core::Vector <Ptr <IWidget> > WidgetVector;
-
-/*
- * TODO Chyba już niepotrzebne, wystarczy sam IView.
+/**
+ * Szczególny rodzaj widoku współpracujący z kontrolerami i modelami. Część
+ * triady MVC. Iterfejs IView jest jeszcze bardziej ogólny.
+ * \ingroup View
  */
 struct IWidget : public IView {
 
         virtual ~IWidget () {}
-
-//        virtual void setCenter (const Model::Point &p) = 0;
-//        virtual const Model::Point &getCenter () const = 0;
-//
-///*------Transformations-----------------------------------------------------*/
-//
-//        // Relative
-//        virtual void translate (const Model::Point &p) = 0;
-//        virtual void rotate (double r) = 0;
-//        virtual void scale (double w, double h) = 0;
-//
-//        // Absolute
-//        virtual void setTranslation (const Model::Point &p) = 0;
-//        virtual void setRotation (double r) = 0;
-//        virtual void setScale (double w, double h) = 0;
-
-
 
         /**
          * Inits this Widget. You must reimplemet this method if you want
@@ -58,7 +42,27 @@ struct IWidget : public IView {
          */
         virtual void setModel (Ptr <Model::IModel> model) = 0;
         virtual Ptr <Model::IModel> getModel () const = 0;
+
+        /**
+         * Zwraca informację czy widget jest wodoczny, czy nie.
+         * @return
+         */
+        virtual bool getVisible () const = 0;
+
+        /**
+         * Ustawiainformację czy widget jest wodoczny, czy nie.
+         * @return
+         */
+        virtual void setVisible (bool) = 0;
 };
+
+/****************************************************************************/
+
+typedef Core::List <Ptr <IWidget> > WidgetList;
+typedef Core::Vector <Ptr <IWidget> > WidgetVector;
+/// \todo Klucz dałbym na std::string
+typedef Reflection::Map <Core::String, Ptr <IWidget> > StringWidgetMap;
+_f (StringWidgetMap)
 
 }
 

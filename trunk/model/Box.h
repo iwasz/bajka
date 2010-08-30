@@ -22,7 +22,7 @@ namespace Model {
 class Box : public Shape, public Geometry::Box {
 public:
         __c (void)
-        _b ("AbstractModel", "Box")
+        _b ("Shape", "Box")
 
         Box () : Shape (), Geometry::Box () {}
         Box (double a, double b, double c, double d) : Shape (), Geometry::Box (a, b, c, d) {}

@@ -21,6 +21,7 @@ namespace Service {
  *
  * Ten kontroler jest pomyślany do wspólpracy ze ScrollService, które ma
  * odpowiednie handlery dla powyżych sygnałów.
+ * \ingroup Service
  */
 class ScrollMarginController : public Controller::SimpleController {
 public:

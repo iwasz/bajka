@@ -157,6 +157,14 @@ void SimpleController::setModel (Ptr<Model::IModel> model)
 
 /****************************************************************************/
 
+/*
+ * TODO To są szczegóły implementacji widgeta, które są w kontrolerze. Czyli się
+ * trochę pomieszało. Teraz, kiedy jest TreeSlave/TreeMaster, możnaby tą metdoę
+ * przenieść do widgeta i jako publiczną zrobić tylko draw, a post i pre jako protected.
+ * Dzięki temu
+ * 1. Implementacj będzie ukryta.
+ * 2. Kontroler będzie wołać tylko draw i będzie łątwiej go przedefiniować w podklasach.
+ */
 void SimpleController::draw ()
 {
         // If render is set to false, we skip drawing this Widget.
