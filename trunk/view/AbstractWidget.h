@@ -9,8 +9,6 @@
 #ifndef ABSTRACTWIDGET_H_
 #define ABSTRACTWIDGET_H_
 
-#include <Reflection.h>
-
 #include "IWidget.h"
 #include "IModel.h"
 
@@ -30,18 +28,24 @@ class AbstractWidget : public IWidget {
 public:
         __d
 
+        AbstractWidget () : visible (true) {}
         virtual ~AbstractWidget () {}
 
         _m (setModel) virtual void setModel (Ptr <Model::IModel> model) { this->model = model; }
         _m (getModel) virtual Ptr <Model::IModel> getModel () const { return model; }
 
+        virtual bool getVisible () const { return visible; }
+        _m (setVisible) virtual void setVisible (bool v) { visible = v; }
+
         // Domyślnie nic się tu nie dzieje.
-        void init () {}
+        virtual void init () {}
 
         void draw ()
         {
-                doTransform ();
-                doDraw ();
+                if (visible) {
+                        doTransform ();
+                        doDraw ();
+                }
         }
 
         virtual void preDraw ();
@@ -53,6 +57,8 @@ public:
 protected:
 
         Ptr <Model::IModel> model;
+        bool visible;
+
         _e (AbstractWidget)
 };
 

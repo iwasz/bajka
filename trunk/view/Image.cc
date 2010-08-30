@@ -41,6 +41,7 @@ void Image::init ()
         SDL_Surface *image = IMG_Load (model->getPath ().c_str ());
 
         if (image == NULL) {
+                /// \todo Może jakieś info do cholery!?
                 throw ImageException ();
         }
 

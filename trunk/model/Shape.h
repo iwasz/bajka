@@ -22,6 +22,9 @@ namespace Model {
  */
 class Shape : public AbstractModel {
 public:
+        __c (void)
+        _b ("AbstractModel")
+
         virtual ~Shape () {}
 
         virtual double getWidth () const { return getBoundingBox ().getX2 () - getBoundingBox ().getX1 (); }
@@ -37,6 +40,8 @@ public:
 //private:
 //
 //        Geometry::Box boundingBox;
+
+        _e (Shape)
 };
 
 } // nam
