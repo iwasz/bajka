@@ -6,22 +6,28 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "ParalaxModel.h"
+#ifndef IMODELAWARE_H_
+#define IMODELAWARE_H_
+
+#include <Pointer.h>
 
 namespace Model {
+class IModel;
 
-void ParalaxModel::setMove (const Geometry::Point &p)
-{
-        // Siebie w ogóle nie przesuwa.
-        //AbstractModel::setMove (p);
+/**
+ * Interfejs marker - symbolizuje klasy, które mają referencję do
+ * klasy IModel.
+ * \ingroup Model
+ */
+struct IModelAware {
 
-        Util::DoubleVector::const_iterator j = depths.begin ();
+        virtual ~IModelAware () {}
 
-        for (iterator i = begin (); i != end (); ++i, ++j) {
-//                double factor = 1
-                (*i)->setMove (p * *j);
-        }
+        virtual Ptr<IModel> getModel () const = 0;
+        virtual void setModel (Ptr<IModel> model) = 0;
 
-}
+};
 
-}
+} //name
+
+#	endif /* IMODELAWARE_H_ */

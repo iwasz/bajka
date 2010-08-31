@@ -16,6 +16,7 @@
 #include "tree/TreeSlave.h"
 #include "IController.h"
 #include "geometry/Box.h"
+#include "IModelAware.h"
 
 /**
  * Klasy związane z modelem. Klasy z warstwy domenowej.
@@ -43,7 +44,7 @@ namespace Model {
  */
 struct IModel :
         virtual public Core::Object,
-        public Util::TreeSlave <IModel, Controller::IController, &Controller::IController::getModel> {
+        public Util::TreeSlave <IModel, IModelAware, &IModelAware::getModel> {
 
         virtual ~IModel () {}
 
@@ -87,6 +88,7 @@ struct IModel :
         virtual Geometry::AffineMatrix const &updateMatrixStack () const = 0;
 
 };
+
 
 }
 

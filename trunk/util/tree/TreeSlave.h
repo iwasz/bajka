@@ -28,8 +28,12 @@ template <typename SlaveElement,
 class TreeSlave {
 public:
 
+/*------typedefy------------------------------------------------------------*/
+
         typedef TreeMaster <MasterElement> TreeMasterType;
         typedef TreeMasterType *TreeMasterPtr;
+
+        typedef MasterElement *MasterElementPtr;
 
         typedef SlaveElement ElementType;
         typedef Ptr <SlaveElement> ChildType;
@@ -40,10 +44,14 @@ public:
                                 ptrToMemberFunction> Extractor;
 
         typedef typename std::list <ChildType> ElementList;
-        typedef TreeSlaveIterator <ChildType, TreeMasterType, Extractor> Iterator;
+        typedef TreeSlaveIterator <ChildType, TreeMasterType, Extractor> iterator;
+
+/*--------------------------------------------------------------------------*/
 
         TreeSlave () : treeMaster (NULL) {}
         virtual ~TreeSlave () {}
+
+/*------gettery/settery-----------------------------------------------------*/
 
         TreeMasterPtr getTreeMaster () { return treeMaster; }
         void setTreeMaster (TreeMasterPtr t) { treeMaster = t; }
@@ -52,8 +60,8 @@ public:
 
         const ElementList &getChildren () const;
 
-        Iterator begin () { return Iterator (treeMaster->begin ()); }
-        Iterator end () { return Iterator (treeMaster->end ()); }
+        iterator begin () { return iterator (treeMaster->begin ()); }
+        iterator end () { return iterator (treeMaster->end ()); }
 
 private:
 

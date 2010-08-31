@@ -148,6 +148,15 @@ void SimpleController::init ()
 
 /****************************************************************************/
 
+void SimpleController::setChildren (const ControllerList &list)
+{
+        for (ControllerList::const_iterator i = list.begin (); i !=list.end (); ++i) {
+                addChild (*i);
+        }
+}
+
+/****************************************************************************/
+
 void SimpleController::setModel (Ptr<Model::IModel> model)
 {
         this->model = model;
@@ -157,8 +166,8 @@ void SimpleController::setModel (Ptr<Model::IModel> model)
 
 /****************************************************************************/
 
-/*
- * TODO To są szczegóły implementacji widgeta, które są w kontrolerze. Czyli się
+/**
+ * \todo To są szczegóły implementacji widgeta, które są w kontrolerze. Czyli się
  * trochę pomieszało. Teraz, kiedy jest TreeSlave/TreeMaster, możnaby tą metdoę
  * przenieść do widgeta i jako publiczną zrobić tylko draw, a post i pre jako protected.
  * Dzięki temu
@@ -188,7 +197,7 @@ void SimpleController::draw ()
 
 void SimpleController::doChildren ()
 {
-        for (SimpleController::Iterator i = begin (); i != end (); ++i) {
+        for (SimpleController::iterator i = begin (); i != end (); ++i) {
                 (*i)->draw ();
         }
 }
@@ -240,7 +249,7 @@ bool SimpleController::onEvent (Event::IEvent *event)
         event->runObserver (&myHelper);
 
         // Wywołania dla dzieci.
-        for (SimpleController::Iterator i = begin (); i != end (); ++i) {
+        for (SimpleController::iterator i = begin (); i != end (); ++i) {
                 // TODO Zastanowić się jak to zrobić bez dynamic_cast!!!
                 Event::AbstractObserver *a = dynamic_cast <Event::AbstractObserver *> (i->get ());
 
