@@ -60,7 +60,8 @@ private:
  */
 class SimpleController :
         public IController,
-        public Event::AbstractObserver  {
+        public Event::AbstractObserver, // Eventy
+        public Util::TreeMaster <IController> { // Zawieranie
 
 public:
 
@@ -100,9 +101,14 @@ public:
 
 /*------Containing----------------------------------------------------------*/
 
-        // Implementacja, która działa z kontenerem (szablonowe nie działają z kontenerem).
+        /*
+         * Implementacja, która działa z kontenerem (szablonowe nie działają z kontenerem).
+         * TODO Kiedy kontener będzie obsługiwał zwykłe kolekcje STL (taki amm zamiar), to
+         * w ogole będzie można wywalić tą metodę i zostawić tą z TreeMaster, która przyjmuje
+         * zwykły wektor.
+         */
         _m (setChildren)
-        void setChildren (const ControllerList &list) { IController::setChildren (list); }
+        void setChildren (const ControllerList &list);
 
 /*------Events--------------------------------------------------------------*/
 

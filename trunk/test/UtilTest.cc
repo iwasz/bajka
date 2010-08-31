@@ -88,7 +88,7 @@ BOOST_AUTO_TEST_CASE (testTree)
         cB->addChild (cD);
         cC->addChild (cE);
 
-        Controller::Iterator i = cA->begin ();
+        Controller::iterator i = cA->begin ();
         BOOST_CHECK ((*i)->name == "cB");
         BOOST_CHECK ((*i)->getParent () == cA.get ());
         ++i;
@@ -103,7 +103,7 @@ BOOST_AUTO_TEST_CASE (testTree)
         BOOST_CHECK ((*i)->name == "cE");
         BOOST_CHECK ((*i)->getParent () == cC.get ());
 
-        Model::Iterator j = mA->begin ();
+        Model::iterator j = mA->begin ();
         BOOST_CHECK ((*j)->name == "mB");
         BOOST_CHECK ((*j)->getParent () == mA);
         ++j;

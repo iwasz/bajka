@@ -24,10 +24,11 @@
 #include "TimerEvent.h"
 #include "IObserver.h"
 #include "tree/TreeMaster.h"
+#include "../model/IModelAware.h"
 
-namespace Model {
-class IModel;
-}
+//namespace Model {
+//class IModel;
+//}
 
 //namespace View {
 //class IView;
@@ -51,12 +52,13 @@ _f (ControllerList)
  */
 struct IController :
         public virtual Core::Object,
-        public Util::TreeMaster <IController> {
+        public virtual Util::ITreeMaster <IController>,
+        public Model::IModelAware {
         __d
 
         virtual ~IController () {}
 
-        /// After properties are set. TODO to jest propozycja.
+        /// \todo After properties are set. To jest propozycja.
         _m (init) virtual void init () = 0;
         /// Do the drawiang.
         virtual void draw () = 0;
@@ -68,9 +70,8 @@ struct IController :
 
         _m (getMapping) virtual Ptr <IMapping> getMapping () const = 0;
 
-        _m (getModel) virtual Ptr<Model::IModel> getModel () const = 0;
-        _m (setModel) virtual void setModel (Ptr<Model::IModel> model) = 0;
-
+        _m (getModel)
+        _m (setModel)
         _e (IController)
 };
 

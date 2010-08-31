@@ -21,7 +21,7 @@ template <typename T, typename TreeMasterType, typename Extractor>
 class TreeSlaveIterator : public std::iterator <std::forward_iterator_tag, T> {
 public:
 
-        typedef typename TreeMasterType::Iterator TreeMasterIterator;
+        typedef typename TreeMasterType::iterator TreeMasterIterator;
 
         TreeSlaveIterator () : extractor (), body () {}
         TreeSlaveIterator (const TreeMasterIterator &b) : extractor (), body (b) {}

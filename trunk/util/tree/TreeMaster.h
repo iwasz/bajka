@@ -15,6 +15,71 @@
 namespace Util {
 
 /**
+ * Interfejs dla głownego drzewa. Patrz dokumentacja od TreeMaster.
+ */
+template <typename Element>
+class ITreeMaster {
+public:
+
+        typedef Element ElementType;
+        typedef Ptr <Element> ChildType;
+        typedef Element *ParentType;
+        typedef typename std::vector <ChildType> ElementList;
+        typedef typename ElementList::iterator iterator;
+        typedef typename ElementList::const_iterator const_iterator;
+
+        virtual ~ITreeMaster () {}
+
+/*------parents-------------------------------------------------------------*/
+
+        virtual ParentType getParent () const = 0;
+        virtual void setParent (ParentType p) = 0;
+
+/*------children------------------------------------------------------------*/
+
+        virtual const ElementList &getChildren () const = 0;
+
+        /**
+         * Ustawia całą listę dzieci. Ta metoda nie może być szablonem, bo
+         * musi być wirtualna.
+         */
+        virtual void setChildren (const ElementList &e) = 0;
+
+        /**
+         * Dodaje listę dzieci do już istniejących .
+         */
+        virtual void addChildren (const ElementList &e) = 0;
+
+        /**
+         * Dodaje dziecko.
+         */
+        virtual void addChild (ChildType const &e) = 0;
+
+        /**
+         * Usuwa dziecko.
+         */
+        virtual void removeChild (ChildType const &e) = 0;
+
+        /**
+         * Usuwa wszystie dzieci.
+         */
+        virtual void clearChildren () = 0;
+
+        /**
+         * Iterator do kolekcji dzieci.
+         */
+        virtual const_iterator begin () const = 0;
+        virtual iterator begin () = 0;
+
+        /**
+         * Iterator do kolekcji dzieci.
+         */
+        virtual const_iterator end () const = 0;
+        virtual iterator end () = 0;
+
+};
+
+/**
  * Z tej klasy należy dziedziczyć aby uzyskać funkcjonalność
  * głownego drzewa. Do tego drzewa podłącza się poboczne drzewa,
  * które mją wtedy dostęp do swoich dzieci (swoich typów).
@@ -30,128 +95,75 @@ namespace Util {
  * \ingroup Tree
  */
 template <typename Element>
-class TreeMaster {
+class TreeMaster : public virtual ITreeMaster <Element> {
 public:
-
-        typedef Element ElementType;
-        typedef Ptr <Element> ChildType;
-        typedef Element *ParentType;
-        typedef typename std::vector <ChildType> ElementList;
-        typedef typename ElementList::const_iterator Iterator;
 
         TreeMaster () : parent (0) {}
         virtual ~TreeMaster () {}
 
 /*------parents-------------------------------------------------------------*/
 
-        virtual ParentType getParent () { return parent; }
-        virtual ParentType const getParent () const { return parent; }
+        virtual
+        typename ITreeMaster <Element>::ParentType
+        getParent () const { return parent; }
 
 /*------children------------------------------------------------------------*/
 
-        virtual const ElementList &getChildren () const { return children; }
+        virtual
+        const typename ITreeMaster <Element>::ElementList &
+        getChildren () const { return children; }
 
         /**
-         * Wszytkie poniższe metody dodające w końcu używają addChildren.
+         * Używa addChildren.
          */
-        template <typename Collection>
-        void setChildren (const Collection &e);
+        virtual void setChildren (const typename ITreeMaster <Element>::ElementList &e);
 
-        template <typename Collection>
-        void addChildren (const Collection &e);
+        /**
+         * Używa addChildren.
+         */
+        virtual void addChildren (const typename ITreeMaster <Element>::ElementList &e);
 
-        template <typename Iter>
-        void setChildren (Iter const &b, Iter const &e);
-
-        template <typename Iter>
-        void addChildren (Iter const &b, Iter const &e);
-
-        virtual void addChild (ChildType e)
+        virtual void addChild (typename ITreeMaster <Element>::ChildType const &e)
         {
                 children.push_back (e);
-                e->setParent (dynamic_cast <ParentType> (this));
+                e->setParent (dynamic_cast <typename ITreeMaster <Element>::ParentType> (this));
         }
 
-        virtual void removeChild (const ChildType &e) { children.erase (std::find (children.begin (), children.end (), e)); }
+        virtual void removeChild (const typename ITreeMaster <Element>::ChildType &e) { children.erase (std::find (children.begin (), children.end (), e)); }
         virtual void clearChildren () { children.clear (); }
 
-        Iterator begin () const { return children.begin (); }
-        Iterator end () const { return children.end (); }
+        typename ITreeMaster <Element>::iterator begin () { return children.begin (); }
+        typename ITreeMaster <Element>::const_iterator begin () const { return children.begin (); }
+
+        typename ITreeMaster <Element>::iterator end () { return children.end (); }
+        typename ITreeMaster <Element>::const_iterator end () const { return children.end (); }
 
 /*--------------------------------------------------------------------------*/
 
 private:
 
-        void setParent (ParentType p) { parent = p; }
+        void setParent (typename ITreeMaster <Element>::ParentType p) { parent = p; }
 
 private:
 
-        ParentType parent;
-        ElementList children;
+        typename ITreeMaster <Element>::ParentType parent;
+        typename ITreeMaster <Element>::ElementList children;
 };
 
 template <typename Element>
-template <typename Collection>
-void TreeMaster<Element>::setChildren (const Collection &col)
-{
-        setChildren (col.begin (), col.end ());
-}
-
-template <typename Element>
-template <typename Collection>
-void TreeMaster<Element>::addChildren (const Collection &col)
-{
-        addChildren (col.begin (), col.end ());
-}
-
-/*
- * Nie używam std::copy, ponieważ addChild ustawia parenta.
- */
-template <typename Element>
-template <typename Iter>
-void TreeMaster<Element>::setChildren (Iter const &b, Iter const &e)
+void TreeMaster<Element>::setChildren (const typename ITreeMaster <Element>::ElementList &col)
 {
         clearChildren ();
-        addChildren (b, e);
+        addChildren (col);
 }
 
-/*
- *
- */
 template <typename Element>
-template <typename Iter>
-void TreeMaster<Element>::addChildren (Iter const &b, Iter const &e)
+void TreeMaster<Element>::addChildren (const typename ITreeMaster <Element>::ElementList &col)
 {
-        for (Iter i = b; i != e; ++i) {
+        for (typename ITreeMaster <Element>::const_iterator i = col.begin (); i != col.end (); ++i) {
                 addChild (*i);
         }
 }
-
-//template <typename Element>
-//class ITreeMaster {
-//public:
-//
-//        typedef Element ElementType;
-//        typedef Ptr <Element> ChildType;
-//        typedef Element *ParentType;
-//        typedef typename std::vector <ChildType> ElementList;
-//        typedef typename ElementList::iterator Iterator;
-//
-//        virtual ~ITreeMaster () {}
-//
-//        virtual ParentType getParent () = 0;
-//        virtual ParentType const getParent () const = 0;
-//
-//        virtual const ElementList &getChildren () const = 0;
-//        virtual void setChildren (const ElementList &e) = 0;
-//        virtual void addChild (ChildType e) = 0;
-//        virtual void removeChild (const ChildType &e) = 0;
-//        virtual void clearChildren () = 0;
-//
-//        virtual Iterator begin () = 0;
-//        virtual Iterator end () = 0;
-//
-//};
 
 } // namespace Util
 
