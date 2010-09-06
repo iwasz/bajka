@@ -13,11 +13,13 @@
 
 #include <Reflection.h>
 #include <collection/Map.h>
+#include <collection/List.h>
 
 #include <List.h>
 #include <Vector.h>
 
 #include "IView.h"
+#include "../util/tree/ITreeMasterSlave.h"
 
 namespace Model {
 class IModel;
@@ -30,7 +32,9 @@ namespace View {
  * triady MVC. Iterfejs IView jest jeszcze bardziej ogólny.
  * \ingroup View
  */
-struct IWidget : public IView {
+struct IWidget :
+        public IView,
+        public virtual Util::ITreeMasterSlave <IWidget> {
 
         virtual ~IWidget () {}
 
@@ -41,7 +45,8 @@ struct IWidget : public IView {
          * from parent class.
          */
         virtual void setModel (Ptr <Model::IModel> model) = 0;
-        virtual Ptr <Model::IModel> getModel () const = 0;
+        // Świadomie nie mam const na końcu, bo swracam wskaźnik do niestałego modelu.
+        virtual Ptr <Model::IModel> getModel () = 0;
 
         /**
          * Zwraca informację czy widget jest wodoczny, czy nie.
@@ -58,7 +63,8 @@ struct IWidget : public IView {
 
 /****************************************************************************/
 
-typedef Core::List <Ptr <IWidget> > WidgetList;
+typedef Reflection::List <Ptr <IWidget> > WidgetList;
+
 typedef Core::Vector <Ptr <IWidget> > WidgetVector;
 /// \todo Klucz dałbym na std::string
 typedef Reflection::Map <Core::String, Ptr <IWidget> > StringWidgetMap;

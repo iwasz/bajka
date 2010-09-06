@@ -14,6 +14,14 @@
 #include "AbstractObserver.h"
 #include "tree/TreeMaster.h"
 #include "geometry/Utils.h"
+#include "KeyboardEvent.h"
+#include "MouseButtonEvent.h"
+#include "MouseMotionEvent.h"
+#include "TimerEvent.h"
+
+// Kiedy nie ma tych nagłówków, kontener nie chce ładować klas.
+#include "IWidget.h"
+#include "IModel.h"
 
 //namespace Geometry {
 //class AffineMatrix;
@@ -81,36 +89,58 @@ public:
 
         /// \name Rysowanie
         //\{
+
         virtual void init ();
+
+        /**
+         * Zwyczajnie deleguje rysowanie do widgetu. Implementacja tej metody wygląda
+         * poprostu jak widget->draw (); Rysowaniem swoich dzieci zajmuje się już sam
+         * widget
+         */
         virtual void draw ();
-        virtual void doChildren ();
 
         bool getRender () const { return render; }
         void setRender (bool r) { render = r; }
 
         // Zmienić na View
-        Ptr<View::IWidget> getWidget () const { return widget; }
-        void setWidget (Ptr<View::IWidget> widget) { this->widget = widget; }
+        Ptr<View::IWidget> getWidget () { return widget; }
+        void setWidget (Ptr<View::IWidget> widget);
 
-        Ptr<Model::IModel> getModel () const { return model; }
+        Ptr<Model::IModel> getModel () /*const*/ { return model; }
         void setModel (Ptr<Model::IModel> model);
 
-        Ptr<IMapping> getMapping () const { return mapping; }
+        Ptr<IMapping> getMapping () { return mapping; }
         _m (setMapping) void setMapping (Ptr<IMapping> mapping) { this->mapping = mapping; }
+
         //\}
 
 /*------Containing----------------------------------------------------------*/
 
+        /// \name Zawieranie
+        //\{
+
         /*
          * Implementacja, która działa z kontenerem (szablonowe nie działają z kontenerem).
-         * TODO Kiedy kontener będzie obsługiwał zwykłe kolekcje STL (taki amm zamiar), to
+         * TODO Kiedy kontener będzie obsługiwał zwykłe kolekcje STL (taki mam zamiar), to
          * w ogole będzie można wywalić tą metodę i zostawić tą z TreeMaster, która przyjmuje
          * zwykły wektor.
          */
         _m (setChildren)
         void setChildren (const ControllerList &list);
 
+        void addChild (ChildType e);
+        void removeChild (ChildType e);
+        void clearChildren ();
+
+protected:
+
+        void setParent (ParentType p);
+
+        //\}
+
 /*------Events--------------------------------------------------------------*/
+
+public:
 
         /// \name Eventy
         //\{
@@ -128,8 +158,6 @@ public:
         virtual bool onMouseMotion (Event::MouseMotionEvent *e);
         virtual bool onMouseOver (Event::MouseMotionEvent *e);
         virtual bool onMouseOut (Event::MouseMotionEvent *e);
-
-//        bool onTimer (Event::TimerEvent *e);
 
         //\}
 
@@ -177,11 +205,8 @@ private:
         Ptr <View::IWidget> widget;
         Ptr <Model::IModel> model;
         Ptr <IMapping> mapping;
-//        Ptr <IController> parent;
 
         bool render;
-
-//        ControllerList children;
 
         _e (SimpleController)
 };

@@ -16,24 +16,18 @@
 #include <List.h>
 #include <collection/List.h>
 
-#include "IWidget.h"
 #include "mapping/IMapping.h"
-#include "KeyboardEvent.h"
-#include "MouseButtonEvent.h"
-#include "MouseMotionEvent.h"
-#include "TimerEvent.h"
 #include "IObserver.h"
 #include "tree/TreeMaster.h"
-#include "../model/IModelAware.h"
 
-//namespace Model {
-//class IModel;
-//}
+namespace Model {
+class IModel;
+}
 
-//namespace View {
-//class IView;
-//class IWidget;
-//}
+namespace View {
+class IView;
+class IWidget;
+}
 
 /**
  * Sprawy związane z kontrolerami i klasami pomocniczymi.
@@ -52,8 +46,7 @@ _f (ControllerList)
  */
 struct IController :
         public virtual Core::Object,
-        public virtual Util::ITreeMaster <IController>,
-        public Model::IModelAware {
+        public virtual Util::ITreeMaster <IController> {
         __d
 
         virtual ~IController () {}
@@ -65,13 +58,14 @@ struct IController :
 
 /*------Properties----------------------------------------------------------*/
 
-        _m (getWidget) virtual Ptr<View::IWidget> getWidget () const = 0;
+        _m (getWidget) virtual Ptr<View::IWidget> getWidget () = 0;
         _m (setWidget) virtual void setWidget (Ptr<View::IWidget> widget) = 0;
 
-        _m (getMapping) virtual Ptr <IMapping> getMapping () const = 0;
+        _m (getModel) virtual Ptr <Model::IModel> getModel () = 0;
+        _m (setModel) virtual void setModel (Ptr <Model::IModel> m) = 0;
 
-        _m (getModel)
-        _m (setModel)
+        _m (getMapping) virtual Ptr <IMapping> getMapping () = 0;
+
         _e (IController)
 };
 

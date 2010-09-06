@@ -57,7 +57,11 @@ void AbstractModel::setResize (double w, double h)
 Geometry::AffineMatrix const &AbstractModel::updateMatrixStack () const
 {
         // TODO Tu można sporo zoptymalizować kiedyś.
-        Model::IModel *parent = getParent ().get ();
+        /*
+         * UWAGA. Tu jest const_cast, ponieważ ta metoda ma działac "w tle"
+         * i po prostu musi być >>const<<.
+         */
+        Model::IModel *parent = const_cast <AbstractModel *> (this)->getParent ();
 
         if (parent) {
                 matrixStack = parent->updateMatrixStack ();

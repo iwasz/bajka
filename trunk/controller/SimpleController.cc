@@ -148,6 +148,89 @@ void SimpleController::init ()
 
 /****************************************************************************/
 
+void SimpleController::setModel (Ptr <Model::IModel> m)
+{
+        model = m;
+        myHelper.myModel = model.get ();
+
+        if (getParent ()) {
+                model->setParent (getParent ()->getModel ().get ());
+        }
+}
+
+/****************************************************************************/
+
+void SimpleController::setWidget (Ptr <View::IWidget> w)
+{
+        widget = w;
+
+        if (getParent ()) {
+                widget->setParent (getParent ()->getWidget ().get ());
+        }
+}
+
+/****************************************************************************/
+
+void SimpleController::addChild (ChildType e)
+{
+        Util::TreeMaster <IController>::addChild (e);
+
+        if (getModel ()) {
+                getModel ()->onAddChild (e->getModel ());
+        }
+
+        if (getWidget ()) {
+                getWidget ()->onAddChild (e->getWidget ());
+        }
+}
+
+/****************************************************************************/
+
+void SimpleController::removeChild (ChildType e)
+{
+        Util::TreeMaster <IController>::removeChild (e);
+
+        if (getModel ()) {
+                getModel ()->onRemoveChild (e->getModel ());
+        }
+
+        if (getWidget ()) {
+                getWidget ()->onRemoveChild (e->getWidget ());
+        }
+}
+
+/****************************************************************************/
+
+void SimpleController::clearChildren ()
+{
+        Util::TreeMaster <IController>::clearChildren ();
+
+        if (getModel ()) {
+                getModel ()->onClearChildren ();
+        }
+
+        if (getWidget ()) {
+                getWidget ()->onClearChildren ();
+        }
+}
+
+/****************************************************************************/
+
+void SimpleController::setParent (ParentType p)
+{
+        Util::TreeMaster <IController>::setParent (p);
+
+        if (getModel ()) {
+                getModel ()->setParent ((p) ? (p->getModel ().get ()) : (0));
+        }
+
+        if (getWidget ()) {
+                getWidget ()->setParent ((p) ? (p->getWidget ().get ()) : (0));
+        }
+}
+
+/****************************************************************************/
+
 void SimpleController::setChildren (const ControllerList &list)
 {
         for (ControllerList::const_iterator i = list.begin (); i !=list.end (); ++i) {
@@ -157,48 +240,10 @@ void SimpleController::setChildren (const ControllerList &list)
 
 /****************************************************************************/
 
-void SimpleController::setModel (Ptr<Model::IModel> model)
-{
-        this->model = model;
-        myHelper.myModel = model.get ();
-        model->setTreeMaster (this);
-}
-
-/****************************************************************************/
-
-/**
- * \todo To są szczegóły implementacji widgeta, które są w kontrolerze. Czyli się
- * trochę pomieszało. Teraz, kiedy jest TreeSlave/TreeMaster, możnaby tą metdoę
- * przenieść do widgeta i jako publiczną zrobić tylko draw, a post i pre jako protected.
- * Dzięki temu
- * 1. Implementacj będzie ukryta.
- * 2. Kontroler będzie wołać tylko draw i będzie łątwiej go przedefiniować w podklasach.
- */
 void SimpleController::draw ()
 {
-        // If render is set to false, we skip drawing this Widget.
-        if (!getRender ()) {
-                return;
-        }
-
         if (widget) {
-                widget->preDraw ();
                 widget->draw ();
-        }
-
-        doChildren ();
-
-        if (widget) {
-                widget->postDraw ();
-        }
-}
-
-/****************************************************************************/
-
-void SimpleController::doChildren ()
-{
-        for (SimpleController::iterator i = begin (); i != end (); ++i) {
-                (*i)->draw ();
         }
 }
 
