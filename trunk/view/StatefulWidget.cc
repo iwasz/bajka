@@ -22,6 +22,22 @@ void StatefulWidget::init ()
         }
 }
 
+/****************************************************************************/
+
+void StatefulWidget::setWidgets (StringWidgetMap const &w)
+{
+        widgets = w;
+}
+
+/****************************************************************************/
+
+void StatefulWidget::addWidget (Core::String const &key, Ptr <IWidget> widget)
+{
+        widgets[key] = widget;
+}
+
+/****************************************************************************/
+
 void StatefulWidget::draw ()
 {
         for (StringWidgetMap::iterator i = widgets.begin () ; i != widgets.end (); ++i) {

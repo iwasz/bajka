@@ -6,82 +6,121 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_TREESLAVE_H_
-#define BAJKA_TREESLAVE_H_
+#ifndef TREESLAVE_H_
+#define TREESLAVE_H_
 
-#include <Pointer.h>
+#include <algorithm>
+#include <cstddef>
+#include <boost/functional.hpp>
 
-#include "TreeSlaveIterator.h"
-#include "TreeMaster.h"
-#include "Extractors.h"
+#include "ITreeSlave.h"
 
 namespace Util {
 
+// Forward
+template <typename T>
+class TreeMaster;
+
 /**
- * Slave dla struktury drzewiastej.
+ * Implementuje interfejs ITreeSlave.
  * \ingroup Tree
  */
-template <typename SlaveElement,
-        typename MasterElement,
-        Ptr <SlaveElement> (MasterElement::*ptrToMemberFunction)() const>
-
-class TreeSlave {
+template <typename Element>
+class TreeSlave : public virtual ITreeSlave <Element> {
 public:
 
-/*------typedefy------------------------------------------------------------*/
-
-        typedef TreeMaster <MasterElement> TreeMasterType;
-        typedef TreeMasterType *TreeMasterPtr;
-
-        typedef MasterElement *MasterElementPtr;
-
-        typedef SlaveElement ElementType;
-        typedef Ptr <SlaveElement> ChildType;
-        typedef Ptr <SlaveElement> ParentType;
-
-        typedef ConstMemFunExtractor <SlaveElement,
-                                MasterElement,
-                                ptrToMemberFunction> Extractor;
-
-        typedef typename std::list <ChildType> ElementList;
-        typedef TreeSlaveIterator <ChildType, TreeMasterType, Extractor> iterator;
+        typedef typename ITreeSlave <Element>::ChildBaseType ChildBaseType;
+        typedef typename ITreeSlave <Element>::ParentBaseType ParentBaseType;
+        typedef typename ITreeSlave <Element>::ChildType ChildType;
+        typedef typename ITreeSlave <Element>::ChildConstType ChildConstType;
+        typedef typename ITreeSlave <Element>::ParentType ParentType;
+        typedef typename ITreeSlave <Element>::ParentConstType ParentConstType;
+        typedef typename ITreeSlave <Element>::iterator iterator;
+        typedef typename ITreeSlave <Element>::const_iterator const_iterator;
+        typedef typename ITreeSlave <Element>::ChildList ChildList;
 
 /*--------------------------------------------------------------------------*/
 
-        TreeSlave () : treeMaster (NULL) {}
+        TreeSlave () : parent (), children () {}
         virtual ~TreeSlave () {}
 
-/*------gettery/settery-----------------------------------------------------*/
+/*------IParentAware--------------------------------------------------------*/
 
-        TreeMasterPtr getTreeMaster () { return treeMaster; }
-        void setTreeMaster (TreeMasterPtr t) { treeMaster = t; }
 
-        ParentType getParent () const { return extractor (treeMaster->getParent ()); }
+        ParentType getParent () { return parent; }
+        ParentConstType getParent () const { return parent; }
 
-        const ElementList &getChildren () const;
+        ChildList &getChildren () { return children; }
+        ChildList const &getChildren () const { return children; }
 
-        iterator begin () { return iterator (treeMaster->begin ()); }
-        iterator end () { return iterator (treeMaster->end ()); }
+        /**
+         * Iterator do kolekcji dzieci.
+         */
+        const_iterator begin () const { return children.begin (); }
+        iterator begin () { return children.begin (); }
+
+        /**
+         * Iterator do kolekcji dzieci.
+         */
+        const_iterator end () const { return children.end (); }
+        iterator end () { return children.end (); }
+
+/*--------------------------------------------------------------------------*/
+
+protected:
+
+        friend class TreeMaster <Element>;
+
+        // Wszystkie poniżej mają być prywatne
+        void setParent (ParentType p) { parent = p; }
+
+        /**
+         * Kiedy master dodaje dziecko.
+         */
+        void onAddChild (ChildType e)
+        {
+                children.push_back (e);
+                e->setParent (dynamic_cast <ParentType> (this));
+        }
+
+        /**
+         * Kiedy master usuwa jedno dziecko.
+         */
+        void onRemoveChild (ChildType e);
+
+        /**
+         * Kiedy master usuwa wszystie dzieci.
+         */
+        void onClearChildren ();
 
 private:
 
-        Extractor extractor;
-        TreeMasterPtr treeMaster;
+        ParentType parent;
+        ChildList children;
 };
 
-template <typename SlaveElement,
-        typename MasterElement,
-        Ptr <SlaveElement> (MasterElement::*ptrToMemberFunction)() const>
+/****************************************************************************/
 
-typename TreeSlave <SlaveElement, MasterElement, ptrToMemberFunction>::ElementList const &
-
-TreeSlave <SlaveElement, MasterElement, ptrToMemberFunction>::getChildren () const
+template <typename Element>
+void TreeSlave <Element>::onRemoveChild (ChildType e)
 {
-        ElementList ret;
-        std::for_each (begin (), end (), std::mem_fun (&ElementList::push_back));
-        return ret;
+        typename ChildList::iterator i = std::find (children.begin (), children.end (), e);
+
+        if (i != children.end ()) {
+                e->setParent (NULL);
+                children.erase (i);
+        }
 }
 
-} // namespace Util
+/****************************************************************************/
 
-#       endif /* TREESLAVEITERATOR_H_ */
+template <typename Element>
+void TreeSlave <Element>::onClearChildren ()
+{
+        std::for_each (children.begin (), children.end (), Util::ConvertPtr <ChildType> (boost::bind2nd (boost::mem_fun (&ChildBaseType::setParent), NULL)));
+        children.clear ();
+}
+
+}
+
+#	endif /* TREESLAVE_H_ */

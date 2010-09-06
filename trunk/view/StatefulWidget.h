@@ -28,10 +28,10 @@ public:
 
         virtual void init ();
 
-        _m (getWidgets) StringWidgetMap const &getWidgets () const { return widgets; }
-        _m (setWidgets) void setWidgets (StringWidgetMap const &w) { widgets = w; }
+        _m (getWidgets)StringWidgetMap const &getWidgets () const { return widgets; }
+        _m (setWidgets) void setWidgets (StringWidgetMap const &w);
 
-        void addWidget (Core::String const &key, Ptr <IWidget> widget) { widgets[key] = widget; }
+        void addWidget (Core::String const &key, Ptr <IWidget> widget);
         Ptr <IWidget> getWidget (Core::String const &key) const;
 
         bool hasWidget (Core::String const &key) const { return widgets.find (key) != widgets.end (); }

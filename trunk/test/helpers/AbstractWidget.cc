@@ -1,67 +1,15 @@
 /****************************************************************************
  *                                                                          *
- *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
+ *  Author : lukasz.iwaszkiewicz@tiliae.eu                                  *
  *  ~~~~~~~~                                                                *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include <SDL_opengl.h>
-
 #include "AbstractWidget.h"
 #include "IModel.h"
 
-namespace View {
-
-void AbstractWidget::preDraw ()
-{
-        glPushMatrix ();
-}
-
-/****************************************************************************/
-
-void AbstractWidget::doTransform ()
-{
-        if (model) {
-                glMultMatrixd (model->getMatrix ().data ().begin ());
-        }
-}
-
-/****************************************************************************/
-
-void AbstractWidget::doChildren ()
-{
-        for (AbstractWidget::iterator i = begin (); i != end (); ++i) {
-                (*i)->draw ();
-        }
-}
-
-/****************************************************************************/
-
-void AbstractWidget::postDraw ()
-{
-        glPopMatrix ();
-}
-
-/****************************************************************************/
-
-void AbstractWidget::draw ()
-{
-        // If render is set to false, we skip drawing this Widget.
-        if (!visible) {
-                return;
-        }
-
-        preDraw ();
-        doTransform ();
-        doDraw ();
-        doChildren ();
-        postDraw ();
-}
-
-/*##########################################################################*/
-
-void AbstractWidget::setModel (Ptr <Model::IModel> m)
+void AbstractWidget::setModel (Ptr <IModel> m)
 {
         model = m;
 
@@ -104,13 +52,4 @@ void AbstractWidget::setParent (ParentType p)
         if (getModel ()) {
                 getModel ()->setParent ((p) ? (p->getModel ().get ()) : (0));
         }
-}
-
-void AbstractWidget::setChildren (WidgetList const &list)
-{
-        for (WidgetList::const_iterator i = list.begin (); i !=list.end (); ++i) {
-                addChild (*i);
-        }
-}
-
 }

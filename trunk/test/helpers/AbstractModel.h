@@ -6,28 +6,31 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef IMODELAWARE_H_
-#define IMODELAWARE_H_
+#ifndef ABSTRACTMODEL_H_
+#define ABSTRACTMODEL_H_
 
-#include <Pointer.h>
-
-namespace Model {
-class IModel;
+#include <string>
+#include "IModel.h"
+#include "tree/TreeSlave.h"
+#include "Pointer.h"
 
 /**
- * Interfejs marker - symbolizuje klasy, które mają referencję do
- * klasy IModel.
- * \ingroup Model
+ *
  */
-struct IModelAware {
+class AbstractModel :
+        public IModel,
+        public Util::TreeSlave <IModel> {
+public:
 
-        virtual ~IModelAware () {}
+        AbstractModel (std::string const &s) : name (s) {}
+        virtual ~AbstractModel () {}
 
-        virtual Ptr<IModel> getModel () const = 0;
-        virtual void setModel (Ptr<IModel> model) = 0;
+        std::string const &getName () const { return name; }
+
+private:
+
+        std::string name;
 
 };
 
-} //name
-
-#	endif /* IMODELAWARE_H_ */
+#	endif /* ABSTRACTMODEL_H_ */

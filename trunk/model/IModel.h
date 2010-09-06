@@ -13,10 +13,8 @@
 
 #include "geometry/Utils.h"
 #include "geometry/Point.h"
-#include "tree/TreeSlave.h"
-#include "IController.h"
 #include "geometry/Box.h"
-#include "IModelAware.h"
+#include "../util/tree/ITreeSlave.h"
 
 /**
  * Klasy związane z modelem. Klasy z warstwy domenowej.
@@ -43,8 +41,8 @@ namespace Model {
  * przemnożonych macierzy swoich rodziców i swojej.
  */
 struct IModel :
-        virtual public Core::Object,
-        public Util::TreeSlave <IModel, IModelAware, &IModelAware::getModel> {
+        public virtual Core::Object,
+        public virtual Util::ITreeSlave <IModel> {
 
         virtual ~IModel () {}
 

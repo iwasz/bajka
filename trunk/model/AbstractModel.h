@@ -12,10 +12,16 @@
 #include "IModel.h"
 #include "geometry/Point.h"
 #include "geometry/Box.h"
+#include "tree/TreeSlave.h"
 
 namespace Model {
 
-class AbstractModel : public IModel {
+/**
+ * \ingroup Model
+ */
+class AbstractModel :
+        public IModel,
+        public Util::TreeSlave <IModel> {
 public:
         __d
 

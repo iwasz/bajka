@@ -6,41 +6,43 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef TREEMASTER_H_
-#define TREEMASTER_H_
+#ifndef TREEMASTERSLAVE_H_
+#define TREEMASTERSLAVE_H_
 
 #include <algorithm>
 #include <cstddef>
 #include <boost/functional.hpp>
 
-#include "ITreeMaster.h"
+#include "ITreeMasterSlave.h"
 
 namespace Util {
 
 /**
- * Implementacja ITreeMaster.
+ * Łączy w sobie i TreeSlave i TreeMaster, to znaczy można dodawać do niego
+ * dzieci bezpośrednio, a można też dodawać dzieci do jego Mastera.
  * \ingroup Tree
  */
 template <typename Element>
-class TreeMaster : public virtual ITreeMaster <Element> {
+class TreeMasterSlave :
+        public virtual ITreeMasterSlave <Element> {
+
 public:
 
-        typedef typename ITreeMaster <Element>::ChildBaseType ChildBaseType;
-        typedef typename ITreeMaster <Element>::ParentBaseType ParentBaseType;
-        typedef typename ITreeMaster <Element>::ChildType ChildType;
-        typedef typename ITreeMaster <Element>::ChildConstType ChildConstType;
-        typedef typename ITreeMaster <Element>::ParentType ParentType;
-        typedef typename ITreeMaster <Element>::ParentConstType ParentConstType;
-        typedef typename ITreeMaster <Element>::iterator iterator;
-        typedef typename ITreeMaster <Element>::const_iterator const_iterator;
-        typedef typename ITreeMaster <Element>::ChildList ChildList;
+        // Odpowiadające typy z ITreeMaster są takie same.
+        typedef typename ITreeSlave <Element>::ChildBaseType ChildBaseType;
+        typedef typename ITreeSlave <Element>::ParentBaseType ParentBaseType;
+        typedef typename ITreeSlave <Element>::ChildType ChildType;
+        typedef typename ITreeSlave <Element>::ChildConstType ChildConstType;
+        typedef typename ITreeSlave <Element>::ParentType ParentType;
+        typedef typename ITreeSlave <Element>::ParentConstType ParentConstType;
+        typedef typename ITreeSlave <Element>::iterator iterator;
+        typedef typename ITreeSlave <Element>::const_iterator const_iterator;
+        typedef typename ITreeSlave <Element>::ChildList ChildList;
 
-/*--------------------------------------------------------------------------*/
+        TreeMasterSlave () : parent (), children () {}
+        virtual ~TreeMasterSlave () {}
 
-        TreeMaster () : parent (), children () {}
-        virtual ~TreeMaster () {}
-
-/*------IParentEnabled------------------------------------------------------*/
+/*------IParentAware--------------------------------------------------------*/
 
         ParentType getParent () { return parent; }
         ParentConstType getParent () const { return parent; }
@@ -74,7 +76,6 @@ public:
 
         /**
          * Dodaje dziecko.
-         * Tu trzeba dodać odwołania do slave-ów.
          */
         virtual void addChild (ChildType e)
         {
@@ -84,19 +85,29 @@ public:
 
         /**
          * Usuwa pierwsze dziecko o wartości równej e. Ustawia mu także parent na NULL.
-         * Tu trzeba dodać odwołania do slave-ów.
          */
-        virtual void removeChild (ChildType e);
+        void removeChild (ChildType e);
 
         /**
          * Czyści listę dzieci. Ustawia wszystkim parent na NULL.
-         * Tu trzeba dodać odwołania do slave-ów.
          */
-        virtual void clearChildren ();
+        void clearChildren ();
 
 protected:
 
-        virtual void setParent (ParentType p) { parent = p; }
+        void setParent (ParentType p) { parent = p; }
+
+        void onAddChild (ChildType e) { addChild (e); }
+
+        /**
+         * Kiedy master usuwa jedno dziecko.
+         */
+        void onRemoveChild (ChildType e) { removeChild (e); }
+
+        /**
+         * Kiedy master usuwa wszystie dzieci.
+         */
+        void onClearChildren () { clearChildren (); }
 
 private:
 
@@ -108,7 +119,7 @@ private:
 /****************************************************************************/
 
 template <typename Element>
-void TreeMaster <Element>::removeChild (ChildType e)
+void TreeMasterSlave <Element>::removeChild (ChildType e)
 {
         typename ChildList::iterator i = std::find (children.begin (), children.end (), e);
 
@@ -121,7 +132,7 @@ void TreeMaster <Element>::removeChild (ChildType e)
 /****************************************************************************/
 
 template <typename Element>
-void TreeMaster <Element>::clearChildren ()
+void TreeMasterSlave <Element>::clearChildren ()
 {
         std::for_each (children.begin (), children.end (), Util::ConvertPtr <ChildType> (boost::bind2nd (boost::mem_fun (&ChildBaseType::setParent), NULL)));
         children.clear ();
@@ -130,7 +141,7 @@ void TreeMaster <Element>::clearChildren ()
 /****************************************************************************/
 
 template <typename Element>
-void TreeMaster <Element>::setChildren (ChildList *col)
+void TreeMasterSlave <Element>::setChildren (ChildList *col)
 {
         clearChildren ();
         addChildren (col);
@@ -139,7 +150,7 @@ void TreeMaster <Element>::setChildren (ChildList *col)
 /****************************************************************************/
 
 template <typename Element>
-void TreeMaster <Element>::addChildren (ChildList *col)
+void TreeMasterSlave <Element>::addChildren (ChildList *col)
 {
         for (typename ChildList::iterator i = col->begin (); i != col->end (); ++i) {
                 addChild (*i);
@@ -148,4 +159,4 @@ void TreeMaster <Element>::addChildren (ChildList *col)
 
 }
 
-#	endif /* TREEMASTER_H_ */
+#	endif /* TREEMASTERSLAVE_H_ */

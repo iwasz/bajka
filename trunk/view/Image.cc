@@ -183,9 +183,9 @@ void Rectangle::doDraw ()
 
 void Rectangle::doTransform ()
 {
-        if (model) {
+        if (getModel ()) {
 //                std::cerr << model->getMatrix ().toString () << std::endl;
-                glMultMatrixd (model->getMatrix ().data ().begin ());
+                glMultMatrixd (getModel ()->getMatrix ().data ().begin ());
         }
 //        glRotated (45, 0.0, 0.0, 1.0);
 

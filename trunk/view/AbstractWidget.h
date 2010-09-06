@@ -11,6 +11,7 @@
 
 #include "IWidget.h"
 #include "IModel.h"
+#include "tree/TreeMasterSlave.h"
 
 namespace View {
 
@@ -24,37 +25,51 @@ namespace View {
  * Oczywiście zawieranie nie jest zaimplementowane w warstwie widoku, tylko w warstwie kontrolera.
  * \ingroup View
  */
-class AbstractWidget : public IWidget {
+class AbstractWidget :
+        public IWidget,
+        public Util::TreeMasterSlave <View::IWidget> {
 public:
         __d
 
         AbstractWidget () : visible (true) {}
         virtual ~AbstractWidget () {}
 
-        _m (setModel) virtual void setModel (Ptr <Model::IModel> model) { this->model = model; }
-        _m (getModel) virtual Ptr <Model::IModel> getModel () const { return model; }
-
-        virtual bool getVisible () const { return visible; }
-        _m (setVisible) virtual void setVisible (bool v) { visible = v; }
-
         // Domyślnie nic się tu nie dzieje.
         virtual void init () {}
 
-        void draw ()
-        {
-                if (visible) {
-                        doTransform ();
-                        doDraw ();
-                }
-        }
+/*------Rysowanie-----------------------------------------------------------*/
+
+        void draw ();
 
         virtual void preDraw ();
         virtual void postDraw ();
 
         virtual void doTransform ();
+        virtual void doChildren ();
         virtual void doDraw () = 0;
 
+        virtual bool getVisible () const { return visible; }
+        _m (setVisible) virtual void setVisible (bool v) { visible = v; }
+
+/*------Zawieranie----------------------------------------------------------*/
+
+        _m (setChildren)
+        void setChildren (WidgetList const &list);
+
+        void addChild (ChildType e);
+        void removeChild (ChildType e);
+        void clearChildren ();
+
+/*--------------------------------------------------------------------------*/
+
+        _m (setModel) virtual void setModel (Ptr <Model::IModel> model);
+        _m (getModel) virtual Ptr <Model::IModel> getModel () { return model; }
+
 protected:
+
+        void setParent (ParentType e);
+
+private:
 
         Ptr <Model::IModel> model;
         bool visible;
