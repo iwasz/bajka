@@ -70,6 +70,10 @@ struct ImageException : public Exception {
 
 /*##########################################################################*/
 
+/**
+ * Rysuje prostokąt.
+ * \ingroup View
+ */
 class Rectangle : public AbstractWidget {
 public:
         __c (void)

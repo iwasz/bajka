@@ -16,6 +16,10 @@
 
 namespace Model {
 
+/**
+ * Model, który implementuje paralaksę.
+ * \ingroup Model
+ */
 class ParalaxModel : public AbstractModel {
 public:
         __c (void)

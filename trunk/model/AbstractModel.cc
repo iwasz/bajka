@@ -7,13 +7,19 @@
  ****************************************************************************/
 
 #include <boost/geometry/algorithms/within.hpp>
+#include <boost/functional.hpp>
+#include <functional>
 
 #include "AbstractModel.h"
 #include "geometry/Point.h"
+#include "Commons.h"
 
 namespace Model {
 using namespace boost::numeric::ublas;
 using namespace Geometry;
+using namespace Util;
+using namespace boost;
+using namespace std;
 
 /****************************************************************************/
 
@@ -91,6 +97,22 @@ Geometry::Point const &AbstractModel::modelToScreen (Geometry::Point const &p) c
         tmpPoint = p;
         matrixStack.transform (&tmpPoint);
         return tmpPoint;
+}
+
+/****************************************************************************/
+
+bool AbstractModel::enclose (const Geometry::Point &p) const
+{
+//        TODO w ramach nauki zrobić algorytmem.
+//        return find_if (begin (), end (), convertPtr (bind2nd (mem_fun (&IModel::enclose), p)))
+
+        for (AbstractModel::const_iterator i = begin (); i != end (); ++i) {
+                if ((*i)->enclose (p)) {
+                        return true;
+                }
+        }
+
+        return false;
 }
 
 }

@@ -26,21 +26,24 @@ public:
 
         virtual ~StatefulWidget () {}
 
-        virtual void init ();
+/*--------------------------------------------------------------------------*/
 
-        _m (getWidgets)StringWidgetMap const &getWidgets () const { return widgets; }
+        virtual void doDraw () {}
+
+/*--------------------------------------------------------------------------*/
+
+        /// \name Settery/gettery od widgetów
+        //\{
+
+        _m (getWidgets) StringWidgetMap const &getWidgets () const { return widgets; }
         _m (setWidgets) void setWidgets (StringWidgetMap const &w);
 
         void addWidget (Core::String const &key, Ptr <IWidget> widget);
         Ptr <IWidget> getWidget (Core::String const &key) const;
-
         bool hasWidget (Core::String const &key) const { return widgets.find (key) != widgets.end (); }
         _m (setCurrentWidget) void setCurrentWidget (Core::String const &key);
 
-        virtual void draw ();
-        virtual void preDraw ();
-        virtual void postDraw ();
-        virtual void doDraw () {}
+        //\}
 
 private:
 

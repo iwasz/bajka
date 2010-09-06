@@ -39,6 +39,7 @@ namespace Model {
  * modele można zagnieżdżać i każdy ma macierz transformacji. Z tego wynika, że model na
  * samym dole tej chierarchii (ostatnie dziecko) ma transformację skłądającą się z
  * przemnożonych macierzy swoich rodziców i swojej.
+ * \ingroup Model
  */
 struct IModel :
         public virtual Core::Object,

@@ -12,8 +12,10 @@
 #include <algorithm>
 #include <cstddef>
 #include <boost/functional.hpp>
+#include <boost/mem_fn.hpp>
 
 #include "ITreeMaster.h"
+#include "Commons.h"
 
 namespace Util {
 
@@ -123,7 +125,7 @@ void TreeMaster <Element>::removeChild (ChildType e)
 template <typename Element>
 void TreeMaster <Element>::clearChildren ()
 {
-        std::for_each (children.begin (), children.end (), Util::ConvertPtr <ChildType> (boost::bind2nd (boost::mem_fun (&ChildBaseType::setParent), NULL)));
+        std::for_each (children.begin (), children.end (), Util::convertPtr <ChildType> (boost::bind2nd (boost::mem_fun (&ChildBaseType::setParent), NULL)));
         children.clear ();
 }
 

@@ -18,6 +18,10 @@ namespace Model {
 /**
  * Klasa modeli, które mają kształt. Dodatkowo jej układ odniesienia
  * jest wyśrodkowany do jej pubktu getBoundingBox ().getLL ().
+ *
+ * TODO enclose zawsze tutaj zwróci false. Czemu w takim razie instancjonuję
+ * to klasę w main2.xml?
+ *
  * \ingroup Model
  */
 class Shape : public AbstractModel {
