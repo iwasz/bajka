@@ -35,7 +35,7 @@ public:
         virtual ~AbstractWidget () {}
 
         // Domyślnie nic się tu nie dzieje.
-        virtual void init () {}
+        virtual void init ();
 
 /*------Rysowanie-----------------------------------------------------------*/
 
@@ -80,6 +80,7 @@ private:
 /**
  * Nic nie rysuje (potrzebne w kontrolerze
  * do transformacji na wszystkich dzieciach).
+ * \ingroup View
  */
 class EmptyWidget : public AbstractWidget {
 public:

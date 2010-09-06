@@ -134,7 +134,7 @@ void TreeMasterSlave <Element>::removeChild (ChildType e)
 template <typename Element>
 void TreeMasterSlave <Element>::clearChildren ()
 {
-        std::for_each (children.begin (), children.end (), Util::ConvertPtr <ChildType> (boost::bind2nd (boost::mem_fun (&ChildBaseType::setParent), NULL)));
+        std::for_each (children.begin (), children.end (), Util::convertPtr <ChildType> (boost::bind2nd (boost::mem_fun (&ChildBaseType::setParent), NULL)));
         children.clear ();
 }
 

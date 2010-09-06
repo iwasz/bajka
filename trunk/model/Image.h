@@ -11,17 +11,18 @@
 
 #include <string>
 #include <Reflection.h>
-#include "Box.h"
+#include "Shape.h"
 
 namespace Model {
 
 /**
- * TODO To powinno dziedziczyć z shape
+ * \ingroup Model
  */
+// Dziedziczy z Box, bo Shape jest abstrakcyjny.
 class Image : public Model::Box {
 public:
         __c (void)
-        _b ("Model::Box")
+        _b ("Shape")
 
         virtual ~Image () {}
 

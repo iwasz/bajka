@@ -277,9 +277,9 @@
             </map>
         </property>
         
-        <property name="model">
-            <bean class="Shape" scope="bean"/>
-        </property>      
+<!--        <property name="model">-->
+<!--            <bean id="model" class="Shape" scope="bean"/>-->
+<!--        </property>      -->
         
         <property name="currentWidget" value="normal" />  
     </bean>
@@ -288,12 +288,13 @@
 
     <bean id="button" class="ButtonController" init-method="init">
         <property name="widget">
-            <bean parent="buttonWidget"/>
-<!--            <bean parent="imageWidget"/>-->
+            <bean parent="buttonWidget">
+                <property name="model" ref="model"/>
+            </bean>
         </property>
         
         <property name="model">
-            <bean class="Model::Box" />
+            <bean id="model" class="Model::Box" scope="bean"/>
         </property>
 
         <property name="bitMask"><value type="unsigned int">255</value></property>        

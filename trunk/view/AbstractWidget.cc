@@ -7,11 +7,34 @@
  ****************************************************************************/
 
 #include <SDL_opengl.h>
+#include <algorithm>
+//#include <boost/functional.hpp>
+#include <boost/mem_fn.hpp>
 
 #include "AbstractWidget.h"
 #include "IModel.h"
+#include "Commons.h"
+
+using std::for_each;
+//using boost::mem_fun;
+//using Util::convertPtr;
 
 namespace View {
+
+// Dla mem_fn - wrzucić do tiliae/Pointer.h
+// TODO dlaczego to kurwa nie działa, kiedy jest w Commons.h ?
+template <class T>
+T *get_pointer (Ptr <T> t)
+{
+        return t.get ();
+}
+
+void AbstractWidget::init ()
+{
+        for_each (begin (), end (), boost::mem_fn (&IWidget::init));
+}
+
+/****************************************************************************/
 
 void AbstractWidget::preDraw ()
 {
@@ -31,9 +54,7 @@ void AbstractWidget::doTransform ()
 
 void AbstractWidget::doChildren ()
 {
-        for (AbstractWidget::iterator i = begin (); i != end (); ++i) {
-                (*i)->draw ();
-        }
+        for_each (begin (), end (), boost::mem_fn (&IWidget::draw));
 }
 
 /****************************************************************************/

@@ -17,6 +17,8 @@
 namespace Model {
 
 /**
+ * Implementacja typowych operacji na modelu. Implemenacja IModel, która zbiera
+ * najczęściej używane operacje do kupy.
  * \ingroup Model
  */
 class AbstractModel :
@@ -50,8 +52,12 @@ public:
         /// Zwraca 0. AbstractModel sam w sobie ma wielkość punktu.
         virtual double getHeight () const { return 0.0; }
 
-        /// Zwraca false. AbstractModel sam w sobie ma wielkość punktu, więc nigdy nic nie jest w jego środku.
-        virtual bool enclose (const Geometry::Point &) const { return false; }
+        /**
+         * AbstractModel sam w sobie ma wielkość punktu, więc nigdy nic nie jest w jego środku, ale
+         * deleguje jeszcze sprawdzenie do swoich dzieci. Jeżeli ktorekolwiek z nich zwróci prawdę,
+         * to ta metoda także zwrac prawdę.
+         */
+        virtual bool enclose (const Geometry::Point &) const;
 
         /// Pudełko o zerowym rozmiarze.
         virtual Geometry::Box const &getBoundingBox () const { static Geometry::Box b; return b; }
