@@ -14,12 +14,11 @@
 #include <Reflection.h>
 #include <collection/Map.h>
 #include <collection/List.h>
-
 #include <List.h>
 #include <Vector.h>
 
 #include "IView.h"
-#include "../util/tree/ITreeMasterSlave.h"
+#include "../base/tree/ITreeWidget.h"
 
 namespace Model {
 class IModel;
@@ -34,19 +33,9 @@ namespace View {
  */
 struct IWidget :
         public IView,
-        public virtual Util::ITreeMasterSlave <IWidget> {
+        public Base::ITreeWidget {
 
         virtual ~IWidget () {}
-
-        /**
-         * Inits this Widget. You must reimplemet this method if you want
-         * your View to be statefull, and perform dynamic_pointer_cast to
-         * your preffered model concrete type. Also ypu should call init
-         * from parent class.
-         */
-        virtual void setModel (Ptr <Model::IModel> model) = 0;
-        // Świadomie nie mam const na końcu, bo swracam wskaźnik do niestałego modelu.
-        virtual Ptr <Model::IModel> getModel () = 0;
 
         /**
          * Zwraca informację czy widget jest wodoczny, czy nie.

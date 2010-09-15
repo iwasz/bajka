@@ -10,6 +10,11 @@
 #include <boost/functional.hpp>
 #include <functional>
 
+// TODO usunąć jakoś
+#include  "IWidget.h"
+// TODO usunąć jakoś
+#include  "IController.h"
+
 #include "AbstractModel.h"
 #include "geometry/Point.h"
 #include "Commons.h"

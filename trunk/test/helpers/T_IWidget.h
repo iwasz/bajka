@@ -9,20 +9,15 @@
 #ifndef IWIDGET_H_
 #define IWIDGET_H_
 
-#include "tree/ITreeMasterSlave.h"
+#include "ITreeWidget.h"
 
-class IModel;
+/**
+ *
+ */
+struct T_IWidget : public Util::ITreeWidget {
 
-struct IWidget : public virtual Util::ITreeMasterSlave <IWidget> {
-
-        virtual ~IWidget () {}
-
-        virtual Ptr <IModel> getModel () = 0;
-        virtual Ptr <IModel const> getModel () const = 0;
-        virtual void setModel (Ptr <IModel> m) = 0;
-
+        virtual ~T_IWidget () {}
         virtual std::string const &getName () const = 0;
-
 };
 
 #	endif /* IWIDGET_H_ */

@@ -6,17 +6,26 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef IMODEL_H_
-#define IMODEL_H_
+#ifndef ABSTRACTMODEL_H_
+#define ABSTRACTMODEL_H_
 
-#include "tree/ITreeSlave.h"
+#include "TreeModel.h"
 
 /**
  *
  */
-struct IModel : public virtual Util::ITreeSlave <IModel> {
-        virtual ~IModel () {}
-        virtual std::string const &getName () const = 0;
+class T_AbstractModel : public Base::TreeModel {
+public:
+
+        T_AbstractModel (std::string const &s) : name (s) {}
+        virtual ~T_AbstractModel () {}
+
+        std::string const &getName () const { return name; }
+
+private:
+
+        std::string name;
+
 };
 
-#	endif /* IMODEL_H_ */
+#	endif /* ABSTRACTMODEL_H_ */

@@ -9,10 +9,9 @@
 #ifndef ABSTRACTMODEL_H_
 #define ABSTRACTMODEL_H_
 
-#include "IModel.h"
 #include "geometry/Point.h"
 #include "geometry/Box.h"
-#include "tree/TreeSlave.h"
+#include "TreeModel.h"
 
 namespace Model {
 
@@ -21,9 +20,7 @@ namespace Model {
  * najczęściej używane operacje do kupy.
  * \ingroup Model
  */
-class AbstractModel :
-        public IModel,
-        public Util::TreeSlave <IModel> {
+class AbstractModel : public TreeModel {
 public:
         __d
 

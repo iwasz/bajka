@@ -148,95 +148,12 @@ void SimpleController::init ()
 
 /****************************************************************************/
 
-void SimpleController::setModel (Ptr <Model::IModel> m)
-{
-        model = m;
-        myHelper.myModel = model.get ();
-
-        if (getParent ()) {
-                model->setParent (getParent ()->getModel ().get ());
-        }
-}
-
-/****************************************************************************/
-
-void SimpleController::setWidget (Ptr <View::IWidget> w)
-{
-        widget = w;
-
-        if (getParent ()) {
-                widget->setParent (getParent ()->getWidget ().get ());
-        }
-}
-
-/****************************************************************************/
-
-void SimpleController::addChild (ChildType e)
-{
-        Util::TreeMaster <IController>::addChild (e);
-
-        if (getModel ()) {
-                getModel ()->onAddChild (e->getModel ());
-        }
-
-        if (getWidget ()) {
-                getWidget ()->onAddChild (e->getWidget ());
-        }
-}
-
-/****************************************************************************/
-
-void SimpleController::removeChild (ChildType e)
-{
-        Util::TreeMaster <IController>::removeChild (e);
-
-        if (getModel ()) {
-                getModel ()->onRemoveChild (e->getModel ());
-        }
-
-        if (getWidget ()) {
-                getWidget ()->onRemoveChild (e->getWidget ());
-        }
-}
-
-/****************************************************************************/
-
-void SimpleController::clearChildren ()
-{
-        Util::TreeMaster <IController>::clearChildren ();
-
-        if (getModel ()) {
-                getModel ()->onClearChildren ();
-        }
-
-        if (getWidget ()) {
-                getWidget ()->onClearChildren ();
-        }
-}
-
-/****************************************************************************/
-
-void SimpleController::setParent (ParentType p)
-{
-        Util::TreeMaster <IController>::setParent (p);
-
-        if (getModel ()) {
-                getModel ()->setParent ((p) ? (p->getModel ().get ()) : (0));
-        }
-
-        if (getWidget ()) {
-                getWidget ()->setParent ((p) ? (p->getWidget ().get ()) : (0));
-        }
-}
-
-/****************************************************************************/
-
-void SimpleController::setChildren (const ControllerList &list)
-{
-        for (ControllerList::const_iterator i = list.begin (); i !=list.end (); ++i) {
-                addChild (*i);
-        }
-}
+//void SimpleController::setChildren (const ControllerList &list)
+//{
+//        for (ControllerList::const_iterator i = list.begin (); i !=list.end (); ++i) {
+//                addChild (*i);
+//        }
+//}
 
 /****************************************************************************/
 
