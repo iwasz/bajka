@@ -14,7 +14,7 @@
 #include "geometry/Utils.h"
 #include "geometry/Point.h"
 #include "geometry/Box.h"
-#include "../util/tree/ITreeSlave.h"
+#include "../base/tree/ITreeModel.h"
 
 /**
  * Klasy związane z modelem. Klasy z warstwy domenowej.
@@ -43,7 +43,7 @@ namespace Model {
  */
 struct IModel :
         public virtual Core::Object,
-        public virtual Util::ITreeSlave <IModel> {
+        public Base::ITreeModel {
 
         virtual ~IModel () {}
 

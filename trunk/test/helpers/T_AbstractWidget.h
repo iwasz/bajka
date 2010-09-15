@@ -6,14 +6,26 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "AbstractModel.h"
+#ifndef ABSTRACTWIDGET_H_
+#define ABSTRACTWIDGET_H_
 
-//Ptr <IModel> TreeSlave::extract (IModelAware *o) const;
-//{
-//        return o->getModel ().get ();
-//}
-//
-//Ptr <IModel const> TreeSlave::extract (IModelAware const *o) const;
-//{
-//        return o->getModel ().get ();
-//}
+#include "TreeWidget.h"
+
+/**
+ *
+ */
+class T_AbstractWidget : public Base::TreeWidget {
+public:
+
+        T_AbstractWidget (std::string const &s) : name (s) {}
+        virtual ~T_AbstractWidget () {}
+
+        std::string const &getName () const { return name; }
+
+private:
+
+        std::string name;
+
+};
+
+#	endif /* ABSTRACTWIDGET_H_ */

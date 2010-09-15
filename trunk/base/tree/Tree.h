@@ -95,12 +95,16 @@
  * </bean>
  */
 
-#include "TreeMaster.h"
-#include "TreeSlave.h"
-#include "TreeMasterSlave.h"
-#include "ITreeMaster.h"
-#include "ITreeSlave.h"
-#include "ITreeMasterSlave.h"
-#include "IParentAware.h"
+#include "Extractors.h"
+#include "IController.h"
+#include "IModel.h"
+#include "IModelAware.h"
+#include "ITreeController.h"
+#include "ITreeModel.h"
+#include "ITreeWidget.h"
+#include "IWidget.h"
+#include "Pointer.h"
+#include "TreeSlaveIterator.h"
+#include "Types.h"
 
 #	endif /* TREE_H_ */

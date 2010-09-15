@@ -12,12 +12,12 @@
 #include <stack>
 #include "IController.h"
 #include "AbstractObserver.h"
-#include "tree/TreeMaster.h"
 #include "geometry/Utils.h"
 #include "KeyboardEvent.h"
 #include "MouseButtonEvent.h"
 #include "MouseMotionEvent.h"
 #include "TimerEvent.h"
+#include "AbstractController.h"
 
 // Kiedy nie ma tych nagłówków, kontener nie chce ładować klas.
 #include "IWidget.h"
@@ -67,19 +67,18 @@ private:
  * \ingroup Kontroler
  */
 class SimpleController :
-        public IController,
         public Event::AbstractObserver, // Eventy
-        public Util::TreeMaster <IController> { // Zawieranie
+        public AbstractController { // Zawieranie
 
 public:
 
         __c (void)
         _b ("IController", "AbstractObserver")
 
-        SimpleController (Ptr <View::IWidget> widget = Ptr <View::IWidget> (),
+        SimpleController (Ptr <View::IWidget> w = Ptr <View::IWidget> (),
                           Ptr <IMapping> mapping = Ptr <IMapping> ()) :
+                                  AbstractController (w),
                                   myHelper (this),
-                                  widget (widget),
                                   mapping (mapping),
                                   render (true) {}
 
@@ -102,13 +101,6 @@ public:
         bool getRender () const { return render; }
         void setRender (bool r) { render = r; }
 
-        // Zmienić na View
-        Ptr<View::IWidget> getWidget () { return widget; }
-        void setWidget (Ptr<View::IWidget> widget);
-
-        Ptr<Model::IModel> getModel () /*const*/ { return model; }
-        void setModel (Ptr<Model::IModel> model);
-
         Ptr<IMapping> getMapping () { return mapping; }
         _m (setMapping) void setMapping (Ptr<IMapping> mapping) { this->mapping = mapping; }
 
@@ -126,17 +118,6 @@ public:
          * zwykły wektor.
          */
         _m (setChildren)
-        void setChildren (const ControllerList &list);
-
-        void addChild (ChildType e);
-        void removeChild (ChildType e);
-        void clearChildren ();
-
-protected:
-
-        void setParent (ParentType p);
-
-        //\}
 
 /*------Events--------------------------------------------------------------*/
 
@@ -202,10 +183,7 @@ private:
 
 private:
 
-        Ptr <View::IWidget> widget;
-        Ptr <Model::IModel> model;
         Ptr <IMapping> mapping;
-
         bool render;
 
         _e (SimpleController)

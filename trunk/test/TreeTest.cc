@@ -5,46 +5,47 @@
 #include <iostream>
 
 #include "tree/Tree.h"
-#include "helpers/AbstractController.h"
-#include "helpers/AbstractModel.h"
-#include "helpers/AbstractWidget.h"
+#include "helpers/T_AbstractController.h"
+#include "helpers/T_AbstractModel.h"
+#include "helpers/T_AbstractWidget.h"
 
-/**
- * Testuje tylko czy da się stworzyć obiekty podanych klas.
- */
 BOOST_AUTO_TEST_CASE (InstantiationTest)
 {
-     AbstractController c ("");
+     T_AbstractController c ("");
 
-     Ptr <AbstractModel> m = Ptr <AbstractModel> (new AbstractModel (""));
+     Ptr <T_AbstractModel> m = Ptr <T_AbstractModel> (new T_AbstractModel (""));
      c.setModel (m);
 
-     Ptr <AbstractWidget> w = Ptr <AbstractWidget> (new AbstractWidget (""));
+     Ptr <T_AbstractWidget> w = Ptr <T_AbstractWidget> (new T_AbstractWidget (""));
      c.setWidget (w);
 
      c.getName ();
 }
 
 /**
- * Prosty parent ntest, przy czym kontroler dostaje tylko model. Nie ustawiam
+ * Prosty parent test, przy czym kontroler dostaje tylko model. Nie ustawiam
  * widgetów.
+ *
+ * Tworzę strukturę drzewiastą kontrolerów, z których kazdy ma ustawiony model,
+ * ale nie ma ustawionego widgetu. Sprawdzam, czy kontrolery zwracają poprawnie
+ * dzieci i czy modle poprawnie zwracają child-modele.
  */
 BOOST_AUTO_TEST_CASE (ParentTestM_C)
 {
         typedef Ptr <IController> CtrPtr;
         typedef Ptr <IModel> MdlPtr;
 
-        CtrPtr cA = CtrPtr (new AbstractController ("cA"));
-        CtrPtr cB = CtrPtr (new AbstractController ("cB"));
-        CtrPtr cC = CtrPtr (new AbstractController ("cC"));
-        CtrPtr cD = CtrPtr (new AbstractController ("cD"));
-        CtrPtr cE = CtrPtr (new AbstractController ("cE"));
+        CtrPtr cA = CtrPtr (new T_AbstractController ("cA"));
+        CtrPtr cB = CtrPtr (new T_AbstractController ("cB"));
+        CtrPtr cC = CtrPtr (new T_AbstractController ("cC"));
+        CtrPtr cD = CtrPtr (new T_AbstractController ("cD"));
+        CtrPtr cE = CtrPtr (new T_AbstractController ("cE"));
 
-        MdlPtr mA = MdlPtr (new AbstractModel ("mA"));
-        MdlPtr mB = MdlPtr (new AbstractModel ("mB"));
-        MdlPtr mC = MdlPtr (new AbstractModel ("mC"));
-        MdlPtr mD = MdlPtr (new AbstractModel ("mD"));
-        MdlPtr mE = MdlPtr (new AbstractModel ("mE"));
+        MdlPtr mA = MdlPtr (new T_AbstractModel ("mA"));
+        MdlPtr mB = MdlPtr (new T_AbstractModel ("mB"));
+        MdlPtr mC = MdlPtr (new T_AbstractModel ("mC"));
+        MdlPtr mD = MdlPtr (new T_AbstractModel ("mD"));
+        MdlPtr mE = MdlPtr (new T_AbstractModel ("mE"));
 
         cA->setModel (mA);
         cB->setModel (mB);
@@ -57,7 +58,7 @@ BOOST_AUTO_TEST_CASE (ParentTestM_C)
         cB->addChild (cD);
         cC->addChild (cE);
 
-        AbstractController::iterator i = cA->begin ();
+        T_AbstractController::iterator i = cA->begin ();
         BOOST_CHECK ((*i)->getName () == "cB");
         BOOST_CHECK ((*i)->getParent () == cA.get ());
         ++i;
@@ -72,9 +73,10 @@ BOOST_AUTO_TEST_CASE (ParentTestM_C)
         BOOST_CHECK ((*i)->getName () == "cE");
         BOOST_CHECK ((*i)->getParent () == cC.get ());
 
-        AbstractModel::iterator j = mA->begin ();
+        T_AbstractModel::iterator j = mA->begin ();
         BOOST_CHECK ((*j)->getName () == "mB");
         BOOST_CHECK ((*j)->getParent () == mA.get ());
+
         ++j;
         BOOST_CHECK ((*j)->getName () == "mC");
         BOOST_CHECK ((*j)->getParent () == mA.get ());
@@ -91,6 +93,10 @@ BOOST_AUTO_TEST_CASE (ParentTestM_C)
 /**
  * Tu tworzę kontrolery, ktopre mają widgety i modele a następnie zagnieżdżam
  * jedne kontrolery w drugich.
+ *
+ * Tworzę strukturę drzewiastą kontrolerów, z których kazdy ma ustawiony model,
+ * i ustawiony widget. Sprawdzam, czy kontrolery zwracają poprawnie dzieci, modle
+ * poprawnie zwracają child-modele, a widgety child widgety.
  */
 BOOST_AUTO_TEST_CASE (ParentTestM_V_C)
 {
@@ -98,23 +104,23 @@ BOOST_AUTO_TEST_CASE (ParentTestM_V_C)
         typedef Ptr <IModel> MdlPtr;
         typedef Ptr <IWidget> WdgPtr;
 
-        CtrPtr cA = CtrPtr (new AbstractController ("cA"));
-        CtrPtr cB = CtrPtr (new AbstractController ("cB"));
-        CtrPtr cC = CtrPtr (new AbstractController ("cC"));
-        CtrPtr cD = CtrPtr (new AbstractController ("cD"));
-        CtrPtr cE = CtrPtr (new AbstractController ("cE"));
+        CtrPtr cA = CtrPtr (new T_AbstractController ("cA"));
+        CtrPtr cB = CtrPtr (new T_AbstractController ("cB"));
+        CtrPtr cC = CtrPtr (new T_AbstractController ("cC"));
+        CtrPtr cD = CtrPtr (new T_AbstractController ("cD"));
+        CtrPtr cE = CtrPtr (new T_AbstractController ("cE"));
 
-        MdlPtr mA = MdlPtr (new AbstractModel ("mA"));
-        MdlPtr mB = MdlPtr (new AbstractModel ("mB"));
-        MdlPtr mC = MdlPtr (new AbstractModel ("mC"));
-        MdlPtr mD = MdlPtr (new AbstractModel ("mD"));
-        MdlPtr mE = MdlPtr (new AbstractModel ("mE"));
+        MdlPtr mA = MdlPtr (new T_AbstractModel ("mA"));
+        MdlPtr mB = MdlPtr (new T_AbstractModel ("mB"));
+        MdlPtr mC = MdlPtr (new T_AbstractModel ("mC"));
+        MdlPtr mD = MdlPtr (new T_AbstractModel ("mD"));
+        MdlPtr mE = MdlPtr (new T_AbstractModel ("mE"));
 
-        WdgPtr wA = WdgPtr (new AbstractWidget ("wA"));
-        WdgPtr wB = WdgPtr (new AbstractWidget ("wB"));
-        WdgPtr wC = WdgPtr (new AbstractWidget ("wC"));
-        WdgPtr wD = WdgPtr (new AbstractWidget ("wD"));
-        WdgPtr wE = WdgPtr (new AbstractWidget ("wE"));
+        WdgPtr wA = WdgPtr (new T_AbstractWidget ("wA"));
+        WdgPtr wB = WdgPtr (new T_AbstractWidget ("wB"));
+        WdgPtr wC = WdgPtr (new T_AbstractWidget ("wC"));
+        WdgPtr wD = WdgPtr (new T_AbstractWidget ("wD"));
+        WdgPtr wE = WdgPtr (new T_AbstractWidget ("wE"));
 
         cA->setModel (mA);
         cB->setModel (mB);
@@ -134,7 +140,7 @@ BOOST_AUTO_TEST_CASE (ParentTestM_V_C)
         cC->addChild (cE);
 
         // Tu sprawdzam strukturę zagnieżdżenia kontrolerów.
-        AbstractController::iterator i = cA->begin ();
+        T_AbstractController::iterator i = cA->begin ();
         BOOST_CHECK ((*i)->getName () == "cB");
         BOOST_CHECK ((*i)->getParent () == cA.get ());
         ++i;
@@ -150,7 +156,7 @@ BOOST_AUTO_TEST_CASE (ParentTestM_V_C)
         BOOST_CHECK ((*i)->getParent () == cC.get ());
 
         // Tu sprawdzam strukturę zagnieżdżenia modeli.
-        AbstractModel::iterator j = mA->begin ();
+        T_AbstractModel::iterator j = mA->begin ();
         BOOST_CHECK ((*j)->getName () == "mB");
         BOOST_CHECK ((*j)->getParent () == mA.get ());
         ++j;
@@ -166,7 +172,7 @@ BOOST_AUTO_TEST_CASE (ParentTestM_V_C)
         BOOST_CHECK ((*j)->getParent () == mC.get ());
 
         // Tu sprawdzam strukturę zagnieżdżenia widgetów.
-        AbstractWidget::iterator k = wA->begin ();
+        T_AbstractWidget::iterator k = wA->begin ();
         BOOST_CHECK ((*k)->getName () == "wB");
         BOOST_CHECK ((*k)->getParent () == wA.get ());
         ++k;
@@ -183,24 +189,26 @@ BOOST_AUTO_TEST_CASE (ParentTestM_V_C)
 }
 
 /**
- *
+ * Test sprawdza strukturę drzewiastą widgetów. Każdy widget ma podpięty
+ * jakiś model. następnie sprawdzam, czy widgety poprawnie zwracają swoje
+ * dzieci (w postaci widgetów), a modele dzieci w postaci modeli.
  */
 BOOST_AUTO_TEST_CASE (WidgetParentTest)
 {
         typedef Ptr <IModel> MdlPtr;
         typedef Ptr <IWidget> WdgPtr;
 
-        MdlPtr mA = MdlPtr (new AbstractModel ("mA"));
-        MdlPtr mB = MdlPtr (new AbstractModel ("mB"));
-        MdlPtr mC = MdlPtr (new AbstractModel ("mC"));
-        MdlPtr mD = MdlPtr (new AbstractModel ("mD"));
-        MdlPtr mE = MdlPtr (new AbstractModel ("mE"));
+        MdlPtr mA = MdlPtr (new T_AbstractModel ("mA"));
+        MdlPtr mB = MdlPtr (new T_AbstractModel ("mB"));
+        MdlPtr mC = MdlPtr (new T_AbstractModel ("mC"));
+        MdlPtr mD = MdlPtr (new T_AbstractModel ("mD"));
+        MdlPtr mE = MdlPtr (new T_AbstractModel ("mE"));
 
-        WdgPtr wA = WdgPtr (new AbstractWidget ("wA"));
-        WdgPtr wB = WdgPtr (new AbstractWidget ("wB"));
-        WdgPtr wC = WdgPtr (new AbstractWidget ("wC"));
-        WdgPtr wD = WdgPtr (new AbstractWidget ("wD"));
-        WdgPtr wE = WdgPtr (new AbstractWidget ("wE"));
+        WdgPtr wA = WdgPtr (new T_AbstractWidget ("wA"));
+        WdgPtr wB = WdgPtr (new T_AbstractWidget ("wB"));
+        WdgPtr wC = WdgPtr (new T_AbstractWidget ("wC"));
+        WdgPtr wD = WdgPtr (new T_AbstractWidget ("wD"));
+        WdgPtr wE = WdgPtr (new T_AbstractWidget ("wE"));
 
         wA->setModel (mA);
         wB->setModel (mB);
@@ -214,7 +222,7 @@ BOOST_AUTO_TEST_CASE (WidgetParentTest)
         wC->addChild (wE);
 
         // Tu sprawdzam strukturę zagnieżdżenia widgetów.
-        AbstractWidget::iterator k = wA->begin ();
+        T_AbstractWidget::iterator k = wA->begin ();
         BOOST_CHECK ((*k)->getName () == "wB");
         BOOST_CHECK ((*k)->getParent () == wA.get ());
         ++k;
@@ -230,7 +238,7 @@ BOOST_AUTO_TEST_CASE (WidgetParentTest)
         BOOST_CHECK ((*k)->getParent () == wC.get ());
 
         // Tu sprawdzam strukturę zagnieżdżenia modeli.
-        AbstractModel::iterator j = mA->begin ();
+        T_AbstractModel::iterator j = mA->begin ();
         BOOST_CHECK ((*j)->getName () == "mB");
         BOOST_CHECK ((*j)->getParent () == mA.get ());
         ++j;
@@ -248,7 +256,8 @@ BOOST_AUTO_TEST_CASE (WidgetParentTest)
 
 /**
  * Tu tworzę kontrolery, ktopre mają widgety i modele a następnie zagnieżdżam
- * jedne kontrolery w drugich.
+ * jedne kontrolery w drugich. Potem czyszczę dzieci i sprawdzam, czy wyzerowały
+ * się wskaźniki do rodziców.
  */
 BOOST_AUTO_TEST_CASE (clearChildrenTest)
 {
@@ -256,23 +265,23 @@ BOOST_AUTO_TEST_CASE (clearChildrenTest)
         typedef Ptr <IModel> MdlPtr;
         typedef Ptr <IWidget> WdgPtr;
 
-        CtrPtr cA = CtrPtr (new AbstractController ("cA"));
-        CtrPtr cB = CtrPtr (new AbstractController ("cB"));
-        CtrPtr cC = CtrPtr (new AbstractController ("cC"));
-        CtrPtr cD = CtrPtr (new AbstractController ("cD"));
-        CtrPtr cE = CtrPtr (new AbstractController ("cE"));
+        CtrPtr cA = CtrPtr (new T_AbstractController ("cA"));
+        CtrPtr cB = CtrPtr (new T_AbstractController ("cB"));
+        CtrPtr cC = CtrPtr (new T_AbstractController ("cC"));
+        CtrPtr cD = CtrPtr (new T_AbstractController ("cD"));
+        CtrPtr cE = CtrPtr (new T_AbstractController ("cE"));
 
-        MdlPtr mA = MdlPtr (new AbstractModel ("mA"));
-        MdlPtr mB = MdlPtr (new AbstractModel ("mB"));
-        MdlPtr mC = MdlPtr (new AbstractModel ("mC"));
-        MdlPtr mD = MdlPtr (new AbstractModel ("mD"));
-        MdlPtr mE = MdlPtr (new AbstractModel ("mE"));
+        MdlPtr mA = MdlPtr (new T_AbstractModel ("mA"));
+        MdlPtr mB = MdlPtr (new T_AbstractModel ("mB"));
+        MdlPtr mC = MdlPtr (new T_AbstractModel ("mC"));
+        MdlPtr mD = MdlPtr (new T_AbstractModel ("mD"));
+        MdlPtr mE = MdlPtr (new T_AbstractModel ("mE"));
 
-        WdgPtr wA = WdgPtr (new AbstractWidget ("wA"));
-        WdgPtr wB = WdgPtr (new AbstractWidget ("wB"));
-        WdgPtr wC = WdgPtr (new AbstractWidget ("wC"));
-        WdgPtr wD = WdgPtr (new AbstractWidget ("wD"));
-        WdgPtr wE = WdgPtr (new AbstractWidget ("wE"));
+        WdgPtr wA = WdgPtr (new T_AbstractWidget ("wA"));
+        WdgPtr wB = WdgPtr (new T_AbstractWidget ("wB"));
+        WdgPtr wC = WdgPtr (new T_AbstractWidget ("wC"));
+        WdgPtr wD = WdgPtr (new T_AbstractWidget ("wD"));
+        WdgPtr wE = WdgPtr (new T_AbstractWidget ("wE"));
 
         cA->setModel (mA);
         cB->setModel (mB);
@@ -313,21 +322,635 @@ BOOST_AUTO_TEST_CASE (clearChildrenTest)
         BOOST_CHECK (!wD->getParent ());
         BOOST_CHECK (!wE->getParent ());
 
-        BOOST_CHECK (cA->getChildren ().empty ());
-        BOOST_CHECK (cB->getChildren ().empty ());
-        BOOST_CHECK (cC->getChildren ().empty ());
-        BOOST_CHECK (cD->getChildren ().empty ());
-        BOOST_CHECK (cE->getChildren ().empty ());
+        BOOST_CHECK (!cA->hasChildren ());
+        BOOST_CHECK (!cB->hasChildren ());
+        BOOST_CHECK (!cC->hasChildren ());
+        BOOST_CHECK (!cD->hasChildren ());
+        BOOST_CHECK (!cE->hasChildren ());
 
-        BOOST_CHECK (mA->getChildren ().empty ());
-        BOOST_CHECK (mB->getChildren ().empty ());
-        BOOST_CHECK (mC->getChildren ().empty ());
-        BOOST_CHECK (mD->getChildren ().empty ());
-        BOOST_CHECK (mE->getChildren ().empty ());
+        BOOST_CHECK (!mA->hasChildren ());
+        BOOST_CHECK (!mB->hasChildren ());
+        BOOST_CHECK (!mC->hasChildren ());
+        BOOST_CHECK (!mD->hasChildren ());
+        BOOST_CHECK (!mE->hasChildren ());
 
-        BOOST_CHECK (wA->getChildren ().empty ());
-        BOOST_CHECK (wB->getChildren ().empty ());
-        BOOST_CHECK (wC->getChildren ().empty ());
-        BOOST_CHECK (wD->getChildren ().empty ());
-        BOOST_CHECK (wE->getChildren ().empty ());
+        BOOST_CHECK (!wA->hasChildren ());
+        BOOST_CHECK (!wB->hasChildren ());
+        BOOST_CHECK (!wC->hasChildren ());
+        BOOST_CHECK (!wD->hasChildren ());
+        BOOST_CHECK (!wE->hasChildren ());
 }
+
+/**
+ * Testuje działanie metody hasChildren.
+ */
+BOOST_AUTO_TEST_CASE (hasChildren)
+{
+        typedef Ptr <IController> CtrPtr;
+        typedef Ptr <IModel> MdlPtr;
+        typedef Ptr <IWidget> WdgPtr;
+
+        CtrPtr cA = CtrPtr (new T_AbstractController ("cA"));
+        CtrPtr cB = CtrPtr (new T_AbstractController ("cB"));
+        CtrPtr cC = CtrPtr (new T_AbstractController ("cC"));
+        CtrPtr cD = CtrPtr (new T_AbstractController ("cD"));
+        CtrPtr cE = CtrPtr (new T_AbstractController ("cE"));
+
+        MdlPtr mA = MdlPtr (new T_AbstractModel ("mA"));
+        MdlPtr mB = MdlPtr (new T_AbstractModel ("mB"));
+        MdlPtr mC = MdlPtr (new T_AbstractModel ("mC"));
+        MdlPtr mD = MdlPtr (new T_AbstractModel ("mD"));
+        MdlPtr mE = MdlPtr (new T_AbstractModel ("mE"));
+
+        WdgPtr wA = WdgPtr (new T_AbstractWidget ("wA"));
+        WdgPtr wB = WdgPtr (new T_AbstractWidget ("wB"));
+        WdgPtr wC = WdgPtr (new T_AbstractWidget ("wC"));
+        WdgPtr wD = WdgPtr (new T_AbstractWidget ("wD"));
+        WdgPtr wE = WdgPtr (new T_AbstractWidget ("wE"));
+
+        cA->setModel (mA);
+        cB->setModel (mB);
+        cC->setModel (mC);
+        cD->setModel (mD);
+        cE->setModel (mE);
+
+        cA->setWidget (wA);
+        cB->setWidget (wB);
+        cC->setWidget (wC);
+        cD->setWidget (wD);
+        cE->setWidget (wE);
+
+        cA->addChild (cB);
+        cA->addChild (cC);
+        cB->addChild (cD);
+        cC->addChild (cE);
+
+        BOOST_CHECK (cA->hasChildren ());
+        BOOST_CHECK (cB->hasChildren ());
+        BOOST_CHECK (cC->hasChildren ());
+        // LIŚCIE Te już nie mają dzieci.
+        BOOST_CHECK (!cD->hasChildren ());
+        BOOST_CHECK (!cE->hasChildren ());
+
+        BOOST_CHECK (mA->hasChildren ());
+        BOOST_CHECK (mB->hasChildren ());
+        BOOST_CHECK (mC->hasChildren ());
+        // LIŚCIE Te już nie mają dzieci.
+        BOOST_CHECK (!mD->hasChildren ());
+        BOOST_CHECK (!mE->hasChildren ());
+
+        BOOST_CHECK (wA->hasChildren ());
+        BOOST_CHECK (wB->hasChildren ());
+        BOOST_CHECK (wC->hasChildren ());
+        // LIŚCIE Te już nie mają dzieci.
+        BOOST_CHECK (!wD->hasChildren ());
+        BOOST_CHECK (!wE->hasChildren ());
+}
+
+/*##########################################################################*/
+/*
+ * TESTY z odwróconą kolejnością setterów - najpierw zagneżdżanie, a potem
+ * ustawione modele i widgety
+ */
+/*##########################################################################*/
+
+/**
+ * Prosty parent ntest, przy czym kontroler dostaje tylko model. Nie ustawiam
+ * widgetów.
+ */
+BOOST_AUTO_TEST_CASE (ParentTestM_C_Order)
+{
+        typedef Ptr <IController> CtrPtr;
+        typedef Ptr <IModel> MdlPtr;
+
+        CtrPtr cA = CtrPtr (new T_AbstractController ("cA"));
+        CtrPtr cB = CtrPtr (new T_AbstractController ("cB"));
+        CtrPtr cC = CtrPtr (new T_AbstractController ("cC"));
+        CtrPtr cD = CtrPtr (new T_AbstractController ("cD"));
+        CtrPtr cE = CtrPtr (new T_AbstractController ("cE"));
+
+        MdlPtr mA = MdlPtr (new T_AbstractModel ("mA"));
+        MdlPtr mB = MdlPtr (new T_AbstractModel ("mB"));
+        MdlPtr mC = MdlPtr (new T_AbstractModel ("mC"));
+        MdlPtr mD = MdlPtr (new T_AbstractModel ("mD"));
+        MdlPtr mE = MdlPtr (new T_AbstractModel ("mE"));
+
+        cA->addChild (cB);
+        cA->addChild (cC);
+        cB->addChild (cD);
+        cC->addChild (cE);
+
+        cA->setModel (mA);
+        cB->setModel (mB);
+        cC->setModel (mC);
+        cD->setModel (mD);
+        cE->setModel (mE);
+
+        T_AbstractController::iterator i = cA->begin ();
+        BOOST_CHECK ((*i)->getName () == "cB");
+        BOOST_CHECK ((*i)->getParent () == cA.get ());
+        ++i;
+        BOOST_CHECK ((*i)->getName () == "cC");
+        BOOST_CHECK ((*i)->getParent () == cA.get ());
+
+        i = cB->begin ();
+        BOOST_CHECK ((*i)->getName () == "cD");
+        BOOST_CHECK ((*i)->getParent () == cB.get ());
+
+        i = cC->begin ();
+        BOOST_CHECK ((*i)->getName () == "cE");
+        BOOST_CHECK ((*i)->getParent () == cC.get ());
+
+        T_AbstractModel::iterator j = mA->begin ();
+        BOOST_CHECK ((*j)->getName () == "mB");
+        BOOST_CHECK ((*j)->getParent () == mA.get ());
+
+        ++j;
+        BOOST_CHECK ((*j)->getName () == "mC");
+        BOOST_CHECK ((*j)->getParent () == mA.get ());
+
+        j = mB->begin ();
+        BOOST_CHECK ((*j)->getName () == "mD");
+        BOOST_CHECK ((*j)->getParent () == mB.get ());
+
+        j = mC->begin ();
+        BOOST_CHECK ((*j)->getName () == "mE");
+        BOOST_CHECK ((*j)->getParent () == mC.get ());
+}
+
+/**
+ * Tu tworzę kontrolery, ktopre mają widgety i modele a następnie zagnieżdżam
+ * jedne kontrolery w drugich.
+ */
+BOOST_AUTO_TEST_CASE (ParentTestM_V_C_Order)
+{
+        typedef Ptr <IController> CtrPtr;
+        typedef Ptr <IModel> MdlPtr;
+        typedef Ptr <IWidget> WdgPtr;
+
+        CtrPtr cA = CtrPtr (new T_AbstractController ("cA"));
+        CtrPtr cB = CtrPtr (new T_AbstractController ("cB"));
+        CtrPtr cC = CtrPtr (new T_AbstractController ("cC"));
+        CtrPtr cD = CtrPtr (new T_AbstractController ("cD"));
+        CtrPtr cE = CtrPtr (new T_AbstractController ("cE"));
+
+        MdlPtr mA = MdlPtr (new T_AbstractModel ("mA"));
+        MdlPtr mB = MdlPtr (new T_AbstractModel ("mB"));
+        MdlPtr mC = MdlPtr (new T_AbstractModel ("mC"));
+        MdlPtr mD = MdlPtr (new T_AbstractModel ("mD"));
+        MdlPtr mE = MdlPtr (new T_AbstractModel ("mE"));
+
+        WdgPtr wA = WdgPtr (new T_AbstractWidget ("wA"));
+        WdgPtr wB = WdgPtr (new T_AbstractWidget ("wB"));
+        WdgPtr wC = WdgPtr (new T_AbstractWidget ("wC"));
+        WdgPtr wD = WdgPtr (new T_AbstractWidget ("wD"));
+        WdgPtr wE = WdgPtr (new T_AbstractWidget ("wE"));
+
+        cA->addChild (cB);
+        cA->addChild (cC);
+        cB->addChild (cD);
+        cC->addChild (cE);
+
+        cA->setModel (mA);
+        cB->setModel (mB);
+        cC->setModel (mC);
+        cD->setModel (mD);
+        cE->setModel (mE);
+
+        cA->setWidget (wA);
+        cB->setWidget (wB);
+        cC->setWidget (wC);
+        cD->setWidget (wD);
+        cE->setWidget (wE);
+
+        // Tu sprawdzam strukturę zagnieżdżenia kontrolerów.
+        T_AbstractController::iterator i = cA->begin ();
+        BOOST_CHECK ((*i)->getName () == "cB");
+        BOOST_CHECK ((*i)->getParent () == cA.get ());
+        ++i;
+        BOOST_CHECK ((*i)->getName () == "cC");
+        BOOST_CHECK ((*i)->getParent () == cA.get ());
+
+        i = cB->begin ();
+        BOOST_CHECK ((*i)->getName () == "cD");
+        BOOST_CHECK ((*i)->getParent () == cB.get ());
+
+        i = cC->begin ();
+        BOOST_CHECK ((*i)->getName () == "cE");
+        BOOST_CHECK ((*i)->getParent () == cC.get ());
+
+        // Tu sprawdzam strukturę zagnieżdżenia modeli.
+        T_AbstractModel::iterator j = mA->begin ();
+        BOOST_CHECK ((*j)->getName () == "mB");
+        BOOST_CHECK ((*j)->getParent () == mA.get ());
+        ++j;
+        BOOST_CHECK ((*j)->getName () == "mC");
+        BOOST_CHECK ((*j)->getParent () == mA.get ());
+
+        j = mB->begin ();
+        BOOST_CHECK ((*j)->getName () == "mD");
+        BOOST_CHECK ((*j)->getParent () == mB.get ());
+
+        j = mC->begin ();
+        BOOST_CHECK ((*j)->getName () == "mE");
+        BOOST_CHECK ((*j)->getParent () == mC.get ());
+
+        // Tu sprawdzam strukturę zagnieżdżenia widgetów.
+        T_AbstractWidget::iterator k = wA->begin ();
+        BOOST_CHECK ((*k)->getName () == "wB");
+        BOOST_CHECK ((*k)->getParent () == wA.get ());
+        ++k;
+        BOOST_CHECK ((*k)->getName () == "wC");
+        BOOST_CHECK ((*k)->getParent () == wA.get ());
+
+        k = wB->begin ();
+        BOOST_CHECK ((*k)->getName () == "wD");
+        BOOST_CHECK ((*k)->getParent () == wB.get ());
+
+        k = wC->begin ();
+        BOOST_CHECK ((*k)->getName () == "wE");
+        BOOST_CHECK ((*k)->getParent () == wC.get ());
+}
+
+/**
+ * zagnieżdżanie widgetów, ale odwrócona kolejność. Najpierw jest tworzona
+ * struktura drzewiasta widgetów a dopiero potem podpinane są modele. Dalej
+ * wykonuję standardowe sprawdzenia iteratorów od dzieci.
+ *
+ * Ten test jest stworzony, ponieważ wcześniejsza implementacja, gdzie modele
+ * miały wewnętrznie kolekcję dzieci, która była uaktualniana przez kontroler
+ * nie działała przy powyższym scenariuszu.
+ */
+BOOST_AUTO_TEST_CASE (WidgetParentTest_Order)
+{
+        typedef Ptr <IModel> MdlPtr;
+        typedef Ptr <IWidget> WdgPtr;
+
+        MdlPtr mA = MdlPtr (new T_AbstractModel ("mA"));
+        MdlPtr mB = MdlPtr (new T_AbstractModel ("mB"));
+        MdlPtr mC = MdlPtr (new T_AbstractModel ("mC"));
+        MdlPtr mD = MdlPtr (new T_AbstractModel ("mD"));
+        MdlPtr mE = MdlPtr (new T_AbstractModel ("mE"));
+
+        WdgPtr wA = WdgPtr (new T_AbstractWidget ("wA"));
+        WdgPtr wB = WdgPtr (new T_AbstractWidget ("wB"));
+        WdgPtr wC = WdgPtr (new T_AbstractWidget ("wC"));
+        WdgPtr wD = WdgPtr (new T_AbstractWidget ("wD"));
+        WdgPtr wE = WdgPtr (new T_AbstractWidget ("wE"));
+
+        wA->addChild (wB);
+        wA->addChild (wC);
+        wB->addChild (wD);
+        wC->addChild (wE);
+
+        wA->setModel (mA);
+        wB->setModel (mB);
+        wC->setModel (mC);
+        wD->setModel (mD);
+        wE->setModel (mE);
+
+        // Tu sprawdzam strukturę zagnieżdżenia widgetów.
+        T_AbstractWidget::iterator k = wA->begin ();
+        BOOST_CHECK ((*k)->getName () == "wB");
+        BOOST_CHECK ((*k)->getParent () == wA.get ());
+        ++k;
+        BOOST_CHECK ((*k)->getName () == "wC");
+        BOOST_CHECK ((*k)->getParent () == wA.get ());
+
+        k = wB->begin ();
+        BOOST_CHECK ((*k)->getName () == "wD");
+        BOOST_CHECK ((*k)->getParent () == wB.get ());
+
+        k = wC->begin ();
+        BOOST_CHECK ((*k)->getName () == "wE");
+        BOOST_CHECK ((*k)->getParent () == wC.get ());
+
+        // Tu sprawdzam strukturę zagnieżdżenia modeli.
+        T_AbstractModel::iterator j = mA->begin ();
+        BOOST_CHECK ((*j)->getName () == "mB");
+        BOOST_CHECK ((*j)->getParent () == mA.get ());
+        ++j;
+        BOOST_CHECK ((*j)->getName () == "mC");
+        BOOST_CHECK ((*j)->getParent () == mA.get ());
+
+        j = mB->begin ();
+        BOOST_CHECK ((*j)->getName () == "mD");
+        BOOST_CHECK ((*j)->getParent () == mB.get ());
+
+        j = mC->begin ();
+        BOOST_CHECK ((*j)->getName () == "mE");
+        BOOST_CHECK ((*j)->getParent () == mC.get ());
+}
+
+/**
+ * test sprawdzający działanie getParent w TreeMasterSlave, a konkretnie
+ * czy nie występuje jeden konkrety BUG, który znalazłem. Kiedy nie było
+ * ustawionego parenta, TreeMasterSlave::getParent próbowało wykonać
+ * getParent ownera, ale nie sprawdzało czy owner jest ustawiony:
+ */
+BOOST_AUTO_TEST_CASE (WidgetParentBUG)
+{
+        typedef Ptr <IModel> MdlPtr;
+        typedef Ptr <IWidget> WdgPtr;
+
+        MdlPtr mA = MdlPtr (new T_AbstractModel ("mA"));
+        WdgPtr wA = WdgPtr (new T_AbstractWidget ("wA"));
+
+        /*
+         * Tu się wywalało. To że parent jest null, nie oznacza, ze trzeba szukać
+         * w owner, bo równie dobrze może oznaczac, że jesteśmy korzeniem, który
+         * nie ma rodzica.
+         */
+        BOOST_CHECK (!wA->getParent ());
+
+        wA->setModel (mA);
+
+        BOOST_CHECK (!wA->getParent ());
+}
+
+/*##########################################################################*/
+/*
+ * Testy iteratorów.
+ */
+/*##########################################################################*/
+
+/**
+ * Testujemy operator -> iteratora TreeIter.
+ */
+BOOST_AUTO_TEST_CASE (TreeIterTest)
+{
+        typedef Ptr <IController> CtrPtr;
+        typedef Ptr <IModel> MdlPtr;
+        typedef Ptr <IWidget> WdgPtr;
+
+        CtrPtr cA = CtrPtr (new T_AbstractController ("cA"));
+        CtrPtr cB = CtrPtr (new T_AbstractController ("cB"));
+        CtrPtr cC = CtrPtr (new T_AbstractController ("cC"));
+        CtrPtr cD = CtrPtr (new T_AbstractController ("cD"));
+        CtrPtr cE = CtrPtr (new T_AbstractController ("cE"));
+
+        MdlPtr mA = MdlPtr (new T_AbstractModel ("mA"));
+        MdlPtr mB = MdlPtr (new T_AbstractModel ("mB"));
+        MdlPtr mC = MdlPtr (new T_AbstractModel ("mC"));
+        MdlPtr mD = MdlPtr (new T_AbstractModel ("mD"));
+        MdlPtr mE = MdlPtr (new T_AbstractModel ("mE"));
+
+        WdgPtr wA = WdgPtr (new T_AbstractWidget ("wA"));
+        WdgPtr wB = WdgPtr (new T_AbstractWidget ("wB"));
+        WdgPtr wC = WdgPtr (new T_AbstractWidget ("wC"));
+        WdgPtr wD = WdgPtr (new T_AbstractWidget ("wD"));
+        WdgPtr wE = WdgPtr (new T_AbstractWidget ("wE"));
+
+        cA->addChild (cB);
+        cA->addChild (cC);
+        cB->addChild (cD);
+        cC->addChild (cE);
+
+        cA->setModel (mA);
+        cB->setModel (mB);
+        cC->setModel (mC);
+        cD->setModel (mD);
+        cE->setModel (mE);
+
+        cA->setWidget (wA);
+        cB->setWidget (wB);
+        cC->setWidget (wC);
+        cD->setWidget (wD);
+        cE->setWidget (wE);
+
+        // Tu sprawdzam strukturę zagnieżdżenia kontrolerów.
+        T_AbstractController::iterator i = cA->begin ();
+        /*
+         * i-> zwraca wskaźnik do Ptr <IController>. Na nim wywołujemy metodę get() (ona zwraca
+         * IController *, a na tym wykonujemy metodę getName ().
+         */
+        BOOST_CHECK (i->get()->getName () == "cB");
+        BOOST_CHECK (i->get()->getParent () == cA.get ());
+        ++i;
+        BOOST_CHECK (i->get()->getName () == "cC");
+        BOOST_CHECK (i->get()->getParent () == cA.get ());
+
+        i = cB->begin ();
+        BOOST_CHECK (i->get()->getName () == "cD");
+        BOOST_CHECK (i->get()->getParent () == cB.get ());
+
+        i = cC->begin ();
+        BOOST_CHECK (i->get()->getName () == "cE");
+        BOOST_CHECK (i->get()->getParent () == cC.get ());
+
+        // Tu sprawdzam strukturę zagnieżdżenia modeli.
+        T_AbstractModel::iterator j = mA->begin ();
+        BOOST_CHECK (j->get()->getName () == "mB");
+        BOOST_CHECK (j->get()->getParent () == mA.get ());
+        ++j;
+        BOOST_CHECK (j->get()->getName () == "mC");
+        BOOST_CHECK (j->get()->getParent () == mA.get ());
+
+        j = mB->begin ();
+        BOOST_CHECK (j->get()->getName () == "mD");
+        BOOST_CHECK (j->get()->getParent () == mB.get ());
+
+        j = mC->begin ();
+        BOOST_CHECK (j->get()->getName () == "mE");
+        BOOST_CHECK (j->get()->getParent () == mC.get ());
+
+        // Tu sprawdzam strukturę zagnieżdżenia widgetów.
+        T_AbstractWidget::iterator k = wA->begin ();
+        BOOST_CHECK (k->get()->getName () == "wB");
+        BOOST_CHECK (k->get()->getParent () == wA.get ());
+        ++k;
+        BOOST_CHECK (k->get()->getName () == "wC");
+        BOOST_CHECK (k->get()->getParent () == wA.get ());
+
+        k = wB->begin ();
+        BOOST_CHECK (k->get()->getName () == "wD");
+        BOOST_CHECK (k->get()->getParent () == wB.get ());
+
+        k = wC->begin ();
+        BOOST_CHECK (k->get()->getName () == "wE");
+        BOOST_CHECK (k->get()->getParent () == wC.get ());
+}
+
+/**
+ *
+ */
+BOOST_AUTO_TEST_CASE (WidgetParentTest_TreeIterTest)
+{
+        typedef Ptr <IModel> MdlPtr;
+        typedef Ptr <IWidget> WdgPtr;
+
+        MdlPtr mA = MdlPtr (new T_AbstractModel ("mA"));
+        MdlPtr mB = MdlPtr (new T_AbstractModel ("mB"));
+        MdlPtr mC = MdlPtr (new T_AbstractModel ("mC"));
+        MdlPtr mD = MdlPtr (new T_AbstractModel ("mD"));
+        MdlPtr mE = MdlPtr (new T_AbstractModel ("mE"));
+
+        WdgPtr wA = WdgPtr (new T_AbstractWidget ("wA"));
+        WdgPtr wB = WdgPtr (new T_AbstractWidget ("wB"));
+        WdgPtr wC = WdgPtr (new T_AbstractWidget ("wC"));
+        WdgPtr wD = WdgPtr (new T_AbstractWidget ("wD"));
+        WdgPtr wE = WdgPtr (new T_AbstractWidget ("wE"));
+
+        wA->setModel (mA);
+        wB->setModel (mB);
+        wC->setModel (mC);
+        wD->setModel (mD);
+        wE->setModel (mE);
+
+        wA->addChild (wB);
+        wA->addChild (wC);
+        wB->addChild (wD);
+        wC->addChild (wE);
+
+        // Tu sprawdzam strukturę zagnieżdżenia widgetów.
+        T_AbstractWidget::iterator k = wA->begin ();
+        BOOST_CHECK (k->get()->getName () == "wB");
+        BOOST_CHECK (k->get()->getParent () == wA.get ());
+        ++k;
+        BOOST_CHECK (k->get()->getName () == "wC");
+        BOOST_CHECK (k->get()->getParent () == wA.get ());
+
+        k = wB->begin ();
+        BOOST_CHECK (k->get()->getName () == "wD");
+        BOOST_CHECK (k->get()->getParent () == wB.get ());
+
+        k = wC->begin ();
+        BOOST_CHECK (k->get()->getName () == "wE");
+        BOOST_CHECK (k->get()->getParent () == wC.get ());
+
+        // Tu sprawdzam strukturę zagnieżdżenia modeli.
+        T_AbstractModel::iterator j = mA->begin ();
+        BOOST_CHECK (j->get()->getName () == "mB");
+        BOOST_CHECK (j->get()->getParent () == mA.get ());
+        ++j;
+        BOOST_CHECK (j->get()->getName () == "mC");
+        BOOST_CHECK (j->get()->getParent () == mA.get ());
+
+        j = mB->begin ();
+        BOOST_CHECK (j->get()->getName () == "mD");
+        BOOST_CHECK (j->get()->getParent () == mB.get ());
+
+        j = mC->begin ();
+        BOOST_CHECK (j->get()->getName () == "mE");
+        BOOST_CHECK (j->get()->getParent () == mC.get ());
+}
+
+/**
+ * Test sprawdza, czy iteratory po skopiowaniu są niezależne od siebie.
+ * To może nie działać, bo TreeIter zawiera w sobie wskaźnik do polimorficznej
+ * implementacji.
+ */
+BOOST_AUTO_TEST_CASE (TreeIter_copy)
+{
+        typedef Ptr <IModel> MdlPtr;
+        typedef Ptr <IWidget> WdgPtr;
+
+        MdlPtr mA = MdlPtr (new T_AbstractModel ("mA"));
+        MdlPtr mB = MdlPtr (new T_AbstractModel ("mB"));
+        MdlPtr mC = MdlPtr (new T_AbstractModel ("mC"));
+        MdlPtr mD = MdlPtr (new T_AbstractModel ("mD"));
+        MdlPtr mE = MdlPtr (new T_AbstractModel ("mE"));
+
+        WdgPtr wA = WdgPtr (new T_AbstractWidget ("wA"));
+        WdgPtr wB = WdgPtr (new T_AbstractWidget ("wB"));
+        WdgPtr wC = WdgPtr (new T_AbstractWidget ("wC"));
+        WdgPtr wD = WdgPtr (new T_AbstractWidget ("wD"));
+        WdgPtr wE = WdgPtr (new T_AbstractWidget ("wE"));
+
+        wA->setModel (mA);
+        wB->setModel (mB);
+        wC->setModel (mC);
+        wD->setModel (mD);
+        wE->setModel (mE);
+
+        wA->addChild (wB);
+        wA->addChild (wC);
+        wB->addChild (wD);
+        wC->addChild (wE);
+
+        T_AbstractWidget::iterator k = wA->begin ();
+        T_AbstractWidget::iterator l = k;
+
+        BOOST_CHECK (k->get()->getName () == "wB");
+        BOOST_CHECK (l->get()->getName () == "wB");
+
+        ++k;
+
+        BOOST_CHECK (k->get()->getName () == "wC");
+        BOOST_CHECK (l->get()->getName () == "wB");
+
+        {
+                T_AbstractWidget::iterator k = wA->begin ();
+                T_AbstractWidget::iterator l (k);
+
+                BOOST_CHECK (k->get()->getName () == "wB");
+                BOOST_CHECK (l->get()->getName () == "wB");
+
+                ++k;
+
+                BOOST_CHECK (k->get()->getName () == "wC");
+                BOOST_CHECK (l->get()->getName () == "wB");
+        }
+
+        {
+                T_AbstractWidget::iterator k = wA->begin ();
+                T_AbstractWidget::iterator l;
+                l = k;
+
+                BOOST_CHECK (k->get()->getName () == "wB");
+                BOOST_CHECK (l->get()->getName () == "wB");
+
+                ++k;
+
+                BOOST_CHECK (k->get()->getName () == "wC");
+                BOOST_CHECK (l->get()->getName () == "wB");
+        }
+}
+
+BOOST_AUTO_TEST_CASE (TreeIter_empty)
+{
+        typedef Ptr <IModel> MdlPtr;
+        typedef Ptr <IWidget> WdgPtr;
+
+        MdlPtr mA = MdlPtr (new T_AbstractModel ("mA"));
+        MdlPtr mB = MdlPtr (new T_AbstractModel ("mB"));
+        MdlPtr mC = MdlPtr (new T_AbstractModel ("mC"));
+        MdlPtr mD = MdlPtr (new T_AbstractModel ("mD"));
+        MdlPtr mE = MdlPtr (new T_AbstractModel ("mE"));
+
+        WdgPtr wA = WdgPtr (new T_AbstractWidget ("wA"));
+        WdgPtr wB = WdgPtr (new T_AbstractWidget ("wB"));
+        WdgPtr wC = WdgPtr (new T_AbstractWidget ("wC"));
+        WdgPtr wD = WdgPtr (new T_AbstractWidget ("wD"));
+        WdgPtr wE = WdgPtr (new T_AbstractWidget ("wE"));
+
+        wA->setModel (mA);
+        wB->setModel (mB);
+        wC->setModel (mC);
+        wD->setModel (mD);
+        wE->setModel (mE);
+
+        wA->addChild (wB);
+        wA->addChild (wC);
+        wB->addChild (wD);
+        wC->addChild (wE);
+
+        T_AbstractWidget::iterator k = wA->begin ();
+        T_AbstractModel::iterator j = mA->begin ();
+
+        T_AbstractWidget::iterator k1, k2;
+        T_AbstractModel::iterator j1, j2;
+
+        BOOST_CHECK (k != k1);
+        BOOST_CHECK (j != j1);
+
+        BOOST_CHECK (j1 == j2);
+        BOOST_CHECK (k1 == k2);
+
+        k = wA->end ();
+        j = mA->end ();
+
+        BOOST_CHECK (k != k1);
+        BOOST_CHECK (j != j1);
+}
+

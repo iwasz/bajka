@@ -9,9 +9,7 @@
 #ifndef ABSTRACTWIDGET_H_
 #define ABSTRACTWIDGET_H_
 
-#include "IWidget.h"
-#include "IModel.h"
-#include "tree/TreeMasterSlave.h"
+#include "TreeWidget.h"
 
 namespace View {
 
@@ -25,9 +23,7 @@ namespace View {
  * Oczywiście zawieranie nie jest zaimplementowane w warstwie widoku, tylko w warstwie kontrolera.
  * \ingroup View
  */
-class AbstractWidget :
-        public IWidget,
-        public Util::TreeMasterSlave <View::IWidget> {
+class AbstractWidget : public TreeWidget {
 public:
         __d
 
@@ -51,29 +47,14 @@ public:
         virtual bool getVisible () const { return visible; }
         _m (setVisible) virtual void setVisible (bool v) { visible = v; }
 
-/*------Zawieranie----------------------------------------------------------*/
-
-        _m (setChildren)
-        void setChildren (WidgetList const &list);
-
-        void addChild (ChildType e);
-        void removeChild (ChildType e);
-        void clearChildren ();
-
-/*--------------------------------------------------------------------------*/
-
-        _m (setModel) virtual void setModel (Ptr <Model::IModel> model);
-        _m (getModel) virtual Ptr <Model::IModel> getModel () { return model; }
-
-protected:
-
-        void setParent (ParentType e);
-
 private:
 
         Ptr <Model::IModel> model;
         bool visible;
 
+        _m (setModel)
+        _m (getModel)
+        _m (setChildren)
         _e (AbstractWidget)
 };
 

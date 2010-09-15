@@ -6,6 +6,10 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+// TODO usunąć jakoś
+#include  "IWidget.h"
+// TODO usunąć jakoś
+#include  "IController.h"
 #include "ParalaxModel.h"
 
 namespace Model {
