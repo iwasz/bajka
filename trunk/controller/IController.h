@@ -33,7 +33,7 @@ namespace Controller {
  */
 struct IController :
         public virtual Core::Object,
-        public Base::ITreeController {
+        public ITreeController {
 
         virtual ~IController () {}
 

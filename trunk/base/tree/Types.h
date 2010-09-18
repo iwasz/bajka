@@ -18,6 +18,7 @@
 
 namespace Model {
 class IModel;
+class IModelAware;
 }
 
 namespace View {
@@ -27,9 +28,6 @@ class IWidget;
 namespace Controller {
 class IController;
 }
-
-namespace Base {
-class IModelAware;
 
 /**
  * Wspólny plik nagłówkowy, ponieważ w wielu miejscach potrzebne jest wiele
@@ -63,6 +61,8 @@ struct TreeTraits {
 
 /*# kontroler ##############################################################*/
 
+namespace Controller {
+
 typedef TreeTraits <Controller::IController>::ChildBaseType ControllerChildBaseType;
 typedef TreeTraits <Controller::IController>::ParentBaseType ControllerParentBaseType;
 
@@ -78,7 +78,11 @@ _f (ControllerCollection)
 typedef TreeTraits <Controller::IController>::ChildIter ControllerIter;
 typedef TreeTraits <Controller::IController>::ChildConstIter ControllerConstIter;
 
+}
+
 /*# widget #################################################################*/
+
+namespace View {
 
 typedef TreeTraits <View::IWidget>::ChildBaseType WidgetChildBaseType;
 typedef TreeTraits <View::IWidget>::ParentBaseType WidgetParentBaseType;
@@ -92,19 +96,23 @@ typedef TreeTraits <View::IWidget>::ParentConstType WidgetParentConstType;
 typedef TreeTraits <View::IWidget>::ChildCollection WidgetCollection;
 _f (WidgetCollection)
 
-typedef TreeIter <Ptr <View::IWidget>,
-                ControllerCollection::iterator,
-                WidgetPtrExtractor,
+typedef Base::TreeIter <Ptr <IWidget>,
+                Controller::ControllerCollection::iterator,
+                Base::WidgetPtrExtractor,
                 WidgetCollection::iterator,
-                NoopExtractor> WidgetIter;
+                Base::NoopExtractor> WidgetIter;
 
-typedef TreeIter <Ptr <View::IWidget> const,
-                ControllerCollection::const_iterator,
-                WidgetPtrExtractor,
+typedef Base::TreeIter <Ptr <IWidget> const,
+                Controller::ControllerCollection::const_iterator,
+                Base::WidgetPtrExtractor,
                 WidgetCollection::const_iterator,
-                NoopExtractor> WidgetConstIter;
+                Base::NoopExtractor> WidgetConstIter;
+
+}
 
 /*# model ##################################################################*/
+
+namespace Model {
 
 typedef TreeTraits <Model::IModel>::ChildBaseType ModelChildBaseType;
 typedef TreeTraits <Model::IModel>::ParentBaseType ModelParentBaseType;
@@ -120,22 +128,22 @@ typedef TreeTraits <Model::IModel>::ParentConstType ModelParentConstType;
  * w TreeController::beginForModel jak i TreeWidget (te implementacje dostarczają
  * iteratorów modelowi).
  */
-typedef TreeIter <Ptr <Model::IModel>,
-                ControllerCollection::iterator,
-                ModelPtrExtractor,
-                WidgetCollection::iterator,
-                ModelPtrExtractor> ModelIter;
+typedef Base::TreeIter <Ptr <IModel>,
+                Controller::ControllerCollection::iterator,
+                Base::ModelPtrExtractor,
+                View::WidgetCollection::iterator,
+                Base::ModelPtrExtractor> ModelIter;
 
 /**
  * Iterator zwracany z TreeModel::begin i TreeModel::end. Zaimplementowane zarówno
  * w TreeController::beginForModel jak i TreeWidget (te implementacje dostarczają
  * iteratorów modelowi).
  */
-typedef TreeIter <Ptr <Model::IModel> const,
-                ControllerCollection::const_iterator,
-                ModelPtrExtractor,
-                WidgetCollection::const_iterator,
-                ModelPtrExtractor> ModelConstIter;
+typedef Base::TreeIter <Ptr <IModel> const,
+                Controller::ControllerCollection::const_iterator,
+                Base::ModelPtrExtractor,
+                View::WidgetCollection::const_iterator,
+                Base::ModelPtrExtractor> ModelConstIter;
 
 typedef IModelAware ModelOwnerBaseType;
 typedef ModelOwnerBaseType *ModelOwnerType;

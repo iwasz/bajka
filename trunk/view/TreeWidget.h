@@ -10,7 +10,7 @@
 #define TREEWIDGET_H_
 
 #include "IWidget.h"
-#include "IModel.h"
+#include "IModel_t.h"
 #include "../base/tree/Types.h"
 
 namespace View {
@@ -20,8 +20,8 @@ namespace View {
  */
 struct TreeWidget : public IWidget {
 
-        typedef Base::WidgetIter iterator;
-        typedef Base::WidgetConstIter const_iterator;
+        typedef WidgetIter iterator;
+        typedef WidgetConstIter const_iterator;
 
         TreeWidget () : children (), parent (), model (), owner () {}
         virtual ~TreeWidget () {}
@@ -31,43 +31,43 @@ struct TreeWidget : public IWidget {
         Ptr <Model::IModel> const &getModel () { return model; }
         void setModel (Ptr <Model::IModel> m);
 
-        Base::IModelAware *getParentMAW () { return parent; }
+        Model::IModelAware *getParentMAW () { return parent; }
         bool hasChildrenMAW () const { return hasChildren (); }
 
 /*------parents-------------------------------------------------------------*/
 
-        Base::WidgetParentType getParent ();
-        Base::WidgetParentConstType getParent () const;
-        void setParent (Base::WidgetParentType p) { parent = p; }
+        WidgetParentType getParent ();
+        WidgetParentConstType getParent () const;
+        void setParent (WidgetParentType p) { parent = p; }
 
 /*------children------------------------------------------------------------*/
 
-        Base::WidgetConstIter begin () const;
-        Base::WidgetIter begin ();
-        Base::WidgetConstIter end () const;
-        Base::WidgetIter end ();
+        WidgetConstIter begin () const;
+        WidgetIter begin ();
+        WidgetConstIter end () const;
+        WidgetIter end ();
 
-        Base::ModelConstIter beginForModel () const;
-        Base::ModelIter beginForModel ();
-        Base::ModelConstIter endForModel () const;
-        Base::ModelIter endForModel ();
+        Model::ModelConstIter beginForModel () const;
+        Model::ModelIter beginForModel ();
+        Model::ModelConstIter endForModel () const;
+        Model::ModelIter endForModel ();
 
         /**
          * Ustawia całą listę dzieci. Ta metoda nie może być szablonem, bo
          * musi być wirtualna. Modyfikuje podaną listę (ustawia dzieciom parenty
          * na siebie).
          */
-        void setChildren (Base::WidgetCollection *e);
+        void setChildren (WidgetCollection *e);
 
         /**
          * Dodaje listę dzieci do już istniejących .
          */
-        void addChildren (Base::WidgetCollection *e);
+        void addChildren (WidgetCollection *e);
 
         /**
          * Dodaje dziecko.
          */
-        virtual void addChild (Base::WidgetChildType e)
+        virtual void addChild (WidgetChildType e)
         {
                 children.push_back (e);
                 e->setParent (this);
@@ -76,7 +76,7 @@ struct TreeWidget : public IWidget {
         /**
          * Usuwa dziecko.
          */
-        void removeChild (Base::WidgetChildType e);
+        void removeChild (WidgetChildType e);
 
         /**
          * Usuwa wszystie dzieci.
@@ -90,16 +90,16 @@ private:
 
 /*------owner / controller / widget-----------------------------------------*/
 
-        Base::WidgetOwnerType getOwner () { return owner; }
-        Base::WidgetOwnerConstType getOwner () const { return owner; }
-        void setOwner (Base::WidgetOwnerType o) { owner = o; }
+        WidgetOwnerType getOwner () { return owner; }
+        WidgetOwnerConstType getOwner () const { return owner; }
+        void setOwner (WidgetOwnerType o) { owner = o; }
 
 private:
 
-        Base::WidgetCollection children;
-        Base::WidgetParentType parent;
+        WidgetCollection children;
+        WidgetParentType parent;
         Ptr <Model::IModel> model;
-        Base::WidgetOwnerType owner;
+        WidgetOwnerType owner;
 
 };
 

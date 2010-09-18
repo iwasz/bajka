@@ -28,7 +28,7 @@ namespace View {
  */
 struct IWidget :
         public IView,
-        public Base::ITreeWidget {
+        public ITreeWidget {
 
         virtual ~IWidget () {}
 

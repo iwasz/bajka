@@ -27,7 +27,7 @@ int main (int argc, char **argv)
         Ptr <Container2::BeanFactoryContainer> container = Container2::XmlContainerFactory::createContainer ("main2.xml");
         Ptr <Util::BajkaApp> app = vcast <Ptr <Util::BajkaApp> > (container->getBean ("app"));
 
-        // TODO Do wywalenia, kiedy beany singleton będą się same instancjonowac (TODO).
+        // TODO Do wywalenia, kiedy beany singleton będą się same instancjonowac.
 //        Core::Variant v = container->getBean ("scrollService");
 
         app->run (argc, argv);

@@ -13,9 +13,10 @@
 #include "TreeController.h"
 
 namespace Controller {
-using namespace Base;
+using namespace View;
+using namespace Model;
 
-void TreeController::setModel (Ptr <Model::IModel> m)
+void TreeController::setModel (Ptr <IModel> m)
 {
         model = m;
 

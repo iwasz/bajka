@@ -13,28 +13,28 @@
 #include "IModelAware.h"
 #include "ITreeController.h"
 
-namespace Base {
+namespace View {
 
 /**
  * Typ właściciela widgetu. Jest to oczywiście kontroler. Typ nie jest zdefiniowany w 
  * Types.h, bo nie można tam includować ITreeController.h.
  * \ingroup Util
  */
-typedef ITreeController WidgetOwnerBaseType;
+typedef Controller::ITreeController WidgetOwnerBaseType;
 
 /**
  * Typ wskaźnika do właściciela widgetu. Jest to oczywiście kontroler. Typ nie jest zdefiniowany w 
  * Types.h, bo nie można tam includować ITreeController.h.
  * \ingroup Util
  */
-typedef WidgetOwnerBaseType *WidgetOwnerType;
+typedef View::WidgetOwnerBaseType *WidgetOwnerType;
 
 /**
  * Typ wskaźnika do właściciela widgetu. Jest to oczywiście kontroler. Typ nie jest zdefiniowany w 
  * Types.h, bo nie można tam includować ITreeController.h.
  * \ingroup Util
  */
-typedef WidgetOwnerBaseType const *WidgetOwnerConstType;
+typedef View::WidgetOwnerBaseType const *WidgetOwnerConstType;
 
 /**
  * Interfejs udostępniający metody pobierające dzieci i rodziców tego widgeta. Widgety mogą same
@@ -43,7 +43,7 @@ typedef WidgetOwnerBaseType const *WidgetOwnerConstType;
  * sposoby!
  * \ingroup Util
  */
-struct ITreeWidget : public IModelAware {
+struct ITreeWidget : public Model::IModelAware {
 
         /// Typ iteratora dla dzieci widgeta.
         typedef WidgetIter iterator;

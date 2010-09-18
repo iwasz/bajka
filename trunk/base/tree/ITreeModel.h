@@ -11,7 +11,7 @@
 
 #include "Types.h"
 
-namespace Base {
+namespace Model {
 
 /**
  * Interfejs dla modeli, które mają dostęp do swoich dzieci i rodziców.

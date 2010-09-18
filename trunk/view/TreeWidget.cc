@@ -74,30 +74,30 @@ WidgetParentConstType TreeWidget::getParent () const
 
 /****************************************************************************/
 
-ModelConstIter TreeWidget::beginForModel () const
+Model::ModelConstIter TreeWidget::beginForModel () const
 {
-        return ModelConstIter (children.begin ());
+        return Model::ModelConstIter (children.begin ());
 }
 
 /****************************************************************************/
 
-ModelIter TreeWidget::beginForModel ()
+Model::ModelIter TreeWidget::beginForModel ()
 {
-        return ModelIter (children.begin ());
+        return Model::ModelIter (children.begin ());
 }
 
 /****************************************************************************/
 
-ModelConstIter TreeWidget::endForModel () const
+Model::ModelConstIter TreeWidget::endForModel () const
 {
-        return ModelConstIter (children.end ());
+        return Model::ModelConstIter (children.end ());
 }
 
 /****************************************************************************/
 
-ModelIter TreeWidget::endForModel ()
+Model::ModelIter TreeWidget::endForModel ()
 {
-        return ModelIter (children.end ());
+        return Model::ModelIter (children.end ());
 }
 
 /****************************************************************************/
