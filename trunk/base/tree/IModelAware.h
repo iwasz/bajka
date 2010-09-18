@@ -15,7 +15,7 @@
 #include "Types.h"
 #include "Pointer.h"
 
-namespace Base {
+namespace Model {
 
 /**
  * Typ właściciela modelu. Dziedziczą z tego kontrolery i widgety, do których potem
@@ -37,8 +37,8 @@ struct IModelAware {
          * Metoda nie jest const, ponieważ wskaźnik nie jest do stałej i można zmodyfikować
          * model pobrany przez getModel.
          */
-        virtual Ptr <Model::IModel> const &getModel () = 0;
-        virtual void setModel (Ptr <Model::IModel> m) = 0;
+        virtual Ptr <IModel> const &getModel () = 0;
+        virtual void setModel (Ptr <IModel> m) = 0;
 
         /// Dziwne nazwy pozwalają uniknąć konfliktu nazw.
         virtual IModelAware *getParentMAW () = 0;

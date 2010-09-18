@@ -12,7 +12,7 @@
 #include "Types.h"
 #include "IModelAware.h"
 
-namespace Base {
+namespace Controller {
 
 /**
  * Interfejs udostępniający metody struktury drzewiastej dla kontrolerów. Z tego interfejsu 
@@ -21,7 +21,7 @@ namespace Base {
  * ale nie bezpośrednio, tylko właśnie poprzez kontroler.
  * \inplace Util
  */
-struct  ITreeController : public IModelAware {
+struct  ITreeController : public Model::IModelAware {
 
         typedef ControllerIter iterator;
         typedef ControllerConstIter const_iterator;
@@ -49,13 +49,13 @@ struct  ITreeController : public IModelAware {
         virtual ControllerIter end () = 0;
 
         /// Iterator do kolekcji dzieci, ale z kazdego dziecka zwracany jest tylko obiekt IWidget.
-        virtual WidgetConstIter beginForWidget () const = 0;
+        virtual View::WidgetConstIter beginForWidget () const = 0;
         /// Iterator do kolekcji dzieci, ale z kazdego dziecka zwracany jest tylko obiekt IWidget.
-        virtual WidgetIter beginForWidget () = 0;
+        virtual View::WidgetIter beginForWidget () = 0;
         /// Iterator do kolekcji dzieci, ale z kazdego dziecka zwracany jest tylko obiekt IWidget.
-        virtual WidgetConstIter endForWidget () const = 0;
+        virtual View::WidgetConstIter endForWidget () const = 0;
         /// Iterator do kolekcji dzieci, ale z kazdego dziecka zwracany jest tylko obiekt IWidget.
-        virtual WidgetIter endForWidget () = 0;
+        virtual View::WidgetIter endForWidget () = 0;
 
         /**
          * Ustawia całą listę dzieci (usuwając te które już były). 

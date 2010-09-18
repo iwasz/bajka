@@ -14,8 +14,8 @@
 #include <collection/List.h>
 
 #include "IController.h"
-#include "IModel.h"
 #include "IWidget.h"
+#include "IModel_t.h"
 
 namespace Controller {
 
@@ -38,7 +38,7 @@ public:
         _m (getModel) Ptr <Model::IModel> const &getModel () { return model; }
         _m (setModel) void setModel (Ptr <Model::IModel> m);
 
-        Base::IModelAware *getParentMAW () { return parent; }
+        Model::IModelAware *getParentMAW () { return parent; }
         bool hasChildrenMAW () const { return hasChildren (); }
 
 /*--------------------------------------------------------------------------*/
@@ -49,46 +49,46 @@ public:
 
 /*------Iteratory-----------------------------------------------------------*/
 
-        Base::ControllerConstIter begin () const;
-        Base::ControllerIter begin ();
-        Base::ControllerConstIter end () const;
-        Base::ControllerIter end ();
+        ControllerConstIter begin () const;
+        ControllerIter begin ();
+        ControllerConstIter end () const;
+        ControllerIter end ();
 
-        Base::ModelConstIter beginForModel () const;
-        Base::ModelIter beginForModel ();
-        Base::ModelConstIter endForModel () const;
-        Base::ModelIter endForModel ();
+        Model::ModelConstIter beginForModel () const;
+        Model::ModelIter beginForModel ();
+        Model::ModelConstIter endForModel () const;
+        Model::ModelIter endForModel ();
 
-        Base::WidgetConstIter beginForWidget () const;
-        Base::WidgetIter beginForWidget ();
-        Base::WidgetConstIter endForWidget () const;
-        Base::WidgetIter endForWidget ();
+        View::WidgetConstIter beginForWidget () const;
+        View::WidgetIter beginForWidget ();
+        View::WidgetConstIter endForWidget () const;
+        View::WidgetIter endForWidget ();
 
 /*--------------------------------------------------------------------------*/
 
         /**
          * Ustawia całą listę dzieci. Używa addChild.
          */
-        void setChildren (Base::ControllerCollection *e);
+        void setChildren (ControllerCollection *e);
 
         /**
          * Dodaje listę dzieci do już istniejących. Używa addChild.
          */
-        void addChildren (Base::ControllerCollection *e);
+        void addChildren (ControllerCollection *e);
 
         /**
          * Dodaje dziecko.
          */
-        virtual void addChild (Base::ControllerChildType e)
+        virtual void addChild (ControllerChildType e)
         {
                 children.push_back (e);
-                e->setParent (dynamic_cast <Base::ControllerParentType> (this));
+                e->setParent (dynamic_cast <ControllerParentType> (this));
         }
 
         /**
          * Usuwa pierwsze dziecko o wartości równej e. Ustawia mu także parent na NULL.
          */
-        void removeChild (Base::ControllerChildType e);
+        void removeChild (ControllerChildType e);
 
         /**
          * Czyści listę dzieci. Ustawia wszystkim parent na NULL.
@@ -99,8 +99,8 @@ public:
 
 private:
 
-        Base::ControllerCollection children;
-        Base::ControllerParentType parent;
+        ControllerCollection children;
+        ControllerParentType parent;
 
 protected:
 

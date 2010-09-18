@@ -11,28 +11,28 @@
 namespace Model {
 using namespace Base;
 
-Base::ModelConstIter TreeModel::begin () const
+Model::ModelConstIter TreeModel::begin () const
 {
-        return const_cast <Base::IModelAware const *> (owner)->beginForModel ();
+        return const_cast <Model::IModelAware const *> (owner)->beginForModel ();
 }
 
 /****************************************************************************/
 
-Base::ModelIter TreeModel::begin ()
+Model::ModelIter TreeModel::begin ()
 {
         return owner->beginForModel ();
 }
 
 /****************************************************************************/
 
-Base::ModelConstIter TreeModel::end () const
+Model::ModelConstIter TreeModel::end () const
 {
-        return const_cast <Base::IModelAware const *> (owner)->endForModel ();
+        return const_cast <Model::IModelAware const *> (owner)->endForModel ();
 }
 
 /****************************************************************************/
 
-Base::ModelIter TreeModel::end ()
+Model::ModelIter TreeModel::end ()
 {
         return owner->endForModel ();
 }

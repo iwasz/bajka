@@ -10,7 +10,6 @@
 #define TREEMODEL_H_
 
 #include "IModel.h"
-//#include "IWidget.h" // TODO do wywalenia jak mi sie uda zlokalizować skąd leci forward
 #include "../base/tree/IModelAware.h"
 #include "../base/tree/Types.h"
 
@@ -30,20 +29,20 @@ public:
 /*------parents-------------------------------------------------------------*/
 
         /// Zwraca rodzica tego modelu.
-        Base::ModelParentType getParent ();
+        ModelParentType getParent ();
         /// Zwraca rodzica tego modelu.
-        Base::ModelParentConstType getParent () const;
+        ModelParentConstType getParent () const;
 
 /*------children------------------------------------------------------------*/
 
         /// Iterator do początku kolekcji potomków tego modelu (przez owner).
-        Base::ModelConstIter begin () const;
+        ModelConstIter begin () const;
         /// Iterator do początku kolekcji potomków tego modelu (przez owner).
-        Base::ModelIter begin ();
+        ModelIter begin ();
         /// Iterator do końca kolekcji potomków tego modelu (przez owner).
-        Base::ModelConstIter end () const;
+        ModelConstIter end () const;
         /// Iterator do końca kolekcji potomków tego modelu (przez owner).
-        Base::ModelIter end ();
+        ModelIter end ();
 
         /// Zwraca informację czy są jacyś potomkowie tego modelu.
         bool hasChildren () const;
@@ -53,15 +52,15 @@ private:
 /*------owner / controller / widget-----------------------------------------*/
 
         /// Zwraca obiekt ownera, czyli kontroler, lub widget, który zawiera ten model.
-        Base::ModelOwnerType getOwner () { return owner; }
+        ModelOwnerType getOwner () { return owner; }
         /// Zwraca obiekt ownera, czyli kontroler, lub widget, który zawiera ten model.
-        Base::ModelOwnerConstType getOwner () const { return owner; }
+        ModelOwnerConstType getOwner () const { return owner; }
         /// Ustawia obiekt ownera, czyli kontroler, lub widget, który zawiera ten model.
-        void setOwner (Base::ModelOwnerType o) { owner = o; }
+        void setOwner (ModelOwnerType o) { owner = o; }
 
 private:
 
-        Base::ModelOwnerType owner;
+        ModelOwnerType owner;
 
 };
 

@@ -8,13 +8,8 @@
 
 #include <SDL_opengl.h>
 #include <algorithm>
-//#include <boost/functional.hpp>
 #include <boost/mem_fn.hpp>
 
-// TODO usunąć jakoś
-#include  "IWidget.h"
-// TODO usunąć jakoś
-#include  "IController.h"
 #include "AbstractWidget.h"
 #include "IModel.h"
 #include "Commons.h"
