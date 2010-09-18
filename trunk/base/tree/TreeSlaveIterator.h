@@ -22,8 +22,7 @@ namespace Base {
  * 
  * Jeśli obydwa iteratory nie są ustawione, to operacje zwiększenia i wyłuskania i -> powodują
  * niezdefiniowane zachowanie.
- *
- * \inplace Util
+ * \ingroup Tree
  */
 template <typename Element, typename IterA, typename ExtractorA, typename IterB, typename ExtractorB>
 class TreeIter : public std::iterator <std::forward_iterator_tag, Element> {

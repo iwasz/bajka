@@ -19,7 +19,7 @@ namespace Model {
  * drzewiastej modeli).
  *
  * IModel jest oddzielinie, aby zachować jego prostą postać i nie zaciemniać.
- * \inplace Util
+ * \ingroup Tree
  */
 struct ITreeModel {
 

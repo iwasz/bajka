@@ -21,7 +21,7 @@ namespace Model {
  * Typ właściciela modelu. Dziedziczą z tego kontrolery i widgety, do których potem
  * TreeModel i ModelIterator mają referencję i mogą pobrać z nich model. Ten typ
  * jest potrzebny po to, żeby model mógł mieć ownera zarówno kontroler jak i widget.
- * \inplace Util
+ * \ingroup Tree
  */
 struct IModelAware {
 

@@ -24,7 +24,8 @@
 namespace Sdl {
 
 /**
- *
+ * Generuje eventy używając do tego SDL.
+ * \ingroup Events
  */
 class EventDispatcher : public Event::IDispatcher {
 public:

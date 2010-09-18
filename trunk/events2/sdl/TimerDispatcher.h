@@ -17,6 +17,10 @@
 
 namespace Sdl {
 
+/**
+ * Generuje eventy zegarowe używając do tego timerów SDL.
+ * \ingroup Events
+ */
 class TimerDispatcher : public Event::IDispatcher {
 public:
         __c (void)

@@ -22,7 +22,7 @@ class IWidget;
  *
  * IController i Base::ITreeController są oddzielone od siebie, żeby zachować prostotę interfejsu
  * IController i nie zaciemniac jej metodami drzewiastymi. 
- * \inplace Kontroler
+ * \ingroup Kontroler
  */
 struct T_IController : public Controller::ITreeController {
 

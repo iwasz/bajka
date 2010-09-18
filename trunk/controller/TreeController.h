@@ -24,7 +24,7 @@ namespace Controller {
  * innym, tak, żeby tworzył drzewo. Do tej struktury drzewiastej mają dostęp także modele
  * i widgety podpięte do kontrolerów, ale w ten sposób, że widgety mają dostęp do child-
  * widgetów, a modele tyko do modeli.
- * \inplace Util
+ * \ingroup Tree
  */
 class TreeController : public IController {
 public:
