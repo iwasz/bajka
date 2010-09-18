@@ -15,6 +15,18 @@
 namespace Controller {
 using namespace Base;
 
+void TreeController::setModel (Ptr <Model::IModel> m)
+{
+        model = m;
+
+        // Ustawiamy tylko jeśli jeszcze nie ma.
+        if (!model->getOwner ()) {
+                model->setOwner (this);
+        }
+}
+
+/****************************************************************************/
+
 ControllerConstIter TreeController::begin () const
 {
         return children.begin ();

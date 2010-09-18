@@ -24,12 +24,12 @@ class IWidget;
  * IController i nie zaciemniac jej metodami drzewiastymi. 
  * \inplace Kontroler
  */
-struct T_IController : public Base::ITreeController {
+struct T_IController : public Controller::ITreeController {
 
         virtual ~T_IController () {}
 
-        virtual Ptr <IWidget> const &getWidget () = 0;
-        virtual void setWidget (Ptr <IWidget> w) = 0;
+        virtual Ptr <View::IWidget> const &getWidget () = 0;
+        virtual void setWidget (Ptr <View::IWidget> w) = 0;
 
 /*--------------------------------------------------------------------------*/
 

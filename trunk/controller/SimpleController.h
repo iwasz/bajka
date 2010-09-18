@@ -69,11 +69,10 @@ private:
 class SimpleController :
         public Event::AbstractObserver, // Eventy
         public AbstractController { // Zawieranie
-
 public:
 
         __c (void)
-        _b ("IController", "AbstractObserver")
+        _b ("TreeController", "AbstractObserver")
 
         SimpleController (Ptr <View::IWidget> w = Ptr <View::IWidget> (),
                           Ptr <IMapping> mapping = Ptr <IMapping> ()) :
@@ -121,7 +120,6 @@ public:
 
 /*------Events--------------------------------------------------------------*/
 
-public:
 
         /// \name Eventy
         //\{
@@ -141,6 +139,9 @@ public:
         virtual bool onMouseOut (Event::MouseMotionEvent *e);
 
         //\}
+/*--------------------------------------------------------------------------*/
+
+        void setModel (Ptr <Model::IModel> m);
 
 private:
 

@@ -9,7 +9,9 @@
 #ifndef TYPES_H_
 #define TYPES_H_
 
+#include <Reflection.h>
 #include <list>
+#include <collection/List.h>
 
 #include "TreeSlaveIterator.h"
 #include "Extractors.h"
@@ -50,7 +52,9 @@ struct TreeTraits {
         typedef Element *ParentType;
         typedef Element const *ParentConstType;
 
-        typedef typename std::list <ChildType> ChildCollection;
+// TODO Po niezbędnych zmianach w Tiliae przywrócić starą wersję z std::list.
+        typedef typename Reflection::List <ChildType> ChildCollection;
+//        typedef typename std::list <ChildType> ChildCollection;
 
         // Główne iteratory.
         typedef typename ChildCollection::iterator ChildIter;
@@ -69,6 +73,7 @@ typedef TreeTraits <Controller::IController>::ParentType ControllerParentType;
 typedef TreeTraits <Controller::IController>::ParentConstType ControllerParentConstType;
 
 typedef TreeTraits <Controller::IController>::ChildCollection ControllerCollection;
+_f (ControllerCollection)
 
 typedef TreeTraits <Controller::IController>::ChildIter ControllerIter;
 typedef TreeTraits <Controller::IController>::ChildConstIter ControllerConstIter;
@@ -85,6 +90,7 @@ typedef TreeTraits <View::IWidget>::ParentType WidgetParentType;
 typedef TreeTraits <View::IWidget>::ParentConstType WidgetParentConstType;
 
 typedef TreeTraits <View::IWidget>::ChildCollection WidgetCollection;
+_f (WidgetCollection)
 
 typedef TreeIter <Ptr <View::IWidget>,
                 ControllerCollection::iterator,

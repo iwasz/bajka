@@ -29,11 +29,7 @@ struct TreeWidget : public IWidget {
 /*------IModelAware---------------------------------------------------------*/
 
         Ptr <Model::IModel> const &getModel () { return model; }
-        void setModel (Ptr <Model::IModel> m)
-        {
-                model = m;
-                model->setOwner (this);
-        }
+        void setModel (Ptr <Model::IModel> m);
 
         Base::IModelAware *getParentMAW () { return parent; }
         bool hasChildrenMAW () const { return hasChildren (); }

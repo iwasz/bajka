@@ -9,6 +9,45 @@
 #include "helpers/T_AbstractModel.h"
 #include "helpers/T_AbstractWidget.h"
 
+using namespace Controller;
+using namespace View;
+using namespace Model;
+
+/*--------------------------------------------------------------------------*/
+
+// Lista dzieci jest jako IController, więc potrzebny kast
+std::string getNameCtr (Ptr <IController> const &i)
+{
+        return dynamic_pointer_cast <T_AbstractController> (i)->getName ();
+}
+
+std::string getNameCtr (IController *i)
+{
+        return dynamic_cast <T_AbstractController *> (i)->getName ();
+}
+
+std::string getNameWgt (Ptr <IWidget> const &i)
+{
+        return dynamic_pointer_cast <T_AbstractWidget> (i)->getName ();
+}
+
+std::string getNameWgt (IWidget *i)
+{
+        return dynamic_cast <T_AbstractWidget *> (i)->getName ();
+}
+
+std::string getNameMdl (Ptr <IModel> const &i)
+{
+        return dynamic_pointer_cast <T_AbstractModel> (i)->getName ();
+}
+
+std::string getNameMdl (IModel *i)
+{
+        return dynamic_cast <T_AbstractModel *> (i)->getName ();
+}
+
+/*--------------------------------------------------------------------------*/
+
 BOOST_AUTO_TEST_CASE (InstantiationTest)
 {
      T_AbstractController c ("");
@@ -59,34 +98,34 @@ BOOST_AUTO_TEST_CASE (ParentTestM_C)
         cC->addChild (cE);
 
         T_AbstractController::iterator i = cA->begin ();
-        BOOST_CHECK ((*i)->getName () == "cB");
+        BOOST_CHECK (getNameCtr (*i) == "cB");
         BOOST_CHECK ((*i)->getParent () == cA.get ());
         ++i;
-        BOOST_CHECK ((*i)->getName () == "cC");
+        BOOST_CHECK (getNameCtr (*i) == "cC");
         BOOST_CHECK ((*i)->getParent () == cA.get ());
 
         i = cB->begin ();
-        BOOST_CHECK ((*i)->getName () == "cD");
+        BOOST_CHECK (getNameCtr (*i) == "cD");
         BOOST_CHECK ((*i)->getParent () == cB.get ());
 
         i = cC->begin ();
-        BOOST_CHECK ((*i)->getName () == "cE");
+        BOOST_CHECK (getNameCtr (*i) == "cE");
         BOOST_CHECK ((*i)->getParent () == cC.get ());
 
         T_AbstractModel::iterator j = mA->begin ();
-        BOOST_CHECK ((*j)->getName () == "mB");
+        BOOST_CHECK (getNameMdl (*j) == "mB");
         BOOST_CHECK ((*j)->getParent () == mA.get ());
 
         ++j;
-        BOOST_CHECK ((*j)->getName () == "mC");
+        BOOST_CHECK (getNameMdl (*j) == "mC");
         BOOST_CHECK ((*j)->getParent () == mA.get ());
 
         j = mB->begin ();
-        BOOST_CHECK ((*j)->getName () == "mD");
+        BOOST_CHECK (getNameMdl (*j) == "mD");
         BOOST_CHECK ((*j)->getParent () == mB.get ());
 
         j = mC->begin ();
-        BOOST_CHECK ((*j)->getName () == "mE");
+        BOOST_CHECK (getNameMdl (*j) == "mE");
         BOOST_CHECK ((*j)->getParent () == mC.get ());
 }
 
@@ -141,50 +180,50 @@ BOOST_AUTO_TEST_CASE (ParentTestM_V_C)
 
         // Tu sprawdzam strukturę zagnieżdżenia kontrolerów.
         T_AbstractController::iterator i = cA->begin ();
-        BOOST_CHECK ((*i)->getName () == "cB");
+        BOOST_CHECK (getNameCtr (*i) == "cB");
         BOOST_CHECK ((*i)->getParent () == cA.get ());
         ++i;
-        BOOST_CHECK ((*i)->getName () == "cC");
+        BOOST_CHECK (getNameCtr (*i) == "cC");
         BOOST_CHECK ((*i)->getParent () == cA.get ());
 
         i = cB->begin ();
-        BOOST_CHECK ((*i)->getName () == "cD");
+        BOOST_CHECK (getNameCtr (*i) == "cD");
         BOOST_CHECK ((*i)->getParent () == cB.get ());
 
         i = cC->begin ();
-        BOOST_CHECK ((*i)->getName () == "cE");
+        BOOST_CHECK (getNameCtr (*i) == "cE");
         BOOST_CHECK ((*i)->getParent () == cC.get ());
 
         // Tu sprawdzam strukturę zagnieżdżenia modeli.
         T_AbstractModel::iterator j = mA->begin ();
-        BOOST_CHECK ((*j)->getName () == "mB");
+        BOOST_CHECK (getNameMdl (*j) == "mB");
         BOOST_CHECK ((*j)->getParent () == mA.get ());
         ++j;
-        BOOST_CHECK ((*j)->getName () == "mC");
+        BOOST_CHECK (getNameMdl (*j) == "mC");
         BOOST_CHECK ((*j)->getParent () == mA.get ());
 
         j = mB->begin ();
-        BOOST_CHECK ((*j)->getName () == "mD");
+        BOOST_CHECK (getNameMdl (*j) == "mD");
         BOOST_CHECK ((*j)->getParent () == mB.get ());
 
         j = mC->begin ();
-        BOOST_CHECK ((*j)->getName () == "mE");
+        BOOST_CHECK (getNameMdl (*j) == "mE");
         BOOST_CHECK ((*j)->getParent () == mC.get ());
 
         // Tu sprawdzam strukturę zagnieżdżenia widgetów.
         T_AbstractWidget::iterator k = wA->begin ();
-        BOOST_CHECK ((*k)->getName () == "wB");
+        BOOST_CHECK (getNameWgt (*k) == "wB");
         BOOST_CHECK ((*k)->getParent () == wA.get ());
         ++k;
-        BOOST_CHECK ((*k)->getName () == "wC");
+        BOOST_CHECK (getNameWgt (*k) == "wC");
         BOOST_CHECK ((*k)->getParent () == wA.get ());
 
         k = wB->begin ();
-        BOOST_CHECK ((*k)->getName () == "wD");
+        BOOST_CHECK (getNameWgt (*k) == "wD");
         BOOST_CHECK ((*k)->getParent () == wB.get ());
 
         k = wC->begin ();
-        BOOST_CHECK ((*k)->getName () == "wE");
+        BOOST_CHECK (getNameWgt (*k) == "wE");
         BOOST_CHECK ((*k)->getParent () == wC.get ());
 }
 
@@ -223,34 +262,34 @@ BOOST_AUTO_TEST_CASE (WidgetParentTest)
 
         // Tu sprawdzam strukturę zagnieżdżenia widgetów.
         T_AbstractWidget::iterator k = wA->begin ();
-        BOOST_CHECK ((*k)->getName () == "wB");
+        BOOST_CHECK (getNameWgt (*k) == "wB");
         BOOST_CHECK ((*k)->getParent () == wA.get ());
         ++k;
-        BOOST_CHECK ((*k)->getName () == "wC");
+        BOOST_CHECK (getNameWgt (*k) == "wC");
         BOOST_CHECK ((*k)->getParent () == wA.get ());
 
         k = wB->begin ();
-        BOOST_CHECK ((*k)->getName () == "wD");
+        BOOST_CHECK (getNameWgt (*k) == "wD");
         BOOST_CHECK ((*k)->getParent () == wB.get ());
 
         k = wC->begin ();
-        BOOST_CHECK ((*k)->getName () == "wE");
+        BOOST_CHECK (getNameWgt (*k) == "wE");
         BOOST_CHECK ((*k)->getParent () == wC.get ());
 
         // Tu sprawdzam strukturę zagnieżdżenia modeli.
         T_AbstractModel::iterator j = mA->begin ();
-        BOOST_CHECK ((*j)->getName () == "mB");
+        BOOST_CHECK (getNameMdl (*j) == "mB");
         BOOST_CHECK ((*j)->getParent () == mA.get ());
         ++j;
-        BOOST_CHECK ((*j)->getName () == "mC");
+        BOOST_CHECK (getNameMdl (*j) == "mC");
         BOOST_CHECK ((*j)->getParent () == mA.get ());
 
         j = mB->begin ();
-        BOOST_CHECK ((*j)->getName () == "mD");
+        BOOST_CHECK (getNameMdl (*j) == "mD");
         BOOST_CHECK ((*j)->getParent () == mB.get ());
 
         j = mC->begin ();
-        BOOST_CHECK ((*j)->getName () == "mE");
+        BOOST_CHECK (getNameMdl (*j) == "mE");
         BOOST_CHECK ((*j)->getParent () == mC.get ());
 }
 
@@ -447,34 +486,34 @@ BOOST_AUTO_TEST_CASE (ParentTestM_C_Order)
         cE->setModel (mE);
 
         T_AbstractController::iterator i = cA->begin ();
-        BOOST_CHECK ((*i)->getName () == "cB");
+        BOOST_CHECK (getNameCtr (*i) == "cB");
         BOOST_CHECK ((*i)->getParent () == cA.get ());
         ++i;
-        BOOST_CHECK ((*i)->getName () == "cC");
+        BOOST_CHECK (getNameCtr (*i) == "cC");
         BOOST_CHECK ((*i)->getParent () == cA.get ());
 
         i = cB->begin ();
-        BOOST_CHECK ((*i)->getName () == "cD");
+        BOOST_CHECK (getNameCtr (*i) == "cD");
         BOOST_CHECK ((*i)->getParent () == cB.get ());
 
         i = cC->begin ();
-        BOOST_CHECK ((*i)->getName () == "cE");
+        BOOST_CHECK (getNameCtr (*i) == "cE");
         BOOST_CHECK ((*i)->getParent () == cC.get ());
 
         T_AbstractModel::iterator j = mA->begin ();
-        BOOST_CHECK ((*j)->getName () == "mB");
+        BOOST_CHECK (getNameMdl (*j) == "mB");
         BOOST_CHECK ((*j)->getParent () == mA.get ());
 
         ++j;
-        BOOST_CHECK ((*j)->getName () == "mC");
+        BOOST_CHECK (getNameMdl (*j) == "mC");
         BOOST_CHECK ((*j)->getParent () == mA.get ());
 
         j = mB->begin ();
-        BOOST_CHECK ((*j)->getName () == "mD");
+        BOOST_CHECK (getNameMdl (*j) == "mD");
         BOOST_CHECK ((*j)->getParent () == mB.get ());
 
         j = mC->begin ();
-        BOOST_CHECK ((*j)->getName () == "mE");
+        BOOST_CHECK (getNameMdl (*j) == "mE");
         BOOST_CHECK ((*j)->getParent () == mC.get ());
 }
 
@@ -525,50 +564,50 @@ BOOST_AUTO_TEST_CASE (ParentTestM_V_C_Order)
 
         // Tu sprawdzam strukturę zagnieżdżenia kontrolerów.
         T_AbstractController::iterator i = cA->begin ();
-        BOOST_CHECK ((*i)->getName () == "cB");
+        BOOST_CHECK (getNameCtr (*i) == "cB");
         BOOST_CHECK ((*i)->getParent () == cA.get ());
         ++i;
-        BOOST_CHECK ((*i)->getName () == "cC");
+        BOOST_CHECK (getNameCtr (*i) == "cC");
         BOOST_CHECK ((*i)->getParent () == cA.get ());
 
         i = cB->begin ();
-        BOOST_CHECK ((*i)->getName () == "cD");
+        BOOST_CHECK (getNameCtr (*i) == "cD");
         BOOST_CHECK ((*i)->getParent () == cB.get ());
 
         i = cC->begin ();
-        BOOST_CHECK ((*i)->getName () == "cE");
+        BOOST_CHECK (getNameCtr (*i) == "cE");
         BOOST_CHECK ((*i)->getParent () == cC.get ());
 
         // Tu sprawdzam strukturę zagnieżdżenia modeli.
         T_AbstractModel::iterator j = mA->begin ();
-        BOOST_CHECK ((*j)->getName () == "mB");
+        BOOST_CHECK (getNameMdl (*j) == "mB");
         BOOST_CHECK ((*j)->getParent () == mA.get ());
         ++j;
-        BOOST_CHECK ((*j)->getName () == "mC");
+        BOOST_CHECK (getNameMdl (*j) == "mC");
         BOOST_CHECK ((*j)->getParent () == mA.get ());
 
         j = mB->begin ();
-        BOOST_CHECK ((*j)->getName () == "mD");
+        BOOST_CHECK (getNameMdl (*j) == "mD");
         BOOST_CHECK ((*j)->getParent () == mB.get ());
 
         j = mC->begin ();
-        BOOST_CHECK ((*j)->getName () == "mE");
+        BOOST_CHECK (getNameMdl (*j) == "mE");
         BOOST_CHECK ((*j)->getParent () == mC.get ());
 
         // Tu sprawdzam strukturę zagnieżdżenia widgetów.
         T_AbstractWidget::iterator k = wA->begin ();
-        BOOST_CHECK ((*k)->getName () == "wB");
+        BOOST_CHECK (getNameWgt (*k) == "wB");
         BOOST_CHECK ((*k)->getParent () == wA.get ());
         ++k;
-        BOOST_CHECK ((*k)->getName () == "wC");
+        BOOST_CHECK (getNameWgt (*k) == "wC");
         BOOST_CHECK ((*k)->getParent () == wA.get ());
 
         k = wB->begin ();
-        BOOST_CHECK ((*k)->getName () == "wD");
+        BOOST_CHECK (getNameWgt (*k) == "wD");
         BOOST_CHECK ((*k)->getParent () == wB.get ());
 
         k = wC->begin ();
-        BOOST_CHECK ((*k)->getName () == "wE");
+        BOOST_CHECK (getNameWgt (*k) == "wE");
         BOOST_CHECK ((*k)->getParent () == wC.get ());
 }
 
@@ -611,34 +650,34 @@ BOOST_AUTO_TEST_CASE (WidgetParentTest_Order)
 
         // Tu sprawdzam strukturę zagnieżdżenia widgetów.
         T_AbstractWidget::iterator k = wA->begin ();
-        BOOST_CHECK ((*k)->getName () == "wB");
+        BOOST_CHECK (getNameWgt (*k) == "wB");
         BOOST_CHECK ((*k)->getParent () == wA.get ());
         ++k;
-        BOOST_CHECK ((*k)->getName () == "wC");
+        BOOST_CHECK (getNameWgt (*k) == "wC");
         BOOST_CHECK ((*k)->getParent () == wA.get ());
 
         k = wB->begin ();
-        BOOST_CHECK ((*k)->getName () == "wD");
+        BOOST_CHECK (getNameWgt (*k) == "wD");
         BOOST_CHECK ((*k)->getParent () == wB.get ());
 
         k = wC->begin ();
-        BOOST_CHECK ((*k)->getName () == "wE");
+        BOOST_CHECK (getNameWgt (*k) == "wE");
         BOOST_CHECK ((*k)->getParent () == wC.get ());
 
         // Tu sprawdzam strukturę zagnieżdżenia modeli.
         T_AbstractModel::iterator j = mA->begin ();
-        BOOST_CHECK ((*j)->getName () == "mB");
+        BOOST_CHECK (getNameMdl (*j) == "mB");
         BOOST_CHECK ((*j)->getParent () == mA.get ());
         ++j;
-        BOOST_CHECK ((*j)->getName () == "mC");
+        BOOST_CHECK (getNameMdl (*j) == "mC");
         BOOST_CHECK ((*j)->getParent () == mA.get ());
 
         j = mB->begin ();
-        BOOST_CHECK ((*j)->getName () == "mD");
+        BOOST_CHECK (getNameMdl (*j) == "mD");
         BOOST_CHECK ((*j)->getParent () == mB.get ());
 
         j = mC->begin ();
-        BOOST_CHECK ((*j)->getName () == "mE");
+        BOOST_CHECK (getNameMdl (*j) == "mE");
         BOOST_CHECK ((*j)->getParent () == mC.get ());
 }
 
@@ -724,50 +763,50 @@ BOOST_AUTO_TEST_CASE (TreeIterTest)
          * i-> zwraca wskaźnik do Ptr <IController>. Na nim wywołujemy metodę get() (ona zwraca
          * IController *, a na tym wykonujemy metodę getName ().
          */
-        BOOST_CHECK (i->get()->getName () == "cB");
+        BOOST_CHECK (getNameCtr (i->get()) == "cB");
         BOOST_CHECK (i->get()->getParent () == cA.get ());
         ++i;
-        BOOST_CHECK (i->get()->getName () == "cC");
+        BOOST_CHECK (getNameCtr (i->get()) == "cC");
         BOOST_CHECK (i->get()->getParent () == cA.get ());
 
         i = cB->begin ();
-        BOOST_CHECK (i->get()->getName () == "cD");
+        BOOST_CHECK (getNameCtr (i->get()) == "cD");
         BOOST_CHECK (i->get()->getParent () == cB.get ());
 
         i = cC->begin ();
-        BOOST_CHECK (i->get()->getName () == "cE");
+        BOOST_CHECK (getNameCtr (i->get()) == "cE");
         BOOST_CHECK (i->get()->getParent () == cC.get ());
 
         // Tu sprawdzam strukturę zagnieżdżenia modeli.
         T_AbstractModel::iterator j = mA->begin ();
-        BOOST_CHECK (j->get()->getName () == "mB");
+        BOOST_CHECK (getNameMdl (j->get()) == "mB");
         BOOST_CHECK (j->get()->getParent () == mA.get ());
         ++j;
-        BOOST_CHECK (j->get()->getName () == "mC");
+        BOOST_CHECK (getNameMdl (j->get()) == "mC");
         BOOST_CHECK (j->get()->getParent () == mA.get ());
 
         j = mB->begin ();
-        BOOST_CHECK (j->get()->getName () == "mD");
+        BOOST_CHECK (getNameMdl (j->get()) == "mD");
         BOOST_CHECK (j->get()->getParent () == mB.get ());
 
         j = mC->begin ();
-        BOOST_CHECK (j->get()->getName () == "mE");
+        BOOST_CHECK (getNameMdl (j->get()) == "mE");
         BOOST_CHECK (j->get()->getParent () == mC.get ());
 
         // Tu sprawdzam strukturę zagnieżdżenia widgetów.
         T_AbstractWidget::iterator k = wA->begin ();
-        BOOST_CHECK (k->get()->getName () == "wB");
+        BOOST_CHECK (getNameWgt (k->get()) == "wB");
         BOOST_CHECK (k->get()->getParent () == wA.get ());
         ++k;
-        BOOST_CHECK (k->get()->getName () == "wC");
+        BOOST_CHECK (getNameWgt (k->get()) == "wC");
         BOOST_CHECK (k->get()->getParent () == wA.get ());
 
         k = wB->begin ();
-        BOOST_CHECK (k->get()->getName () == "wD");
+        BOOST_CHECK (getNameWgt (k->get()) == "wD");
         BOOST_CHECK (k->get()->getParent () == wB.get ());
 
         k = wC->begin ();
-        BOOST_CHECK (k->get()->getName () == "wE");
+        BOOST_CHECK (getNameWgt (k->get()) == "wE");
         BOOST_CHECK (k->get()->getParent () == wC.get ());
 }
 
@@ -804,34 +843,34 @@ BOOST_AUTO_TEST_CASE (WidgetParentTest_TreeIterTest)
 
         // Tu sprawdzam strukturę zagnieżdżenia widgetów.
         T_AbstractWidget::iterator k = wA->begin ();
-        BOOST_CHECK (k->get()->getName () == "wB");
+        BOOST_CHECK (getNameWgt (k->get()) == "wB");
         BOOST_CHECK (k->get()->getParent () == wA.get ());
         ++k;
-        BOOST_CHECK (k->get()->getName () == "wC");
+        BOOST_CHECK (getNameWgt (k->get()) == "wC");
         BOOST_CHECK (k->get()->getParent () == wA.get ());
 
         k = wB->begin ();
-        BOOST_CHECK (k->get()->getName () == "wD");
+        BOOST_CHECK (getNameWgt (k->get()) == "wD");
         BOOST_CHECK (k->get()->getParent () == wB.get ());
 
         k = wC->begin ();
-        BOOST_CHECK (k->get()->getName () == "wE");
+        BOOST_CHECK (getNameWgt (k->get()) == "wE");
         BOOST_CHECK (k->get()->getParent () == wC.get ());
 
         // Tu sprawdzam strukturę zagnieżdżenia modeli.
         T_AbstractModel::iterator j = mA->begin ();
-        BOOST_CHECK (j->get()->getName () == "mB");
+        BOOST_CHECK (getNameMdl (j->get()) == "mB");
         BOOST_CHECK (j->get()->getParent () == mA.get ());
         ++j;
-        BOOST_CHECK (j->get()->getName () == "mC");
+        BOOST_CHECK (getNameMdl (j->get()) == "mC");
         BOOST_CHECK (j->get()->getParent () == mA.get ());
 
         j = mB->begin ();
-        BOOST_CHECK (j->get()->getName () == "mD");
+        BOOST_CHECK (getNameMdl (j->get()) == "mD");
         BOOST_CHECK (j->get()->getParent () == mB.get ());
 
         j = mC->begin ();
-        BOOST_CHECK (j->get()->getName () == "mE");
+        BOOST_CHECK (getNameMdl (j->get()) == "mE");
         BOOST_CHECK (j->get()->getParent () == mC.get ());
 }
 
@@ -871,25 +910,25 @@ BOOST_AUTO_TEST_CASE (TreeIter_copy)
         T_AbstractWidget::iterator k = wA->begin ();
         T_AbstractWidget::iterator l = k;
 
-        BOOST_CHECK (k->get()->getName () == "wB");
-        BOOST_CHECK (l->get()->getName () == "wB");
+        BOOST_CHECK (getNameWgt (k->get()) == "wB");
+        BOOST_CHECK (getNameWgt (l->get()) == "wB");
 
         ++k;
 
-        BOOST_CHECK (k->get()->getName () == "wC");
-        BOOST_CHECK (l->get()->getName () == "wB");
+        BOOST_CHECK (getNameWgt (k->get()) == "wC");
+        BOOST_CHECK (getNameWgt (l->get()) == "wB");
 
         {
                 T_AbstractWidget::iterator k = wA->begin ();
                 T_AbstractWidget::iterator l (k);
 
-                BOOST_CHECK (k->get()->getName () == "wB");
-                BOOST_CHECK (l->get()->getName () == "wB");
+                BOOST_CHECK (getNameWgt (k->get()) == "wB");
+                BOOST_CHECK (getNameWgt (l->get()) == "wB");
 
                 ++k;
 
-                BOOST_CHECK (k->get()->getName () == "wC");
-                BOOST_CHECK (l->get()->getName () == "wB");
+                BOOST_CHECK (getNameWgt (k->get()) == "wC");
+                BOOST_CHECK (getNameWgt (l->get()) == "wB");
         }
 
         {
@@ -897,13 +936,13 @@ BOOST_AUTO_TEST_CASE (TreeIter_copy)
                 T_AbstractWidget::iterator l;
                 l = k;
 
-                BOOST_CHECK (k->get()->getName () == "wB");
-                BOOST_CHECK (l->get()->getName () == "wB");
+                BOOST_CHECK (getNameWgt (k->get()) == "wB");
+                BOOST_CHECK (getNameWgt (l->get()) == "wB");
 
                 ++k;
 
-                BOOST_CHECK (k->get()->getName () == "wC");
-                BOOST_CHECK (l->get()->getName () == "wB");
+                BOOST_CHECK (getNameWgt (k->get()) == "wC");
+                BOOST_CHECK (getNameWgt (l->get()) == "wB");
         }
 }
 

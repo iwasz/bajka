@@ -13,16 +13,11 @@
 
 #include <Reflection.h>
 #include <collection/Map.h>
-#include <collection/List.h>
 #include <List.h>
 #include <Vector.h>
 
 #include "IView.h"
 #include "../base/tree/ITreeWidget.h"
-
-namespace Model {
-class IModel;
-}
 
 namespace View {
 
@@ -52,9 +47,6 @@ struct IWidget :
 
 /****************************************************************************/
 
-typedef Reflection::List <Ptr <IWidget> > WidgetList;
-
-typedef Core::Vector <Ptr <IWidget> > WidgetVector;
 /// \todo Klucz dałbym na std::string
 typedef Reflection::Map <Core::String, Ptr <IWidget> > StringWidgetMap;
 _f (StringWidgetMap)
