@@ -14,8 +14,8 @@
 /**
  *
  */
-struct T_IModel : public Base::ITreeModel {
-        virtual ~T_IModel () {}
+struct T_IModel : public Model::ITreeModel {
+        virtual ~T_IModel () {}Base
         virtual std::string const &getName () const = 0;
 };
 

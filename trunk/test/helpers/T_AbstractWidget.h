@@ -6,19 +6,20 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ABSTRACTWIDGET_H_
-#define ABSTRACTWIDGET_H_
+#ifndef T_ABSTRACTWIDGET_H_
+#define T_ABSTRACTWIDGET_H_
 
-#include "TreeWidget.h"
+#include "../../view/AbstractWidget.h"
 
 /**
  *
  */
-class T_AbstractWidget : public Base::TreeWidget {
+class T_AbstractWidget : public View::AbstractWidget {
 public:
 
         T_AbstractWidget (std::string const &s) : name (s) {}
         virtual ~T_AbstractWidget () {}
+        void doDraw () {}
 
         std::string const &getName () const { return name; }
 

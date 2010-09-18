@@ -161,7 +161,7 @@
 
     <bean id="scrollMargins" class="SimpleController" init-method="init" singleton="true">
         <property name="children">
-            <list class="ControllerList">
+            <list class="ControllerCollection">
                 <ref bean="scrollEventMarginLeft"/>                
                 <ref bean="scrollEventMarginRight"/>                
                 <ref bean="scrollEventMarginTop"/>
@@ -188,7 +188,7 @@
         </property>
     
         <property name="children">
-            <list class="ControllerList">
+            <list class="ControllerCollection">
                 <ref bean="background2"/>
                 <ref bean="background"/>
             </list>
@@ -252,12 +252,14 @@
     
 <!-- ===================================================================================== -->
 
-    <!-- Abstra -->
+
+
     <bean id="imageWidget" class="View::Image" abstract="true">
         <property name="model" ref="imageModel">
             <bean id="imageModel" class="Model::Image" scope="bean"/>
         </property>
     </bean>
+
 
 
     <bean id="buttonWidget" class="StatefulWidget" abstract="true">
@@ -276,11 +278,11 @@
                 </entry>
             </map>
         </property>
-        
-<!--        <property name="model">-->
-<!--            <bean id="model" class="Shape" scope="bean"/>-->
-<!--        </property>      -->
-        
+
+        <property name="model">
+            <bean id="model" class="Model::Box" scope="bean"/>
+        </property>
+
         <property name="currentWidget" value="normal" />  
     </bean>
 
@@ -288,45 +290,22 @@
 
     <bean id="button" class="ButtonController" init-method="init">
         <property name="widget">
-            <bean parent="buttonWidget">
-                <property name="model" ref="model"/>
-            </bean>
-        </property>
-        
-        <property name="model">
-            <bean id="model" class="Model::Box" scope="bean"/>
+            <bean parent="buttonWidget"/>
         </property>
 
+        <!-- Model pobiera się sam z widgeta jeśliw widgecie już jest. -->
         <property name="bitMask"><value type="unsigned int">255</value></property>        
     </bean>
 
 
 
-    <!-- Tak będzie wyglądał guzik w XMLu -->
+    <!--Tak będzie wyglądał guzik w XMLu. Jego rozmiar jest ustalony -->
+    <!--przez rozmiar obrazków składających się na 3 stany guzika. -->
     <bean id="myButton" parent="button">
-<!--        <property name="widget.model.path" value="../gfx/button-01-normal.png" />-->
-    
         <property name="widget.widgets.normal.model.path" value="../gfx/button-01-normal.png" />
         <property name="widget.widgets.hover.model.path" value="../gfx/button-01-hover.png" />
         <property name="widget.widgets.clicked.model.path" value="../gfx/button-01-clicked.png" />
-        
-        
-        <property name="model.x1"><value type="double">0</value></property>
-        <property name="model.y1"><value type="double">0</value></property>
-        <property name="model.x2"><value type="double">246</value></property>
-        <property name="model.y2"><value type="double">246</value></property>
-        
-<!--        <property name="model.move.x" value="100"/>-->
-<!--        <property name="model.move.y" value="100"/>-->
     </bean>
-
-<!--    <bean id="button" class="ButtonController" init-method="init">-->
-<!--        <property name="widget.widgets.normal.model.path" value="button-01-normal.jpg" />-->
-<!--        <property name="widget.widgets.hover.model.path" value="button-01-hover.jpg" />-->
-<!--        <property name="widget.widgets.clicked.model.path" value="button-01-clicked.jpg" />-->
-<!--        -->
-<!--        <property name="model.move" value="100, 100"/>-->
-<!--    </bean>-->
 
 <!-- ===================================================================================== -->
 
@@ -336,10 +315,10 @@
         </property>
 
         <property name="children">
-            <list class="ControllerList">
+            <list class="ControllerCollection">
 <!--                <ref bean="scrollController" /> -->
-<!--                <ref bean="tmp1"/>-->
-<!--                <ref bean="rect"/>-->
+                <ref bean="tmp1"/>
+                <ref bean="rect"/>
 <!--                <ref bean="scrollMargins"/>-->
                 <ref bean="myButton" />
             </list>
@@ -383,7 +362,7 @@
                         <list class="ObserverVector">
                             <ref bean="screen" />
 <!--                            <ref bean="ruchJednostajny"/>-->
-                            <ref bean="scrollController" />
+<!--                            <ref bean="scrollController" />-->
                         </list>
                     </property>
                     <property name="tickInterval"><value type="int">20</value></property>

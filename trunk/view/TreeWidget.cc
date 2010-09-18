@@ -17,6 +17,18 @@
 namespace View {
 using namespace Base;
 
+void TreeWidget::setModel (Ptr <Model::IModel> m)
+{
+        model = m;
+
+        // Ustawiamy tylko jeśli jeszcze nie ma.
+        if (!model->getOwner ()) {
+                model->setOwner (this);
+        }
+}
+
+/****************************************************************************/
+
 bool TreeWidget::hasChildren () const
 {
         return (owner) ? (owner->hasChildren ()) : (!children.empty ());
@@ -89,10 +101,15 @@ ModelIter TreeWidget::endForModel ()
 }
 
 /****************************************************************************/
-
+/**
+ * Uwaga. W pierwszej kolejności zwracany jest iterator do kolekcji children. Dopiero
+ * gdy jest ona pusta, zwracany jest iterator z ownera. Czyli dodając dzieci bezpośrednio
+ * do widgetu tracimy dostęp do dzieci kontrolera.
+ * @return
+ */
 WidgetConstIter TreeWidget::begin () const
 {
-        if (owner) {
+        if (owner && children.empty ()) {
                 return const_cast <WidgetOwnerConstType> (owner)->beginForWidget ();
         }
 
@@ -103,7 +120,7 @@ WidgetConstIter TreeWidget::begin () const
 
 WidgetIter TreeWidget::begin ()
 {
-        if (owner) {
+        if (owner && children.empty ()) {
                 return owner->beginForWidget ();
         }
 
@@ -114,7 +131,7 @@ WidgetIter TreeWidget::begin ()
 
 WidgetConstIter TreeWidget::end () const
 {
-        if (owner) {
+        if (owner && children.empty ()) {
                 return const_cast <WidgetOwnerConstType> (owner)->endForWidget ();
         }
 
@@ -125,7 +142,7 @@ WidgetConstIter TreeWidget::end () const
 
 WidgetIter TreeWidget::end ()
 {
-        if (owner) {
+        if (owner && children.empty ()) {
                 return owner->endForWidget ();
         }
 

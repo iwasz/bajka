@@ -9,6 +9,10 @@
 #ifndef TREECONTROLLER_H_
 #define TREECONTROLLER_H_
 
+#include <Reflection.h>
+#include <List.h>
+#include <collection/List.h>
+
 #include "IController.h"
 #include "IModel.h"
 #include "IWidget.h"
@@ -24,18 +28,15 @@ namespace Controller {
  */
 class TreeController : public IController {
 public:
+        __d
 
         TreeController () : children (), parent (), model () {}
         virtual ~TreeController () {}
 
 /*------IModelAware---------------------------------------------------------*/
 
-        Ptr <Model::IModel> const &getModel () { return model; }
-        void setModel (Ptr <Model::IModel> m)
-        {
-                model = m;
-                model->setOwner (this);
-        }
+        _m (getModel) Ptr <Model::IModel> const &getModel () { return model; }
+        _m (setModel) void setModel (Ptr <Model::IModel> m);
 
         Base::IModelAware *getParentMAW () { return parent; }
         bool hasChildrenMAW () const { return hasChildren (); }
@@ -105,6 +106,11 @@ protected:
 
         Ptr <Model::IModel> model;
 
+        _m (init)
+        _m (getWidget)
+        _m (setWidget)
+        _m (getMapping)
+        _e (TreeController)
 };
 
 }

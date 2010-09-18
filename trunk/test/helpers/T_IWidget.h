@@ -14,7 +14,7 @@
 /**
  *
  */
-struct T_IWidget : public Util::ITreeWidget {
+struct T_IWidget : public View::ITreeWidget {
 
         virtual ~T_IWidget () {}
         virtual std::string const &getName () const = 0;

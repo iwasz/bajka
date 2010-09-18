@@ -9,7 +9,6 @@
 #include <Foreach.h>
 
 #include "SimpleController.h"
-//#include "geometry/Utils.h"
 #include "IModel.h"
 #include "IWidget.h"
 
@@ -64,7 +63,7 @@ bool SimpleController::ObserverHelper::checkArea (Event::MouseEvent *e)
 //        matrix.transform (&p);
 
         Point p2 = myModel->screenToModel (p);
-//        std::cerr << "---> [" << p2 << "], enclose [" << myModel->enclose (p2) << "]" << std::endl;
+        // std::cerr << "---> [" << p2 << "], enclose [" << myModel->enclose (p2) << "]" << std::endl;
 
 //        if (myModel->enclose (p)) {
         if (myModel->enclose (p2)) {
@@ -148,12 +147,11 @@ void SimpleController::init ()
 
 /****************************************************************************/
 
-//void SimpleController::setChildren (const ControllerList &list)
-//{
-//        for (ControllerList::const_iterator i = list.begin (); i !=list.end (); ++i) {
-//                addChild (*i);
-//        }
-//}
+void SimpleController::setModel (Ptr <Model::IModel> m)
+{
+        AbstractController::setModel (m);
+        myHelper.myModel = model.get ();
+}
 
 /****************************************************************************/
 
@@ -215,6 +213,7 @@ bool SimpleController::onEvent (Event::IEvent *event)
                 // TODO Zastanowić się jak to zrobić bez dynamic_cast!!!
                 Event::AbstractObserver *a = dynamic_cast <Event::AbstractObserver *> (i->get ());
 
+                //std::cerr << std::hex << a << std::endl;
                 if (!a->onEvent (event)) {
                         return false;
                 }
@@ -240,14 +239,6 @@ bool SimpleController::onMouseMotion (Event::MouseMotionEvent *e)
 //        std::cerr << "SimpleController::onMouseMotion : " << e->getPosition () << ", this=[" << this << "]" << std::endl;
         return true;
 }
-
-/****************************************************************************/
-
-//bool SimpleController::onTimer (Event::TimerEvent *e)
-//{
-//        std::cerr << "SimpleController::onTimer : " << e->getTicks () << ", this=[" << this << "]" << std::endl;
-//        return true;
-//}
 
 /****************************************************************************/
 

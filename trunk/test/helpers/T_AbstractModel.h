@@ -6,15 +6,15 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ABSTRACTMODEL_H_
-#define ABSTRACTMODEL_H_
+#ifndef T_ABSTRACTMODEL_H_
+#define T_ABSTRACTMODEL_H_
 
-#include "TreeModel.h"
+#include "../../model/AbstractModel.h"
 
 /**
  *
  */
-class T_AbstractModel : public Base::TreeModel {
+class T_AbstractModel : public Model::AbstractModel {
 public:
 
         T_AbstractModel (std::string const &s) : name (s) {}

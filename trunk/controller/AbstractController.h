@@ -26,6 +26,13 @@ public:
         {
                 widget = w;
                 widget->setOwner (this);
+
+                if (widget->getModel ()) {
+                        setModel (widget->getModel ());
+                }
+                else if (model) {
+                        widget->setModel (model);
+                }
         }
 
 protected:

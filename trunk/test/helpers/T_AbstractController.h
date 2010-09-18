@@ -6,26 +6,26 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ABSTRACTCONTROLLER_H_
-#define ABSTRACTCONTROLLER_H_
+#ifndef T_ABSTRACTCONTROLLER_H_
+#define T_ABSTRACTCONTROLLER_H_
 
-#include "TreeController.h"
+#include "../../controller/AbstractController.h"
 
 /**
  *
  */
-class T_AbstractController : public Base::TreeController {
+class T_AbstractController : public Controller::AbstractController {
 public:
 
-        T_AbstractController (std::string const &s) : name (s) {}
+        T_AbstractController (std::string const &s) :
+                AbstractController (Ptr <View::IWidget> ()),
+                name (s) {}
+
         virtual ~T_AbstractController () {}
 
-        Ptr <IWidget> const &getWidget () { return widget; }
-        void setWidget (Ptr <IWidget> w)
-        {
-                widget = w;
-                widget->setOwner (this);
-        }
+        void init () {}
+        void draw () {}
+        Ptr <Controller::IMapping> getMapping () {}
 
 /*--------------------------------------------------------------------------*/
 
@@ -34,7 +34,6 @@ public:
 private:
 
         std::string name;
-        Ptr <IWidget> widget;
 
 };
 

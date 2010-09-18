@@ -75,7 +75,7 @@ INCLUDE_DIRECTORIES (../base)
 add_library (bajka SHARED ${SOURCES})
 
 # Executable test.
-IF (0)
+IF (1)
     AUX_SOURCE_DIRECTORY (../test TEST_SOURCES)
     AUX_SOURCE_DIRECTORY (../test/helpers TEST_SOURCES)
     
