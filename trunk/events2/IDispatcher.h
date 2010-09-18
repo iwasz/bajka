@@ -18,6 +18,7 @@ namespace Event {
 
 /**
  * Do wysyłania eventów.
+ * \ingroup Events
  */
 class IDispatcher : public Core::Object {
 public:

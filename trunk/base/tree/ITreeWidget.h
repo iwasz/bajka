@@ -18,21 +18,21 @@ namespace View {
 /**
  * Typ właściciela widgetu. Jest to oczywiście kontroler. Typ nie jest zdefiniowany w 
  * Types.h, bo nie można tam includować ITreeController.h.
- * \ingroup Util
+ * \ingroup Tree
  */
 typedef Controller::ITreeController WidgetOwnerBaseType;
 
 /**
  * Typ wskaźnika do właściciela widgetu. Jest to oczywiście kontroler. Typ nie jest zdefiniowany w 
  * Types.h, bo nie można tam includować ITreeController.h.
- * \ingroup Util
+ * \ingroup Tree
  */
 typedef View::WidgetOwnerBaseType *WidgetOwnerType;
 
 /**
  * Typ wskaźnika do właściciela widgetu. Jest to oczywiście kontroler. Typ nie jest zdefiniowany w 
  * Types.h, bo nie można tam includować ITreeController.h.
- * \ingroup Util
+ * \ingroup Tree
  */
 typedef View::WidgetOwnerBaseType const *WidgetOwnerConstType;
 
@@ -41,7 +41,7 @@ typedef View::WidgetOwnerBaseType const *WidgetOwnerConstType;
  * tworzyć struktury drzewiaste lub mogą być podpięte pod kontroler i czerpac informację o swoich
  * potomkach i rodzicach z kontrolera. Czyli struktura drzewiasta widgetu może być stworzona na 2
  * sposoby!
- * \ingroup Util
+ * \ingroup Tree
  */
 struct ITreeWidget : public Model::IModelAware {
 

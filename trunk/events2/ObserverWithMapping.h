@@ -22,6 +22,7 @@ namespace Event {
  * Obserwator, ktory w każdej metodzie obsługi wywołuje metodę IMapping::run.
  * Należy ustawić mu zadany mapping, oraz w metodzie setBitMask ustawić na
  * jakie eventy ma reagować.
+ * \ingroup Events
  */
 class ObserverWithMapping : public AbstractObserver {
 public:

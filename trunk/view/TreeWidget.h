@@ -16,9 +16,13 @@
 namespace View {
 
 /**
- *
+ * Implementuje strukturę drzewiastą widgetów. Prócz zagnieżdżania kontrolerów można
+ * także zagnieżdżać widgety. Jednak zagnieżdżanie widgetów skutkuje jedynie ich wizualnym
+ * grupowaniem. Wszystkie zagnieżdżone widgety mają ten sam ukłąd współrzędnych.
+ * \ingroup Tree
  */
-struct TreeWidget : public IWidget {
+class TreeWidget : public IWidget {
+public:
 
         typedef WidgetIter iterator;
         typedef WidgetConstIter const_iterator;

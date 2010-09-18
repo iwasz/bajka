@@ -11,7 +11,7 @@
 
 /**
  * \defgroup Tree
- * \ingroup Util
+ * \ingroup Base
  * Uogólnienie struktury drzewiastej. W tym module znajdują się klasy implementujące ogólną strukturę
  * drzewiastą. Pomysł polega na tym, że dziedzicząc z klasy Util::TreeMaster definiujemy główną hierarchię
  * drzewaistą, a dziedzicząc z Util::TreeSlave poboczną. Obiekty należące do głownej hierarchii można w
@@ -24,21 +24,49 @@
  * \section Zawieranie
  * \subsection Ogólnie
  * Zawieranie, czyli implementacja wzoraca projektowego "composite" jest realizowane w Bajce na dwóch
- * płaszczyznach. Przede wszystkim kontrolery (instancje klasy SimpleController) mogą zawierać inne
- * kontyrolery (obiekty typu IController). Czyli '''kontrolery mogą tworzyć strukturę drzewistą'''. Każdy
- * kontroler może zawierać jeden model (obiekt typu IModel), oraz jeden widget (obiekt klasy IWidget). I tu
- * pojawia się druga płaszczyzna, bowiem widgety (czyli to V w MVC) też można zagnieżdżać. Instancje klasy
+ * płaszczyznach.
+ *
+ * -# Kontrolery (instancje klasy Controller::SimpleController) mogą zawierać inne
+ * kontyrolery (obiekty typu Controller::IController). Czyli <b>kontrolery mogą tworzyć strukturę drzewistą</b>. Każdy
+ * kontroler może zawierać jeden model (obiekt typu Model::IModel), oraz jeden widget (obiekt klasy View::IWidget).
+ * -# Widgety (czyli to V w MVC) też można zagnieżdżać. Instancje klasy
  * AbstractWidget mogą zawierać dowolnie dużo obiektów klasy IWidget i '''wówczas także tworzą strukturę
  * drzewisatą'''.
  *
  * Dziecko może mieć tylko jednego rodzica, co oznacza, że nie można dodać jednego kontrolera do dwóch
  * innych (da się, ale pierwszy się zamaże).
  *
- * Struktura drzewiasta kontrolerów tworzy niejawną, odpowiadającą strukturę drzewiastą widgetów i modeli.
- * Analogicznie jest z widgetami, które same w sonie można układac w drzewa i wówczas mamy też odpowiadające
- * drzewo modeli stworzone niejawnie. Efekt jest taki, że po zagnieżdżeniu kontrolerów ich '''modele mogą
- * iterować po modelach-potomkach, a wdgety mogą iterować po widgetach-potomkach'''. Analogicznie z
- * zagnieżdżaniem samych widgetów.
+ * Głównym sposobem zagnieżdżania (tym który był wcześniej) jest zagnieżdżanie kontrolerów. Kontrolery
+ * udostępiają specjalne iteratory pozwalające iterować nie tylko po potomkach-kontrolerach, ale także
+ * dwa dodatkowe iteratory, które iteraując po potomkach zwracają widget lub model takiego potomka. Dzięki
+ * temu każdy model w takiej strukturze może iteraować po odpowadających mu modelach-potokach, a widget
+ * po widgetach-potomkach. Zagnieżdżanie kontrolerów niesie ze sobą szereg konsekwencji jak :
+ * - Przekazywanie eventów w górę drzewa (od korzenia do liści).
+ * - Układy wspólrzędnych są relatywne dla każdego poziomu zagnieżdżenia.
+ * - Kształt widgetów (enlose, boundingBox etc).
+ *
+ * Drugi sposób zagnieżdżania w bajce, to zagnieżdżanie widgetów. Dzięki temu można tworzyć bardziej
+ * skomplikowane kontrolki/spritey, typu tabelki etc. Widgety znalogicznie o kontrolerów udostępniają
+ * specjalny iterator pozwalający iterując po potomkach widgetu zwracać odpowiednie modele zawierane
+ * przez te widgety.
+ *
+ * \subsection Uwaga
+ * Model (konkretnie klasa Model::ITreeModel) zawiera prywatny wskaźnik do obiektu o nazwie <b>owner</b>.
+ * Ownerem może być albo kontroler, albo widget.  W pierwszym przypadku mamy doczynienia z <i>pierwszym sposobem
+ * zawierania</i>, a w drugim z tym <i>drugim</i>. Owner ustawia się, kiedy dodajemy ten model za pomocą
+ * Controller::IController::setModel, albo View::IWidget::setModel, ale <b>tylko gdy model nie ma już ustawionego
+ * ownera</b>. Czyli pierwszy ustawiony jest ownerem:
+ *
+ * <pre>
+ * // A.
+ * ctr.setModel (mdl);
+ * wdg.setModel (mdl); // mdl.owner == ctr
+ *
+ * // B.
+ * wdg.setModel (mdl);
+ * ctr.setModel (mdl); // mdl.owner == wdg
+ * </pre>
+ *
  *
  * \subsection Implementacja
  * Zawieranie jest zaimplementowane za pomocą dwóch głownych szablonów klas TreeMaster i TreeSlave (jest jeszcze
@@ -93,16 +121,29 @@
  * widget
  * children
  * </bean>
+ *
+ * \section Eventy
+ * Section
+ *
+ * \section Układy_współrzędnych
+ * Section
+ *
+ * \section Geometria
+ * Section
+ *
+ * \section Transformacje
+ * Section
+ *
+ * \section Rysowanie
+ * Section
+ *
  */
 
 #include "Extractors.h"
-#include "IController.h"
-#include "IModel.h"
 #include "IModelAware.h"
 #include "ITreeController.h"
 #include "ITreeModel.h"
 #include "ITreeWidget.h"
-#include "IWidget.h"
 #include "Pointer.h"
 #include "TreeSlaveIterator.h"
 #include "Types.h"

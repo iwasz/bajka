@@ -18,7 +18,7 @@ namespace Model {
 /**
  * Implementuje dostęp do struktury drzewiastej dla modelu. Struktura ta jest utrzymywana w
  * obiekcie ownera, który może być kontrolerem, lub widgetem. 
- * \inplace Util
+ * \ingroup Tree
  */
 class TreeModel : public IModel {
 public:

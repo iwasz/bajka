@@ -29,7 +29,7 @@ namespace Controller {
 class IController;
 }
 
-/**
+/*
  * Wspólny plik nagłówkowy, ponieważ w wielu miejscach potrzebne jest wiele
  * typów, na przykłąd kontroler potrzebuje typów widgeta i modelu etc.
  */
@@ -127,6 +127,7 @@ typedef TreeTraits <Model::IModel>::ParentConstType ModelParentConstType;
  * Iterator zwracany z TreeModel::begin i TreeModel::end. Zaimplementowane zarówno
  * w TreeController::beginForModel jak i TreeWidget (te implementacje dostarczają
  * iteratorów modelowi).
+ * \ingroup Model
  */
 typedef Base::TreeIter <Ptr <IModel>,
                 Controller::ControllerCollection::iterator,
@@ -138,6 +139,7 @@ typedef Base::TreeIter <Ptr <IModel>,
  * Iterator zwracany z TreeModel::begin i TreeModel::end. Zaimplementowane zarówno
  * w TreeController::beginForModel jak i TreeWidget (te implementacje dostarczają
  * iteratorów modelowi).
+ * \ingroup Model
  */
 typedef Base::TreeIter <Ptr <IModel> const,
                 Controller::ControllerCollection::const_iterator,

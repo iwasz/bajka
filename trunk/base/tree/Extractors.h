@@ -24,7 +24,7 @@ namespace Base {
  * Ponieważ TreeIterator zawiera iterator STL (na przykład do kolekcji kontrolerów),
  * jest potrzebne coś, co z tego kontrolera wyciągnie na przykład model lub widget.
  * To jest właśnie zadanie ekstraktora. Jest on funktorem.
- * \inplace Util
+ * \ingroup Tree
  */
 struct ModelExtractor {
         // T to może być wskaźnik lub smart_pointer
@@ -44,7 +44,7 @@ struct ModelExtractor {
  * Ponieważ TreeIterator zawiera iterator STL (na przykład do kolekcji kontrolerów),
  * jest potrzebne coś, co z tego kontrolera wyciągnie na przykład model lub widget.
  * To jest właśnie zadanie ekstraktora. Jest on funktorem.
- * \inplace Util
+ * \ingroup Tree
  */
 struct ModelPtrExtractor {
         // T to może być wskaźnik lub smart_pointer
@@ -65,7 +65,7 @@ struct ModelPtrExtractor {
  * Ponieważ TreeIterator zawiera iterator STL (na przykład do kolekcji kontrolerów),
  * jest potrzebne coś, co z tego kontrolera wyciągnie na przykład model lub widget.
  * To jest właśnie zadanie ekstraktora. Jest on funktorem.
- * \inplace Util
+ * \ingroup Tree
  */
 struct WidgetExtractor {
         // T to może być wskaźnik lub smart_pointer
@@ -85,7 +85,7 @@ struct WidgetExtractor {
  * Ponieważ TreeIterator zawiera iterator STL (na przykład do kolekcji kontrolerów),
  * jest potrzebne coś, co z tego kontrolera wyciągnie na przykład model lub widget.
  * To jest właśnie zadanie ekstraktora. Jest on funktorem.
- * \inplace Util
+ * \ingroup Tree
  */
 struct WidgetPtrExtractor {
         // T to może być wskaźnik lub smart_pointer
@@ -103,7 +103,7 @@ struct WidgetPtrExtractor {
 
 /**
  * Dummy extractor, który zwraca swój argument w niezmienionej postaci.
- * \inplace Util
+ * \ingroup Tree
  */
 struct NoopExtractor {
 
@@ -117,3 +117,8 @@ struct NoopExtractor {
 } // namespace
 
 #	endif /* EXTRACTORS_H_ */
+
+/**
+ * \defgroup Base
+ * Rzeczy wspólne niskiego poziomu.
+ */

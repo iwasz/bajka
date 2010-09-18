@@ -105,28 +105,32 @@ MouseMotionEvent *EventDispatcher::updateMouseMotionEvent (SDL_Event *event)
 
 MouseButtonEvent *EventDispatcher::updateMouseButtonEvent (SDL_Event *event)
 {
-//        MouseButtonEvent::Press t = (event->button.type == SDL_MOUSEBUTTONDOWN) ? (MouseButtonEvent::DOWN) : (MouseButtonEvent::UP);
-//        MouseButton btn;
-//
-//        switch (event->button.button) {
-//        case SDL_BUTTON_MIDDLE:
-//                btn = CENTER;
-//                break;
-//
-//        case SDL_BUTTON_RIGHT:
-//                btn = RIGHT;
-//                break;
-//
-//        default:
-//        case SDL_BUTTON_LEFT:
-//                btn = LEFT;
-//                break;
-//
-//        }
-//
-//        mouseButtonEvent.setPress (t);
-//        mouseButtonEvent.setButton (btn);
-//        mouseButtonEvent.setPosition (Geometry::Point (event->button.x, event->button.y));
+        MouseButtonEvent::Press t = (event->button.type == SDL_MOUSEBUTTONDOWN) ? (MouseButtonEvent::DOWN) : (MouseButtonEvent::UP);
+        MouseButton btn;
+
+        switch (event->button.button) {
+        case SDL_BUTTON_MIDDLE:
+                btn = CENTER;
+                break;
+
+        case SDL_BUTTON_RIGHT:
+                btn = RIGHT;
+                break;
+
+        default:
+        case SDL_BUTTON_LEFT:
+                btn = LEFT;
+                break;
+
+        }
+
+//        buttonPressEvent.setPress (t);
+        buttonPressEvent.setButton (btn);
+        buttonPressEvent.setPosition (
+                        Geometry::Point (
+                                        event->button.x - resX2,
+                                        -event->button.y + resY2));
+
         return &buttonPressEvent;
 }
 

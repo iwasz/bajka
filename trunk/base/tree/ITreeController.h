@@ -19,7 +19,7 @@ namespace Controller {
  * dziedziczy kazdy kontroler. Kontrolery mogą tworzyć strukturę drzewiastą i udostępniać ja
  * modelom i widgetom, tak, że modele i widgety mają dostęp do swoich "potomków" i "rodziców",
  * ale nie bezpośrednio, tylko właśnie poprzez kontroler.
- * \inplace Util
+ * \ingroup Tree
  */
 struct  ITreeController : public Model::IModelAware {
 

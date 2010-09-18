@@ -16,6 +16,7 @@ namespace Event {
 /**
  * Obserwator z zaimplementowanymi powtarzalnymi metodami - klasa
  * ułątwiająca implementowanie obserwatorów. Nie można jej zinstancjonować.
+ * \ingroup Events
  */
 class AbstractObserver : public IObserver {
 public:

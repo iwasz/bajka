@@ -6,35 +6,21 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ABSTRACTCONTROLLER_H_
-#define ABSTRACTCONTROLLER_H_
-
-#include "TreeController.h"
+#include "AbstractController.h"
 
 namespace Controller {
 
-/**
- * Klasa implementujaca trzon kontrolerów.
- * \ingroup Kontroler
- */
-class AbstractController : public TreeController {
-public:
+void AbstractController::setWidget (Ptr <View::IWidget> w)
+{
+        widget = w;
+        widget->setOwner (this);
 
-        virtual ~AbstractController () {}
-
-        Ptr <View::IWidget> const &getWidget () { return widget; }
-        void setWidget (Ptr <View::IWidget> w);
-
-protected:
-
-        AbstractController (Ptr <View::IWidget> w) : widget (w) {}
-
-protected:
-
-        Ptr <View::IWidget> widget;
-
-};
+        if (widget->getModel ()) {
+                setModel (widget->getModel ());
+        }
+        else if (model) {
+                widget->setModel (model);
+        }
+}
 
 } // nam
-
-#	endif /* ABSTRACTCONTROLLER_H_ */

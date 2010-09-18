@@ -18,6 +18,7 @@ namespace Controller {
 /**
  * Kontroler dla wszelkiej maści guzików. Wymaga widgeta typu View::StatefulWidget i
  * modelu typu Model::Shape.
+ * \ingroup Kontroler
  */
 class ButtonController : public Controller::SimpleController {
 public:

@@ -327,7 +327,7 @@
         <!--Nie ma za bardzo jak robić iloczynów logicznych, -->
         <!--wiec trzeba podawać gotowe bit-maski. Pierwszy bit-->
         <!--to mouse move.-->
-        <property name="bitMask"><value type="unsigned int">1</value></property>
+        <property name="bitMask"><value type="unsigned int">255</value></property>
     </bean>
 
 
