@@ -141,7 +141,7 @@ public:
         //\}
 /*--------------------------------------------------------------------------*/
 
-        void setModel (Ptr <Model::IModel> m);
+        virtual void setModel (Ptr <Model::IModel> m);
 
 private:
 

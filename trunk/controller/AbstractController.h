@@ -22,8 +22,8 @@ public:
 
         virtual ~AbstractController () {}
 
-        Ptr <View::IWidget> const &getWidget () { return widget; }
-        void setWidget (Ptr <View::IWidget> w);
+        virtual Ptr <View::IWidget> const &getWidget () { return widget; }
+        virtual void setWidget (Ptr <View::IWidget> w);
 
 protected:
 

@@ -12,11 +12,7 @@
 /**
  * \defgroup Tree
  * \ingroup Base
- * Uogólnienie struktury drzewiastej. W tym module znajdują się klasy implementujące ogólną strukturę
- * drzewiastą. Pomysł polega na tym, że dziedzicząc z klasy Util::TreeMaster definiujemy główną hierarchię
- * drzewaistą, a dziedzicząc z Util::TreeSlave poboczną. Obiekty należące do głownej hierarchii można w
- * sobie zagnieżdżać (tworzyć z nich drzewo - czyli ustawiać relację rodzic-potomek), i ta struktura
- * automatycznie znajduje odzwierciedlenie w strukturze obiektow slave.
+ * Kod implementujący strukturę drzewiastą kontrolerów i widgetów w Bajce.
  */
 
 /**
@@ -95,22 +91,21 @@
  * \image html mvc-mv.png "Struktura MVC w bajce"
  *
  * \subsection API
- * TreeMaster zawiera metody do dodawania i pobierania potomków oraz do pobierania rodzica. Nie ma możliwości
+ * Controller::TreeController zawiera metody do dodawania i pobierania potomków oraz do pobierania rodzica. Nie ma możliwości
  * ustawienia rodzica explicite. Rodzic ustawia się w momencie dodania dziecka i jest czyszczony w momencie
- * usuwania dziecka z rodzica.
+ * usuwania dziecka z rodzica. Analogicznie View::TreeWidget.
  *
- * - Util::TreeMaster::addChild - głowna metoda dodająca dziecko - wszystkie inne dodające korzystają własnie z niej.
+ * - Controller::TreeController::addChild - głowna metoda dodająca dziecko - wszystkie inne dodające korzystają własnie z niej.
  *   Ta metoda ustawia referencję do rodzica w dziecku.
- * - Util::TreeMaster::addChildren - korzystając w pętli z addChild dodaje liste dzieci do już istniejących dzieci.
- * - Util::TreeMaster::setChildren - korzystając w pętli z addChild ustawia listę dzieci (dotychczasowe zostają
+ * - Controller::TreeController::addChildren - korzystając w pętli z addChild dodaje liste dzieci do już istniejących dzieci.
+ * - Controller::TreeController::setChildren - korzystając w pętli z addChild ustawia listę dzieci (dotychczasowe zostają
  *   usunięte, a ich referencja do rodzica ustawiona na NULL).
- * - Util::TreeMaster::removeChild - usuwa dziecko z rodzica. Dziecko od tej pory będzie miało wskaźnik do rodzica
+ * - Controller::TreeController::removeChild - usuwa dziecko z rodzica. Dziecko od tej pory będzie miało wskaźnik do rodzica
  *   ustawioną na NULL.
- * - Util::TreeMaster::clearChildren - usuwa wszystkie dzieci i czyści im referencję do rodzica.
- * - Util::TreeMaster::getChildren - pobiera listę dzieci (kontener STL).
- * - Util::TreeMaster::begin - pobiera iterator do początku listy dzieci.
- * - Util::TreeMaster::end - pobiera iterator do elementu następnego za ostatnim na liście dzieci.
- * - Util::TreeMaster::getParent - zwraca wskaźnik do rodzica (może być NULL).
+ * - Controller::TreeController::clearChildren - usuwa wszystkie dzieci i czyści im referencję do rodzica.
+ * - Controller::TreeController::begin - pobiera iterator do początku listy dzieci.
+ * - Controller::TreeController::end - pobiera iterator do elementu następnego za ostatnim na liście dzieci.
+ * - Controller::TreeController::getParent - zwraca wskaźnik do rodzica (może być NULL).
  *
  * \subsection IoC
  * W kontenerze dostępne są w zasadzie tylko metody setChildren, setModel, getModel i setWidget. getModel jest
@@ -137,6 +132,8 @@
  * \section Rysowanie
  * Section
  *
+ * \section Layout
+ * Tree, VBox, HBox, Expander
  */
 
 #include "Extractors.h"

@@ -26,12 +26,24 @@ class MouseMotionEvent : public MouseEvent {
 public:
 
         MouseMotionEvent () {}
-        MouseMotionEvent (const Geometry::Point &position, const Geometry::Point &movement, MouseButton b) : MouseEvent (position), movement (movement), button (button) {}
+        MouseMotionEvent (const Geometry::Point &position, const Geometry::Point &movement, unsigned int b) :
+                MouseEvent (position),
+                movement (movement),
+                buttons (b) {}
+
         virtual ~MouseMotionEvent () {}
 
-        MouseButton getButton () const { return button; }
-        void setButton (MouseButton button) { this->button = button; }
+        /**
+         * Maska bitowa aktualnie wciśniętych guzików. Należy ją porównywać
+         * ze stałymi z enum Event::MouseButton.
+         */
+        unsigned int getButtons () const { return buttons; }
+        void setButtons (unsigned int button) { this->buttons = button; }
 
+        /**
+         * Relatywny ruch kursora we współrzędnych device-coordinates. Jest to
+         * różnica między aktualną a poprzednią pozycją kursora.
+         */
         const Geometry::Point &getMovement () const { return movement; }
         void setMovement (const Geometry::Point &movement) { this->movement = movement; }
 
@@ -41,7 +53,7 @@ public:
 private:
 
         Geometry::Point movement;
-        MouseButton button;
+        unsigned int buttons;
 
 };
 

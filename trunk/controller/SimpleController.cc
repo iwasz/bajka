@@ -236,7 +236,12 @@ bool SimpleController::onEvent (Event::IEvent *event)
 
 bool SimpleController::onMouseMotion (Event::MouseMotionEvent *e)
 {
-//        std::cerr << "SimpleController::onMouseMotion : " << e->getPosition () << ", this=[" << this << "]" << std::endl;
+#if 0
+        std::cerr << "SimpleController::onMouseMotion : pos=" <<
+                        e->getPosition () << ", this=[" << this << "], mov=" <<
+                        e->getMovement () << ", btn=" << e->getButtons () << std::endl;
+#endif
+
         return true;
 }
 

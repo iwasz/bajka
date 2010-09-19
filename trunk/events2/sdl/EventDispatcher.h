@@ -41,9 +41,6 @@ public:
 
 /*------getters-setters-----------------------------------------------------*/
 
-//        Event::IObserver *getObserver () const { return observer; }
-//        _m (setObserver) void setObserver (Event::IObserver *o) { observer = o; }
-
         Event::ObserverVector const &getObservers () const { return observers; }
         _m (setObservers) void setObservers (Event::ObserverVector const &o) { observers = o; }
 
@@ -55,6 +52,8 @@ private:
         Event::KeyboardEvent *updateKeyboardEvent (SDL_Event *event);
         Event::MouseMotionEvent *updateMouseMotionEvent (SDL_Event *event);
         Event::MouseButtonEvent *updateMouseButtonEvent (SDL_Event *event);
+        Event::MouseButtonEvent *updateMouseButtonEventImpl (Event::MouseButtonEvent *output, SDL_Event *event);
+        Event::MouseButton translateMouseButton (SDL_Event *event);
 
 private:
 
@@ -66,7 +65,6 @@ private:
         Event::ButtonReleaseEvent buttonReleaseEvent;
         Event::QuitEvent quitEvent;
 
-//        Event::IObserver *observer;
         Event::ObserverVector observers;
         Ptr <Util::BajkaConfig> config;
 

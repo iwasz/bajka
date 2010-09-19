@@ -35,8 +35,8 @@ public:
 
 /*------IModelAware---------------------------------------------------------*/
 
-        _m (getModel) Ptr <Model::IModel> const &getModel () { return model; }
-        _m (setModel) void setModel (Ptr <Model::IModel> m);
+        _m (getModel) virtual Ptr <Model::IModel> const &getModel () { return model; }
+        _m (setModel) virtual void setModel (Ptr <Model::IModel> m);
 
         Model::IModelAware *getParentMAW () { return parent; }
         bool hasChildrenMAW () const { return hasChildren (); }
