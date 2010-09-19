@@ -49,30 +49,23 @@ void EventDispatcher::run ()
 
 void EventDispatcher::translate (SDL_Event *event)
 {
-//        if (!observer) {
-//                return;
-//        }
-
         // Run inherited and overloaded methods.
         if (event->type == SDL_MOUSEMOTION) {
                 for (Event::ObserverVector::iterator i = observers.begin (); i != observers.end (); ++i) {
                         (*i)->onEvent (updateMouseMotionEvent (event));
                 }
-//                observer->onEvent (updateMouseMotionEvent (event));
         }
 
         if (event->type == SDL_MOUSEBUTTONDOWN || event->type == SDL_MOUSEBUTTONUP) {
                 for (Event::ObserverVector::iterator i = observers.begin (); i != observers.end (); ++i) {
                         (*i)->onEvent (updateMouseButtonEvent (event));
                 }
-//                observer->onEvent (updateMouseButtonEvent (event));
         }
 
         if (event->type == SDL_KEYDOWN || event->type == SDL_KEYUP) {
                 for (Event::ObserverVector::iterator i = observers.begin (); i != observers.end (); ++i) {
                         (*i)->onEvent (updateKeyboardEvent (event));
                 }
-//                observer->onEvent (updateKeyboardEvent (event));
         }
 }
 
@@ -89,9 +82,7 @@ KeyboardEvent *EventDispatcher::updateKeyboardEvent (SDL_Event *event)
 
 MouseMotionEvent *EventDispatcher::updateMouseMotionEvent (SDL_Event *event)
 {
-        // TODO Implement!
-        MouseButton btn = static_cast <MouseButton> (event->motion.state & SDL_BUTTON (1));
-        mouseMotionEvent.setButton (btn);
+        mouseMotionEvent.setButtons ((unsigned int)event->motion.state);
         mouseMotionEvent.setPosition (
                         Geometry::Point (
                                         event->motion.x - resX2,
@@ -105,33 +96,54 @@ MouseMotionEvent *EventDispatcher::updateMouseMotionEvent (SDL_Event *event)
 
 MouseButtonEvent *EventDispatcher::updateMouseButtonEvent (SDL_Event *event)
 {
-        MouseButtonEvent::Press t = (event->button.type == SDL_MOUSEBUTTONDOWN) ? (MouseButtonEvent::DOWN) : (MouseButtonEvent::UP);
-        MouseButton btn;
+        return (event->button.type == SDL_MOUSEBUTTONDOWN) ?
+                        (updateMouseButtonEventImpl (&buttonPressEvent, event)) :
+                        (updateMouseButtonEventImpl (&buttonReleaseEvent, event));
+}
 
-        switch (event->button.button) {
-        case SDL_BUTTON_MIDDLE:
-                btn = CENTER;
-                break;
+/*--------------------------------------------------------------------------*/
 
-        case SDL_BUTTON_RIGHT:
-                btn = RIGHT;
-                break;
-
-        default:
-        case SDL_BUTTON_LEFT:
-                btn = LEFT;
-                break;
-
-        }
-
-//        buttonPressEvent.setPress (t);
-        buttonPressEvent.setButton (btn);
-        buttonPressEvent.setPosition (
+MouseButtonEvent *EventDispatcher::updateMouseButtonEventImpl (MouseButtonEvent *output, SDL_Event *event)
+{
+        output->setButton (translateMouseButton (event));
+        output->setPosition (
                         Geometry::Point (
                                         event->button.x - resX2,
                                         -event->button.y + resY2));
 
-        return &buttonPressEvent;
+        return output;
+}
+
+/*--------------------------------------------------------------------------*/
+
+MouseButton EventDispatcher::translateMouseButton (SDL_Event *event)
+{
+        switch (event->button.button) {
+        case SDL_BUTTON_MIDDLE:
+                return CENTER;
+
+        case SDL_BUTTON_RIGHT:
+                return RIGHT;
+
+        case 4:
+                return BUTTON4;
+
+        case 5:
+                return BUTTON5;
+
+        case 6:
+                return BUTTON6;
+
+        case 7:
+                return BUTTON7;
+
+        case 8:
+                return BUTTON8;
+
+        default:
+        case SDL_BUTTON_LEFT:
+                return LEFT;
+        }
 }
 
 } // nam

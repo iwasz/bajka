@@ -25,27 +25,29 @@ namespace Event {
 class MouseButtonEvent : public MouseEvent {
 public:
 
-        enum Press { DOWN, UP };
+        MouseButtonEvent () : button (static_cast <MouseButton> (0)) {}
+        MouseButtonEvent (MouseButton button, const Geometry::Point &position) :
+                MouseEvent (position),
+                button (button) {}
 
-        MouseButtonEvent () {}
-        MouseButtonEvent (Press type, MouseButton button, const Geometry::Point &position) : MouseEvent (position), press (type), button (button) {}
         virtual ~MouseButtonEvent () {}
 
-        Press getPress () const { return press; }
-        void setPress (Press t) { this->press = t; }
-
+        /**
+         * Wciśnięty guzik myszy. Wartość typu Event::MouseButton (należy porównywać
+         * ze zdefiniowanymi stałymi).
+         */
         MouseButton getButton () const { return button; }
         void setButton (MouseButton button) { this->button = button; }
 
 private:
 
-        Press press;
         MouseButton button;
 
 };
 
 /**
- *
+ * Event oznaczający wciśnięcie guzika myszy.
+ * \ingroup Events
  */
 struct ButtonPressEvent : public MouseButtonEvent {
         virtual ~ButtonPressEvent () {}
@@ -55,7 +57,8 @@ struct ButtonPressEvent : public MouseButtonEvent {
 };
 
 /**
- *
+ * Event oznaczający puszczenie guzika myszy.
+ * \ingroup Events
  */
 struct ButtonReleaseEvent : public MouseButtonEvent {
         virtual ~ButtonReleaseEvent () {}

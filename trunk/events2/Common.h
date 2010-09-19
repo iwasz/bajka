@@ -13,7 +13,6 @@
 
 namespace Event {
 
-enum MouseButton { LEFT, CENTER, RIGHT };
 
 } // nam
 

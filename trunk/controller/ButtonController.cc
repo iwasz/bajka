@@ -32,8 +32,8 @@ bool ButtonController::onMouseOut (Event::MouseMotionEvent *e)
 
 bool ButtonController::onButtonPress (Event::ButtonPressEvent *e)
 {
-        std::cerr << "--> " << __FILE__ << "," << __FUNCTION__ << " @ " << __LINE__ << " : " << "clicked" << std::endl;
         stateful->setCurrentWidget ("clicked");
+//        sender.emit ("/clicked");
         return true;
 }
 
