@@ -27,6 +27,7 @@
 #include "Image.h"
 #include "painting/Painting.h"
 #include "geometry/Geometry.h"
+#include "layout/Layout.h"
 
 namespace Model {
 

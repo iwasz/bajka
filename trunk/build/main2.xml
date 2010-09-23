@@ -2,92 +2,49 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
         "file:///home/iwasz/program/projects/tiliae/base/container/tiliae-container-1.0.dtd">
 
+<!--Ogólny schemat nazw : Ctr - kontroler, Wgt - widget, Mdl - model.-->
 <beans>
+
+<!-- +===================================================================================+ -->
+<!-- | Biblioteka beanów Bajki                                                           | -->
+<!-- +===================================================================================+ -->
+
+    <!-- Widget obrazka od razu z modelem. -->
+    <bean id="imageWgt" class="View::Image" abstract="true">
+        <property name="model" ref="model">
+            <bean id="model" class="Model::Image" scope="bean"/>
+        </property>
+    </bean>
 
     <!--Definicja obrazka. Jest tu M, V i C, gotowe do użycia. Z tej-->
     <!--definicji należy dziedziczyć (parent) i ustawiać model.path i-->
     <!--na przykłąd model.translatePont.-->
-    <bean id="image" class="SimpleController" init-method="init">
-        
-        <!--Model-->
-        <property name="model" ref="imageModel">
-            <bean id="imageModel" class="Model::Image" scope="bean">
-                <property name="path" value="../gfx/main02.png" />
-                <property name="move">
-                    <bean class="Point">
-                        <property name="x"><value type="double">-512.0</value></property>
-                        <property name="y"><value type="double">-512.0</value></property>
-                    </bean>
-                </property>
-            </bean>
-        </property>
-
+    <bean id="imageCtr" class="SimpleController" init-method="init" abstract="true">
+        <!--Model ustawia się z imageWgt -->
         <!--View-->
-        <property name="widget">
-            <bean class="View::Image">
-                <property name="model" ref="imageModel" />
-            </bean>
-        </property>
+        <property name="widget" ref="imageWgt"/>
+        
+        <!-- Domyślnie obrazek nie przyjmuje żadnych eventów -->
+        <property name="bitMask"><value type="unsigned int">0</value></property>
     </bean>
-
-
-
-    <!--Uwaga! Ustawiam property "widget.model", ale to jest inny-->
-    <!--obiekt niż "model". Kiedy się zaimplementuje scope bean, to-->
-    <!--będzie tylko jeden obiekt i ustawienie takie jak poniżej-->
-    <!--będzie OK. Teraz path będzie zmieniony tylko w kopii, którą-->
-    <!--posiada widget, a w kopii którą posiada kontroler jest stara-->
-    <!--ścieżka. TODO.-->
-    <bean id="background" parent="image" singleton="true">
-        <property name="bitMask"><value type="unsigned int">0</value></property>       
-        <property name="model.resizeW"><value type="double">1</value></property>
-        <property name="model.resizeH"><value type="double">1</value></property>
-    </bean>
-
-    <bean id="background2" parent="image" singleton="true">
-        <property name="model.path" value="../gfx/ralervegen.jpg" />
-<!--        <property name="model.resizeW"><value type="double">2</value></property>-->
-<!--        <property name="model.resizeH"><value type="double">2</value></property>-->
-    </bean>
-
-
 
 <!-- ===================================================================================== -->
 
-
-
-    <bean id="rect" class="SimpleController" init-method="init">
-
-        <!--Model-->
-        <property name="model">
-            <bean id="model" class="Model::Box" scope="bean">
-                <property name="x1"><value type="double">-50</value></property>
-                <property name="y1"><value type="double">-50</value></property>
-                <property name="x2"><value type="double">50</value></property>
-                <property name="y2"><value type="double">50</value></property>
-
-                <property name="rotate"><value type="double">0.7853981</value></property>
-
-                <property name="move">
-                    <bean class="Point">
-                        <property name="x"><value type="double">50</value></property>
-                        <property name="y"><value type="double">50</value></property>
-                    </bean>
-                </property>
-
-                <property name="resizeW"><value type="double">2</value></property>
-                <property name="resizeH"><value type="double">2</value></property>
-            </bean>
+    <!-- Widget prostokąta z modelem. -->
+    <bean id="rectWgt" class="Rectangle" abstract="true">
+        <property name="model" ref="model">
+            <bean id="model" class="Model::Box" scope="bean"/>
         </property>
-
+    </bean>
+    
+    <!-- Kontroler prostokąta z modelem. -->
+    <bean id="rectCtr" class="SimpleController" init-method="init" abstract="true">
+        <!--Model ustawia się z imageWgt -->
         <!--View-->
-        <property name="widget">
-            <bean class="Rectangle">
-                <property name="model" ref="model"/>
-            </bean>
-        </property>
-
-        <property name="bitMask"><value type="unsigned int">1</value></property>       
+        <property name="widget" ref="rectWgt"/>
+        
+        <!-- Domyślnie obrazek nie przyjmuje żadnych eventów -->
+        <property name="bitMask"><value type="unsigned int">0</value></property>
     </bean>
 
 
@@ -252,13 +209,28 @@
     
 <!-- ===================================================================================== -->
 
-
-
-    <bean id="imageWidget" class="View::Image" abstract="true">
-        <property name="model" ref="imageModel">
-            <bean id="imageModel" class="Model::Image" scope="bean"/>
-        </property>
+    <bean id="background" parent="imageCtr" singleton="true">
+    
+<!--                <property name="path" value="../gfx/main02.png" />-->
+<!--                <property name="move">-->
+<!--                    <bean class="Point">-->
+<!--                        <property name="x"><value type="double">-512.0</value></property>-->
+<!--                        <property name="y"><value type="double">-512.0</value></property>-->
+<!--                    </bean>-->
+<!--                </property>-->
+    
+        <property name="model.resizeW"><value type="double">1</value></property>
+        <property name="model.resizeH"><value type="double">1</value></property>
     </bean>
+
+    <bean id="background2" parent="imageCtr" singleton="true">
+        <property name="model.path" value="../gfx/ralervegen.jpg" />
+<!--        <property name="model.resizeW"><value type="double">2</value></property>-->
+<!--        <property name="model.resizeH"><value type="double">2</value></property>-->
+    </bean>
+
+
+
 
 
 
@@ -266,15 +238,15 @@
         <property name="widgets">
             <map class="StringWidgetMap">
                 <entry key="normal">
-                    <bean parent="imageWidget"/>
+                    <bean parent="imageWgt"/>
                 </entry>
 
                 <entry key="hover">
-                    <bean parent="imageWidget"/>
+                    <bean parent="imageWgt"/>
                 </entry>
 
                 <entry key="clicked">
-                    <bean parent="imageWidget"/>
+                    <bean parent="imageWgt"/>
                 </entry>
             </map>
         </property>
@@ -309,6 +281,98 @@
 
 <!-- ===================================================================================== -->
 
+
+    <!-- Test obrazka. -->
+    <bean id="pointer01" parent="imageCtr">    
+        <property name="model.path" value="../gfx/pointer128.png" />
+        <property name="model.move">
+            <bean class="Point">
+                <property name="x"><value type="double">-320.0</value></property>
+                <property name="y"><value type="double">-240.0</value></property>
+            </bean>
+        </property>
+        
+        <property name="model.rotate">
+                <value type="double">0.05</value>
+        </property>
+    </bean>
+
+    <bean id="pointer02" parent="imageCtr">    
+        <property name="model.path" value="../gfx/pointer64.png" />
+        <property name="model.move">
+            <bean class="Point">
+                <property name="x"><value type="double">-250.0</value></property>
+                <property name="y"><value type="double">-240.0</value></property>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="pointer03" parent="imageCtr">    
+        <property name="model.path" value="../gfx/pointer32.png" />
+        <property name="model.move">
+            <bean class="Point">
+                <property name="x"><value type="double">-200.0</value></property>
+                <property name="y"><value type="double">-240.0</value></property>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- Test prostokąta. Ma podany rozmiar, przesunięty o 5,5 i odchylony od pionu. -->
+    <bean id="myRect" parent="rectCtr">
+        <property name="model.x1"><value type="double">-319</value></property>
+        <property name="model.y1"><value type="double">-239</value></property>
+        <property name="model.x2"><value type="double">-220</value></property>
+        <property name="model.y2"><value type="double">240</value></property>        
+
+        <property name="model.rotate">
+                <value type="double">0.01</value>
+        </property>
+
+        <property name="model.move">
+            <bean class="Point">
+                <property name="x"><value type="double">5</value></property>
+                <property name="y"><value type="double">5</value></property>
+            </bean>
+        </property>
+    </bean>
+
+
+<!-- ===================================================================================== -->
+    
+    <bean id="tableWgt" class="EmptyWidget" abstract="true">
+        <property name="model">
+            <bean id="model" scope="bean" class="Table"/>
+        </property>
+    </bean>
+
+    <bean id="tableCtr" class="SimpleController" abstract="true" init-method="init">
+        <property name="model">
+            <bean id="model" scope="bean" class="Table"/>
+        </property>
+        
+        <property name="widget">
+            <bean class="EmptyWidget"/>
+        </property>
+    </bean>
+
+
+
+    <bean id="myTable" parent="tableCtr">
+        <property name="model.columnNo"><value type="int">2</value></property>
+        <property name="model.rowNo"><value type="int">2</value></property>
+
+        <property name="children">
+            <list class="ControllerCollection">
+                <ref bean="pointer02" />
+                <ref bean="pointer02" />
+                <ref bean="pointer02" />
+                <ref bean="pointer02" />
+            </list>
+        </property>
+    </bean>
+
+<!-- ===================================================================================== -->
+
     <bean id="screen" class="SimpleController" init-method="init" singleton="true">
         <property name="widget">
             <bean class="Screen"/>
@@ -318,9 +382,13 @@
             <list class="ControllerCollection">
 <!--                <ref bean="scrollController" /> -->
                 <ref bean="tmp1"/>
-                <ref bean="rect"/>
 <!--                <ref bean="scrollMargins"/>-->
                 <ref bean="myButton" />
+                <ref bean="pointer01" />
+                <ref bean="pointer02" />
+                <ref bean="pointer03" />
+                <ref bean="myRect" />
+                <ref bean="myTable" />
             </list>
         </property>
 

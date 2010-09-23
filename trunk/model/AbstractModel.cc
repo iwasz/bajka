@@ -23,7 +23,7 @@ using namespace std;
 
 /****************************************************************************/
 
-AbstractModel::AbstractModel ()
+AbstractModel::AbstractModel () : upToDate (false), alwaysUpdate (false)
 {
         //resetMatrix ();
         matrix.resetIdentity ();
@@ -115,6 +115,16 @@ bool AbstractModel::enclose (const Geometry::Point &p) const
         }
 
         return false;
+}
+
+/****************************************************************************/
+
+void AbstractModel::update ()
+{
+        if (!upToDate || alwaysUpdate) {
+            upToDate = true;
+            doUpdate ();
+        }
 }
 
 }

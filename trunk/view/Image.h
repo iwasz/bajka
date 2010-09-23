@@ -40,7 +40,7 @@ public:
         Image () : texName (0), texWidth (0), texHeight (0) {}
         virtual ~Image () {}
 
-        virtual void init ();
+        _m (init) virtual void init ();
 
         /// Do the drawing.
         virtual void doDraw ();
@@ -67,40 +67,6 @@ struct Exception {
 struct ImageException : public Exception {
 
 };
-
-/*##########################################################################*/
-
-/**
- * Rysuje prostokąt.
- * \ingroup View
- */
-class Rectangle : public AbstractWidget {
-public:
-        __c (void)
-        _b ("AbstractWidget")
-
-        virtual ~Rectangle () {}
-
-        virtual void setModel (Ptr <Model::IModel> model);
-        virtual void doDraw ();
-
-        void doTransform ();
-
-private:
-
-        Model::Box *box;
-        _e (Rectangle)
-};
-
-
-
-///**
-// *
-// */
-//class Layer : public Primitive {
-//public:
-//
-//};
 
 }
 

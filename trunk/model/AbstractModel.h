@@ -28,9 +28,9 @@ public:
 
 /*------affine-transformations----------------------------------------------*/
 
-        _m (setMove) virtual void setMove (const Geometry::Point &p);
-        _m (setRotate) virtual void setRotate (double r);
-        virtual void setResize (double w, double h);
+        _m (setMove)    virtual void setMove (const Geometry::Point &p);
+        _m (setRotate)  virtual void setRotate (double r);
+                        virtual void setResize (double w, double h);
         _m (setResizeW) virtual void setResizeW (double w) { setResize (w, 1); }
         _m (setResizeH) virtual void setResizeH (double h) { setResize (1, h); }
 
@@ -59,6 +59,29 @@ public:
         /// Pudełko o zerowym rozmiarze.
         virtual Geometry::Box const &getBoundingBox () const { static Geometry::Box b; return b; }
 
+/*--------------------------------------------------------------------------*/
+
+        /**
+         * Implementacja metody IModel::update. Ponieważ update jest wykonywana przez <b>każdym</b> uruchomieniem
+         * IController::draw, ta implementacja deleguje zadanie do metody AbstractModel::doUpdate i uruchamia
+         * ją za każdym razem lub tylko przy pierwszym wywołaniu. Zachowanie zależy od znaczników ustawianych za
+         * pomocą metod AbstractModel::getUpToDate i AbstractModel::getAlwaysUpdate.
+         */
+        void update ();
+
+        /**
+         * AbstractModel::update dleguje swoje zadanie wlaśnie do tej metody, przy czym uruchamia ją jeden raz
+         * lub za każdym razem, zależnie od konfiguracji.
+         */
+        virtual void doUpdate () {}
+
+        /// Czy update zostało wykonane przynajmniej 1 raz?
+        bool getUpToDate () const { return upToDate; }
+        /// Czy AbstractModel::doUpdate wykonywać za każdym razemkiedy uruchomione jest AbstractModel::update?
+        bool getAlwaysUpdate () const { return upToDate; }
+        /// Czy AbstractModel::doUpdate wykonywać za każdym razemkiedy uruchomione jest AbstractModel::update?
+        _m (setAlwaysUpdate) void setAlwaysUpdate (bool b) { alwaysUpdate = b; }
+
 protected:
 
         AbstractModel ();
@@ -72,6 +95,8 @@ private:
 
         mutable Geometry::AffineMatrix matrixStack;
         mutable Geometry::Point tmpPoint;
+        bool upToDate;
+        bool alwaysUpdate;
 
         _e (AbstractModel)
 };

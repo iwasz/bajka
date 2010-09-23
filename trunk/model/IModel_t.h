@@ -56,6 +56,8 @@ struct IModel :
         Geometry::AffineMatrix const &
         getMatrix () const = 0;
 
+        virtual Geometry::AffineMatrix const &updateMatrixStack () const = 0;
+
         virtual void setMove (const Geometry::Point &p) = 0;
         virtual void setRotate (double r) = 0;
         virtual void setResize (double w, double h) = 0;
@@ -83,8 +85,13 @@ struct IModel :
          */
         virtual Geometry::Box const &getBoundingBox () const = 0;
 
+/*--------------------------------------------------------------------------*/
 
-        virtual Geometry::AffineMatrix const &updateMatrixStack () const = 0;
+        /**
+         * Metod uruchamiana przez kontrolery (i ewentualnie przez widoki) przed
+         * każdym odmalowaniem danego kontrolera.
+         */
+        virtual void update () = 0;
 
 };
 
