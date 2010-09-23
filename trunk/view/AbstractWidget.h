@@ -49,27 +49,12 @@ public:
 
 private:
 
-        Ptr <Model::IModel> model;
         bool visible;
 
         _m (setModel)
         _m (getModel)
         _m (setChildren)
         _e (AbstractWidget)
-};
-
-/**
- * Nic nie rysuje (potrzebne w kontrolerze
- * do transformacji na wszystkich dzieciach).
- * \ingroup View
- */
-class EmptyWidget : public AbstractWidget {
-public:
-        __c (void)
-        _b ("AbstractWidget")
-        virtual ~EmptyWidget () {}
-        void doDraw () {}
-        _e (EmptyWidget)
 };
 
 }

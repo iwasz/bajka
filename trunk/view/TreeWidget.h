@@ -27,7 +27,7 @@ public:
         typedef WidgetIter iterator;
         typedef WidgetConstIter const_iterator;
 
-        TreeWidget () : children (), parent (), model (), owner () {}
+        TreeWidget () : model (), children (), parent (), owner () {}
         virtual ~TreeWidget () {}
 
 /*------IModelAware---------------------------------------------------------*/
@@ -98,11 +98,14 @@ private:
         WidgetOwnerConstType getOwner () const { return owner; }
         void setOwner (WidgetOwnerType o) { owner = o; }
 
+protected:
+
+        Ptr <Model::IModel> model;
+
 private:
 
         WidgetCollection children;
         WidgetParentType parent;
-        Ptr <Model::IModel> model;
         WidgetOwnerType owner;
 
 };

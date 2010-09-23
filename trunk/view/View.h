@@ -23,5 +23,7 @@
 #include "Image.h"
 #include "Screen.h"
 #include "PointSet.h"
+#include "EmptyWidget.h"
+#include "Rectangle.h"
 
 #	endif /* VIEW_H_ */

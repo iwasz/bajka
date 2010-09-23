@@ -136,13 +136,17 @@ bool SimpleController::ObserverHelper::onQuit (Event::QuitEvent *e)
 
 /*##########################################################################*/
 
+/**
+ * Uruchamia init widgetowi jeśli jest ustawiony. Ma to tą zaletę, że ten init
+ * wykonuje się po ustawioenu wszystkich pól <b>kontrolera</b>, a nie widgeta.
+ * Dzięki temu można na przykład ustawić kontrolerowi widget, potem zmienić w
+ * modelu na przykład ścieżkę do pliku, a na koniec wykonać ten oto init.
+ */
 void SimpleController::init ()
 {
         if (widget) {
                 widget->init ();
         }
-
-//        std::cerr << "this = " << this << std::endl;
 }
 
 /****************************************************************************/
@@ -157,6 +161,10 @@ void SimpleController::setModel (Ptr <Model::IModel> m)
 
 void SimpleController::draw ()
 {
+        if (model) {
+                model->update ();
+        }
+
         if (widget) {
                 widget->draw ();
         }

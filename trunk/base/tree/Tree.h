@@ -117,6 +117,14 @@
  * children
  * </bean>
  *
+ * \section MVC_Interakcje
+ *
+ * \subsection Rysowanie
+ * Co i jak się uruchamia kiedy rysujemy kontroler/widget (co się dzieje z dziećmi).
+ *
+ * \subsection Inicjowanie
+ * Co i w jakiej kolejności inicjowac, a czego nie.
+ *
  * \section Eventy
  * Section
  *
