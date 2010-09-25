@@ -35,14 +35,22 @@ public:
 
 /*------Rysowanie-----------------------------------------------------------*/
 
+        /// Wywouje doDraw, jeśli tylko visible jest true.
         void draw ();
 
+        /**
+         * Sprawdza visible == true i jeśli tak, to dokonuje transformacji na
+         * macierzy openGL.
+         */
         virtual void preDraw ();
-        virtual void postDraw ();
 
-        virtual void doTransform ();
-        virtual void doChildren ();
-        virtual void doDraw () = 0;
+        /**
+         * Sprawdza visible == true i jeśli tak, to zdejmuje transformacje na
+         * macierzy Open GL i przed tem wykonuje draw dla Dzieci tego widgeta,
+         * ale tylko dla tych, które są bezpośredniododane do niego, a nie tych,
+         * do których ma dostęp za pośrednictwem kontrolera.
+         */
+        virtual void postDraw ();
 
         virtual bool getVisible () const { return visible; }
         _m (setVisible) virtual void setVisible (bool v) { visible = v; }

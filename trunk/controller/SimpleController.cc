@@ -11,6 +11,7 @@
 #include "SimpleController.h"
 #include "IModel.h"
 #include "IWidget.h"
+#include "Commons.h"
 
 namespace Controller {
 using namespace Geometry;
@@ -161,12 +162,34 @@ void SimpleController::setModel (Ptr <Model::IModel> m)
 
 void SimpleController::draw ()
 {
+        preDraw ();
+        doDraw ();
+        std::for_each (begin (), end (), boost::mem_fn (&IController::draw));
+        postDraw ();
+}
+
+void SimpleController::preDraw ()
+{
+        if (widget) {
+                widget->preDraw ();
+        }
+}
+
+void SimpleController::doDraw ()
+{
         if (model) {
                 model->update ();
         }
 
         if (widget) {
                 widget->draw ();
+        }
+}
+
+void SimpleController::postDraw ()
+{
+        if (widget) {
+                widget->postDraw ();
         }
 }
 

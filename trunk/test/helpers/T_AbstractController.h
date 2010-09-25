@@ -25,6 +25,7 @@ public:
 
         void init () {}
         void draw () {}
+
         Ptr <Controller::IMapping> getMapping () {}
 
 /*--------------------------------------------------------------------------*/

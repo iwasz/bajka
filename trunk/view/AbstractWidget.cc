@@ -15,18 +15,8 @@
 #include "Commons.h"
 
 using std::for_each;
-//using boost::mem_fun;
-//using Util::convertPtr;
 
 namespace View {
-
-// Dla mem_fn - wrzucić do tiliae/Pointer.h
-// TODO dlaczego to kurwa nie działa, kiedy jest w Commons.h ?
-template <class T>
-T *get_pointer (Ptr <T> t)
-{
-        return t.get ();
-}
 
 void AbstractWidget::init ()
 {
@@ -37,29 +27,31 @@ void AbstractWidget::init ()
 
 void AbstractWidget::preDraw ()
 {
+        if (!visible) {
+                return;
+        }
+
         glPushMatrix ();
-}
 
-/****************************************************************************/
-
-void AbstractWidget::doTransform ()
-{
+#if 1
         if (model) {
                 glMultMatrixd (model->getMatrix ().data ().begin ());
         }
-}
-
-/****************************************************************************/
-
-void AbstractWidget::doChildren ()
-{
-        for_each (begin (), end (), boost::mem_fn (&IWidget::draw));
+#endif
 }
 
 /****************************************************************************/
 
 void AbstractWidget::postDraw ()
 {
+        if (!visible) {
+                return;
+        }
+
+        if (ownsChildren ()) {
+                for_each (begin (), end (), boost::mem_fn (&IWidget::draw));
+        }
+
         glPopMatrix ();
 }
 
@@ -72,11 +64,7 @@ void AbstractWidget::draw ()
                 return;
         }
 
-        preDraw ();
-        doTransform ();
         doDraw ();
-        doChildren ();
-        postDraw ();
 }
 
 }

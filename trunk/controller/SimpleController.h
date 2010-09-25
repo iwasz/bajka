@@ -91,11 +91,19 @@ public:
         virtual void init ();
 
         /**
-         * Zwyczajnie deleguje rysowanie do widgetu. Implementacja tej metody wygląda
-         * poprostu jak widget->draw (); Rysowaniem swoich dzieci zajmuje się już sam
-         * widget
+         * Metoda wyświetlająca ten kontroler, czyli metoda wywoływana w
+         * głownej pętli programu. Wyświetla też wszystkie child->kontorlery.
+         *
+         * Wykonuje SimpleController::preDraw, SimpleController::doDraw,
+         * SimpleController::draw na wszystkich dzieciach i na koniec
+         * SimpleController::postDraw.
          */
         virtual void draw ();
+
+        /// Wykonuje preDraw na wid
+        virtual void preDraw ();
+        virtual void doDraw ();
+        virtual void postDraw ();
 
         bool getRender () const { return render; }
         void setRender (bool r) { render = r; }
