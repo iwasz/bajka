@@ -104,6 +104,9 @@ struct ITreeWidget : public Model::IModelAware {
 
         /// Czy są dzieci
         virtual bool hasChildren () const = 0;
+
+        /// true jeśli ma dzieci dodane bezpośrednio do widgeta, a nie do kontrolera.
+        virtual bool ownsChildren () const = 0;
 };
 
 } // namespace

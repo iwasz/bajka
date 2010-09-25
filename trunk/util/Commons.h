@@ -73,4 +73,17 @@ convertPtr (Op const &o)
 
 } // namespace
 
+namespace std {
+namespace tr1 {
+
+// Dla mem_fn - wrzucić do tiliae/Pointer.h
+template <class T>
+T *get_pointer (Ptr <T> t)
+{
+        return t.get ();
+}
+
+} // tr1
+} // std
+
 #	endif /* UTILS_H_ */

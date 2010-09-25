@@ -90,6 +90,9 @@ public:
         /// Czy ma dzieci.
         bool hasChildren () const;
 
+        /// true jeśli ma dzieci dodane bezpośrednio do widgeta, a nie do kontrolera.
+        bool ownsChildren () const { return !children.empty (); }
+
 private:
 
 /*------owner / controller / widget-----------------------------------------*/

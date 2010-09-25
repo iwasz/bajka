@@ -35,6 +35,7 @@ struct IView : public virtual Core::Object {
          */
         virtual void init () = 0;
         virtual void draw () = 0;
+        virtual void doDraw () = 0;// Zamiast draw
 
         virtual void preDraw () = 0;
         virtual void postDraw () = 0;
