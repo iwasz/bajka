@@ -30,7 +30,7 @@ namespace Model {
  */
 class Shape : public AbstractModel {
 public:
-        __c (void)
+        __d
         _b ("AbstractModel")
 
         virtual ~Shape () {}
@@ -38,10 +38,16 @@ public:
         virtual double getWidth () const { return getBoundingBox ().getX2 () - getBoundingBox ().getX1 (); }
         virtual double getHeight () const { return getBoundingBox ().getY2 () - getBoundingBox ().getY1 (); }
 
-        virtual bool enclose (const Geometry::Point &) const;
-
         virtual Geometry::Point const &screenToModel (Geometry::Point const &) const;
         virtual Geometry::Point const &modelToScreen (Geometry::Point const &) const;
+
+        /**
+         * Najpierw sprawdza, czy jakieś z dzieci nie zwóci true, a jeśli nie, to
+         * sprawdza, czy p jest wewnątrz bounding box.
+         */
+        virtual bool enclose (const Geometry::Point &p) const;
+
+
 //        virtual Geometry::Box const &getBoundingBox () const { return boundingBox; }
 //        virtual void setBoundingBox (Geometry::Box const &b) { boundingBox = b; }
 //

@@ -28,6 +28,9 @@ public:
 
 /*------affine-transformations----------------------------------------------*/
 
+        /// \name Przekształcenia / układy współrzędznych
+        //\{
+
         _m (setMove)    virtual void setMove (const Geometry::Point &p);
         _m (setRotate)  virtual void setRotate (double r);
                         virtual void setResize (double w, double h);
@@ -43,25 +46,12 @@ public:
         // TODO To do zastanowienia.
         Geometry::AffineMatrix const &updateMatrixStack () const;
 
-        /// Zwraca 0. AbstractModel sam w sobie ma wielkość punktu.
-        virtual double getWidth () const { return 0.0; }
-
-        /// Zwraca 0. AbstractModel sam w sobie ma wielkość punktu.
-        virtual double getHeight () const { return 0.0; }
-        virtual void setWidth (double d) {}
-        virtual void setHeight (double d) {}
-
-        /**
-         * AbstractModel sam w sobie ma wielkość punktu, więc nigdy nic nie jest w jego środku, ale
-         * deleguje jeszcze sprawdzenie do swoich dzieci. Jeżeli ktorekolwiek z nich zwróci prawdę,
-         * to ta metoda także zwrac prawdę.
-         */
-        virtual bool enclose (const Geometry::Point &) const;
-
-        /// Pudełko o zerowym rozmiarze.
-        virtual Geometry::Box const &getBoundingBox () const { static Geometry::Box b; return b; }
+        //\}
 
 /*--------------------------------------------------------------------------*/
+
+        /// \name Update i przyległości
+        //\{
 
         /**
          * Implementacja metody IModel::update. Ponieważ update jest wykonywana przez <b>każdym</b> uruchomieniem
@@ -83,6 +73,8 @@ public:
         bool getAlwaysUpdate () const { return upToDate; }
         /// Czy AbstractModel::doUpdate wykonywać za każdym razemkiedy uruchomione jest AbstractModel::update?
         _m (setAlwaysUpdate) void setAlwaysUpdate (bool b) { alwaysUpdate = b; }
+
+        //\}
 
 protected:
 
@@ -108,10 +100,35 @@ private:
  * pozycji w przesytrzeni - on tylko umożliwia transformacje swoich dzieci, czyli obrót
  * całości, przesunięcie o jakiś czas w lewo/prawo.
  *
- * PS, to czy nie ma pozycji, czy ma być, to jest do ustalenia - bo ja cały czas nie wiem!
+ * Nie ma kształtu, ale ma środek układu współrzędnych. To jest potrzebne do obracania
+ * i rozmieszczania dzieci.
  */
 struct Shapeless : public AbstractModel {
         __c (void)
+        _b ("AbstractModel")
+
+        virtual ~Shapeless () {}
+
+        /// Zwraca 0. AbstractModel sam w sobie ma wielkość punktu.
+        virtual double getWidth () const { return 0.0; }
+        /// Zwraca 0. AbstractModel sam w sobie ma wielkość punktu.
+        virtual double getHeight () const { return 0.0; }
+        /// Pusta operacja
+        virtual void setWidth (double d) {}
+        /// Pusta operacja
+        virtual void setHeight (double d) {}
+
+        virtual bool enclose (const Geometry::Point &p) const { return false; }
+
+        /// Pudełko o zerowym rozmiarze.
+        virtual Geometry::Box const &getBoundingBox () const { static Geometry::Box b; return b; }
+
+        Geometry::Point const &getOrigin () const { return origin; }
+        void setOrigin (Geometry::Point const &p) { origin = p; }
+
+private:
+
+        Geometry::Point origin;
         _e (Shapeless)
 };
 

@@ -60,6 +60,9 @@ struct IModel :
 
 /*------przekształcenia-----------------------------------------------------*/
 
+        /// \name Przekształcenia / układy współrzędznych
+        //\{
+
         /**
          * Returns affine transformation matrix for this object.
          */
@@ -78,7 +81,12 @@ struct IModel :
         virtual Geometry::Point const &screenToModel (Geometry::Point const &) const = 0;
         virtual Geometry::Point const &modelToScreen (Geometry::Point const &) const = 0;
 
+        //\}
+
 /*------kształt-------------------------------------------------------------*/
+
+        /// \name Kształt / pozycja
+        //\{
 
         /**
          * Sprawdza, czy punkt znajduje się w środku danego modelu.
@@ -87,16 +95,29 @@ struct IModel :
         //virtual bool enclose (const Geometry::Box &p) const = 0;
         // ...
 
+        /**
+         * Zwraca boundingBox w układzie współrzędnych swojego rodzica (?).
+         * Box ten jest zwracany bez transformowania go za pomocą macierzy.
+         */
+        virtual Geometry::Box const &getBoundingBox () const = 0;
+
         virtual double getWidth () const = 0;
         virtual void setWidth (double) = 0;
         virtual double getHeight () const = 0;
         virtual void setHeight (double) = 0;
 
         /**
-         * Zwraca boundingBox w układzie współrzędnych swojego rodzica.
-         * @return
+         * Każdy model ma swój środek. Stanowi on :
+         * - Środek układu współrzędnych dla ewentualnych dzieci tego modelu.
+         * - Środek obrotu (za pomocą setRotate).
+         * - Środek skalowania (za pomocą setResize).
+         * Punkt ten jest zwracany bez transformowania go za pomocą macierzy.
+         * Ustawianie tego punktu jest sposobem na bezwzględne przesunięcie.
          */
-        virtual Geometry::Box const &getBoundingBox () const = 0;
+        virtual Geometry::Point const &getOrigin () const = 0;
+        virtual void setOrigin (Geometry::Point const &) = 0;
+
+        //\}
 
 /*--------------------------------------------------------------------------*/
 
