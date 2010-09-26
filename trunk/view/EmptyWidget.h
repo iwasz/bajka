@@ -9,6 +9,8 @@
 #ifndef EMPTYWIDGET_H_
 #define EMPTYWIDGET_H_
 
+#include "AbstractWidget.h"
+
 namespace View {
 
 /**

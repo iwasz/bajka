@@ -6,7 +6,8 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include <Foreach.h>
+#include <algorithm>
+#include <numeric>
 
 #include "Table.h"
 #include "geometry/Point.h"
@@ -14,102 +15,195 @@
 
 namespace Model {
 using namespace Geometry;
+using namespace std;
 
 /****************************************************************************/
 
 void Table::doUpdate ()
 {
-#if 0
         if (!rowNo || !columnNo) {
                 return;
         }
 
-        double x = 0.0;
-        double y = 0.0;
+        // Największa szerokość widgeta spośród wszystkich w tabeli.
+        double maxCellWidthPerTable = 0.0, maxCellHeightPerTable = 0.0;
+        // Największa wysokośc widgeta per wiersz.
+        double maxCellHeightPerRow[rowNo];
+        // Najwięsza szerokość widgeta per kolumna.
+        double maxCellWidthPerCol[columnNo];
 
-        // Oblicz początkową wysokość.
-        if (rowNo > 1) {
-                for (int r = 1; r < rowNo; r++) {
-                        y += table[r][0]->getHeight ();
-                }
-        }
-        std::cerr << "-----" << std::endl;
+        // Szerokość i wysokość tabeli jeśli kolumny mają być ściśnięte (nie są w jednej linii).
+        double tableWShrinked = 0.0, tableHShrinked = 0.0;
+        // Szerokość i wysokość całej tabeli jeśli kolumny mają być rozciągnięte (tak, że faktycznie towrzą kolumny w jednej linii).
+        double expRowW = 0.0, expColH = 0.0;
 
-        // Ustawiaj widgety.
-        for (int r = 0; r < rowNo; r++) {
+        // Aktualny wiersz i aktualna kolumna.
+        int curR = 0;
+        int curC = 0;
 
-                if (r > 0) {
-                        y -= table[r][0]->getHeight ();
-                }
+        int cnt = 0;
+        int elems = columnNo * rowNo;
+        double curRowW = 0;
 
-                for (int c = 0; c < columnNo; c++) {
-                        Ptr <Model::AbstractModel> it = table[r][c];
-                        it->setMove (Geometry::Point (x, y));
-                        std::cerr << Geometry::Point (x, y) << std::endl;
-                        x += it->getWidth ();
+        // Teraz ustalamy rożne warianty szerokości i wysokości tabeli rozciągnie się jeśli dzieci się nie mieszczą.
+        // Dzieci moze być więcej niż kolumn * wierszy. Nadmiarowych nie bierzemy pod uwagę.
+        for (iterator i = begin (); i != end () && cnt < elems; ++i, ++cnt) {
 
-                        if (c == columnNo - 1) {
-                                x = 0.0;
+                // Ogólnie największa szerokość/wysokość
+                maxCellWidthPerTable = max ((*i)->getWidth (), maxCellWidthPerTable);
+                maxCellHeightPerTable = max ((*i)->getHeight (), maxCellHeightPerTable);
+
+                // Największa szerokośc/wysokoś per wiersz/kolumna.
+                maxCellHeightPerRow[curR] = max ((*i)->getHeight (), maxCellHeightPerRow[curR]);
+                maxCellWidthPerCol[curC] = max ((*i)->getWidth (), maxCellWidthPerCol[curC]);
+
+                curRowW += (*i)->getWidth ();
+
+                // Zwiększ aktualny indeks wiersza i kolumny. Idź wierszami.
+                if (++curC >= columnNo) {
+
+                        // Przejście do następnego wiersza.
+                        curC = 0;
+                        tableWShrinked = max (curRowW, tableWShrinked);
+                        curRowW = 0;
+                        tableHShrinked += maxCellHeightPerRow[curR];
+                        expRowW += maxCellWidthPerTable;
+
+                        if (++curR >= rowNo) {
+                                break;
                         }
                 }
         }
-#endif
+
+        expColH = tableHShrinked;
+
+        double tableH;
+        double tableW;
+
+        if (colWidth == NONE) {
+                tableW = max (getWidth (), tableWShrinked);
+        }
+        else if (colWidth == WIDEST_CELL_IN_COL) {
+                tableW = max (getWidth (), accumulate (maxCellWidthPerCol, maxCellWidthPerCol + columnNo, 0.0));
+        }
+        else if (colWidth == WIDEST_CELL_IN_TABLE || colWidth == EXPAND_COL) {
+                tableW = max (getWidth (), maxCellWidthPerTable * columnNo);
+        }
+
+        if (rowHeight == HIGHEST_CELL_IN_ROW) {
+                tableH = max (getHeight (), tableHShrinked);
+        }
+        else if (rowHeight == HIGHEST_CELL_IN_TABLE || rowHeight == EXPAND_ROW) {
+                tableH = max (getHeight (), maxCellHeightPerTable * rowNo);
+        }
+
+        setWidth (tableW);
+        setHeight (tableH);
+
+        // Szerokość i wysokośc kolumn gdy robimy expand.
+        double expRowH = tableH / rowNo;
+        double expColW = tableW / columnNo;
+
+        // W tym miejscu mamy już obliczoną wysokość/szerokość tabeli na 3 rózne sposoby. Wiemy z którego miejsca zacząć rysować.
+
+        curC = curR = 0;
+        double cellH = getCellH (maxCellHeightPerRow[curR], maxCellHeightPerTable, expRowH);
+
+        // Początkowe x, y ustawione na górny lewy róg
+        double x = tableH - cellH;
+        double y = 0.0;
+
 /*--------------------------------------------------------------------------*/
-        std::cerr << "1" << std::endl;
-
-        if (!rowNo || !columnNo) {
-                return;
-        }
-
-        std::cerr << "2" << std::endl;
-
+#if 0
         for (iterator i = begin (); i != end (); ++i) {
-                std::cerr << "child" << std::endl;
-        }
 
-        std::cerr << "3" << std::endl;
+                cellW = getCellW (i->getWidth (), maxCellWidthPerCol[curC], maxCellWidthPerTable, expColW);
+
+
+                // Jeśli jest ustawione expand, to trzeba też rozciągnąć widgety do rozmiaru komórek.
+                if (hAlign == EXPAND) {
+                        i->setWidth (cellW);
+                }
+
+                if (vAlign == EXPAND) {
+                        i->setHeight (cellH);
+                }
+
+                Point p;
+
+                if (hAlign == LEFT || hAlign == EXPAND) {
+                        p->setX (x);
+                }
+                else if (hAlign == RIGHT) {
+                        p->setX (x + (cellH - i->getWidth ()));
+                }
+                else { // CENTER
+                        p->setX (x + (cellH - i->getWidth ()) / 2.0);
+                }
+
+                if (vAlign == BOTTOM || vAlign == EXPAND) {
+                        p->setY (y);
+                }
+                else if (vAlign == TOP) {
+                        p->setY (y + (cellH - i->getHeight ()));
+                }
+                else { // CENTER
+                        p->setY (y + (cellH - i->getHeight ()) / 2.0);
+                }
+
+                i->setMove (p);
+
+                y += cellW;
+
+                // Zwiększ aktualny indeks wiersza i kolumny. Idź wierszami.
+                if (++curC >= colNum) {
+                        curC = 0;
+
+                        if (++curR >= rowNum) {
+                                break;
+                        }
+
+                        cellH = getCellH (maxCellHeightPerRow[curR], maxCellHeightPerTable, expRowH);
+                        y = 0;
+                        x -= cellH;
+                }
+        }
+#endif
 }
 
 /****************************************************************************/
 
-//void Table::setChildren (const ControllerList &list)
-//{
-//        SimpleController::setChildren (ControllerList ());
-//
-//        addChildren (list);
-//}
-//
-///****************************************************************************/
-//
-//void Table::addChildren (const ControllerList &list)
-//{
-//        foreach (Ptr <IController> child, list) {
-//                addChild (child);
-//        }
-//}
+// Oblicz wysokość aktualnej komórki.
+double Table::getCellH (double highestInRow, double highestInTable, double expand)
+{
+        if (rowHeight == HIGHEST_CELL_IN_ROW) {
+                return highestInRow;
+        }
+        else if (rowHeight == HIGHEST_CELL_IN_TABLE) {
+                return highestInTable;
+        }
+        else { // EXPAND
+                return expand;
+        }
+}
 
 /****************************************************************************/
 
-//void Table::addChild (Ptr <IController> widget)
-//{
-//        SimpleController::addChild (widget);
-//
-//        Ptr <Model::IModel> mod = widget->getModel ();
-//        Ptr <Model::AbstractModel> item = dynamic_pointer_cast <Model::AbstractModel> (mod);
-//
-//        assert (item);
-//
-//        if (curRow < rowNo && curCol < columnNo) {
-//                table[curRow][curCol] = item;
-//        }
-//
-//        if (curCol + 1 >= columnNo) {
-//                curCol = 0;
-//                 curRow++;
-//        }
-//        else {
-//                curCol++;
-//        }
-//}
+// Oblicz szerokośc aktualnej komórki.
+double Table::getCellW (double widgetWidth, double widestInCol, double widestInTable, double expand)
+{
+        if (colWidth == NONE) {
+                return widgetWidth;
+        }
+        else if (colWidth == WIDEST_CELL_IN_COL) {
+                return widestInCol;
+        }
+        else if (colWidth == WIDEST_CELL_IN_TABLE) {
+                return widestInTable;
+        }
+        else { // EXPAND
+                return expand;
+        }
+}
 
 } // namespace
