@@ -45,8 +45,6 @@ namespace Model {
  * - Kształt.
  * - update
  *
- * TODO Dla różnych modeli te całe grupy mają sens lub nie : w szczególności są modele, które nie
- * mają kształtu. Trzeba to ROZDZIELIĆ.
  * TODO Układy współrzędnych, oraz środek ukłądu współrzędnych dla widgeta - to jest skoplikowane,
  * więc trzeba się upewnić, że to jest OK i jest logiczne, a potem to ładnie udokumentować i narysować.
  * TODO Metody procentowe dałbym do IModel - takzeby każdy widget mógł być resolution independent.
@@ -97,7 +95,6 @@ struct IModel :
 
         /**
          * Zwraca boundingBox w układzie współrzędnych swojego rodzica (?).
-         * Box ten jest zwracany bez transformowania go za pomocą macierzy.
          */
         virtual Geometry::Box const &getBoundingBox () const = 0;
 
