@@ -20,10 +20,10 @@ namespace Model {
  * Model, który implementuje paralaksę.
  * \ingroup Model
  */
-class ParalaxModel : public AbstractModel {
+class ParalaxModel : public Shapeless {
 public:
         __c (void)
-        _b ("AbstractModel")
+        _b ("Shapeless")
 
         virtual ~ParalaxModel () {}
         virtual void setMove (const Geometry::Point &p);

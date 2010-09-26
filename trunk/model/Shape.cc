@@ -11,14 +11,21 @@
 
 namespace Model {
 
+/****************************************************************************/
+
 bool Shape::enclose (const Geometry::Point &p) const
 {
+        for (AbstractModel::const_iterator i = begin (); i != end (); ++i) {
+                if ((*i)->enclose (p)) {
+                        return true;
+                }
+        }
+
         Geometry::Box tmp = getBoundingBox ();
         tmp.setUR (tmp.getUR () - tmp.getLL ());
         tmp.setLL (Geometry::Point (0, 0));
 
-        //std::cerr << "Shape::enclose p=(" << p << "), boundingBox=(" << getBoundingBox() << "), [" << boost::geometry::within (p, tmp) << "][" << AbstractModel::enclose (p) << "]" << std::endl;
-        return boost::geometry::within (p, tmp) || AbstractModel::enclose (p);
+        return boost::geometry::within (p, tmp);
 }
 
 /****************************************************************************/

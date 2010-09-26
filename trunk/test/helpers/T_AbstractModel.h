@@ -9,12 +9,12 @@
 #ifndef T_ABSTRACTMODEL_H_
 #define T_ABSTRACTMODEL_H_
 
-#include "../../model/AbstractModel.h"
+#include "../../model/Box.h"
 
 /**
  *
  */
-class T_AbstractModel : public Model::AbstractModel {
+class T_AbstractModel : public Model::Box {
 public:
 
         T_AbstractModel (std::string const &s) : name (s) {}

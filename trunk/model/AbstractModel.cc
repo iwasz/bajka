@@ -101,24 +101,6 @@ Geometry::Point const &AbstractModel::modelToScreen (Geometry::Point const &p) c
 
 /****************************************************************************/
 
-bool AbstractModel::enclose (const Geometry::Point &p) const
-{
-//        std::cerr << "Shape::enclose p=(" << p << "), boundingBox=(" << getBoundingBox() << "), [" << std::endl;
-
-//        TODO w ramach nauki zrobić algorytmem.
-//        return find_if (begin (), end (), convertPtr (bind2nd (mem_fun (&IModel::enclose), p)))
-
-        for (AbstractModel::const_iterator i = begin (); i != end (); ++i) {
-                if ((*i)->enclose (p)) {
-                        return true;
-                }
-        }
-
-        return false;
-}
-
-/****************************************************************************/
-
 void AbstractModel::update ()
 {
         if (!upToDate || alwaysUpdate) {
