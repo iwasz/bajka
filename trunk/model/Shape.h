@@ -22,6 +22,10 @@ namespace Model {
  * TODO enclose zawsze tutaj zwróci false. Czemu w takim razie instancjonuję
  * to klasę w main2.xml?
  *
+ * TODO Zastanowić się nad strukturą dziedziczenia w modelu - czy ten shape
+ * jest napewno OK? Trochę zamęt jest. On powinien być abstrakcyjny ten shape (absttract
+ * model też i nie powinien mieć pustych metody, tylko pure virtual i zeby one były zdefiniowane
+ * w klasach konkretnych i nie jako puste, ale żeby robiły coś sensownego).
  * \ingroup Model
  */
 class Shape : public AbstractModel {

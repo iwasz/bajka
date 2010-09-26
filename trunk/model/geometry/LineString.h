@@ -20,6 +20,7 @@ namespace Geometry {
  * LineString is compatible with boost::geometry::line_string. It represents
  * opened sequence of line segments. It can be used in Tilae.Container using
  * <list class="LineString"> tag.
+ * \ingroup Geometry
  */
 class LineString : public Reflection::Vector <Point> {
 public:

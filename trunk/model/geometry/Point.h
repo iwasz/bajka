@@ -25,6 +25,7 @@ namespace Geometry {
 
 /**
  * Punkt.
+ * \ingroup Geometry
  */
 class Point : public Core::IToStringEnabled {
 public:
@@ -85,7 +86,14 @@ private:
         _e (Point)
 };
 
+/**
+ * Wyrzucanie pinktu do strumienia.
+ * \ingroup Geometry
+ */
+extern std::ostream &operator<< (std::ostream &o, Geometry::Point const &p);
+
 } // namespace
+
 
 /*
  * Can't pass 'Geometry::Point' to BOOST_GEOMETRY_REGISTER_POINT_2D_GET_SET (:: chars confuse

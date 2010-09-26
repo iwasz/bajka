@@ -299,12 +299,12 @@
 
     <bean id="pointer02" parent="imageCtr">    
         <property name="model.path" value="../gfx/pointer64.png" />
-        <property name="model.move">
-            <bean class="Point">
-                <property name="x"><value type="double">-250.0</value></property>
-                <property name="y"><value type="double">-240.0</value></property>
-            </bean>
-        </property>
+<!--        <property name="model.move">-->
+<!--            <bean class="Point">-->
+<!--                <property name="x"><value type="double">-250.0</value></property>-->
+<!--                <property name="y"><value type="double">-240.0</value></property>-->
+<!--            </bean>-->
+<!--        </property>-->
     </bean>
 
     <bean id="pointer03" parent="imageCtr">    
@@ -347,11 +347,13 @@
 
     <bean id="tableCtr" class="SimpleController" abstract="true" init-method="init">
         <property name="model">
-            <bean id="model" scope="bean" class="Table"/>
+            <bean class="Table"/>
         </property>
         
         <property name="widget">
-            <bean class="EmptyWidget"/>
+            <!-- Dzięki temu widać obrys tabeli -->
+            <bean class="Rectangle"/>
+<!--            <bean class="EmptyWidget"/>-->
         </property>
     </bean>
 
@@ -360,6 +362,9 @@
     <bean id="myTable" parent="tableCtr">
         <property name="model.columnNo"><value type="int">2</value></property>
         <property name="model.rowNo"><value type="int">2</value></property>
+<!--        <property name="model.rotate">-->
+<!--                <value type="double">0.7</value>-->
+<!--        </property>-->
 
         <property name="children">
             <list class="ControllerCollection">
@@ -367,6 +372,26 @@
                 <ref bean="pointer02" />
                 <ref bean="pointer02" />
                 <ref bean="pointer02" />
+            </list>
+        </property>
+    </bean>
+
+
+    <bean id="layerCtr" class="SimpleController" init-method="init" abstract="true">
+        <property name="model">
+            <bean class="Shapeless"/>
+        </property>
+    
+        <property name="widget">
+            <bean class="EmptyWidget"/>
+        </property>
+    </bean>
+
+    <bean id="myLayer" parent="layerCtr">
+            <property name="children">
+            <list class="ControllerCollection">
+                <ref bean="pointer01" />
+                <ref bean="pointer03" />
             </list>
         </property>
     </bean>
@@ -384,11 +409,9 @@
                 <ref bean="tmp1"/>
 <!--                <ref bean="scrollMargins"/>-->
                 <ref bean="myButton" />
-                <ref bean="pointer01" />
-                <ref bean="pointer02" />
-                <ref bean="pointer03" />
                 <ref bean="myRect" />
                 <ref bean="myTable" />
+                <ref bean="myLayer" />
             </list>
         </property>
 
