@@ -26,6 +26,5 @@
 
 #include "IController.h"
 #include "SimpleController.h"
-#include "Table.h"
 
-#	endif /* CONTROLLER_H_ */
+#endif /* CONTROLLER_H_ */
