@@ -48,6 +48,8 @@ public:
 
         /// Zwraca 0. AbstractModel sam w sobie ma wielkość punktu.
         virtual double getHeight () const { return 0.0; }
+        virtual void setWidth (double d) {}
+        virtual void setHeight (double d) {}
 
         /**
          * AbstractModel sam w sobie ma wielkość punktu, więc nigdy nic nie jest w jego środku, ale
@@ -99,6 +101,18 @@ private:
         bool alwaysUpdate;
 
         _e (AbstractModel)
+};
+
+/**
+ * To jest propozycja - chodzi o to, że to jest model, który nie ma kształtu, ani nawet
+ * pozycji w przesytrzeni - on tylko umożliwia transformacje swoich dzieci, czyli obrót
+ * całości, przesunięcie o jakiś czas w lewo/prawo.
+ *
+ * PS, to czy nie ma pozycji, czy ma być, to jest do ustalenia - bo ja cały czas nie wiem!
+ */
+struct Shapeless : public AbstractModel {
+        __c (void)
+        _e (Shapeless)
 };
 
 } // namespace

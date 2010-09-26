@@ -39,6 +39,17 @@ namespace Model {
  * modele można zagnieżdżać i każdy ma macierz transformacji. Z tego wynika, że model na
  * samym dole tej chierarchii (ostatnie dziecko) ma transformację skłądającą się z
  * przemnożonych macierzy swoich rodziców i swojej.
+ *
+ * Zawiera grupy metod :
+ * - Przekształcenia / układ współrzędnych.
+ * - Kształt.
+ * - update
+ *
+ * TODO Dla różnych modeli te całe grupy mają sens lub nie : w szczególności są modele, które nie
+ * mają kształtu. Trzeba to ROZDZIELIĆ.
+ * TODO Układy współrzędnych, oraz środek ukłądu współrzędnych dla widgeta - to jest skoplikowane,
+ * więc trzeba się upewnić, że to jest OK i jest logiczne, a potem to ładnie udokumentować i narysować.
+ * TODO Metody procentowe dałbym do IModel - takzeby każdy widget mógł być resolution independent.
  * \ingroup Model
  */
 struct IModel :
@@ -77,7 +88,9 @@ struct IModel :
         // ...
 
         virtual double getWidth () const = 0;
+        virtual void setWidth (double) = 0;
         virtual double getHeight () const = 0;
+        virtual void setHeight (double) = 0;
 
         /**
          * Zwraca boundingBox w układzie współrzędnych swojego rodzica.

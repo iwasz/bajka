@@ -21,6 +21,7 @@ namespace Geometry {
 
 /**
  * Affine matrix type optimised to use with OpenGL.
+ * \ingroup Geometry
  */
 /*
  * Tu jest podany parametr szablonowy column_major, który mówi o ustawieniu
@@ -29,7 +30,8 @@ namespace Geometry {
 typedef boost::numeric::ublas::matrix <double, boost::numeric::ublas::column_major> AffineMatrixType;
 
 /**
- *
+ * Affine matrix type optimised to use with OpenGL.
+ * \ingroup Geometry
  */
 class AffineMatrix : public AffineMatrixType, public Core::IToStringEnabled {
 public:

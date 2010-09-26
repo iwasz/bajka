@@ -12,8 +12,17 @@
 
 #include "Point.h"
 
+
+/****************************************************************************/
+
 namespace Geometry {
 using namespace boost::geometry;
+
+std::ostream &operator<< (std::ostream &o, Geometry::Point const &p)
+{
+        o << "Point (" << p.getX () << ", " << p.getY () << ")";
+        return o;
+}
 
 /****************************************************************************/
 

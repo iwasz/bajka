@@ -23,6 +23,7 @@ namespace Geometry {
  *             |    |
  * ll (x1, y1) +----+
  * </pre>
+ * \ingroup Geometry
  */
 class Box : public Core::IToStringEnabled, virtual public Core::Object {
 public:

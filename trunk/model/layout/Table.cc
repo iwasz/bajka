@@ -27,10 +27,14 @@ void Table::doUpdate ()
 
         // Największa szerokość widgeta spośród wszystkich w tabeli.
         double maxCellWidthPerTable = 0.0, maxCellHeightPerTable = 0.0;
+
         // Największa wysokośc widgeta per wiersz.
         double maxCellHeightPerRow[rowNo];
+        fill (maxCellHeightPerRow, maxCellHeightPerRow + rowNo, 0.0);
+
         // Najwięsza szerokość widgeta per kolumna.
         double maxCellWidthPerCol[columnNo];
+        fill (maxCellWidthPerCol, maxCellWidthPerCol + columnNo, 0.0);
 
         // Szerokość i wysokość tabeli jeśli kolumny mają być ściśnięte (nie są w jednej linii).
         double tableWShrinked = 0.0, tableHShrinked = 0.0;
@@ -108,67 +112,67 @@ void Table::doUpdate ()
 
         curC = curR = 0;
         double cellH = getCellH (maxCellHeightPerRow[curR], maxCellHeightPerTable, expRowH);
+        double cellW = 0;
 
         // Początkowe x, y ustawione na górny lewy róg
-        double x = tableH - cellH;
-        double y = 0.0;
+        double x = 0.0;
+        double y = tableH - cellH;
 
 /*--------------------------------------------------------------------------*/
-#if 0
+
         for (iterator i = begin (); i != end (); ++i) {
 
-                cellW = getCellW (i->getWidth (), maxCellWidthPerCol[curC], maxCellWidthPerTable, expColW);
-
+                cellW = getCellW ((*i)->getWidth (), maxCellWidthPerCol[curC], maxCellWidthPerTable, expColW);
 
                 // Jeśli jest ustawione expand, to trzeba też rozciągnąć widgety do rozmiaru komórek.
-                if (hAlign == EXPAND) {
-                        i->setWidth (cellW);
+                if (hAlign == HSTRETCH) {
+                        (*i)->setWidth (cellW);
                 }
 
-                if (vAlign == EXPAND) {
-                        i->setHeight (cellH);
+                if (vAlign == VSTRETCH) {
+                        (*i)->setHeight (cellH);
                 }
 
                 Point p;
 
-                if (hAlign == LEFT || hAlign == EXPAND) {
-                        p->setX (x);
+                if (hAlign == LEFT || hAlign == HSTRETCH) {
+                        p.setX (x);
                 }
                 else if (hAlign == RIGHT) {
-                        p->setX (x + (cellH - i->getWidth ()));
+                        p.setX (x + (cellW - (*i)->getWidth ()));
                 }
                 else { // CENTER
-                        p->setX (x + (cellH - i->getWidth ()) / 2.0);
+                        p.setX (x + (cellW - (*i)->getWidth ()) / 2.0);
                 }
 
-                if (vAlign == BOTTOM || vAlign == EXPAND) {
-                        p->setY (y);
+                if (vAlign == BOTTOM || vAlign == VSTRETCH) {
+                        p.setY (y);
                 }
                 else if (vAlign == TOP) {
-                        p->setY (y + (cellH - i->getHeight ()));
+                        p.setY (y + (cellH - (*i)->getHeight ()));
                 }
                 else { // CENTER
-                        p->setY (y + (cellH - i->getHeight ()) / 2.0);
+                        p.setY (y + (cellH - (*i)->getHeight ()) / 2.0);
                 }
 
-                i->setMove (p);
+                (*i)->setMove (p);
 
-                y += cellW;
+                x += cellW;
 
                 // Zwiększ aktualny indeks wiersza i kolumny. Idź wierszami.
-                if (++curC >= colNum) {
+                if (++curC >= columnNo) {
                         curC = 0;
 
-                        if (++curR >= rowNum) {
+                        if (++curR >= rowNo) {
                                 break;
                         }
 
                         cellH = getCellH (maxCellHeightPerRow[curR], maxCellHeightPerTable, expRowH);
-                        y = 0;
-                        x -= cellH;
+                        x = 0;
+                        y -= cellH;
                 }
         }
-#endif
+
 }
 
 /****************************************************************************/
