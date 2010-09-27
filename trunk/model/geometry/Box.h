@@ -57,6 +57,9 @@ public:
         void setLL (const Point &p) { ll = p; }
         void setUR (const Point &p) { ur = p; }
 
+        double getWidth () const { return getX2() - getX1 (); }
+        double getHeight () const { return getY2 () - getY1 (); }
+
 /*--------------------------------------------------------------------------*/
 
         Core::String toString (unsigned int = 0) const;

@@ -30,7 +30,7 @@ class TreeController : public IController {
 public:
         __d
 
-        TreeController () : children (), parent (), model () {}
+        TreeController () : children (), parent (0), model () {}
         virtual ~TreeController () {}
 
 /*------IModelAware---------------------------------------------------------*/

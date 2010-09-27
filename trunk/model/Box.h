@@ -36,10 +36,12 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-//        virtual double getWidth () const { return getX2() - getX1 (); }
+        /*
+         * TODO Te metody bym wywalił, bo:
+         * - są uż metody do ustawiania rozmiaru : x2 i y2
+         * - dają złudne wrażenie, że jak zmienię x1,y1, to rozmiary zostaną zachowane.
+         */
         void setWidth (double d) { setX2 (getX1 () + d); }
-
-//        virtual double getHeight () const { return getY2 () - getY1 (); }
         void setHeight (double d) { setY2 (getY1 () + d); }
 
         virtual Geometry::Box const &getBoundingBox () const { return *this; }
