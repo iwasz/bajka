@@ -20,7 +20,7 @@ namespace View {
 
 void AbstractWidget::init ()
 {
-        for_each (begin (), end (), boost::mem_fn (&IWidget::init));
+        for_each (begin (), end (), boost::mem_fn (&IView::init));
 }
 
 /****************************************************************************/

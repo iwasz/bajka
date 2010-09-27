@@ -35,8 +35,8 @@ public:
 
         virtual ~Shape () {}
 
-        virtual double getWidth () const { return getBoundingBox ().getX2 () - getBoundingBox ().getX1 (); }
-        virtual double getHeight () const { return getBoundingBox ().getY2 () - getBoundingBox ().getY1 (); }
+//        virtual double getWidth () const { return getBoundingBox ().getX2 () - getBoundingBox ().getX1 (); }
+//        virtual double getHeight () const { return getBoundingBox ().getY2 () - getBoundingBox ().getY1 (); }
 
         virtual Geometry::Point const &screenToModel (Geometry::Point const &) const;
         virtual Geometry::Point const &modelToScreen (Geometry::Point const &) const;

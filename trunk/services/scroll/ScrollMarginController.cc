@@ -8,16 +8,23 @@
 
 #include "ScrollMarginController.h"
 #include "geometry/Utils.h"
-#include "IModel.h"
+#include "../../model/Box.h"
 
 namespace Service {
 using namespace Core;
 using namespace Signal;
 namespace G = Geometry;
 
+void ScrollMarginController::setModel (Ptr <Model::IModel> m)
+{
+        SimpleController::setModel (m);
+        box = dynamic_cast <Model::Box *> (m.get ());
+        ASSERT (box, "Failed to cast to Model::Box *");
+}
+
 bool ScrollMarginController::onMouseMotion (Event::MouseMotionEvent *e)
 {
-        if (!e || !getModel ()) {
+        if (!e || !box) {
                 return true;
         }
 
@@ -25,7 +32,7 @@ bool ScrollMarginController::onMouseMotion (Event::MouseMotionEvent *e)
         G::Point p = getModel ()->screenToModel (e->getPosition ());
 
         if (type == TOP) {
-                double h = getModel ()->getHeight ();
+                double h = box->getHeight ();
                 double speed = p.getY () / h;
 
                 // TODO to nie może być przez taką listę. To bez sensu jest.
@@ -34,7 +41,7 @@ bool ScrollMarginController::onMouseMotion (Event::MouseMotionEvent *e)
         }
 
         if (type == BOTTOM) {
-                double h = getModel ()->getHeight ();
+                double h = box->getHeight ();
                 double speed = ((h - p.getY ()) / h);
 
                 args.add (variant_cast <Variant> (speed));
@@ -42,7 +49,7 @@ bool ScrollMarginController::onMouseMotion (Event::MouseMotionEvent *e)
         }
 
         if (type == LEFT) {
-                double w = getModel ()->getWidth ();
+                double w = box->getWidth ();
                 double speed = ((w - p.getX ()) / w);
 
                 args.add (variant_cast <Variant> (speed));
@@ -50,7 +57,7 @@ bool ScrollMarginController::onMouseMotion (Event::MouseMotionEvent *e)
         }
 
         if (type == RIGHT) {
-                double w = getModel ()->getWidth ();
+                double w = box->getWidth ();
                 double speed = (p.getX () / w);
 
                 args.add (variant_cast <Variant> (speed));

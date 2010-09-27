@@ -27,7 +27,7 @@ public:
         typedef WidgetIter iterator;
         typedef WidgetConstIter const_iterator;
 
-        TreeWidget () : model (), children (), parent (), owner () {}
+        TreeWidget () : model (), children (), parent (0), owner (0) {}
         virtual ~TreeWidget () {}
 
 /*------IModelAware---------------------------------------------------------*/

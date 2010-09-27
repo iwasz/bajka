@@ -9,6 +9,7 @@
 #ifndef ABSTRACTOBSERVER_H_
 #define ABSTRACTOBSERVER_H_
 
+#include <numeric>
 #include "IObserver.h"
 
 namespace Event {
@@ -23,7 +24,7 @@ public:
 
         __c (void)
 
-        AbstractObserver () : bitMask (0), active (true) {}
+        AbstractObserver () : bitMask (std::numeric_limits <unsigned int>::max ()), active (true) {}
         virtual ~AbstractObserver () {}
 
         virtual bool onEvent (IEvent *event);

@@ -109,14 +109,14 @@ struct Shapeless : public AbstractModel {
 
         virtual ~Shapeless () {}
 
-        /// Zwraca 0. AbstractModel sam w sobie ma wielkość punktu.
-        virtual double getWidth () const { return 0.0; }
-        /// Zwraca 0. AbstractModel sam w sobie ma wielkość punktu.
-        virtual double getHeight () const { return 0.0; }
-        /// Pusta operacja
-        virtual void setWidth (double d) {}
-        /// Pusta operacja
-        virtual void setHeight (double d) {}
+//        /// Zwraca 0. AbstractModel sam w sobie ma wielkość punktu.
+//        virtual double getWidth () const { return 0.0; }
+//        /// Zwraca 0. AbstractModel sam w sobie ma wielkość punktu.
+//        virtual double getHeight () const { return 0.0; }
+//        /// Pusta operacja
+//        virtual void setWidth (double d) {}
+//        /// Pusta operacja
+//        virtual void setHeight (double d) {}
 
         virtual bool enclose (const Geometry::Point &p) const { return false; }
 

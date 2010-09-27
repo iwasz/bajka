@@ -79,6 +79,10 @@ struct IModel :
         virtual Geometry::Point const &screenToModel (Geometry::Point const &) const = 0;
         virtual Geometry::Point const &modelToScreen (Geometry::Point const &) const = 0;
 
+//        Propozycja.
+//        virtual Geometry::Point const &parentToModel (Geometry::Point const &) const = 0;
+//        virtual Geometry::Point const &modelToParent (Geometry::Point const &) const = 0;
+
         //\}
 
 /*------kształt-------------------------------------------------------------*/
@@ -98,17 +102,12 @@ struct IModel :
          */
         virtual Geometry::Box const &getBoundingBox () const = 0;
 
-        virtual double getWidth () const = 0;
-        virtual void setWidth (double) = 0;
-        virtual double getHeight () const = 0;
-        virtual void setHeight (double) = 0;
-
         /**
          * Każdy model ma swój środek. Stanowi on :
          * - Środek układu współrzędnych dla ewentualnych dzieci tego modelu.
          * - Środek obrotu (za pomocą setRotate).
          * - Środek skalowania (za pomocą setResize).
-         * Punkt ten jest zwracany bez transformowania go za pomocą macierzy.
+         * Punkt ten jest zwracany bez transformowania go za pomocą macierzy i jest we współrzędnych rodzica.
          * Ustawianie tego punktu jest sposobem na bezwzględne przesunięcie.
          */
         virtual Geometry::Point const &getOrigin () const = 0;

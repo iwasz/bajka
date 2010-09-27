@@ -12,6 +12,10 @@
 #include <Signal.h>
 #include "../../controller/SimpleController.h"
 
+namespace Model {
+class Box;
+}
+
 namespace Service {
 
 /**
@@ -35,7 +39,7 @@ public:
          */
         enum Type { TOP, RIGHT, BOTTOM, LEFT };
 
-        ScrollMarginController () : sender (this) {}
+        ScrollMarginController () : sender (this), box (0) {}
         virtual ~ScrollMarginController () {}
 
         bool onMouseMotion (Event::MouseMotionEvent *e);
@@ -45,10 +49,13 @@ public:
         // TODO kiedyś kontener będzie obsługiwał enumy, to zamienić typ.
         _m (setType) void setType (/*Type t*/int t) { type = (Type)t; }
 
+        void setModel (Ptr <Model::IModel> m);
+
 private:
 
         Signal::Sender sender;
         Type type;
+        Model::Box *box;
 
         _e (ScrollMarginController)
 };

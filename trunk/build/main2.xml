@@ -60,14 +60,12 @@
 
         <!--Model-->
         <property name="model">
-            <bean id="model" class="Model::Box" scope="bean"/>
+            <bean class="Model::Box"/>
         </property>
 
         <!--View-->
         <property name="widget">
-            <bean class="Rectangle">
-                <property name="model" ref="model"/>
-            </bean>
+            <bean class="Rectangle"/>
         </property>
 
         <!--Tylko event mouse motion-->
@@ -211,7 +209,7 @@
 
     <bean id="background" parent="imageCtr" singleton="true">
     
-<!--                <property name="path" value="../gfx/main02.png" />-->
+        <property name="model.path" value="../gfx/main02.png" />
 <!--                <property name="move">-->
 <!--                    <bean class="Point">-->
 <!--                        <property name="x"><value type="double">-512.0</value></property>-->
@@ -377,6 +375,49 @@
     </bean>
 
 
+
+
+    <bean id="rectButton" parent="button">
+        <property name="widget.widgets.normal.model.path" value="../gfx/bajka/button-rect-normal.png" />
+        <property name="widget.widgets.hover.model.path" value="../gfx/bajka/button-rect-hover.png" />
+        <property name="widget.widgets.clicked.model.path" value="../gfx/bajka/button-rect-clicked.png" />
+    </bean>
+
+    <bean id="circleButton" parent="button">
+        <property name="widget.widgets.normal.model.path" value="../gfx/bajka/button-circle-normal.png" />
+        <property name="widget.widgets.hover.model.path" value="../gfx/bajka/button-circle-hover.png" />
+        <property name="widget.widgets.clicked.model.path" value="../gfx/bajka/button-circle-clicked.png" />
+    </bean>
+
+    <bean id="lineButton" parent="button">
+        <property name="widget.widgets.normal.model.path" value="../gfx/bajka/button-line-normal.png" />
+        <property name="widget.widgets.hover.model.path" value="../gfx/bajka/button-line-hover.png" />
+        <property name="widget.widgets.clicked.model.path" value="../gfx/bajka/button-line-clicked.png" />
+    </bean>
+
+    <bean id="buttonsTable" parent="tableCtr">
+        <property name="model.columnNo"><value type="int">3</value></property>
+        <property name="model.rowNo"><value type="int">3</value></property>
+        <property name="model.move">
+            <bean class="Point">
+                <property name="x"><value type="double">250</value></property>
+                <property name="y"><value type="double">0</value></property>
+            </bean>
+        </property>
+
+        <property name="children">
+            <list class="ControllerCollection">
+                <ref bean="rectButton" />
+                <ref bean="circleButton" />
+                <ref bean="lineButton" />
+            </list>
+        </property>
+
+        <property name="bitMask"><value type="unsigned int">255</value></property>
+    </bean>
+
+
+
     <bean id="layerCtr" class="SimpleController" init-method="init" abstract="true">
         <property name="model">
             <bean class="Shapeless"/>
@@ -407,11 +448,13 @@
             <list class="ControllerCollection">
 <!--                <ref bean="scrollController" /> -->
                 <ref bean="tmp1"/>
-                <ref bean="scrollMargins"/>
+<!--                <ref bean="scrollMargins"/>-->
                 <ref bean="myButton" />
                 <ref bean="myRect" />
                 <ref bean="myTable" />
                 <ref bean="myLayer" />
+                <ref bean="buttonsTable" />                
+                <ref bean="rectButton" />                
             </list>
         </property>
 

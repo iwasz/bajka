@@ -53,15 +53,18 @@ void Table::doUpdate ()
         // Dzieci moze być więcej niż kolumn * wierszy. Nadmiarowych nie bierzemy pod uwagę.
         for (iterator i = begin (); i != end () && cnt < elems; ++i, ++cnt) {
 
+                double bbh = (*i)->getBoundingBox ().getHeight ();
+                double bbw = (*i)->getBoundingBox ().getWidth ();
+
                 // Ogólnie największa szerokość/wysokość
-                maxCellWidthPerTable = max ((*i)->getWidth (), maxCellWidthPerTable);
-                maxCellHeightPerTable = max ((*i)->getHeight (), maxCellHeightPerTable);
+                maxCellWidthPerTable = max (bbw, maxCellWidthPerTable);
+                maxCellHeightPerTable = max (bbh, maxCellHeightPerTable);
 
                 // Największa szerokośc/wysokoś per wiersz/kolumna.
-                maxCellHeightPerRow[curR] = max ((*i)->getHeight (), maxCellHeightPerRow[curR]);
-                maxCellWidthPerCol[curC] = max ((*i)->getWidth (), maxCellWidthPerCol[curC]);
+                maxCellHeightPerRow[curR] = max (bbh, maxCellHeightPerRow[curR]);
+                maxCellWidthPerCol[curC] = max (bbw, maxCellWidthPerCol[curC]);
 
-                curRowW += (*i)->getWidth ();
+                curRowW += bbw;
 
                 // Zwiększ aktualny indeks wiersza i kolumny. Idź wierszami.
                 if (++curC >= columnNo) {
@@ -122,16 +125,20 @@ void Table::doUpdate ()
 
         for (iterator i = begin (); i != end (); ++i) {
 
-                cellW = getCellW ((*i)->getWidth (), maxCellWidthPerCol[curC], maxCellWidthPerTable, expColW);
+                double bbh = (*i)->getBoundingBox ().getHeight ();
+                double bbw = (*i)->getBoundingBox ().getWidth ();
+
+                cellW = getCellW (bbw, maxCellWidthPerCol[curC], maxCellWidthPerTable, expColW);
 
                 // Jeśli jest ustawione expand, to trzeba też rozciągnąć widgety do rozmiaru komórek.
-                if (hAlign == HSTRETCH) {
-                        (*i)->setWidth (cellW);
-                }
-
-                if (vAlign == VSTRETCH) {
-                        (*i)->setHeight (cellH);
-                }
+                // TODO jak to zaimplementować z nowym interfejsem? Chyba się nie da (może jakieś request size, albo olać - w sumie, to po chuj ten expand)
+//                if (hAlign == HSTRETCH) {
+//                        (*i)->setWidth (cellW);
+//                }
+//
+//                if (vAlign == VSTRETCH) {
+//                        (*i)->setHeight (cellH);
+//                }
 
                 Point p;
 
@@ -139,23 +146,24 @@ void Table::doUpdate ()
                         p.setX (x);
                 }
                 else if (hAlign == RIGHT) {
-                        p.setX (x + (cellW - (*i)->getWidth ()));
+                        p.setX (x + (cellW - bbw));
                 }
                 else { // CENTER
-                        p.setX (x + (cellW - (*i)->getWidth ()) / 2.0);
+                        p.setX (x + (cellW - bbw) / 2.0);
                 }
 
                 if (vAlign == BOTTOM || vAlign == VSTRETCH) {
                         p.setY (y);
                 }
                 else if (vAlign == TOP) {
-                        p.setY (y + (cellH - (*i)->getHeight ()));
+                        p.setY (y + (cellH - bbh));
                 }
                 else { // CENTER
-                        p.setY (y + (cellH - (*i)->getHeight ()) / 2.0);
+                        p.setY (y + (cellH - bbh) / 2.0);
                 }
 
                 (*i)->setMove (p);
+                //(*i)->setOrigin (p); // Powinno być bezwzględnie.
 
                 x += cellW;
 

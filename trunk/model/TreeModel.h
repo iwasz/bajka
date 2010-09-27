@@ -23,7 +23,7 @@ namespace Model {
 class TreeModel : public IModel {
 public:
 
-        TreeModel (): owner () {}
+        TreeModel (): owner (0) {}
         virtual ~TreeModel () {}
 
 /*------parents-------------------------------------------------------------*/
