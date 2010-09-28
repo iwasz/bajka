@@ -30,10 +30,13 @@ bool Shape::enclose (const Geometry::Point &p) const
 
 /****************************************************************************/
 
-Geometry::Point const &Shape::screenToModel (Geometry::Point const &p) const
+Geometry::Point Shape::screenToModel (Geometry::Point const &p) const
 {
-        // TODO Czy to jest OK z tym static? Na pewno nie thread safe.
-        static Geometry::Point ret;
+        /*
+         * TODO Czy to jest OK z tym static? Na pewno nie thread safe. Nie jest ok, bo jak
+         * user przypisze ta funkcję na referencję, a potem jeszcze raz, to mu się zmieni.
+         */
+        /*static*/Geometry::Point ret;
         ret = AbstractModel::screenToModel (p);
         ret -= getBoundingBox ().getLL ();
         return ret;
@@ -41,10 +44,9 @@ Geometry::Point const &Shape::screenToModel (Geometry::Point const &p) const
 
 /****************************************************************************/
 
-Geometry::Point const &Shape::modelToScreen (Geometry::Point const &p) const
+Geometry::Point Shape::modelToScreen (Geometry::Point const &p) const
 {
-        // TODO Czy to jest OK z tym static? Na pewno nie thread safe.
-        static Geometry::Point ret;
+        Geometry::Point ret;
         ret = AbstractModel::modelToScreen (p);
         ret += getBoundingBox ().getLL ();
         return ret;

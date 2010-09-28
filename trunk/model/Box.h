@@ -26,6 +26,9 @@ public:
 
         Box () : Shape (), Geometry::Box () {}
         Box (double a, double b, double c, double d) : Shape (), Geometry::Box (a, b, c, d) {}
+
+        /// Pomocnicza.
+        static Ptr <Box> create (double a = 0.0, double b = 0.0, double c = 0.0, double d = 0.0) { return Ptr <Box> (new Box (a, b, c, d)); }
         virtual ~Box () {}
 
 /*--------------------------------------------------------------------------*/

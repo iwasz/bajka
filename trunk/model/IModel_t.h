@@ -61,6 +61,19 @@ struct IModel :
         /// \name Przekształcenia / układy współrzędznych
         //\{
 
+        virtual void setMove (const Geometry::Point &p) = 0;
+        virtual void setRotate (double deg, const Geometry::Point &p) {}
+        virtual void setRotate (double deg) = 0;
+        virtual void setRotateRad (double rad, const Geometry::Point &p) {}
+        virtual void setRotateRad (double rad) = 0;
+        virtual void setResize (double w, double h) = 0;
+        virtual void setResizeW (double w) = 0;
+        virtual void setResizeH (double h) = 0;
+
+        virtual Geometry::Point getMove () const = 0;
+        virtual double getRotate () const = 0;
+        virtual double getRotateRad () const = 0;
+
         /**
          * Returns affine transformation matrix for this object.
          */
@@ -70,14 +83,8 @@ struct IModel :
 
         virtual Geometry::AffineMatrix const &updateMatrixStack () const = 0;
 
-        virtual void setMove (const Geometry::Point &p) = 0;
-        virtual void setRotate (double r) = 0;
-        virtual void setResize (double w, double h) = 0;
-        virtual void setResizeW (double w) = 0;
-        virtual void setResizeH (double h) = 0;
-
-        virtual Geometry::Point const &screenToModel (Geometry::Point const &) const = 0;
-        virtual Geometry::Point const &modelToScreen (Geometry::Point const &) const = 0;
+        virtual Geometry::Point screenToModel (Geometry::Point const &) const = 0;
+        virtual Geometry::Point modelToScreen (Geometry::Point const &) const = 0;
 
 //        Propozycja.
 //        virtual Geometry::Point const &parentToModel (Geometry::Point const &) const = 0;

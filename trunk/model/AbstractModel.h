@@ -31,17 +31,22 @@ public:
         /// \name Przekształcenia / układy współrzędznych
         //\{
 
-        _m (setMove)    virtual void setMove (const Geometry::Point &p);
-        _m (setRotate)  virtual void setRotate (double r);
-                        virtual void setResize (double w, double h);
-        _m (setResizeW) virtual void setResizeW (double w) { setResize (w, 1); }
-        _m (setResizeH) virtual void setResizeH (double h) { setResize (1, h); }
+        _m (setMove)    void setMove (const Geometry::Point &p);
+        _m (setRotate)  void setRotate (double deg);
+                        void setRotateRad (double rad);
+                        void setResize (double w, double h);
+        _m (setResizeW) void setResizeW (double w) { setResize (w, 1); }
+        _m (setResizeH) void setResizeH (double h) { setResize (1, h); }
+
+        Geometry::Point getMove () const;
+        double getRotate () const;
+        double getRotateRad () const;
 
         virtual Geometry::AffineMatrix const &
         getMatrix () const { return matrix; }
 
-        virtual Geometry::Point const &screenToModel (Geometry::Point const &) const;
-        virtual Geometry::Point const &modelToScreen (Geometry::Point const &) const;
+        virtual Geometry::Point screenToModel (Geometry::Point const &) const;
+        virtual Geometry::Point modelToScreen (Geometry::Point const &) const;
 
         // TODO To do zastanowienia.
         Geometry::AffineMatrix const &updateMatrixStack () const;
@@ -88,7 +93,7 @@ protected:
 private:
 
         mutable Geometry::AffineMatrix matrixStack;
-        mutable Geometry::Point tmpPoint;
+//        mutable Geometry::Point tmpPoint;
         bool upToDate;
         bool alwaysUpdate;
 

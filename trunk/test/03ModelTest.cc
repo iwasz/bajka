@@ -9,6 +9,9 @@
 #include "../controller/SimpleController.h"
 #include "../model/Box.h"
 
+// Procentowy dopuszcalny błąd w porównaniach doubli.
+#define CLOSE 0.0000001
+
 using namespace boost;
 using namespace boost::geometry;
 
@@ -130,6 +133,44 @@ BOOST_AUTO_TEST_CASE (testAffine)
 //TODO to nie przechodzi poprawic
 //        BOOST_CHECK (Point (0, 0) == b0->modelToScreen (Point (0, 0)));
 
+}
+
+/**
+ * Testuje parę metod IModel::setMove, IModel::
+ */
+BOOST_AUTO_TEST_CASE (testMoveMethod)
+{
+        Ptr <M::Box> b = M::Box::create (10, 10, 20, 20);
+        b->setMove (Point (5, 5));
+        BOOST_CHECK_EQUAL (b->getMove (), Point (5, 5));
+}
+
+BOOST_AUTO_TEST_CASE (testRotateMethod)
+{
+        {
+                Ptr <M::Box> b = M::Box::create (10, 10, 20, 20);
+                b->setRotate (45);
+                BOOST_CHECK_CLOSE (b->getRotate (), 45, CLOSE);
+        }
+
+        {
+                Ptr <M::Box> b = M::Box::create (10, 10, 20, 20);
+                b->setRotateRad (M_PI / 4);
+                BOOST_CHECK_CLOSE (b->getRotateRad (), M_PI / 4, CLOSE);
+        }
+
+        {
+                Ptr <M::Box> b = M::Box::create (10, 10, 20, 20);
+                b->setRotateRad (M_PI / 4);
+                BOOST_CHECK_CLOSE (b->getRotate (), 45, CLOSE);
+        }
+
+        {
+                Ptr <M::Box> b = M::Box::create (10, 10, 20, 20);
+                b->setMove (Point (5, 5));
+                b->setRotate (45);
+                BOOST_CHECK_CLOSE (b->getRotate (), 45, CLOSE);
+        }
 }
 
 BOOST_AUTO_TEST_SUITE_END ();
