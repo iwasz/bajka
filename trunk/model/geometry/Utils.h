@@ -30,7 +30,8 @@ namespace Geometry {
 typedef boost::numeric::ublas::matrix <double, boost::numeric::ublas::column_major> AffineMatrixType;
 
 /**
- * Affine matrix type optimised to use with OpenGL.
+ * Affine matrix type optimised to use with OpenGL. Dostęp do poszczególnych
+ * elementów za pomocą operatora (). Najpierw numer wiersza, potem kolumny.
  * \ingroup Geometry
  */
 class AffineMatrix : public AffineMatrixType, public Core::IToStringEnabled {

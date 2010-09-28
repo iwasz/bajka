@@ -9,6 +9,7 @@
 #include <boost/geometry/algorithms/within.hpp>
 #include <boost/functional.hpp>
 #include <functional>
+#include <cmath>
 
 #include "AbstractModel.h"
 #include "geometry/Point.h"
@@ -46,9 +47,47 @@ void AbstractModel::setMove (const Point &p)
 
 /****************************************************************************/
 
-void AbstractModel::setRotate (double r)
+Point AbstractModel::getMove () const
 {
-        matrix.rotate (r);
+        return Point (matrix (0,3), matrix (1,3));
+}
+
+/****************************************************************************/
+
+void AbstractModel::setRotate (double deg)
+{
+        matrix.rotate (deg * (M_PI / 180.0));
+}
+
+/****************************************************************************/
+
+double AbstractModel::getRotate () const
+{
+        double ret = getRotateRad () * (180.0 / M_PI);
+        return (ret < 0) ? (ret + 360) : ret;
+}
+
+/****************************************************************************/
+
+void AbstractModel::setRotateRad (double rad)
+{
+        matrix.rotate (rad);
+}
+
+/****************************************************************************/
+
+double AbstractModel::getRotateRad () const
+{
+        Point p (1.0, 0.0);
+        double tmpX = matrix (0,3);
+        double tmpY = matrix (1,3);
+        AbstractModel *ptr = const_cast <AbstractModel *> (this);
+        ptr->matrix (0,3) = 0.0;
+        ptr->matrix (1,3) = 0.0;
+        matrix.transform (&p);
+        ptr->matrix (0,3) = tmpX;
+        ptr->matrix (1,3) = tmpY;
+        return atan2 (p.getX (), p.getY ());
 }
 
 /****************************************************************************/
@@ -80,21 +119,21 @@ Geometry::AffineMatrix const &AbstractModel::updateMatrixStack () const
 
 /****************************************************************************/
 
-Geometry::Point const &AbstractModel::screenToModel (Geometry::Point const &p) const
+Geometry::Point AbstractModel::screenToModel (Geometry::Point const &p) const
 {
         updateMatrixStack ();
         matrixStack.inverse ();
-        tmpPoint = p;
+        Point tmpPoint = p;
         matrixStack.transform (&tmpPoint);
         return tmpPoint;
 }
 
 /****************************************************************************/
 
-Geometry::Point const &AbstractModel::modelToScreen (Geometry::Point const &p) const
+Geometry::Point AbstractModel::modelToScreen (Geometry::Point const &p) const
 {
         updateMatrixStack ();
-        tmpPoint = p;
+        Point tmpPoint = p;
         matrixStack.transform (&tmpPoint);
         return tmpPoint;
 }
