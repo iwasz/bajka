@@ -168,12 +168,16 @@ void SimpleController::draw ()
         postDraw ();
 }
 
+/****************************************************************************/
+
 void SimpleController::preDraw ()
 {
         if (widget) {
                 widget->preDraw ();
         }
 }
+
+/****************************************************************************/
 
 void SimpleController::doDraw ()
 {
@@ -185,6 +189,8 @@ void SimpleController::doDraw ()
                 widget->draw ();
         }
 }
+
+/****************************************************************************/
 
 void SimpleController::postDraw ()
 {

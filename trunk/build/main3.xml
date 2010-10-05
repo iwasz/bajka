@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
+        "file:///home/iwasz/program/projects/tiliae/base/container/tiliae-container-1.0.dtd">
+
+<!--Ogólny schemat nazw : Ctr - kontroler, Wgt - widget, Mdl - model.-->
+<beans>
+
+<!-- +===================================================================================+ -->
+<!-- | Biblioteka beanów Bajki                                                           | -->
+<!-- +===================================================================================+ -->
+
+    <!-- Widget obrazka od razu z modelem. -->
+    <bean id="imageWgt" class="View::Image" abstract="true">
+        <property name="model" ref="model">
+            <bean id="model" class="Model::Image" scope="bean"/>
+        </property>
+    </bean>
+
+    <!--Definicja obrazka. Jest tu M, V i C, gotowe do użycia. Z tej-->
+    <!--definicji należy dziedziczyć (parent) i ustawiać model.path i-->
+    <!--na przykłąd model.translatePont.-->
+    <bean id="imageCtr" class="SimpleController" init-method="init" abstract="true">
+        <!--Model ustawia się z imageWgt -->
+        <!--View-->
+        <property name="widget" ref="imageWgt"/>
+        
+        <!-- Domyślnie obrazek nie przyjmuje żadnych eventów -->
+        <property name="bitMask"><value type="unsigned int">0</value></property>
+    </bean>
+
+<!-- ===================================================================================== -->
+
+    <!-- Widget prostokąta z modelem. -->
+    <bean id="rectWgt" class="Rectangle" abstract="true">
+        <property name="model" ref="model">
+            <bean id="model" class="Model::Box" scope="bean"/>
+        </property>
+    </bean>
+    
+    <!-- Kontroler prostokąta z modelem. -->
+    <bean id="rectCtr" class="SimpleController" init-method="init" abstract="true">
+        <!--Model ustawia się z imageWgt -->
+        <!--View-->
+        <property name="widget" ref="rectWgt"/>
+        
+        <!-- Domyślnie obrazek nie przyjmuje żadnych eventów -->
+        <property name="bitMask"><value type="unsigned int">0</value></property>
+    </bean>
+
+
+
+<!-- ===================================================================================== -->
+
+    <!-- Test prostokąta. Ma podany rozmiar, przesunięty o 5,5 i odchylony od pionu. -->
+<!--    <bean id="myRect" parent="rectCtr">-->
+<!--        <property name="model.x1"><value type="double">-319</value></property>-->
+<!--        <property name="model.y1"><value type="double">-239</value></property>-->
+<!--        <property name="model.x2"><value type="double">-220</value></property>-->
+<!--        <property name="model.y2"><value type="double">240</value></property>        -->
+<!---->
+<!--        <property name="model.rotate">-->
+<!--                <value type="double">0.01</value>-->
+<!--        </property>-->
+<!---->
+<!--        <property name="model.move">-->
+<!--            <bean class="Point">-->
+<!--                <property name="x"><value type="double">5</value></property>-->
+<!--                <property name="y"><value type="double">5</value></property>-->
+<!--            </bean>-->
+<!--        </property>-->
+<!--    </bean>-->
+    
+    <!-- Normalny -->
+    <bean id="myRect" parent="rectCtr" scope="bean">
+        <property name="model.x1"><value type="double">0</value></property>
+        <property name="model.y1"><value type="double">0</value></property>
+        <property name="model.x2"><value type="double">100</value></property>
+        <property name="model.y2"><value type="double">100</value></property>        
+    </bean>
+
+<!-- ===================================================================================== -->
+
+    <bean id="screen" class="SimpleController" init-method="init" singleton="true">
+        <property name="widget">
+            <bean class="Screen"/>
+        </property>
+
+        <property name="children">
+            <list class="ControllerCollection">
+            
+                <ref bean="myRect"/>
+                            
+                <bean parent="myRect">
+                    <property name="model.rotate">
+                        <value type="double">45</value>
+                    </property>
+                </bean>
+            
+                <bean parent="myRect">
+                    <property name="model.move">
+                        <bean class="Point">
+                            <property name="x"><value type="double">5</value></property>
+                            <property name="y"><value type="double">5</value></property>
+                        </bean>
+                    </property>
+                </bean>
+                
+                <bean parent="myRect">
+                    <property name="model.move">
+                        <bean class="Point">
+                            <property name="x"><value type="double">-200</value></property>
+                            <property name="y"><value type="double">-200</value></property>
+                        </bean>
+                    </property>
+                    <property name="children">
+                        <list class="ControllerCollection">
+                            <bean parent="rectCtr" scope="bean">
+                                <property name="model.x1"><value type="double">10</value></property>
+                                <property name="model.y1"><value type="double">10</value></property>
+                                <property name="model.x2"><value type="double">20</value></property>
+                                <property name="model.y2"><value type="double">20</value></property>        
+                            </bean>                        
+                        </list>
+                    </property>
+                </bean>
+
+                <bean parent="rectCtr" scope="bean">
+                    <property name="model.x1"><value type="double">200</value></property>
+                    <property name="model.y1"><value type="double">-200</value></property>
+                    <property name="model.x2"><value type="double">300</value></property>
+                    <property name="model.y2"><value type="double">-100</value></property>        
+                    <property name="children">
+                        <list class="ControllerCollection">
+                            <bean parent="rectCtr" scope="bean">
+                                <property name="model.x1"><value type="double">10</value></property>
+                                <property name="model.y1"><value type="double">10</value></property>
+                                <property name="model.x2"><value type="double">20</value></property>
+                                <property name="model.y2"><value type="double">20</value></property>
+                                <property name="model.rotate">
+                                    <value type="double">45</value>
+                                </property>
+                            </bean>                        
+                        </list>
+                    </property>
+                </bean>
+    
+            </list>
+        </property>
+
+        <!--Nie ma za bardzo jak robić iloczynów logicznych, -->
+        <!--wiec trzeba podawać gotowe bit-maski. Pierwszy bit-->
+        <!--to mouse move.-->
+        <property name="bitMask"><value type="unsigned int">255</value></property>
+    </bean>
+
+
+<!--    <bean id="screenWidth" class="int">-->
+<!--        <constructor-arg>-->
+<!--            <value type="int">640</value>-->
+<!--        </constructor-arg>-->
+<!--    </bean>-->
+
+    <!--Konfiguracja-->
+    <bean id="cfg" class="BajkaConfig" init-method="init" singleton="true">
+        <property name="fullScreen"><value type="bool">false</value></property>
+        <property name="resX"><value type="int">640</value></property>
+<!--        <property name="resX" ref="screenWidth" />-->
+        <property name="resY"><value type="int">480</value></property>
+        <property name="windowCaption" value="Bajka DEMO"/>
+    </bean>
+
+
+
+    <!--Obiekt app, czyli aplikacja :)-->
+    <bean id="app" class="BajkaApp" singleton="true">
+        <property name="config" ref="cfg" />
+        <property name="rootController" ref="screen"/>
+
+        <!--Dispatcher-y eventów. Generują evenyt. Przekształcają eventy -->
+        <!--SDL (lub innej biblioteki) na wewnętrzne eventy.-->
+        <property name="dispatchers">
+            <list class="DispatcherList">
+                <bean class="TimerDispatcher" singleton="true">
+                    <property name="observers">
+                        <list class="ObserverVector">
+                            <ref bean="screen" />
+<!--                            <ref bean="ruchJednostajny"/>-->
+<!--                            <ref bean="scrollController" />-->
+                        </list>
+                    </property>
+                    <property name="tickInterval"><value type="int">20</value></property>
+                </bean>
+
+                <!--Można dodać więcej inż 1 timer o różnych interwałach.-->
+<!--                <bean class="TimerDispatcher" singleton="true">-->
+<!--                    <property name="observers">-->
+<!--                        <list class="ObserverVector">-->
+<!--                            <ref bean="screen" />-->
+<!--                        </list>-->
+<!--                    </property>-->
+<!--                    <property name="tickInterval"><value type="int">2000</value></property>-->
+<!--                </bean>-->
+
+                <bean class="EventDispatcher" singleton="true" init-method="init">
+                    <property name="observers">
+                        <list class="ObserverVector">
+                            <ref bean="screen" />
+                        </list>
+                    </property>
+                    <property name="config" ref="cfg" />
+                </bean>
+            </list>
+        </property>
+    </bean>
+    
+</beans>

@@ -34,8 +34,9 @@ public:
         _m (setMove)    void setMove (const Geometry::Point &p);
                         Geometry::Point getMove () const;
                         void setPosition (const Geometry::Point &p);
-
-        /*_m (setRotate)  */void setRotate (double deg);
+        _M (void, setRotate, double)
+                        void setRotate (double deg);
+                        double getRotate () const;
                         void setRotate (double deg, const Geometry::Point &p);
                         void setRotateRad (double rad);
                         void setRotateRad (double rad, const Geometry::Point &p);
@@ -44,8 +45,6 @@ public:
         _m (setResizeW) void setResizeW (double w) { setResize (w, 1); }
         _m (setResizeH) void setResizeH (double h) { setResize (1, h); }
 
-
-        double getRotate () const;
         double getRotateRad () const;
         double getResizeW () const;
         double getResizeH () const;
@@ -136,12 +135,11 @@ struct Shapeless : public AbstractModel {
         /// Pudełko o zerowym rozmiarze.
         virtual Geometry::Box const &getBoundingBox () const { static Geometry::Box b; return b; }
 
-        Geometry::Point const &getOrigin () const { return origin; }
-        void setOrigin (Geometry::Point const &p) { origin = p; }
+        /// Zawsze zwraca punkt (0, 0).
+        Geometry::Point const &getOrigin () const { static Geometry::Point origin; return origin; }
 
 private:
 
-        Geometry::Point origin;
         _e (Shapeless)
 };
 

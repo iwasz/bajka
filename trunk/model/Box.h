@@ -49,8 +49,8 @@ public:
 
         virtual Geometry::Box const &getBoundingBox () const { return *this; }
 
+        /// Zawsze zwraca LL.
         Geometry::Point const &getOrigin () const { return getLL (); }
-        void setOrigin (Geometry::Point const &p) { setLL (p); }
 
 private:
 
