@@ -46,13 +46,19 @@ bool TreeModel::hasChildren () const
 
 /**
  * Zwraca rodzica lub NULL (a konkretnie ModelParentType()) jeśli rodzica
- * nie ma. Ta metoda nie sprawdza czy ustawiono ownera, więc jeśli go nie
+ * nie ma.
+ *
+ * NIEAKTUALNE - zastanowić się, dlaczego niby miałaby nie sprawdzać. SegF.
+ * Bez sprawdzania problematyczne staje się używanie modeli standalone, na
+ * przykład w testach.
+ *
+ * Ta metoda nie sprawdza czy ustawiono ownera, więc jeśli go nie
  * ma, to zachowanie będzie niezdefiniowane. Oczywiście jeśli owner->getParent ()
  * zwraca NULL, to ta metoda także zwraca NULL.
  */
 ModelParentType TreeModel::getParent ()
 {
-        if (owner->getParentMAW ()) {
+        if (owner && owner->getParentMAW ()) {
                 return owner->getParentMAW ()->getModel ().get ();
         }
 
@@ -67,7 +73,7 @@ ModelParentType TreeModel::getParent ()
  */
 ModelParentConstType TreeModel::getParent () const
 {
-        if (owner->getParentMAW ()) {
+        if (owner && owner->getParentMAW ()) {
                 return owner->getParentMAW ()->getModel ().get ();
         }
 

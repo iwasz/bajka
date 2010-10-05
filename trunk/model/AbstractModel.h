@@ -32,15 +32,23 @@ public:
         //\{
 
         _m (setMove)    void setMove (const Geometry::Point &p);
-        _m (setRotate)  void setRotate (double deg);
+                        Geometry::Point getMove () const;
+                        void setPosition (const Geometry::Point &p);
+
+        /*_m (setRotate)  */void setRotate (double deg);
+                        void setRotate (double deg, const Geometry::Point &p);
                         void setRotateRad (double rad);
+                        void setRotateRad (double rad, const Geometry::Point &p);
                         void setResize (double w, double h);
+                        void setResize (double w, double h, Geometry::Point const &p);
         _m (setResizeW) void setResizeW (double w) { setResize (w, 1); }
         _m (setResizeH) void setResizeH (double h) { setResize (1, h); }
 
-        Geometry::Point getMove () const;
+
         double getRotate () const;
         double getRotateRad () const;
+        double getResizeW () const;
+        double getResizeH () const;
 
         virtual Geometry::AffineMatrix const &
         getMatrix () const { return matrix; }
