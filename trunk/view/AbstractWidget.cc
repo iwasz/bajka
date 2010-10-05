@@ -65,6 +65,10 @@ void AbstractWidget::draw ()
         }
 
         doDraw ();
+
+        if (model) {
+                glTranslated (model->getOrigin ().getX (), model->getOrigin ().getY (), 0.0);
+        }
 }
 
 }

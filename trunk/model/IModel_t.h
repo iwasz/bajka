@@ -178,7 +178,6 @@ struct IModel :
          * Ustawianie tego punktu jest sposobem na bezwzględne przesunięcie.
          */
         virtual Geometry::Point const &getOrigin () const = 0;
-        virtual void setOrigin (Geometry::Point const &) = 0;
 
         //\}
 

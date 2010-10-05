@@ -162,8 +162,7 @@ void Table::doUpdate ()
                         p.setY (y + (cellH - bbh) / 2.0);
                 }
 
-                (*i)->setMove (p);
-                //(*i)->setOrigin (p); // Powinno być bezwzględnie.
+                (*i)->setMove (p);// Powinno być bezwzględnie, ale w stosunku do BBox.
 
                 x += cellW;
 
