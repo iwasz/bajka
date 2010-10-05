@@ -46,16 +46,34 @@ void AffineMatrix::move (const Geometry::Point &p)
 
 /****************************************************************************/
 
-void AffineMatrix::rotate (double r)
+//void AffineMatrix::rotate (double r)
+//{
+//        //AffineMatrixType m (4, 4);
+//        AffineMatrix m;
+//
+//        double c = cos (r);
+//        double s = sin (r);
+//
+//        m (0,0) = c;   m (0,1) = -s;   m (0,2) = 0;   m (0,3) = 0;
+//        m (1,0) = s;   m (1,1) = c;    m (1,2) = 0;   m (1,3) = 0;
+//        m (2,0) = 0;   m (2,1) = 0;    m (2,2) = 1;   m (2,3) = 0;
+//        m (3,0) = 0;   m (3,1) = 0;    m (3,2) = 0;   m (3,3) = 1;
+//
+//        //assign (prod (*this, m));
+//        *this = prod (*this, m);
+//}
+
+/****************************************************************************/
+
+void AffineMatrix::rotate (double r, Geometry::Point const &p)
 {
-        //AffineMatrixType m (4, 4);
         AffineMatrix m;
 
         double c = cos (r);
         double s = sin (r);
 
-        m (0,0) = c;   m (0,1) = -s;   m (0,2) = 0;   m (0,3) = 0;
-        m (1,0) = s;   m (1,1) = c;    m (1,2) = 0;   m (1,3) = 0;
+        m (0,0) = c;   m (0,1) = -s;   m (0,2) = 0;   m (0,3) = p.getX () - c * p.getX () + s * p.getY ();
+        m (1,0) = s;   m (1,1) = c;    m (1,2) = 0;   m (1,3) = p.getY () - s * p.getX () - c * p.getY ();
         m (2,0) = 0;   m (2,1) = 0;    m (2,2) = 1;   m (2,3) = 0;
         m (3,0) = 0;   m (3,1) = 0;    m (3,2) = 0;   m (3,3) = 1;
 
@@ -65,12 +83,12 @@ void AffineMatrix::rotate (double r)
 
 /****************************************************************************/
 
-void AffineMatrix::resize (double w, double h)
+void AffineMatrix::resize (double w, double h, Geometry::Point const &p)
 {
         AffineMatrixType m (4, 4);
 
-        m (0,0) = w;   m (0,1) = 0;   m (0,2) = 0;   m (0,3) = 0;
-        m (1,0) = 0;   m (1,1) = h;   m (1,2) = 0;   m (1,3) = 0;
+        m (0,0) = w;   m (0,1) = 0;   m (0,2) = 0;   m (0,3) = p.getX () - w * p.getX ();
+        m (1,0) = 0;   m (1,1) = h;   m (1,2) = 0;   m (1,3) = p.getY () - h * p.getX ();
         m (2,0) = 0;   m (2,1) = 0;   m (2,2) = 1;   m (2,3) = 0;
         m (3,0) = 0;   m (3,1) = 0;   m (3,2) = 0;   m (3,3) = 1;
 

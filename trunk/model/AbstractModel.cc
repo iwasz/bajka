@@ -54,9 +54,23 @@ Point AbstractModel::getMove () const
 
 /****************************************************************************/
 
+void AbstractModel::setPosition (const Geometry::Point &p)
+{
+        setMove (p - getMove ());
+}
+
+/****************************************************************************/
+
 void AbstractModel::setRotate (double deg)
 {
         matrix.rotate (deg * (M_PI / 180.0));
+}
+
+/****************************************************************************/
+
+void AbstractModel::setRotate (double deg, const Geometry::Point &p)
+{
+        matrix.rotate (deg * (M_PI / 180.0), p);
 }
 
 /****************************************************************************/
@@ -72,6 +86,13 @@ double AbstractModel::getRotate () const
 void AbstractModel::setRotateRad (double rad)
 {
         matrix.rotate (rad);
+}
+
+/****************************************************************************/
+
+void AbstractModel::setRotateRad (double rad, const Geometry::Point &p)
+{
+        matrix.rotate (rad, p);
 }
 
 /****************************************************************************/
@@ -95,6 +116,45 @@ double AbstractModel::getRotateRad () const
 void AbstractModel::setResize (double w, double h)
 {
         matrix.resize (w, h);
+}
+
+/****************************************************************************/
+
+void AbstractModel::setResize (double w, double h, Geometry::Point const &p)
+{
+        matrix.resize (w, h, p);
+}
+
+/****************************************************************************/
+
+double AbstractModel::getResizeW () const
+{
+        Point p (1.0, 0.0);
+        double tmpX = matrix (0,3);
+        double tmpY = matrix (1,3);
+        AbstractModel *ptr = const_cast <AbstractModel *> (this);
+        ptr->matrix (0,3) = 0.0;
+        ptr->matrix (1,3) = 0.0;
+        matrix.transform (&p);
+        ptr->matrix (0,3) = tmpX;
+        ptr->matrix (1,3) = tmpY;
+        return p.getX ();
+}
+
+/****************************************************************************/
+
+double AbstractModel::getResizeH () const
+{
+        Point p (0.0, 1.0);
+        double tmpX = matrix (0,3);
+        double tmpY = matrix (1,3);
+        AbstractModel *ptr = const_cast <AbstractModel *> (this);
+        ptr->matrix (0,3) = 0.0;
+        ptr->matrix (1,3) = 0.0;
+        matrix.transform (&p);
+        ptr->matrix (0,3) = tmpX;
+        ptr->matrix (1,3) = tmpY;
+        return p.getY ();
 }
 
 /****************************************************************************/

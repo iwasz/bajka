@@ -20,6 +20,28 @@ using namespace Geometry;
 namespace M = Model;
 namespace C = Controller;
 
+/****************************************************************************/
+
+//void CHECK_POINT (Geometry::Point const &p, double x, double y)
+#define CHECK_POINT(p,x,y)                                                \
+{                                                                         \
+        if ((x) != 0.0) {                                                 \
+                BOOST_CHECK_CLOSE ((p).getX (), (x), CLOSE);              \
+        }                                                                 \
+        else {                                                            \
+                BOOST_CHECK_CLOSE ((p).getX () + 1, (x) + 1, CLOSE);      \
+        }                                                                 \
+                                                                          \
+        if ((y) != 0.0) {                                                 \
+                BOOST_CHECK_CLOSE ((p).getY (), (y), CLOSE);              \
+        }                                                                 \
+        else {                                                            \
+                BOOST_CHECK_CLOSE ((p).getY () + 1, (y) + 1, CLOSE);      \
+        }                                                                 \
+}
+
+/****************************************************************************/
+
 BOOST_AUTO_TEST_SUITE (ModelTest);
 
 /**
@@ -145,6 +167,34 @@ BOOST_AUTO_TEST_CASE (testMoveMethod)
         BOOST_CHECK_EQUAL (b->getMove (), Point (5, 5));
 }
 
+/**
+ * Testuje pozycjonowanie absolutne.
+ */
+BOOST_AUTO_TEST_CASE (testPositionMethod)
+{
+        Ptr <M::Box> b = M::Box::create (0, 0, 10, 10);
+        b->setPosition (Point (5, 5));
+        BOOST_CHECK_EQUAL (b->getMove (), Point (5, 5));
+
+        b->setPosition (Point (5, 5));
+        BOOST_CHECK_EQUAL (b->getMove (), Point (5, 5));
+
+        b->setPosition (Point (10, 10));
+        BOOST_CHECK_EQUAL (b->getMove (), Point (10, 10));
+
+        b->setPosition (Point (-10, 5));
+        BOOST_CHECK_EQUAL (b->getMove (), Point (-10, 5));
+
+        b->setRotate (30);
+        BOOST_CHECK_EQUAL (b->getMove (), Point (-10, 5));
+
+        b->setResize (1.5, 1.5);
+        BOOST_CHECK_EQUAL (b->getMove (), Point (-10, 5));
+}
+
+/**
+ * Testuje setRotate i getRotate (bez punktu).
+ */
 BOOST_AUTO_TEST_CASE (testRotateMethod)
 {
         {
@@ -170,6 +220,136 @@ BOOST_AUTO_TEST_CASE (testRotateMethod)
                 b->setMove (Point (5, 5));
                 b->setRotate (45);
                 BOOST_CHECK_CLOSE (b->getRotate (), 45, CLOSE);
+        }
+}
+
+/**
+ * Testuje setRotate i getRotate (z punktem).
+ */
+BOOST_AUTO_TEST_CASE (testRotateOriginMethod)
+{
+        {
+                Ptr <M::Box> b = M::Box::create (10, 10, 20, 20);
+                b->setRotate (45, Point (20, 20));
+                BOOST_CHECK_CLOSE (b->getRotate (), 45, CLOSE);
+        }
+
+        {
+                Ptr <M::Box> b = M::Box::create (10, 10, 20, 20);
+                b->setRotateRad (M_PI / 4, Point (10, 10));
+                BOOST_CHECK_CLOSE (b->getRotateRad (), M_PI / 4, CLOSE);
+        }
+
+        {
+                Ptr <M::Box> b = M::Box::create (10, 10, 20, 20);
+                b->setRotateRad (M_PI / 4, Point (50, 70));
+                BOOST_CHECK_CLOSE (b->getRotate (), 45, CLOSE);
+        }
+
+        {
+                Ptr <M::Box> b = M::Box::create (10, 10, 20, 20);
+                b->setMove (Point (5, 5));
+                b->setRotate (45, Point (15, 25));
+                BOOST_CHECK_CLOSE (b->getRotate (), 45, CLOSE);
+        }
+}
+
+/**
+ * A teraz sprawdzam współrzędne które powstawły w wyniku rotacji. Na przykład pierwsza
+ * rotacja jest względem punktu 20, 20.
+ */
+BOOST_AUTO_TEST_CASE (testRotate2)
+{
+        {
+                Ptr <M::Box> b = M::Box::create (0, 0, 10, 10);
+                b->setRotate (90);
+
+                Point p1 = b->modelToScreen (b->getLL ());
+                Point p2 = b->modelToScreen (b->getUR ());
+
+                BOOST_CHECK_EQUAL (p2, Point (-10, 10));
+                BOOST_CHECK_EQUAL (p1, Point (0, 0));
+                BOOST_CHECK_EQUAL (b->getMove (), Point (0, 0));
+
+                b->setRotate (45);
+
+                p1 = b->modelToScreen (b->getLL ());
+                p2 = b->modelToScreen (b->getUR ());
+
+                BOOST_CHECK_EQUAL (b->getMove (), Point (0, 0));
+                BOOST_CHECK_CLOSE (p2.getX (), -10.0 * M_SQRT2, CLOSE);
+                BOOST_CHECK_CLOSE (p2.getY () + 1, 1, CLOSE);
+                BOOST_CHECK_CLOSE (p1.getX (), 0, CLOSE);
+                BOOST_CHECK_CLOSE (p1.getY (), 0, CLOSE);
+        }
+
+        {
+                Ptr <M::Box> b = M::Box::create (0, 0, 10, 10);
+                b->setRotate (90, Point (5, 5));
+
+                Point ll = b->modelToScreen (b->getLL ());
+                Point ur = b->modelToScreen (b->getUR ());
+
+                CHECK_POINT (ur, 0, 10);
+                CHECK_POINT (ll, 10, 0);
+        }
+
+        {
+                Ptr <M::Box> b = M::Box::create (0, 0, 10, 10);
+                b->setRotate (45, Point (5, 5));
+
+                Point ll = b->modelToScreen (b->getLL ());
+                Point ur = b->modelToScreen (b->getUR ());
+
+                CHECK_POINT (ur, 5, 5 + 5*M_SQRT2);
+                CHECK_POINT (ll, 5, 5 - 5*M_SQRT2);
+        }
+
+        {
+                Ptr <M::Box> b = M::Box::create (0, 0, 10, 10);
+                b->setMove (Point (5, 5));
+                b->setRotate (90, Point (5, 5));
+
+                Point ll = b->modelToScreen (b->getLL ());
+                Point ur = b->modelToScreen (b->getUR ());
+
+                CHECK_POINT (ur, 5, 15);
+                CHECK_POINT (ll, 15, 5);
+        }
+}
+
+/**
+ * Skalowaine
+ */
+BOOST_AUTO_TEST_CASE (testResizeMethod)
+{
+        {
+                Ptr <M::Box> b = M::Box::create (0, 0, 10, 10);
+                b->setResizeW (2);
+                b->setResizeH (2);
+                BOOST_CHECK_CLOSE (b->getResizeW (), 2, CLOSE);
+                BOOST_CHECK_CLOSE (b->getResizeH (), 2, CLOSE);
+
+                Point ll = b->modelToScreen (b->getLL ());
+                Point ur = b->modelToScreen (b->getUR ());
+
+                CHECK_POINT (ur, 20, 20);
+                CHECK_POINT (ll, 0, 0);
+        }
+
+        {
+                Ptr <M::Box> b = M::Box::create (0, 0, 10, 10);
+                b->setMove (Point (5, 5));
+                b->setResizeW (2);
+                b->setResizeH (2);
+                BOOST_CHECK_CLOSE (b->getResizeW (), 2, CLOSE);
+                BOOST_CHECK_CLOSE (b->getResizeH (), 2, CLOSE);
+
+                Point ll = b->modelToScreen (b->getLL ());
+                Point ur = b->modelToScreen (b->getUR ());
+
+                CHECK_POINT (ur, 25, 25);
+                CHECK_POINT (ll, 5, 5);
         }
 }
 

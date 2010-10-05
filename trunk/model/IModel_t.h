@@ -58,21 +58,81 @@ struct IModel :
 
 /*------przekształcenia-----------------------------------------------------*/
 
-        /// \name Przekształcenia / układy współrzędznych
+        /// \name Proste przekształcenia
         //\{
 
+        /// Przesunięcie względne. TODO - argumentem powinein być nie punkt, a jakiś szift.
         virtual void setMove (const Geometry::Point &p) = 0;
-        virtual void setRotate (double deg, const Geometry::Point &p) {}
-        virtual void setRotate (double deg) = 0;
-        virtual void setRotateRad (double rad, const Geometry::Point &p) {}
-        virtual void setRotateRad (double rad) = 0;
-        virtual void setResize (double w, double h) = 0;
-        virtual void setResizeW (double w) = 0;
-        virtual void setResizeH (double h) = 0;
 
+        /**
+         * Pobiera absolutną wartość przesunięcia, pod warunkiem, że nie nałożono jakichś
+         * skomplikowanych transformacji. Gwarancja, że zadziała ze wszyskimi prostymi
+         * przekształceniami.
+         */
         virtual Geometry::Point getMove () const = 0;
+
+        virtual void setPosition (const Geometry::Point &p) = 0;
+
+        /**
+         * Obrót Counterclokwise wokół środka układu współrzędnych rodzica, czyli
+         * wokół punktu 0, 0.
+         */
+        virtual void setRotate (double deg) = 0;
+
+        /**
+         * Pobiera absolutną wartość obrotu, pod warunkiem, że nie nałożono jakichś
+         * skomplikowanych transformacji. Gwarancja, że zadziała ze wszyskimi prostymi
+         * przekształceniami.
+         */
         virtual double getRotate () const = 0;
+
+        /**
+         * Obrót Counterclokwise wokół środka układu współrzędnych rodzica, czyli
+         * wokół punktu 0, 0.
+         */
+        virtual void setRotateRad (double rad) = 0;
+
+        /**
+         * Pobiera absolutną wartość obrotu, pod warunkiem, że nie nałożono jakichś
+         * skomplikowanych transformacji. Gwarancja, że zadziała ze wszyskimi prostymi
+         * przekształceniami.
+         */
         virtual double getRotateRad () const = 0;
+
+        virtual void setResizeW (double w) = 0;
+        virtual double getResizeW () const = 0;
+
+        virtual void setResizeH (double h) = 0;
+        virtual double getResizeH () const = 0;
+
+        //\}
+
+        /// \name Zaawansowae przekształcenia
+        //\{
+
+        /**
+         * Obrót Counterclokwise wokół punktu, gdzie punkt jest podany w układzie
+         * rodzica i zalezy od przesunięcia. Kąt podajemy w stopniach. Uwaga! Użycie tej
+         * metody podowuje, że getMove przestaje działać prawidłowo. Tylko setRotate
+         * bez punktu zapewnia poprawne działanie getMove.
+         */
+        virtual void setRotate (double deg, const Geometry::Point &p) = 0;
+
+        /**
+         * Obrót Counterclokwise wokół punktu, gdzie punkt jest podany w układzie
+         * rodzica i zalezy od przesunięcia. Kąt podajemy w stopniach. Uwaga! Użycie tej
+         * metody podowuje, że getMove przestaje działać prawidłowo. Tylko setRotate
+         * bez punktu zapewnia poprawne działanie getMove.
+         */
+        virtual void setRotateRad (double rad, const Geometry::Point &p) = 0;
+
+        virtual void setResize (double w, double h) = 0;
+        virtual void setResize (double w, double h, Geometry::Point const &p) = 0;
+
+        //\}
+
+        /// \name Układy współrzędznych
+        //\{
 
         /**
          * Returns affine transformation matrix for this object.
@@ -105,7 +165,7 @@ struct IModel :
         // ...
 
         /**
-         * Zwraca boundingBox w układzie współrzędnych swojego rodzica (?).
+         * Zwraca boundingBox w układzie współrzędnych swojego rodzica.
          */
         virtual Geometry::Box const &getBoundingBox () const = 0;
 

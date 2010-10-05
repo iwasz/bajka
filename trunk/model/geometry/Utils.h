@@ -49,8 +49,8 @@ public:
         void inverse ();
 
         void move (const Geometry::Point &p);
-        void rotate (double r);
-        void resize (double w, double h);
+        void rotate (double r, Geometry::Point const &p = Geometry::Point (0, 0));
+        void resize (double w, double h, Geometry::Point const &p = Geometry::Point (0, 0));
 
 /*------apply-transformation------------------------------------------------*/
 
