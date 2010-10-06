@@ -13,6 +13,7 @@
 
 #include "AbstractModel.h"
 #include "geometry/Point.h"
+#include "geometry/Utils.h"
 #include "Commons.h"
 
 namespace Model {
@@ -157,7 +158,35 @@ double AbstractModel::getResizeH () const
         return p.getY ();
 }
 
+/*##########################################################################*/
+
+bool AbstractModel::enclose (const Geometry::Point &p) const
+{
+        for (AbstractModel::const_iterator i = begin (); i != end (); ++i) {
+                if ((*i)->enclose (p)) {
+                        return true;
+                }
+        }
+
+        return false;
+}
+
 /****************************************************************************/
+
+// Test tego kiedyś
+Box AbstractModel::getBoundingBox () const
+{
+        Box ret;
+
+        // Jak to zrobić za pomocą std::accumulate?
+        for (const_iterator i = begin (); i != end (); ++i) {
+                ret = Geometry::getBoundingBox (ret, (*i)->getBoundingBox ());
+        }
+
+        return ret;
+}
+
+/*##########################################################################*/
 
 Geometry::AffineMatrix const &AbstractModel::updateMatrixStack () const
 {
@@ -185,7 +214,7 @@ Geometry::Point AbstractModel::screenToModel (Geometry::Point const &p) const
         matrixStack.inverse ();
         Point tmpPoint = p;
         matrixStack.transform (&tmpPoint);
-        return tmpPoint;
+        return tmpPoint - getOrigin ();
 }
 
 /****************************************************************************/
@@ -195,7 +224,7 @@ Geometry::Point AbstractModel::modelToScreen (Geometry::Point const &p) const
         updateMatrixStack ();
         Point tmpPoint = p;
         matrixStack.transform (&tmpPoint);
-        return tmpPoint;
+        return tmpPoint + getOrigin ();
 }
 
 /****************************************************************************/

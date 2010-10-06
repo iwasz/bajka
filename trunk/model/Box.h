@@ -10,7 +10,7 @@
 #define MODEL_BOX_H_
 
 #include "geometry/Box.h"
-#include "Shape.h"
+#include "AbstractModel.h"
 
 namespace Model {
 
@@ -19,13 +19,13 @@ namespace Model {
  * do jakiegoś innego prostokątnego cudaka.
  * \ingroup Model
  */
-class Box : public Shape, public Geometry::Box {
+class Box : public AbstractModel, public Geometry::Box {
 public:
         __c (void)
-        _b ("Shape", "Box")
+        _b ("AbstractModel", "Box")
 
-        Box () : Shape (), Geometry::Box () {}
-        Box (double a, double b, double c, double d) : Shape (), Geometry::Box (a, b, c, d) {}
+        Box () : AbstractModel (), Geometry::Box () {}
+        Box (double a, double b, double c, double d) : AbstractModel (), Geometry::Box (a, b, c, d) {}
 
         /// Pomocnicza.
         static Ptr <Box> create (double a = 0.0, double b = 0.0, double c = 0.0, double d = 0.0) { return Ptr <Box> (new Box (a, b, c, d)); }
@@ -33,7 +33,7 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-//        bool enclose (const Geometry::Point &p) const;
+        virtual bool enclose (const Geometry::Point &p) const;
 
 //        const Geometry::Box &toScreenCoords () const { updateScreenCoords (); return screenCoords; }
 
@@ -47,7 +47,7 @@ public:
         void setWidth (double d) { setX2 (getX1 () + d); }
         void setHeight (double d) { setY2 (getY1 () + d); }
 
-        virtual Geometry::Box const &getBoundingBox () const { return *this; }
+        virtual Geometry::Box getBoundingBox () const;
 
         /// Zawsze zwraca LL.
         Geometry::Point const &getOrigin () const { return getLL (); }

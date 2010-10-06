@@ -16,6 +16,7 @@
 #include <IToStringEnabled.h>
 
 #include "geometry/Point.h"
+#include "geometry/Box.h"
 
 namespace Geometry {
 
@@ -32,6 +33,7 @@ typedef boost::numeric::ublas::matrix <double, boost::numeric::ublas::column_maj
 /**
  * Affine matrix type optimised to use with OpenGL. Dostęp do poszczególnych
  * elementów za pomocą operatora (). Najpierw numer wiersza, potem kolumny.
+ * TODO Do osobnego pliku.
  * \ingroup Geometry
  */
 class AffineMatrix : public AffineMatrixType, public Core::IToStringEnabled {
@@ -70,6 +72,11 @@ private:
  * Stos - dla eventów.
  */
 typedef std::stack <AffineMatrix> AffineMatrixStack;
+
+/**
+ * Bounding box z dwóch innych boxów.
+ */
+extern Box getBoundingBox (Box const &b1, Box const &b2);
 
 } // namespace
 

@@ -19,8 +19,8 @@ namespace Model {
 enum HAlign {
         LEFT, /// Jeśli widget jest węższy niż komórka tabeli, przesuń go do lewej krawędzi komórki.
         HCENTER, /// Jeśli widget jest węższy niż komórka tabeli, przesuń go na środek komórki.
-        RIGHT, /// Jeśli widget jest węższy niż komórka tabeli, przesuń go do prawej krawędzi komórki.
-        HSTRETCH /// Jeśli widget jest węższy niż komórka tabeli, rozciągnij go na szerokość do szerokości komórki.
+        RIGHT /// Jeśli widget jest węższy niż komórka tabeli, przesuń go do prawej krawędzi komórki.
+        //HSTRETCH /// Jeśli widget jest węższy niż komórka tabeli, rozciągnij go na szerokość do szerokości komórki.
 };
 
 /**
@@ -29,8 +29,8 @@ enum HAlign {
 enum VAlign {
         TOP, /// Jeśli widget jest niższy niż komórka tabeli, przesuń go do górnej krawędzi komórki.
         VCENTER, /// Jeśli widget jest niższy niż komórka tabeli, przesuń go do środka komórki.
-        BOTTOM, /// Jeśli widget jest niższy niż komórka tabeli, przesuń go do dolnej krawędzi komórki.
-        VSTRETCH /// Jeśli widget jest niższy niż komórka tabeli, rozciągnij go na wysokość do wysokości komórki.
+        BOTTOM /// Jeśli widget jest niższy niż komórka tabeli, przesuń go do dolnej krawędzi komórki.
+        //VSTRETCH /// Jeśli widget jest niższy niż komórka tabeli, rozciągnij go na wysokość do wysokości komórki.
 };
 
 /**
