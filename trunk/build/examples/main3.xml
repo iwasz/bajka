@@ -77,7 +77,22 @@
         <property name="model.x2"><value type="double">100</value></property>
         <property name="model.y2"><value type="double">100</value></property>        
     </bean>
-
+    
+    
+    <!-- Kontroler prostokąta z modelem. -->
+    <bean id="customCtr" class="SimpleController" init-method="init" abstract="true">
+        <!--View-->
+        <property name="widget">
+            <bean class="Rectangle" abstract="true">
+                <property name="model">
+                    <bean class="CustomModel" init-method="init"/>
+                </property>
+            </bean>
+        </property>
+        
+        <!-- Domyślnie obrazek nie przyjmuje żadnych eventów -->
+        <property name="bitMask"><value type="unsigned int">0</value></property>
+    </bean>
 <!-- ===================================================================================== -->
 
     <bean id="screen" class="SimpleController" init-method="init" singleton="true">
@@ -142,6 +157,20 @@
                             </bean>                        
                         </list>
                     </property>
+                </bean>
+
+                <bean parent="customCtr">
+                    <property name="model.x1"><value type="double">-200</value></property>
+                    <property name="model.y1"><value type="double">0</value></property>
+                    <property name="model.x2"><value type="double">0</value></property>
+                    <property name="model.y2"><value type="double">200</value></property>        
+                </bean>
+
+                <bean parent="myRect">
+                    <property name="model.x1"><value type="double">-200</value></property>
+                    <property name="model.y1"><value type="double">0</value></property>
+                    <property name="model.x2"><value type="double">0</value></property>
+                    <property name="model.y2"><value type="double">200</value></property>        
                 </bean>
     
             </list>

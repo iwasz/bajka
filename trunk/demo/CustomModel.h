@@ -6,35 +6,24 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef IMAGE_MODEL_H_
-#define IMAGE_MODEL_H_
+#ifndef CUSTOMMODEL_H_
+#define CUSTOMMODEL_H_
 
-#include <string>
-#include <Reflection.h>
-#include "Shape.h"
-
-namespace Model {
+#include "../model/Box.h"
 
 /**
- * \ingroup Model
+ * Model do celów testowych. W metodzie init wykonuje jakieś dodatkowe
+ * czary.
  */
-// Dziedziczy z Box, bo Shape jest abstrakcyjny.
-class Image : public Model::Box {
+class CustomModel : public Model::Box {
 public:
         __c (void)
         _b ("Model::Box")
 
-        virtual ~Image () {}
+        virtual ~CustomModel () {}
+        _m (init) void init ();
 
-        virtual Core::String getPath() const { return path; }
-        _m (setPath) virtual void setPath (Core::String const &path) { this->path = path; }
-
-private:
-
-        Core::String path;
-        _e (Model::Image);
+        _e (CustomModel)
 };
 
-}
-
-#	endif /* IMAGE_H_ */
+#	endif /* CUSTOMMODEL_H_ */

@@ -23,8 +23,17 @@
  */
 int main (int argc, char **argv)
 {
+        std::string fileName;
+
+        if (argc > 1) {
+                fileName = *(argv + 1);
+        }
+        else {
+                fileName = "main.xml";
+        }
+
         // Nie roine try-catch, bo i tak info zostanie wypisane.
-        Ptr <Container2::BeanFactoryContainer> container = Container2::XmlContainerFactory::createContainer ("main.xml");
+        Ptr <Container2::BeanFactoryContainer> container = Container2::XmlContainerFactory::createContainer (fileName);
         Ptr <Util::BajkaApp> app = vcast <Ptr <Util::BajkaApp> > (container->getBean ("app"));
 
         // TODO Do wywalenia, kiedy beany singleton będą się same instancjonowac.

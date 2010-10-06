@@ -56,6 +56,10 @@ void Table::doUpdate ()
                 double bbh = (*i)->getBoundingBox ().getHeight ();
                 double bbw = (*i)->getBoundingBox ().getWidth ();
 
+#if 0
+                std::cerr << bbh << ", " << bbw << std::endl;
+#endif
+
                 // Ogólnie największa szerokość/wysokość
                 maxCellWidthPerTable = max (bbw, maxCellWidthPerTable);
                 maxCellHeightPerTable = max (bbh, maxCellHeightPerTable);
@@ -107,6 +111,10 @@ void Table::doUpdate ()
         setWidth (tableW);
         setHeight (tableH);
 
+#if 0
+        std::cerr << tableW << ", " << tableH << std::endl;
+#endif
+
         // Szerokość i wysokośc kolumn gdy robimy expand.
         double expRowH = tableH / rowNo;
         double expColW = tableW / columnNo;
@@ -125,24 +133,15 @@ void Table::doUpdate ()
 
         for (iterator i = begin (); i != end (); ++i) {
 
-                double bbh = (*i)->getBoundingBox ().getHeight ();
-                double bbw = (*i)->getBoundingBox ().getWidth ();
+                Geometry::Box bb = (*i)->getBoundingBox ();
+                double bbh = bb.getHeight ();
+                double bbw = bb.getWidth ();
 
                 cellW = getCellW (bbw, maxCellWidthPerCol[curC], maxCellWidthPerTable, expColW);
 
-                // Jeśli jest ustawione expand, to trzeba też rozciągnąć widgety do rozmiaru komórek.
-                // TODO jak to zaimplementować z nowym interfejsem? Chyba się nie da (może jakieś request size, albo olać - w sumie, to po chuj ten expand)
-//                if (hAlign == HSTRETCH) {
-//                        (*i)->setWidth (cellW);
-//                }
-//
-//                if (vAlign == VSTRETCH) {
-//                        (*i)->setHeight (cellH);
-//                }
-
                 Point p;
 
-                if (hAlign == LEFT || hAlign == HSTRETCH) {
+                if (hAlign == LEFT /*|| hAlign == HSTRETCH*/) {
                         p.setX (x);
                 }
                 else if (hAlign == RIGHT) {
@@ -152,7 +151,7 @@ void Table::doUpdate ()
                         p.setX (x + (cellW - bbw) / 2.0);
                 }
 
-                if (vAlign == BOTTOM || vAlign == VSTRETCH) {
+                if (vAlign == BOTTOM /*|| vAlign == VSTRETCH*/) {
                         p.setY (y);
                 }
                 else if (vAlign == TOP) {
@@ -162,7 +161,8 @@ void Table::doUpdate ()
                         p.setY (y + (cellH - bbh) / 2.0);
                 }
 
-                (*i)->setMove (p);// Powinno być bezwzględnie, ale w stosunku do BBox.
+                // TODO Powinno być bezwzględnie, ale w stosunku do BBox.
+                (*i)->setMove (p - bb.getLL ());
 
                 x += cellW;
 

@@ -22,9 +22,6 @@
 namespace Model {
 
 /**
- * Marker
- * TODO Zastanowić się jakie właściwie tu powinny być metody.
- *
  * Rodzaje układów współrzędznych w Bajce.
  * - Device coordinates : to są współrzędne ekranowe po naszemu i w ich przypadku
  * w górnym lewym rogu ekranu zawsze wypada 0,0. Oś Y rośnie do dołu, jednostki są
@@ -107,6 +104,8 @@ struct IModel :
 
         //\}
 
+/*--------------------------------------------------------------------------*/
+
         /// \name Zaawansowae przekształcenia
         //\{
 
@@ -130,6 +129,8 @@ struct IModel :
         virtual void setResize (double w, double h, Geometry::Point const &p) = 0;
 
         //\}
+
+/*--------------------------------------------------------------------------*/
 
         /// \name Układy współrzędznych
         //\{
@@ -167,7 +168,7 @@ struct IModel :
         /**
          * Zwraca boundingBox w układzie współrzędnych swojego rodzica.
          */
-        virtual Geometry::Box const &getBoundingBox () const = 0;
+        virtual Geometry::Box getBoundingBox () const = 0;
 
         /**
          * Każdy model ma swój środek. Stanowi on :

@@ -26,7 +26,7 @@ public:
 
         virtual ~AbstractModel () {}
 
-/*------affine-transformations----------------------------------------------*/
+/*--------------------------------------------------------------------------*/
 
         /// \name Przekształcenia / układy współrzędznych
         //\{
@@ -57,6 +57,34 @@ public:
 
         // TODO To do zastanowienia.
         Geometry::AffineMatrix const &updateMatrixStack () const;
+
+        //\}
+
+/*--------------------------------------------------------------------------*/
+
+        /// \name Kształt / pozycja
+        //\{
+
+        /**
+         * Domyślna implementacja sprawdza, czy któreś z dzieci zawiera punkt p. Nie jest to
+         * najszybsze rozwiązanie, dlatego należy albo nie dodawać żadnych dzieci (w kodzie
+         * krytycznym), albo przedefiniować tą metodę.
+         */
+        virtual bool enclose (const Geometry::Point &p) const;
+
+        /**
+         * Domyślna implementacja zwraca bounding box obejmujący wszystkie swoje dzieci.
+         * Oczywiście ta implementacja nie jest zbyt szybka, dlatego w klasach konkretnych
+         * można ją przedefiniowac, tak, żeby tego nie robiła, albo wystarczy po prostu
+         * nie dodawać żadnych dzieci do widgeta, i wtedy ta metoda nie spowolni działania
+         * programu.
+         */
+        virtual Geometry::Box getBoundingBox () const;
+
+        /**
+         * Domyslna implementacja : zwraca punkt 0,0, czyli ten model ma środek tam gdzie rodzic.
+         */
+        virtual Geometry::Point const &getOrigin () const { static Geometry::Point p; return p; }
 
         //\}
 
@@ -133,7 +161,7 @@ struct Shapeless : public AbstractModel {
         virtual bool enclose (const Geometry::Point &p) const { return false; }
 
         /// Pudełko o zerowym rozmiarze.
-        virtual Geometry::Box const &getBoundingBox () const { static Geometry::Box b; return b; }
+        virtual Geometry::Box getBoundingBox () const { return Geometry::Box (); }
 
         /// Zawsze zwraca punkt (0, 0).
         Geometry::Point const &getOrigin () const { static Geometry::Point origin; return origin; }
