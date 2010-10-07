@@ -24,6 +24,7 @@ void TreeController::setModel (Ptr <IModel> m)
                 model->setOwner (this);
         }
 
+//        TODO To jest obejście problemu
 //        if (!model->getOwnerForParent () /*|| (!model->getOwnerForParent ()->getParentMAW () && getParentMAW ())*/) {
                 model->setOwnerForParent (this);
 //        }

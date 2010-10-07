@@ -25,6 +25,7 @@ void TreeWidget::setModel (Ptr <Model::IModel> m)
                 model->setOwner (this);
         }
 
+//        TODO To jest obejście problemu
 //        if (!model->getOwnerForParent () /*|| (!model->getOwnerForParent ()->getParentMAW () && getParentMAW ())*/) {
                 model->setOwnerForParent (this);
 //        }
