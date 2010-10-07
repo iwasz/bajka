@@ -83,18 +83,18 @@ ModelParentType TreeModel::getParent ()
 {
 #if 1
         std::cerr << (unsigned long int)owner << " "
-                  << (unsigned long int)((owner) ? (owner->getParentMAW ()) : 0) << " "
-                  << (unsigned long int)ownerWgt << " "
-                  << (unsigned long int)((ownerWgt) ? ownerWgt->getParentMAW () : 0) << std::endl;
+                  << (unsigned long int)((owner) ? (owner->ownsChildren ()) : 0) << " "
+                  << (unsigned long int)ownerForParent << " "
+                  << (unsigned long int)((ownerForParent) ? ownerForParent->getParentMAW () : 0) << std::endl;
 #endif
 
-        if (owner && owner->getParentMAW ()) {
-                return owner->getParentMAW ()->getModel ().get ();
-        }
-
-//        if (ownerWgt && ownerWgt->getParentMAW ()) {
-//                return ownerWgt->getParentMAW ()->getModel ().get ();
+//        if (owner && owner->getParentMAW ()) {
+//                return owner->getParentMAW ()->getModel ().get ();
 //        }
+
+        if (ownerForParent && ownerForParent->getParentMAW ()) {
+                return ownerForParent->getParentMAW ()->getModel ().get ();
+        }
 
         return ModelParentType ();
 }
@@ -107,13 +107,13 @@ ModelParentType TreeModel::getParent ()
  */
 ModelParentConstType TreeModel::getParent () const
 {
-        if (owner && owner->getParentMAW ()) {
-                return owner->getParentMAW ()->getModel ().get ();
-        }
-
-//        if (ownerWgt && ownerWgt->getParentMAW ()) {
-//                return ownerWgt->getParentMAW ()->getModel ().get ();
+//        if (owner && owner->getParentMAW ()) {
+//                return owner->getParentMAW ()->getModel ().get ();
 //        }
+
+        if (ownerForParent && ownerForParent->getParentMAW ()) {
+                return ownerForParent->getParentMAW ()->getModel ().get ();
+        }
 
         return ModelParentConstType ();
 }

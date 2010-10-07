@@ -20,10 +20,13 @@ void TreeController::setModel (Ptr <IModel> m)
 {
         model = m;
 
-        // Ustawiamy tylko jeśli jeszcze nie ma.
-        if (!model->getOwner ()) {
+        if (!model->getOwner () || (!model->getOwner ()->ownsChildren () && ownsChildren ())) {
                 model->setOwner (this);
         }
+
+//        if (!model->getOwnerForParent () /*|| (!model->getOwnerForParent ()->getParentMAW () && getParentMAW ())*/) {
+                model->setOwnerForParent (this);
+//        }
 }
 
 /****************************************************************************/
