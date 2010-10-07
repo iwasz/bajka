@@ -23,7 +23,7 @@ namespace Model {
 class TreeModel : public IModel {
 public:
 
-        TreeModel (): owner (0) {}
+        TreeModel (): owner (0), ownerWgt (0) {}
         virtual ~TreeModel () {}
 
 /*------parents-------------------------------------------------------------*/
@@ -58,9 +58,17 @@ private:
         /// Ustawia obiekt ownera, czyli kontroler, lub widget, który zawiera ten model.
         void setOwner (ModelOwnerType o) { owner = o; }
 
+        /// Zwraca obiekt ownera, czyli kontroler, lub widget, który zawiera ten model.
+        ModelOwnerType getOwnerWgt () { return ownerWgt; }
+        /// Zwraca obiekt ownera, czyli kontroler, lub widget, który zawiera ten model.
+        ModelOwnerConstType getOwnerWgt () const { return ownerWgt; }
+        /// Ustawia obiekt ownera, czyli kontroler, lub widget, który zawiera ten model.
+        void setOwnerWgt (ModelOwnerType o) { ownerWgt = o; }
+
 private:
 
         ModelOwnerType owner;
+        ModelOwnerType ownerWgt;
 
 };
 

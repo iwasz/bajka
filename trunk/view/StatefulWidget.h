@@ -17,6 +17,10 @@ namespace View {
  * Widget zawierający kilka innych widgetów i wyświetlający tylko jeden z nich. Zawierane
  * widgety są indeksowane poprzez napisy. Każdy ma przyporzadkowany klucz i można wybrać,
  * który ma być aktualnie pokazywany.
+ * TODO to powinna być klasa abstrakcyjna, a z tą listą widgetów konkretna. A co by było
+ * gdybym chciał zrobić podświetlany prostokąt (wystarczy zmieinć kolor, a nie podmieniać
+ * całe widgety). Zastanowić się. Patrz CustomRect. IMHO : nic nie zaszkodzi jeśli to będzie
+ * klasa abstrakcyjna + kokretna.
  * \ingroup View
  */
 class StatefulWidget : public AbstractWidget {

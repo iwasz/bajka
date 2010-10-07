@@ -109,7 +109,7 @@ void AffineMatrix::transform (Point *p) const
 
 /****************************************************************************/
 
-Point AffineMatrix::transform (const Point &p) const
+Point AffineMatrix::getTransformed (const Point &p) const
 {
         Point tmp (p);
         transform (&tmp);
@@ -142,6 +142,15 @@ Core::String AffineMatrix::toString (unsigned int) const
 void AffineMatrix::inverse ()
 {
         invertMatrix (data ().begin (), data ().begin ());
+}
+
+/****************************************************************************/
+
+AffineMatrix AffineMatrix::getInversed () const
+{
+        AffineMatrix tmp = *this;
+        tmp.inverse ();
+        return tmp;
 }
 
 /**

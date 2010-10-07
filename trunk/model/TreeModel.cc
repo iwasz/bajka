@@ -13,6 +13,10 @@ using namespace Base;
 
 Model::ModelConstIter TreeModel::begin () const
 {
+        if (ownerWgt && ownerWgt->ownsChildren () && !owner->ownsChildren ()) {
+//                std::cerr << "TreeModel::begin ()" << std::endl;
+                return const_cast <Model::IModelAware const *> (ownerWgt)->beginForModel ();
+        }
         return const_cast <Model::IModelAware const *> (owner)->beginForModel ();
 }
 
@@ -20,6 +24,11 @@ Model::ModelConstIter TreeModel::begin () const
 
 Model::ModelIter TreeModel::begin ()
 {
+        if (ownerWgt && ownerWgt->ownsChildren () && !owner->ownsChildren ()) {
+//                std::cerr << "TreeModel::begin ()" << std::endl;
+                return ownerWgt->beginForModel ();
+        }
+
         return owner->beginForModel ();
 }
 
@@ -27,6 +36,9 @@ Model::ModelIter TreeModel::begin ()
 
 Model::ModelConstIter TreeModel::end () const
 {
+        if (ownerWgt && ownerWgt->ownsChildren () && !owner->ownsChildren ()) {
+                return const_cast <Model::IModelAware const *> (ownerWgt)->endForModel ();
+        }
         return const_cast <Model::IModelAware const *> (owner)->endForModel ();
 }
 
@@ -34,6 +46,9 @@ Model::ModelConstIter TreeModel::end () const
 
 Model::ModelIter TreeModel::end ()
 {
+        if (ownerWgt && ownerWgt->ownsChildren () && !owner->ownsChildren ()) {
+                return ownerWgt->endForModel ();
+        }
         return owner->endForModel ();
 }
 
@@ -41,7 +56,15 @@ Model::ModelIter TreeModel::end ()
 
 bool TreeModel::hasChildren () const
 {
-        return (owner) ? (owner->hasChildrenMAW ()) : (true);
+        if (ownerWgt && ownerWgt->hasChildrenMAW ()) {
+                return true;
+        }
+
+        if (owner) {
+                return owner->hasChildrenMAW ();
+        }
+
+        return false;
 }
 
 /**
@@ -58,8 +81,19 @@ bool TreeModel::hasChildren () const
  */
 ModelParentType TreeModel::getParent ()
 {
+#if 1
+        std::cerr << (unsigned long int)owner << " "
+                  << (unsigned long int)((owner) ? (owner->getParentMAW ()) : 0) << " "
+                  << (unsigned long int)ownerWgt << " "
+                  << (unsigned long int)((ownerWgt) ? ownerWgt->getParentMAW () : 0) << std::endl;
+#endif
+
         if (owner && owner->getParentMAW ()) {
                 return owner->getParentMAW ()->getModel ().get ();
+        }
+
+        if (ownerWgt && ownerWgt->getParentMAW ()) {
+                return ownerWgt->getParentMAW ()->getModel ().get ();
         }
 
         return ModelParentType ();
@@ -75,6 +109,10 @@ ModelParentConstType TreeModel::getParent () const
 {
         if (owner && owner->getParentMAW ()) {
                 return owner->getParentMAW ()->getModel ().get ();
+        }
+
+        if (ownerWgt && ownerWgt->getParentMAW ()) {
+                return ownerWgt->getParentMAW ()->getModel ().get ();
         }
 
         return ModelParentConstType ();

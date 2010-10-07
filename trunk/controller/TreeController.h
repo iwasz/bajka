@@ -96,6 +96,8 @@ public:
         void clearChildren ();
 
         bool hasChildren () const { return !children.empty (); }
+        /// ToW przypadku kontrolera to samo co hasChildren.
+        bool ownsChildren () const { return !children.empty (); }
 
 private:
 

@@ -56,7 +56,7 @@ void Table::doUpdate ()
                 double bbh = (*i)->getBoundingBox ().getHeight ();
                 double bbw = (*i)->getBoundingBox ().getWidth ();
 
-#if 0
+#if 1
                 std::cerr << bbh << ", " << bbw << std::endl;
 #endif
 
@@ -111,7 +111,7 @@ void Table::doUpdate ()
         setWidth (tableW);
         setHeight (tableH);
 
-#if 0
+#if 1
         std::cerr << tableW << ", " << tableH << std::endl;
 #endif
 
