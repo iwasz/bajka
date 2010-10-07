@@ -21,7 +21,7 @@ using namespace std;
 
 void Table::doUpdate ()
 {
-#if 1
+#if 0
         std::cerr << "Table=" << (unsigned long int)this << std::endl;
 #endif
 
@@ -60,7 +60,7 @@ void Table::doUpdate ()
                 double bbh = (*i)->getBoundingBox ().getHeight ();
                 double bbw = (*i)->getBoundingBox ().getWidth ();
 
-#if 1
+#if 0
                 std::cerr << "Child bbh=" << bbh << ", bbw=" << bbw << std::endl;
 #endif
 
@@ -115,7 +115,7 @@ void Table::doUpdate ()
         setWidth (tableW);
         setHeight (tableH);
 
-#if 1
+#if 0
         std::cerr << "Table dimensions : " << tableW << ", " << tableH << std::endl;
 #endif
 

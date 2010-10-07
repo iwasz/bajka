@@ -81,7 +81,7 @@ bool TreeModel::hasChildren () const
  */
 ModelParentType TreeModel::getParent ()
 {
-#if 1
+#if 0
         std::cerr << (unsigned long int)owner << " "
                   << (unsigned long int)((owner) ? (owner->ownsChildren ()) : 0) << " "
                   << (unsigned long int)ownerForParent << " "
