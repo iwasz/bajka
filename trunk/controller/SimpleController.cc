@@ -90,12 +90,9 @@ bool SimpleController::ObserverHelper::checkArea (Event::MouseEvent *e)
         if (parent) {
                 // Przetransforuj punkt z ukladu screen do układu rodzica.
                 p = parent->screenToModel (p);
-#if 1
+#if 0
                 std::cerr << "---> [" << p << "], enclose [" << myModel->enclose (p) << "]" << std::endl;
 #endif
-        }
-        else {
-                std::cerr << (unsigned long int)myModel << " has no parent" << std::endl;
         }
 
         // Podaj punkt w układzie rodzica.

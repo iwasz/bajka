@@ -393,6 +393,14 @@
             <list class="ControllerCollection">
                 <ref bean="scrollController" />             
                 <ref bean="osdLayerCtr" />
+                <bean class="MachineController">
+                    <property name="model">
+                        <bean class="Model::Box"/>
+                    </property>
+                    <property name="widget">
+                        <bean class="EmptyWidget"/>
+                    </property>
+                </bean>
             </list>
         </property>
 
