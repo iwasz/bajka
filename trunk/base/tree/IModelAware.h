@@ -44,6 +44,8 @@ struct IModelAware {
         virtual IModelAware *getParentMAW () = 0;
         /// Dziwne nazwy pozwalają uniknąć konfliktu nazw.
         virtual bool hasChildrenMAW () const = 0;
+        // TODO niespójna nazwa
+        virtual bool ownsChildren () const = 0;
 
         // Typy tych iteratorów są dostosowane do iteratorów z kolekcji STL.
         virtual ModelConstIter beginForModel () const = 0;

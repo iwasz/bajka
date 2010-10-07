@@ -123,7 +123,10 @@
  * Co i jak się uruchamia kiedy rysujemy kontroler/widget (co się dzieje z dziećmi).
  *
  * \subsection Inicjowanie
- * Co i w jakiej kolejności inicjowac, a czego nie.
+ * Co i w jakiej kolejności inicjowac, a czego nie. W szczególności zakręcone jest to, że jak się model ustawi
+ * widgetowi jako pierwszemu, a potem kontrolerowi, to tem model ma ownera jako ten widget (i getParent zwraca
+ * NULL, nie ma też dzieci - mimo, że kontroler ma dzieci i rodzica). I na odwrot. Nie wiem - może to zmienić?
+ * W końcu zawieranie przez kontrolery jest wazniejsze!
  *
  * \section Eventy
  * Section

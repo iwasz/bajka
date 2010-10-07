@@ -6,39 +6,31 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef RECTANGLE_VIEW_H_
-#define RECTANGLE_VIEW_H_
+#ifndef CUSTOMRECT_H_
+#define CUSTOMRECT_H_
 
-#include "AbstractWidget.h"
-
-namespace Model {
-class Box;
-}
-
-namespace View {
+#include "../view/Rectangle.h"
 
 /**
- * Rysuje prostokąt.
- * \ingroup View
+ * To jest testowy prostokąt, który ma opcję wypełnienia.
  */
-class Rectangle : public AbstractWidget {
+class CustomRect : public View::Rectangle {
 public:
         __c (void)
-        _b ("AbstractWidget")
+        _b ("Rectangle")
 
-        Rectangle () : box () {}
-        virtual ~Rectangle () {}
+        CustomRect () : fill (false) {}
+        virtual ~CustomRect () {}
 
-        virtual void setModel (Ptr <Model::IModel> model);
-        virtual void doDraw ();
+        void setFill (bool b) { fill = b; }
+        bool getFill () const { return fill; }
 
-// Żeby nie trzeba było kastowac modelu na box w pochodnych.
-protected:
+        void doDraw ();
 
-        Model::Box *box;
-        _e (Rectangle)
+private:
+
+        bool fill;
+        _e (CustomRect)
 };
 
-}
-
-#	endif /* RECTANGLE_H_ */
+#	endif /* CUSTOMRECT_H_ */

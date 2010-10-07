@@ -15,8 +15,10 @@ using namespace Geometry;
 
 bool Box::enclose (const Geometry::Point &p) const
 {
-        return boost::geometry::within (p, *(static_cast <const Geometry::Box *> (this))) ||
-                        AbstractModel::enclose(p);
+        Point tmp = getMatrix ().getInversed ().getTransformed (p);
+
+        return boost::geometry::within (tmp, *(static_cast <const Geometry::Box *> (this))) ||
+                        AbstractModel::enclose(tmp);
 }
 
 ///****************************************************************************/

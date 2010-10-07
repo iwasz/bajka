@@ -46,6 +46,8 @@ std::string getNameMdl (IModel *i)
         return dynamic_cast <T_AbstractModel *> (i)->getName ();
 }
 
+BOOST_AUTO_TEST_SUITE (TreeTest);
+
 /*--------------------------------------------------------------------------*/
 
 BOOST_AUTO_TEST_CASE (InstantiationTest)
@@ -993,3 +995,4 @@ BOOST_AUTO_TEST_CASE (TreeIter_empty)
         BOOST_CHECK (j != j1);
 }
 
+BOOST_AUTO_TEST_SUITE_END ();

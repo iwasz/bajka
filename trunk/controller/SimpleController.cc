@@ -51,6 +51,9 @@ const AffineMatrix &SimpleControllerContext::topMaptrix () const
 
 /*##########################################################################*/
 
+
+#if 0
+// To (błednie) ale działa jakoś.
 bool SimpleController::ObserverHelper::checkArea (Event::MouseEvent *e)
 {
         if (!myModel) {
@@ -73,6 +76,33 @@ bool SimpleController::ObserverHelper::checkArea (Event::MouseEvent *e)
 
         return false;
 }
+#else
+// A to już prawie w ogóle nie działa, ale wydaje mji się, że ta implementacja jest własciwa.
+bool SimpleController::ObserverHelper::checkArea (Event::MouseEvent *e)
+{
+        if (!myModel) {
+                return false;
+        }
+
+        Geometry::Point p = e->getPosition();
+        Model::IModel *parent = myModel->getParent ();
+
+        if (parent) {
+                // Przetransforuj punkt z ukladu screen do układu rodzica.
+                p = parent->screenToModel (p);
+#if 0
+                std::cerr << "---> [" << p << "], enclose [" << myModel->enclose (p) << "]" << std::endl;
+#endif
+        }
+
+        // Podaj punkt w układzie rodzica.
+        if (myModel->enclose (p)) {
+                return true;
+        }
+
+        return false;
+}
+#endif
 
 bool SimpleController::ObserverHelper::onButtonPress (Event::ButtonPressEvent *e)
 {

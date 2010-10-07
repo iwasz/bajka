@@ -49,6 +49,7 @@ public:
 
         void resetIdentity ();
         void inverse ();
+        AffineMatrix getInversed () const;
 
         void move (const Geometry::Point &p);
         void rotate (double r, Geometry::Point const &p = Geometry::Point (0, 0));
@@ -57,7 +58,7 @@ public:
 /*------apply-transformation------------------------------------------------*/
 
         void transform (Point *) const;
-        Point transform (const Point &) const;
+        Point getTransformed (const Point &) const;
 
 /*--------------------------------------------------------------------------*/
 

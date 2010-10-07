@@ -239,14 +239,14 @@ BOOST_AUTO_TEST_CASE (testTableLayout)
         model->setRowHeight (HIGHEST_CELL_IN_ROW);
         model->setColWidth (NONE);
         model->update ();
-        BOOST_CHECK_EQUAL (m1->getMatrix ().transform (m1->getLL ()), Point (0, 5));
-        BOOST_CHECK_EQUAL (m1->getMatrix ().transform (m1->getUR ()), Point (2, 7));
-        BOOST_CHECK_EQUAL (m2->getMatrix ().transform (m2->getLL ()), Point (2, 5));
-        BOOST_CHECK_EQUAL (m2->getMatrix ().transform (m2->getUR ()), Point (5, 8));
-        BOOST_CHECK_EQUAL (m3->getMatrix ().transform (m3->getLL ()), Point (0, 0));
-        BOOST_CHECK_EQUAL (m3->getMatrix ().transform (m3->getUR ()), Point (4, 4));
-        BOOST_CHECK_EQUAL (m4->getMatrix ().transform (m4->getLL ()), Point (4, 0));
-        BOOST_CHECK_EQUAL (m4->getMatrix ().transform (m4->getUR ()), Point (9, 5));
+        BOOST_CHECK_EQUAL (m1->getMatrix ().getTransformed (m1->getLL ()), Point (0, 5));
+        BOOST_CHECK_EQUAL (m1->getMatrix ().getTransformed (m1->getUR ()), Point (2, 7));
+        BOOST_CHECK_EQUAL (m2->getMatrix ().getTransformed (m2->getLL ()), Point (2, 5));
+        BOOST_CHECK_EQUAL (m2->getMatrix ().getTransformed (m2->getUR ()), Point (5, 8));
+        BOOST_CHECK_EQUAL (m3->getMatrix ().getTransformed (m3->getLL ()), Point (0, 0));
+        BOOST_CHECK_EQUAL (m3->getMatrix ().getTransformed (m3->getUR ()), Point (4, 4));
+        BOOST_CHECK_EQUAL (m4->getMatrix ().getTransformed (m4->getLL ()), Point (4, 0));
+        BOOST_CHECK_EQUAL (m4->getMatrix ().getTransformed (m4->getUR ()), Point (9, 5));
 }
 
 /**
@@ -288,14 +288,14 @@ BOOST_AUTO_TEST_CASE (testTableLayout2)
         model->setRowHeight (HIGHEST_CELL_IN_ROW);
         model->setColWidth (NONE);
         model->update ();
-        BOOST_CHECK_EQUAL (m1->getMatrix ().transform (m1->getLL ()), Point (0, 6));
-        BOOST_CHECK_EQUAL (m1->getMatrix ().transform (m1->getUR ()), Point (2, 8));
-        BOOST_CHECK_EQUAL (m2->getMatrix ().transform (m2->getLL ()), Point (2, 5));
-        BOOST_CHECK_EQUAL (m2->getMatrix ().transform (m2->getUR ()), Point (5, 8));
-        BOOST_CHECK_EQUAL (m3->getMatrix ().transform (m3->getLL ()), Point (0, 1));
-        BOOST_CHECK_EQUAL (m3->getMatrix ().transform (m3->getUR ()), Point (4, 5));
-        BOOST_CHECK_EQUAL (m4->getMatrix ().transform (m4->getLL ()), Point (4, 0));
-        BOOST_CHECK_EQUAL (m4->getMatrix ().transform (m4->getUR ()), Point (9, 5));
+        BOOST_CHECK_EQUAL (m1->getMatrix ().getTransformed (m1->getLL ()), Point (0, 6));
+        BOOST_CHECK_EQUAL (m1->getMatrix ().getTransformed (m1->getUR ()), Point (2, 8));
+        BOOST_CHECK_EQUAL (m2->getMatrix ().getTransformed (m2->getLL ()), Point (2, 5));
+        BOOST_CHECK_EQUAL (m2->getMatrix ().getTransformed (m2->getUR ()), Point (5, 8));
+        BOOST_CHECK_EQUAL (m3->getMatrix ().getTransformed (m3->getLL ()), Point (0, 1));
+        BOOST_CHECK_EQUAL (m3->getMatrix ().getTransformed (m3->getUR ()), Point (4, 5));
+        BOOST_CHECK_EQUAL (m4->getMatrix ().getTransformed (m4->getLL ()), Point (4, 0));
+        BOOST_CHECK_EQUAL (m4->getMatrix ().getTransformed (m4->getUR ()), Point (9, 5));
 }
 
 BOOST_AUTO_TEST_SUITE_END ();

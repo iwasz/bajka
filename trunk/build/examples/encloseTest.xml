@@ -63,14 +63,8 @@
     <!--na przykłąd model.translatePont.-->
     <bean id="imageCtr" class="SimpleController" init-method="init" abstract="true">
         <!--Model ustawia się z imageWgt -->
-        <property name="model">
-            <bean id="model" class="Model::Image" scope="bean"/>
-        </property>
-
         <!--View-->
-        <property name="widget">
-            <bean class="View::Image"/>
-        </property>
+        <property name="widget" ref="imageWgt"/>
         
         <!-- Domyślnie obrazek nie przyjmuje żadnych eventów -->
         <property name="bitMask"><value type="unsigned int">0</value></property>
@@ -95,6 +89,15 @@
         <property name="bitMask"><value type="unsigned int">0</value></property>
     </bean>
 
+    <bean id="customRectCtr" class="CustomController" init-method="init" abstract="true">
+        <property name="model">
+            <bean id="model" class="Model::Box" scope="bean"/>
+        </property>
+        <property name="widget">
+            <bean class="CustomRect"/>
+        </property>       
+    </bean>
+    
 <!-- ===================================================================================== -->
 
     <bean id="tableWgt" class="EmptyWidget" abstract="true">
@@ -135,8 +138,7 @@
         </property>
 
         <property name="model">
-<!--            <bean id="model" class="Model::Box" scope="bean"/>-->
-            <bean class="Model::Box" />
+            <bean id="model" class="Model::Box" scope="bean"/>
         </property>
 
         <property name="currentWidget" value="normal" />  
@@ -145,10 +147,6 @@
 
 
     <bean id="buttonCtr" class="ButtonController" init-method="init">
-<!--        <property name="model">-->
-<!--            <bean class="Model::Box" />-->
-<!--        </property>-->
-
         <property name="widget">
             <bean parent="buttonWgt"/>
         </property>
@@ -266,13 +264,126 @@
         </property>
     </bean>
     
-    <bean id="osdLayerCtr" parent="layerCtr">
-            <property name="children">
-            <list class="ControllerCollection">
-                <ref bean="buttonTable" />
-            </list>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Zwykły prosty kwadracik -->
+    <bean id="rect1" parent="customRectCtr">
+        <property name="model.x1"><value type="double">0</value></property>
+        <property name="model.y1"><value type="double">0</value></property>
+        <property name="model.x2"><value type="double">50</value></property>
+        <property name="model.y2"><value type="double">50</value></property>        
+    </bean>
+
+    <!-- Move, ale origin nadal 0,0 -->
+    <bean id="rect2" parent="customRectCtr">
+        <property name="model.x1"><value type="double">0</value></property>
+        <property name="model.y1"><value type="double">0</value></property>
+        <property name="model.x2"><value type="double">50</value></property>
+        <property name="model.y2"><value type="double">50</value></property>        
+        <property name="model.move">
+            <bean class="Point">
+                <property name="x"><value type="double">60</value></property>
+                <property name="y"><value type="double">0</value></property>
+            </bean>
         </property>
     </bean>
+
+    <!-- Banalny prost. origin 0, 0, move + rotate -->
+    <bean id="rect3" parent="customRectCtr">
+        <property name="model.x1"><value type="double">0</value></property>
+        <property name="model.y1"><value type="double">0</value></property>
+        <property name="model.x2"><value type="double">50</value></property>
+        <property name="model.y2"><value type="double">50</value></property>        
+        <property name="model.move">
+            <bean class="Point">
+                <property name="x"><value type="double">-70</value></property>
+                <property name="y"><value type="double">0</value></property>
+            </bean>
+        </property>
+        <property name="model.rotate">
+                <value type="double">45</value>
+        </property>
+    </bean>
+
+    <!-- Bez transformacji, ale za to origin ine jest w 0,0 -->
+    <bean id="rect4" parent="customRectCtr">
+        <property name="model.x1"><value type="double">120</value></property>
+        <property name="model.y1"><value type="double">0</value></property>
+        <property name="model.x2"><value type="double">170</value></property>
+        <property name="model.y2"><value type="double">50</value></property>        
+    </bean>
+
+    <bean id="rect5" parent="customRectCtr">
+        <property name="model.x1"><value type="double">0</value></property>
+        <property name="model.y1"><value type="double">-60</value></property>
+        <property name="model.x2"><value type="double">50</value></property>
+        <property name="model.y2"><value type="double">-10</value></property>        
+            <property name="model.move">
+            <bean class="Point">
+                <property name="x"><value type="double">-70</value></property>
+                <property name="y"><value type="double">0</value></property>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="rect6" parent="customRectCtr">
+        <property name="model.x1"><value type="double">0</value></property>
+        <property name="model.y1"><value type="double">-60</value></property>
+        <property name="model.x2"><value type="double">50</value></property>
+        <property name="model.y2"><value type="double">-10</value></property>        
+        <property name="model.move">
+            <bean class="Point">
+                <property name="x"><value type="double">70</value></property>
+                <property name="y"><value type="double">-50</value></property>
+            </bean>
+        </property>
+        <property name="model.rotate">
+                <value type="double">45</value>
+        </property>
+        <property name="model.resizeW">
+                <value type="double">1.5</value>
+        </property>
+    </bean>
+
+
+    <bean id="layer1" parent="layerCtr">
+        <property name="children">
+            <list class="ControllerCollection">
+                <ref bean="rect1" />
+                <ref bean="rect2" />
+                <ref bean="rect3" />
+                <ref bean="rect4" />
+                <ref bean="rect5" />
+                <ref bean="rect6" />
+            </list>
+        </property>
+        <property name="model.move">
+            <bean class="Point">
+                <property name="x"><value type="double">0</value></property>
+                <property name="y"><value type="double">-150</value></property>
+            </bean>
+        </property>
+        <property name="model.rotate">
+                <value type="double">5</value>
+        </property>
+        <property name="model.resizeW">
+                <value type="double">1.2</value>
+        </property>
+    </bean>
+
+
+
 
 <!-- ===================================================================================== -->
 
@@ -283,7 +394,13 @@
 
         <property name="children">
             <list class="ControllerCollection">
-                <ref bean="osdLayerCtr" />
+                <ref bean="rect1" />
+                <ref bean="rect2" />
+                <ref bean="rect3" />
+                <ref bean="rect4" />
+                <ref bean="rect5" />
+                <ref bean="rect6" />
+                <ref bean="layer1" />                
             </list>
         </property>
 
