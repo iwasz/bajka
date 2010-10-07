@@ -22,9 +22,10 @@ void TreeWidget::setModel (Ptr <Model::IModel> m)
         model = m;
 
         // Ustawiamy tylko jeśli jeszcze nie ma.
-        //if (!model->getOwner ()) {
-                model->setOwnerWgt (this);
-        //}
+        if (!model->getOwner ()) {
+//                model->setOwnerWgt (this);
+                model->setOwner (this);
+        }
 }
 
 /****************************************************************************/
