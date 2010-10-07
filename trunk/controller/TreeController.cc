@@ -21,9 +21,9 @@ void TreeController::setModel (Ptr <IModel> m)
         model = m;
 
         // Ustawiamy tylko jeśli jeszcze nie ma.
-        //if (!model->getOwner ()) {
+        if (!model->getOwner ()) {
                 model->setOwner (this);
-        //}
+        }
 }
 
 /****************************************************************************/
