@@ -34,9 +34,9 @@ struct ITreeModel {
         virtual ModelOwnerConstType getOwner () const = 0;
         virtual void setOwner (ModelOwnerType) = 0;
 
-        virtual ModelOwnerType getOwnerWgt () = 0;
-        virtual ModelOwnerConstType getOwnerWgt () const = 0;
-        virtual void setOwnerWgt (ModelOwnerType) = 0;
+        virtual ModelOwnerType getOwnerForParent () = 0;
+        virtual ModelOwnerConstType getOwnerForParent () const = 0;
+        virtual void setOwnerForParent (ModelOwnerType) = 0;
 
 /*------parents-------------------------------------------------------------*/
 

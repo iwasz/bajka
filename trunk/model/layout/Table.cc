@@ -21,6 +21,10 @@ using namespace std;
 
 void Table::doUpdate ()
 {
+#if 1
+        std::cerr << "Table=" << (unsigned long int)this << std::endl;
+#endif
+
         if (!rowNo || !columnNo) {
                 return;
         }
@@ -57,7 +61,7 @@ void Table::doUpdate ()
                 double bbw = (*i)->getBoundingBox ().getWidth ();
 
 #if 1
-                std::cerr << bbh << ", " << bbw << std::endl;
+                std::cerr << "Child bbh=" << bbh << ", bbw=" << bbw << std::endl;
 #endif
 
                 // Ogólnie największa szerokość/wysokość
@@ -112,7 +116,7 @@ void Table::doUpdate ()
         setHeight (tableH);
 
 #if 1
-        std::cerr << tableW << ", " << tableH << std::endl;
+        std::cerr << "Table dimensions : " << tableW << ", " << tableH << std::endl;
 #endif
 
         // Szerokość i wysokośc kolumn gdy robimy expand.
