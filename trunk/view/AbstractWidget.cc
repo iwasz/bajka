@@ -20,7 +20,13 @@ namespace View {
 
 void AbstractWidget::init ()
 {
-        for_each (begin (), end (), boost::mem_fn (&IView::init));
+//        for_each (begin (), end (), boost::mem_fn (&IView::init));
+        for (iterator i = begin (); i != end (); ++i) {
+                // Nie każdy kontroler musi mieć ustawiony widget.
+                if (*i) {
+                        (*i)->init ();
+                }
+        }
 }
 
 /****************************************************************************/

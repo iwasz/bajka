@@ -446,9 +446,9 @@
 
         <property name="children">
             <list class="ControllerCollection">
-<!--                <ref bean="scrollController" /> -->
+                <ref bean="scrollController" /> 
                 <ref bean="tmp1"/>
-<!--                <ref bean="scrollMargins"/>-->
+                <ref bean="scrollMargins"/>
                 <ref bean="myButton" />
                 <ref bean="myRect" />
                 <ref bean="myTable" />
