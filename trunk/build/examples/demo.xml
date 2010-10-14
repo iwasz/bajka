@@ -5,327 +5,44 @@
 <!--Ogólny schemat nazw : Ctr - kontroler, Wgt - widget, Mdl - model.-->
 <beans>
 
-    <!--Konfiguracja-->
-    <bean id="cfg" class="BajkaConfig" init-method="init" singleton="true">
-        <property name="fullScreen"><value type="bool">false</value></property>
-        <property name="resX"><value type="int">640</value></property>
-        <property name="resY"><value type="int">480</value></property>
-        <property name="windowCaption" value="Bajka DEMO"/>
-    </bean>
+    <import resource="basic.xml" />
+    <import resource="examples/demo-scroll.xml" />
+    <import resource="examples/demo-app.xml" />
 
+<!-- ===================================================================================== -->
 
-
-    <!--Obiekt app, czyli aplikacja :)-->
-    <bean id="app" class="BajkaApp" singleton="true">
-        <property name="config" ref="cfg" />
-        <property name="rootController" ref="screen"/>
-
-        <!--Dispatcher-y eventów. Generują evenyt. Przekształcają eventy -->
-        <!--SDL (lub innej biblioteki) na wewnętrzne eventy.-->
-        <property name="dispatchers">
-            <list class="DispatcherList">
-                <bean class="TimerDispatcher" singleton="true">
-                    <property name="observers">
-                        <list class="ObserverVector">
-                            <ref bean="screen" />
-<!--                            <ref bean="ruchJednostajny"/>-->
-<!--                            <ref bean="scrollController" />-->
-                        </list>
-                    </property>
-                    <property name="tickInterval"><value type="int">20</value></property>
-                </bean>
-
-                <bean class="EventDispatcher" singleton="true" init-method="init">
-                    <property name="observers">
-                        <list class="ObserverVector">
-                            <ref bean="screen" />
-                        </list>
-                    </property>
-                    <property name="config" ref="cfg" />
-                </bean>
-            </list>
-        </property>
-    </bean>
-
-<!-- +===================================================================================+ -->
-<!-- | Biblioteka beanów Bajki                                                           | -->
-<!-- +===================================================================================+ -->
-
-    <!-- Widget obrazka od razu z modelem. -->
-    <bean id="imageWgt" class="View::Image" abstract="true">
-        <property name="model">
-            <bean id="model" class="Model::Image" scope="bean"/>
-        </property>
-    </bean>
-
-    <!--Definicja obrazka. Jest tu M, V i C, gotowe do użycia. Z tej-->
-    <!--definicji należy dziedziczyć (parent) i ustawiać model.path i-->
-    <!--na przykłąd model.translatePont.-->
-    <bean id="imageCtr" class="SimpleController" init-method="init" abstract="true">
-        <!--Model ustawia się z imageWgt -->
-        <property name="model">
-            <bean id="model" class="Model::Image" scope="bean"/>
-        </property>
-
-        <!--View-->
+    <bean id="screen" class="SimpleController" init-method="init" singleton="true">
         <property name="widget">
-            <bean class="View::Image"/>
-        </property>
-        
-        <!-- Domyślnie obrazek nie przyjmuje żadnych eventów -->
-        <property name="bitMask"><value type="unsigned int">0</value></property>
-    </bean>
-
-<!-- ===================================================================================== -->
-
-    <!-- Widget prostokąta z modelem. -->
-    <bean id="rectWgt" class="Rectangle" abstract="true">
-        <property name="model">
-            <bean id="model" class="Model::Box" scope="bean"/>
-        </property>
-    </bean>
-    
-    <!-- Kontroler prostokąta z modelem. -->
-    <bean id="rectCtr" class="SimpleController" init-method="init" abstract="true">
-        <!--Model ustawia się z imageWgt -->
-        <!--View-->
-        <property name="widget" ref="rectWgt"/>
-        
-        <!-- Domyślnie obrazek nie przyjmuje żadnych eventów -->
-        <property name="bitMask"><value type="unsigned int">0</value></property>
-    </bean>
-
-<!-- ===================================================================================== -->
-
-    <bean id="tableWgt" class="EmptyWidget" abstract="true">
-        <property name="model">
-            <bean id="model" scope="bean" class="Table"/>
-        </property>
-    </bean>
-
-    <bean id="tableCtr" class="SimpleController" abstract="true" init-method="init">
-        <property name="model">
-            <bean class="Table"/>
+            <bean class="Screen"/>
         </property>
 
-        <property name="widget">
-            <!-- Dzięki temu widać obrys tabeli, z tym drugim nie. -->
-<!--            <bean class="Rectangle"/>-->
-            <bean class="EmptyWidget"/>
-        </property>        
-    </bean>
-
-<!-- ===================================================================================== -->
-
-    <bean id="buttonWgt" class="StatefulWidget" abstract="true">
-        <property name="widgets">
-            <map class="StringWidgetMap">
-                <entry key="normal">
-                    <bean parent="imageWgt"/>
-                </entry>
-
-                <entry key="hover">
-                    <bean parent="imageWgt"/>
-                </entry>
-
-                <entry key="clicked">
-                    <bean parent="imageWgt"/>
-                </entry>
-            </map>
-        </property>
-
-        <property name="model">
-<!--            <bean id="model" class="Model::Box" scope="bean"/>-->
-            <bean class="Model::Box" />
-        </property>
-
-        <property name="currentWidget" value="normal" />  
-    </bean>
-
-
-
-    <bean id="buttonCtr" class="ButtonController" init-method="init">
-<!--        <property name="model">-->
-<!--            <bean class="Model::Box" />-->
-<!--        </property>-->
-
-        <property name="widget">
-            <bean parent="buttonWgt"/>
-        </property>
-
-        <!-- Model pobiera się sam z widgeta jeśliw widgecie już jest. -->
-        <property name="bitMask"><value type="unsigned int">255</value></property>        
-    </bean>
-
-<!-- ===================================================================================== -->
-
-    <bean id="layerCtr" class="SimpleController" init-method="init" abstract="true">
-        <property name="model">
-            <bean class="Shapeless"/>
-        </property>
-    
-        <property name="widget">
-            <bean class="EmptyWidget"/>
-        </property>
-    </bean>
-
-<!-- ===================================================================================== -->
-<!--+==============+-->
-<!--| Scroll Layer |-->
-<!--+==============+-->
-
-    <bean id="scrollEventMargin" class="ScrollMarginController" init-method="init">
-
-        <!--Model-->
         <property name="model">
             <bean class="Model::Box"/>
         </property>
 
-        <!--View-->
-        <property name="widget">
-<!--            <bean class="Rectangle"/>-->
-            <bean class="EmptyWidget"/>
-        </property>
-
-        <!--Tylko event mouse motion-->
-        <property name="bitMask"><value type="unsigned int">1</value></property>       
-    </bean>
-
-
-
-    <bean id="scrollEventMarginLeft" parent="scrollEventMargin">
-        <property name="model.x1"><value type="double">-319</value></property>
-        <property name="model.y1"><value type="double">-239</value></property>
-        <property name="model.x2"><value type="double">-220</value></property>
-        <property name="model.y2"><value type="double">240</value></property>
-        <property name="type"><value type="int">3</value></property>
-    </bean>
-
-
-
-    <bean id="scrollEventMarginRight" parent="scrollEventMargin">
-        <property name="model.x1"><value type="double">220</value></property>
-        <property name="model.y1"><value type="double">-239</value></property>
-        <property name="model.x2"><value type="double">320</value></property>
-        <property name="model.y2"><value type="double">240</value></property>
-        <property name="type"><value type="int">1</value></property>
-    </bean>
-
-
-
-    <bean id="scrollEventMarginTop" parent="scrollEventMargin">
-        <property name="model.x1"><value type="double">-319</value></property>
-        <property name="model.y1"><value type="double">140</value></property>
-        <property name="model.x2"><value type="double">320</value></property>
-        <property name="model.y2"><value type="double">240</value></property>
-        <property name="type"><value type="int">0</value></property>
-    </bean>
-    
-    
-    
-    <bean id="scrollEventMarginBottom" parent="scrollEventMargin">
-        <property name="model.x1"><value type="double">-319</value></property>
-        <property name="model.y1"><value type="double">-239</value></property>
-        <property name="model.x2"><value type="double">320</value></property>
-        <property name="model.y2"><value type="double">-140</value></property>
-        <property name="type"><value type="int">2</value></property>
-    </bean>
-
-
-
-    <bean id="scrollMargins" class="SimpleController" init-method="init" singleton="true">
         <property name="children">
             <list class="ControllerCollection">
-                <ref bean="scrollEventMarginLeft"/>                
-                <ref bean="scrollEventMarginRight"/>                
-                <ref bean="scrollEventMarginTop"/>
-                <ref bean="scrollEventMarginBottom"/>
-            </list>
-        </property>
-
-        <!--Mouse move - jeśli tego nie będzie, to event nie zostanie przekazany do potomków.-->
-        <property name="bitMask"><value type="unsigned int">1</value></property>
-    </bean>
-    
-    
-    
-    <bean id="scrollController" class="ScrollController">
-        <property name="model">
-            <bean class="ParalaxModel">
-                <property name="depths">
-                    <list class="DoubleVector">
-                        <value type="double">0.5</value>
-                        <value type="double">0.6</value>
-                        <value type="double">0.8</value>
-                        <value type="double">1.0</value>
-                    </list>
-                </property>
-            </bean>
-        </property>
-    
-        <property name="children">
-            <list class="ControllerCollection">
-                <bean parent="imageCtr">
-                    <property name="model.path" value="../gfx/bajka/background.png" />       
-                    <property name="model.move">
-                        <bean class="Point">
-                            <property name="x"><value type="double">-512</value></property>
-                            <property name="y"><value type="double">-512</value></property>
-                        </bean>
+                <ref bean="scrollController" />             
+                <ref bean="osdLayerCtr" />
+                <bean class="MachineController">
+                    <property name="model">
+                        <bean class="Model::Box"/>
                     </property>
-                </bean>
-            
-                <bean parent="imageCtr">
-                    <property name="model.path" value="../gfx/bajka/mountain2.png" />       
-                    <property name="model.move">
-                        <bean class="Point">
-                            <property name="x"><value type="double">-512</value></property>
-                            <property name="y"><value type="double">-400</value></property>
-                        </bean>
-                    </property>
-                </bean>
-
-                <bean parent="imageCtr">
-                    <property name="model.path" value="../gfx/bajka/mountain1.png" />       
-                    <property name="model.move">
-                        <bean class="Point">
-                            <property name="x"><value type="double">-512</value></property>
-                            <property name="y"><value type="double">-400</value></property>
-                        </bean>
-                    </property>
-                </bean>
-
-                <bean parent="imageCtr">
-                    <property name="model.path" value="../gfx/bajka/ground.png" />       
-                    <property name="model.move">
-                        <bean class="Point">
-                            <property name="x"><value type="double">-512</value></property>
-                            <property name="y"><value type="double">-750</value></property>
-                        </bean>
+                    <property name="widget">
+                        <bean class="EmptyWidget"/>
                     </property>
                 </bean>
             </list>
         </property>
-    
-        <!-- Zegarowy -->
-        <property name="bitMask"><value type="unsigned int">8</value></property>
+
+        <!--Nie ma za bardzo jak robić iloczynów logicznych, -->
+        <!--wiec trzeba podawać gotowe bit-maski. Pierwszy bit-->
+        <!--to mouse move.-->
+        <property name="bitMask"><value type="unsigned int">255</value></property>
     </bean>
     
 <!-- ===================================================================================== -->
-<!--+===============+-->
-<!--| Paralax stuff |-->
-<!--+===============+-->
     
-    
-
-
-
-<!-- ===================================================================================== -->
-    
-
-
-
-
     <bean id="rectButton" parent="buttonCtr">
         <property name="widget.widgets.normal.model.path" value="../gfx/bajka/button-rect-normal.png" />
         <property name="widget.widgets.hover.model.path" value="../gfx/bajka/button-rect-hover.png" />
@@ -376,38 +93,7 @@
             </list>
         </property>
     </bean>
-    
-    
+        
 <!-- ===================================================================================== -->
 
-    <bean id="screen" class="SimpleController" init-method="init" singleton="true">
-        <property name="widget">
-            <bean class="Screen"/>
-        </property>
-
-        <property name="model">
-            <bean class="Model::Box"/>
-        </property>
-
-        <property name="children">
-            <list class="ControllerCollection">
-                <ref bean="scrollController" />             
-                <ref bean="osdLayerCtr" />
-                <bean class="MachineController">
-                    <property name="model">
-                        <bean class="Model::Box"/>
-                    </property>
-                    <property name="widget">
-                        <bean class="EmptyWidget"/>
-                    </property>
-                </bean>
-            </list>
-        </property>
-
-        <!--Nie ma za bardzo jak robić iloczynów logicznych, -->
-        <!--wiec trzeba podawać gotowe bit-maski. Pierwszy bit-->
-        <!--to mouse move.-->
-        <property name="bitMask"><value type="unsigned int">255</value></property>
-    </bean>
-    
 </beans>

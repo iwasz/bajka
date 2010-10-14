@@ -32,7 +32,7 @@ int main (int argc, char **argv)
                 fileName = "main.xml";
         }
 
-        // Nie roine try-catch, bo i tak info zostanie wypisane.
+        // Nie robimy try-catch, bo i tak info zostanie wypisane.
         Ptr <Container2::BeanFactoryContainer> container = Container2::XmlContainerFactory::createContainer (fileName);
         Ptr <Util::BajkaApp> app = vcast <Ptr <Util::BajkaApp> > (container->getBean ("app"));
 
