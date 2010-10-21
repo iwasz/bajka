@@ -7,39 +7,28 @@
  ****************************************************************************/
 
 #include <cstdlib>
-#include "IWidget.h"
-
 #include <Container.h>
 #include <ContainerFactory.h>
-
-#include "BajkaApp.h"
-#include "sequence/ConstSequence.h"
-
-// TODO wywalić
+// TODO wywalić?
 #include <Signal.h>
 
+#include "../Bajka.h"
+//#include "Platformer.h"
+
 /**
- * Main entry.
+ * \mainpage PlatformerMain Nazwa kodowa : platformer.
+ * Jest to próba zrobienia pierwszej platformówki. Tileset, tile jednakowej wielkości,
+ * skaczemy hop hop.
+ */
+
+/**
+ * Main. Ładuje plik cfg/main.xml, wyciąga bean o nazwie app, uruchamia pętlę programu.
  */
 int main (int argc, char **argv)
 {
-        std::string fileName;
-
-        if (argc > 1) {
-                fileName = *(argv + 1);
-        }
-        else {
-                fileName = "main.xml";
-        }
-
-        // Nie robimy try-catch, bo i tak info zostanie wypisane.
-        Ptr <Container2::BeanFactoryContainer> container = Container2::XmlContainerFactory::createContainer (fileName, true);
+        Ptr <Container2::BeanFactoryContainer> container = Container2::XmlContainerFactory::createContainer ("cfg/main.xml", true);
+        //        Ptr <PlatformerApp> app = vcast <Ptr <PlatformerApp> > (container->getBean ("app"));
         Ptr <Util::BajkaApp> app = vcast <Ptr <Util::BajkaApp> > (container->getBean ("app"));
-
-        // TODO Do wywalenia, kiedy beany singleton będą się same instancjonowac.
-//        Core::Variant v = container->getBean ("scrollService");
-
         app->loop ();
-        app->destroy ();
         return EXIT_SUCCESS;
 }

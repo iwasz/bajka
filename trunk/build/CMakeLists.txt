@@ -105,3 +105,16 @@ IF (1)
     TARGET_LINK_LIBRARIES (demo ${TILIAE_LIBRARIES})
     TARGET_LINK_LIBRARIES (demo bajka)
 ENDIF ()
+
+IF (1)
+    # Executable demo.
+    AUX_SOURCE_DIRECTORY (../platformer/src PLATFORMER_SOURCES)
+   
+    add_executable (platformer ${PLATFORMER_SOURCES})
+    TARGET_LINK_LIBRARIES (platformer ${OPENGL_LIBRARIES})
+    TARGET_LINK_LIBRARIES (platformer ${JPEG_LIBRARIES})
+    TARGET_LINK_LIBRARIES (platformer ${SDL_LIBRARY})
+    TARGET_LINK_LIBRARIES (platformer ${SDLIMAGE_LIBRARY})
+    TARGET_LINK_LIBRARIES (platformer ${TILIAE_LIBRARIES})
+    TARGET_LINK_LIBRARIES (platformer bajka)  
+ENDIF ()

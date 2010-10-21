@@ -71,6 +71,7 @@ private:
  * the main loop.
  *
  * CR : Kiedyś kiedyś : umożliwić stosowanie czegoś innego niż SDL.
+ * Można z tego dziedziczyć i dodawać swoje metody game-specific.
  */
 class BajkaApp {
 public:
@@ -78,10 +79,11 @@ public:
        __c (void)
 
        BajkaApp () : dispatchers (new Event::DispatcherList) {}
+       virtual ~BajkaApp () {}
 
-       void run (int argc, char **argv);
-       void loop ();
-       void destroy ();
+       _m (loop) void loop ();
+       _m (debug) void debug (Core::String const &);
+       _m (debug) void destroy ();
 
 /*--------------------------------------------------------------------------*/
 
