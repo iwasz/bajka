@@ -15,7 +15,7 @@
 
 
 
-    <!--Obiekt app, czyli aplikacja :)-->
+    <!--Obiekt app, czyli aplikacja -->
     <bean id="app" class="BajkaApp" singleton="true">
         <property name="config" ref="cfg" />
         <property name="rootController" ref="screen"/>

@@ -124,13 +124,6 @@ void BajkaConfig::init ()
 
 /*##########################################################################*/
 
-void BajkaApp::run (int argc, char **argv)
-{
-
-}
-
-/****************************************************************************/
-
 void BajkaApp::loop ()
 {
         bool done = false;
@@ -151,8 +144,16 @@ void BajkaApp::loop ()
 
 /****************************************************************************/
 
+void BajkaApp::debug (Core::String const &msg)
+{
+        std::cerr << "+---------------DEBUG-------[" << msg << "]--------+" << std::endl;
+}
+
+/****************************************************************************/
+
 void BajkaApp::destroy ()
 {
+        std::cerr << "+---------------QUIT----------------+" << std::endl;
         std::cerr << "gl version : " << glGetString(GL_VERSION) << std::endl;
 
         int i;
