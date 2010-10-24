@@ -24,14 +24,14 @@
             <list class="ControllerCollection">
                 <ref bean="scrollController" />             
                 <ref bean="osdLayerCtr" />
-                <bean class="MachineController">
-                    <property name="model">
-                        <bean class="Model::Box"/>
-                    </property>
-                    <property name="widget">
-                        <bean class="EmptyWidget"/>
-                    </property>
-                </bean>
+<!--                <bean class="MachineController">-->
+<!--                    <property name="model">-->
+<!--                        <bean class="Model::Box"/>-->
+<!--                    </property>-->
+<!--                    <property name="widget">-->
+<!--                        <bean class="EmptyWidget"/>-->
+<!--                    </property>-->
+<!--                </bean>-->
             </list>
         </property>
 
@@ -310,24 +310,6 @@
             </list>
         </property>
     </bean>
-
-    <bean id="a" class="Address">
-        <property name="property">
-            <list class="TransitionList">
-<!--                <list class="VariantList">-->
-<!--                    <value>Test</value>-->
-                        <null/>
-<!--                </list>-->
-            </list>
-        </property>
-    </bean>
-
-    <bean id="b" parent="a" singleton="true">
-        <property name="property.0">
-            <null/>
-        </property>
-    </bean>
-    
 
 <!-- ===================================================================================== -->
 

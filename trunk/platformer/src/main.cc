@@ -7,13 +7,17 @@
  ****************************************************************************/
 
 #include <cstdlib>
+#include "IWidget.h"
+
 #include <Container.h>
 #include <ContainerFactory.h>
-// TODO wywalić?
-#include <Signal.h>
 
-#include "../Bajka.h"
-//#include "Platformer.h"
+#include "BajkaApp.h"
+#include "sequence/ConstSequence.h"
+
+// TODO wywalić
+#include <Signal.h>
+#include "PlatformerApp.h"
 
 /**
  * \mainpage PlatformerMain Nazwa kodowa : platformer.
@@ -27,8 +31,9 @@
 int main (int argc, char **argv)
 {
         Ptr <Container2::BeanFactoryContainer> container = Container2::XmlContainerFactory::createContainer ("cfg/main.xml", true);
-        //        Ptr <PlatformerApp> app = vcast <Ptr <PlatformerApp> > (container->getBean ("app"));
-        Ptr <Util::BajkaApp> app = vcast <Ptr <Util::BajkaApp> > (container->getBean ("app"));
+        Ptr <PlatformerApp> app = vcast <Ptr <PlatformerApp> > (container->getBean ("app"));
+        // To by się mogło ustawiać w kontenerze.
+        app->setMainContainer (container);
         app->loop ();
         return EXIT_SUCCESS;
 }
