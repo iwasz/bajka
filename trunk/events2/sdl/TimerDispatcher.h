@@ -31,11 +31,10 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-//        Event::IObserver *getObserver () const { return observer; }
-//        _m (setObserver) void setObserver (Event::IObserver *o) { observer = o; }
-
         _m (setObservers) void setObservers (Event::ObserverVector const &o) { observers = o; }
         Event::ObserverVector const &getObservers () const { return observers; }
+        void addObserver (Ptr <Event::IObserver> o);
+        void removeObserver (Ptr <Event::IObserver> o);
 
         int getTickInterval () const { return tickInterval; }
         _m (setTickInterval) void setTickInterval (int tickInterval) { this->tickInterval = tickInterval; }
@@ -45,7 +44,6 @@ private:
         int tickInterval;
         unsigned int prevTime;
         Event::TimerEvent timerEvent;
-//        Event::IObserver *observer;
         Event::ObserverVector observers;
 
         _e (TimerDispatcher)

@@ -10,6 +10,7 @@
 #define PLATFORMERAPP_H_
 
 #include <Reflection.h>
+#include "../../util/BajkaApp.h"
 
 namespace Container2 {
 class BeanFactoryContainer;

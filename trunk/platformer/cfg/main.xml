@@ -44,7 +44,7 @@
 
 <!-- ===================================================================================== -->
 
-    <bean id="machine" class="Machine" singleton="true" init-method="runOnce">
+    <bean id="machine" class="Machine" singleton="true">
         <constructor-arg>
             <map class="VariantMap">
 <!--                TODO Poniższe wyjebuje program! value-ref jest blednym atrybutem--> 

@@ -19,7 +19,7 @@ namespace Event {
  * ułątwiająca implementowanie obserwatorów. Nie można jej zinstancjonować.
  * \ingroup Events
  */
-class AbstractObserver : public IObserver {
+class AbstractObserver : public virtual IObserver {
 public:
 
         __c (void)

@@ -26,6 +26,20 @@ void EventDispatcher::init ()
 
 /****************************************************************************/
 
+void EventDispatcher::addObserver (Ptr <IObserver> o)
+{
+        observers.push_back (o);
+}
+
+/****************************************************************************/
+
+void EventDispatcher::removeObserver (Ptr <IObserver> o)
+{
+        observers.erase (std::remove (observers.begin (), observers.end (), o), observers.end ());
+}
+
+/****************************************************************************/
+
 void EventDispatcher::run ()
 {
         SDL_Event event;
