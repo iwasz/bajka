@@ -51,6 +51,8 @@ struct IController :
         virtual Ptr <IMapping> getMapping () = 0;
 };
 
+_f (ControllerCollection)
+
 }
 
 #	endif /* ICONTROLLER_H_ */

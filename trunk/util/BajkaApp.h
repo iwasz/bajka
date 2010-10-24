@@ -73,7 +73,7 @@ private:
  * CR : Kiedyś kiedyś : umożliwić stosowanie czegoś innego niż SDL.
  * Można z tego dziedziczyć i dodawać swoje metody game-specific.
  */
-class BajkaApp {
+class BajkaApp : public Core::Object {
 public:
 
        __c (void)

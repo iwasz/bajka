@@ -73,7 +73,7 @@ typedef TreeTraits <Controller::IController>::ParentType ControllerParentType;
 typedef TreeTraits <Controller::IController>::ParentConstType ControllerParentConstType;
 
 typedef TreeTraits <Controller::IController>::ChildCollection ControllerCollection;
-_f (ControllerCollection)
+//_f (ControllerCollection)
 
 typedef TreeTraits <Controller::IController>::ChildIter ControllerIter;
 typedef TreeTraits <Controller::IController>::ChildConstIter ControllerConstIter;

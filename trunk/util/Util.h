@@ -21,6 +21,5 @@
 #include "Math.h"
 #include "BajkaApp.h"
 #include "Commons.h"
-#include "tree/Tree.h"
 
 #	endif /* UTIL_H_ */
