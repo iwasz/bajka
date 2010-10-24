@@ -25,7 +25,12 @@ public:
         virtual ~IDispatcher () {}
 
         virtual void run () = 0;
+        /// Ustawia nową kolekcję obserwatorów.
         virtual void setObservers (Event::ObserverVector const &o) = 0;
+        /// Dodaje obserwatora do listy. Bedzie on powiadamiany o ewentach.
+        virtual void addObserver (Ptr <IObserver> o) = 0;
+        /// Usuwa wszystkie wystąpienia obserwatora z listy.
+        virtual void removeObserver (Ptr <IObserver> o) = 0;
 };
 
 /**

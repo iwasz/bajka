@@ -90,11 +90,25 @@ public:
        Ptr <BajkaConfig> getConfig () const { return config; }
        _m (setConfig) void setConfig (Ptr <BajkaConfig> b) { config = b; }
 
+       /// Głowny kontroler.
        Ptr <Controller::IController> getRootController () const { return rootController; }
-       _m (setRootController) void setRootController (Ptr <Controller::IController> r) { rootController = r; }
+
+       /**
+        * 1. Odłącza poprzedni rootControloer od dispatcherów.
+        * 2. Ustawia główny kontroler.
+        * 3. Podłącza ten nowy do wszystkich dispatcherów.
+        */
+       _m (setRootController) void setRootController (Ptr <Controller::IController> r);
 
        Ptr <Event::DispatcherList> getDispatchers () const { return dispatchers; }
        _m (setDispatchers) void setDispatchers (Ptr <Event::DispatcherList> d) { dispatchers = d; }
+
+/*--------------------------------------------------------------------------*/
+
+       /// Podłącza o do wszystkich dispatcherów.
+       void connect (Ptr <Event::IObserver> o);
+       /// Odłącza o od wszystkich dispatcherów.
+       void disconnect (Ptr <Event::IObserver> o);
 
 private:
 

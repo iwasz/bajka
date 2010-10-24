@@ -16,6 +16,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <cstdio>
+#include <boost/bind.hpp>
 
 #include "Image.h"
 #include "Model.h"
@@ -38,6 +39,7 @@ namespace M = Model;
 namespace V = View;
 namespace C = Controller;
 namespace R = Reflection;
+using namespace Event;
 
 /****************************************************************************/
 
@@ -163,6 +165,32 @@ void BajkaApp::destroy ()
         std::cerr << "max texture size : " << i << std::endl;
 
         SDL_Quit ();
+}
+
+/****************************************************************************/
+
+void BajkaApp::setRootController (Ptr <Controller::IController> r)
+{
+        if (rootController) {
+                disconnect (rootController);
+        }
+
+        rootController = r;
+        connect (r);
+}
+
+/****************************************************************************/
+
+void BajkaApp::connect (Ptr <IObserver> o)
+{
+        std::for_each (dispatchers->begin (), dispatchers->end (), boost::bind (&IDispatcher::addObserver, _1, o));
+}
+
+/****************************************************************************/
+
+void BajkaApp::disconnect (Ptr <IObserver> o)
+{
+        std::for_each (dispatchers->begin (), dispatchers->end (), boost::bind (&IDispatcher::removeObserver, _1, o));
 }
 
 } // Nam

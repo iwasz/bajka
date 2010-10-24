@@ -16,6 +16,9 @@
 #include "IObserver.h"
 #include "mapping/IMapping.h"
 #include "../base/tree/ITreeController.h"
+#include "../events2/IObserver.h"
+
+using Event::IObserver;
 
 /**
  * Sprawy związane z kontrolerami i klasami pomocniczymi.
@@ -33,6 +36,7 @@ namespace Controller {
  */
 struct IController :
         public virtual Core::Object,
+        public virtual IObserver,
         public ITreeController {
 
         virtual ~IController () {}

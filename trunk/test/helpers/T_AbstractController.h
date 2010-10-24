@@ -10,11 +10,14 @@
 #define T_ABSTRACTCONTROLLER_H_
 
 #include "../../controller/AbstractController.h"
+#include "../../events2/AbstractObserver.h"
 
 /**
  *
  */
-class T_AbstractController : public Controller::AbstractController {
+class T_AbstractController :
+        public Controller::AbstractController,
+        public Event::AbstractObserver {
 public:
 
         T_AbstractController (std::string const &s) :

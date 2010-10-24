@@ -43,6 +43,8 @@ public:
 
         Event::ObserverVector const &getObservers () const { return observers; }
         _m (setObservers) void setObservers (Event::ObserverVector const &o) { observers = o; }
+        void addObserver (Ptr <Event::IObserver> o);
+        void removeObserver (Ptr <Event::IObserver> o);
 
         Ptr <Util::BajkaConfig> getConfig () const { return config; }
         _m (setConfig) void setConfig (Ptr <Util::BajkaConfig> b) { config = b; }
