@@ -52,6 +52,11 @@
                 <entry key="app" ref="app" />
             </map>
         </constructor-arg>
+        <property name="listener">
+            <bean class="MachineListener">
+                <property name="path" value="/machine"/>            
+            </bean>
+        </property>
         <property name="initialStateName" value="menu"/>
         <property name="states">
             <list class="StateList">
@@ -63,6 +68,8 @@
             </list>
         </property>        
     </bean>
+
+
 
     <bean id="menuState" class="State" singleton="true">
         <property name="name" value="menu"/>

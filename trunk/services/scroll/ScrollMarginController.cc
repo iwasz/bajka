@@ -22,6 +22,8 @@ void ScrollMarginController::setModel (Ptr <Model::IModel> m)
         ASSERT (box, "Failed to cast to Model::Box *");
 }
 
+/****************************************************************************/
+
 bool ScrollMarginController::onMouseMotion (Event::MouseMotionEvent *e)
 {
         if (!e || !box) {
@@ -37,7 +39,7 @@ bool ScrollMarginController::onMouseMotion (Event::MouseMotionEvent *e)
 
                 // TODO to nie może być przez taką listę. To bez sensu jest.
                 args.add (vcast <Variant> (speed));
-                sender.emit ("/scroll/up", args);
+                up.emit (args);
         }
 
         if (type == BOTTOM) {
@@ -45,7 +47,7 @@ bool ScrollMarginController::onMouseMotion (Event::MouseMotionEvent *e)
                 double speed = ((h - p.getY ()) / h);
 
                 args.add (variant_cast <Variant> (speed));
-                sender.emit ("/scroll/down", args);
+                down.emit (args);
         }
 
         if (type == LEFT) {
@@ -53,7 +55,7 @@ bool ScrollMarginController::onMouseMotion (Event::MouseMotionEvent *e)
                 double speed = ((w - p.getX ()) / w);
 
                 args.add (variant_cast <Variant> (speed));
-                sender.emit ("/scroll/left", args);
+                left.emit (args);
         }
 
         if (type == RIGHT) {
@@ -61,7 +63,7 @@ bool ScrollMarginController::onMouseMotion (Event::MouseMotionEvent *e)
                 double speed = (p.getX () / w);
 
                 args.add (variant_cast <Variant> (speed));
-                sender.emit ("/scroll/right", args);
+                right.emit (args);
         }
 }
 
@@ -73,19 +75,19 @@ bool ScrollMarginController::onMouseOut (Event::MouseMotionEvent *e)
         args.add (variant_cast <Variant> (0.0));
 
         if (type == TOP) {
-                sender.emit ("/scroll/up", args);
+                up.emit (args);
         }
 
         if (type == BOTTOM) {
-                sender.emit ("/scroll/down", args);
+                down.emit (args);
         }
 
         if (type == LEFT) {
-                sender.emit ("/scroll/left", args);
+                left.emit (args);
         }
 
         if (type == RIGHT) {
-                sender.emit ("/scroll/right", args);
+                right.emit (args);
         }
 }
 

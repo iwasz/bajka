@@ -25,7 +25,7 @@ public:
         __c (void)
         _b ("SimpleController")
 
-        ButtonController () : sender (this) {}
+        ButtonController () {}
         virtual ~ButtonController () {}
 
         /**
@@ -39,10 +39,15 @@ public:
         virtual bool onButtonPress (Event::ButtonPressEvent *e);
         virtual bool onButtonRelease (Event::ButtonReleaseEvent *e);
 
+/*--------------------------------------------------------------------------*/
+
+        _m (getSender) Ptr <Signal::Sender> getSender () { return sender; }
+        _m (setSender) void setSender (Ptr <Signal::Sender> s) { sender = s; }
+
 private:
 
-        Signal::Sender sender;
         Ptr <View::StatefulWidget> stateful;
+        Ptr <Signal::Sender> sender;
 
         _e (ButtonController)
 };

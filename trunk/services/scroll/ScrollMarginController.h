@@ -39,7 +39,13 @@ public:
          */
         enum Type { TOP, RIGHT, BOTTOM, LEFT };
 
-        ScrollMarginController () : sender (this), box (0) {}
+        ScrollMarginController () :
+                up ("/scroll/up"),
+                down ("/scroll/down"),
+                left ("/scroll/left"),
+                right ("/scroll/right"),
+                box (0) {}
+
         virtual ~ScrollMarginController () {}
 
         bool onMouseMotion (Event::MouseMotionEvent *e);
@@ -53,7 +59,7 @@ public:
 
 private:
 
-        Signal::Sender sender;
+        Signal::Sender up, down, left, right;
         Type type;
         Model::Box *box;
 
