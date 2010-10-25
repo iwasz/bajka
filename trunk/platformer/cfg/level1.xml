@@ -29,10 +29,16 @@
     
 <!-- ===================================================================================== -->
     
-    <bean id="rectButton" parent="buttonCtr">
+    <bean id="rectButton" parent="buttonCtr" singleton="true">
         <property name="widget.widgets.normal.model.path" value="../gfx/bajka/button-rect-normal.png" />
         <property name="widget.widgets.hover.model.path" value="../gfx/bajka/button-rect-hover.png" />
         <property name="widget.widgets.clicked.model.path" value="../gfx/bajka/button-rect-clicked.png" />
+        <property name="sender.path" value="/machine"/>
+        <property name="sender.paramMap">
+            <map class="VariantMap">
+                <entry key="signal" value="play" />
+            </map>
+        </property>        
     </bean>
 
     <bean id="circleButton" parent="buttonCtr">

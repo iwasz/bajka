@@ -33,7 +33,7 @@ bool ButtonController::onMouseOut (Event::MouseMotionEvent *e)
 bool ButtonController::onButtonPress (Event::ButtonPressEvent *e)
 {
         stateful->setCurrentWidget ("clicked");
-        sender.emit ("/toolbox/clicked");
+        sender->emit ();
         return true;
 }
 

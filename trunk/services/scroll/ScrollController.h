@@ -25,10 +25,10 @@ public:
         _b ("SimpleController")
 
         ScrollController () :
-                onDown (this, "/scroll/down", "$down (%0)"),
-                onUp (this, "/scroll/up", "$up (%0)"),
-                onRight (this, "/scroll/right", "$right (%0)"),
-                onLeft (this, "/scroll/left", "$left (%0)")
+                onDown (this, "$down (%0)", "/scroll/down"),
+                onUp (this, "$up (%0)", "/scroll/up"),
+                onRight (this, "$right (%0)", "/scroll/right"),
+                onLeft (this, "$left (%0)", "/scroll/left")
                 {}
 
         virtual ~ScrollController () {}

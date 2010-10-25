@@ -102,13 +102,17 @@
 
 
 
-    <bean id="buttonCtr" class="ButtonController" init-method="init">
+    <bean id="buttonCtr" class="ButtonController" init-method="init" abstract="true">
 <!--        <property name="model">-->
 <!--            <bean class="Model::Box" />-->
 <!--        </property>-->
 
         <property name="widget">
             <bean parent="buttonWgt"/>
+        </property>
+
+        <property name="sender">
+            <bean class="Sender"/>
         </property>
 
         <!-- Model pobiera się sam z widgeta jeśliw widgecie już jest. -->
