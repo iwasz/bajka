@@ -16,7 +16,6 @@
 
         <property name="children">
             <list class="ControllerCollection">
-                <ref bean="scrollController" />             
                 <ref bean="osdLayerCtr" />
             </list>
         </property>
@@ -29,7 +28,7 @@
     
 <!-- ===================================================================================== -->
     
-    <bean id="rectButton" parent="buttonCtr" singleton="true">
+    <bean id="playButton" parent="buttonCtr" singleton="true">
         <property name="widget.widgets.normal.model.path" value="../gfx/bajka/button-rect-normal.png" />
         <property name="widget.widgets.hover.model.path" value="../gfx/bajka/button-rect-hover.png" />
         <property name="widget.widgets.clicked.model.path" value="../gfx/bajka/button-rect-clicked.png" />
@@ -41,22 +40,19 @@
         </property>        
     </bean>
 
-    <bean id="circleButton" parent="buttonCtr">
+    <bean id="quitButton" parent="buttonCtr">
         <property name="widget.widgets.normal.model.path" value="../gfx/bajka/button-circle-normal.png" />
         <property name="widget.widgets.hover.model.path" value="../gfx/bajka/button-circle-hover.png" />
         <property name="widget.widgets.clicked.model.path" value="../gfx/bajka/button-circle-clicked.png" />
-        <property name="sender">
-            <bean class="Sender">
-                <property name="path" value="/machine"/>            
-            </bean>
-        </property>
+        <property name="sender.path" value="/machine"/>
+        <property name="sender.paramMap">
+            <map class="VariantMap">
+                <entry key="signal" value="quit" />
+            </map>
+        </property>        
     </bean>
 
-    <bean id="lineButton" parent="buttonCtr">
-        <property name="widget.widgets.normal.model.path" value="../gfx/bajka/button-line-normal.png" />
-        <property name="widget.widgets.hover.model.path" value="../gfx/bajka/button-line-hover.png" />
-        <property name="widget.widgets.clicked.model.path" value="../gfx/bajka/button-line-clicked.png" />
-    </bean>
+
 
 
 
@@ -65,18 +61,17 @@
         <property name="model.rowNo"><value type="int">3</value></property>
 <!--        <property name="model.alwaysUpdate"><value type="bool">true</value></property>        -->
 
-        <property name="model.move">
-            <bean class="Point">
-                <property name="x"><value type="double">266.0</value></property>
-                <property name="y"><value type="double">-81</value></property>
-            </bean>
-        </property>
+<!--        <property name="model.move">-->
+<!--            <bean class="Point">-->
+<!--                <property name="x"><value type="double">266.0</value></property>-->
+<!--                <property name="y"><value type="double">-81</value></property>-->
+<!--            </bean>-->
+<!--        </property>-->
 
         <property name="children">
             <list class="ControllerCollection">
-                <ref bean="rectButton" />
-                <ref bean="circleButton" />
-                <ref bean="lineButton" />
+                <ref bean="playButton" />
+                <ref bean="quitButton" />
             </list>
         </property>
     </bean>
@@ -85,7 +80,6 @@
     <bean id="osdLayerCtr" parent="layerCtr">
             <property name="children">
             <list class="ControllerCollection">
-                <ref bean="scrollMargins"/>
                 <ref bean="buttonTable" />
             </list>
         </property>
