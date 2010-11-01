@@ -165,7 +165,7 @@ private:
 
                 ObserverHelper (SimpleController *c) : myController (c), myModel (NULL), pointerInside (false) {}
 
-                bool onEvent (Event::IEvent *event) { return true; }
+                bool onEvent (Event::IEvent *event) { return false; }
                 bool acceptEvent (Event::IEvent *event) const { return true; }
                 bool getActive () const { return true; }
 

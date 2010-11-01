@@ -25,8 +25,15 @@ class TimerEvent;
 class QuitEvent;
 
 /**
- * IObserver
- * TODO Nie jest napisane co oznacza wartość zwracana z metod.
+ * Interfejs obserwatorów. Zawiera on podstawowe funkcje obsługi eventów
+ * zwracające wartość typu bool. Wartość false, oznacza, że dany even nie
+ * został obsłużony i że należy go przekazać dalej wgłąb struktury parant-
+ * child. True zaś, oznacza, że event został obsłużony i należy zaprzestać
+ * dalszego odpytywania struktury. Ma to zapobiec wykonaniu się kilku zmian
+ * przy jednej akcji usera. Tak jest w GTK.
+ *
+ * Wzorowałem się na tym:
+ * http://developer.gnome.org/doc/GGAD/sec-gdkevent.html
  * \ingroup Events
  */
 struct IObserver : public virtual Core::Object {

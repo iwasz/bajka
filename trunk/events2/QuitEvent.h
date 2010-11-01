@@ -21,7 +21,7 @@ namespace Event {
 struct QuitEvent : public AbstractEvent {
         virtual ~QuitEvent () {}
         Type getType () const { return QUIT_EVENT; }
-        virtual void runObserver (IObserver *o) { o->onQuit (static_cast <QuitEvent *> (this)); }
+        virtual bool runObserver (IObserver *o) { return o->onQuit (static_cast <QuitEvent *> (this)); }
 };
 
 }

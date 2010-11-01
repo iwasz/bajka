@@ -17,6 +17,7 @@ void ButtonController::init ()
         ASSERT (stateful, "dynamic_pointer_cast to View::StatefulWidget failed.");
 }
 
+/****************************************************************************/
 
 bool ButtonController::onMouseOver (Event::MouseMotionEvent *e)
 {
@@ -24,11 +25,15 @@ bool ButtonController::onMouseOver (Event::MouseMotionEvent *e)
         return true;
 }
 
+/****************************************************************************/
+
 bool ButtonController::onMouseOut (Event::MouseMotionEvent *e)
 {
         stateful->setCurrentWidget ("normal");
         return true;
 }
+
+/****************************************************************************/
 
 bool ButtonController::onButtonPress (Event::ButtonPressEvent *e)
 {
@@ -36,6 +41,8 @@ bool ButtonController::onButtonPress (Event::ButtonPressEvent *e)
         sender->emit ();
         return true;
 }
+
+/****************************************************************************/
 
 bool ButtonController::onButtonRelease (Event::ButtonReleaseEvent *e)
 {

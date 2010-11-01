@@ -28,7 +28,7 @@ public:
         void setTicks (unsigned int ticks) { this->ticks = ticks; }
 
         Type getType () const { return TIMER_EVENT; }
-        virtual void runObserver (IObserver *o) { o->onTimer (static_cast <TimerEvent *> (this)); }
+        virtual bool runObserver (IObserver *o) { return o->onTimer (static_cast <TimerEvent *> (this)); }
 
 private:
 

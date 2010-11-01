@@ -46,7 +46,7 @@ private:
 struct KeyDownEvent : public KeyboardEvent {
         virtual ~KeyDownEvent () {}
         Type getType () const { return  KEY_DOWN_EVENT; }
-        virtual void runObserver (IObserver *o) { o->onKeyDown (static_cast <KeyDownEvent *> (this)); }
+        virtual bool runObserver (IObserver *o) { return o->onKeyDown (static_cast <KeyDownEvent *> (this)); }
 };
 
 /**
@@ -56,7 +56,7 @@ struct KeyDownEvent : public KeyboardEvent {
 struct KeyUpEvent : public KeyboardEvent {
         virtual ~KeyUpEvent () {}
         Type getType () const { return  KEY_UP_EVENT; }
-        virtual void runObserver (IObserver *o) { o->onKeyUp (static_cast <KeyUpEvent *> (this)); }
+        virtual bool runObserver (IObserver *o) { return o->onKeyUp (static_cast <KeyUpEvent *> (this)); }
 };
 
 }

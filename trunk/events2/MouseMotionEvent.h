@@ -48,7 +48,7 @@ public:
         void setMovement (const Geometry::Point &movement) { this->movement = movement; }
 
         Type getType () const { return MOUSE_MOTION_EVENT; }
-        virtual void runObserver (IObserver *o) { o->onMouseMotion (static_cast <MouseMotionEvent *> (this)); }
+        virtual bool runObserver (IObserver *o) { return o->onMouseMotion (static_cast <MouseMotionEvent *> (this)); }
 
 private:
 

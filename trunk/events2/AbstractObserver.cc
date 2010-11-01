@@ -17,8 +17,7 @@ bool AbstractObserver::onEvent (IEvent *event)
                 return false;
         }
 
-        event->runObserver (this);
-        return true;
+        return event->runObserver (this);
 }
 
 /****************************************************************************/

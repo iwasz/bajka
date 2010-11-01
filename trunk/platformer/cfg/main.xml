@@ -141,7 +141,6 @@
         <property name="entryActions">
             <list class="ActionList">
                 <bean class="K202Action">
-<!--                    <property name="code" value="$app.load ('cfg/menu.xml', 'screen'); $app.debug ('level1State.entryActions')"/>-->
                     <property name="code" value="$app.load ('cfg/menu.xml', 'screen')"/>
                 </bean>
             </list>

@@ -22,6 +22,7 @@ public:
         __c (void)
         _b ("BajkaApp")
 
+        PlatformerApp () : doLoad (false) {}
         virtual ~PlatformerApp () {}
 
         /**
@@ -32,10 +33,19 @@ public:
         Ptr <Container2::BeanFactoryContainer> getMainContainer () { return mainContainer; }
         void setMainContainer (Ptr <Container2::BeanFactoryContainer> c) { mainContainer = c; }
 
+        void afterEvents ();
+
+private:
+
+        bool doLoad;
+        Core::String xmlFile;
+        Core::String controller;
+
 private:
 
         Ptr <Container2::BeanFactoryContainer> mainContainer;
         Ptr <Container2::BeanFactoryContainer> levelContainer;
+
 
         _e (PlatformerApp)
 };

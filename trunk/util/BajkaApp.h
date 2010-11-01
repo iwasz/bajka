@@ -87,6 +87,12 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
+       /**
+        * Wykonywane w głównej pętli PO wykonaniu wszystkich procedur obsługi eventow.
+        * Domyślnie ta metoda jest pusta, ale można ją oczywiście przedefiniować.
+        */
+       virtual void afterEvents () {}
+
        Ptr <BajkaConfig> getConfig () const { return config; }
        _m (setConfig) void setConfig (Ptr <BajkaConfig> b) { config = b; }
 
