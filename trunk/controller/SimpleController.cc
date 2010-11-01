@@ -257,7 +257,7 @@ bool SimpleController::onEvent (Event::IEvent *event)
                         event->setContext (NULL);
                 }
 
-                return true;
+                return false;
         }
 
         if (getModel ()) {
@@ -281,8 +281,8 @@ bool SimpleController::onEvent (Event::IEvent *event)
                 Event::AbstractObserver *a = dynamic_cast <Event::AbstractObserver *> (i->get ());
 
                 //std::cerr << std::hex << a << std::endl;
-                if (!a->onEvent (event)) {
-                        return false;
+                if (a->onEvent (event)) {
+                        return true;
                 }
         }
 
@@ -296,7 +296,7 @@ bool SimpleController::onEvent (Event::IEvent *event)
                 event->setContext (NULL);
         }
 
-        return true;
+        return false;
 }
 
 /****************************************************************************/

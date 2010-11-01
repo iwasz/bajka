@@ -19,12 +19,24 @@ using Controller::IController;
 
 void PlatformerApp::load (Core::String const &xmlFile, Core::String const &controller)
 {
-        // Załaduj plik z levelem, czy z czymś tam.
-        levelContainer = XmlContainerFactory::createContainer (xmlFile, false, mainContainer);
+        doLoad = true;
+        this->xmlFile = xmlFile;
+        this->controller = controller;
+}
 
-        // Pobierz z nieg wskazany kontroler.
-        Ptr <IController> levelCtr = vcast <Ptr <IController> > (levelContainer->getBean (controller));
+/****************************************************************************/
 
-        // Ustaw jako główny kontroler.
-        setRootController (levelCtr);
+void PlatformerApp::afterEvents ()
+{
+        if (doLoad) {
+                // Załaduj plik z levelem, czy z czymś tam.
+                levelContainer = XmlContainerFactory::createContainer (xmlFile, false, mainContainer);
+
+                // Pobierz z nieg wskazany kontroler.
+                Ptr <IController> levelCtr = vcast <Ptr <IController> > (levelContainer->getBean (controller));
+
+                // Ustaw jako główny kontroler.
+                setRootController (levelCtr);
+                doLoad = false;
+        }
 }

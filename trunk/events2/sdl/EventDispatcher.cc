@@ -28,14 +28,26 @@ void EventDispatcher::init ()
 
 void EventDispatcher::addObserver (Ptr <IObserver> o)
 {
+#if 0
+        std::cerr << "EventDispatcher::addObserver before Size = " << observers.size () << std::endl;
+#endif
         observers.push_back (o);
+#if 0
+        std::cerr << "EventDispatcher::addObserver after Size = " << observers.size () << std::endl;
+#endif
 }
 
 /****************************************************************************/
 
 void EventDispatcher::removeObserver (Ptr <IObserver> o)
 {
+#if 0
+        std::cerr << "EventDispatcher::removeObserver before Size = " << observers.size () << std::endl;
+#endif
         observers.erase (std::remove (observers.begin (), observers.end (), o), observers.end ());
+#if 0
+        std::cerr << "EventDispatcher::removeObserver after Size = " << observers.size () << std::endl;
+#endif
 }
 
 /****************************************************************************/
@@ -66,19 +78,25 @@ void EventDispatcher::translate (SDL_Event *event)
         // Run inherited and overloaded methods.
         if (event->type == SDL_MOUSEMOTION) {
                 for (Event::ObserverVector::iterator i = observers.begin (); i != observers.end (); ++i) {
-                        (*i)->onEvent (updateMouseMotionEvent (event));
+                        if ((*i)->onEvent (updateMouseMotionEvent (event))) {
+                                break;
+                        }
                 }
         }
 
         if (event->type == SDL_MOUSEBUTTONDOWN || event->type == SDL_MOUSEBUTTONUP) {
                 for (Event::ObserverVector::iterator i = observers.begin (); i != observers.end (); ++i) {
-                        (*i)->onEvent (updateMouseButtonEvent (event));
+                        if ((*i)->onEvent (updateMouseButtonEvent (event))) {
+                                break;
+                        }
                 }
         }
 
         if (event->type == SDL_KEYDOWN || event->type == SDL_KEYUP) {
                 for (Event::ObserverVector::iterator i = observers.begin (); i != observers.end (); ++i) {
-                        (*i)->onEvent (updateKeyboardEvent (event));
+                        if ((*i)->onEvent (updateKeyboardEvent (event))) {
+                                break;
+                        }
                 }
         }
 }

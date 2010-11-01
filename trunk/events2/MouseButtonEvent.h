@@ -53,7 +53,7 @@ struct ButtonPressEvent : public MouseButtonEvent {
         virtual ~ButtonPressEvent () {}
         Type getType () const { return  BUTTON_PRESS_EVENT; }
         // Jesli to zadziała, to wywalić getType.
-        virtual void runObserver (IObserver *o) { o->onButtonPress (static_cast <ButtonPressEvent *> (this)); }
+        virtual bool runObserver (IObserver *o) { return o->onButtonPress (static_cast <ButtonPressEvent *> (this)); }
 };
 
 /**
@@ -63,7 +63,7 @@ struct ButtonPressEvent : public MouseButtonEvent {
 struct ButtonReleaseEvent : public MouseButtonEvent {
         virtual ~ButtonReleaseEvent () {}
         Type getType () const { return  BUTTON_RELEASE_EVENT; }
-        virtual void runObserver (IObserver *o) { o->onButtonRelease (static_cast <ButtonReleaseEvent *> (this)); }
+        virtual bool runObserver (IObserver *o) { return o->onButtonRelease (static_cast <ButtonReleaseEvent *> (this)); }
 };
 
 }

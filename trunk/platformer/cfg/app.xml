@@ -26,20 +26,14 @@
             <list class="DispatcherList">
                 <bean class="TimerDispatcher" singleton="true">
                     <property name="observers">
-                        <list class="ObserverVector">
-<!--                            <ref bean="screen" />-->
-<!--                            <ref bean="ruchJednostajny"/>-->
-<!--                            <ref bean="scrollController" />-->
-                        </list>
+                        <list class="ObserverVector"/>
                     </property>
                     <property name="tickInterval"><value type="int">20</value></property>
                 </bean>
 
                 <bean class="EventDispatcher" singleton="true" init-method="init">
                     <property name="observers">
-                        <list class="ObserverVector">
-<!--                            <ref bean="screen" />-->
-                        </list>
+                        <list class="ObserverVector"/>
                     </property>
                     <property name="config" ref="cfg" />
                 </bean>

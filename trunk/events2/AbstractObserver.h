@@ -35,13 +35,13 @@ public:
         bool getActive () const { return active; }
         _m (setActive) void setActive (bool a) { active = a; }
 
-        virtual bool onButtonPress (ButtonPressEvent *e) { return true; }
-        virtual bool onButtonRelease (ButtonReleaseEvent *e) { return true; }
-        virtual bool onMouseMotion (MouseMotionEvent *e) { return true; }
-        virtual bool onKeyDown (KeyDownEvent *e) { return true; }
-        virtual bool onKeyUp (KeyUpEvent *e) { return true; }
-        virtual bool onTimer (TimerEvent *e) { return true; }
-        virtual bool onQuit (QuitEvent *e) { return true; }
+        virtual bool onButtonPress (ButtonPressEvent *e) { return false; }
+        virtual bool onButtonRelease (ButtonReleaseEvent *e) { return false; }
+        virtual bool onMouseMotion (MouseMotionEvent *e) { return false; }
+        virtual bool onKeyDown (KeyDownEvent *e) { return false; }
+        virtual bool onKeyUp (KeyUpEvent *e) { return false; }
+        virtual bool onTimer (TimerEvent *e) { return false; }
+        virtual bool onQuit (QuitEvent *e) { return false; }
 
 /*--------------------------------------------------------------------------*/
 

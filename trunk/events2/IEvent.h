@@ -50,7 +50,7 @@ public:
         virtual ~IEvent () {}
         virtual Type getType () const = 0;
         // TODO zwracać bool
-        virtual void runObserver (IObserver *o) = 0;
+        virtual bool runObserver (IObserver *o) = 0;
         virtual IEventContext *getContext () const = 0;
         virtual void setContext (IEventContext *ctx) = 0;
 };

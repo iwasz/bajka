@@ -141,6 +141,8 @@ void BajkaApp::loop ()
                         rootController->draw ();
                 }
 
+                afterEvents ();
+
                 // Tak śmiga, że damy delay
                 SDL_Delay (5);
         }
