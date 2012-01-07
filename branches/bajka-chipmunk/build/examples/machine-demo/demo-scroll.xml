@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
+        "file:///home/iwasz/program/projects/tiliae/base/container/tiliae-container-1.0.dtd">
+
+<!--Ogólny schemat nazw : Ctr - kontroler, Wgt - widget, Mdl - model.-->
+<beans>
+
+<!--+==============+-->
+<!--| Scroll Layer |-->
+<!--+==============+-->
+
+    <bean id="scrollEventMargin" class="ScrollMarginController" init-method="init">
+
+        <!--Model-->
+        <property name="model">
+            <bean class="Model::Box"/>
+        </property>
+
+        <!--View-->
+        <property name="widget">
+<!--            <bean class="Rectangle"/>-->
+            <bean class="EmptyWidget"/>
+        </property>
+
+        <!--Tylko event mouse motion-->
+        <property name="bitMask"><value type="unsigned int">1</value></property>       
+    </bean>
+
+
+
+    <bean id="scrollEventMarginLeft" parent="scrollEventMargin">
+        <property name="model.x1"><value type="double">-319</value></property>
+        <property name="model.y1"><value type="double">-239</value></property>
+        <property name="model.x2"><value type="double">-220</value></property>
+        <property name="model.y2"><value type="double">240</value></property>
+        <property name="type"><value type="int">3</value></property>
+    </bean>
+
+
+
+    <bean id="scrollEventMarginRight" parent="scrollEventMargin">
+        <property name="model.x1"><value type="double">220</value></property>
+        <property name="model.y1"><value type="double">-239</value></property>
+        <property name="model.x2"><value type="double">320</value></property>
+        <property name="model.y2"><value type="double">240</value></property>
+        <property name="type"><value type="int">1</value></property>
+    </bean>
+
+
+
+    <bean id="scrollEventMarginTop" parent="scrollEventMargin">
+        <property name="model.x1"><value type="double">-319</value></property>
+        <property name="model.y1"><value type="double">140</value></property>
+        <property name="model.x2"><value type="double">320</value></property>
+        <property name="model.y2"><value type="double">240</value></property>
+        <property name="type"><value type="int">0</value></property>
+    </bean>
+    
+    
+    
+    <bean id="scrollEventMarginBottom" parent="scrollEventMargin">
+        <property name="model.x1"><value type="double">-319</value></property>
+        <property name="model.y1"><value type="double">-239</value></property>
+        <property name="model.x2"><value type="double">320</value></property>
+        <property name="model.y2"><value type="double">-140</value></property>
+        <property name="type"><value type="int">2</value></property>
+    </bean>
+
+
+
+    <bean id="scrollMargins" class="SimpleController" init-method="init" singleton="true">
+        <property name="children">
+            <list class="ControllerCollection">
+                <ref bean="scrollEventMarginLeft"/>                
+                <ref bean="scrollEventMarginRight"/>                
+                <ref bean="scrollEventMarginTop"/>
+                <ref bean="scrollEventMarginBottom"/>
+            </list>
+        </property>
+
+        <!--Mouse move - jeśli tego nie będzie, to event nie zostanie przekazany do potomków.-->
+        <property name="bitMask"><value type="unsigned int">1</value></property>
+    </bean>
+    
+    
+    
+    <bean id="scrollController" class="ScrollController">
+        <property name="model">
+            <bean class="ParalaxModel">
+                <property name="depths">
+                    <list class="DoubleVector">
+                        <value type="double">0.5</value>
+                        <value type="double">0.6</value>
+                        <value type="double">0.8</value>
+                        <value type="double">1.0</value>
+                    </list>
+                </property>
+            </bean>
+        </property>
+    
+        <property name="children">
+            <list class="ControllerCollection">
+                <bean parent="imageCtr">
+                    <property name="model.path" value="../gfx/bajka/background.png" />       
+                    <property name="model.move">
+                        <bean class="Point">
+                            <property name="x"><value type="double">-512</value></property>
+                            <property name="y"><value type="double">-512</value></property>
+                        </bean>
+                    </property>
+                </bean>
+            
+                <bean parent="imageCtr">
+                    <property name="model.path" value="../gfx/bajka/mountain2.png" />       
+                    <property name="model.move">
+                        <bean class="Point">
+                            <property name="x"><value type="double">-512</value></property>
+                            <property name="y"><value type="double">-400</value></property>
+                        </bean>
+                    </property>
+                </bean>
+
+                <bean parent="imageCtr">
+                    <property name="model.path" value="../gfx/bajka/mountain1.png" />       
+                    <property name="model.move">
+                        <bean class="Point">
+                            <property name="x"><value type="double">-512</value></property>
+                            <property name="y"><value type="double">-400</value></property>
+                        </bean>
+                    </property>
+                </bean>
+
+                <bean parent="imageCtr">
+                    <property name="model.path" value="../gfx/bajka/ground.png" />       
+                    <property name="model.move">
+                        <bean class="Point">
+                            <property name="x"><value type="double">-512</value></property>
+                            <property name="y"><value type="double">-750</value></property>
+                        </bean>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    
+        <!-- Zegarowy -->
+        <property name="bitMask"><value type="unsigned int">8</value></property>
+    </bean>
+    
+   
+</beans>
