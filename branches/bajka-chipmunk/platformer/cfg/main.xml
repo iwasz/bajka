@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
+        "file:///home/iwasz/program/projects/tiliae/base/container/tiliae-container-1.0.dtd">
+
+<!--Ogólny schemat nazw : Ctr - kontroler, Wgt - widget, Mdl - model.-->
+<beans>
+
+    <import resource="cfg/basic.xml" />
+    <import resource="cfg/scroll.xml" />
+    <import resource="cfg/app.xml" />
+        
+<!-- ===================================================================================== -->
+
+    <!-- Prosty stan z jednym przejściem -->
+    <bean id="simpleState1" class="State" singleton="true" abstract="true">
+        <property name="transitions">
+            <list class="TransitionList">
+                <bean class="Transition">
+                    <property name="condition">
+                        <bean class="K202Condition"/>
+                    </property>
+                </bean>
+            </list>
+        </property>        
+    </bean>
+
+    <!-- Prosty stan z dwoma przejściami -->
+    <bean id="simpleState2" class="State" singleton="true" abstract="true">
+        <property name="transitions">
+            <list class="TransitionList">
+                <bean class="Transition">
+                    <property name="condition">
+                        <bean class="K202Condition"/>
+                    </property>
+                </bean>
+                <bean class="Transition">
+                    <property name="condition">
+                        <bean class="K202Condition"/>
+                    </property>
+                </bean>
+            </list>
+        </property>        
+    </bean>
+
+<!-- ===================================================================================== -->
+
+    <bean id="machine" class="Machine" singleton="true">
+        <constructor-arg>
+            <map class="VariantMap">
+<!--                TODO Poniższe wyjebuje program! value-ref jest blednym atrybutem--> 
+<!--                <entry key="app" value-ref="app" />-->
+                <entry key="app" ref="app" />
+            </map>
+        </constructor-arg>
+        <property name="listener">
+            <bean class="MachineListener">
+                <property name="path" value="/machine"/>            
+            </bean>
+        </property>
+        <property name="initialStateName" value="menu"/>
+        <property name="states">
+            <list class="StateList">
+                <ref bean="menuState"/>
+                <ref bean="level1State"/>
+                <ref bean="looseState"/>
+                <ref bean="winState"/>
+                <ref bean="quitState"/>
+            </list>
+        </property>        
+    </bean>
+
+
+
+    <bean id="menuState" class="State" singleton="true">
+        <property name="name" value="menu"/>
+        <property name="transitions">
+            <list class="TransitionList">
+                <bean class="Transition">
+                    <property name="toState" value="level1"/>
+                    <property name="condition">
+                        <bean class="K202Condition">
+                            <property name="code" value="$!signal == 'play'"/>
+                        </bean>
+                    </property>
+                </bean>
+                <bean class="Transition">
+                    <property name="toState" value="quit"/>
+                    <property name="condition">
+                        <bean class="K202Condition">
+                            <property name="code" value="$!signal == 'quit'"/>
+                        </bean>
+                    </property>
+                </bean>
+            </list>
+        </property>        
+        <property name="entryActions">
+            <list class="ActionList">
+                <bean class="K202Action">
+                    <property name="code" value="$app.load ('cfg/level1.xml', 'screen')"/>
+                </bean>
+            </list>
+        </property>
+        <property name="exitActions">
+            <list class="ActionList">
+                <bean class="K202Action">
+                    <property name="code" value="$app.debug ('menuState.exitActions')"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+<!--    <bean id="level1State" parent="simpleState2">-->
+<!--        <property name="name" value="level1"/>-->
+<!--        <property name="transitions.0.toState" value="win"/>-->
+<!--        <property name="transitions.0.condition.code" value="$!signal == 'play'"/>-->
+<!--    </bean>-->
+
+
+    <bean id="level1State" class="State" singleton="true">
+        <property name="name" value="level1"/>
+        <property name="transitions">
+            <list class="TransitionList">
+                <bean class="Transition">
+                    <property name="toState" value="win"/>
+                    <property name="condition">
+                        <bean class="K202Condition">
+                            <property name="code" value="$!signal == 'win'"/>
+                        </bean>
+                    </property>
+                </bean>
+                <bean class="Transition">
+                    <property name="toState" value="loose"/>
+                    <property name="condition">
+                        <bean class="K202Condition">
+                            <property name="code" value="$!signal == 'loose'"/>
+                        </bean>
+                    </property>
+                </bean>
+            </list>
+        </property>        
+        <property name="entryActions">
+            <list class="ActionList">
+                <bean class="K202Action">
+                    <property name="code" value="$app.load ('cfg/menu.xml', 'screen')"/>
+                </bean>
+            </list>
+        </property>
+        <property name="exitActions">
+            <list class="ActionList">
+                <bean class="K202Action">
+                    <property name="code" value="$app.debug ('level1State.exitActions')"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+<!-- Nie działa ustawianie transitions.0 -> transitions nie kastuje sie na IList * w ListPlugin-->
+<!--    <bean id="looseState" parent="simpleState1">-->
+<!--        <property name="name" value="loose"/>-->
+<!--        <property name="transitions.0">-->
+<!--            <null/>-->
+<!--        </property>-->
+<!--    </bean>-->
+
+    <bean id="looseState" class="State" singleton="true">
+        <property name="name" value="loose"/>
+        <property name="transitions">
+            <list class="TransitionList">
+                <bean class="Transition">
+                    <property name="toState" value="menu"/>
+                    <property name="condition">
+                        <bean class="K202Condition">
+                            <property name="code" value="$!signal == 'menu'"/>
+                        </bean>
+                    </property>
+                </bean>
+            </list>
+        </property>        
+        <property name="entryActions">
+            <list class="ActionList">
+                <bean class="K202Action">
+                    <property name="code" value="$app.debug ('looseState.entryActions')"/>
+                </bean>
+            </list>
+        </property>
+        <property name="exitActions">
+            <list class="ActionList">
+                <bean class="K202Action">
+                    <property name="code" value="$app.debug ('looseState.exitActions')"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="winState" class="State" singleton="true">
+        <property name="name" value="win"/>
+        <property name="transitions">
+            <list class="TransitionList">
+                <bean class="Transition">
+                    <property name="toState" value="menu"/>
+                    <property name="condition">
+                        <bean class="K202Condition">
+                            <property name="code" value="$!signal == 'menu'"/>
+                        </bean>
+                    </property>
+                </bean>
+            </list>
+        </property>        
+        <property name="entryActions">
+            <list class="ActionList">
+                <bean class="K202Action">
+                    <property name="code" value="$app.debug ('menuState.entryActions')"/>
+                </bean>
+            </list>
+        </property>
+        <property name="exitActions">
+            <list class="ActionList">
+                <bean class="K202Action">
+                    <property name="code" value="$app.debug ('menuState.exitActions')"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="quitState" class="State" singleton="true">
+        <property name="name" value="quit"/>
+        <property name="entryActions">
+            <list class="ActionList">
+                <bean class="K202Action">
+                    <property name="code" value="$app.debug ('quitState.entryActions')"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+    
+<!-- ===================================================================================== -->
+
+</beans>

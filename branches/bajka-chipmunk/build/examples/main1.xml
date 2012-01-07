@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
+        "file:///home/iwasz/program/projects/tiliae/sandBox/sandBox/tiliae-container-1.0.dtd">
+
+<beans>
+
+    <!--Definicja obrazka. Jest tu M, V i C, gotowe do użycia. Z tej-->
+    <!--definicji należy dziedziczyć (parent) i ustawiać model.path i-->
+    <!--na przykłąd model.translatePont.-->
+    <bean id="image" class="SimpleController" init-method="init">
+        
+        <!--Model-->
+        <property name="model" ref="imageModel">
+            <bean id="imageModel" class="Model::Image" scope="bean">
+                <property name="path" value="../gfx/main02.png" />
+                <property name="translatePoint">
+                    <bean class="Point">
+                        <property name="x"><value type="double">-512.0</value></property>
+                        <property name="y"><value type="double">-512.0</value></property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+
+        <!--View-->
+        <property name="widget">
+            <bean class="View::Image">
+                <property name="model" ref="imageModel" />
+            </bean>
+        </property>
+    </bean>
+
+
+
+    <!--Uwaga! Ustawiam property "widget.model", ale to jest inny-->
+    <!--obiekt niż "model". Kiedy się zaimplementuje scope bean, to-->
+    <!--będzie tylko jeden obiekt i ustawienie takie jak poniżej-->
+    <!--będzie OK. Teraz path będzie zmieniony tylko w kopii, którą-->
+    <!--posiada widget, a w kopii którą posiada kontroler jest stara-->
+    <!--ścieżka. TODO.-->
+    <bean id="background" parent="image"  singleton="true"/>
+
+
+
+    <bean id="box1" parent="image" singleton="true">
+        <property name="model.path" value="../gfx/box/1.png"/>    
+    </bean>
+
+
+
+    <bean id="box2" parent="image" singleton="true">
+        <property name="model.path" value="../gfx/box/2.png"/>    
+    </bean>
+
+
+
+    <bean id="box3" parent="image" singleton="true">
+        <property name="model.path" value="../gfx/box/3.png"/>    
+    </bean>
+
+
+
+    <bean id="box4" parent="image" singleton="true">
+        <property name="model.path" value="../gfx/box/4.png"/>    
+    </bean>
+
+
+
+    <bean id="cursor" parent="image" singleton="true">
+        <property name="model.path" value="../gfx/pointer64.png"/>    
+    </bean>
+
+
+
+    <bean id="snowFlake" class="SnowflakeController" parent="image" singleton="true">
+        <property name="model.path" value="../gfx/snowflake2.png"/>    
+
+        <!--To jest moje marzenie, zeby takj się dało :-->
+        <!--<property name="model.center" value="0, 0" />-->
+        
+        <property name="model.translatePoint">
+            <bean class="Point">
+                <property name="x"><value type="double">0</value></property>
+                <property name="y"><value type="double">0</value></property>
+            </bean>
+        </property>
+        
+        <property name="model.center">
+            <bean class="Point">
+                <property name="x"><value type="double">-2</value></property>
+                <property name="y"><value type="double">-2</value></property>            
+            </bean>
+        </property>
+        
+        <property name="mapping">
+            <bean class="RotationMapping">
+                <property name="sequence">
+                    <!--Kiepsko to wygląda z tymi &lt/gt...    -->
+                    <bean id="seq1" class="StepSequence&lt;double&gt;">
+                        <property name="initial"><value type="double">0</value></property>
+                        <property name="step"><value type="double">2</value></property>
+                        <property name="stepNumber"><value type="int">180</value></property>
+                    </bean>
+                </property>
+                                
+                <property name="model" ref="imageModel"/>                
+            </bean>
+        </property>
+
+        <property name="movMap">
+            <bean class="TranslationMapping">
+                <property name="model" ref="imageModel"/>                
+
+                <property name="sequence">
+                    <bean id="seq2" class="StepSequence&lt;Model::Point&gt;">
+                        <property name="initial">
+                            <bean class="Point">
+                                <property name="x"><value type="double">-50</value></property>
+                                <property name="y"><value type="double">250</value></property>            
+                            </bean>
+                        </property>
+                        
+                        <property name="step">
+                            <bean class="Point">
+                                <property name="x"><value type="double">0.25</value></property>
+                                <property name="y"><value type="double">-1.75</value></property>            
+                            </bean>
+                        </property>
+                        
+                        <property name="stepNumber"><value type="int">400</value></property>
+                    </bean>
+                </property>                
+            </bean>
+        </property>
+    </bean>
+    
+
+
+    <bean id="table" class="Table" init-method="init" singleton="true">
+        <constructor-arg><value type="int">2</value></constructor-arg>
+        <constructor-arg><value type="int">2</value></constructor-arg>
+        
+        <property name="model">
+            <bean id="model" class="Item" scope="bean">
+                <property name="translatePoint">
+                    <bean class="Point">
+                        <property name="x"><value type="double">-320.0</value></property>
+                        <property name="y"><value type="double">-70.0</value></property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+        
+        <property name="widget">
+            <bean id="emptyWidget" class="EmptyWidget">        
+                <property name="model" ref="model" />            
+            </bean>
+        </property>
+        
+        <property name="children">
+            <list class="ControllerList">
+                <ref bean="box1"/>
+                <ref bean="box2"/>
+                <ref bean="box3"/>
+                <ref bean="box4"/>
+            </list>
+        </property>
+    </bean>
+
+
+
+    <bean id="tableAsia" parent="table">
+        <property name="model.translatePoint">
+            <bean class="Point">
+                <property name="x"><value type="double">200.0</value></property>
+                <property name="y"><value type="double">-70.0</value></property>
+            </bean>
+        </property>
+
+        <!--A tak będzie kiedyś kiedyś:-->
+        <!--<property name="model.translatePoint" value="200.0, -70.0"/>-->
+
+        <property name="children">
+            <list class="ControllerList">
+                <bean parent="image" scope="bean">
+                    <property name="model.path" value="../gfx/asia/slice_0_1.jpg"/>    
+                </bean>                
+                <bean parent="image" scope="bean">
+                    <property name="model.path" value="../gfx/asia/slice_0_0.jpg"/>    
+                </bean>                
+                <bean parent="image" scope="bean">
+                    <property name="model.path" value="../gfx/asia/slice_1_0.jpg"/>    
+                </bean>                
+                <bean parent="image" scope="bean">
+                    <property name="model.path" value="../gfx/asia/slice_1_1.jpg"/>    
+                </bean>                
+            </list>
+        </property>
+    </bean>
+
+<!-- ===================================================================================== -->
+
+    <bean id="rect" class="SimpleController" init-method="init">
+      
+        <!--View-->
+        <property name="widget">
+            <bean class="Rectangle">
+                <property name="model2">
+                    <bean class="Box2">
+                        <property name="x1"><value type="double">-50</value></property>
+                        <property name="y1"><value type="double">50</value></property>
+                        <property name="x2"><value type="double">50</value></property>
+                        <property name="y2"><value type="double">-50</value></property>
+
+                        <property name="move">
+                            <bean class="Model2::Point">
+                                <property name="x"><value type="double">50</value></property>
+                                <property name="y"><value type="double">50</value></property>
+                            </bean>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+<!-- ===================================================================================== -->
+
+    <bean id="screenModel" class="Primitive" singleton="true">
+        <property name="fillColor">
+            <bean class="Color">
+                <property name="r"><value type="double">0.35</value></property>
+                <property name="g"><value type="double">0.75</value></property>
+                <property name="b"><value type="double">1</value></property>
+            </bean>
+        </property>
+    </bean>
+
+
+
+    <bean id="screen" class="SimpleController" singleton="true">
+        <property name="widget">
+            <bean class="Screen">
+                <property name="model" ref="screenModel" />
+            </bean>
+        </property>
+        
+        <property name="model" ref="screenModel" />
+        
+        <property name="children">
+            <list class="ControllerList">
+                <ref bean="snowFlake"/>
+                <ref bean="background"/>
+                <ref bean="table"/>
+                <ref bean="tableAsia"/>
+                <ref bean="rect"/>
+                <ref bean="cursor"/>
+            </list>        
+        </property>
+    </bean>
+
+</beans>

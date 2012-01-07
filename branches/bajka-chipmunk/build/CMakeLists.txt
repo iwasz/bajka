@@ -1,0 +1,122 @@
+# Wymagaj tej wersji - dopier w niej jest nowe makro FindPkgConfig
+CMAKE_MINIMUM_REQUIRED (VERSION 2.4.7 FATAL_ERROR)
+
+if(COMMAND cmake_policy)
+    cmake_policy(SET CMP0003 NEW)
+endif(COMMAND cmake_policy)
+
+#ADD_DEFINITIONS (-O3)
+ADD_DEFINITIONS (-g)
+ADD_DEFINITIONS (-Winvalid-pch)
+#ADD_DEFINITIONS (-H)
+#ADD_DEFINITIONS (-Wall)
+#ADD_DEFINITIONS (-fsyntax-only)
+
+SET (CMAKE_C_COMPILER gcc-4.5)
+SET (CMAKE_CXX_COMPILER g++-4.5)
+SET (EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR})
+SET (LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR})
+#SET (CMAKE_VERBOSE_MAKEFILE true)
+
+# Boost, można zakomentowa, you can skip this
+SET(Boost_ADDITIONAL_VERSIONS "1.39" "1.39.0")
+find_package (Boost 1.39.0)
+include_directories(${Boost_INCLUDE_DIRS})
+
+include (FindPkgConfig)
+pkg_check_modules (TILIAE "tiliae")
+INCLUDE_DIRECTORIES (${TILIAE_INCLUDE_DIRS})
+link_directories(${TILIAE_LIBRARY_DIRS})
+
+# Find GL
+include (FindOpenGL)
+INCLUDE_DIRECTORIES (${OPENGL_INCLUDE_DIR})
+
+# sdl
+include (FindSDL)
+INCLUDE_DIRECTORIES (${SDL_INCLUDE_DIR})
+
+# sdl_image
+include (FindSDL_image)
+INCLUDE_DIRECTORIES (${SDL_SDLIMAGE_INCLUDE_DIR})
+
+# Sources
+AUX_SOURCE_DIRECTORY (../view SOURCES)
+AUX_SOURCE_DIRECTORY (../model SOURCES)
+AUX_SOURCE_DIRECTORY (../model/geometry SOURCES)
+AUX_SOURCE_DIRECTORY (../model/layout SOURCES)
+AUX_SOURCE_DIRECTORY (../model/painting SOURCES)
+AUX_SOURCE_DIRECTORY (../util SOURCES)
+AUX_SOURCE_DIRECTORY (../events2 SOURCES)
+AUX_SOURCE_DIRECTORY (../events2/sdl SOURCES)
+#AUX_SOURCE_DIRECTORY (../sdl SOURCES)
+AUX_SOURCE_DIRECTORY (../openGl SOURCES)
+AUX_SOURCE_DIRECTORY (../controller SOURCES)
+AUX_SOURCE_DIRECTORY (../controller/sequence SOURCES)
+AUX_SOURCE_DIRECTORY (../controller/mapping SOURCES)
+AUX_SOURCE_DIRECTORY (../services SOURCES)
+AUX_SOURCE_DIRECTORY (../services/scroll SOURCES)
+AUX_SOURCE_DIRECTORY (../base SOURCES)
+AUX_SOURCE_DIRECTORY (../base/tree SOURCES)
+
+#AUX_SOURCE_DIRECTORY (../fluids/common SOURCES)
+#AUX_SOURCE_DIRECTORY (../fluids/common/GL SOURCES)
+#AUX_SOURCE_DIRECTORY (../fluids/fluids SOURCES)
+#AUX_SOURCE_DIRECTORY (../fluids/sandBox SOURCES)
+
+# Local includes (inside project).
+INCLUDE_DIRECTORIES (../view)
+INCLUDE_DIRECTORIES (../model)
+#INCLUDE_DIRECTORIES (../fluids)
+INCLUDE_DIRECTORIES (../util)
+INCLUDE_DIRECTORIES (../events2)
+INCLUDE_DIRECTORIES (../controller)
+#INCLUDE_DIRECTORIES (../sdl)
+INCLUDE_DIRECTORIES (../openGl)
+INCLUDE_DIRECTORIES (../base)
+
+# Biblioteka z silnikiem bajka.
+add_library (bajka SHARED ${SOURCES})
+
+# Executable test.
+IF (1)
+    AUX_SOURCE_DIRECTORY (../test TEST_SOURCES)
+    AUX_SOURCE_DIRECTORY (../test/helpers TEST_SOURCES)
+    
+    #if (true)
+    add_executable (test ${TEST_SOURCES})
+    TARGET_LINK_LIBRARIES (test ${OPENGL_LIBRARIES})
+    TARGET_LINK_LIBRARIES (test ${JPEG_LIBRARIES})
+    TARGET_LINK_LIBRARIES (test ${SDL_LIBRARY})
+    TARGET_LINK_LIBRARIES (test ${SDLIMAGE_LIBRARY})
+    TARGET_LINK_LIBRARIES (test ${TILIAE_LIBRARIES})
+    TARGET_LINK_LIBRARIES (test bajka)
+    TARGET_LINK_LIBRARIES (test boost_unit_test_framework)
+ENDIF ()
+
+IF (1)
+    # Executable demo.
+    AUX_SOURCE_DIRECTORY (../demo DEMO_SOURCES)
+    #LIST(APPEND DEMO_SOURCES ${SOURCES})
+    
+    add_executable (demo ${DEMO_SOURCES})
+    TARGET_LINK_LIBRARIES (demo ${OPENGL_LIBRARIES})
+    TARGET_LINK_LIBRARIES (demo ${JPEG_LIBRARIES})
+    TARGET_LINK_LIBRARIES (demo ${SDL_LIBRARY})
+    TARGET_LINK_LIBRARIES (demo ${SDLIMAGE_LIBRARY})
+    TARGET_LINK_LIBRARIES (demo ${TILIAE_LIBRARIES})
+    TARGET_LINK_LIBRARIES (demo bajka)
+ENDIF ()
+
+IF (1)
+    # Executable demo.
+    AUX_SOURCE_DIRECTORY (../platformer/src PLATFORMER_SOURCES)
+   
+    add_executable (platformer ${PLATFORMER_SOURCES})
+    TARGET_LINK_LIBRARIES (platformer ${OPENGL_LIBRARIES})
+    TARGET_LINK_LIBRARIES (platformer ${JPEG_LIBRARIES})
+    TARGET_LINK_LIBRARIES (platformer ${SDL_LIBRARY})
+    TARGET_LINK_LIBRARIES (platformer ${SDLIMAGE_LIBRARY})
+    TARGET_LINK_LIBRARIES (platformer ${TILIAE_LIBRARIES})
+    TARGET_LINK_LIBRARIES (platformer bajka)  
+ENDIF ()
