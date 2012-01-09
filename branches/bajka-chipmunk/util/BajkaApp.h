@@ -9,7 +9,7 @@
 #ifndef BAJKAAPP_H_
 #define BAJKAAPP_H_
 
-#include "../model/geometry/Utils.h"
+#include "../model/geometry/Geometry.h"
 #include <Reflection.h>
 #include "../model/geometry/Point.h"
 #include <chipmunk.h>
