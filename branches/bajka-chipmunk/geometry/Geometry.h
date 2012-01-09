@@ -15,7 +15,7 @@
  * Czysta geometria, niezależne od M/V/C.
  */
 
-#include "Utils.h"
+#include "AffineMatrix.h"
 #include "Point.h"
 #include "Box.h"
 #include "Vector.h"

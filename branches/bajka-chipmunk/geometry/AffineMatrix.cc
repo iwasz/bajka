@@ -7,8 +7,7 @@
  ****************************************************************************/
 
 #include <cmath>
-
-#include "Utils.h"
+#include "AffineMatrix.h"
 
 namespace Geometry {
 using namespace boost::numeric::ublas;

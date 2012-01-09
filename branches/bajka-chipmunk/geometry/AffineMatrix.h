@@ -14,8 +14,8 @@
 #include <stack>
 #include <IToStringEnabled.h>
 
-#include "geometry/Point.h"
-#include "geometry/Box.h"
+#include "Point.h"
+#include "Box.h"
 
 namespace Geometry {
 
