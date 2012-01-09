@@ -7,16 +7,19 @@
  ****************************************************************************/
 
 #include <cstdlib>
-#include "IWidget.h"
+//#include "IWidget.h"
+
+#include "BajkaApp.h"
 
 #include <Container.h>
 #include <ContainerFactory.h>
 
-#include "BajkaApp.h"
-#include "sequence/ConstSequence.h"
+//#include "sequence/ConstSequence.h"
 
-// TODO wywalić
-#include <Signal.h>
+namespace M = Model;
+namespace V = View;
+namespace C = Controller;
+namespace G = Geometry;
 
 /**
  * Main entry.
@@ -29,15 +32,44 @@ int main (int argc, char **argv)
                 fileName = *(argv + 1);
         }
         else {
-                fileName = "main.xml";
+                fileName = "examples/chipmunk.xml";
         }
 
         // Nie robimy try-catch, bo i tak info zostanie wypisane.
-        Ptr <Container2::BeanFactoryContainer> container = Container2::XmlContainerFactory::createContainer (fileName, true);
+        Ptr <Container::BeanFactoryContainer> container = Container::XmlContainerFactory::createContainer (fileName, true);
         Ptr <Util::BajkaApp> app = vcast <Ptr <Util::BajkaApp> > (container->getBean ("app"));
 
-        // TODO Do wywalenia, kiedy beany singleton będą się same instancjonowac.
-//        Core::Variant v = container->getBean ("scrollService");
+
+        Ptr <M::CPSpace> space = boost::make_shared <M::CPSpace> ();
+        space->setGravity (G::Vector (0, -100));
+
+        M::CPBody *body = new M::CPBody ();
+        body->setMass (1);
+        V::IView *view = new V::Circle ();
+        body->setView (view);
+        space->addChild (body);
+
+
+        M::CPCircle *circle = new M::CPCircle ();
+        circle->setRadius (5);
+        circle->setView (view);
+
+        body->addChild (circle);
+
+
+
+
+//        Ptr <M::IModel> model = boost::make_shared <M::Box> (0, 0, 30, 30);
+//
+//        V::IView *view = new V::Rectangle ();
+//        C::IController *c = new C::EmptyController ();
+//        model->setView (view);
+//        model->setController(c);
+//        model->setAngle (1);
+
+
+
+        app->setModel (space);
 
         app->loop ();
         app->destroy ();

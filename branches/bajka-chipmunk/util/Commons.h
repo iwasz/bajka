@@ -10,23 +10,21 @@
 #define BAJKA_UTILS_COMMONS_H_
 
 #include <Reflection.h>
-#include <collection/List.h>
-#include <collection/Vector.h>
 #include <Pointer.h>
 
 namespace Util {
 
-typedef Reflection::List <int> IntList;
-_f (IntList)
+typedef std::list <int> IntList;
+_g (IntList)
 
-typedef Reflection::Vector <int> IntVector;
-_f (IntVector)
+typedef std::vector <int> IntVector;
+_g (IntVector)
 
-typedef Reflection::List <double> DoubleList;
-_f (DoubleList)
+typedef std::list <double> DoubleList;
+_g (DoubleList)
 
-typedef Reflection::Vector <double> DoubleVector;
-_f (DoubleVector)
+typedef std::vector <double> DoubleVector;
+_g (DoubleVector)
 
 /*
  * Typ ConvertPtr_t
