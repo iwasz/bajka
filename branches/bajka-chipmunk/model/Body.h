@@ -17,7 +17,7 @@ class Body : public AbstractModel {
 public:
 
         Body ();
-        virtual ~Body () {}
+        virtual ~Body ();
 
         Geometry::Point getPosition () const;
         void setPosition (Geometry::Point const &position);

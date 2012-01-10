@@ -9,9 +9,9 @@
 #ifndef BAJKA_BOX_H_
 #define BAJKA_BOX_H_
 
-#include "Polygon.h"
-#include "../geometry/Point.h"
 #include "../geometry/AffineMatrix.h"
+#include "../geometry/Point.h"
+#include "Polygon.h"
 
 namespace Model {
 
@@ -37,6 +37,8 @@ public:
         double getHeight () const { return height; }
         void setHeight (double h) { height = h; }
 
+        double calculateInertia (double mass) const;
+        void parentCallback (IModel *m);
 private:
 
         Geometry::Point position;

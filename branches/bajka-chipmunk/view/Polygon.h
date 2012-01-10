@@ -6,16 +6,24 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_POLYGON_H_
-#define BAJKA_POLYGON_H_
+#ifndef BAJKA_VIEW_POLYGON_H_
+#define BAJKA_VIEW_POLYGON_H_
 
 #include "Widget.h"
 
 namespace View {
 
+class Rectangle : public Widget {
+public:
+
+        virtual ~Rectangle () {}
+        virtual void update (Model::IModel *model);
+};
+
 class Polygon : public Widget {
 public:
-        virtual ~Polygon ();
+        virtual ~Polygon () {}
+        virtual void update (Model::IModel *model);
 };
 
 ///**

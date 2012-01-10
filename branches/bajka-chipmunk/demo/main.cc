@@ -6,15 +6,18 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#include "../util/BajkaApp.h"
+#include "../model/Space.h"
+#include "../model/Body.h"
+#include "../view/Circle.h"
+#include "../model/Circle.h"
+
 #include <cstdlib>
-//#include "IWidget.h"
-
-#include "BajkaApp.h"
-
 #include <Container.h>
 #include <ContainerFactory.h>
-
-//#include "sequence/ConstSequence.h"
+#include "../view/draw/Primitives.h"
+#include "../model/Box.h"
+#include "../view/Polygon.h"
 
 namespace M = Model;
 namespace V = View;
@@ -40,24 +43,27 @@ int main (int argc, char **argv)
         Ptr <Util::BajkaApp> app = vcast <Ptr <Util::BajkaApp> > (container->getBean ("app"));
 
 
-        Ptr <M::CPSpace> space = boost::make_shared <M::CPSpace> ();
+        Ptr <M::Space> space = boost::make_shared <M::Space> ();
         space->setGravity (G::Vector (0, -100));
 
-        M::CPBody *body = new M::CPBody ();
+        M::Body *body = new M::Body ();
         body->setMass (1);
-        V::IView *view = new V::Circle ();
-        body->setView (view);
         space->addChild (body);
 
 
-        M::CPCircle *circle = new M::CPCircle ();
-        circle->setRadius (5);
-        circle->setView (view);
+        M::Circle *circle = new M::Circle ();
+        circle->setRadius (50);
+        circle->setView (new V::Circle ());
+
+
+        M::Box *box = new M::Box ();
+        box->setPosition (G::Point (0, -50));
+        box->setWidth (50);
+        box->setHeight (50);
+        box->setView (new V::Rectangle ());
 
         body->addChild (circle);
-
-
-
+        body->addChild (box);
 
 //        Ptr <M::IModel> model = boost::make_shared <M::Box> (0, 0, 30, 30);
 //
