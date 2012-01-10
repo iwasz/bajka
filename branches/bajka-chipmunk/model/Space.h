@@ -18,8 +18,8 @@ namespace Model {
 class Space : public AbstractModel {
 public:
 
-        Space () {}
-        virtual ~Space () {}
+        Space ();
+        virtual ~Space ();
 
         static cpSpace *getSpace () { return space; }
 

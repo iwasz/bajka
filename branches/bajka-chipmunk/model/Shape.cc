@@ -6,8 +6,32 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#include <chipmunk.h>
+#include "../geometry/AffineMatrix.h"
 #include "Shape.h"
+#include "Body.h"
 
 namespace Model {
+
+Shape::~Shape ()
+{
+        cpShapeFree (shape);
+}
+
+void Shape::parentCallback (IModel *m)
+{
+        AbstractModel::parentCallback (m);
+        // TODO można zrobic cast w zalezności od define DEBUG/RELEASE.
+        Body *body = static_cast <Body *> (m);
+        double inertia = calculateInertia (body->getMass ());
+        body->addInertia (inertia);
+}
+
+double const *Shape::getMatrix () const
+{
+        // TODO!
+        static Geometry::AffineMatrix one;
+        return one.data ().begin ();
+}
 
 } /* namespace Model */

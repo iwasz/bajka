@@ -17,7 +17,7 @@ class Shape : public AbstractModel {
 public:
 
         Shape () : shape (0) {}
-        virtual ~Shape () {}
+        virtual ~Shape ();
 
         virtual double calculateInertia (double mass) const = 0;
         virtual void parentCallback (IModel *m);

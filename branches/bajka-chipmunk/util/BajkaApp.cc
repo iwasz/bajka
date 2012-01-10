@@ -31,6 +31,7 @@
 //#include "View.h"
 
 #include "BajkaApp.h"
+#include "../view/draw/Primitives.h"
 //#include "Controller.h"
 //#include "Model.h"
 
@@ -119,12 +120,19 @@ void BajkaConfig::init ()
         glGetFloatv (GL_SMOOTH_POINT_SIZE_GRANULARITY, params);
         std::cerr << "GL_SMOOTH_POINT_SIZE_GRANULARITY : " << params[0] << ", " << params[1] << std::endl;
 
-        glDisable (GL_POINT_SMOOTH);
+        glEnable(GL_LINE_SMOOTH);
+        glEnable(GL_POINT_SMOOTH);
+        glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
+        glHint(GL_POINT_SMOOTH_HINT, GL_DONT_CARE);
+
         std::cerr << "is enabled GL_POINT_SMOOTH : " << ((glIsEnabled (GL_POINT_SMOOTH)) ? ("true") : ("false")) << std::endl;
 
         glPointSize (3);
         glGetFloatv (GL_POINT_SIZE, params);
         std::cerr << "GL_POINT_SIZE : " << params[0] << std::endl;
+
+        // glDrawArrays
+        glEnableClientState(GL_VERTEX_ARRAY);
 
 /*--------------------------------------------------------------------------*/
 //
@@ -297,271 +305,32 @@ void BajkaApp::setModel (Ptr <Model::IModel> m)
 } // Nam
 
 
-//namespace View {
-//
-//void Widget::preUpdate (Model::IModel *model)
-//{
-//        if (!visible) {
-//                return;
-//        }
-//
-//        glPushMatrix ();
-//
-//        if (model) {
-//                glMultMatrixd (model->getMatrix ());
-//        }
-//}
-//
-////void Widget::update (Model::IModel *model)
-////{
-////
-////}
-//
-//void Widget::postUpdate (Model::IModel *model)
-//{
-//        if (!visible) {
-//                return;
-//        }
-//
-//        glPopMatrix ();
-//}
-//
-//void Rectangle::update (Model::IModel *model)
-//{
-//        // TODO Do wywalenia.
-//        glColor3f (1.0, 0.0, 0.0);
-//
-//        // TODO Lub dynamic, dio zastanowienia się.
-//        // TODO Kastować na ogólniejszy typ.
-//        Model::Box *box = static_cast <Model::Box *> (model);
-//
-//        double x = box->getPosition ().getX ();
-//        double y = box->getPosition ().getY ();
-//
-//        glBegin (GL_LINE_LOOP);
-//                glVertex2f (x, y);
-//                glVertex2f (x, y + box->getHeight ());
-//                glVertex2f (x + box->getHeight (), y + box->getHeight ());
-//                glVertex2f (x + box->getHeight (), y);
-//        glEnd ();
-//}
-//
-//void Circle::update (Model::IModel *model)
-//{
-//        // TODO Do wywalenia.
-//        glColor3f (0.0, 1.0, 0.0);
-//
-//        // TODO Lub dynamic, dio zastanowienia się.
-//        // TODO Kastować na ogólniejszy typ.
-////        Model::CPCircle *box = static_cast <Model::CPCircle *> (model);
-//
-//        double x = model->getPosition ().getX ();
-//        double y = model->getPosition ().getY ();
-//
-//        glBegin (GL_LINE_LOOP);
-//                glVertex2f (x, y);
-//                glVertex2f (x, y + 30);
-//                glVertex2f (x + 30, y + 30);
-//                glVertex2f (x + 30, y);
-//        glEnd ();
-//}
-//
-//} // Nam
-//
-//namespace Model {
-//
-//bool AbstractModel::update ()
-//{
-//        if (controller) {
-//                controller->preUpdate (this, view);
-//                controller->update (this, view);
-//        }
-//
-//        if (view) {
-//                view->preUpdate (this);
-//                view->update (this);
-//        }
-//
-//        std::for_each (begin (), end (), boost::mem_fn (&IModel::update));
-//
-//        if (controller) {
-//                controller->postUpdate (this, view);
-//        }
-//
-//        if (view) {
-//                view->postUpdate (this);
-//        }
-//}
-//
-//
-//cpSpace *CPSpace::space = NULL;
-//
-//CPSpace::CPSpace ()
-//{
-//        assert (!space);
-//        space = cpSpaceNew ();
-//}
-//
-//CPSpace::~CPSpace ()
-//{
-//        cpSpaceFree (space);
-//}
-//
-//Geometry::Vector CPSpace::getGravity () const
-//{
-//        cpVect g = cpSpaceGetGravity (space);
-//        return Geometry::Vector (g.x, g.y);
-//}
-//
-//void CPSpace::setGravity (Geometry::Vector const &g)
-//{
-//        cpSpaceSetGravity (space, cpv (g.getX (), g.getY ()));
-//}
-//
-//double const *CPSpace::getMatrix () const
-//{
-//        static Geometry::AffineMatrix one;
-//        return one.data ().begin ();
-//}
-//
-///*--------------------------------------------------------------------------*/
-//
-//CPBody::CPBody ()
-//{
-//        body = cpSpaceAddBody (CPSpace::getSpace (), cpBodyNew (1, 1));
-//}
-//
-//CPBody::~CPBody ()
-//{
-//        cpBodyFree (body);
-//}
-//
-//Geometry::Point CPBody::getPosition () const
-//{
-//        cpVect v = cpBodyGetPos (body);
-//        return Geometry::Point (v.x, v.y);
-//}
-//
-//void CPBody::setPosition (Geometry::Point const &p)
-//{
-//        cpBodySetPos (body, cpv (p.getX (), p.getY ()));
-//        cpSpaceReindexShapesForBody (CPSpace::getSpace (), body);
-//}
-//
-//double CPBody::getAngle () const
-//{
-//        return cpBodyGetAngle (body);
-//}
-//
-//void CPBody::setAngle (double a)
-//{
-//        cpBodySetAngle (body, a);
-//        cpSpaceReindexShapesForBody (CPSpace::getSpace (), body);
-//}
-//
-//double const *CPBody::getMatrix () const
-//{
-//        // TODO!
-//        static Geometry::AffineMatrix one;
-//        return one.data ().begin ();
-//}
-//
-//double CPBody::getMass () const
-//{
-//        return cpBodyGetMass (body);
-//}
-//
-//void CPBody::setMass (double m)
-//{
-//        cpBodySetMass (body, m);
-//}
-//
-//double CPBody::getInertia () const
-//{
-//        return cpBodyGetMoment (body);
-//}
-//
-//void CPBody::setInertia (double i)
-//{
-//        cpBodySetMoment (body, i);
-//}
-//
-//void CPBody::addInertia (double i)
-//{
-//        double tmp = cpBodyGetMoment (body);
-//        cpBodySetMoment (body, i + tmp);
-//}
-//
-///****************************************************************************/
-//
-//CPShape::~CPShape ()
-//{
-//        cpShapeFree (shape);
-//}
-//
-//void CPShape::parentCallback (IModel *m)
-//{
-//        CPModel::parentCallback (m);
-//        // TODO można zrobic cast w zalezności od define DEBUG/RELEASE.
-//        CPBody *body = static_cast <CPBody *> (m);
-//        double inertia = calculateInertia (body->getMass ());
-//        body->addInertia (inertia);
-//}
-//
-//double const *CPShape::getMatrix () const
-//{
-//        // TODO!
-//        static Geometry::AffineMatrix one;
-//        return one.data ().begin ();
-//}
-//
-///****************************************************************************/
-//
-//CPCircle::CPCircle ()
-//{
-//
-//}
-//
-//double CPCircle::calculateInertia (double mass) const
-//{
-//        return cpMomentForCircle (mass, 0, getRadius (), cpv (getPosition ().getX (), getPosition ().getY ()));
-//}
-//
-//void CPCircle::parentCallback (IModel *m)
-//{
-//        CPBody *b = static_cast <CPBody *> (m);
-//        shape = cpCircleShapeNew (b->getBody (), radius, cpv (position.getX (), position.getY ()));
-//        CPShape::parentCallback (m);
-//}
-//
-//double CPCircle::getRadius () const
-//{
-//        return cpCircleShapeGetRadius (shape);
-//}
-//
-//void CPCircle::setRadius (double r)
-//{
-//        if (getParent ()) {
-//                throw Util::OperationNotSupportedException ();
-//        }
-//
-//        radius = r;
-//}
-//
-//void CPCircle::setPosition (Geometry::Point const &p)
-//{
-//        if (getParent ()) {
-//                throw Util::OperationNotSupportedException ();
-//        }
-//
-//        position = p;
-//}
-//
-//Geometry::Point CPCircle::getPosition () const
-//{
-//        cpVect v = cpCircleShapeGetOffset (shape);
-//        return Geometry::Point (v.x, v.y);
-//}
-//
-//
-//}
+namespace View {
+
+
+
+
+
+
+} // Nam
+
+namespace Model {
+
+
+
+
+
+
+/*--------------------------------------------------------------------------*/
+
+
+
+/****************************************************************************/
+
+
+
+/****************************************************************************/
+
+
+
+}

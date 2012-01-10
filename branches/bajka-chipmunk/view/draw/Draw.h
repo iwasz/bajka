@@ -6,22 +6,9 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include <chipmunk.h>
-#include "Box.h"
-#include "Body.h"
+#ifndef BAJKA_VIEW_PRIMITIVES_H_
+#define BAJKA_VIEW_PRIMITIVES_H_
 
-namespace Model {
+#include "Draw.h"
 
-double Box::calculateInertia (double mass) const
-{
-        return cpMomentForBox (mass, width, height);
-}
-
-void Box::parentCallback (IModel *m)
-{
-        Body *b = static_cast <Body *> (m);
-        shape = cpBoxShapeNew (b->getBody (), width, height);
-        Shape::parentCallback (m);
-}
-
-} /* namespace Model1 */
+#	endif /* PRIMITIVES_H_ */
