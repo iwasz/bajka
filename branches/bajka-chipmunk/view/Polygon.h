@@ -13,38 +13,11 @@
 
 namespace View {
 
-class Rectangle : public Widget {
-public:
-
-        virtual ~Rectangle () {}
-        virtual void update (Model::IModel *model);
-};
-
 class Polygon : public Widget {
 public:
         virtual ~Polygon () {}
         virtual void update (Model::IModel *model);
 };
-
-///**
-// * Rysuje prostokąt.
-// * \ingroup View
-// */
-//class Rectangle : public Widget {
-//public:
-////        __c (void)
-////        _b ("AbstractWidget")
-//
-//        virtual ~Rectangle () {}
-//
-//        virtual void update (Model::IModel *model);
-//
-////// Żeby nie trzeba było kastowac modelu na box w pochodnych.
-////protected:
-////
-////        Model::Box *box;
-////        _e (Rectangle)
-//};
 
 } // namespace
 

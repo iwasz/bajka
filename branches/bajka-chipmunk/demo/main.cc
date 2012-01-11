@@ -18,6 +18,7 @@
 #include "../view/draw/Primitives.h"
 #include "../model/Box.h"
 #include "../view/Polygon.h"
+#include "../view/Rectangle.h"
 
 namespace M = Model;
 namespace V = View;
@@ -42,7 +43,6 @@ int main (int argc, char **argv)
         Ptr <Container::BeanFactoryContainer> container = Container::XmlContainerFactory::createContainer (fileName, true);
         Ptr <Util::BajkaApp> app = vcast <Ptr <Util::BajkaApp> > (container->getBean ("app"));
 
-
         Ptr <M::Space> space = boost::make_shared <M::Space> ();
         space->setGravity (G::Point (0, -100));
 
@@ -50,19 +50,33 @@ int main (int argc, char **argv)
         body->setMass (1);
         space->addChild (body);
 
-
         M::Circle *circle = new M::Circle ();
         circle->setRadius (50);
         circle->setView (new V::Circle ());
 
-//        M::Box *box = new M::Box ();
-//        box->setPosition (G::Point (0, -50));
-//        box->setWidth (50);
-//        box->setHeight (50);
-//        box->setView (new V::Rectangle ());
+        M::Box *box = new M::Box ();
+        box->setPosition (G::Point (0, -50));
+        box->setWidth (50);
+        box->setHeight (50);
+        box->setView (new V::Rectangle ());
 
         body->addChild (circle);
-//        body->addChild (box);
+        body->addChild (box);
+
+
+        body = new M::StaticBody (true);
+        body->setPosition (G::Point (-320, -140));
+        space->addChild (body);
+
+        box = new M::Box ();
+//        box->setPosition (G::Point (0, -50));
+        box->setWidth (640);
+        box->setHeight (10);
+        box->setView (new V::Rectangle ());
+
+        body->addChild (box);
+
+
 
 //        Ptr <M::IModel> model = boost::make_shared <M::Box> (0, 0, 30, 30);
 //

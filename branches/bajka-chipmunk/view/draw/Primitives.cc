@@ -44,7 +44,7 @@ static const GLfloat circleVAR[] = {
 };
 static const int circleVAR_count = sizeof(circleVAR)/sizeof(GLfloat)/2;
 
-void DrawUtil::drawCircle (Geometry::Point center, double angle, double radius, Color const lineColor, Color const &fillColor)
+void DrawUtil::drawCircle (Geometry::Point const &center, double angle, double radius, Color const &lineColor, Color const &fillColor)
 {
         glVertexPointer(2, GL_FLOAT, 0, circleVAR);
 
@@ -67,7 +67,34 @@ void DrawUtil::drawCircle (Geometry::Point center, double angle, double radius, 
 
 /****************************************************************************/
 
-void DrawUtil::drawLine (Geometry::Point const &a, Geometry::Point const &b, Color color)
+void DrawUtil::drawRectangle (Geometry::Point const &a, Geometry::Point const &b, Color const &lineColor, Color const &fillColor)
+{
+        if (fillColor.getA () > 0){
+                glColor4f (fillColor.getR (), fillColor.getG (), fillColor.getB (), fillColor.getA ());
+        }
+
+        glBegin (GL_TRIANGLE_FAN);
+                glVertex2f (a.x, a.y);
+                glVertex2f (a.x, b.y);
+                glVertex2f (b.x, b.y);
+                glVertex2f (b.x, a.y);
+        glEnd ();
+
+        if (lineColor.getA () > 0){
+                glColor4f (lineColor.getR (), lineColor.getG (), lineColor.getB (), lineColor.getA ());
+        }
+
+        glBegin (GL_LINE_LOOP);
+                glVertex2f (a.x, a.y);
+                glVertex2f (a.x, b.y);
+                glVertex2f (b.x, b.y);
+                glVertex2f (b.x, a.y);
+        glEnd ();
+}
+
+/****************************************************************************/
+
+void DrawUtil::drawLine (Geometry::Point const &a, Geometry::Point const &b, Color const &color)
 {
         GLfloat verts[] = {
                 a.getX (), a.getY (),

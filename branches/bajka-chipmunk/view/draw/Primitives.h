@@ -18,8 +18,9 @@ namespace View {
 struct DrawUtil {
 public:
 
-        static void drawCircle (Geometry::Point center, double angle, double radius, Color const lineColor, Color const &fillColor);
-        static void drawLine (Geometry::Point const &a, Geometry::Point const &b, Color color);
+        static void drawCircle (Geometry::Point const &center, double angle, double radius, Color const &lineColor, Color const &fillColor);
+        static void drawLine (Geometry::Point const &a, Geometry::Point const &b, Color const &color);
+        static void drawRectangle (Geometry::Point const &a, Geometry::Point const &b, Color const &lineColor, Color const &fillColor);
         static void drawFatLine (Geometry::Point const &a, Geometry::Point const &b, double radius, Color const &lineColor, Color const &fillColor);
 //        static void drawPolygon (int count, cpVect *verts, Color lineColor, Color fillColor);
 //        static void drawPoints (cpFloat size, int count, cpVect *verts, Color color);

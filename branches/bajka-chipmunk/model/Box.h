@@ -11,11 +11,11 @@
 
 #include "../geometry/AffineMatrix.h"
 #include "../geometry/Point.h"
-#include "Polygon.h"
+#include "Shape.h"
 
 namespace Model {
 
-class Box : public Polygon {
+class Box : public Shape {
 public:
 
         Box (double x, double y, double w, double h) :  width (w), height (h) { setPosition (Geometry::Point (x, y)); }

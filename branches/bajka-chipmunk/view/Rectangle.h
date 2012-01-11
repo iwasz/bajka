@@ -2,23 +2,28 @@
  *                                                                          *
  *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 19, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef INTERSECTIONSERVICE_H_
-#define INTERSECTIONSERVICE_H_
+#ifndef BAJKA_VIEW_RECT_H_
+#define BAJKA_VIEW_RECT_H_
 
-namespace Util {
+#include "Widget.h"
 
-class IntersectionService {
+namespace View {
+
+/**
+ * Rysuje prostokąt.
+ * \ingroup View
+ */
+class Rectangle : public Widget {
 public:
-        IntersectionService () {}
-        virtual ~IntersectionService () {}
+
+        virtual ~Rectangle () {}
+        virtual void update (Model::IModel *model);
 };
 
-}
+} /* namespace View */
 
-#	endif /* INTERSECTIONSERVICE_H_ */
+#	endif /* CIRCLE_H_ */
