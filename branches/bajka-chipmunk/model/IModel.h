@@ -15,6 +15,7 @@
 #include "../view/IView.h"
 #include "../controller/IController.h"
 #include "../geometry/Point.h"
+#include "../geometry/AffineMatrix.h"
 
 namespace Model {
 
@@ -26,7 +27,7 @@ struct IModel;
 typedef std::vector <IModel *> ModelVector;
 
 /**
- *
+ * Dane geometryczne.
  */
 struct IModel : public Core::Object {
 
@@ -41,8 +42,6 @@ struct IModel : public Core::Object {
 
         virtual double getAngle () const = 0;
         virtual void setAngle (double a) = 0;
-
-        virtual double const *getMatrix () const = 0;
 
 /*--------------------------------------------------------------------------*/
 

@@ -18,6 +18,5 @@
 #include "AffineMatrix.h"
 #include "Point.h"
 #include "Box.h"
-#include "Vector.h"
 
 #	endif /* PRIMITIVE_H_ */

@@ -10,6 +10,7 @@
 #include "../geometry/AffineMatrix.h"
 #include "Shape.h"
 #include "Body.h"
+#include "../util/Exceptions.h"
 
 namespace Model {
 
@@ -25,13 +26,6 @@ void Shape::parentCallback (IModel *m)
         Body *body = static_cast <Body *> (m);
         double inertia = calculateInertia (body->getMass ());
         body->addInertia (inertia);
-}
-
-double const *Shape::getMatrix () const
-{
-        // TODO!
-        static Geometry::AffineMatrix one;
-        return one.data ().begin ();
 }
 
 } /* namespace Model */

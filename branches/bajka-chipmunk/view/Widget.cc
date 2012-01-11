@@ -18,17 +18,8 @@ void Widget::preUpdate (Model::IModel *model)
                 return;
         }
 
-        glPushMatrix ();
-
-        if (model) {
-                glMultMatrixd (model->getMatrix ());
-        }
+        defaultPreUpdate (model);
 }
-
-//void Widget::update (Model::IModel *model)
-//{
-//
-//}
 
 void Widget::postUpdate (Model::IModel *model)
 {
@@ -36,7 +27,23 @@ void Widget::postUpdate (Model::IModel *model)
                 return;
         }
 
-        glPopMatrix ();
+        defaultPostUpdate (model);
+}
+
+void Widget::defaultPreUpdate (Model::IModel *model)
+{
+    glPushMatrix ();
+
+    if (model) {
+            glTranslatef (model->getPosition().x, model->getPosition().y, 0.0f);
+//                glRotatef (angle*180.0f/M_PI, 0.0f, 0.0f, 1.0f);
+            glRotatef (model->getAngle(), 0.0f, 0.0f, 1.0f);
+    }
+}
+
+void Widget::defaultPostUpdate (Model::IModel *)
+{
+    glPopMatrix ();
 }
 
 } /* namespace View */

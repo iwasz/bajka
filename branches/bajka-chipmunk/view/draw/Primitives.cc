@@ -12,6 +12,8 @@
 
 namespace View {
 
+namespace G = Geometry;
+
 static const GLfloat circleVAR[] = {
          0.0000f,  1.0000f,
          0.2588f,  0.9659f,
@@ -117,15 +119,15 @@ void DrawUtil::drawFatLine (Geometry::Point const &a, Geometry::Point const &b, 
                 glVertexPointer(3, GL_FLOAT, 0, pillVAR);
 
                 glPushMatrix(); {
-                        // TODO pomieszanie z poplątaniem - powinno być Geometry::Vector
-                        cpVect d = cpvsub (cpv (b.getX(), b.getY()), cpv (a.getX(), a.getY()));
-                        cpVect r = cpvmult (d, radius / cpvlength (d));
+
+                        G::Point d = b - a;
+                        G::Point r = d * radius / d.distance ();
 
                         const GLfloat matrix[] = {
                                  r.x, r.y, 0.0f, 0.0f,
                                 -r.y, r.x, 0.0f, 0.0f,
                                  d.x, d.y, 0.0f, 0.0f,
-                                 a.getX (), a.getY(), 0.0f, 1.0f,
+                                 a.x, a.y, 0.0f, 1.0f,
                         };
                         glMultMatrixf(matrix);
 

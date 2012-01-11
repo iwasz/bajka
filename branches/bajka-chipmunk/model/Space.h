@@ -11,7 +11,6 @@
 
 #include "AbstractModel.h"
 #include "../util/Exceptions.h"
-#include "../geometry/Vector.h"
 
 namespace Model {
 
@@ -31,12 +30,10 @@ public:
         double getAngle () const { return 0; }
         void setAngle (double a) { throw Util::OperationNotSupportedException ();  }
 
-        double const *getMatrix () const;
-
 /*--------------------------------------------------------------------------*/
 
-        Geometry::Vector getGravity () const;
-        void setGravity (Geometry::Vector const &g);
+        Geometry::Point getGravity () const;
+        void setGravity (Geometry::Point const &g);
 
 private:
 

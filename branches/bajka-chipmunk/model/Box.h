@@ -18,18 +18,16 @@ namespace Model {
 class Box : public Polygon {
 public:
 
-        Box (double x, double y, double w, double h) : position (x, y), width (w), height (h) {}
+        Box (double x, double y, double w, double h) :  width (w), height (h) { setPosition (Geometry::Point (x, y)); }
         Box () : width (0), height (0) {}
         virtual ~Box () {}
 
-        Geometry::Point getPosition () const { return position; }
-        void setPosition (Geometry::Point const &p) { position = p; }
+        virtual Geometry::Point getPosition () const { return Geometry::Point (); }
+        virtual void setPosition (Geometry::Point const &p) { }
 
         // TODO
-        double getAngle () const { throw 1; }
-        void setAngle (double a) { matrix.rotate (a); }
-
-        double const *getMatrix () const { return matrix.data ().begin (); }
+        double getAngle () const { 0; }
+        void setAngle (double a) { throw 1; }
 
         double getWidth () const { return width; }
         void setWidth (double w) { width = w; }
@@ -39,12 +37,11 @@ public:
 
         double calculateInertia (double mass) const;
         void parentCallback (IModel *m);
+
 private:
 
-        Geometry::Point position;
         double width;
         double height;
-        Geometry::AffineMatrix matrix;
 
 };
 

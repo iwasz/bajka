@@ -19,13 +19,13 @@ public:
         Body ();
         virtual ~Body ();
 
-        Geometry::Point getPosition () const;
-        void setPosition (Geometry::Point const &position);
+/*--------------------------------------------------------------------------*/
+
+        virtual Geometry::Point getPosition () const;
+        virtual void setPosition (Geometry::Point const &position);
 
         double getAngle () const;
         void setAngle (double a);
-
-        double const *getMatrix () const;
 
 /*--------------------------------------------------------------------------*/
 
