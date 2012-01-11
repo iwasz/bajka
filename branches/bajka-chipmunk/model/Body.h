@@ -24,8 +24,8 @@ public:
         virtual Geometry::Point getPosition () const;
         virtual void setPosition (Geometry::Point const &position);
 
-        double getAngle () const;
-        void setAngle (double a);
+        virtual double getAngle () const;
+        virtual void setAngle (double a);
 
 /*--------------------------------------------------------------------------*/
 
@@ -39,10 +39,10 @@ public:
         cpBody *getBody () { return body; }
         cpBody const *getBody () const { return body; }
 
-private:
+protected:
 
+        Body (int) {}
         cpBody *body;
-
 
 };
 

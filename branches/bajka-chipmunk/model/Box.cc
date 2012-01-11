@@ -9,6 +9,7 @@
 #include <chipmunk.h>
 #include "Box.h"
 #include "Body.h"
+#include "Space.h"
 
 namespace Model {
 
@@ -20,7 +21,13 @@ double Box::calculateInertia (double mass) const
 void Box::parentCallback (IModel *m)
 {
         Body *b = static_cast <Body *> (m);
-        shape = cpBoxShapeNew (b->getBody (), width, height);
+        shape = cpSpaceAddShape (Space::getSpace(), cpBoxShapeNew (b->getBody (), width, height));
+        cpShapeSetElasticity (shape, 1.0f);
+        cpShapeSetFriction (shape, 1.0f);
+//#define GRABABLE_MASK_BIT (1<<31)
+//#define NOT_GRABABLE_MASK (~GRABABLE_MASK_BIT)
+//        cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+
         Shape::parentCallback (m);
 }
 

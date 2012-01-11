@@ -15,7 +15,17 @@ namespace Model {
 
 class StaticBody : public Body {
 public:
+
+        StaticBody (bool spcBdy = false);
         virtual ~StaticBody ();
+
+        // To główne ze space.
+        bool getSpaceBody () const { return spaceBody; }
+
+private:
+
+        bool spaceBody;
+
 };
 
 }

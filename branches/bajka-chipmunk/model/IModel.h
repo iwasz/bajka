@@ -52,7 +52,7 @@ struct IModel : public Core::Object {
         virtual IModel *getParent () = 0;
 
         /**
-         * Także callback;
+         * Także callback; TODO jedna metoda zamiast dwóch byłaby lepsza.
          * @param m
          */
         virtual void setParent (IModel *m) = 0;
