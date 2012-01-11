@@ -44,7 +44,7 @@ int main (int argc, char **argv)
 
 
         Ptr <M::Space> space = boost::make_shared <M::Space> ();
-        space->setGravity (G::Vector (0, -100));
+        space->setGravity (G::Point (0, -100));
 
         M::Body *body = new M::Body ();
         body->setMass (1);
@@ -55,15 +55,14 @@ int main (int argc, char **argv)
         circle->setRadius (50);
         circle->setView (new V::Circle ());
 
-
-        M::Box *box = new M::Box ();
-        box->setPosition (G::Point (0, -50));
-        box->setWidth (50);
-        box->setHeight (50);
-        box->setView (new V::Rectangle ());
+//        M::Box *box = new M::Box ();
+//        box->setPosition (G::Point (0, -50));
+//        box->setWidth (50);
+//        box->setHeight (50);
+//        box->setView (new V::Rectangle ());
 
         body->addChild (circle);
-        body->addChild (box);
+//        body->addChild (box);
 
 //        Ptr <M::IModel> model = boost::make_shared <M::Box> (0, 0, 30, 30);
 //

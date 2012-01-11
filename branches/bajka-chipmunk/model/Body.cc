@@ -18,10 +18,14 @@ Body::Body ()
         body = cpSpaceAddBody (Space::getSpace (), cpBodyNew (1, 1));
 }
 
+/****************************************************************************/
+
 Body::~Body ()
 {
         cpBodyFree (body);
 }
+
+/****************************************************************************/
 
 Geometry::Point Body::getPosition () const
 {
@@ -29,16 +33,22 @@ Geometry::Point Body::getPosition () const
         return Geometry::Point (v.x, v.y);
 }
 
+/****************************************************************************/
+
 void Body::setPosition (Geometry::Point const &p)
 {
         cpBodySetPos (body, cpv (p.getX (), p.getY ()));
         cpSpaceReindexShapesForBody (Space::getSpace (), body);
 }
 
+/****************************************************************************/
+
 double Body::getAngle () const
 {
         return cpBodyGetAngle (body);
 }
+
+/****************************************************************************/
 
 void Body::setAngle (double a)
 {
@@ -46,32 +56,35 @@ void Body::setAngle (double a)
         cpSpaceReindexShapesForBody (Space::getSpace (), body);
 }
 
-double const *Body::getMatrix () const
-{
-        // TODO!
-        static Geometry::AffineMatrix one;
-        return one.data ().begin ();
-}
+/****************************************************************************/
 
 double Body::getMass () const
 {
         return cpBodyGetMass (body);
 }
 
+/****************************************************************************/
+
 void Body::setMass (double m)
 {
         cpBodySetMass (body, m);
 }
+
+/****************************************************************************/
 
 double Body::getInertia () const
 {
         return cpBodyGetMoment (body);
 }
 
+/****************************************************************************/
+
 void Body::setInertia (double i)
 {
         cpBodySetMoment (body, i);
 }
+
+/****************************************************************************/
 
 void Body::addInertia (double i)
 {

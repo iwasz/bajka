@@ -20,10 +20,14 @@ public:
         virtual ~Widget () {}
 
         virtual void preUpdate (Model::IModel *);
+        virtual void update (Model::IModel *) {}
         virtual void postUpdate (Model::IModel *);
 
         bool getVisible () const { return visible; }
         /*_m (setVisible) */void setVisible (bool v) { visible = v; }
+
+        static void defaultPreUpdate (Model::IModel *m);
+        static void defaultPostUpdate (Model::IModel *m);
 
 private:
 

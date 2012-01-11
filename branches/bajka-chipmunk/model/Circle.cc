@@ -12,6 +12,21 @@
 
 namespace Model {
 
+void Circle::setPosition (Geometry::Point const &p)
+{
+        if (getParent ()) {
+                throw Util::OperationNotSupportedException ();
+        }
+
+        position = p;
+}
+
+Geometry::Point Circle::getPosition () const
+{
+        cpVect v = cpCircleShapeGetOffset (shape);
+        return Geometry::Point (v.x, v.y);
+}
+
 double Circle::calculateInertia (double mass) const
 {
         return cpMomentForCircle (mass, 0, getRadius (), cpv (getPosition ().getX (), getPosition ().getY ()));
@@ -36,21 +51,6 @@ void Circle::setRadius (double r)
         }
 
         radius = r;
-}
-
-void Circle::setPosition (Geometry::Point const &p)
-{
-        if (getParent ()) {
-                throw Util::OperationNotSupportedException ();
-        }
-
-        position = p;
-}
-
-Geometry::Point Circle::getPosition () const
-{
-        cpVect v = cpCircleShapeGetOffset (shape);
-        return Geometry::Point (v.x, v.y);
 }
 
 

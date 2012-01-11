@@ -7,8 +7,11 @@
  ****************************************************************************/
 
 #include "AbstractModel.h"
+#include "../view/Widget.h"
 
 namespace Model {
+
+/****************************************************************************/
 
 bool AbstractModel::update ()
 {
@@ -21,6 +24,9 @@ bool AbstractModel::update ()
                 view->preUpdate (this);
                 view->update (this);
         }
+        else {
+        	View::Widget::defaultPreUpdate (this);
+        }
 
         std::for_each (begin (), end (), boost::mem_fn (&IModel::update));
 
@@ -30,6 +36,9 @@ bool AbstractModel::update ()
 
         if (view) {
                 view->postUpdate (this);
+        }
+        else {
+        	View::Widget::defaultPostUpdate (this);
         }
 }
 

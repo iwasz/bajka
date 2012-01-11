@@ -24,21 +24,15 @@ Space::~Space ()
         cpSpaceFree (space);
 }
 
-Geometry::Vector Space::getGravity () const
+Geometry::Point Space::getGravity () const
 {
         cpVect g = cpSpaceGetGravity (space);
-        return Geometry::Vector (g.x, g.y);
+        return Geometry::Point (g.x, g.y);
 }
 
-void Space::setGravity (Geometry::Vector const &g)
+void Space::setGravity (Geometry::Point const &g)
 {
         cpSpaceSetGravity (space, cpv (g.getX (), g.getY ()));
-}
-
-double const *Space::getMatrix () const
-{
-        static Geometry::AffineMatrix one;
-        return one.data ().begin ();
 }
 
 } /* namespace Model */
