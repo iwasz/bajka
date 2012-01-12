@@ -19,6 +19,17 @@ namespace View {
 class IView;
 }
 
+namespace Event {
+class IEvent;
+class ButtonPressEvent;
+class ButtonReleaseEvent;
+class MouseMotionEvent;
+class KeyDownEvent;
+class KeyUpEvent;
+class TimerEvent;
+class QuitEvent;
+}
+
 namespace Controller {
 
 /**
@@ -31,6 +42,16 @@ struct IController : public Core::Object {
         virtual bool preUpdate (Model::IModel *m, View::IView *v) = 0;
         virtual bool update (Model::IModel *m, View::IView *v) = 0;
         virtual bool postUpdate (Model::IModel *m, View::IView *v) = 0;
+
+/*--------------------------------------------------------------------------*/
+
+        virtual bool onButtonPress (Event::ButtonPressEvent *e) = 0;
+        virtual bool onButtonRelease (Event::ButtonReleaseEvent *e) = 0;
+        virtual bool onMouseMotion (Event::MouseMotionEvent *e) = 0;
+        virtual bool onKeyDown (Event::KeyDownEvent *e) = 0;
+        virtual bool onKeyUp (Event::KeyUpEvent *e) = 0;
+        virtual bool onTimer (Event::TimerEvent *e) = 0;
+        virtual bool onQuit (Event::QuitEvent *e) = 0;
 
 };
 
