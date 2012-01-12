@@ -43,7 +43,7 @@ public:
 
 private:
 
-        void translate (SDL_Event *event);
+        Event::IEvent *translate (SDL_Event *event);
 
         Event::KeyboardEvent *updateKeyboardEvent (SDL_Event *event);
         Event::MouseMotionEvent *updateMouseMotionEvent (SDL_Event *event);

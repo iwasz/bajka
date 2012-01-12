@@ -18,6 +18,14 @@
     <!--Obiekt app, czyli aplikacja :)-->
     <bean id="app" class="BajkaApp" singleton="true">
         <property name="config" ref="cfg" />
+        
+        <property name="dispatchers">
+            <list class="DispatcherList">
+                <bean class="EventDispatcher" singleton="true" init-method="init">
+                    <property name="config" ref="cfg" />
+                </bean>
+            </list>
+        </property>        
     </bean>
       
 </beans>

@@ -19,6 +19,7 @@
 #include "../model/Box.h"
 #include "../view/Polygon.h"
 #include "../view/Rectangle.h"
+#include "../controller/EmptyController.h"
 
 namespace M = Model;
 namespace V = View;
@@ -44,6 +45,9 @@ int main (int argc, char **argv)
         Ptr <Util::BajkaApp> app = vcast <Ptr <Util::BajkaApp> > (container->getBean ("app"));
 
         Ptr <M::Space> space = boost::make_shared <M::Space> ();
+        C::IController *controller = new C::EmptyController ();
+        controller->setEventMask (0xFFFF);
+        space->setController (controller);
         space->setGravity (G::Point (0, -100));
 
         M::Body *body = new M::Body ();

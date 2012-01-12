@@ -36,12 +36,10 @@
 //#include "Model.h"
 
 namespace Util {
-//namespace M = Model;
-//namespace V = View;
-//namespace C = Controller;
-namespace R = Reflection;
+namespace M = Model;
+namespace V = View;
+namespace C = Controller;
 //using namespace Event;
-
 
 /****************************************************************************/
 

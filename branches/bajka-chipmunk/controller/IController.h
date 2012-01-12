@@ -37,6 +37,7 @@ namespace Controller {
  */
 struct IController : public Core::Object {
 
+        IController () : eventMask (0) {}
         virtual ~IController () {}
 
         virtual bool preUpdate (Model::IModel *m, View::IView *v) = 0;
@@ -52,6 +53,11 @@ struct IController : public Core::Object {
         virtual bool onKeyUp (Event::KeyUpEvent *e) = 0;
         virtual bool onTimer (Event::TimerEvent *e) = 0;
         virtual bool onQuit (Event::QuitEvent *e) = 0;
+
+        // Mały hack psujący interfejs - nie ma sensu wirtualne!
+        unsigned int eventMask;
+        unsigned int getEventMask () const { return eventMask; }
+        void setEventMask (unsigned int b) { eventMask = b; }
 
 };
 
