@@ -21,6 +21,16 @@ struct EmptyController : public IController {
         virtual bool update (Model::IModel *m, View::IView *v) {}
         virtual bool postUpdate (Model::IModel *m, View::IView *v) {}
 
+/*--------------------------------------------------------------------------*/
+
+        virtual bool onButtonPress (Event::ButtonPressEvent *e) {}
+        virtual bool onButtonRelease (Event::ButtonReleaseEvent *e) {}
+        virtual bool onMouseMotion (Event::MouseMotionEvent *e) {}
+        virtual bool onKeyDown (Event::KeyDownEvent *e) {}
+        virtual bool onKeyUp (Event::KeyUpEvent *e) {}
+        virtual bool onTimer (Event::TimerEvent *e) {}
+        virtual bool onQuit (Event::QuitEvent *e);
+
 };
 
 } /* namespace Controller */

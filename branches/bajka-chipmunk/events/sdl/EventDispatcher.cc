@@ -14,6 +14,9 @@
 using namespace Event;
 
 namespace Sdl {
+namespace M = Model;
+namespace V = View;
+namespace C = Controller;
 
 void EventDispatcher::init ()
 {
@@ -23,29 +26,24 @@ void EventDispatcher::init ()
 
 /****************************************************************************/
 
-//void EventDispatcher::addObserver (Ptr <IObserver> o)
-//{
-//#if 0
-//        std::cerr << "EventDispatcher::addObserver before Size = " << observers.size () << std::endl;
-//#endif
-//        observers.push_back (o);
-//#if 0
-//        std::cerr << "EventDispatcher::addObserver after Size = " << observers.size () << std::endl;
-//#endif
-//}
+static void runRec (Model::IModel *m, Event::IEvent *e)
+{
+        C::IController *c;
+        bool skipChildren = false;
 
-/****************************************************************************/
+        if ((c = m->getController ())) {
+                if (e && e->getType () & c->getEventMask ()) {
+                        e->runCallback (m->getController ());
+                }
+                else {
+                        skipChildren = true;
+                }
+        }
 
-//void EventDispatcher::removeObserver (Ptr <IObserver> o)
-//{
-//#if 0
-//        std::cerr << "EventDispatcher::removeObserver before Size = " << observers.size () << std::endl;
-//#endif
-//        observers.erase (std::remove (observers.begin (), observers.end (), o), observers.end ());
-//#if 0
-//        std::cerr << "EventDispatcher::removeObserver after Size = " << observers.size () << std::endl;
-//#endif
-//}
+        if (!skipChildren) {
+                std::for_each (m->begin (), m->end (), boost::bind (runRec, _1, e));
+        }
+}
 
 /****************************************************************************/
 
@@ -54,48 +52,35 @@ void EventDispatcher::run (Model::IModel *m)
         SDL_Event event;
 
         while (SDL_PollEvent (&event)) {
-                translate (&event);
-
-                // TODO Wywalić to i jakoś to rozwiązać inaczej.
-                if (event.type == SDL_QUIT) {
-                        exit (0);
-                }
-                if (event.type == SDL_KEYDOWN) {
-                        if (event.key.keysym.sym == SDLK_ESCAPE) {
-                                exit (0);
-                        }
-                }
+                Event::IEvent *e = translate (&event);
+                runRec (m, e);
         }
 }
 
 /****************************************************************************/
 
-void EventDispatcher::translate (SDL_Event *event)
+Event::IEvent *EventDispatcher::translate (SDL_Event *event)
 {
-//        // Run inherited and overloaded methods.
-//        if (event->type == SDL_MOUSEMOTION) {
-//                for (Event::ObserverVector::iterator i = observers.begin (); i != observers.end (); ++i) {
-//                        if ((*i)->onEvent (updateMouseMotionEvent (event))) {
-//                                break;
-//                        }
-//                }
-//        }
-//
-//        if (event->type == SDL_MOUSEBUTTONDOWN || event->type == SDL_MOUSEBUTTONUP) {
-//                for (Event::ObserverVector::iterator i = observers.begin (); i != observers.end (); ++i) {
-//                        if ((*i)->onEvent (updateMouseButtonEvent (event))) {
-//                                break;
-//                        }
-//                }
-//        }
-//
-//        if (event->type == SDL_KEYDOWN || event->type == SDL_KEYUP) {
-//                for (Event::ObserverVector::iterator i = observers.begin (); i != observers.end (); ++i) {
-//                        if ((*i)->onEvent (updateKeyboardEvent (event))) {
-//                                break;
-//                        }
-//                }
-//        }
+        switch (event->type) {
+        case SDL_MOUSEMOTION:
+                return updateMouseMotionEvent (event);
+
+        case SDL_MOUSEBUTTONDOWN:
+        case SDL_MOUSEBUTTONUP:
+                return updateMouseButtonEvent (event);
+
+        case SDL_KEYDOWN:
+        case SDL_KEYUP:
+                return updateKeyboardEvent (event);
+
+        case SDL_QUIT:
+                return &quitEvent;
+
+        default:
+                break;
+        }
+
+        return NULL;
 }
 
 /****************************************************************************/
