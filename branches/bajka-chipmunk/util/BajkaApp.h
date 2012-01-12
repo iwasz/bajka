@@ -11,6 +11,7 @@
 
 #include "Geometry.h"
 #include "Model.h"
+#include "IDispatcher.h"
 #include <Reflection.h>
 #include <chipmunk.h>
 
@@ -101,22 +102,15 @@ public:
         * 3. Podłącza ten nowy do wszystkich dispatcherów.
         */
        _m (setModel) void setModel (Ptr <Model::IModel> model);
-//
-//       Ptr <Event::DispatcherList> getDispatchers () const { return dispatchers; }
-//       _m (setDispatchers) void setDispatchers (Ptr <Event::DispatcherList> d) { dispatchers = d; }
 
-/*--------------------------------------------------------------------------*/
-
-//       /// Podłącza o do wszystkich dispatcherów.
-//       void connect (Ptr <Event::IObserver> o);
-//       /// Odłącza o od wszystkich dispatcherów.
-//       void disconnect (Ptr <Event::IObserver> o);
+       Ptr <Event::DispatcherList> getDispatchers () const { return dispatchers; }
+       _m (setDispatchers) void setDispatchers (Ptr <Event::DispatcherList> d) { dispatchers = d; }
 
 private:
 
        Ptr <BajkaConfig> config;
        Ptr <Model::IModel> model;
-//       Ptr <Event::DispatcherList> dispatchers;
+       Ptr <Event::DispatcherList> dispatchers;
 
        _e (BajkaApp)
 };

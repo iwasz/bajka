@@ -20,7 +20,7 @@
 
 //#include "Image.h"
 //#include "Model.h"
-//#include "Events.h"
+#include "Events.h"
 //#include "Util.h"
 //#include "OpenGl.h"
 //
@@ -134,19 +134,6 @@ void BajkaConfig::init ()
         // glDrawArrays
         glEnableClientState(GL_VERTEX_ARRAY);
 
-/*--------------------------------------------------------------------------*/
-//
-//        glColor3f (0.0, 0.0, 1.0);
-//
-//        glBegin (GL_LINE_LOOP);
-//                glVertex2f (0, 0);
-//                glVertex2f (0, 100);
-//                glVertex2f (100, 100);
-//                glVertex2f (100, 0);
-//        glEnd ();
-//
-//        glClearColor((128.0f / 255.0f), 1.0f, 1.0f, 1.0f);
-
 #endif
 #if 0
         if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
@@ -189,37 +176,11 @@ void BajkaConfig::init ()
 
         glLoadIdentity();
 
-/*--------------------------------------------------------------------------*/
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glLoadIdentity();
-
-        glBegin(GL_QUADS);
-            glColor3f(1, 0, 0); glVertex3f(0, 0, 0);
-            glColor3f(1, 1, 0); glVertex3f(100, 0, 0);
-            glColor3f(1, 0, 1); glVertex3f(100, 100, 0);
-            glColor3f(1, 1, 1); glVertex3f(0, 100, 0);
-        glEnd();
-
-
-//        glColor3f (0.0, 0.0, 1.0);
-//
-//        glBegin (GL_LINE_LOOP);
-//                glVertex2f (0, 0);
-//                glVertex2f (0, 100);
-//                glVertex2f (100, 100);
-//                glVertex2f (100, 0);
-//        glEnd ();
-
-        glClearColor((128.0f / 255.0f), 1.0f, 1.0f, 1.0f);
-
-        SDL_GL_SwapBuffers();
-
         return;
 #endif
 }
 
-/*##########################################################################*/
+/****************************************************************************/
 
 void BajkaApp::loop ()
 {
@@ -232,15 +193,17 @@ void BajkaApp::loop ()
                 glClearColor (0.35, 0.75, 1.0, 1.0);
                 glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-//                // Generuj eventy.
-//                for (Event::DispatcherList::const_iterator i = dispatchers->begin (); i != dispatchers->end (); i++) {
-//                        (*i)->run ();
-//                }
-//
+                // Generuj eventy.
+                for (Event::DispatcherList::const_iterator i = dispatchers->begin (); i != dispatchers->end (); i++) {
+                        (*i)->run (model.get ());
+                }
+
+                // Run models, views and controllers.
                 if (model) {
                         model->update ();
                 }
 
+                // Run chipmunk
                 cpSpaceStep (Model::Space::getSpace (), 1.0 / 60.0);
 
                 afterEvents ();
@@ -303,34 +266,3 @@ void BajkaApp::setModel (Ptr <Model::IModel> m)
 
 /*##########################################################################*/
 } // Nam
-
-
-namespace View {
-
-
-
-
-
-
-} // Nam
-
-namespace Model {
-
-
-
-
-
-
-/*--------------------------------------------------------------------------*/
-
-
-
-/****************************************************************************/
-
-
-
-/****************************************************************************/
-
-
-
-}
