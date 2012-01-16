@@ -32,7 +32,7 @@ public:
         void setParent (IModel *m) { parent = m; }
         void parentCallback (IModel *m) {}
 
-        ModelVector &getChildren () { return children; }
+        m_ (getChildren) ModelVector &getChildren () { return children; }
         m_ (setChildren) void setChildren (ModelVector const &c);
         void addChild (IModel *m);
         ModelVector::iterator begin () { return children.begin (); }

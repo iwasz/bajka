@@ -22,6 +22,12 @@
 #include "../controller/EmptyController.h"
 #include "../model/StaticBody.h"
 
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/trim.hpp>
+
+#include<boost/tokenizer.hpp>
+
 namespace M = Model;
 namespace V = View;
 namespace C = Controller;
