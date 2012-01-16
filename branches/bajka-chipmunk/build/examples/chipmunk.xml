@@ -138,4 +138,12 @@
         </property>
     </bean>      
     
+    <!-- Tak bym chciał, ale to wymaga: 1 fixu i 2 CRów... Czy warto? -->
+    <!-- 
+    <bean id="img2" parent="imageBody">
+        <property name="position" value="70, 50"/>
+        <property name="path" value="gfx/1.png"/>
+    </bean>
+     -->
+    
 </beans>

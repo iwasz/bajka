@@ -19,6 +19,8 @@ namespace View {
 
 void Image::init (Model::IModel *model)
 {
+        initialized = true;
+
         glGenTextures(1, &texName);
         glBindTexture(GL_TEXTURE_2D, texName);
 
