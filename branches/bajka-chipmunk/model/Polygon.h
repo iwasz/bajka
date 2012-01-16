@@ -15,6 +15,10 @@ namespace Model {
 
 class Polygon : public Shape {
 public:
+
+        C__ (void)
+        b_ ("Shape")
+
         virtual ~Polygon () {}
 };
 

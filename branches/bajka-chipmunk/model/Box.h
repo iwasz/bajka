@@ -18,6 +18,9 @@ namespace Model {
 class Box : public Shape {
 public:
 
+        C__ (void)
+        b_ ("Shape")
+
         Box (double x, double y, double w, double h) :  width (w), height (h) { setPosition (Geometry::Point (x, y)); }
         Box () : width (0), height (0) {}
         virtual ~Box () {}
@@ -30,10 +33,10 @@ public:
         void setAngle (double a) { throw 1; }
 
         double getWidth () const { return width; }
-        void setWidth (double w) { width = w; }
+        m_ (setWidth) void setWidth (double w) { width = w; }
 
         double getHeight () const { return height; }
-        void setHeight (double h) { height = h; }
+        m_ (setHeight) void setHeight (double h) { height = h; }
 
         double calculateInertia (double mass) const;
         void parentCallback (IModel *m);
@@ -43,6 +46,7 @@ private:
         double width;
         double height;
 
+        E_ (Model::Box)
 };
 
 } /* namespace Model1 */

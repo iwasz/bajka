@@ -12,8 +12,8 @@
 #include <iostream>
 #include <boost/geometry/geometries/register/point.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
-#include <Reflection.h>
 #include <IToStringEnabled.h>
+#include "ReflectionMacros.h"
 
 /**
  * Prymitywy geometryczne.
@@ -26,20 +26,22 @@ namespace Geometry {
  */
 class Point : public Core::IToStringEnabled {
 public:
-        __c (void)
 
+        C__ (void)
         Point () : x (0.0), y (0.0) {}
         explicit Point (double d) : x (d), y (d) {}
         Point (double x, double y) : x (x), y (y) {}
+        C_ (std::string const &)
+        Point (std::string const &s);
         Point (const Point &p) : x (p.x), y (p.y) {}
 
 /*--------------------------------------------------------------------------*/
 
         double getX () const { return x; }
-        _m (setX) void setX (double x) { this->x = x; }
+        m_ (setX) void setX (double x) { this->x = x; }
 
         double getY () const { return y; }
-        _m (setY) void setY (double y) { this->y = y; }
+        m_ (setY) void setY (double y) { this->y = y; }
 
 /*--------------------------------------------------------------------------*/
 
@@ -83,7 +85,7 @@ public:
         double x;
         double y;
 
-        _e (Point)
+        E_ (Point)
 };
 
 typedef std::vector <Point> PointVector;

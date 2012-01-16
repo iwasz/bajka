@@ -16,6 +16,7 @@
 #include "../controller/IController.h"
 #include "../geometry/Point.h"
 #include "../geometry/AffineMatrix.h"
+#include "../util/ReflectionMacros.h"
 
 namespace Model {
 
@@ -25,6 +26,7 @@ struct IModel;
  *
  */
 typedef std::vector <IModel *> ModelVector;
+g_ (ModelVector)
 
 /**
  * Dane geometryczne.

@@ -6,8 +6,8 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef EXCEPTIONS_H_
-#define EXCEPTIONS_H_
+#ifndef BAJKA_EXCEPTIONS_H_
+#define BAJKA_EXCEPTIONS_H_
 
 namespace Util {
 

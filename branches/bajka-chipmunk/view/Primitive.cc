@@ -6,9 +6,8 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "IController.h"
+#include "Primitive.h"
 
-namespace Controller {
+namespace View {
 
-
-} /* namespace Controller1 */
+} /* namespace View */

@@ -9,7 +9,8 @@
 #ifndef BAJKA_VIEW_CIRCLE_H_
 #define BAJKA_VIEW_CIRCLE_H_
 
-#include "Widget.h"
+#include "ReflectionMacros.h"
+#include "Primitive.h"
 
 namespace View {
 
@@ -17,11 +18,16 @@ namespace View {
  * Rysuje prostokąt.
  * \ingroup View
  */
-class Circle : public Widget {
+class Circle : public Primitive {
 public:
+
+        C__ (void)
+        b_ ("Primitive")
 
         virtual ~Circle () {}
         virtual void update (Model::IModel *model);
+
+        E_ (View::Circle)
 };
 
 } /* namespace View */

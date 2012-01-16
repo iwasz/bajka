@@ -8,8 +8,26 @@
 
 #include "AbstractModel.h"
 #include "../view/Widget.h"
+#include <algorithm>
+#include <boost/bind.hpp>
 
 namespace Model {
+
+/****************************************************************************/
+
+void AbstractModel::setChildren (ModelVector const &c)
+{
+        std::for_each (c.begin (), c.end (), boost::bind (&AbstractModel::addChild, this, _1));
+}
+
+/****************************************************************************/
+
+void AbstractModel::addChild (IModel *m)
+{
+        children.push_back (m);
+        m->setParent (this);
+        m->parentCallback (this);
+}
 
 /****************************************************************************/
 

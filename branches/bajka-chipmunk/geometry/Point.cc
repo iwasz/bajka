@@ -18,6 +18,13 @@
 namespace Geometry {
 using namespace boost::geometry;
 
+Point::Point (std::string const &s)
+{
+
+}
+
+/****************************************************************************/
+
 std::ostream &operator<< (std::ostream &o, Geometry::Point const &p)
 {
         o << p.toString ();

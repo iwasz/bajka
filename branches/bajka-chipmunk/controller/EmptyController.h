@@ -9,12 +9,14 @@
 #ifndef EMPTYCONTROLLER_H_
 #define EMPTYCONTROLLER_H_
 
+#include "ReflectionMacros.h"
 #include "IController.h"
 
 namespace Controller {
 
 struct EmptyController : public IController {
 
+        C__ (void)
         virtual ~EmptyController () {}
 
         virtual bool preUpdate (Model::IModel *m, View::IView *v) {}
@@ -31,6 +33,8 @@ struct EmptyController : public IController {
         virtual bool onTimer (Event::TimerEvent *e) {}
         virtual bool onQuit (Event::QuitEvent *e);
 
+        m_ (setEventMask)
+        E_ (EmptyController)
 };
 
 } /* namespace Controller */

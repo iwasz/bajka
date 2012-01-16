@@ -9,11 +9,11 @@
 #ifndef BAJKAAPP_H_
 #define BAJKAAPP_H_
 
+#include <chipmunk.h>
 #include "Geometry.h"
 #include "Model.h"
 #include "IDispatcher.h"
-#include <Reflection.h>
-#include <chipmunk.h>
+#include "ReflectionMacros.h"
 
 namespace Util {
 
@@ -30,27 +30,27 @@ namespace Util {
  */
 class BajkaConfig {
 public:
-        __c (void)
+        C__ (void)
 
         BajkaConfig ();
 
 /*--------------------------------------------------------------------------*/
 
-        _m (init) void init ();
+        m_ (init) void init ();
 
 /*------access methods------------------------------------------------------*/
 
         bool getFullScreen () const { return fullScreen; }
-        _m (setFullScreen) void setFullScreen (bool fullScreen) { this->fullScreen = fullScreen; }
+        m_ (setFullScreen) void setFullScreen (bool fullScreen) { this->fullScreen = fullScreen; }
 
         int getResX () const { return resX; }
-        _m (setResX) void setResX (int resX) { this->resX = resX; }
+        m_ (setResX) void setResX (int resX) { this->resX = resX; }
 
         int getResY () const { return resY; }
-        _m (setResY)  void setResY (int resY) { this->resY = resY; }
+        m_ (setResY)  void setResY (int resY) { this->resY = resY; }
 
         const std::string &getWindowCaption () const { return windowCaption; }
-        _m (setWindowCaption) void setWindowCaption (const std::string &windowCaption) { this->windowCaption = windowCaption; }
+        m_ (setWindowCaption) void setWindowCaption (const std::string &windowCaption) { this->windowCaption = windowCaption; }
 
 private:
 
@@ -59,7 +59,7 @@ private:
         int resY;
         std::string windowCaption;
 
-        _e (BajkaConfig)
+        E_ (BajkaConfig)
 };
 
 /**
@@ -73,14 +73,14 @@ private:
 class BajkaApp : public Core::Object {
 public:
 
-       __c (void)
+       C__ (void)
 
        BajkaApp () /*: dispatchers (new Event::DispatcherList)*/ {}
        virtual ~BajkaApp () {}
 
-       _m (loop) void loop ();
-       _m (debug) void debug (Core::String const &);
-       _m (debug) void destroy ();
+       m_ (loop) void loop ();
+       m_ (debug) void debug (Core::String const &);
+       m_ (debug) void destroy ();
 
 /*--------------------------------------------------------------------------*/
 
@@ -91,7 +91,7 @@ public:
        virtual void afterEvents () {}
 
        Ptr <BajkaConfig> getConfig () const { return config; }
-       _m (setConfig) void setConfig (Ptr <BajkaConfig> b) { config = b; }
+       m_ (setConfig) void setConfig (Ptr <BajkaConfig> b) { config = b; }
 
        /// Głowny model.
        Ptr <Model::IModel> getModel () const { return model; }
@@ -101,10 +101,10 @@ public:
         * 2. Ustawia główny kontroler.
         * 3. Podłącza ten nowy do wszystkich dispatcherów.
         */
-       _m (setModel) void setModel (Ptr <Model::IModel> model);
+       s_ (setModel) void setModel (Ptr <Model::IModel> model);
 
        Ptr <Event::DispatcherList> getDispatchers () const { return dispatchers; }
-       _m (setDispatchers) void setDispatchers (Ptr <Event::DispatcherList> d) { dispatchers = d; }
+       m_ (setDispatchers) void setDispatchers (Ptr <Event::DispatcherList> d) { dispatchers = d; }
 
 private:
 
@@ -112,7 +112,7 @@ private:
        Ptr <Model::IModel> model;
        Ptr <Event::DispatcherList> dispatchers;
 
-       _e (BajkaApp)
+       E_ (BajkaApp)
 };
 
 } // nam

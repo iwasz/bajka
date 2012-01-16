@@ -13,8 +13,6 @@
         <property name="windowCaption" value="Chipmunk tests"/>
     </bean>
 
-
-
     <!--Obiekt app, czyli aplikacja :)-->
     <bean id="app" class="BajkaApp" singleton="true">
         <property name="config" ref="cfg" />
@@ -25,7 +23,82 @@
                     <property name="config" ref="cfg" />
                 </bean>
             </list>
-        </property>        
+        </property>
+        
+        <property name="model" ref="space" />        
     </bean>
       
+    <bean id="emptyCtr" class="EmptyController" singleton="true">
+<!--         <property name="eventMask" value="0xFFFF"/> -->
+    </bean>      
+      
+    <bean id="randomColor" class="Color">
+        <constructor-arg><value type="bool">true</value></constructor-arg>
+    </bean>
+      
+    <bean id="circleWgt" class="View::Circle" singleton="true">
+        <property name="foreground" value="000000FF"/>
+        <property name="background" ref="randomColor"/>
+    </bean>  
+
+    <bean id="rectangleWgt" class="Rectangle" singleton="true">
+        <property name="foreground" ref="randomColor"/>
+        <property name="background" ref="randomColor"/>
+    </bean>  
+      
+    <bean id="space" class="Space" singleton="true">
+        <property name="gravity">
+            <bean class="Point">
+                <property name="x" value="0"/>
+                <property name="y" value="-100"/>                
+            </bean>
+        </property>
+        
+        <property name="children">
+            <list class="ModelVector">
+                <ref bean="body"/>
+                <ref bean="ground"/>
+            </list>
+        </property>
+
+        <property name="controller" ref="emptyCtr"/>            
+    </bean>
+      
+    <bean id="body" class="Body" singleton="true">
+        <propery name="mass" value="1" />
+
+        <property name="children">
+            <list class="ModelVector">
+                <ref bean="circle"/>
+            </list>
+        </property>
+    </bean>      
+
+    <bean id="circle" class="Model::Circle" singleton="true">
+        <property name="view" ref="circleWgt"/>            
+        <property name="radius" value="50" />    
+    </bean>
+    
+    <bean id="ground" class="StaticBody" singleton="true">
+        <constructor-arg><value type="bool">true</value></constructor-arg>
+        <property name="position">
+            <bean class="Point">
+                <property name="x" value="-320"/>
+                <property name="y" value="-140"/>                
+            </bean>        
+        </property>
+    
+        <property name="children">
+            <list class="ModelVector">
+                <!-- TODO kiedy tu nie jest singleton="true", to segf! To jakas lipa!-->
+                <bean id="box" class="Model::Box" singleton="true">
+                    <property name="width" value="640" />
+                    <property name="height" value="10" />
+                    <property name="view" ref="rectangleWgt"/>            
+                </bean>
+            </list>
+        </property>
+    </bean>      
+
+            
 </beans>

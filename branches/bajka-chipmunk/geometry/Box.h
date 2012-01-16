@@ -9,9 +9,7 @@
 #ifndef GEOMETRY_MODEL_BOX_H_
 #define GEOMETRY_MODEL_BOX_H_
 
-//#include <boost/geometry/geometries/register/box.hpp>
 #include <Object.h>
-
 #include "Point.h"
 
 namespace Geometry {
@@ -25,9 +23,9 @@ namespace Geometry {
  * </pre>
  * \ingroup Geometry
  */
-class Box : public Core::IToStringEnabled, virtual public Core::Object {
+class Box : public Core::IToStringEnabled {
 public:
-        __c (void)
+        C__ (void)
 
         Box () {}
         Box (const Point &ll, const Point &ur) : ll (ll), ur (ur) {}
@@ -37,16 +35,16 @@ public:
 /*------access-methods------------------------------------------------------*/
 
         double getX1 () const { return ll.getX (); }
-        _m (setX1) void setX1 (double x) { ll.setX (x); }
+        m_ (setX1) void setX1 (double x) { ll.setX (x); }
 
         double getY1 () const { return ll.getY (); }
-        _m (setY1) void setY1 (double y) { ll.setY (y); }
+        m_ (setY1) void setY1 (double y) { ll.setY (y); }
 
         double getX2 () const { return ur.getX (); }
-        _m (setX2) void setX2 (double x) { ur.setX (x); }
+        m_ (setX2) void setX2 (double x) { ur.setX (x); }
 
         double getY2 () const { return ur.getY (); }
-        _m (setY2) void setY2 (double y) { ur.setY (y); }
+        m_ (setY2) void setY2 (double y) { ur.setY (y); }
 
         const Point &getLL () const { return ll; }
         const Point &getUR () const { return ur; }
@@ -71,7 +69,7 @@ private:
         Point ll;
         Point ur;
 
-        _e (Box)
+        E_ (Box)
 };
 
 }
