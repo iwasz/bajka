@@ -29,10 +29,7 @@
     </bean>
       
     <bean id="emptyCtr" class="EmptyController" singleton="true">
-	<!-- TODO nie ma automatycznej konwersji ze string do unsigned int, TODO nie dziala konwersja ze string do liczby w formacie 0x -->
-         <property name="eventMask"> 
-            <value type="unsigned int">4294967295</value>
-         </property>
+         <property name="eventMask" value="0xffff"/> 
     </bean>      
       
     <bean id="randomColor" class="Color" singleton="false">
