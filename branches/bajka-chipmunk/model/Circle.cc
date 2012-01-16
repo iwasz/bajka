@@ -37,8 +37,8 @@ void Circle::parentCallback (IModel *m)
 {
         Body *b = static_cast <Body *> (m);
         shape = cpSpaceAddShape (Space::getSpace(), cpCircleShapeNew (b->getBody (), radius, cpv (position.getX (), position.getY ())));
-        cpShapeSetElasticity (shape, 1.0f);
-        cpShapeSetFriction (shape, 1.0f);
+//        cpShapeSetElasticity (shape, 1.0f);
+//        cpShapeSetFriction (shape, 1.0f);
         Shape::parentCallback (m);
 }
 
