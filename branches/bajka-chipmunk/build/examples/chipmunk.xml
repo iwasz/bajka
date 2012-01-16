@@ -7,9 +7,9 @@
 
     <!--Konfiguracja-->
     <bean id="cfg" class="BajkaConfig" init-method="init" singleton="true">
-        <property name="fullScreen"><value type="bool">false</value></property>
-        <property name="resX"><value type="int">640</value></property>
-        <property name="resY"><value type="int">480</value></property>
+        <property name="fullScreen" value="false"/>
+        <property name="resX" value="640"/>
+        <property name="resY" value="480"/>
         <property name="windowCaption" value="Chipmunk tests"/>
     </bean>
 
@@ -25,7 +25,7 @@
             </list>
         </property>
         
-        <property name="model" ref="space" />        
+        <property name="model" ref="space" />
     </bean>
       
     <bean id="emptyCtr" class="EmptyController" singleton="true">
@@ -41,12 +41,13 @@
       
     <bean id="circleWgt" class="View::Circle" singleton="true">
         <property name="foreground" value="000000FF"/>
+        <!-- TODO Wszystkie latajce obiekty maja ten sam kolor, mimo, ze on ma scope prototype. Czemu? -->
         <property name="background" ref="randomColor"/>
     </bean>  
 
     <bean id="rectangleWgt" class="Rectangle" singleton="true">
         <property name="foreground" value="000000FF"/>
-        <property name="background" value="ffffffff"/>
+        <property name="background" ref="randomColor"/>
     </bean>  
       
     <bean id="space" class="Space" singleton="true">
