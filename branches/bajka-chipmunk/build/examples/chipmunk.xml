@@ -29,7 +29,10 @@
     </bean>
       
     <bean id="emptyCtr" class="EmptyController" singleton="true">
-<!--         <property name="eventMask" value="0xFFFF"/> -->
+	<!-- TODO nie ma automatycznej konwersji ze string do unsigned int, TODO nie dziala konwersja ze string do liczby w formacie 0x -->
+         <property name="eventMask"> 
+            <value type="unsigned int">4294967295</value>
+         </property>
     </bean>      
       
     <bean id="randomColor" class="Color" singleton="false">
@@ -42,17 +45,12 @@
     </bean>  
 
     <bean id="rectangleWgt" class="Rectangle" singleton="true">
-        <property name="foreground" ref="randomColor"/>
-        <property name="background" ref="randomColor"/>
+        <property name="foreground" value="000000FF"/>
+        <property name="background" value="ffffffff"/>
     </bean>  
       
     <bean id="space" class="Space" singleton="true">
-        <property name="gravity">
-            <bean class="Point">
-                <property name="x" value="0"/>
-                <property name="y" value="-100"/>                
-            </bean>
-        </property>
+	<property name="gravity" value="0, -100"/>
         
         <property name="children">
             <list class="ModelVector">
@@ -67,7 +65,8 @@
     </bean>
       
     <bean id="body" class="Body" singleton="true">
-        <propery name="mass" value="1" />
+        <property name="mass" value="1" />
+        <property name="position" value="5, 0"/>
 
         <property name="children">
             <list class="ModelVector">
@@ -83,12 +82,8 @@
     
     <bean id="ground" class="StaticBody" singleton="true">
         <constructor-arg><value type="bool">true</value></constructor-arg>
-        <property name="position">
-            <bean class="Point">
-                <property name="x" value="-320"/>
-                <property name="y" value="-140"/>                
-            </bean>        
-        </property>
+        <!-- TODO tu jest jakos dziwnie przesuniete - chyba shape zakotwicza sie w srodku body -->
+        <property name="position" value="0, -140"/>
     
         <property name="children">
             <list class="ModelVector">
@@ -96,7 +91,7 @@
                 <bean id="box" class="Model::Box" singleton="true">
                     <property name="width" value="640" />
                     <property name="height" value="10" />
-                    <property name="view" ref="rectangleWgt"/>            
+                    <property name="view" ref="rectangleWgt"/>
                 </bean>
             </list>
         </property>
@@ -104,14 +99,8 @@
 
 
     <bean id="c2" class="Body" singleton="true">
-        <propery name="mass" value="1" />
-
-        <property name="position">
-            <bean class="Point">
-                <property name="x" value="0"/>
-                <property name="y" value="50"/>                
-            </bean>        
-        </property>
+        <propery name="mass" value="1"/>
+        <property name="position" value="-100, 50"/>
 
         <property name="children">
             <list class="ModelVector">
@@ -126,12 +115,9 @@
     
     
     <bean id="c3" parent="c2">
-        <property name="position">
-            <bean class="Point">
-                <property name="x" value="50"/>
-                <property name="y" value="50"/>                
-            </bean>        
-        </property>
+        <property name="position" value="-150, 50"/>
+<!-- TODO to nie dziala, a powinno! -->
+<!--        <property name="children.0.radius" value="100"/>-->
     </bean>
     
 </beans>
