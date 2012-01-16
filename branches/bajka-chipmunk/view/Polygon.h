@@ -9,14 +9,21 @@
 #ifndef BAJKA_VIEW_POLYGON_H_
 #define BAJKA_VIEW_POLYGON_H_
 
-#include "Widget.h"
+#include "ReflectionMacros.h"
+#include "Primitive.h"
 
 namespace View {
 
-class Polygon : public Widget {
+class Polygon : public Primitive {
 public:
+
+        C__ (void)
+        b_ ("Primitive")
+
         virtual ~Polygon () {}
-        virtual void update (Model::IModel *model);
+        virtual void update (Model::IModel *model) {}
+
+        E_ (Polygon)
 };
 
 } // namespace

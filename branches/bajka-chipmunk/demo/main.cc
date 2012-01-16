@@ -6,20 +6,21 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#include <cstdlib>
+#include <Container.h>
+#include <ContainerFactory.h>
+#include "ReflectionMacros.h"
 #include "../util/BajkaApp.h"
 #include "../model/Space.h"
 #include "../model/Body.h"
 #include "../view/Circle.h"
 #include "../model/Circle.h"
-
-#include <cstdlib>
-#include <Container.h>
-#include <ContainerFactory.h>
 #include "../view/draw/Primitives.h"
 #include "../model/Box.h"
 #include "../view/Polygon.h"
 #include "../view/Rectangle.h"
 #include "../controller/EmptyController.h"
+#include "../model/StaticBody.h"
 
 namespace M = Model;
 namespace V = View;
@@ -44,55 +45,46 @@ int main (int argc, char **argv)
         Ptr <Container::BeanFactoryContainer> container = Container::XmlContainerFactory::createContainer (fileName, true);
         Ptr <Util::BajkaApp> app = vcast <Ptr <Util::BajkaApp> > (container->getBean ("app"));
 
-        Ptr <M::Space> space = boost::make_shared <M::Space> ();
-        C::IController *controller = new C::EmptyController ();
-        controller->setEventMask (0xFFFF);
-        space->setController (controller);
-        space->setGravity (G::Point (0, -100));
-
-        M::Body *body = new M::Body ();
-        body->setMass (1);
-        space->addChild (body);
-
-        M::Circle *circle = new M::Circle ();
-        circle->setRadius (50);
-        circle->setView (new V::Circle ());
-
-        M::Box *box = new M::Box ();
-        box->setPosition (G::Point (0, -50));
-        box->setWidth (50);
-        box->setHeight (50);
-        box->setView (new V::Rectangle ());
-
-        body->addChild (circle);
-        body->addChild (box);
-
-
-        body = new M::StaticBody (true);
-        body->setPosition (G::Point (-320, -140));
-        space->addChild (body);
-
-        box = new M::Box ();
-//        box->setPosition (G::Point (0, -50));
-        box->setWidth (640);
-        box->setHeight (10);
-        box->setView (new V::Rectangle ());
-
-        body->addChild (box);
-
-
-
-//        Ptr <M::IModel> model = boost::make_shared <M::Box> (0, 0, 30, 30);
+//        Ptr <M::Space> space = boost::make_shared <M::Space> ();
+//        C::IController *controller = new C::EmptyController ();
+//        controller->setEventMask (0xFFFF);
+//        space->setController (controller);
+//        space->setGravity (G::Point (0, -100));
 //
-//        V::IView *view = new V::Rectangle ();
-//        C::IController *c = new C::EmptyController ();
-//        model->setView (view);
-//        model->setController(c);
-//        model->setAngle (1);
-
-
-
-        app->setModel (space);
+//        M::Body *body = new M::Body ();
+//        body->setMass (1);
+//        space->addChild (body);
+//
+//        M::Circle *circle = new M::Circle ();
+//        circle->setRadius (50);
+//
+//        V::Circle *circlev = new V::Circle ();
+//        circlev->setForeground (V::Color (true));
+//        circlev->setBackground (V::Color (true));
+//        circle->setView (circlev);
+//
+//        M::Box *box = new M::Box ();
+//        box->setPosition (G::Point (0, -50));
+//        box->setWidth (50);
+//        box->setHeight (50);
+//        box->setView (new V::Rectangle ());
+//
+//        body->addChild (circle);
+//        body->addChild (box);
+//
+//
+//        body = new M::StaticBody (true);
+//        body->setPosition (G::Point (-320, -140));
+//        space->addChild (body);
+//
+//        box = new M::Box ();
+//        box->setWidth (640);
+//        box->setHeight (10);
+//        box->setView (new V::Rectangle ());
+//
+//        body->addChild (box);
+//
+//        app->setModel (space);
 
         app->loop ();
         app->destroy ();

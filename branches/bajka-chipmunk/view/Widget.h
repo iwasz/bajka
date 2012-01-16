@@ -10,12 +10,14 @@
 #define BAJKA_WIDGET_H_
 
 #include "IView.h"
+#include "ReflectionMacros.h"
 
 namespace View {
 
 class Widget : public IView {
 public:
 
+        C__ (void)
         Widget () : visible (true) {}
         virtual ~Widget () {}
 
@@ -24,7 +26,7 @@ public:
         virtual void postUpdate (Model::IModel *);
 
         bool getVisible () const { return visible; }
-        /*_m (setVisible) */void setVisible (bool v) { visible = v; }
+        m_ (setVisible) void setVisible (bool v) { visible = v; }
 
         static void defaultPreUpdate (Model::IModel *m);
         static void defaultPostUpdate (Model::IModel *m);
@@ -32,7 +34,7 @@ public:
 private:
 
         bool visible;
-
+        E_ (Widget)
 };
 
 } /* namespace View */

@@ -13,7 +13,6 @@
 #include <boost/geometry/strategies/transform/matrix_transformers.hpp>
 #include <stack>
 #include <IToStringEnabled.h>
-
 #include "Point.h"
 #include "Box.h"
 

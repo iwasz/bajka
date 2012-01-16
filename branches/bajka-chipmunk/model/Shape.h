@@ -16,11 +16,14 @@ namespace Model {
 class Shape : public AbstractModel {
 public:
 
+        d__
+        b_ ("AbstractModel")
+
         Shape () : shape (0) {}
         virtual ~Shape ();
 
         virtual Geometry::Point getPosition () const { return position; }
-        virtual void setPosition (Geometry::Point const &p) { position = p; }
+        m_ (setPosition) virtual void setPosition (Geometry::Point const &p) { position = p; }
 
         virtual double calculateInertia (double mass) const = 0;
         virtual void parentCallback (IModel *m);
@@ -30,6 +33,7 @@ protected:
         Geometry::Point position;
         cpShape *shape;
 
+        E_ (Shape)
 };
 
 } /* namespace Model */

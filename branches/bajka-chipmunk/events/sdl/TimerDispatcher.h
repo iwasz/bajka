@@ -9,7 +9,7 @@
 #ifndef TIMERDISPATCHER_H_
 #define TIMERDISPATCHER_H_
 
-#include <Reflection.h>
+#include "ReflectionMacros.h"
 #include "TimerEvent.h"
 #include "IDispatcher.h"
 
@@ -21,7 +21,7 @@ namespace Sdl {
  */
 class TimerDispatcher : public Event::IDispatcher {
 public:
-        __c (void)
+        C__ (void)
 
         TimerDispatcher () : tickInterval (30), prevTime (0)/*, observer (NULL)*/ {}
         virtual ~TimerDispatcher () {}
@@ -31,7 +31,7 @@ public:
 /*--------------------------------------------------------------------------*/
 
         int getTickInterval () const { return tickInterval; }
-        _m (setTickInterval) void setTickInterval (int tickInterval) { this->tickInterval = tickInterval; }
+        m_ (setTickInterval) void setTickInterval (int tickInterval) { this->tickInterval = tickInterval; }
 
 private:
 
@@ -39,7 +39,7 @@ private:
         unsigned int prevTime;
         Event::TimerEvent timerEvent;
 
-        _e (TimerDispatcher)
+        E_ (TimerDispatcher)
 };
 
 }

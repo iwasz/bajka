@@ -132,6 +132,9 @@ void BajkaConfig::init ()
         // glDrawArrays
         glEnableClientState(GL_VERTEX_ARRAY);
 
+        // Init rand
+        srand (time (NULL));
+
 #endif
 #if 0
         if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
@@ -191,13 +194,13 @@ void BajkaApp::loop ()
                 glClearColor (0.35, 0.75, 1.0, 1.0);
                 glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                // Generuj eventy.
-                for (Event::DispatcherList::const_iterator i = dispatchers->begin (); i != dispatchers->end (); i++) {
-                        (*i)->run (model.get ());
-                }
-
                 // Run models, views and controllers.
                 if (model) {
+                        // Generuj eventy.
+                        for (Event::DispatcherList::const_iterator i = dispatchers->begin (); i != dispatchers->end (); i++) {
+                                (*i)->run (model.get ());
+                        }
+
                         model->update ();
                 }
 

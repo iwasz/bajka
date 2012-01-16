@@ -17,16 +17,19 @@ namespace Model {
 class Circle : public Shape {
 public:
 
+        C__ (void)
+        b_ ("Shape")
+
         virtual ~Circle () {}
 
         virtual void setPosition (Geometry::Point const &p);
         virtual Geometry::Point getPosition () const;
 
         double getRadius () const;
-        void setRadius (double r);
+        m_ (setRadius) void setRadius (double r);
 
         double getAngle () const { return 0; }
-        void setAngle (double) {}
+        m_ (setAngle) void setAngle (double) {}
 
 /*--------------------------------------------------------------------------*/
 
@@ -36,6 +39,8 @@ public:
 private:
 
         double radius;
+
+        E_ (Model::Circle)
 
 };
 

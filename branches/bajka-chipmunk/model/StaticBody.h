@@ -16,6 +16,9 @@ namespace Model {
 class StaticBody : public Body {
 public:
 
+        C__ (bool)
+        b_ ("Body")
+
         StaticBody (bool spcBdy = false);
         virtual ~StaticBody ();
 
@@ -26,6 +29,7 @@ private:
 
         bool spaceBody;
 
+        E_ (StaticBody)
 };
 
 }

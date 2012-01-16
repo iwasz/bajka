@@ -9,6 +9,8 @@
 #ifndef EVENTDISPATCHER_H_
 #define EVENTDISPATCHER_H_
 
+#include <SDL.h>
+#include "ReflectionMacros.h"
 #include "MouseMotionEvent.h"
 #include "IEvent.h"
 #include "KeyboardEvent.h"
@@ -16,8 +18,6 @@
 #include "QuitEvent.h"
 #include "IDispatcher.h"
 #include "BajkaApp.h"
-#include <Reflection.h>
-#include <SDL.h>
 
 namespace Sdl {
 
@@ -27,19 +27,19 @@ namespace Sdl {
  */
 class EventDispatcher : public Event::IDispatcher {
 public:
-        __c (void)
+        C__ (void)
 
         EventDispatcher () : /*observer (NULL),*/ resX2 (0), resY2 (0) {}
         virtual ~EventDispatcher () {}
 
-        _m (init) void init ();
+        m_ (init) void init ();
 
         void run (Model::IModel *m);
 
 /*------getters-setters-----------------------------------------------------*/
 
         Ptr <Util::BajkaConfig> getConfig () const { return config; }
-        _m (setConfig) void setConfig (Ptr <Util::BajkaConfig> b) { config = b; }
+        m_ (setConfig) void setConfig (Ptr <Util::BajkaConfig> b) { config = b; }
 
 private:
 
@@ -66,7 +66,7 @@ private:
         // Screen resolution / 2
         int resX2, resY2;
 
-        _e (EventDispatcher)
+        E_ (EventDispatcher)
 };
 
 }

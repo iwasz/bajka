@@ -17,6 +17,9 @@ namespace Model {
 class Space : public AbstractModel {
 public:
 
+        C__ (void)
+        b_ ("AbstractModel")
+
         Space ();
         virtual ~Space ();
 
@@ -33,12 +36,13 @@ public:
 /*--------------------------------------------------------------------------*/
 
         Geometry::Point getGravity () const;
-        void setGravity (Geometry::Point const &g);
+        m_ (setGravity) void setGravity (Geometry::Point const &g);
 
 private:
 
         static cpSpace *space;
 
+        E_ (Space)
 };
 
 } /* namespace Model */

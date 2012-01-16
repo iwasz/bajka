@@ -9,8 +9,8 @@
 #ifndef BAJKA_UTILS_COMMONS_H_
 #define BAJKA_UTILS_COMMONS_H_
 
-#include <Reflection.h>
 #include <Pointer.h>
+#include "ReflectionMacros.h"
 
 namespace Util {
 
