@@ -69,9 +69,7 @@ void DrawUtil::drawCircle (Geometry::Point const &center, double angle, double r
 
 void DrawUtil::drawRectangle (Geometry::Point const &a, Geometry::Point const &b, Color const &lineColor, Color const &fillColor)
 {
-//        if (fillColor.getA () > 0){
-                glColor4f (fillColor.getR (), fillColor.getG (), fillColor.getB (), fillColor.getA ());
-//        }
+        glColor4f (fillColor.getR (), fillColor.getG (), fillColor.getB (), fillColor.getA ());
 
         glBegin (GL_TRIANGLE_FAN);
                 glVertex2f (a.x, a.y);
@@ -80,9 +78,7 @@ void DrawUtil::drawRectangle (Geometry::Point const &a, Geometry::Point const &b
                 glVertex2f (b.x, a.y);
         glEnd ();
 
-//        if (lineColor.getA () > 0){
-                glColor4f (lineColor.getR (), lineColor.getG (), lineColor.getB (), lineColor.getA ());
-//        }
+        glColor4f (lineColor.getR (), lineColor.getG (), lineColor.getB (), lineColor.getA ());
 
         glBegin (GL_LINE);
                 glVertex2f (a.x, a.y);

@@ -25,6 +25,7 @@ public:
         Box () : width (0), height (0) {}
         virtual ~Box () {}
 
+        // Zawsze jest wypośrodkowane względem środka masy swojego body.
         virtual Geometry::Point getPosition () const { return Geometry::Point (); }
         virtual void setPosition (Geometry::Point const &p) { }
 

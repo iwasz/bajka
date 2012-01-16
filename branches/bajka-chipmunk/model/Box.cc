@@ -21,13 +21,10 @@ double Box::calculateInertia (double mass) const
 void Box::parentCallback (IModel *m)
 {
         Body *b = static_cast <Body *> (m);
-        shape = cpSpaceAddShape (Space::getSpace(), cpBoxShapeNew (b->getBody (), width, height));
-        cpShapeSetElasticity (shape, 1.0f);
-        cpShapeSetFriction (shape, 1.0f);
-//#define GRABABLE_MASK_BIT (1<<31)
-//#define NOT_GRABABLE_MASK (~GRABABLE_MASK_BIT)
-//        cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
-
+        shape = cpSpaceAddShape (Space::getSpace(), cpBoxShapeNew2 (b->getBody (),
+                   cpBBNew (position.x, position.y, position.x + width, position.y + height)));
+//        cpShapeSetElasticity (shape, 1.0f);
+//        cpShapeSetFriction (shape, 1.0f);
         Shape::parentCallback (m);
 }
 

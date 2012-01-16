@@ -48,16 +48,17 @@ bool AbstractModel::update ()
 
         std::for_each (begin (), end (), boost::mem_fn (&IModel::update));
 
-        if (controller) {
-                controller->postUpdate (this, view);
-        }
-
         if (view) {
                 view->postUpdate (this);
         }
         else {
         	View::Widget::defaultPostUpdate (this);
         }
+
+        if (controller) {
+                controller->postUpdate (this, view);
+        }
+
 }
 
 } /* namespace Model1 */

@@ -56,6 +56,7 @@
                 <ref bean="ground"/>
                 <ref bean="c2"/>
                 <ref bean="c3"/>
+                <ref bean="imageBdy"/>
             </list>
         </property>
 
@@ -80,8 +81,7 @@
     
     <bean id="ground" class="StaticBody" singleton="true">
         <constructor-arg><value type="bool">true</value></constructor-arg>
-        <!-- TODO tu jest jakos dziwnie przesuniete - chyba shape zakotwicza sie w srodku body -->
-        <property name="position" value="0, -140"/>
+        <property name="position" value="-320, -140"/>
     
         <property name="children">
             <list class="ModelVector">
@@ -115,7 +115,27 @@
     <bean id="c3" parent="c2">
         <property name="position" value="-150, 50"/>
 <!-- TODO to nie dziala, a powinno! -->
-<!--        <property name="children.0.radius" value="100"/>-->
+<!--        <property name="children.0.radius" value="100"/> -->
     </bean>
+    
+    
+    <bean id="image1Wgt" class="View::Image" singleton="true">
+        <property name="path" value="gfx/1.png"/>
+    </bean>
+    
+    <bean id="imageBdy" class="Body" singleton="true">
+        <propery name="mass" value="1"/>
+        <property name="position" value="70, 50"/>
+
+        <property name="children">
+            <list class="ModelVector">
+                <bean class="Model::Box" singleton="true">
+                    <property name="width" value="92" />
+                    <property name="height" value="122" />
+                    <property name="view" ref="image1Wgt"/>            
+                </bean>
+            </list>
+        </property>
+    </bean>      
     
 </beans>
