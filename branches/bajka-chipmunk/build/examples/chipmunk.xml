@@ -32,7 +32,7 @@
 <!--         <property name="eventMask" value="0xFFFF"/> -->
     </bean>      
       
-    <bean id="randomColor" class="Color">
+    <bean id="randomColor" class="Color" singleton="false">
         <constructor-arg><value type="bool">true</value></constructor-arg>
     </bean>
       
@@ -58,6 +58,8 @@
             <list class="ModelVector">
                 <ref bean="body"/>
                 <ref bean="ground"/>
+                <ref bean="c2"/>
+                <ref bean="c3"/>
             </list>
         </property>
 
@@ -100,5 +102,36 @@
         </property>
     </bean>      
 
-            
+
+    <bean id="c2" class="Body" singleton="true">
+        <propery name="mass" value="1" />
+
+        <property name="position">
+            <bean class="Point">
+                <property name="x" value="0"/>
+                <property name="y" value="50"/>                
+            </bean>        
+        </property>
+
+        <property name="children">
+            <list class="ModelVector">
+                <bean id="circle" class="Model::Circle" singleton="true">
+                    <property name="view" ref="circleWgt"/>            
+                    <property name="radius" value="30" />    
+                </bean>
+            </list>
+        </property>
+    </bean>      
+    
+    
+    
+    <bean id="c3" parent="c2">
+        <property name="position">
+            <bean class="Point">
+                <property name="x" value="50"/>
+                <property name="y" value="50"/>                
+            </bean>        
+        </property>
+    </bean>
+    
 </beans>
