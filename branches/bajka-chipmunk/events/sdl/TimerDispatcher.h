@@ -10,7 +10,7 @@
 #define TIMERDISPATCHER_H_
 
 #include "ReflectionMacros.h"
-#include "TimerEvent.h"
+#include "types/TimerEvent.h"
 #include "IDispatcher.h"
 
 namespace Sdl {

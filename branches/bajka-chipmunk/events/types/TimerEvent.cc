@@ -6,24 +6,14 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef EVENTS_H_
-#define EVENTS_H_
-
-/**
- * \defgroup Events
- * Podsystem eventów. W tym module znajdują się klasy implementujące poszczególne eventy, oraz serwisy
- * implementujące generowanie tych eventów.
- * \{
- * \}
- */
-
-#include "sdl/Sdl.h"
-#include "types/Types.h"
-#include "IDispatcher.h"
-#include "Common.h"
+#include "TimerEvent.h"
+#include <boost/lexical_cast.hpp>
 
 namespace Event {
 
+std::string TimerEvent::toString () const
+{
+        return "TimerEvent (ticks=" + boost::lexical_cast <std::string> (ticks)+ ")";
 }
 
-#	endif /* EVENTS_H_ */
+} /* namespace Event1 */

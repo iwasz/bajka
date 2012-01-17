@@ -38,30 +38,10 @@ public:
         MouseButton getButton () const { return button; }
         void setButton (MouseButton button) { this->button = button; }
 
-private:
+protected:
 
         MouseButton button;
 
-};
-
-/**
- * Event oznaczający wciśnięcie guzika myszy.
- * \ingroup Events
- */
-struct ButtonPressEvent : public MouseButtonEvent {
-        virtual ~ButtonPressEvent () {}
-        Type getType () const { return  BUTTON_PRESS_EVENT; }
-        virtual bool runCallback (Controller::IController *c) { return c->onButtonPress (static_cast <ButtonPressEvent *> (this)); }
-};
-
-/**
- * Event oznaczający puszczenie guzika myszy.
- * \ingroup Events
- */
-struct ButtonReleaseEvent : public MouseButtonEvent {
-        virtual ~ButtonReleaseEvent () {}
-        Type getType () const { return  BUTTON_RELEASE_EVENT; }
-        virtual bool runCallback (Controller::IController *c) { return c->onButtonRelease (static_cast <ButtonReleaseEvent *> (this)); }
 };
 
 }

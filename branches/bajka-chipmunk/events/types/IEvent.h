@@ -11,6 +11,7 @@
 
 #include <cstddef>
 #include "../controller/IController.h"
+#include <IToStringEnabled.h>
 
 /**
  * Eventy.
@@ -31,20 +32,20 @@ enum Type {
         QUIT_EVENT              = 0x01 << 6 //!< QUIT_EVENT
 };
 
-/**
- * Służy do przekazywania danych dodatkowych - coś takiego jak void *data
- * w niektórych bibliotekach C.
- * \ingroup Events
- */
-struct IEventContext {
-        virtual ~IEventContext () {}
-};
+///**
+// * Służy do przekazywania danych dodatkowych - coś takiego jak void *data
+// * w niektórych bibliotekach C.
+// * \ingroup Events
+// */
+//struct IEventContext {
+//        virtual ~IEventContext () {}
+//};
 
 /**
  * Typowy visitor-pattern się zrobił.
  * \ingroup Events
  */
-class IEvent {
+class IEvent : public Core::IToStringEnabled {
 public:
         virtual ~IEvent () {}
 
@@ -55,23 +56,23 @@ public:
 //        virtual void setContext (IEventContext *ctx) = 0;
 };
 
-/**
- * Implementuje powtarzalne metody interfejsu IEvent.
- * \ingroup Events
- */
-class AbstractEvent : public IEvent {
-public:
-
-        AbstractEvent () : context (NULL) {}
-        virtual ~AbstractEvent () {}
-
-//        IEventContext *getContext () const { return context;}
-//        void setContext (IEventContext *ctx) { context = ctx; }
-
-private:
-
-        IEventContext *context;
-};
+///**
+// * Implementuje powtarzalne metody interfejsu IEvent.
+// * \ingroup Events
+// */
+//class AbstractEvent : public IEvent {
+//public:
+//
+//        AbstractEvent () : context (NULL) {}
+//        virtual ~AbstractEvent () {}
+//
+////        IEventContext *getContext () const { return context;}
+////        void setContext (IEventContext *ctx) { context = ctx; }
+//
+//private:
+//
+//        IEventContext *context;
+//};
 
 }
 

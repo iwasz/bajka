@@ -6,24 +6,24 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef EVENTS_H_
-#define EVENTS_H_
+#ifndef BUTTONPRESSEVENT_H_
+#define BUTTONPRESSEVENT_H_
 
-/**
- * \defgroup Events
- * Podsystem eventów. W tym module znajdują się klasy implementujące poszczególne eventy, oraz serwisy
- * implementujące generowanie tych eventów.
- * \{
- * \}
- */
-
-#include "sdl/Sdl.h"
-#include "types/Types.h"
-#include "IDispatcher.h"
-#include "Common.h"
+#include "MouseButtonEvent.h"
 
 namespace Event {
 
-}
+/**
+ * Event oznaczający wciśnięcie guzika myszy.
+ * \ingroup Events
+ */
+struct ButtonPressEvent : public MouseButtonEvent {
+        virtual ~ButtonPressEvent () {}
+        Type getType () const { return  BUTTON_PRESS_EVENT; }
+        virtual bool runCallback (Controller::IController *c) { return c->onButtonPress (static_cast <ButtonPressEvent *> (this)); }
+        virtual std::string toString () const;
+};
 
-#	endif /* EVENTS_H_ */
+} /* namespace Event */
+
+#	endif /* BUTTONPRESSEVENT_H_ */

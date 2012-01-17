@@ -18,28 +18,16 @@
 #include <cstdio>
 #include <boost/bind.hpp>
 
-//#include "Image.h"
-//#include "Model.h"
-#include "Events.h"
-//#include "Util.h"
-//#include "OpenGl.h"
-//
-//#include "sequence/Sequence.h"
-//#include "mapping/Mapping.h"
-//
-////#include "Sdl.h"
-//#include "View.h"
 
+#include "Events.h"
 #include "BajkaApp.h"
 #include "../view/draw/Primitives.h"
-//#include "Controller.h"
-//#include "Model.h"
 
 namespace Util {
 namespace M = Model;
 namespace V = View;
 namespace C = Controller;
-//using namespace Event;
+namespace E = Event;
 
 /****************************************************************************/
 
@@ -243,27 +231,6 @@ void BajkaApp::destroy ()
 void BajkaApp::setModel (Ptr <Model::IModel> m)
 {
         model = m;
-//        if (rootController) {
-//                disconnect (rootController);
-//        }
-//
-//        rootController = r;
-//        connect (r);
 }
-//
-///****************************************************************************/
-//
-//void BajkaApp::connect (Ptr <IObserver> o)
-//{
-//        std::for_each (dispatchers->begin (), dispatchers->end (), boost::bind (&IDispatcher::addObserver, _1, o));
-//}
-//
-///****************************************************************************/
-//
-//void BajkaApp::disconnect (Ptr <IObserver> o)
-//{
-//        std::for_each (dispatchers->begin (), dispatchers->end (), boost::bind (&IDispatcher::removeObserver, _1, o));
-//}
 
-/*##########################################################################*/
 } // Nam
