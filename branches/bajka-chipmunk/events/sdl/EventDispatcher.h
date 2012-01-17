@@ -11,13 +11,9 @@
 
 #include <SDL.h>
 #include "ReflectionMacros.h"
-#include "MouseMotionEvent.h"
-#include "IEvent.h"
-#include "KeyboardEvent.h"
-#include "MouseButtonEvent.h"
-#include "QuitEvent.h"
 #include "IDispatcher.h"
 #include "BajkaApp.h"
+#include "types/Types.h"
 
 namespace Sdl {
 

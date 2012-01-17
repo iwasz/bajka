@@ -6,24 +6,13 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef EVENTS_H_
-#define EVENTS_H_
-
-/**
- * \defgroup Events
- * Podsystem eventów. W tym module znajdują się klasy implementujące poszczególne eventy, oraz serwisy
- * implementujące generowanie tych eventów.
- * \{
- * \}
- */
-
-#include "sdl/Sdl.h"
-#include "types/Types.h"
-#include "IDispatcher.h"
-#include "Common.h"
+#include "KeyUpEvent.h"
 
 namespace Event {
 
+std::string KeyUpEvent::toString () const
+{
+        return "KeyUpEvent (TODO)";
 }
 
-#	endif /* EVENTS_H_ */
+} /* namespace Event */

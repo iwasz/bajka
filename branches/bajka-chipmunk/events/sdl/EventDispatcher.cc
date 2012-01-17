@@ -53,7 +53,10 @@ void EventDispatcher::run (Model::IModel *m)
 
         while (SDL_PollEvent (&event)) {
                 Event::IEvent *e = translate (&event);
-                runRec (m, e);
+
+                if (e) {
+                        runRec (m, e);
+                }
         }
 }
 

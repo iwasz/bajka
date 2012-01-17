@@ -6,24 +6,25 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef EVENTS_H_
-#define EVENTS_H_
+#ifndef KEYUPEVENT_H_
+#define KEYUPEVENT_H_
 
-/**
- * \defgroup Events
- * Podsystem eventów. W tym module znajdują się klasy implementujące poszczególne eventy, oraz serwisy
- * implementujące generowanie tych eventów.
- * \{
- * \}
- */
-
-#include "sdl/Sdl.h"
-#include "types/Types.h"
-#include "IDispatcher.h"
-#include "Common.h"
+#include "KeyboardEvent.h"
+#include <string>
 
 namespace Event {
 
-}
+/**
+ * Event zwolnienie klawisza na klawiaturze.
+ * \ingroup Events
+ */
+struct KeyUpEvent : public KeyboardEvent {
+        virtual ~KeyUpEvent () {}
+        Type getType () const { return  KEY_UP_EVENT; }
+        virtual bool runCallback (Controller::IController *c) { return c->onKeyUp (static_cast <KeyUpEvent *> (this)); }
+        virtual std::string toString () const;
+};
 
-#	endif /* EVENTS_H_ */
+} /* namespace Event */
+
+#	endif /* KEYUPEVENT_H_ */

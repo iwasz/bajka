@@ -49,6 +49,8 @@ public:
         Type getType () const { return MOUSE_MOTION_EVENT; }
         virtual bool runCallback (Controller::IController *c) { return c->onMouseMotion (static_cast <MouseMotionEvent *> (this)); }
 
+        virtual std::string toString () const;
+
 private:
 
         Geometry::Point movement;

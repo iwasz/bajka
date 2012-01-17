@@ -33,7 +33,7 @@ enum MouseButton {
  * Event związany jakoś z myszą.
  * \ingroup Events
  */
-class MouseEvent : public AbstractEvent {
+class MouseEvent : public IEvent {
 public:
 
         MouseEvent () {}
@@ -45,7 +45,7 @@ public:
         /// Współrzędne ekranowe kursora.
         void setPosition (const Geometry::Point &position) { this->position = position; }
 
-private:
+protected:
 
         Geometry::Point position;
 

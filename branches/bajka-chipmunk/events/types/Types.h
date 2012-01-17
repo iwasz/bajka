@@ -6,24 +6,19 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef EVENTS_H_
-#define EVENTS_H_
+#ifndef BAJKA_EVENT_TYPES_H_
+#define BAJKA_EVENT_TYPES_H_
 
-/**
- * \defgroup Events
- * Podsystem eventów. W tym module znajdują się klasy implementujące poszczególne eventy, oraz serwisy
- * implementujące generowanie tych eventów.
- * \{
- * \}
- */
+#include "ButtonPressEvent.h"
+#include "ButtonReleaseEvent.h"
+#include "IEvent.h"
+#include "KeyboardEvent.h"
+#include "KeyDownEvent.h"
+#include "KeyUpEvent.h"
+#include "MouseButtonEvent.h"
+#include "MouseEvent.h"
+#include "MouseMotionEvent.h"
+#include "QuitEvent.h"
+#include "TimerEvent.h"
 
-#include "sdl/Sdl.h"
-#include "types/Types.h"
-#include "IDispatcher.h"
-#include "Common.h"
-
-namespace Event {
-
-}
-
-#	endif /* EVENTS_H_ */
+#	endif /* TYPES_H_ */

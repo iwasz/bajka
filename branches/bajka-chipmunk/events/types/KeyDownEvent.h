@@ -6,34 +6,25 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef TIMEREVENT_H_
-#define TIMEREVENT_H_
+#ifndef KEYDOWNEVENT_H_
+#define KEYDOWNEVENT_H_
 
-#include "IEvent.h"
+#include "KeyboardEvent.h"
+#include <string>
 
 namespace Event {
 
 /**
- * Event zegarowy.
+ * Event naciśnięcie klawisza na klawiaturze.
  * \ingroup Events
  */
-class TimerEvent : public AbstractEvent {
-public:
-
-        TimerEvent () : ticks (0) {}
-        virtual ~TimerEvent () {}
-
-        unsigned int getTicks () const { return ticks; }
-        void setTicks (unsigned int ticks) { this->ticks = ticks; }
-
-        Type getType () const { return TIMER_EVENT; }
-        virtual bool runCallback (Controller::IController *c) { return c->onTimer (static_cast <TimerEvent *> (this)); }
-
-private:
-
-        unsigned int ticks;
+struct KeyDownEvent : public KeyboardEvent {
+        virtual ~KeyDownEvent () {}
+        Type getType () const { return  KEY_DOWN_EVENT; }
+        virtual bool runCallback (Controller::IController *c) { return c->onKeyDown (static_cast <KeyDownEvent *> (this)); }
+        virtual std::string toString () const;
 };
 
-}
+} /* namespace Event */
 
-#	endif /* TIMEREVENT_H_ */
+#	endif /* KEYDOWNEVENT_H_ */

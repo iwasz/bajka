@@ -2,28 +2,21 @@
  *                                                                          *
  *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
  *  ~~~~~~~~                                                                *
+ *  Date : Nov 18, 2009                                                     *
+ *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef EVENTS_H_
-#define EVENTS_H_
-
-/**
- * \defgroup Events
- * Podsystem eventów. W tym module znajdują się klasy implementujące poszczególne eventy, oraz serwisy
- * implementujące generowanie tych eventów.
- * \{
- * \}
- */
-
-#include "sdl/Sdl.h"
-#include "types/Types.h"
-#include "IDispatcher.h"
-#include "Common.h"
+#include "MouseMotionEvent.h"
 
 namespace Event {
 
+std::string MouseMotionEvent::toString () const
+{
+        return "MouseMotionEvent (position=" + position.toString () +
+                        ", movement=" + movement.toString () +
+                        ", buttons=" + boost::lexical_cast <std::string> (buttons)+ ")";
 }
 
-#	endif /* EVENTS_H_ */
+} // namespace Event
