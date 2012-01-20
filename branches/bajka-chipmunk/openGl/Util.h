@@ -2,22 +2,21 @@
  *                                                                          *
  *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 22, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef OPENGL_H_
-#define OPENGL_H_
+#ifndef BAJKA_OPEN_GL_UTIL_H_
+#define BAJKA_OPEN_GL_UTIL_H_
 
-/**
- * \defgroup OpenGl
- * \ingroup View
- * Klasy zależne od Open GL. Helpery implementujące funkcje graficzne OpenGL na niskim poziomie abstrakcji.
- */
+namespace View {
 
-#include "GLUtil.h"
-#include "Util.h"
+struct Util {
 
-#	endif /* OPENGL_H_ */
+        static void mouseToDisplay (int x, int y, int windowWidth, int windowHeight, double *nx, double *ny);
+
+};
+
+} /* namespace View */
+
+#	endif /* UTIL_H_ */

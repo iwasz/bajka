@@ -10,18 +10,19 @@
 
 #include "EventDispatcher.h"
 #include "Common.h"
-
-using namespace Event;
+#include "../../openGl/Util.h"
 
 namespace Sdl {
 namespace M = Model;
 namespace V = View;
 namespace C = Controller;
+namespace G = Geometry;
+using namespace Event;
 
 void EventDispatcher::init ()
 {
-        resX2 = config->getResX () / 2;
-        resY2 = config->getResY () / 2;
+        resX2 = config->getResX ();
+        resY2 = config->getResY ();
 }
 
 /****************************************************************************/
@@ -47,15 +48,51 @@ static void runRec (Model::IModel *m, Event::IEvent *e)
 
 /****************************************************************************/
 
-void EventDispatcher::run (Model::IModel *m)
+void EventDispatcher::dispatchEventBackwards (Model::IModel *m, IEvent *e)
+{
+        C::IController *controller = m->getController ();
+
+        if (controller && controller->getEventMask () & e->getType ()) {
+                e->runCallback (controller);
+        }
+
+        if ((m = m->getParent ())) {
+                dispatchEventBackwards (m, e);
+        }
+}
+
+/****************************************************************************/
+
+void EventDispatcher::run (Model::IModel *m, ModelIndex const &modeliIndex)
 {
         SDL_Event event;
 
         while (SDL_PollEvent (&event)) {
                 Event::IEvent *e = translate (&event);
 
-                if (e) {
-                        runRec (m, e);
+                if (!e) {
+                        return;
+                }
+
+                Event::Type type = e->getType();
+
+                if (type & MOUSE_EVENTS) {
+                        MouseEvent *mev = static_cast <MouseEvent *> (e);
+                        G::Point const &p = mev->getPosition ();
+                        M::IModel *model = m->findChild (p);
+
+                        if (!model) {
+                                return;
+                        }
+
+                        dispatchEventBackwards (model, mev);
+                }
+                else {
+                        std::pair <ModelIndex::const_iterator, ModelIndex::const_iterator> t = modeliIndex.equal_range (type);
+
+                        for (ModelIndex::const_iterator i = t.first; i != t.second; ++i) {
+                                dispatchEventBackwards (i->second, e);
+                        }
                 }
         }
 }
@@ -123,11 +160,10 @@ MouseButtonEvent *EventDispatcher::updateMouseButtonEvent (SDL_Event *event)
 MouseButtonEvent *EventDispatcher::updateMouseButtonEventImpl (MouseButtonEvent *output, SDL_Event *event)
 {
         output->setButton (translateMouseButton (event));
-        output->setPosition (
-                        Geometry::Point (
-                                        event->button.x - resX2,
-                                        -event->button.y + resY2));
 
+        G::Point p;
+        V::Util::mouseToDisplay (event->button.x, event->button.y, resX2, resY2, &p.x, &p.y);
+        output->setPosition (p);
         return output;
 }
 

@@ -16,6 +16,7 @@ namespace Model {
 Body::Body ()
 {
         body = cpSpaceAddBody (Space::getSpace (), cpBodyNew (1, 1));
+        cpBodySetUserData (body, this);
 }
 
 /****************************************************************************/

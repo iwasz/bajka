@@ -35,6 +35,10 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
+        IModel *findChild (Geometry::Point const &p);
+
+/*--------------------------------------------------------------------------*/
+
         Geometry::Point getGravity () const;
         m_ (setGravity) void setGravity (Geometry::Point const &g);
 
