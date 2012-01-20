@@ -19,6 +19,7 @@ StaticBody::StaticBody (bool spcBdy) : Body (0), spaceBody (spcBdy)
         }
         else {
                 body = cpBodyNewStatic ();
+                cpBodySetUserData (body, this);
         }
 }
 

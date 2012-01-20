@@ -77,6 +77,7 @@
     <bean id="circle" class="Model::Circle" singleton="true">
         <property name="view" ref="circleWgt"/>            
         <property name="radius" value="50" />    
+        <property name="controller" ref="emptyCtr"/>            
     </bean>
     
     <bean id="ground" class="StaticBody" singleton="true">

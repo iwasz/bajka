@@ -26,7 +26,7 @@ public:
         TimerDispatcher () : tickInterval (30), prevTime (0)/*, observer (NULL)*/ {}
         virtual ~TimerDispatcher () {}
 
-        void run (Model::IModel *m);
+        void run (Model::IModel *m, Event::ModelIndex const &modeliIndex);
 
 /*--------------------------------------------------------------------------*/
 

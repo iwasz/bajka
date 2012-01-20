@@ -29,7 +29,10 @@ typedef std::vector <IModel *> ModelVector;
 g_ (ModelVector)
 
 /**
- * Dane geometryczne.
+ * Mam zamysł, żeby to było głownie nastawione na geometrię. Czyli kształty, pozycje
+ * kąty etc. Jeśli mam obrazek, to ścieżka do obrazka będzie polem widoku, a nie modelu
+ * natomiast model to będzie box, circle etc. czyli definicja kształtu tego obrazka
+ * (jego konturów).
  */
 struct IModel : public Core::Object {
 
@@ -44,6 +47,17 @@ struct IModel : public Core::Object {
 
         virtual double getAngle () const = 0;
         virtual void setAngle (double a) = 0;
+
+/*------searching-----------------------------------------------------------*/
+
+        /**
+         * Znajduje model w zadanym punkcie. Zaczyna przeszukiwanie od dzieci,
+         * i idzie w dół, jeśli nie znajdzie. W ten sposób możliwe, że zwróci
+         * samego siebie, jeśli żadne jego dziecko nie znajduje się w podanym
+         * punkcie, albo ten model nie ma żadnych dzieci. Współrzędne punktu p
+         * podajemy oczywiście w układzie tego (this) modelu.
+         */
+        virtual IModel *findChild (Geometry::Point const &p) = 0;
 
 /*--------------------------------------------------------------------------*/
 

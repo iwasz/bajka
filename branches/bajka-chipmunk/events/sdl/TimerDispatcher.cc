@@ -31,7 +31,7 @@ using namespace Event;
 
 /****************************************************************************/
 
-void TimerDispatcher::run (Model::IModel *m)
+void TimerDispatcher::run (Model::IModel *m, ModelIndex const &modeliIndex)
 {
         unsigned int now = SDL_GetTicks ();
 

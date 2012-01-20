@@ -23,8 +23,7 @@ void Box::parentCallback (IModel *m)
         Body *b = static_cast <Body *> (m);
         shape = cpSpaceAddShape (Space::getSpace(), cpBoxShapeNew2 (b->getBody (),
                    cpBBNew (position.x, position.y, position.x + width, position.y + height)));
-//        cpShapeSetElasticity (shape, 1.0f);
-//        cpShapeSetFriction (shape, 1.0f);
+        cpShapeSetUserData (shape, this);
         Shape::parentCallback (m);
 }
 

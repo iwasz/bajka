@@ -14,6 +14,9 @@
 #include "Model.h"
 #include "IDispatcher.h"
 #include "ReflectionMacros.h"
+#include "../events/types/IEvent.h"
+
+using Event::ModelIndex;
 
 namespace Util {
 
@@ -108,9 +111,15 @@ public:
 
 private:
 
+       /// Szuka wśród modeli które mają trafić na które listy.
+       unsigned int reindex (unsigned int eventMask, Model::IModel *m);
+
+private:
+
        Ptr <BajkaConfig> config;
        Ptr <Model::IModel> model;
        Ptr <Event::DispatcherList> dispatchers;
+       ModelIndex listeners;
 
        E_ (BajkaApp)
 };

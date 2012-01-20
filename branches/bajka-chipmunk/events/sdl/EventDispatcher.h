@@ -14,6 +14,7 @@
 #include "IDispatcher.h"
 #include "BajkaApp.h"
 #include "types/Types.h"
+#include "../types/IEvent.h"
 
 namespace Sdl {
 
@@ -30,7 +31,7 @@ public:
 
         m_ (init) void init ();
 
-        void run (Model::IModel *m);
+        void run (Model::IModel *m, ModelIndex const &modeliIndex);
 
 /*------getters-setters-----------------------------------------------------*/
 
@@ -40,6 +41,7 @@ public:
 private:
 
         Event::IEvent *translate (SDL_Event *event);
+        void dispatchEventBackwards (Model::IModel *m, Event::IEvent *e);
 
         Event::KeyboardEvent *updateKeyboardEvent (SDL_Event *event);
         Event::MouseMotionEvent *updateMouseMotionEvent (SDL_Event *event);

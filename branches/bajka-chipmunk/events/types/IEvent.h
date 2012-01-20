@@ -12,6 +12,11 @@
 #include <cstddef>
 #include "../controller/IController.h"
 #include <IToStringEnabled.h>
+#include <map>
+
+namespace Model {
+class IModel;
+}
 
 /**
  * Eventy.
@@ -29,17 +34,11 @@ enum Type {
         TIMER_EVENT             = 0x01 << 3,//!< TIMER_EVENT
         KEY_DOWN_EVENT          = 0x01 << 4,//!< KEY_DOWN_EVENT
         KEY_UP_EVENT            = 0x01 << 5,//!< KEY_UP_EVENT
-        QUIT_EVENT              = 0x01 << 6 //!< QUIT_EVENT
+        QUIT_EVENT              = 0x01 << 6,//!< QUIT_EVENT
+        EVENT_TERMINATOR        = 0x01 << 7 //!< Do not use.
 };
 
-///**
-// * Służy do przekazywania danych dodatkowych - coś takiego jak void *data
-// * w niektórych bibliotekach C.
-// * \ingroup Events
-// */
-//struct IEventContext {
-//        virtual ~IEventContext () {}
-//};
+const unsigned int MOUSE_EVENTS = MOUSE_MOTION_EVENT | BUTTON_PRESS_EVENT | BUTTON_RELEASE_EVENT;
 
 /**
  * Typowy visitor-pattern się zrobił.
@@ -51,28 +50,12 @@ public:
 
         virtual Type getType () const = 0;
         virtual bool runCallback (Controller::IController *c) = 0;
-
-//        virtual IEventContext *getContext () const = 0;
-//        virtual void setContext (IEventContext *ctx) = 0;
 };
 
-///**
-// * Implementuje powtarzalne metody interfejsu IEvent.
-// * \ingroup Events
-// */
-//class AbstractEvent : public IEvent {
-//public:
-//
-//        AbstractEvent () : context (NULL) {}
-//        virtual ~AbstractEvent () {}
-//
-////        IEventContext *getContext () const { return context;}
-////        void setContext (IEventContext *ctx) { context = ctx; }
-//
-//private:
-//
-//        IEventContext *context;
-//};
+/**
+ * Używane do wyszukiwania modeli pod kątem eventu.
+ */
+typedef std::multimap <Event::Type, Model::IModel *> ModelIndex;
 
 }
 

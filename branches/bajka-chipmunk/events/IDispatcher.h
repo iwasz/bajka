@@ -11,6 +11,7 @@
 
 #include <Object.h>
 #include "ReflectionMacros.h"
+#include "../events/types/IEvent.h"
 
 namespace Model {
 class IModel;
@@ -26,7 +27,7 @@ class IDispatcher : public Core::Object {
 public:
         virtual ~IDispatcher () {}
 
-        virtual void run (Model::IModel *m) = 0;
+        virtual void run (Model::IModel *m, ModelIndex const &modeliIndex) = 0;
 };
 
 /**
