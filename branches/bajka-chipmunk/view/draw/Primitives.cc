@@ -84,7 +84,7 @@ void DrawUtil::drawRectangle (Geometry::Point const &a, Geometry::Point const &b
                 glColor4f (lineColor.getR (), lineColor.getG (), lineColor.getB (), lineColor.getA ());
         }
 
-        glBegin (GL_LINE);
+        glBegin (GL_LINE_LOOP);
                 glVertex2f (a.x, a.y);
                 glVertex2f (a.x, b.y);
                 glVertex2f (b.x, b.y);

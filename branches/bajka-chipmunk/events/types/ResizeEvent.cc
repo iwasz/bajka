@@ -6,23 +6,15 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_EVENT_TYPES_H_
-#define BAJKA_EVENT_TYPES_H_
-
-#include "ButtonPressEvent.h"
-#include "ButtonReleaseEvent.h"
-#include "IEvent.h"
-#include "KeyboardEvent.h"
-#include "KeyDownEvent.h"
-#include "KeyUpEvent.h"
-#include "MouseButtonEvent.h"
-#include "MouseEvent.h"
-#include "MouseMotionEvent.h"
-#include "QuitEvent.h"
-#include "TimerEvent.h"
-#include "KeyCode.h"
-#include "ExposeEvent.h"
 #include "ResizeEvent.h"
-#include "ActiveEvent.h"
+#include <boost/lexical_cast.hpp>
 
-#	endif /* TYPES_H_ */
+namespace Event {
+
+std::string ResizeEvent::toString () const
+{
+        return "ResizeEvent (width=" + boost::lexical_cast <std::string> (width) + ", height=" + boost::lexical_cast <std::string> (height) + ")";
+}
+
+
+} /* namespace Event */

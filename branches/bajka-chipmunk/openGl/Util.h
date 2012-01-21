@@ -14,6 +14,7 @@ namespace View {
 struct Util {
 
         static void mouseToDisplay (int x, int y, int windowWidth, int windowHeight, double *nx, double *ny);
+//        static void mouseToDisplayRelative (int x, int y, double *nx, double *ny);
 
 };
 

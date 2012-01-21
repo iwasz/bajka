@@ -32,6 +32,9 @@ struct DebugController : public IController {
         virtual bool onKeyUp (Event::KeyUpEvent *e);
         virtual bool onTimer (Event::TimerEvent *e);
         virtual bool onQuit (Event::QuitEvent *e);
+        virtual bool onActive (Event::ActiveEvent *e);
+        virtual bool onExpose (Event::ExposeEvent *e);
+        virtual bool onResize (Event::ResizeEvent *e);
 
         m_ (setEventMask)
         E_ (DebugController)

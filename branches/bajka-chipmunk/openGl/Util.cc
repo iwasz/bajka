@@ -26,4 +26,20 @@ void Util::mouseToDisplay (int x, int y, int windowWidth, int windowHeight, doub
         gluUnProject(x, windowHeight - y, 0.0f, model, proj, view, nx, ny, &mz);
 }
 
+/****************************************************************************/
+
+//void Util::mouseToDisplayRelative (int x, int y, double *nx, double *ny)
+//{
+//        GLdouble model[16];
+//        glGetDoublev(GL_MODELVIEW_MATRIX, model);
+//
+//        GLdouble proj[16];
+//        glGetDoublev(GL_PROJECTION_MATRIX, proj);
+//
+//        GLint view[4] = {0, 1, 1, 0};
+//
+//        GLdouble mz;
+//        gluUnProject(x, y, 0.0f, model, proj, view, nx, ny, &mz);
+//}
+
 } /* namespace View */

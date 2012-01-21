@@ -6,14 +6,35 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "KeyDownEvent.h"
-#include <boost/lexical_cast.hpp>
+#include "ActiveEvent.h"
 
 namespace Event {
 
-std::string KeyDownEvent::toString () const
+std::string ActiveEvent::toString () const
 {
-        return "KeyDownEvent (code=" + boost::lexical_cast <std::string> (keyCode) + ", mod=" + boost::lexical_cast <std::string> (keyMod) + ")";
+       std::string ret = std::string ("ActiveEvent (active=") + ((active) ? ("true") : ("false")) +
+                       ", state=";
+
+       switch (state) {
+       case MOUSE:
+               ret += "MOUSE";
+               break;
+
+       case KEYBOARD:
+               ret += "KEYBOARD";
+               break;
+
+       case WINDOW:
+               ret += "WINDOW";
+               break;
+
+       default:
+               ret += "?";
+               break;
+       }
+
+       ret += ")";
+       return ret;
 }
 
 } /* namespace Event */

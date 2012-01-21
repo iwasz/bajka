@@ -28,6 +28,9 @@ class KeyDownEvent;
 class KeyUpEvent;
 class TimerEvent;
 class QuitEvent;
+class ActiveEvent;
+class ExposeEvent;
+class ResizeEvent;
 }
 
 namespace Controller {
@@ -53,6 +56,9 @@ struct IController : public Core::Object {
         virtual bool onKeyUp (Event::KeyUpEvent *e) = 0;
         virtual bool onTimer (Event::TimerEvent *e) = 0;
         virtual bool onQuit (Event::QuitEvent *e) = 0;
+        virtual bool onActive (Event::ActiveEvent *e) = 0;
+        virtual bool onExpose (Event::ExposeEvent *e) = 0;
+        virtual bool onResize (Event::ResizeEvent *e) = 0;
 
         // Mały hack psujący interfejs - nie ma sensu wirtualne!
         unsigned int eventMask;

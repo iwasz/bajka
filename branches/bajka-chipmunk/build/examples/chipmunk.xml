@@ -60,7 +60,7 @@
             </list>
         </property>
 
-        <property name="controller" ref="emptyCtr"/>            
+<!--         <property name="controller" ref="emptyCtr"/>             -->
     </bean>
       
     <bean id="body" class="Body" singleton="true">
@@ -82,7 +82,7 @@
     
     <bean id="ground" class="StaticBody" singleton="true">
         <constructor-arg><value type="bool">true</value></constructor-arg>
-        <property name="position" value="-320, -140"/>
+        <property name="position" value="-320, -240"/>
     
         <property name="children">
             <list class="ModelVector">
@@ -105,7 +105,12 @@
             <list class="ModelVector">
                 <bean id="circle" class="Model::Circle" singleton="true">
                     <property name="view" ref="circleWgt"/>            
-                    <property name="radius" value="30" />    
+                    <property name="radius" value="30" />
+                    <property name="controller">    
+                        <bean class="DebugController" singleton="true">
+                             <property name="eventMask" value="0xffff"/> 
+                        </bean>      
+                    </property>
                 </bean>
             </list>
         </property>
