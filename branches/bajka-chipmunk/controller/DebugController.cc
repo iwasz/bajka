@@ -60,4 +60,25 @@ bool DebugController::onQuit (Event::QuitEvent *e)
         exit (0);
 }
 
+/****************************************************************************/
+
+bool DebugController::onActive (Event::ActiveEvent *e)
+{
+        std::cout << std::hex << this << std::dec << " " << e->toString () << std::endl;
+}
+
+/****************************************************************************/
+
+bool DebugController::onExpose (Event::ExposeEvent *e)
+{
+        std::cout << std::hex << this << std::dec << " " << e->toString () << std::endl;
+}
+
+/****************************************************************************/
+
+bool DebugController::onResize (Event::ResizeEvent *e)
+{
+        std::cout << std::hex << this << std::dec << " " << e->toString () << std::endl;
+}
+
 } /* namespace Controller */

@@ -110,11 +110,22 @@ Event::IEvent *EventDispatcher::translate (SDL_Event *event)
                 return updateMouseButtonEvent (event);
 
         case SDL_KEYDOWN:
+                return updateKeyboardDownEvent (event);
+
         case SDL_KEYUP:
-                return updateKeyboardEvent (event);
+                return updateKeyboardUpEvent (event);
 
         case SDL_QUIT:
                 return &quitEvent;
+
+        case SDL_ACTIVEEVENT:
+                return updateActiveEvent (event);
+
+        case SDL_VIDEORESIZE:
+                return updateResizeEvent (event);
+
+        case SDL_VIDEOEXPOSE:
+                return &exposeEvent;
 
         default:
                 break;
@@ -125,11 +136,20 @@ Event::IEvent *EventDispatcher::translate (SDL_Event *event)
 
 /****************************************************************************/
 
-KeyboardEvent *EventDispatcher::updateKeyboardEvent (SDL_Event *event)
+KeyboardEvent *EventDispatcher::updateKeyboardUpEvent (SDL_Event *event)
 {
-        // TODO Implement!
-//        return keyboardEvent;
+        keyUpEvent.setKeyCode (static_cast <KeyCode> (event->key.keysym.sym));
+        keyUpEvent.setKeyMod (static_cast <KeyMod> (event->key.keysym.mod));
         return &keyUpEvent;
+}
+
+/****************************************************************************/
+
+KeyboardEvent *EventDispatcher::updateKeyboardDownEvent (SDL_Event *event)
+{
+        keyDownEvent.setKeyCode (static_cast <KeyCode> (event->key.keysym.sym));
+        keyDownEvent.setKeyMod (static_cast <KeyMod> (event->key.keysym.mod));
+        return &keyDownEvent;
 }
 
 /****************************************************************************/
@@ -137,12 +157,18 @@ KeyboardEvent *EventDispatcher::updateKeyboardEvent (SDL_Event *event)
 MouseMotionEvent *EventDispatcher::updateMouseMotionEvent (SDL_Event *event)
 {
         mouseMotionEvent.setButtons ((unsigned int)event->motion.state);
-        mouseMotionEvent.setPosition (
-                        Geometry::Point (
-                                        event->motion.x - resX2,
-                                        -event->motion.y + resY2));
 
-        mouseMotionEvent.setMovement (Geometry::Point (event->motion.xrel, event->motion.yrel));
+        G::Point p;
+        V::Util::mouseToDisplay (event->button.x, event->button.y, resX2, resY2, &p.x, &p.y);
+        mouseMotionEvent.setPosition (p);
+
+#if 0
+        std::cerr << event->motion.xrel << ", " << event->motion.yrel << std::endl;
+#endif
+
+        // ?
+        mouseMotionEvent.setMovement (G::Point (event->motion.xrel, event->motion.yrel));
+
         return &mouseMotionEvent;
 }
 
@@ -197,6 +223,24 @@ MouseButton EventDispatcher::translateMouseButton (SDL_Event *event)
         case SDL_BUTTON_LEFT:
                 return LEFT;
         }
+}
+
+/****************************************************************************/
+
+Event::ActiveEvent *EventDispatcher::updateActiveEvent (SDL_Event *event)
+{
+        activeEvent.setActive (event->active.gain);
+        activeEvent.setState (static_cast <ActiveState> (event->active.state));
+        return &activeEvent;
+}
+
+/****************************************************************************/
+
+Event::ResizeEvent *EventDispatcher::updateResizeEvent (SDL_Event *event)
+{
+        resizeEvent.setWidth (event->resize.w);
+        resizeEvent.setHeight (event->resize.h);
+        return &resizeEvent;
 }
 
 } // nam

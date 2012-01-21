@@ -14,7 +14,6 @@
 #include "IDispatcher.h"
 #include "BajkaApp.h"
 #include "types/Types.h"
-#include "../types/IEvent.h"
 
 namespace Sdl {
 
@@ -43,10 +42,14 @@ private:
         Event::IEvent *translate (SDL_Event *event);
         void dispatchEventBackwards (Model::IModel *m, Event::IEvent *e);
 
-        Event::KeyboardEvent *updateKeyboardEvent (SDL_Event *event);
+        Event::KeyboardEvent *updateKeyboardUpEvent (SDL_Event *event);
+        Event::KeyboardEvent *updateKeyboardDownEvent (SDL_Event *event);
         Event::MouseMotionEvent *updateMouseMotionEvent (SDL_Event *event);
         Event::MouseButtonEvent *updateMouseButtonEvent (SDL_Event *event);
         Event::MouseButtonEvent *updateMouseButtonEventImpl (Event::MouseButtonEvent *output, SDL_Event *event);
+        Event::ActiveEvent *updateActiveEvent (SDL_Event *event);
+        Event::ResizeEvent *updateResizeEvent (SDL_Event *event);
+
         Event::MouseButton translateMouseButton (SDL_Event *event);
 
 private:
@@ -58,6 +61,9 @@ private:
         Event::ButtonPressEvent buttonPressEvent;
         Event::ButtonReleaseEvent buttonReleaseEvent;
         Event::QuitEvent quitEvent;
+        Event::ResizeEvent resizeEvent;
+        Event::ActiveEvent activeEvent;
+        Event::ExposeEvent exposeEvent;
 
         Ptr <Util::BajkaConfig> config;
 

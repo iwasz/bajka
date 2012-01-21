@@ -35,7 +35,10 @@ enum Type {
         KEY_DOWN_EVENT          = 0x01 << 4,//!< KEY_DOWN_EVENT
         KEY_UP_EVENT            = 0x01 << 5,//!< KEY_UP_EVENT
         QUIT_EVENT              = 0x01 << 6,//!< QUIT_EVENT
-        EVENT_TERMINATOR        = 0x01 << 7 //!< Do not use.
+        ACTIVE_EVENT            = 0x01 << 7,
+        EXPOSE_EVENT            = 0x01 << 8,
+        RESIZE_EVENT            = 0x01 << 9,
+        EVENT_TERMINATOR        = 0x01 << 10 //!< Do not use.
 };
 
 const unsigned int MOUSE_EVENTS = MOUSE_MOTION_EVENT | BUTTON_PRESS_EVENT | BUTTON_RELEASE_EVENT;

@@ -12,6 +12,7 @@
 #define KEYBOARDEVENT_H_
 
 #include "IEvent.h"
+#include "KeyCode.h"
 
 namespace Event {
 
@@ -22,19 +23,18 @@ namespace Event {
 class KeyboardEvent : public IEvent {
 public:
 
-//        enum { PRESSED, RELEASED } Type;
-
         virtual ~KeyboardEvent () {}
 
-//        Type getType () const { return KEYBOARD_EVENT; }
+        KeyCode getKeyCode() const { return keyCode; }
+        void setKeyCode(KeyCode keyCode) { this->keyCode = keyCode; }
 
-private:
+        KeyMod getKeyMod() const { return keyMod; }
+        void setKeyMod(KeyMod keyMod) { this->keyMod = keyMod; }
 
-//        Type type;
-//        unsigned int scancode;
-//        SDLKey sym;
-//        SDLMod mod;
-//        unsigned int unicode;
+protected:
+
+        KeyCode keyCode;
+        KeyMod keyMod;
 
 };
 
