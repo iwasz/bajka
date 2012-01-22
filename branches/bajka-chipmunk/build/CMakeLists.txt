@@ -56,7 +56,10 @@ AUX_SOURCE_DIRECTORY (../events/types SOURCES)
 AUX_SOURCE_DIRECTORY (../model SOURCES)
 AUX_SOURCE_DIRECTORY (../geometry SOURCES)
 AUX_SOURCE_DIRECTORY (../util SOURCES)
-AUX_SOURCE_DIRECTORY (../openGl SOURCES)
+
+AUX_SOURCE_DIRECTORY (../dependencies/openGl SOURCES)
+AUX_SOURCE_DIRECTORY (../dependencies/sdl SOURCES)
+
 AUX_SOURCE_DIRECTORY (../controller SOURCES)
 
 # Local includes (inside project).
@@ -68,8 +71,8 @@ INCLUDE_DIRECTORIES (../geometry)
 INCLUDE_DIRECTORIES (../util)
 INCLUDE_DIRECTORIES (../events)
 INCLUDE_DIRECTORIES (../controller)
-#INCLUDE_DIRECTORIES (../sdl)
-INCLUDE_DIRECTORIES (../openGl)
+INCLUDE_DIRECTORIES (../dependencies/sdl)
+INCLUDE_DIRECTORIES (../dependencies/openGl)
 INCLUDE_DIRECTORIES (../base)
 
 # Biblioteka z silnikiem bajka.

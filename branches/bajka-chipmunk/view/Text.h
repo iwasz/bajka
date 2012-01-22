@@ -9,6 +9,7 @@
 #ifndef BAJKA_VIEW_TEXT_H_
 #define BAJKA_VIEW_TEXT_H_
 
+#include <SDL_opengl.h>
 #include "ReflectionMacros.h"
 #include "resource/Font.h"
 #include "Primitive.h"
@@ -20,6 +21,7 @@ public:
         C__ (void)
         b_ ("Widget")
 
+        Text () : hash (0) {}
         virtual ~Text () {}
 
         /// Do the drawing.
@@ -33,8 +35,15 @@ public:
 
 private:
 
+        void init (Model::IModel *model);
+
+private:
+
         Ptr <Font> font;
         std::string text;
+        std::size_t hash;
+        GLuint texName;
+        int texWidth, texHeight;
 
         E_ (Text)
 };
