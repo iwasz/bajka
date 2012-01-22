@@ -22,6 +22,12 @@ public:
         AbstractModel () : parent (0), view (0), controller (0) {}
         virtual ~AbstractModel () {}
 
+        // TODO wywalić.
+        virtual double getSacle () const {}
+        virtual void setScale (double a) {}
+        Geometry::Box getBoundingBox () const {}
+        bool inside (Geometry::Point const &p) const {}
+
 /*--------------------------------------------------------------------------*/
 
         virtual IModel *findChild (Geometry::Point const &p) { return NULL; }
