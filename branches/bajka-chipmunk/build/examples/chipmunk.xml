@@ -54,6 +54,8 @@
             <list class="ModelVector">
                 <ref bean="body"/>
                 <ref bean="ground"/>
+                <ref bean="ground2"/>
+                <ref bean="ground3"/>
                 <ref bean="c2"/>
                 <ref bean="c3"/>
                 <ref bean="imageBdy"/>
@@ -88,7 +90,7 @@
         <property name="children">
             <list class="ModelVector">
                 <!-- TODO kiedy tu nie jest singleton="true", to segf! To jakas lipa!-->
-                <bean id="box" class="Model::Box" singleton="true">
+                <bean class="Model::Box" singleton="true">
                     <property name="width" value="640" />
                     <property name="height" value="10" />
                     <property name="view" ref="rectangleWgt"/>
@@ -97,6 +99,35 @@
         </property>
     </bean>      
 
+    <bean id="ground2" class="StaticBody" singleton="true">
+        <constructor-arg><value type="bool">false</value></constructor-arg>
+        <property name="position" value="-320, -240"/>
+    
+        <property name="children">
+            <list class="ModelVector">
+                <bean class="Model::Box" singleton="true">
+                    <property name="width" value="10" />
+                    <property name="height" value="480" />
+                    <property name="view" ref="rectangleWgt"/>
+                </bean>
+            </list>
+        </property>
+    </bean>   
+
+    <bean id="ground3" class="StaticBody" singleton="true">
+        <constructor-arg><value type="bool">false</value></constructor-arg>
+        <property name="position" value="310, -240"/>
+    
+        <property name="children">
+            <list class="ModelVector">
+                <bean class="Model::Box" singleton="true">
+                    <property name="width" value="10" />
+                    <property name="height" value="480" />
+                    <property name="view" ref="rectangleWgt"/>
+                </bean>
+            </list>
+        </property>
+    </bean>   
 
     <bean id="c2" class="Body" singleton="true">
         <propery name="mass" value="1"/>
@@ -164,13 +195,13 @@
 
     <bean id="textBdy" class="Body" singleton="true">
         <propery name="mass" value="1"/>
-        <property name="position" value="170, 50"/>
+        <property name="position" value="-70, 200"/>
 
         <property name="children">
             <list class="ModelVector">
                 <bean class="Model::Box" singleton="true">
-                    <property name="width" value="92" />
-                    <property name="height" value="122" />
+                    <property name="width" value="200" />
+                    <property name="height" value="50" />
                     <property name="view" ref="textWgt"/>            
                 </bean>
             </list>

@@ -48,6 +48,9 @@ struct IModel : public Core::Object {
         virtual double getAngle () const = 0;
         virtual void setAngle (double a) = 0;
 
+        virtual double getSacle () const = 0;
+        virtual void setScale (double a) = 0;
+
 /*------searching-----------------------------------------------------------*/
 
         /**
@@ -59,11 +62,24 @@ struct IModel : public Core::Object {
          */
         virtual IModel *findChild (Geometry::Point const &p) = 0;
 
+        /**
+         * Bounding box w układzie rodzica.
+         * @return
+         */
+        virtual Geometry::Box getBoundingBox () const = 0;
+
+        /**
+         * Czy podany punkt jest wewnątrz kształtu.
+         * @param p  W układzie rodzica.
+         * @return
+         */
+        virtual bool inside (Geometry::Point const &p) const = 0;
+
 /*--------------------------------------------------------------------------*/
 
         virtual bool update () = 0;
 
-/*--------------------------------------------------------------------------*/
+/*------parent-child--------------------------------------------------------*/
 
         virtual IModel *getParent () = 0;
 
@@ -80,7 +96,7 @@ struct IModel : public Core::Object {
         virtual ModelVector::iterator begin () = 0;
         virtual ModelVector::iterator end () = 0;
 
-/*--------------------------------------------------------------------------*/
+/*------additional-functionalities------------------------------------------*/
 
         virtual View::IView *getView () = 0;
         virtual void setView (View::IView *v) = 0;

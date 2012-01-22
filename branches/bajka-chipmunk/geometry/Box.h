@@ -9,6 +9,9 @@
 #ifndef GEOMETRY_MODEL_BOX_H_
 #define GEOMETRY_MODEL_BOX_H_
 
+//#include <boost/geometry/geometry.hpp>
+//#include <boost/geometry/arithmetic/arithmetic.hpp>
+//#include <boost/geometry/geometries/point_xy.hpp>
 #include <Object.h>
 #include "Point.h"
 
@@ -64,7 +67,7 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-private:
+public:
 
         Point ll;
         Point ur;
@@ -74,8 +77,8 @@ private:
 
 }
 
-//typedef Geometry::Box __BAJKA_BOX__;
-//
+typedef Geometry::Box __BAJKA_BOX__;
+
 ///*
 // * BOOST definitions.
 // */
