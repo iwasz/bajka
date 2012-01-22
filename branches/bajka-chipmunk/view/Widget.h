@@ -28,12 +28,17 @@ public:
         bool getVisible () const { return visible; }
         m_ (setVisible) void setVisible (bool v) { visible = v; }
 
+        double getAlpha () const { return alpha; }
+        m_ (setAlpha) void setAlpha (double d) { alpha = d; }
+
         static void defaultPreUpdate (Model::IModel *m);
         static void defaultPostUpdate (Model::IModel *m);
 
 private:
 
         bool visible;
+        double alpha;
+
         E_ (Widget)
 };
 

@@ -9,6 +9,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_opengl.h>
+#include <SDL_ttf.h>
 
 #include <iostream>
 #include <cmath>
@@ -69,6 +70,12 @@ void BajkaConfig::init ()
 
         /* Set the title bar in environments that support it */
         SDL_WM_SetCaption (windowCaption.c_str (), NULL);
+
+/*##########################################################################*/
+
+        if (TTF_Init () < 0) {
+            throw InitException ("TTF_Init failed");
+        }
 
 /*##########################################################################*/
 
@@ -171,6 +178,14 @@ void BajkaConfig::init ()
 
 /****************************************************************************/
 
+BajkaConfig::~BajkaConfig ()
+{
+        TTF_Quit ();
+        SDL_Quit ();
+}
+
+/*##########################################################################*/
+
 void BajkaApp::loop ()
 {
         bool done = false;
@@ -223,7 +238,6 @@ void BajkaApp::destroy ()
         glGetIntegerv (GL_MAX_TEXTURE_SIZE, &i);
         std::cerr << "max texture size : " << i << std::endl;
 
-        SDL_Quit ();
 }
 
 /****************************************************************************/

@@ -17,7 +17,16 @@
  * rzeczy. Mogą to być kształty, figury etc, ale mogą też być jakieś sekwencje animacji, przejścia, efekty.
  */
 
+#include "Circle.h"
+#include "Image.h"
 #include "IView.h"
+#include "Polygon.h"
+#include "Primitive.h"
 #include "Rectangle.h"
+#include "Text.h"
+#include "View.h"
+#include "Widget.h"
+#include "resource/Resource.h"
+#include "draw/Draw.h"
 
 #	endif /* VIEW_H_ */
