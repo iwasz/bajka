@@ -92,7 +92,17 @@ int main (int argc, char **argv)
 //
 //        app->setModel (space);
 
-        app->loop ();
-        app->destroy ();
+        try {
+                app->loop ();
+                app->destroy ();
+        }
+        catch (std::exception const &e) {
+                std::cerr << "Exception caught : " << e.what () << std::endl;
+        }
+        catch (...) {
+                std::cerr << "Unknown exception." << std::endl;
+        }
+
+
         return EXIT_SUCCESS;
 }

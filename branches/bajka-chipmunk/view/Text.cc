@@ -2,8 +2,6 @@
  *                                                                          *
  *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 15, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
@@ -11,24 +9,16 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include <SDL_image.h>
-#include "Image.h"
 #include "Math.h"
 #include "Model.h"
+#include "Text.h"
+#include "../util/Exceptions.h"
 
 namespace View {
 
-void Image::init (Model::IModel *model)
+void Text::update (Model::IModel *model)
 {
-        initialized = true;
-
-/*--------------------------------------------------------------------------*/
-
-        SDL_Surface *image = IMG_Load (path.c_str ());
-
-        if (image == NULL) {
-                /// \todo Może jakieś info do cholery!?
-                throw ImageException ();
-        }
+        SDL_Surface *image = static_cast <SDL_Surface *> (font->render (text, getForeground (), getBackground ()));
 
 /*--------------------------------------------------------------------------*/
 
@@ -54,8 +44,8 @@ void Image::init (Model::IModel *model)
                 #endif
                 );
 
-                if(surface == NULL) {
-                        throw ImageException ();
+                if (surface == NULL) {
+                        throw Util::RuntimeException ("Text::update : surface == NULL");
                 }
 
                 Uint32 saved_flags = image->flags & (SDL_SRCALPHA | SDL_RLEACCELOK);
@@ -81,6 +71,8 @@ void Image::init (Model::IModel *model)
         }
 
 /*--------------------------------------------------------------------------*/
+        GLuint texName;
+        int texWidth, texHeight;
 
         glGenTextures(1, &texName);
         glBindTexture(GL_TEXTURE_2D, texName);
@@ -106,7 +98,7 @@ void Image::init (Model::IModel *model)
         glGetTexLevelParameteriv(GL_PROXY_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &tmpWidth);
 
         if (tmpWidth != width) {
-                throw ImageException ();
+                throw Util::RuntimeException ("Text::update : tmpWidth != width");
         }
 
 /*--------------------------------------------------------------------------*/
@@ -119,15 +111,8 @@ void Image::init (Model::IModel *model)
         texHeight = height;
 
         SDL_FreeSurface (texSurface);
-}
 
-/****************************************************************************/
-
-void Image::update (Model::IModel *model)
-{
-        if (!initialized) {
-                init (model);
-        }
+/*--------------------------------------------------------------------------*/
 
         glEnable(GL_TEXTURE_2D);
         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
@@ -143,4 +128,5 @@ void Image::update (Model::IModel *model)
         glDisable (GL_TEXTURE_2D);
 }
 
-} // nam
+
+} /* namespace View */

@@ -57,6 +57,7 @@
                 <ref bean="c2"/>
                 <ref bean="c3"/>
                 <ref bean="imageBdy"/>
+                <ref bean="textBdy"/>
             </list>
         </property>
 
@@ -152,4 +153,28 @@
     </bean>
      -->
     
+    <bean id="font" class="TTFFont" singleton="true">
+        <constructor-arg><value type="text">gfx/volter.ttf</value></constructor-arg>    
+    </bean>
+
+    <bean id="textWgt" class="Text" singleton="true">
+        <property name="text" value="Hello World!!!"/>
+        <property name="font" ref="font"/>        
+    </bean>
+
+    <bean id="textBdy" class="Body" singleton="true">
+        <propery name="mass" value="1"/>
+        <property name="position" value="170, 50"/>
+
+        <property name="children">
+            <list class="ModelVector">
+                <bean class="Model::Box" singleton="true">
+                    <property name="width" value="92" />
+                    <property name="height" value="122" />
+                    <property name="view" ref="textWgt"/>            
+                </bean>
+            </list>
+        </property>
+    </bean>
+         
 </beans>

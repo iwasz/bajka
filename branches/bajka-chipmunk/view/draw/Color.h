@@ -55,7 +55,7 @@ private:
 
         void initFromHex (unsigned int color);
 
-private:
+public:
 
         double r;
         double g;
