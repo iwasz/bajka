@@ -14,6 +14,9 @@
 #include "Image.h"
 #include "Math.h"
 #include "Model.h"
+#include "../dependencies/sdl/Util.h"
+
+using Sdl::expandSurfacePowerOf2;
 
 namespace View {
 
@@ -32,53 +35,11 @@ void Image::init (Model::IModel *model)
 
 /*--------------------------------------------------------------------------*/
 
-        SDL_Surface *texSurface = NULL;
+        SDL_Surface *texSurface = expandSurfacePowerOf2 (image);
+        SDL_FreeSurface (image);
 
-        // Podniesione do następnej potęgi
-        unsigned int width = Util::Math::nextSqr (image->w);
-        unsigned int height = Util::Math::nextSqr (image->h);
-
-        if (height != image->h || width != image->w) {
-
-                SDL_Surface *surface = SDL_CreateRGBSurface (SDL_SWSURFACE, width, height, 32,
-                #if SDL_BYTEORDER == SDL_LIL_ENDIAN
-                            0x000000FF,
-                            0x0000FF00,
-                            0x00FF0000,
-                            0xFF000000
-                #else
-                            0xFF000000,
-                            0x00FF0000,
-                            0x0000FF00,
-                            0x000000FF
-                #endif
-                );
-
-                if(surface == NULL) {
-                        throw ImageException ();
-                }
-
-                Uint32 saved_flags = image->flags & (SDL_SRCALPHA | SDL_RLEACCELOK);
-                if ((saved_flags & SDL_SRCALPHA) == SDL_SRCALPHA) {
-                        SDL_SetAlpha (image, 0, 0);
-                }
-
-                /* Copy the surface into the GL texture surface (texSurface) */
-                SDL_Rect area;
-
-                area.x = 0;
-                area.y = height - image->h;
-                area.w = image->w;
-                area.h = image->h;
-
-                SDL_BlitSurface (image, NULL, surface, &area);
-                SDL_FreeSurface (image);
-
-                texSurface = surface;
-        }
-        else {
-                texSurface = image;
-        }
+        unsigned int width = texSurface->w;
+        unsigned int height = texSurface->h;
 
 /*--------------------------------------------------------------------------*/
 

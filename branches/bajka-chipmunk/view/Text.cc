@@ -7,73 +7,30 @@
  ****************************************************************************/
 
 #include <SDL.h>
-#include <SDL_opengl.h>
 #include <SDL_image.h>
 #include "Math.h"
 #include "Model.h"
 #include "Text.h"
 #include "../util/Exceptions.h"
+#include <boost/functional/hash.hpp>
+#include "../dependencies/sdl/Util.h"
+
+using Sdl::expandSurfacePowerOf2;
 
 namespace View {
 
-void Text::update (Model::IModel *model)
+void Text::init (Model::IModel *model)
 {
         SDL_Surface *image = static_cast <SDL_Surface *> (font->render (text, getForeground (), getBackground ()));
+        SDL_Surface *texSurface = expandSurfacePowerOf2 (image);
+        SDL_FreeSurface (image);
+
+        unsigned int width = texSurface->w;
+        unsigned int height = texSurface->h;
 
 /*--------------------------------------------------------------------------*/
 
-        SDL_Surface *texSurface = NULL;
-
-        // Podniesione do następnej potęgi
-        unsigned int width = Util::Math::nextSqr (image->w);
-        unsigned int height = Util::Math::nextSqr (image->h);
-
-        if (height != image->h || width != image->w) {
-
-                SDL_Surface *surface = SDL_CreateRGBSurface (SDL_SWSURFACE, width, height, 32,
-                #if SDL_BYTEORDER == SDL_LIL_ENDIAN
-                            0x000000FF,
-                            0x0000FF00,
-                            0x00FF0000,
-                            0xFF000000
-                #else
-                            0xFF000000,
-                            0x00FF0000,
-                            0x0000FF00,
-                            0x000000FF
-                #endif
-                );
-
-                if (surface == NULL) {
-                        throw Util::RuntimeException ("Text::update : surface == NULL");
-                }
-
-                Uint32 saved_flags = image->flags & (SDL_SRCALPHA | SDL_RLEACCELOK);
-                if ((saved_flags & SDL_SRCALPHA) == SDL_SRCALPHA) {
-                        SDL_SetAlpha (image, 0, 0);
-                }
-
-                /* Copy the surface into the GL texture surface (texSurface) */
-                SDL_Rect area;
-
-                area.x = 0;
-                area.y = height - image->h;
-                area.w = image->w;
-                area.h = image->h;
-
-                SDL_BlitSurface (image, NULL, surface, &area);
-                SDL_FreeSurface (image);
-
-                texSurface = surface;
-        }
-        else {
-                texSurface = image;
-        }
-
-/*--------------------------------------------------------------------------*/
-        GLuint texName;
-        int texWidth, texHeight;
-
+        // TODO może nie trzeba za każdym razem tworzyć nowej tekstury, poza tym nie wiem, czy nie wycieka pamięć w karcie tu.
         glGenTextures(1, &texName);
         glBindTexture(GL_TEXTURE_2D, texName);
 
@@ -111,8 +68,19 @@ void Text::update (Model::IModel *model)
         texHeight = height;
 
         SDL_FreeSurface (texSurface);
+}
 
-/*--------------------------------------------------------------------------*/
+/****************************************************************************/
+
+void Text::update (Model::IModel *model)
+{
+        static boost::hash <std::string> hf = boost::hash <std::string> ();
+        std::size_t h = hf (text);
+
+        if (h != hash) {
+                init (model);
+                hash = h;
+        }
 
         glEnable(GL_TEXTURE_2D);
         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);

@@ -43,7 +43,7 @@ TTFFont::~TTFFont ()
 void TTFFont::open (std::string const &path, int ptSize, long int index)
 {
         if (ptSize < 0) {
-                ptSize = 12;
+                ptSize = 36;
         }
 
         if (index < 0) {
@@ -91,6 +91,24 @@ void *TTFFont::renderShaded (std::string const &text, View::Color const &fgColor
 void *TTFFont::renderBlended (std::string const &text, View::Color const &fgColor)
 {
 
+}
+
+/****************************************************************************/
+
+int TTFFont::getHinting () const
+{
+//        return TTF_GetFontHinting (font);
+}
+
+/****************************************************************************/
+
+void TTFFont::setHinting (int hint)
+{
+//        if (TTF_GetFontHinting (font) == hint) {
+//                return;
+//        }
+//
+//        TTF_SetFontHinting (font, hint);
 }
 
 } /* namespace View */

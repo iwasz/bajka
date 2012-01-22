@@ -30,6 +30,9 @@ public:
 
         void *render (std::string const &text, View::Color const &fgColor, View::Color const &bgColor);
 
+        int getHinting () const;
+        m_ (setHinting) void setHinting (int hint);
+
 private:
 
         void open (std::string const &path, int ptSize = -1, long int index = -1);

@@ -10,7 +10,7 @@
 
 #include "EventDispatcher.h"
 #include "Common.h"
-#include "../../openGl/Util.h"
+#include "../../dependencies/openGl/Util.h"
 
 namespace Sdl {
 namespace M = Model;
