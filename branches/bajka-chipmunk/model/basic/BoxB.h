@@ -19,17 +19,30 @@ public:
         C__ (void)
         b_ ("AbstractModel")
 
-        BoxB () : angle (0), scale (0) {}
+        BoxB () : angle (0), scale (1) {}
         virtual ~BoxB () {}
 
-        virtual Geometry::Point getPosition () const { return box.ll; }
-        virtual void setPosition (Geometry::Point const &p);
+        virtual Geometry::Point getPosition () const { return position; }
+        m_ (setPosition) virtual void setPosition (Geometry::Point const &p) { position = p; }
+
+        virtual Geometry::Point getCenter () const { return center; }
+        m_ (setCenter) virtual void setCenter (Geometry::Point const &p) { center = p; }
 
         virtual double getAngle () const { return angle; }
-        virtual void setAngle (double a) { angle = a; }
+        m_ (setAngle) virtual void setAngle (double a) { angle = a; }
 
-        virtual double getSacle () const { return scale; }
-        virtual void setScale (double s) { scale = s; }
+        virtual double getScale () const { return scale; }
+        m_ (setScale) virtual void setScale (double s) { scale = s; }
+
+/*--------------------------------------------------------------------------*/
+
+        // Nie uwzględnia skali.
+//        double getWidth () const { return box}
+//        double getHeight () const {}
+
+        // Tymczasowa?
+        Geometry::Box const &getBox () const { return box; }
+        m_ (setBox) void setBox (Geometry::Box const &b) { box = b; }
 
 /*--------------------------------------------------------------------------*/
 
@@ -40,6 +53,8 @@ public:
 private:
 
         Geometry::Box box;
+        Geometry::Point position;
+        Geometry::Point center;
         double angle;
         double scale;
 

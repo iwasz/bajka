@@ -21,6 +21,8 @@ void Widget::preUpdate (Model::IModel *model)
         defaultPreUpdate (model);
 }
 
+/****************************************************************************/
+
 void Widget::postUpdate (Model::IModel *model)
 {
         if (!visible) {
@@ -30,20 +32,30 @@ void Widget::postUpdate (Model::IModel *model)
         defaultPostUpdate (model);
 }
 
+/****************************************************************************/
+
 void Widget::defaultPreUpdate (Model::IModel *model)
 {
-    glPushMatrix ();
 
     if (model) {
-            glTranslatef (model->getPosition().x, model->getPosition().y, 0.0f);
-//                glRotatef (angle*180.0f/M_PI, 0.0f, 0.0f, 1.0f);
-            glRotatef (model->getAngle(), 0.0f, 0.0f, 1.0f);
+            glPushMatrix ();
+            Geometry::Point c = model->getCenter ();
+            Geometry::Point p = model->getPosition ();
+
+            glTranslated (c.x, c.y, 0.0);
+            glRotated (model->getAngle(), 0.0, 0.0, 1.0); // angle * 180.0f / M_PI
+            glScaled (model->getScale (), model->getScale (), 0.0);
+            glTranslated (-c.x + p.x, -c.y + p.y, 0.0f);
     }
 }
 
-void Widget::defaultPostUpdate (Model::IModel *)
+/****************************************************************************/
+
+void Widget::defaultPostUpdate (Model::IModel *model)
 {
-    glPopMatrix ();
+        if (model) {
+                glPopMatrix ();
+        }
 }
 
 } /* namespace View */

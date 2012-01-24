@@ -38,17 +38,16 @@ struct IModel : public Core::Object {
 
         virtual ~IModel () {}
 
-        /**
-         * Pozycja tego modelu we współrzędnych rodzica. Jest to pozycja
-         * pewnego punktu w tym modelu (na przykład środek okręgu).
-         */
         virtual Geometry::Point getPosition () const = 0;
         virtual void setPosition (Geometry::Point const &position) = 0;
+
+        virtual Geometry::Point getCenter () const = 0;
+        virtual void setCenter (Geometry::Point const &p) = 0;
 
         virtual double getAngle () const = 0;
         virtual void setAngle (double a) = 0;
 
-        virtual double getSacle () const = 0;
+        virtual double getScale () const = 0;
         virtual void setScale (double a) = 0;
 
 /*------searching-----------------------------------------------------------*/

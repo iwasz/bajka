@@ -7,9 +7,36 @@
  ****************************************************************************/
 
 #include <sstream>
+#include <boost/geometry/geometry.hpp>
+#include <boost/geometry/arithmetic/arithmetic.hpp>
+#include <boost/geometry/geometries/point_xy.hpp>
+#include <boost/tokenizer.hpp>
+#include <boost/algorithm/string/trim.hpp>
 #include "Box.h"
 
 namespace Geometry {
+using namespace boost::geometry;
+using namespace boost;
+using namespace boost::algorithm;
+
+Box::Box (std::string const &s)
+{
+        typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+        tokenizer tok (s, boost::char_separator<char> (","));
+        tokenizer::iterator i = tok.begin ();
+
+        assert (i != tok.end ());
+        ll.x = lexical_cast <double> (trim_copy (*i++));
+
+        assert (i != tok.end ());
+        ll.y = lexical_cast <double> (trim_copy (*i++));
+
+        assert (i != tok.end ());
+        ur.x = lexical_cast <double> (trim_copy (*i++));
+
+        assert (i != tok.end ());
+        ur.y = lexical_cast <double> (trim_copy (*i));
+}
 
 /****************************************************************************/
 
