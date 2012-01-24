@@ -32,10 +32,11 @@ void Rectangle::update (Model::IModel *model)
 
         Model::BoxB *cB = dynamic_cast <Model::BoxB *>  (model);
 
-//        DrawUtil::drawRectangle (c2->getPosition(),
-//                                 Point (c2->getPosition ().x + c2->getWidth (), c->getPosition ().y + c->getHeight ()),
-//                                 getForeground (),
-//                                 getBackground ());
+        Geometry::Box const &b = cB->getBox ();
+        DrawUtil::drawRectangle (b.ll,
+                                 b.ur,
+                                 getForeground (),
+                                 getBackground ());
 
 
 }

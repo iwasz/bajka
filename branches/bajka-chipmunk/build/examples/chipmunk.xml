@@ -52,6 +52,8 @@
         
         <property name="children">
             <list class="ModelVector">
+                <ref bean="boxB"/>
+                <ref bean="boxB2"/>
                 <ref bean="body"/>
                 <ref bean="ground"/>
                 <ref bean="ground2"/>
@@ -208,4 +210,18 @@
         </property>
     </bean>
          
+         
+    <bean id="boxB" class="BoxB" singleton="true">
+        <property name="box" value="100, 100, 150, 150"/>
+        <property name="center" value="125, 125"/>
+        <property name="view" ref="rectangleWgt"/>
+        <property name="scale" value="2"/>
+    </bean>         
+         
+    <bean id="boxB2" parent="boxB">
+        <property name="box" value="100, 100, 150, 150"/>
+        <property name="center" value="125, 125"/>
+        <property name="angle" value="45"/>
+        <property name="scale" value="1"/>
+    </bean>       
 </beans>

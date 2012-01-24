@@ -23,8 +23,11 @@ public:
         virtual ~AbstractModel () {}
 
         // TODO wywalić.
-        virtual double getSacle () const {}
+        virtual double getScale () const { return 1; }
         virtual void setScale (double a) {}
+        virtual Geometry::Point getCenter () const { return Geometry::Point (); }
+        virtual void setCenter (Geometry::Point const &p) {}
+
         Geometry::Box getBoundingBox () const {}
         bool inside (Geometry::Point const &p) const {}
 
