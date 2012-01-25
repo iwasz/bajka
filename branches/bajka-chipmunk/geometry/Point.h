@@ -108,6 +108,6 @@ typedef Geometry::Point __BAJKA_POINT__;
 /*
  * Register my custom point Type.
  */
-BOOST_GEOMETRY_REGISTER_POINT_2D_GET_SET (__BAJKA_POINT__, double, cs::cartesian, getX, getY, setX, setY)
+BOOST_GEOMETRY_REGISTER_POINT_2D (__BAJKA_POINT__, double, cs::cartesian, x, y)
 
 #	endif /* POINT_H_ */

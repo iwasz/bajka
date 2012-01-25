@@ -2,22 +2,26 @@
  *                                                                          *
  *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 19, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef UTIL_H_
-#define UTIL_H_
+#ifndef BAJKA_GEOM_RING_H_
+#define BAJKA_GEOM_RING_H_
+
+#include <boost/geometry/geometries/ring.hpp>
+#include "Point.h"
+
+namespace Geometry {
 
 /**
- * \defgroup Util
- * Klasy pomocnicze. Matematyka, geometria, struktury drzewiaste. Rożne klasy pomocnicze.
+ * Poligon, który nie ma dziurek.
  */
+class Ring : public boost::geometry::model::ring <Point> {
+public:
+        virtual ~Ring () {}
+};
 
-#include "Math.h"
-#include "BajkaApp.h"
-#include "Commons.h"
+} /* namespace Geometry */
 
-#	endif /* UTIL_H_ */
+#	endif /* RING_H_ */

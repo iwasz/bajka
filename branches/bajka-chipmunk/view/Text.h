@@ -28,7 +28,7 @@ public:
         virtual void update (Model::IModel *model);
 
         Ptr <Font> getFont () const { return font; }
-        s_ (setFont) void setFont (Ptr <Font> f) { font = f; }
+        S_ (setFont) void setFont (Ptr <Font> f) { font = f; }
 
         std::string getText () const { return text; }
         m_ (setText) void setText (std::string const &s) { text = s; }
