@@ -113,10 +113,10 @@ void BajkaConfig::init ()
         glGetFloatv (GL_SMOOTH_POINT_SIZE_GRANULARITY, params);
         std::cerr << "GL_SMOOTH_POINT_SIZE_GRANULARITY : " << params[0] << ", " << params[1] << std::endl;
 
-        glEnable(GL_LINE_SMOOTH);
-        glEnable(GL_POINT_SMOOTH);
-        glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
-        glHint(GL_POINT_SMOOTH_HINT, GL_DONT_CARE);
+//        glEnable(GL_LINE_SMOOTH);
+//        glEnable(GL_POINT_SMOOTH);
+//        glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
+//        glHint(GL_POINT_SMOOTH_HINT, GL_DONT_CARE);
 
         std::cerr << "is enabled GL_POINT_SMOOTH : " << ((glIsEnabled (GL_POINT_SMOOTH)) ? ("true") : ("false")) << std::endl;
 

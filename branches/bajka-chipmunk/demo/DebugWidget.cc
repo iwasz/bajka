@@ -45,7 +45,7 @@ void DebugWidget::update (Model::IModel *model)
         cB->transform (&p4);
 
 //        std::cout << "Po" << b.toString() << std::endl;
-        std::cout << p1.toString() << ", " << p2.toString()<< std::endl;
+        std::cout << b.toString () << ", " << p1.toString() << ", " << p3.toString()<< std::endl;
 
 //        DrawUtil::drawRectangle (b.ll,
 //                                 b.ur,
@@ -56,6 +56,7 @@ void DebugWidget::update (Model::IModel *model)
         DrawUtil::drawLine (p2, p3, View::Color (1, 0, 0));
         DrawUtil::drawLine (p3, p4, View::Color (1, 0, 0));
         DrawUtil::drawLine (p4, p1, View::Color (1, 0, 0));
+//        DrawUtil::drawLine (p1, p3, View::Color (1, 0, 0));
 
 
 }
