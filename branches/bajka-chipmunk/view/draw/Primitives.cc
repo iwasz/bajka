@@ -70,25 +70,25 @@ void DrawUtil::drawCircle (Geometry::Point const &center, double angle, double r
 void DrawUtil::drawRectangle (Geometry::Point const &a, Geometry::Point const &b, Color const &lineColor, Color const &fillColor)
 {
         if (fillColor.getA () > 0) {
-                glColor4f (fillColor.getR (), fillColor.getG (), fillColor.getB (), fillColor.getA ());
+                glColor4d (fillColor.getR (), fillColor.getG (), fillColor.getB (), fillColor.getA ());
         }
 
         glBegin (GL_TRIANGLE_FAN);
-                glVertex2f (a.x, a.y);
-                glVertex2f (a.x, b.y);
-                glVertex2f (b.x, b.y);
-                glVertex2f (b.x, a.y);
+                glVertex2d (a.x, a.y);
+                glVertex2d (a.x, b.y);
+                glVertex2d (b.x, b.y);
+                glVertex2d (b.x, a.y);
         glEnd ();
 
         if (lineColor.getA () > 0) {
-                glColor4f (lineColor.getR (), lineColor.getG (), lineColor.getB (), lineColor.getA ());
+                glColor4d (lineColor.getR (), lineColor.getG (), lineColor.getB (), lineColor.getA ());
         }
 
         glBegin (GL_LINE_LOOP);
-                glVertex2f (a.x, a.y);
-                glVertex2f (a.x, b.y);
-                glVertex2f (b.x, b.y);
-                glVertex2f (b.x, a.y);
+                glVertex2d (a.x, a.y);
+                glVertex2d (a.x, b.y);
+                glVertex2d (b.x, b.y);
+                glVertex2d (b.x, a.y);
         glEnd ();
 }
 
@@ -96,14 +96,21 @@ void DrawUtil::drawRectangle (Geometry::Point const &a, Geometry::Point const &b
 
 void DrawUtil::drawLine (Geometry::Point const &a, Geometry::Point const &b, Color const &color)
 {
-        GLfloat verts[] = {
-                a.getX (), a.getY (),
-                b.getX (), b.getY ()
-        };
+//        GLfloat verts[] = {
+//                a.getX (), a.getY (),
+//                b.getX (), b.getY ()
+//        };
+//
+//        glVertexPointer(2, GL_FLOAT, 0, verts);
+        if (color.getA () > 0) {
+                glColor4d (color.getR (), color.getG (), color.getB (), color.getA ());
+        }
+//        glDrawArrays (GL_LINE, 0, 2);
 
-        glVertexPointer(2, GL_FLOAT, 0, verts);
-        glColor4f (color.getR (), color.getG (), color.getB (), color.getA ());
-        glDrawArrays (GL_LINE, 0, 2);
+        glBegin (GL_LINES);
+                glVertex2d (a.x, a.y);
+                glVertex2d (b.x, b.y);
+        glEnd ();
 }
 
 /****************************************************************************/

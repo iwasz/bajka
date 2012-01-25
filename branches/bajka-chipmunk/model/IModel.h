@@ -74,6 +74,8 @@ struct IModel : public Core::Object {
          */
         virtual bool inside (Geometry::Point const &p) const = 0;
 
+        virtual void transform (Geometry::Point *p) = 0;
+
 /*--------------------------------------------------------------------------*/
 
         virtual bool update () = 0;

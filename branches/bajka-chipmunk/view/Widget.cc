@@ -37,16 +37,16 @@ void Widget::postUpdate (Model::IModel *model)
 void Widget::defaultPreUpdate (Model::IModel *model)
 {
 
-    if (model) {
-            glPushMatrix ();
-            Geometry::Point c = model->getCenter ();
-            Geometry::Point p = model->getPosition ();
+        if (model) {
+                glPushMatrix ();
+                Geometry::Point c = model->getCenter ();
+                Geometry::Point p = model->getPosition ();
 
-            glTranslated (c.x, c.y, 0.0);
-            glRotated (model->getAngle(), 0.0, 0.0, 1.0); // angle * 180.0f / M_PI
-            glScaled (model->getScale (), model->getScale (), 0.0);
-            glTranslated (-c.x + p.x, -c.y + p.y, 0.0f);
-    }
+                glTranslated (c.x + p.x, c.y + p.y, 0.0);
+                glRotated (model->getAngle(), 0.0, 0.0, 1.0); // angle * 180.0f / M_PI
+                glScaled (model->getScale (), model->getScale (), 1.0);
+                glTranslated (-c.x, -c.y, 0.0);
+        }
 }
 
 /****************************************************************************/
