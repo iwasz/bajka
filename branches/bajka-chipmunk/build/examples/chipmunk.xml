@@ -253,7 +253,7 @@
         <property name="box" value="100, 100, 150, 150"/>
         <property name="center" value="125, 125"/>
         <property name="position" value="20, 20"/>        
-        <property name="angle" value="45"/>
+        <property name="angle" value="30"/>
         <property name="scale" value="1"/>
         <property name="view">
             <bean class="DebugWidget" singleton="true"/>
@@ -264,7 +264,7 @@
         <property name="box" value="100, 100, 150, 150"/>
         <property name="center" value="125, 125"/>
         <property name="position" value="20, 20"/>        
-        <property name="angle" value="45"/>
+        <property name="angle" value="30"/>
         <property name="scale" value="1"/>
         <property name="view" ref="rectangleWgt"/>
     </bean>       

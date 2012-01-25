@@ -50,16 +50,20 @@ bool BoxB::inside (Geometry::Point const &p) const
 
 void BoxB::transform (Geometry::Point *p)
 {
-        double aRad = angle * 180.0 / M_PI;
-        double sin_ = sin (aRad);
-        double cos_ = cos (aRad);
+        double aRad = angle * M_PI / 180.0;
+        double s = sin (aRad);
+        double c = cos (aRad);
+        double x = p->x;
 
-//        Pierwsze podejście nieudane:
-//        p->x = scale * cos_ * (p->x + center.x + position.x) - scale * sin_ * (p->y + center.y + position.y) - center.x;
-//        p->y = scale * cos_ * (p->y + center.y + position.y) + scale * sin_ * (p->x + center.x + position.x) - center.y;
+        p->x = scale * c * (x - scale * center.x) + scale * s * (scale * center.y - p->y) + center.x + position.x;
+        p->y = scale * c * (p->y - scale * center.y) + scale * s * (x - scale * center.x) + center.y + position.y;
+}
 
-        p->x = scale * cos_ * (p->x - scale * center.x) + scale * sin_ * (scale * center.y - p->y) + center.x + position.x;
-        p->y = scale * cos_ * (p->y - scale * center.y) + scale * sin_ * (p->x - scale * center.x) + center.y + position.y;
+/****************************************************************************/
+
+virtual Geometry::Box BoxB::getBoundingBox () const
+{
+
 }
 
 
