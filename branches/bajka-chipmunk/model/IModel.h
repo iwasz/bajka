@@ -59,7 +59,7 @@ struct IModel : public Core::Object {
          * punkcie, albo ten model nie ma żadnych dzieci. Współrzędne punktu p
          * podajemy oczywiście w układzie tego (this) modelu.
          */
-        virtual IModel *findChild (Geometry::Point const &p) = 0;
+        virtual IModel *findContains (Geometry::Point const &p) = 0;
 
         /**
          * Bounding box w układzie rodzica.
@@ -72,9 +72,9 @@ struct IModel : public Core::Object {
          * @param p  W układzie rodzica.
          * @return
          */
-        virtual bool inside (Geometry::Point const &p) const = 0;
+        virtual bool contains (Geometry::Point const &p) const = 0;
 
-        virtual void transform (Geometry::Point *p) = 0;
+        virtual void transform (Geometry::Point *p) const = 0;
 
 /*--------------------------------------------------------------------------*/
 
@@ -96,6 +96,9 @@ struct IModel : public Core::Object {
         virtual void addChild (IModel *m) = 0;
         virtual ModelVector::iterator begin () = 0;
         virtual ModelVector::iterator end () = 0;
+
+        // todo
+        bool isContainer () const { return true; }
 
 /*------additional-functionalities------------------------------------------*/
 

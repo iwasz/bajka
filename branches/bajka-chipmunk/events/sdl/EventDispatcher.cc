@@ -79,7 +79,7 @@ void EventDispatcher::run (Model::IModel *m, ModelIndex const &modeliIndex)
                 if (type & MOUSE_EVENTS) {
                         MouseEvent *mev = static_cast <MouseEvent *> (e);
                         G::Point const &p = mev->getPosition ();
-                        M::IModel *model = m->findChild (p);
+                        M::IModel *model = m->findContains (p);
 
                         if (!model) {
                                 return;

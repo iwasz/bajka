@@ -11,20 +11,22 @@
 
 #include <Pointer.h>
 #include "ReflectionMacros.h"
+#include <vector>
+#include <list>
 
 namespace Util {
 
 typedef std::list <int> IntList;
-_g (IntList)
+f_ (IntList)
 
 typedef std::vector <int> IntVector;
-_g (IntVector)
+f_ (IntVector)
 
 typedef std::list <double> DoubleList;
-_g (DoubleList)
+f_ (DoubleList)
 
 typedef std::vector <double> DoubleVector;
-_g (DoubleVector)
+f_ (DoubleVector)
 
 /*
  * Typ ConvertPtr_t

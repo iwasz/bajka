@@ -2,22 +2,14 @@
  *                                                                          *
  *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 19, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef UTIL_H_
-#define UTIL_H_
+#include "Ring.h"
 
-/**
- * \defgroup Util
- * Klasy pomocnicze. Matematyka, geometria, struktury drzewiaste. Rożne klasy pomocnicze.
- */
+namespace Geometry {
 
-#include "Math.h"
-#include "BajkaApp.h"
-#include "Commons.h"
 
-#	endif /* UTIL_H_ */
+
+} /* namespace Geometry */

@@ -45,20 +45,24 @@ void DebugWidget::update (Model::IModel *model)
         cB->transform (&p4);
 
 //        std::cout << "Po" << b.toString() << std::endl;
-        std::cout << b.toString () << ", " << p1.toString() << ", " << p3.toString()<< std::endl;
 
 //        DrawUtil::drawRectangle (b.ll,
 //                                 b.ur,
 //                                 getForeground (),
 //                                 getBackground ());
 
-        DrawUtil::drawLine (p1, p2, View::Color (1, 0, 0));
-        DrawUtil::drawLine (p2, p3, View::Color (1, 0, 0));
-        DrawUtil::drawLine (p3, p4, View::Color (1, 0, 0));
-        DrawUtil::drawLine (p4, p1, View::Color (1, 0, 0));
+        DrawUtil::drawLine (p1, p2, View::Color (0, 1, 0));
+        DrawUtil::drawLine (p2, p3, View::Color (0, 1, 0));
+        DrawUtil::drawLine (p3, p4, View::Color (0, 1, 0));
+        DrawUtil::drawLine (p4, p1, View::Color (0, 1, 0));
 //        DrawUtil::drawLine (p1, p3, View::Color (1, 0, 0));
 
+        Geometry::Box aabb = model->getBoundingBox ();
+        DrawUtil::drawRectangle (aabb,
+                                 View::Color (1, 0, 0),
+                                 View::Color (0, 0, 0, 0));
 
+        std::cout << b.toString () << ", " << p1.toString() << ", " << p3.toString() << ", aabb=" << aabb.toString() << std::endl;
 }
 
 } /* namespace View */

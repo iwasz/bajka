@@ -45,7 +45,7 @@ void Space::setGravity (Geometry::Point const &g)
 
 /****************************************************************************/
 
-IModel *Space::findChild (Geometry::Point const &p)
+IModel *Space::findContains (Geometry::Point const &p)
 {
         cpShape *shape = cpSpacePointQueryFirst (space, cpv (p.x, p.y), 0xFFFF, CP_NO_GROUP);
 

@@ -9,9 +9,9 @@
 #ifndef GEOMETRY_MODEL_BOX_H_
 #define GEOMETRY_MODEL_BOX_H_
 
-//#include <boost/geometry/geometry.hpp>
-//#include <boost/geometry/arithmetic/arithmetic.hpp>
-//#include <boost/geometry/geometries/point_xy.hpp>
+#undef error //TODO wymyślić coś mądrzejszego
+#include <boost/geometry/geometry.hpp>
+#include <boost/geometry/geometries/register/box.hpp>
 #include <Object.h>
 #include "Point.h"
 
@@ -64,6 +64,10 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
+        bool contains (Geometry::Point const &p) const { p.x >= ll.x && p.x <= ur.x && p.y >= ll.y && p.y <= ur.y; }
+
+/*--------------------------------------------------------------------------*/
+
         std::string toString () const;
 
 /*--------------------------------------------------------------------------*/
@@ -79,44 +83,6 @@ public:
 }
 
 typedef Geometry::Box __BAJKA_BOX__;
-
-///*
-// * BOOST definitions.
-// */
-//namespace boost { namespace geometry { namespace traits {
-//        BOOST_GEOMETRY_DETAIL_SPECIALIZE_BOX_TRAITS(__BAJKA_BOX__, __BAJKA_POINT__)
-//
-//        template <>
-//        struct indexed_access<__BAJKA_BOX__, min_corner, 0>
-//        {
-//            typedef coordinate_type<__BAJKA_POINT__>::type ct;
-//            static inline ct get(__BAJKA_BOX__ const& b) { return b.getX1 ();  }
-//            static inline void set(__BAJKA_BOX__& b, ct const& value) { b.setX1 (value); }
-//        };
-//
-//        template <>
-//        struct indexed_access<__BAJKA_BOX__, min_corner, 1>
-//        {
-//            typedef coordinate_type<__BAJKA_POINT__>::type ct;
-//            static inline ct get(__BAJKA_BOX__ const& b) { return b.getY1 ();  }
-//            static inline void set(__BAJKA_BOX__& b, ct const& value) { b.setY1 (value); }
-//        };
-//
-//        template <>
-//        struct indexed_access<__BAJKA_BOX__, max_corner, 0>
-//        {
-//            typedef coordinate_type<__BAJKA_POINT__>::type ct;
-//            static inline ct get(__BAJKA_BOX__ const& b) { return b.getX2 ();  }
-//            static inline void set(__BAJKA_BOX__& b, ct const& value) { b.setX2 (value); }
-//        };
-//
-//        template <>
-//        struct indexed_access<__BAJKA_BOX__, max_corner, 1>
-//        {
-//            typedef coordinate_type<__BAJKA_POINT__>::type ct;
-//            static inline ct get(__BAJKA_BOX__ const& b) { return b.getY2 ();  }
-//            static inline void set(__BAJKA_BOX__& b, ct const& value) { b.setY2 (value); }
-//        };
-//}}}
+BOOST_GEOMETRY_REGISTER_BOX (__BAJKA_BOX__, __BAJKA_POINT__, ll, ur)
 
 #	endif /* BOX_H_ */

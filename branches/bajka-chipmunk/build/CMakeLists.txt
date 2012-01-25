@@ -88,19 +88,15 @@ TARGET_LINK_LIBRARIES (bajka ${TILIAE_LIBRARIES})
 TARGET_LINK_LIBRARIES (bajka chipmunk)
 
 # Executable test.
-IF (0)
+IF (1)
     AUX_SOURCE_DIRECTORY (../test TEST_SOURCES)
-    AUX_SOURCE_DIRECTORY (../test/helpers TEST_SOURCES)
+    #AUX_SOURCE_DIRECTORY (../test/helpers TEST_SOURCES)
     
     #if (true)
     add_executable (test ${TEST_SOURCES})
     TARGET_LINK_LIBRARIES (test bajka)
     TARGET_LINK_LIBRARIES (test boost_unit_test_framework)
-    TARGET_LINK_LIBRARIES (test ${OPENGL_LIBRARIES})
-    TARGET_LINK_LIBRARIES (test ${JPEG_LIBRARIES})
-    TARGET_LINK_LIBRARIES (test ${SDL_LIBRARY})
-    TARGET_LINK_LIBRARIES (test ${SDLIMAGE_LIBRARY})
-    TARGET_LINK_LIBRARIES (test ${TILIAE_LIBRARIES})
+    TARGET_LINK_LIBRARIES (test boost_prg_exec_monitor)
 ENDIF ()
 
 IF (1)

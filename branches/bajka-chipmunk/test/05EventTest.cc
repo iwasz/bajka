@@ -7,9 +7,9 @@
 
 #include "Events.h"
 
-#include "helpers/TestObserver.h"
-#include "helpers/TestObservable.h"
-#include "helpers/TestEvent.h"
+//#include "helpers/TestObserver.h"
+//#include "helpers/TestObservable.h"
+//#include "helpers/TestEvent.h"
 
 BOOST_AUTO_TEST_SUITE (EventTest);
 

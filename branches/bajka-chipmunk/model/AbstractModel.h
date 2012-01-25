@@ -27,15 +27,13 @@ public:
         virtual void setScale (double a) {}
         virtual Geometry::Point getCenter () const { return Geometry::Point (); }
         virtual void setCenter (Geometry::Point const &p) {}
-        virtual void transform (Geometry::Point *p) {}
-
-        Geometry::Box getBoundingBox () const {}
-        bool inside (Geometry::Point const &p) const {}
+        virtual void transform (Geometry::Point *p) const {}
+        virtual Geometry::Box getBoundingBox () const {}
+        virtual bool contains (Geometry::Point const &p) const {}
 
 /*--------------------------------------------------------------------------*/
 
-        virtual IModel *findChild (Geometry::Point const &p) { return NULL; }
-
+        virtual IModel *findContains (Geometry::Point const &p) { return NULL; }
 
 /*--------------------------------------------------------------------------*/
 
@@ -52,14 +50,16 @@ public:
         void addChild (IModel *m);
         ModelVector::iterator begin () { return children.begin (); }
         ModelVector::iterator end () { return children.end (); }
+        ModelVector::const_iterator begin () const { return children.begin (); }
+        ModelVector::const_iterator end () const { return children.end (); }
 
 /*--------------------------------------------------------------------------*/
 
         View::IView *getView () { return view; }
-        s_ (setView) void setView (View::IView *v) { view = v; }
+        S_ (setView) void setView (View::IView *v) { view = v; }
 
         Controller::IController *getController () { return controller; }
-        s_ (setController) void setController (Controller::IController *c) { controller = c; }
+        S_ (setController) void setController (Controller::IController *c) { controller = c; }
 
 private:
 

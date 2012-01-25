@@ -105,7 +105,7 @@ public:
         * 2. Ustawia główny kontroler.
         * 3. Podłącza ten nowy do wszystkich dispatcherów.
         */
-       s_ (setModel) void setModel (Ptr <Model::IModel> model);
+       S_ (setModel) void setModel (Ptr <Model::IModel> model);
 
        Ptr <Event::DispatcherList> getDispatchers () const { return dispatchers; }
        m_ (setDispatchers) void setDispatchers (Ptr <Event::DispatcherList> d) { dispatchers = d; }
