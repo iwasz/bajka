@@ -27,6 +27,7 @@ public:
         virtual void setScale (double a) {}
         virtual Geometry::Point getCenter () const { return Geometry::Point (); }
         virtual void setCenter (Geometry::Point const &p) {}
+        virtual void transform (Geometry::Point *p) {}
 
         Geometry::Box getBoundingBox () const {}
         bool inside (Geometry::Point const &p) const {}
@@ -34,6 +35,7 @@ public:
 /*--------------------------------------------------------------------------*/
 
         virtual IModel *findChild (Geometry::Point const &p) { return NULL; }
+
 
 /*--------------------------------------------------------------------------*/
 

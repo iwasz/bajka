@@ -49,6 +49,7 @@ public:
         virtual IModel *findChild (Geometry::Point const &p);
         virtual Geometry::Box getBoundingBox () const { return box; }
         virtual bool inside (Geometry::Point const &p) const;
+        virtual void transform (Geometry::Point *p);
 
 private:
 

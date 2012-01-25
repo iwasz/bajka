@@ -53,6 +53,9 @@
         <property name="children">
             <list class="ModelVector">
                 <ref bean="boxB"/>
+                <ref bean="boxB3"/>                
+                <ref bean="boxB4"/>                
+                <ref bean="boxB5"/>
                 <ref bean="boxB2"/>
                 <ref bean="body"/>
                 <ref bean="ground"/>
@@ -91,7 +94,10 @@
     
         <property name="children">
             <list class="ModelVector">
-                <!-- TODO kiedy tu nie jest singleton="true", to segf! To jakas lipa!-->
+<!--                 TODO kiedy tu nie jest singleton="true", to segf! To jakas lipa! -->
+<!--                 Uwaga! To dla tego, ze kontener tworzy Ptr <Widget>, ale tam jest Widget *.  -->
+<!--                 To się konwertuje ładnie, ale tamten Ptr się kasuje! Zaś gdy damy singleton,-->
+<!--                 To Ptr siedzi w pamięci. -->
                 <bean class="Model::Box" singleton="true">
                     <property name="width" value="640" />
                     <property name="height" value="10" />
@@ -211,17 +217,55 @@
     </bean>
          
          
-    <bean id="boxB" class="BoxB" singleton="true">
-        <property name="box" value="100, 100, 150, 150"/>
-        <property name="center" value="125, 125"/>
-        <property name="view" ref="rectangleWgt"/>
+<!--     <bean id="boxB" class="BoxB" singleton="true"> -->
+<!--         <property name="box" value="100, 100, 150, 150"/> -->
+<!--         <property name="center" value="125, 125"/> -->
+<!--         <property name="position" value="20, 20"/>         -->
+<!--         <property name="angle" value="45"/> -->
+<!--         <property name="scale" value="1"/> -->
+<!--         <property name="view" ref="rectangleWgt"/> -->
+<!--     </bean>          -->
+
+     <bean id="boxB" class="BoxB" singleton="true">
+        <property name="box" value="-20, -20, 20, 20"/>
+        <property name="center" value="-20, -20"/>
+        <property name="position" value="40, 40"/>        
+        <property name="angle" value="45"/>
         <property name="scale" value="2"/>
+        <property name="view" ref="rectangleWgt"/>
     </bean>         
-         
-    <bean id="boxB2" parent="boxB">
-        <property name="box" value="100, 100, 150, 150"/>
-        <property name="center" value="125, 125"/>
+
+      <bean id="boxB3" class="BoxB" singleton="true">
+        <property name="box" value="-20, -20, 20, 20"/>
+        <property name="center" value="0, 0"/>
+<!--         <property name="position" value="20, 20"/>         -->
         <property name="angle" value="45"/>
         <property name="scale" value="1"/>
+        <property name="view" ref="rectangleWgt"/>
+    </bean>         
+     
+    <bean id="boxB4" class="BoxB" singleton="true">
+        <property name="box" value="-20, -20, 20, 20"/>
+        <property name="view" ref="rectangleWgt"/>
+    </bean>
+                 
+    <bean id="boxB2" class="BoxB" singleton="true">
+        <property name="box" value="100, 100, 150, 150"/>
+        <property name="center" value="125, 125"/>
+        <property name="position" value="20, 20"/>        
+        <property name="angle" value="45"/>
+        <property name="scale" value="1"/>
+        <property name="view">
+            <bean class="DebugWidget" singleton="true"/>
+        </property>
+    </bean>       
+
+    <bean id="boxB5" class="BoxB" singleton="true">
+        <property name="box" value="100, 100, 150, 150"/>
+        <property name="center" value="125, 125"/>
+        <property name="position" value="20, 20"/>        
+        <property name="angle" value="45"/>
+        <property name="scale" value="1"/>
+        <property name="view" ref="rectangleWgt"/>
     </bean>       
 </beans>

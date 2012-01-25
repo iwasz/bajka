@@ -46,5 +46,21 @@ bool BoxB::inside (Geometry::Point const &p) const
         return p.x >= box.ll.x && p.x <= box.ur.x && p.y >= box.ll.y && p.y <= box.ur.y;
 }
 
+/****************************************************************************/
+
+void BoxB::transform (Geometry::Point *p)
+{
+        double aRad = angle * 180.0 / M_PI;
+        double sin_ = sin (aRad);
+        double cos_ = cos (aRad);
+
+//        Pierwsze podejście nieudane:
+//        p->x = scale * cos_ * (p->x + center.x + position.x) - scale * sin_ * (p->y + center.y + position.y) - center.x;
+//        p->y = scale * cos_ * (p->y + center.y + position.y) + scale * sin_ * (p->x + center.x + position.x) - center.y;
+
+        p->x = scale * cos_ * (p->x - scale * center.x) + scale * sin_ * (scale * center.y - p->y) + center.x + position.x;
+        p->y = scale * cos_ * (p->y - scale * center.y) + scale * sin_ * (p->x - scale * center.x) + center.y + position.y;
+}
+
 
 } /* namespace Model */
