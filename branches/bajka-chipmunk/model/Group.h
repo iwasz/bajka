@@ -6,26 +6,22 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include <chipmunk.h>
-#include "../geometry/AffineMatrix.h"
-#include "Shape.h"
-#include "Body.h"
-#include "../util/Exceptions.h"
+#ifndef BAJKA_MODEL_GROUP_H_
+#define BAJKA_MODEL_GROUP_H_
+
+#include "AbstractModel.h"
 
 namespace Model {
 
-Shape::~Shape ()
-{
-        cpShapeFree (shape);
-}
-
-void Shape::parentCallback (IModel *m)
-{
-        AbstractModel::parentCallback (m);
-        // TODO można zrobic cast w zalezności od define DEBUG/RELEASE.
-        Body *body = static_cast <Body *> (m);
-        double inertia = calculateInertia (body->getMass ());
-        body->addInertia (inertia);
-}
+/**
+ * Podstawowa grupa modeli, czyli coś, co się rozciąga w nieskończoność (nie ma
+ * swojego rozmiaru).
+ */
+class Group : public AbstractModel {
+public:
+	virtual ~Group() {}
+};
 
 } /* namespace Model */
+
+#endif /* GROUP_H_ */

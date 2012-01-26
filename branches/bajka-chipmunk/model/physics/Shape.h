@@ -6,31 +6,27 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef SHAPE_H_
-#define SHAPE_H_
+#ifndef BAJKA_MODEL_SHAPE_H_
+#define BAJKA_MODEL_SHAPE_H_
 
-#include "AbstractModel.h"
+#include <chipmunk.h>
+#include "../../util/ReflectionMacros.h"
+#include "../IModel.h"
 
 namespace Model {
 
-class Shape : public AbstractModel {
+class Shape : public virtual Core::Object {
 public:
 
         d__
-        b_ ("AbstractModel")
 
         Shape () : shape (0) {}
         virtual ~Shape ();
 
-        virtual Geometry::Point getPosition () const { return position; }
-        m_ (setPosition) virtual void setPosition (Geometry::Point const &p) { position = p; }
-
-        virtual double calculateInertia (double mass) const = 0;
-        virtual void parentCallback (IModel *m);
+        // Settery + gettery od shape.
 
 protected:
 
-        Geometry::Point position;
         cpShape *shape;
 
         E_ (Shape)

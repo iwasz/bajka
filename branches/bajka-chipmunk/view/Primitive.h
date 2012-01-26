@@ -23,7 +23,6 @@ public:
 
         Color const &getBackground () const { return background; }
         m_ (setBackground) void setBackground (Color const &background) { this->background = background; }
-        m_ (setBackground2) void setBackground2 (Ptr <Color> c) { this->background = *c; }
 
         Color const &getForeground () const { return foreground; }
         m_ (setForeground) void setForeground (Color const &foreground) { this->foreground = foreground; }

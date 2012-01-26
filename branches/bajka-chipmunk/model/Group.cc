@@ -6,25 +6,9 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include <chipmunk.h>
-#include "Box.h"
-#include "Body.h"
-#include "Space.h"
+#include "Group.h"
 
 namespace Model {
 
-double Box::calculateInertia (double mass) const
-{
-        return cpMomentForBox (mass, width, height);
-}
 
-void Box::parentCallback (IModel *m)
-{
-        Body *b = static_cast <Body *> (m);
-        shape = cpSpaceAddShape (Space::getSpace(), cpBoxShapeNew2 (b->getBody (),
-                   cpBBNew (position.x, position.y, position.x + width, position.y + height)));
-        cpShapeSetUserData (shape, this);
-        Shape::parentCallback (m);
-}
-
-} /* namespace Model1 */
+} /* namespace Model */

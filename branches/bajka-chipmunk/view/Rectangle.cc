@@ -7,20 +7,20 @@
  ****************************************************************************/
 
 #include <SDL_opengl.h>
-#include "../model/Box.h"
 #include "Rectangle.h"
 #include "draw/Primitives.h"
-#include "../model/static/BoxB.h"
+#include "../model/static/Box.h"
+#include "../model/physics/CPBox.h"
 
 namespace View {
 using namespace Geometry;
 
 void Rectangle::update (Model::IModel *model)
 {
-//        Model::Box *c = static_cast <Model::Box *>  (model);
+//        Model::CPBox *c = static_cast <Model::CPBox *>  (model);
 
 // TODO wywalić!
-        Model::Box *c = dynamic_cast <Model::Box *>  (model);
+        Model::CPBox *c = dynamic_cast <Model::CPBox *>  (model);
 
         if (c) {
                 DrawUtil::drawRectangle (c->getPosition(),
@@ -30,7 +30,7 @@ void Rectangle::update (Model::IModel *model)
                 return;
         }
 
-        Model::BoxB *cB = dynamic_cast <Model::BoxB *>  (model);
+        Model::Box *cB = dynamic_cast <Model::Box *>  (model);
 
         Geometry::Box const &b = cB->getBox ();
         DrawUtil::drawRectangle (b.ll,
