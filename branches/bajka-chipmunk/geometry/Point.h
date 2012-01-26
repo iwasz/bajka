@@ -98,16 +98,9 @@ extern std::ostream &operator<< (std::ostream &o, Geometry::Point const &p);
 
 } // namespace
 
-
-/*
- * Can't pass 'Geometry::Point' to BOOST_GEOMETRY_REGISTER_POINT_2D_GET_SET (:: chars confuse
- * those macros).
- */
-typedef Geometry::Point __BAJKA_POINT__;
-
 /*
  * Register my custom point Type.
  */
-BOOST_GEOMETRY_REGISTER_POINT_2D (__BAJKA_POINT__, double, cs::cartesian, x, y)
+BOOST_GEOMETRY_REGISTER_POINT_2D (Geometry::Point, double, cs::cartesian, x, y)
 
 #	endif /* POINT_H_ */

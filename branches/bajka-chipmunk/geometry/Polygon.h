@@ -6,8 +6,19 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BASIC_H_
-#define BASIC_H_
+#ifndef BAJKA_POLYGON_H_
+#define BAJKA_POLYGON_H_
 
+#include <boost/geometry/geometries/polygon.hpp>
+#include "Point.h"
 
-#	endif /* BASIC_H_ */
+namespace Geometry {
+
+struct Polygon : public boost::geometry::model::polygon <Point> {
+};
+
+} /* namespace Geometry */
+
+// TODO! Nie ma jak zarejestrować! Nie ma makra!
+
+#endif /* POLYGON_H_ */
