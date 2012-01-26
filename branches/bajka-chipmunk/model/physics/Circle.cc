@@ -28,17 +28,16 @@ Geometry::Point Circle::getPosition () const
         return Geometry::Point (v.x, v.y);
 }
 
-double Circle::calculateInertia (double mass) const
-{
-        return cpMomentForCircle (mass, 0, getRadius (), cpv (getPosition ().getX (), getPosition ().getY ()));
-}
-
 void Circle::parentCallback (IModel *m)
 {
         Body *b = static_cast <Body *> (m);
         shape = cpSpaceAddShape (Space::getSpace(), cpCircleShapeNew (b->getBody (), radius, cpv (position.getX (), position.getY ())));
         cpShapeSetUserData (shape, this);
-        Shape::parentCallback (m);
+
+        // TODO można zrobic cast w zalezności od define DEBUG/RELEASE.
+        Body *body = static_cast <Body *> (m);
+        body->addInertia (cpMomentForCircle (body->getMass (), 0, getRadius (), cpv (getPosition ().getX (), getPosition ().getY ())));
+        AbstractModel::parentCallback (m);
 }
 
 double Circle::getRadius () const

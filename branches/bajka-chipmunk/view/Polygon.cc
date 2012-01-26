@@ -7,9 +7,7 @@
  ****************************************************************************/
 
 #include <SDL_opengl.h>
-#include "../model/Box.h"
 #include "Polygon.h"
-#include "../view/draw/Primitives.h"
 
 namespace View {
 

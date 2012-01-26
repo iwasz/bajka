@@ -13,14 +13,14 @@
 
 namespace Model {
 
-class BoxB : public AbstractModel {
+class Box : public AbstractModel {
 public:
 
         C__ (void)
         b_ ("AbstractModel")
 
-        BoxB () : angle (0), scale (1) {}
-        virtual ~BoxB () {}
+        Box () : angle (0), scale (1) {}
+        virtual ~Box () {}
 
         virtual Geometry::Point getPosition () const { return position; }
         m_ (setPosition) virtual void setPosition (Geometry::Point const &p) { position = p; }
@@ -36,11 +36,9 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        // Nie uwzględnia skali.
-//        double getWidth () const { return box}
-//        double getHeight () const {}
+        double getWidth () const { return box.getWidth (); }
+        double getHeight () const { return box.getHeight (); }
 
-        // Tymczasowa?
         Geometry::Box const &getBox () const { return box; }
         m_ (setBox) void setBox (Geometry::Box const &b) { box = b; }
 
@@ -51,7 +49,7 @@ public:
         virtual bool contains (Geometry::Point const &p) const;
         virtual void transform (Geometry::Point *p) const;
 
-private:
+protected:
 
         Geometry::Box box;
         Geometry::Point position;
@@ -59,7 +57,7 @@ private:
         double angle;
         double scale;
 
-        E_ (BoxB)
+        E_ (Model::Box)
 };
 
 } /* namespace Model */

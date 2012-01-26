@@ -8,15 +8,16 @@
 
 #include <boost/geometry/geometry.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
-#include "BoxB.h"
+#include "Box.h"
 #include "../../geometry/Ring.h"
 
 namespace Model {
 using namespace boost::geometry;
 using namespace Geometry;
+namespace G = Geometry;
 namespace trans = boost::geometry::strategy::transform;
 
-//void BoxB::setPosition (Point const &p)
+//void Box::setPosition (Point const &p)
 //{
 //        double w = box.getWidth ();
 //        double h = box.getHeight ();
@@ -26,7 +27,7 @@ namespace trans = boost::geometry::strategy::transform;
 
 /****************************************************************************/
 
-IModel *BoxB::findContains (Point const &p)
+IModel *Box::findContains (Point const &p)
 {
         // - Punkt p jest we współrzędnych rodzica.
 
@@ -36,7 +37,7 @@ IModel *BoxB::findContains (Point const &p)
         // --- Stwórz macierz.
         // --- Przemnóż ll i ur przez tą macierz.
         // -- Znajdz aabb (max i min x + max i min.y).
-        Box aabb = getBoundingBox ();
+        G::Box aabb = getBoundingBox ();
 
         // - Sprawdź, czy p jest w aabb
         // -- Jeśli nie, zwróć NULL.
@@ -73,7 +74,7 @@ IModel *BoxB::findContains (Point const &p)
 
 /****************************************************************************/
 
-bool BoxB::contains (Point const &p) const
+bool Box::contains (Point const &p) const
 {
     Ring ring;
     convert (box, ring);
@@ -95,7 +96,7 @@ bool BoxB::contains (Point const &p) const
 
 /****************************************************************************/
 
-void BoxB::transform (Point *p) const
+void Box::transform (Point *p) const
 {
         double aRad = angle * M_PI / 180.0;
         // Pomnożyć sin i cos razy scale i podstawić.
@@ -109,7 +110,7 @@ void BoxB::transform (Point *p) const
 
 /****************************************************************************/
 
-Box BoxB::getBoundingBox () const
+G::Box Box::getBoundingBox () const
 {
 //        double minX, minY, maxX, maxY;
 //
@@ -145,7 +146,7 @@ Box BoxB::getBoundingBox () const
 //
 //        return G::Box (minX, minY, maxX, maxY);
 
-	Box aabb;
+	G::Box aabb;
     Ring ring;
     convert (box, ring);
 

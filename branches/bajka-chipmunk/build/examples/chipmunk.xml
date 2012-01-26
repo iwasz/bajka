@@ -98,7 +98,7 @@
 <!--                 Uwaga! To dla tego, ze kontener tworzy Ptr <Widget>, ale tam jest Widget *.  -->
 <!--                 To się konwertuje ładnie, ale tamten Ptr się kasuje! Zaś gdy damy singleton,-->
 <!--                 To Ptr siedzi w pamięci. -->
-                <bean class="Model::Box" singleton="true">
+                <bean class="CPBox" singleton="true">
                     <property name="width" value="640" />
                     <property name="height" value="10" />
                     <property name="view" ref="rectangleWgt"/>
@@ -113,7 +113,7 @@
     
         <property name="children">
             <list class="ModelVector">
-                <bean class="Model::Box" singleton="true">
+                <bean class="CPBox" singleton="true">
                     <property name="width" value="10" />
                     <property name="height" value="480" />
                     <property name="view" ref="rectangleWgt"/>
@@ -128,7 +128,7 @@
     
         <property name="children">
             <list class="ModelVector">
-                <bean class="Model::Box" singleton="true">
+                <bean class="CPBox" singleton="true">
                     <property name="width" value="10" />
                     <property name="height" value="480" />
                     <property name="view" ref="rectangleWgt"/>
@@ -171,7 +171,7 @@
 
         <property name="children">
             <list class="ModelVector">
-                <bean class="Model::Box" singleton="true">
+                <bean class="CPBox" singleton="true">
                     <property name="width" value="92" />
                     <property name="height" value="122" />
                     <property name="view" ref="image1Wgt"/>            
@@ -203,7 +203,7 @@
 
         <property name="children">
             <list class="ModelVector">
-                <bean class="Model::Box" singleton="true">
+                <bean class="CPBox" singleton="true">
                     <property name="width" value="200" />
                     <property name="height" value="50" />
                     <property name="view" ref="textWgt"/>            
@@ -213,7 +213,7 @@
     </bean>
          
          
-<!--     <bean id="boxB" class="BoxB" singleton="true"> -->
+<!--     <bean id="boxB" class="Model::Box" singleton="true"> -->
 <!--         <property name="box" value="100, 100, 150, 150"/> -->
 <!--         <property name="center" value="125, 125"/> -->
 <!--         <property name="position" value="20, 20"/>         -->
@@ -222,7 +222,7 @@
 <!--         <property name="view" ref="rectangleWgt"/> -->
 <!--     </bean>          -->
 
-     <bean id="boxB" class="BoxB" singleton="true">
+     <bean id="boxB" class="Model::Box" singleton="true">
         <property name="box" value="-20, -20, 20, 20"/>
         <property name="center" value="-20, -20"/>
         <property name="position" value="40, 40"/>        
@@ -231,7 +231,7 @@
         <property name="view" ref="rectangleWgt"/>
     </bean>         
 
-      <bean id="boxB3" class="BoxB" singleton="true">
+      <bean id="boxB3" class="Model::Box" singleton="true">
         <property name="box" value="-20, -20, 20, 20"/>
         <property name="center" value="0, 0"/>
 <!--         <property name="position" value="20, 20"/>         -->
@@ -240,13 +240,13 @@
         <property name="view" ref="rectangleWgt"/>
     </bean>         
      
-    <bean id="boxB4" class="BoxB" singleton="true">
+    <bean id="boxB4" class="Model::Box" singleton="true">
         <property name="box" value="-20, -20, 20, 20"/>
         <property name="view" ref="rectangleWgt"/>
     </bean>
                  
 <!--                 
-    <bean id="boxB2" class="BoxB" singleton="true">
+    <bean id="boxB2" class="Model::Box" singleton="true">
         <property name="box" value="100, 100, 150, 150"/>
         <property name="center" value="125, 125"/>
         <property name="position" value="20, 20"/>        
@@ -258,7 +258,7 @@
     </bean>       
 -->
 
-    <bean id="boxB5" class="BoxB" singleton="true">
+    <bean id="boxB5" class="Model::Box" singleton="true">
         <property name="box" value="100, 100, 150, 150"/>
         <property name="center" value="125, 125"/>
         <property name="position" value="20, 20"/>        

@@ -6,13 +6,17 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_MODEL_H_
-#define BAJKA_MODEL_H_
+#include <chipmunk.h>
+#include "../geometry/AffineMatrix.h"
+#include "Shape.h"
+#include "Body.h"
+#include "../util/Exceptions.h"
 
-#include "static/Static.h"
-#include "physics/Physics.h"
-#include "IModel.h"
-#include "AbstractModel.h"
-#include "Group.h"
+namespace Model {
 
-#	endif /* MODEL_H_ */
+Shape::~Shape ()
+{
+        cpShapeFree (shape);
+}
+
+} /* namespace Model */

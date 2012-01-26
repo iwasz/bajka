@@ -6,19 +6,20 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef CIRCLE_H_
-#define CIRCLE_H_
+#ifndef BAJKA_CIRCLE_H_
+#define BAJKA_CIRCLE_H_
 
 #include "../geometry/Point.h"
 #include "Shape.h"
+#include "../AbstractModel.h"
 
 namespace Model {
 
-class Circle : public Shape {
+class Circle /*: public Shape*/, public AbstractModel {
 public:
 
         C__ (void)
-        b_ ("Shape")
+        b_ ("AbstractModel", "Shape")
 
         virtual ~Circle () {}
 
@@ -33,12 +34,12 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        double calculateInertia (double mass) const;
         virtual void parentCallback (IModel *m);
 
 private:
 
         double radius;
+        Geometry::Point position;
 
         E_ (Model::Circle)
 

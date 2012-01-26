@@ -7,11 +7,11 @@
  ****************************************************************************/
 
 #include <SDL_opengl.h>
-#include "../model/Box.h"
 #include "DebugWidget.h"
 #include "draw/Primitives.h"
-#include "../model/static/BoxB.h"
+#include "../model/static/Box.h"
 #include "../view/draw/Primitives.h"
+#include "../model/physics/CPBox.h"
 
 using View::DrawUtil;
 
@@ -20,7 +20,7 @@ using namespace Geometry;
 
 void DebugWidget::update (Model::IModel *model)
 {
-        Model::Box *c = dynamic_cast <Model::Box *>  (model);
+        Model::CPBox *c = dynamic_cast <Model::CPBox *>  (model);
 
         if (c) {
                 DrawUtil::drawRectangle (c->getPosition(),
@@ -30,7 +30,7 @@ void DebugWidget::update (Model::IModel *model)
                 return;
         }
 
-        Model::BoxB *cB = dynamic_cast <Model::BoxB *>  (model);
+        Model::Box *cB = dynamic_cast <Model::Box *>  (model);
 
         Geometry::Box const &b = cB->getBox ();
 

@@ -34,7 +34,7 @@ g_ (ModelVector)
  * natomiast model to będzie box, circle etc. czyli definicja kształtu tego obrazka
  * (jego konturów).
  */
-struct IModel : public Core::Object {
+struct IModel : public virtual Core::Object {
 
         virtual ~IModel () {}
 

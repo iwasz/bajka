@@ -4,7 +4,6 @@
 #include <Pointer.h>
 
 #include "IModel.h"
-#include "../model/Box.h"
 #include "../geometry/Ring.h"
 
 // Procentowy dopuszcalny błąd w porównaniach doubli.
