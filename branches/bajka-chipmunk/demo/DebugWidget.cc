@@ -10,7 +10,7 @@
 #include "../model/Box.h"
 #include "DebugWidget.h"
 #include "draw/Primitives.h"
-#include "../model/basic/BoxB.h"
+#include "../model/static/BoxB.h"
 #include "../view/draw/Primitives.h"
 
 using View::DrawUtil;

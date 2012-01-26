@@ -10,7 +10,7 @@
 #include "../model/Box.h"
 #include "Rectangle.h"
 #include "draw/Primitives.h"
-#include "../model/basic/BoxB.h"
+#include "../model/static/BoxB.h"
 
 namespace View {
 using namespace Geometry;

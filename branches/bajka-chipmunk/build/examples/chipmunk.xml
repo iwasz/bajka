@@ -56,7 +56,7 @@
                 <ref bean="boxB3"/>                
                 <ref bean="boxB4"/>                
                 <ref bean="boxB5"/>
-                <ref bean="boxB2"/>
+                <!--<ref bean="boxB2"/>-->
                 <ref bean="body"/>
                 <ref bean="ground"/>
                 <ref bean="ground2"/>
@@ -68,7 +68,7 @@
             </list>
         </property>
 
-<!--         <property name="controller" ref="emptyCtr"/>             -->
+        <!--<property name="controller" ref="emptyCtr"/>-->
     </bean>
       
     <bean id="body" class="Body" singleton="true">
@@ -146,11 +146,7 @@
                 <bean id="circle" class="Model::Circle" singleton="true">
                     <property name="view" ref="circleWgt"/>            
                     <property name="radius" value="30" />
-                    <property name="controller">    
-                        <bean class="DebugController" singleton="true">
-                             <property name="eventMask" value="0xffff"/> 
-                        </bean>      
-                    </property>
+                    <property name="controller" ref="emptyCtr"/>    
                 </bean>
             </list>
         </property>
@@ -249,6 +245,7 @@
         <property name="view" ref="rectangleWgt"/>
     </bean>
                  
+<!--                 
     <bean id="boxB2" class="BoxB" singleton="true">
         <property name="box" value="100, 100, 150, 150"/>
         <property name="center" value="125, 125"/>
@@ -259,13 +256,16 @@
             <bean class="DebugWidget" singleton="true"/>
         </property>
     </bean>       
+-->
 
     <bean id="boxB5" class="BoxB" singleton="true">
         <property name="box" value="100, 100, 150, 150"/>
         <property name="center" value="125, 125"/>
         <property name="position" value="20, 20"/>        
         <property name="angle" value="30"/>
-        <property name="scale" value="1"/>
+        <property name="scale" value="2"/>
         <property name="view" ref="rectangleWgt"/>
-    </bean>       
+        <property name="controller" ref="emptyCtr"/>    
+    </bean>
+
 </beans>

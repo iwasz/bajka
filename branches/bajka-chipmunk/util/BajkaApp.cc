@@ -190,6 +190,10 @@ void BajkaApp::loop ()
 {
         bool done = false;
 
+        if (!model) {
+        	throw InitException ("BajkaApp has no model.");
+        }
+
         while (!done) {
 
                 glMatrixMode (GL_MODELVIEW);
@@ -198,14 +202,12 @@ void BajkaApp::loop ()
                 glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 // Run models, views and controllers.
-                if (model) {
-                        // Generuj eventy.
-                        for (Event::DispatcherList::const_iterator i = dispatchers->begin (); i != dispatchers->end (); i++) {
-                                (*i)->run (model.get (), listeners);
-                        }
+				// Generuj eventy.
+				for (Event::DispatcherList::const_iterator i = dispatchers->begin (); i != dispatchers->end (); i++) {
+						(*i)->run (model.get (), listeners);
+				}
 
-                        model->update ();
-                }
+				model->update ();
 
                 // Run chipmunk
                 cpSpaceStep (Model::Space::getSpace (), 1.0 / 60.0);

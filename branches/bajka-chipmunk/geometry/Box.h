@@ -64,7 +64,7 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        bool contains (Geometry::Point const &p) const { p.x >= ll.x && p.x <= ur.x && p.y >= ll.y && p.y <= ur.y; }
+        bool contains (Geometry::Point const &p) const { return p.x >= ll.x && p.x <= ur.x && p.y >= ll.y && p.y <= ur.y; }
 
 /*--------------------------------------------------------------------------*/
 
@@ -82,7 +82,6 @@ public:
 
 }
 
-typedef Geometry::Box __BAJKA_BOX__;
-BOOST_GEOMETRY_REGISTER_BOX (__BAJKA_BOX__, __BAJKA_POINT__, ll, ur)
+BOOST_GEOMETRY_REGISTER_BOX (Geometry::Box, Geometry::Point, ll, ur)
 
 #	endif /* BOX_H_ */

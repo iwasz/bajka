@@ -36,6 +36,7 @@ struct DebugController : public IController {
         virtual bool onExpose (Event::ExposeEvent *e);
         virtual bool onResize (Event::ResizeEvent *e);
 
+        // linia do dołu
         m_ (setEventMask)
         E_ (DebugController)
 };
