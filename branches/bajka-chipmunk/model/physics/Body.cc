@@ -23,7 +23,9 @@ Body::Body ()
 
 Body::~Body ()
 {
-        cpBodyFree (body);
+//        TODO Coś jest źle przy kasowaniu kontenera - SegF tutaj.
+//        cpBodyFree (body);
+        body = NULL;
 }
 
 /****************************************************************************/

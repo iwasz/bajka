@@ -15,7 +15,7 @@
 
 namespace Model {
 
-class Circle /*: public Shape*/, public AbstractModel {
+class Circle : public Shape, public AbstractModel {
 public:
 
         C__ (void)

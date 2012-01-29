@@ -57,7 +57,7 @@ protected:
         double angle;
         double scale;
 
-        E_ (Model::Box)
+        E_ (Box)
 };
 
 } /* namespace Model */

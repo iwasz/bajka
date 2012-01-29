@@ -77,7 +77,7 @@ public:
         Point ll;
         Point ur;
 
-        E_ (Box)
+        E_ (Geometry::Box)
 };
 
 }

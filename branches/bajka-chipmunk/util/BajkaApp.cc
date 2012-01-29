@@ -204,7 +204,7 @@ void BajkaApp::loop ()
                 // Run models, views and controllers.
 				// Generuj eventy.
 				for (Event::DispatcherList::const_iterator i = dispatchers->begin (); i != dispatchers->end (); i++) {
-						(*i)->run (model.get (), listeners);
+                                        (*i)->run (model.get (), listeners);
 				}
 
 				model->update ();
