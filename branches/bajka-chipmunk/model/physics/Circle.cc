@@ -22,11 +22,15 @@ void Circle::setPosition (Geometry::Point const &p)
         position = p;
 }
 
+/****************************************************************************/
+
 Geometry::Point Circle::getPosition () const
 {
         cpVect v = cpCircleShapeGetOffset (shape);
         return Geometry::Point (v.x, v.y);
 }
+
+/****************************************************************************/
 
 void Circle::parentCallback (IModel *m)
 {
@@ -40,10 +44,14 @@ void Circle::parentCallback (IModel *m)
         AbstractModel::parentCallback (m);
 }
 
+/****************************************************************************/
+
 double Circle::getRadius () const
 {
         return cpCircleShapeGetRadius (shape);
 }
+
+/****************************************************************************/
 
 void Circle::setRadius (double r)
 {

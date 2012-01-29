@@ -17,19 +17,7 @@ using namespace Geometry;
 
 void Rectangle::update (Model::IModel *model)
 {
-//        Model::CPBox *c = static_cast <Model::CPBox *>  (model);
-
-// TODO wywalić!
-        Model::CPBox *c = dynamic_cast <Model::CPBox *>  (model);
-
-        if (c) {
-                DrawUtil::drawRectangle (c->getPosition(),
-                                         Point (c->getPosition ().x + c->getWidth (), c->getPosition ().y + c->getHeight ()),
-                                         getForeground (),
-                                         getBackground ());
-                return;
-        }
-
+        // TODO CAst zależny od makra DEBUG
         Model::Box *cB = dynamic_cast <Model::Box *>  (model);
 
         Geometry::Box const &b = cB->getBox ();

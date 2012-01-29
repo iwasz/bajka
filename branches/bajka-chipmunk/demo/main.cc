@@ -25,20 +25,22 @@ int main (int argc, char **argv)
                 fileName = "examples/chipmunk.xml";
         }
 
-        // Nie robimy try-catch, bo i tak info zostanie wypisane.
-        Ptr <Container::BeanFactoryContainer> container = Container::XmlContainerFactory::createContainer (fileName, true);
-        Ptr <Util::BajkaApp> app = vcast <Ptr <Util::BajkaApp> > (container->getBean ("app"));
+//        try {
+                Ptr <Container::BeanFactoryContainer> container = Container::XmlContainerFactory::createContainer (fileName, true);
+                Ptr <Util::BajkaApp> app = vcast <Ptr <Util::BajkaApp> > (container->getBean ("app"));
 
-        try {
                 app->loop ();
                 app->destroy ();
-        }
-        catch (std::exception const &e) {
-                std::cerr << "Exception caught : " << e.what () << std::endl;
-        }
-        catch (...) {
-                std::cerr << "Unknown exception." << std::endl;
-        }
+//        }
+//        catch (Core::Exception const &e) {
+//                std::cerr << "Exception caught : " << e.getMessage () << std::endl;
+//        }
+//        catch (std::exception const &e) {
+//                std::cerr << "exception caught : " << e.what () << std::endl;
+//        }
+//        catch (...) {
+//                std::cerr << "Unknown exception." << std::endl;
+//        }
 
 
         return EXIT_SUCCESS;

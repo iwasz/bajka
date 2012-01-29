@@ -29,16 +29,16 @@ public:
 /*--------------------------------------------------------------------------*/
 
         // Szejpów chipmunkowych nie można zmieniać i nie można transformowac. Tylko body można.
-        Geometry::Point getPosition () const { throw Util::OperationNotSupportedException (); }
+        Geometry::Point getPosition () const;
         void setPosition (Geometry::Point const &p) { throw Util::OperationNotSupportedException (); }
 
-        Geometry::Point getCenter () const { throw Util::OperationNotSupportedException (); }
+        Geometry::Point getCenter () const;
         void setCenter (Geometry::Point const &p) { throw Util::OperationNotSupportedException (); }
 
-        double getAngle () const { throw Util::OperationNotSupportedException (); }
+        double getAngle () const { return 0; }
         virtual void setAngle (double a) { throw Util::OperationNotSupportedException (); }
 
-        double getScale () const { throw Util::OperationNotSupportedException (); }
+        double getScale () const { return 1; }
         virtual void setScale (double s) { throw Util::OperationNotSupportedException (); }
 
 /*--------------------------------------------------------------------------*/
