@@ -13,6 +13,27 @@
 
 namespace Model {
 
+Geometry::Point AbstractModel::getCenter () const
+{
+        if (center.get ()) {
+                return *center;
+        }
+
+        return computeCenter ();
+}
+
+/****************************************************************************/
+
+void AbstractModel::setCenter (Geometry::Point const &p)
+{
+        if (!center.get ()) {
+                center = std::auto_ptr <Geometry::Point> (new Geometry::Point (p));
+        }
+        else {
+                *center = p;
+        }
+}
+
 /****************************************************************************/
 
 void AbstractModel::setChildren (ModelVector const &c)

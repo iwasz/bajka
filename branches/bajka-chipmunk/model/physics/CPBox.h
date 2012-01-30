@@ -6,8 +6,8 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_BOX_H_
-#define BAJKA_BOX_H_
+#ifndef BAJKA_PHYS_BOX_H_
+#define BAJKA_PHYS_BOX_H_
 
 #include "../geometry/AffineMatrix.h"
 #include "../geometry/Point.h"

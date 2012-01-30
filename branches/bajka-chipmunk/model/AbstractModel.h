@@ -19,14 +19,28 @@ public:
 
         d__
 
-        AbstractModel () : parent (0), view (0), controller (0) {}
+        AbstractModel () : parent (0), angle (0), scale (1), view (0), controller (0) {}
         virtual ~AbstractModel () {}
 
+/*--------------------------------------------------------------------------*/
+
+        virtual Geometry::Point getPosition () const { return position; }
+        m_ (setPosition) virtual void setPosition (Geometry::Point const &p) { position = p; }
+
+        virtual Geometry::Point getCenter () const;
+        m_ (setCenter) virtual void setCenter (Geometry::Point const &p);
+        // TODO pure virtual
+        virtual Geometry::Point computeCenter () const { return Geometry::Point(); }
+
+        virtual double getAngle () const { return angle; }
+        m_ (setAngle) virtual void setAngle (double a) { angle = a; }
+
+        virtual double getScale () const { return scale; }
+        m_ (setScale) virtual void setScale (double s) { scale = s; }
+
+/*--------------------------------------------------------------------------*/
+
         // TODO wywalić.
-        virtual double getScale () const { return 1; }
-        virtual void setScale (double a) {}
-        virtual Geometry::Point getCenter () const { return Geometry::Point (); }
-        virtual void setCenter (Geometry::Point const &p) {}
         virtual void transform (Geometry::Point *p) const {}
         virtual Geometry::Box getBoundingBox () const {}
         virtual bool contains (Geometry::Point const &p) const {}
@@ -61,10 +75,19 @@ public:
         Controller::IController *getController () { return controller; }
         S_ (setController) void setController (Controller::IController *c) { controller = c; }
 
-private:
+
+protected:
 
         IModel *parent;
         ModelVector children;
+
+        Geometry::Point position;
+        double angle;
+        double scale;
+
+private:
+
+        std::auto_ptr <Geometry::Point> center;
         View::IView *view;
         Controller::IController *controller;
 

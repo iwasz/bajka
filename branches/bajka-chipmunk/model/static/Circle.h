@@ -6,30 +6,28 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_MODEDL_BOXB_H_
-#define BAJKA_MODEDL_BOXB_H_
+#ifndef BAJKA_MODEDL_CIRCLE_STATIC_H_
+#define BAJKA_MODEDL_CIRCLE_STATIC_H_
 
 #include "../AbstractModel.h"
 
 namespace Model {
 
-class Box : public AbstractModel {
+class Circle : public AbstractModel {
 public:
 
         C__ (void)
         b_ ("AbstractModel")
 
-        virtual ~Box () {}
+        Circle () : radius (0) {}
+        virtual ~Circle () {}
 
 /*--------------------------------------------------------------------------*/
 
         Geometry::Point computeCenter () const;
 
-        double getWidth () const { return box.getWidth (); }
-        double getHeight () const { return box.getHeight (); }
-
-        Geometry::Box const &getBox () const { return box; }
-        m_ (setBox) void setBox (Geometry::Box const &b) { box = b; }
+        virtual double getRadius () const { return radius; }
+        m_ (setRadius) virtual void setRadius (double r) { radius = r; }
 
 /*--------------------------------------------------------------------------*/
 
@@ -40,9 +38,9 @@ public:
 
 protected:
 
-        Geometry::Box box;
+        double radius;
 
-        E_ (Box)
+        E_ (Circle)
 };
 
 } /* namespace Model */
