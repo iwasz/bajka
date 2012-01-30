@@ -40,8 +40,9 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
+        virtual void transform (Geometry::Point *p) const;
+
         // TODO wywalić.
-        virtual void transform (Geometry::Point *p) const {}
         virtual Geometry::Box getBoundingBox () const {}
         virtual bool contains (Geometry::Point const &p) const {}
 

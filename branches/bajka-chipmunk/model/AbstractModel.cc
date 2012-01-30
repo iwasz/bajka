@@ -82,4 +82,18 @@ bool AbstractModel::update ()
 
 }
 
+/****************************************************************************/
+
+void AbstractModel::transform (Geometry::Point *p) const
+{
+        double aRad = angle * M_PI / 180.0;
+        // Pomnożyć sin i cos razy scale i podstawić.
+        double s = sin (aRad);
+        double c = cos (aRad);
+        double x = p->x;
+        Geometry::Point ct = getCenter ();
+
+        p->x = scale * c * (x - scale * ct.x) + scale * s * (scale * ct.y - p->y) + ct.x + position.x;
+        p->y = scale * c * (p->y - scale * ct.y) + scale * s * (x - scale * ct.x) + ct.y + position.y;
+}
 } /* namespace Model1 */

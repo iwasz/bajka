@@ -36,7 +36,7 @@ public:
         virtual IModel *findContains (Geometry::Point const &p);
         virtual Geometry::Box getBoundingBox () const;
         virtual bool contains (Geometry::Point const &p) const;
-        virtual void transform (Geometry::Point *p) const;
+//        virtual void transform (Geometry::Point *p) const;
 
 protected:
 

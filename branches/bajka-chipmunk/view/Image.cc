@@ -38,8 +38,8 @@ void Image::init (Model::IModel *model)
         SDL_Surface *texSurface = expandSurfacePowerOf2 (image);
         SDL_FreeSurface (image);
 
-        unsigned int width = texSurface->w;
-        unsigned int height = texSurface->h;
+        int width = texSurface->w;
+        int height = texSurface->h;
 
 /*--------------------------------------------------------------------------*/
 
