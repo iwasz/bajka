@@ -84,8 +84,8 @@ bool Circle::contains (Point const &p) const
 G::Box Circle::getBoundingBox () const
 {
         double r = radius * scale;
-        double x = translate.x + origin.x * scale;
-        double y = translate.y + origin.y * scale;
+        double x = translate.x + origin.x;
+        double y = translate.y + origin.y;
         return G::Box (x - r, y - r, x + r, y + r);
 }
 

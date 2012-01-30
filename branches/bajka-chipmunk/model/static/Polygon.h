@@ -6,18 +6,22 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_SEGMENT_H_
-#define BAJKA_SEGMENT_H_
+#ifndef BAJKA_POLYGON_H_
+#define BAJKA_POLYGON_H_
 
-#include "Shape.h"
+#include "../AbstractModel.h"
 
 namespace Model {
 
-class Segment : public Shape {
+class Polygon : public AbstractModel {
 public:
-        virtual ~Segment () {}
+
+//        C__ (void)
+//        b_ ("Shape")
+
+        virtual ~Polygon () {}
 };
 
 } // namespace
 
-#	endif /* SEGMENT_H_ */
+#	endif /* POLYGON_H_ */

@@ -10,6 +10,9 @@
 #include "../view/Widget.h"
 #include <algorithm>
 #include <boost/bind.hpp>
+#include "../view/draw/Primitives.h"
+
+using View::DrawUtil;
 
 namespace Model {
 
@@ -60,6 +63,9 @@ void AbstractModel::update ()
         }
 
         if (view) {
+#if 1
+                DrawUtil::drawRectangle (getBoundingBox(), View::Color::RED, View::Color::TRANSPARENT);
+#endif
                 view->preUpdate (this);
                 view->update (this);
         }

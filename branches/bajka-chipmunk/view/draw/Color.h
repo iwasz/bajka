@@ -50,6 +50,7 @@ public:
         static Color MAGENTA;
         static Color CYAN;
         static Color WHITE;
+        static Color TRANSPARENT;
 
 private:
 
