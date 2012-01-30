@@ -52,7 +52,7 @@ void AbstractModel::addChild (IModel *m)
 
 /****************************************************************************/
 
-bool AbstractModel::update ()
+void AbstractModel::update ()
 {
         if (controller) {
                 controller->preUpdate (this, view);
@@ -79,7 +79,6 @@ bool AbstractModel::update ()
         if (controller) {
                 controller->postUpdate (this, view);
         }
-
 }
 
 /****************************************************************************/
@@ -93,7 +92,7 @@ void AbstractModel::transform (Geometry::Point *p) const
         double x = p->x;
         Geometry::Point ct = getCenter ();
 
-        p->x = scale * c * (x - scale * ct.x) + scale * s * (scale * ct.y - p->y) + ct.x + position.x;
-        p->y = scale * c * (p->y - scale * ct.y) + scale * s * (x - scale * ct.x) + ct.y + position.y;
+        p->x = scale * c * (x - scale * ct.x) + scale * s * (scale * ct.y - p->y) + ct.x + translate.x;
+        p->y = scale * c * (p->y - scale * ct.y) + scale * s * (x - scale * ct.x) + ct.y + translate.y;
 }
 } /* namespace Model1 */

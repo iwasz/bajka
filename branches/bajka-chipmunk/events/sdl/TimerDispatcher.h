@@ -30,12 +30,12 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        int getTickInterval () const { return tickInterval; }
-        m_ (setTickInterval) void setTickInterval (int tickInterval) { this->tickInterval = tickInterval; }
+        unsigned int getTickInterval () const { return tickInterval; }
+        m_ (setTickInterval) void setTickInterval (unsigned int tickInterval) { this->tickInterval = tickInterval; }
 
 private:
 
-        int tickInterval;
+        unsigned int tickInterval;
         unsigned int prevTime;
         Event::TimerEvent timerEvent;
 

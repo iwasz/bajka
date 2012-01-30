@@ -17,8 +17,8 @@ SDL_Surface *expandSurfacePowerOf2 (SDL_Surface *input)
         SDL_Surface *texSurface = NULL;
 
         // Podniesione do następnej potęgi
-        unsigned int width = Util::Math::nextSqr (input->w);
-        unsigned int height = Util::Math::nextSqr (input->h);
+        int width = Util::Math::nextSqr (input->w);
+        int height = Util::Math::nextSqr (input->h);
 
         if (height != input->h || width != input->w) {
 

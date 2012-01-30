@@ -6,25 +6,25 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "Circle.h"
+#include "CPCircle.h"
 #include "../util/Exceptions.h"
 #include "Body.h"
 #include "Space.h"
 
 namespace Model {
 
-void Circle::setPosition (Geometry::Point const &p)
+void CPCircle::setOrigin (Geometry::Point const &p)
 {
         if (getParent ()) {
                 throw Util::OperationNotSupportedException ();
         }
 
-        position = p;
+        origin = p;
 }
 
 /****************************************************************************/
 
-Geometry::Point Circle::getPosition () const
+Geometry::Point CPCircle::getOrigin () const
 {
         cpVect v = cpCircleShapeGetOffset (shape);
         return Geometry::Point (v.x, v.y);
@@ -32,28 +32,27 @@ Geometry::Point Circle::getPosition () const
 
 /****************************************************************************/
 
-void Circle::parentCallback (IModel *m)
+void CPCircle::parentCallback (IModel *m)
 {
         Body *b = static_cast <Body *> (m);
-        shape = cpSpaceAddShape (Space::getSpace(), cpCircleShapeNew (b->getBody (), radius, cpv (position.getX (), position.getY ())));
+        shape = cpSpaceAddShape (Space::getSpace(), cpCircleShapeNew (b->getBody (), radius, cpv (origin.x, origin.y)));
         cpShapeSetUserData (shape, this);
 
         // TODO można zrobic cast w zalezności od define DEBUG/RELEASE.
-        Body *body = static_cast <Body *> (m);
-        body->addInertia (cpMomentForCircle (body->getMass (), 0, getRadius (), cpv (getPosition ().getX (), getPosition ().getY ())));
+        b->addInertia (cpMomentForCircle (b->getMass (), 0, radius, cpv (origin.x, origin.y)));
         AbstractModel::parentCallback (m);
 }
 
 /****************************************************************************/
 
-double Circle::getRadius () const
+double CPCircle::getRadius () const
 {
         return cpCircleShapeGetRadius (shape);
 }
 
 /****************************************************************************/
 
-void Circle::setRadius (double r)
+void CPCircle::setRadius (double r)
 {
         if (getParent ()) {
                 throw Util::OperationNotSupportedException ();

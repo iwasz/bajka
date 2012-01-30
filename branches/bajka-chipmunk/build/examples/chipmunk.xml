@@ -52,6 +52,7 @@
         
         <property name="children">
             <list class="ModelVector">
+                <ref bean="statCirc01"/>
                 <ref bean="boxB"/>
                 <ref bean="boxB3"/>                
                 <ref bean="boxB4"/>                
@@ -73,7 +74,7 @@
       
     <bean id="body" class="Body" singleton="true">
         <property name="mass" value="1" />
-        <property name="position" value="5, 0"/>
+        <property name="translate" value="5, 0"/>
 
         <property name="children">
             <list class="ModelVector">
@@ -82,7 +83,7 @@
         </property>
     </bean>      
 
-    <bean id="circle" class="Model::Circle" singleton="true">
+    <bean id="circle" class="CPCircle" singleton="true">
         <property name="view" ref="circleWgt"/>            
         <property name="radius" value="50" />    
         <property name="controller" ref="emptyCtr"/>            
@@ -90,7 +91,7 @@
     
     <bean id="ground" class="StaticBody" singleton="true">
         <constructor-arg><value type="bool">true</value></constructor-arg>
-        <property name="position" value="-320, -240"/>
+        <property name="translate" value="-320, -240"/>
     
         <property name="children">
             <list class="ModelVector">
@@ -108,7 +109,7 @@
 
     <bean id="ground2" class="StaticBody" singleton="true">
         <constructor-arg><value type="bool">false</value></constructor-arg>
-        <property name="position" value="-320, -240"/>
+        <property name="translate" value="-320, -240"/>
     
         <property name="children">
             <list class="ModelVector">
@@ -122,7 +123,7 @@
 
     <bean id="ground3" class="StaticBody" singleton="true">
         <constructor-arg><value type="bool">false</value></constructor-arg>
-        <property name="position" value="310, -240"/>
+        <property name="translate" value="310, -240"/>
     
         <property name="children">
             <list class="ModelVector">
@@ -136,11 +137,11 @@
 
     <bean id="c2" class="Body" singleton="true">
         <propery name="mass" value="1"/>
-        <property name="position" value="-100, 50"/>
+        <property name="translate" value="-100, 50"/>
 
         <property name="children">
             <list class="ModelVector">
-                <bean id="circle" class="Model::Circle" singleton="true">
+                <bean id="circle" class="CPCircle" singleton="true">
                     <property name="view" ref="circleWgt"/>            
                     <property name="radius" value="30" />
                     <property name="controller" ref="emptyCtr"/>    
@@ -151,8 +152,8 @@
     
     
     
-    <bean id="c3" parent="c2">
-        <property name="position" value="-150, 50"/>
+    <bean id="c3" parent="c2" singleton="true">
+        <property name="translate" value="-150, 50"/>
 <!-- TODO to nie dziala, a powinno! -->
 <!--        <property name="children.0.radius" value="100"/> -->
     </bean>
@@ -164,7 +165,7 @@
     
     <bean id="imageBdy" class="Body" singleton="true">
         <propery name="mass" value="1"/>
-        <property name="position" value="70, 50"/>
+        <property name="translate" value="70, 50"/>
 
         <property name="children">
             <list class="ModelVector">
@@ -179,7 +180,7 @@
     <!-- Tak bym chciał, ale to wymaga: 1 fixu i 2 CRów... Czy warto? -->
     <!-- 
     <bean id="img2" parent="imageBody">
-        <property name="position" value="70, 50"/>
+        <property name="translate" value="70, 50"/>
         <property name="path" value="gfx/1.png"/>
     </bean>
      -->
@@ -195,7 +196,7 @@
 
     <bean id="textBdy" class="Body" singleton="true">
         <propery name="mass" value="1"/>
-        <property name="position" value="-70, 200"/>
+        <property name="translate" value="-70, 200"/>
 
         <property name="children">
             <list class="ModelVector">
@@ -211,7 +212,7 @@
 <!--     <bean id="boxB" class="Box" singleton="true"> -->
 <!--         <property name="box" value="100, 100, 150, 150"/> -->
 <!--         <property name="center" value="125, 125"/> -->
-<!--         <property name="position" value="20, 20"/>         -->
+<!--         <property name="translate" value="20, 20"/>         -->
 <!--         <property name="angle" value="45"/> -->
 <!--         <property name="scale" value="1"/> -->
 <!--         <property name="view" ref="rectangleWgt"/> -->
@@ -220,7 +221,7 @@
      <bean id="boxB" class="Box" singleton="true">
         <property name="box" value="-20, -20, 20, 20"/>
         <property name="center" value="-20, -20"/>
-        <property name="position" value="40, 40"/>        
+        <property name="translate" value="40, 40"/>        
         <property name="angle" value="45"/>
         <property name="scale" value="2"/>
         <property name="view" ref="rectangleWgt"/>
@@ -229,7 +230,7 @@
       <bean id="boxB3" class="Box" singleton="true">
         <property name="box" value="-20, -20, 20, 20"/>
 <!--         <property name="center" value="0, 0"/> -->
-<!--         <property name="position" value="20, 20"/>         -->
+<!--         <property name="translate" value="20, 20"/>         -->
         <property name="angle" value="45"/>
         <property name="scale" value="1"/>
         <property name="view" ref="rectangleWgt"/>
@@ -244,7 +245,7 @@
     <bean id="boxB2" class="Box" singleton="true">
         <property name="box" value="100, 100, 150, 150"/>
         <property name="center" value="125, 125"/>
-        <property name="position" value="20, 20"/>        
+        <property name="translate" value="20, 20"/>        
         <property name="angle" value="30"/>
         <property name="scale" value="1"/>
         <property name="view">
@@ -255,10 +256,17 @@
 
     <bean id="boxB5" class="Box" singleton="true">
         <property name="box" value="100, 100, 150, 150"/>
-        <property name="position" value="20, 20"/>        
+        <property name="translate" value="20, 20"/>        
         <property name="angle" value="30"/>
         <property name="scale" value="2"/>
         <property name="view" ref="rectangleWgt"/>
+        <property name="controller" ref="emptyCtr"/>    
+    </bean>
+
+    <bean id="statCirc01" class="Circle" singleton="true">
+        <property name="view" ref="circleWgt"/>            
+        <property name="radius" value="20" />    
+        <property name="origin" value="-290, 220"/>        
         <property name="controller" ref="emptyCtr"/>    
     </bean>
 

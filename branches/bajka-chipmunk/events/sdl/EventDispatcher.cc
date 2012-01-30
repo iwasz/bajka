@@ -34,7 +34,9 @@ static void runRec (Model::IModel *m, Event::IEvent *e)
 
         if ((c = m->getController ())) {
                 if (e && e->getType () & c->getEventMask ()) {
-                        e->runCallback (m->getController ());
+                        if (!e->runCallback (m->getController ())) {
+                                return;
+                        }
                 }
                 else {
                         skipChildren = true;

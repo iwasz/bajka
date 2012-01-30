@@ -10,8 +10,8 @@
 #define BAJKA_PHYSICS_H_
 
 #include "Body.h"
-#include "Box.h"
-#include "Circle.h"
+#include "CPBox.h"
+#include "CPCircle.h"
 #include "Polygon.h"
 #include "RigidBody.h"
 #include "Segment.h"

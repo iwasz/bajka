@@ -24,13 +24,12 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        virtual Geometry::Point getPosition () const { return position; }
-        m_ (setPosition) virtual void setPosition (Geometry::Point const &p) { position = p; }
+        virtual Geometry::Point getTranslate () const { return translate; }
+        m_ (setTranslate) virtual void setTranslate (Geometry::Point const &p) { translate = p; }
 
         virtual Geometry::Point getCenter () const;
         m_ (setCenter) virtual void setCenter (Geometry::Point const &p);
-        // TODO pure virtual
-        virtual Geometry::Point computeCenter () const { return Geometry::Point(); }
+        virtual Geometry::Point computeCenter () const = 0;
 
         virtual double getAngle () const { return angle; }
         m_ (setAngle) virtual void setAngle (double a) { angle = a; }
@@ -42,9 +41,10 @@ public:
 
         virtual void transform (Geometry::Point *p) const;
 
-        // TODO wywalić.
-        virtual Geometry::Box getBoundingBox () const {}
-        virtual bool contains (Geometry::Point const &p) const {}
+        // TODO wywalić kiedy byędzie zaimplem. w Space i Body.
+        virtual Geometry::Box getBoundingBox () const { return Geometry::Box (); }
+        // TODO wywalić kiedy byędzie zaimplem. w Space i Body.
+        virtual bool contains (Geometry::Point const &p) const { return true; }
 
 /*--------------------------------------------------------------------------*/
 
@@ -52,7 +52,7 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        virtual bool update ();
+        virtual void update ();
 
 /*--------------------------------------------------------------------------*/
 
@@ -76,13 +76,12 @@ public:
         Controller::IController *getController () { return controller; }
         S_ (setController) void setController (Controller::IController *c) { controller = c; }
 
-
 protected:
 
         IModel *parent;
         ModelVector children;
 
-        Geometry::Point position;
+        Geometry::Point translate;
         double angle;
         double scale;
 

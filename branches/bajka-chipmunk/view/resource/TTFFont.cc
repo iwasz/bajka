@@ -83,14 +83,14 @@ void *TTFFont::renderSolid (std::string const &text, View::Color const &fgColor)
 
 void *TTFFont::renderShaded (std::string const &text, View::Color const &fgColor, View::Color const &bgColor)
 {
-
+        return NULL;
 }
 
 /****************************************************************************/
 
 void *TTFFont::renderBlended (std::string const &text, View::Color const &fgColor)
 {
-
+        return NULL;
 }
 
 /****************************************************************************/
@@ -98,6 +98,7 @@ void *TTFFont::renderBlended (std::string const &text, View::Color const &fgColo
 int TTFFont::getHinting () const
 {
 //        return TTF_GetFontHinting (font);
+        return 0;
 }
 
 /****************************************************************************/

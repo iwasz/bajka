@@ -46,9 +46,8 @@ BOOST_AUTO_TEST_SUITE (GeometryTest);
  */
 BOOST_AUTO_TEST_CASE (test1)
 {
-        Ring r;
-
-        boost::range_iterator<Geometry::Ring>::type i = boost::begin (r);
+//        Ring r;
+//        boost::range_iterator<Geometry::Ring>::type i = boost::begin (r);
 }
 
 BOOST_AUTO_TEST_SUITE_END ();

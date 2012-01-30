@@ -43,9 +43,9 @@ struct IController : public Core::Object {
         IController () : eventMask (0) {}
         virtual ~IController () {}
 
-        virtual bool preUpdate (Model::IModel *m, View::IView *v) = 0;
-        virtual bool update (Model::IModel *m, View::IView *v) = 0;
-        virtual bool postUpdate (Model::IModel *m, View::IView *v) = 0;
+        virtual void preUpdate (Model::IModel *m, View::IView *v) = 0;
+        virtual void update (Model::IModel *m, View::IView *v) = 0;
+        virtual void postUpdate (Model::IModel *m, View::IView *v) = 0;
 
 /*--------------------------------------------------------------------------*/
 
