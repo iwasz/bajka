@@ -228,7 +228,7 @@
 
       <bean id="boxB3" class="Box" singleton="true">
         <property name="box" value="-20, -20, 20, 20"/>
-        <property name="center" value="0, 0"/>
+<!--         <property name="center" value="0, 0"/> -->
 <!--         <property name="position" value="20, 20"/>         -->
         <property name="angle" value="45"/>
         <property name="scale" value="1"/>
@@ -255,7 +255,6 @@
 
     <bean id="boxB5" class="Box" singleton="true">
         <property name="box" value="100, 100, 150, 150"/>
-        <property name="center" value="125, 125"/>
         <property name="position" value="20, 20"/>        
         <property name="angle" value="30"/>
         <property name="scale" value="2"/>
