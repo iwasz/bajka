@@ -196,16 +196,16 @@ bool AffineMatrix::invertMatrix (const double m[16], double invOut[16])
 
 /*##########################################################################*/
 
-Box getBoundingBox (Box const &b1, Box const &b2)
-{
-        Box ret;
-
-        ret.setX1 (std::min (b1.getX1 (), b2.getX1 ()));
-        ret.setY1 (std::min (b1.getY1 (), b2.getY1 ()));
-        ret.setX2 (std::max (b1.getX2 (), b2.getX2 ()));
-        ret.setY2 (std::max (b1.getY2 (), b2.getY2 ()));
-
-        return ret;
-}
+//Box getBoundingBox (Box const &b1, Box const &b2)
+//{
+//        Box ret;
+//
+//        ret.setX1 (std::min (b1.getX1 (), b2.getX1 ()));
+//        ret.setY1 (std::min (b1.getY1 (), b2.getY1 ()));
+//        ret.setX2 (std::max (b1.getX2 (), b2.getX2 ()));
+//        ret.setY2 (std::max (b1.getY2 (), b2.getY2 ()));
+//
+//        return ret;
+//}
 
 } // nam

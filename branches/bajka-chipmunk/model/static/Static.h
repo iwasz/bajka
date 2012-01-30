@@ -10,7 +10,7 @@
 #define BAJKA_BASIC_H_
 
 #include "Polygon.h"
-#include "Segment.h"
+#include "Line.h"
 #include "Box.h"
 #include "Circle.h"
 

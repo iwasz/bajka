@@ -23,8 +23,6 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        Geometry::Point computeCenter () const;
-
         double getWidth () const { return box.getWidth (); }
         double getHeight () const { return box.getHeight (); }
 
@@ -33,6 +31,7 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
+        Geometry::Point computeCenter () const;
         virtual IModel *findContains (Geometry::Point const &p);
         virtual Geometry::Box getBoundingBox () const;
         virtual bool contains (Geometry::Point const &p) const;
