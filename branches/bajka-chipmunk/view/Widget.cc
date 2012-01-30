@@ -40,7 +40,7 @@ void Widget::defaultPreUpdate (Model::IModel *model)
         if (model) {
                 glPushMatrix ();
                 Geometry::Point c = model->getCenter ();
-                Geometry::Point p = model->getPosition ();
+                Geometry::Point p = model->getTranslate ();
 
                 glTranslated (c.x + p.x, c.y + p.y, 0.0);
                 glRotated (model->getAngle(), 0.0, 0.0, 1.0); // angle * 180.0f / M_PI

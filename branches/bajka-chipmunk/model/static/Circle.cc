@@ -21,7 +21,7 @@ namespace trans = boost::geometry::strategy::transform;
 
 Geometry::Point Circle::computeCenter () const
 {
-        return position;
+        return origin;
 }
 
 /****************************************************************************/
@@ -63,7 +63,7 @@ IModel *Circle::findContains (Point const &p)
         IModel *ret;
 
         for (ModelVector::iterator i = begin (); i != end (); ++i) {
-                if (ret = (*i)->findContains (p)) {
+                if ((ret = (*i)->findContains (p))) {
                         return ret;
                 }
         }
@@ -75,7 +75,7 @@ IModel *Circle::findContains (Point const &p)
 
 bool Circle::contains (Point const &p) const
 {
-		// TODO!
+        // TODO!
         return true;
 }
 
@@ -83,7 +83,10 @@ bool Circle::contains (Point const &p) const
 
 G::Box Circle::getBoundingBox () const
 {
-        return G::Box (position.x - radius, position.y - radius, position.x + radius, position.y + radius);
+        double r = radius * scale;
+        double x = translate.x + origin.x * scale;
+        double y = translate.y + origin.y * scale;
+        return G::Box (x - r, y - r, x + r, y + r);
 }
 
 

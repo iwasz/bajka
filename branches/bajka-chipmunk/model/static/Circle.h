@@ -26,6 +26,9 @@ public:
 
         Geometry::Point computeCenter () const;
 
+        virtual Geometry::Point getOrigin () const { return origin; }
+        m_ (setOrigin) virtual void setOrigin (Geometry::Point const &p) { origin = p; }
+
         virtual double getRadius () const { return radius; }
         m_ (setRadius) virtual void setRadius (double r) { radius = r; }
 
@@ -38,6 +41,7 @@ public:
 protected:
 
         double radius;
+        Geometry::Point origin;
 
         E_ (Circle)
 };

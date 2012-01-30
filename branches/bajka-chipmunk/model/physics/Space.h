@@ -27,11 +27,15 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        Geometry::Point getPosition () const { return Geometry::Point (); }
-        void setPosition (Geometry::Point const &position) { throw Util::OperationNotSupportedException ();  }
+//        Czemu nie można? Można przecież - cała symulacja się przesunie, obróci etc.
+//        Geometry::Point getTranslate () const { return Geometry::Point (); }
+//        void setTranslate (Geometry::Point const &position) { throw Util::OperationNotSupportedException ();  }
+//
+//        double getAngle () const { return 0; }
+//        void setAngle (double a) { throw Util::OperationNotSupportedException ();  }
 
-        double getAngle () const { return 0; }
-        void setAngle (double a) { throw Util::OperationNotSupportedException ();  }
+        // W środku rodzica.
+        virtual Geometry::Point computeCenter () const { return Geometry::Point (); }
 
 /*--------------------------------------------------------------------------*/
 

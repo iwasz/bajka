@@ -1,3 +1,4 @@
+#if 0
 //#include <boost/test/unit_test.hpp>
 //#include <boost/geometry/geometry.hpp>
 //#include <sstream>
@@ -351,3 +352,4 @@
 //}
 //
 //BOOST_AUTO_TEST_SUITE_END ();
+#endif

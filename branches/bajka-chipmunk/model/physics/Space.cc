@@ -48,30 +48,30 @@ void Space::setGravity (Geometry::Point const &g)
 
 IModel *Space::findContains (Geometry::Point const &point)
 {
-		Geometry::Point p = point;
-		//? Czy to tu ma być?
-		transform (&p);
+        Geometry::Point p = point;
+        //? Czy to tu ma być?
+        transform (&p);
         cpShape *shape = cpSpacePointQueryFirst (space, cpv (p.x, p.y), 0xFFFF, CP_NO_GROUP);
 
         if (shape) {
-            cpDataPointer ptr = cpShapeGetUserData (shape);
+                cpDataPointer ptr = cpShapeGetUserData (shape);
 
-            if (ptr) {
-                    return static_cast <IModel *> (ptr);
-            }
-            else {
-				throw Util::RuntimeException ("cpDataPointer is NULL - fatal!");
-            }
+                if (ptr) {
+                        return static_cast<IModel *> (ptr);
+                }
+                else {
+                        throw Util::RuntimeException ("cpDataPointer is NULL - fatal!");
+                }
         }
         else {
-            // Kastuj na kontener?
-            IModel *ret;
+                // Kastuj na kontener?
+                IModel *ret;
 
-            for (ModelVector::iterator i = begin (); i != end (); ++i) {
-                    if (ret = (*i)->findContains (p)) {
-                            return ret;
-                    }
-            }
+                for (ModelVector::iterator i = begin (); i != end (); ++i) {
+                        if ((ret = (*i)->findContains (p))) {
+                                return ret;
+                        }
+                }
         }
 
         // Space się rozciąga na cały obszar, więc jesli nie ma dzieci, to zwróć space.

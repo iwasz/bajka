@@ -13,9 +13,9 @@
 
 namespace Model {
 
-Geometry::Point CPBox::getPosition () const
+Geometry::Point CPBox::getTranslate () const
 {
-        return box.ll;
+        return Geometry::Point ();
 }
 
 /****************************************************************************/
@@ -35,9 +35,7 @@ void CPBox::parentCallback (IModel *m)
                    cpBBNew (box.ll.x, box.ll.y, box.ur.x, box.ur.y)));
         cpShapeSetUserData (shape, this);
 
-        // TODO można zrobic cast w zalezności od define DEBUG/RELEASE.
-        Body *body = static_cast <Body *> (m);
-        body->addInertia (cpMomentForBox (body->getMass (), getWidth (), getHeight ()));
+        b->addInertia (cpMomentForBox (b->getMass (), getWidth (), getHeight ()));
         AbstractModel::parentCallback (m);
 }
 

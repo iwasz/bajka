@@ -19,9 +19,9 @@ struct DebugController : public IController {
         C__ (void)
         virtual ~DebugController () {}
 
-        virtual bool preUpdate (Model::IModel *m, View::IView *v) {}
-        virtual bool update (Model::IModel *m, View::IView *v) {}
-        virtual bool postUpdate (Model::IModel *m, View::IView *v) {}
+        virtual void preUpdate (Model::IModel *m, View::IView *v) {}
+        virtual void update (Model::IModel *m, View::IView *v) {}
+        virtual void postUpdate (Model::IModel *m, View::IView *v) {}
 
 /*--------------------------------------------------------------------------*/
 

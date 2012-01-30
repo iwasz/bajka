@@ -10,6 +10,7 @@
 #define BAJKA_BODY_H_
 
 #include "AbstractModel.h"
+#include "../../util/Exceptions.h"
 
 namespace Model {
 
@@ -23,11 +24,22 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        virtual Geometry::Point getPosition () const;
-        m_ (setPosition) virtual void setPosition (Geometry::Point const &position);
+        /**
+         * Body nie ma swojej pozycji, tylko ma przesunięcie i obrót.
+         */
+        Geometry::Point getTranslate () const;
+        void setTranslate (Geometry::Point const &position);
 
-        virtual double getAngle () const;
-        virtual void setAngle (double a);
+        /**
+         * Dlatego center wypada tam gdzie przesunięcie.
+         */
+        Geometry::Point computeCenter () const { return translate; }
+
+        double getAngle () const;
+        void setAngle (double a);
+
+        double getScale () const { return 1; }
+        void setScale (double s) { throw Util::OperationNotSupportedException (); }
 
 /*--------------------------------------------------------------------------*/
 

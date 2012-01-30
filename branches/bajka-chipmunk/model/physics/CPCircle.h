@@ -6,33 +6,38 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_PHYS_BOX_H_
-#define BAJKA_PHYS_BOX_H_
+#ifndef BAJKA_PHYS_CIRCLE_H_
+#define BAJKA_PHYS_CIRCLE_H_
 
-#include "../geometry/AffineMatrix.h"
 #include "../geometry/Point.h"
+#include "../static/Circle.h"
 #include "Shape.h"
-#include "../static/Box.h"
 #include "../../util/Exceptions.h"
 
 namespace Model {
 
-class CPBox : public Box, public Shape {
+class CPCircle : public Circle, public Shape {
 public:
 
         C__ (void)
-        b_ ("Box", "Shape")
+        b_ ("Circle", "Shape")
 
-        CPBox () : Box (), Shape () {}
-        virtual ~CPBox () {}
+        virtual ~CPCircle () {}
+
+/*--------------------------------------------------------------------------*/
+
+        Geometry::Point getOrigin () const;
+        void setOrigin (Geometry::Point const &p);
+
+        double getRadius () const;
+        void setRadius (double r);
 
 /*--------------------------------------------------------------------------*/
 
         // Szejpów chipmunkowych nie można zmieniać i nie można transformowac. Tylko body można.
-        Geometry::Point getTranslate () const;
+        Geometry::Point getTranslate () const { return Geometry::Point (); }
         void setTranslate (Geometry::Point const &p) { throw Util::OperationNotSupportedException (); }
 
-        Geometry::Point getCenter () const;
         void setCenter (Geometry::Point const &p) { throw Util::OperationNotSupportedException (); }
 
         double getAngle () const { return 0; }
@@ -43,11 +48,17 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        void parentCallback (IModel *m);
+        virtual void parentCallback (IModel *m);
 
-        E_ (CPBox)
+private:
+
+        double radius;
+        Geometry::Point position;
+
+        E_ (CPCircle)
+
 };
 
-} /* namespace Model1 */
+} /* namespace Model */
 
-#	endif /* BOX_H_ */
+#	endif /* CIRCLE_H_ */

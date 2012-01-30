@@ -23,14 +23,13 @@ Body::Body ()
 
 Body::~Body ()
 {
-//        TODO Coś jest źle przy kasowaniu kontenera - SegF tutaj.
-//        cpBodyFree (body);
+        cpBodyFree (body);
         body = NULL;
 }
 
 /****************************************************************************/
 
-Geometry::Point Body::getPosition () const
+Geometry::Point Body::getTranslate () const
 {
         cpVect v = cpBodyGetPos (body);
         return Geometry::Point (v.x, v.y);
@@ -38,7 +37,7 @@ Geometry::Point Body::getPosition () const
 
 /****************************************************************************/
 
-void Body::setPosition (Geometry::Point const &p)
+void Body::setTranslate (Geometry::Point const &p)
 {
         cpBodySetPos (body, cpv (p.getX (), p.getY ()));
         cpSpaceReindexShapesForBody (Space::getSpace (), body);

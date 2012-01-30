@@ -63,7 +63,7 @@ IModel *Box::findContains (Point const &p)
         IModel *ret;
 
         for (ModelVector::iterator i = begin (); i != end (); ++i) {
-                if (ret = (*i)->findContains (p)) {
+                if ((ret = (*i)->findContains (p))) {
                         return ret;
                 }
         }
@@ -84,8 +84,8 @@ bool Box::contains (Point const &p) const
         Point ct = getCenter ();
 
         trans::ublas_transformer <Point, Point, 2, 2> matrix (
-                c, -s, -c * ct.x + s * ct.y + ct.x + position.x,
-                s,  c, -s * ct.x - c * ct.y + ct.y + position.y,
+                c, -s, -c * ct.x + s * ct.y + ct.x + translate.x,
+                s,  c, -s * ct.x - c * ct.y + ct.y + translate.y,
                 0,  0,  1
         );
 
@@ -123,8 +123,8 @@ G::Box Box::getBoundingBox () const
         Point ct = getCenter ();
 
         trans::ublas_transformer <Point, Point, 2, 2> matrix (
-    		c, -s, -c * ct.x + s * ct.y + ct.x + position.x,
-    		s,  c, -s * ct.x - c * ct.y + ct.y + position.y,
+    		c, -s, -c * ct.x + s * ct.y + ct.x + translate.x,
+    		s,  c, -s * ct.x - c * ct.y + ct.y + translate.y,
     		0,  0,  1
 	);
 
