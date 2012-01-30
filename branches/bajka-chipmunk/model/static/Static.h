@@ -6,8 +6,12 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BASIC_H_
-#define BASIC_H_
+#ifndef BAJKA_BASIC_H_
+#define BAJKA_BASIC_H_
 
+#include "Polygon.h"
+#include "Segment.h"
+#include "Box.h"
+#include "Circle.h"
 
 #	endif /* BASIC_H_ */

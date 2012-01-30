@@ -53,11 +53,7 @@
         <property name="children">
             <list class="ModelVector">
                 <ref bean="statCirc01"/>
-                <ref bean="boxB"/>
-                <ref bean="boxB3"/>                
-                <ref bean="boxB4"/>                
-                <ref bean="boxB5"/>
-                <!--<ref bean="boxB2"/>-->
+                <ref bean="staticBox01"/>
                 <ref bean="body"/>
                 <ref bean="ground"/>
                 <ref bean="ground2"/>
@@ -207,56 +203,10 @@
             </list>
         </property>
     </bean>
-         
-         
-<!--     <bean id="boxB" class="Box" singleton="true"> -->
-<!--         <property name="box" value="100, 100, 150, 150"/> -->
-<!--         <property name="center" value="125, 125"/> -->
-<!--         <property name="translate" value="20, 20"/>         -->
-<!--         <property name="angle" value="45"/> -->
-<!--         <property name="scale" value="1"/> -->
-<!--         <property name="view" ref="rectangleWgt"/> -->
-<!--     </bean>          -->
 
-     <bean id="boxB" class="Box" singleton="true">
-        <property name="box" value="-20, -20, 20, 20"/>
-        <property name="center" value="-20, -20"/>
-        <property name="translate" value="40, 40"/>        
-        <property name="angle" value="45"/>
-        <property name="scale" value="2"/>
-        <property name="view" ref="rectangleWgt"/>
-    </bean>         
-
-      <bean id="boxB3" class="Box" singleton="true">
-        <property name="box" value="-20, -20, 20, 20"/>
-<!--         <property name="center" value="0, 0"/> -->
-<!--         <property name="translate" value="20, 20"/>         -->
-        <property name="angle" value="45"/>
-        <property name="scale" value="1"/>
-        <property name="view" ref="rectangleWgt"/>
-    </bean>         
-     
-    <bean id="boxB4" class="Box" singleton="true">
-        <property name="box" value="-20, -20, 20, 20"/>
-        <property name="view" ref="rectangleWgt"/>
-    </bean>
-                 
-<!--                 
-    <bean id="boxB2" class="Box" singleton="true">
+    <bean id="staticBox01" class="Box" singleton="true">
         <property name="box" value="100, 100, 150, 150"/>
-        <property name="center" value="125, 125"/>
-        <property name="translate" value="20, 20"/>        
-        <property name="angle" value="30"/>
-        <property name="scale" value="1"/>
-        <property name="view">
-            <bean class="DebugWidget" singleton="true"/>
-        </property>
-    </bean>       
--->
-
-    <bean id="boxB5" class="Box" singleton="true">
-        <property name="box" value="100, 100, 150, 150"/>
-        <property name="translate" value="20, 20"/>        
+        <property name="translate" value="-300, 50"/>        
         <property name="angle" value="30"/>
         <property name="scale" value="2"/>
         <property name="view" ref="rectangleWgt"/>
@@ -267,7 +217,10 @@
         <property name="view" ref="circleWgt"/>            
         <property name="radius" value="20" />    
         <property name="origin" value="-290, 220"/>        
+        <property name="translate" value="10, -10"/>        
         <property name="controller" ref="emptyCtr"/>    
+        <property name="angle" value="30"/>
+        <property name="scale" value="1.5"/>
     </bean>
 
 </beans>

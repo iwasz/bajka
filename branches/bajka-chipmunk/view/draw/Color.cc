@@ -75,5 +75,5 @@ Color Color::BLUE = Color (0.0, 0.0, 1.0);
 Color Color::MAGENTA = Color (1.0, 0.0, 1.0);
 Color Color::CYAN = Color (0.0, 1.0, 1.0);
 Color Color::WHITE = Color (1.0, 1.0, 1.0);
-
+Color Color::TRANSPARENT = Color (0, 0, 0, 0);
 }
