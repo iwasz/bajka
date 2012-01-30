@@ -75,7 +75,7 @@ typedef std::stack <AffineMatrix> AffineMatrixStack;
 /**
  * Bounding box z dwóch innych boxów.
  */
-extern Box getBoundingBox (Box const &b1, Box const &b2);
+//extern Box getBoundingBox (Box const &b1, Box const &b2);
 
 } // namespace
 

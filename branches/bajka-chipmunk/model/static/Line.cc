@@ -6,18 +6,9 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_SEGMENT_H_
-#define BAJKA_SEGMENT_H_
-
-#include "../AbstractModel.h"
+#include "Line.h"
 
 namespace Model {
 
-class Segment : public AbstractModel {
-public:
-        virtual ~Segment () {}
-};
 
-} // namespace
-
-#	endif /* SEGMENT_H_ */
+} /* namespace Model */
