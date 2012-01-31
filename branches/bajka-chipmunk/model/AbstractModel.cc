@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <boost/bind.hpp>
 #include "../view/draw/Primitives.h"
+#include "Group.h"
 
 using View::DrawUtil;
 
@@ -39,22 +40,6 @@ void AbstractModel::setCenter (Geometry::Point const &p)
 
 /****************************************************************************/
 
-void AbstractModel::setChildren (ModelVector const &c)
-{
-        std::for_each (c.begin (), c.end (), boost::bind (&AbstractModel::addChild, this, _1));
-}
-
-/****************************************************************************/
-
-void AbstractModel::addChild (IModel *m)
-{
-        children.push_back (m);
-        m->setParent (this);
-        m->parentCallback (this);
-}
-
-/****************************************************************************/
-
 void AbstractModel::update ()
 {
         if (controller) {
@@ -73,7 +58,10 @@ void AbstractModel::update ()
         	View::Widget::defaultPreUpdate (this);
         }
 
-        std::for_each (begin (), end (), boost::mem_fn (&IModel::update));
+        if (isGroup ()) {
+        		Group *g = static_cast <Group *> (this);
+        		std::for_each (g->begin (), g->end (), boost::mem_fn (&IModel::update));
+        }
 
         if (view) {
                 view->postUpdate (this);

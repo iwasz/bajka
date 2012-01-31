@@ -260,11 +260,15 @@ unsigned int BajkaApp::reindex (unsigned int eventMask, Model::IModel *m)
          */
         unsigned int childMask = 0x0;
 
-        for (Model::ModelVector::const_iterator i = m->getChildren ().begin ();
-             i != m->getChildren ().end ();
-             ++i) {
+        if (m->isGroup ()) {
+        		M::Group *g = static_cast <M::Group *> (m);
 
-                childMask |= reindex (eventMask, *i);
+				for (Model::ModelVector::const_iterator i = g->getChildren ().begin ();
+					 i != g->getChildren ().end ();
+					 ++i) {
+
+						childMask |= reindex (eventMask, *i);
+				}
         }
 
         unsigned int eventsToRun = 0x0;

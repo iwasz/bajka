@@ -37,14 +37,6 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        double getX () const { return x; }
-        m_ (setX) void setX (double x) { this->x = x; }
-
-        double getY () const { return y; }
-        m_ (setY) void setY (double y) { this->y = y; }
-
-/*--------------------------------------------------------------------------*/
-
         virtual std::string toString () const;
 
 /*--------------------------------------------------------------------------*/

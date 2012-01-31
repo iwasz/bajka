@@ -39,7 +39,7 @@ Geometry::Point Body::getTranslate () const
 
 void Body::setTranslate (Geometry::Point const &p)
 {
-        cpBodySetPos (body, cpv (p.getX (), p.getY ()));
+        cpBodySetPos (body, cpv (p.x, p.y));
         cpSpaceReindexShapesForBody (Space::getSpace (), body);
 }
 

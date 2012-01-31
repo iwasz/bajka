@@ -6,30 +6,28 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_MODEL_GROUP_H_
-#define BAJKA_MODEL_GROUP_H_
+#ifndef BAJKA_MODEL_BOX_GROUP_H_
+#define BAJKA_MODEL_BOX_GROUP_H_
 
-#include "AbstractModel.h"
-#include "IGroup.h"
 #include "../geometry/Point.h"
 #include "../util/ReflectionMacros.h"
+#include "../model/static/Box.h"
+#include "IGroup.h"
 
 namespace Model {
 
 /**
- * Podstawowa grupa modeli, czyli coś, co się rozciąga w nieskończoność (nie ma
- * swojego rozmiaru).
+ * Grupa, która jednocześnie jest grupą i pudełkiem Box (ma wymiary w przeciwieństwie do zwykłej grupy).
  */
-class Group : public AbstractModel, public IGroup {
+class BoxGroup : public Box, public IGroup {
 public:
 
 	C__ (void)
-	b_ ("AbstractModel")
+	b_ ("Box")
 
-	virtual ~Group() {}
+	virtual ~BoxGroup() {}
 
-    virtual Geometry::Point computeCenter () const { return Geometry::Point (); }
-    virtual Geometry::Box getBoundingBox () const;
+    virtual Geometry::Point computeCenter () const { return Box::computeCenter (); }
     virtual bool contains (Geometry::Point const &p) const { return true; }
     bool isGroup () const { return true; }
     virtual IModel *findContains (Geometry::Point const &p);
@@ -48,7 +46,7 @@ private:
 
     ModelVector children;
 
-    E_ (Group)
+    E_ (BoxGroup)
 };
 
 } /* namespace Model */

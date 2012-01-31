@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#include <chipmunk.h>
 #include "CPCircle.h"
 #include "../util/Exceptions.h"
 #include "Body.h"
@@ -61,5 +62,12 @@ void CPCircle::setRadius (double r)
         radius = r;
 }
 
+/****************************************************************************/
+
+Geometry::Box CPCircle::getBoundingBox () const
+{
+	cpBB b = cpShapeGetBB (shape);
+	return Geometry::Box (b.l, b.b, b.r, b.t);
+}
 
 } /* namespace Model */

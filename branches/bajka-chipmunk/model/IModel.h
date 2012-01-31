@@ -15,8 +15,8 @@
 #include "../view/IView.h"
 #include "../controller/IController.h"
 #include "../geometry/Point.h"
-#include "../geometry/AffineMatrix.h"
 #include "../util/ReflectionMacros.h"
+#include "../geometry/Box.h"
 
 namespace Model {
 
@@ -60,6 +60,11 @@ struct IModel : public virtual Core::Object {
 
         virtual double getScale () const = 0;
         virtual void setScale (double a) = 0;
+
+/*------runtime type information--------------------------------------------*/
+
+        virtual bool isBox () const = 0;
+        virtual bool isGroup () const = 0;
 
 /*------searching-----------------------------------------------------------*/
 
@@ -105,15 +110,6 @@ struct IModel : public virtual Core::Object {
          */
         virtual void setParent (IModel *m) = 0;
         virtual void parentCallback (IModel *m) = 0;
-
-        virtual ModelVector &getChildren () = 0;
-        virtual void setChildren (ModelVector const &) = 0;
-        virtual void addChild (IModel *m) = 0;
-        virtual ModelVector::iterator begin () = 0;
-        virtual ModelVector::iterator end () = 0;
-
-        // todo
-        bool isContainer () const { return true; }
 
 /*------additional-functionalities------------------------------------------*/
 

@@ -1,3 +1,4 @@
+#if 0
 /****************************************************************************
  *                                                                          *
  *  Author : lukasz.iwaszkiewicz@tiliae.eu                                  *
@@ -80,3 +81,4 @@ typedef std::stack <AffineMatrix> AffineMatrixStack;
 } // namespace
 
 #	endif /* UTILS_H_ */
+#endif

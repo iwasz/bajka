@@ -1,3 +1,4 @@
+#if 0
 /****************************************************************************
  *                                                                          *
  *  Author : lukasz.iwaszkiewicz@tiliae.eu                                  *
@@ -209,3 +210,4 @@ bool AffineMatrix::invertMatrix (const double m[16], double invOut[16])
 //}
 
 } // nam
+#endif

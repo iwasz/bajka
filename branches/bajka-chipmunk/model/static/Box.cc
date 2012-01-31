@@ -26,53 +26,6 @@ Geometry::Point Box::computeCenter () const
 
 /****************************************************************************/
 
-IModel *Box::findContains (Point const &p)
-{
-        // - Punkt p jest we współrzędnych rodzica.
-
-        // A.
-        // - Weź mój aabb we wsp. rodzica, czyli równoległy do osi układu rodzica.
-        // -- Przetransformuj ll i ur
-        // --- Stwórz macierz.
-        // --- Przemnóż ll i ur przez tą macierz.
-        // -- Znajdz aabb (max i min x + max i min.y).
-        G::Box aabb = getBoundingBox ();
-
-        // - Sprawdź, czy p jest w aabb
-        // -- Jeśli nie, zwróć NULL.
-
-        if (!aabb.contains (p)) {
-                return NULL;
-        }
-
-        // -- Jeśli tak, to sprawdź dokładnie, za pomocą inside
-        if (!this->contains (p)) {
-                return NULL;
-        }
-
-        // --- Jeśli nie ma dzieci zwróć this.
-        if (!isContainer ()) {
-                return this;
-        }
-
-        // --- Jeśli są dzieci, to przetransformuj p przez moją macierz i puść w pętli do dzieci.
-        Point copy = p;
-        transform (&copy);
-
-        // Kastuj na kontener?
-        IModel *ret;
-
-        for (ModelVector::iterator i = begin (); i != end (); ++i) {
-                if ((ret = (*i)->findContains (p))) {
-                        return ret;
-                }
-        }
-
-        return this;
-}
-
-/****************************************************************************/
-
 bool Box::contains (Point const &p) const
 {
         Ring ring;
@@ -96,21 +49,6 @@ bool Box::contains (Point const &p) const
 
 /****************************************************************************/
 
-//void Box::transform (Point *p) const
-//{
-//        double aRad = angle * M_PI / 180.0;
-//        // Pomnożyć sin i cos razy scale i podstawić.
-//        double s = sin (aRad);
-//        double c = cos (aRad);
-//        double x = p->x;
-//        Point ct = getCenter ();
-//
-//        p->x = scale * c * (x - scale * ct.x) + scale * s * (scale * ct.y - p->y) + ct.x + position.x;
-//        p->y = scale * c * (p->y - scale * ct.y) + scale * s * (x - scale * ct.x) + ct.y + position.y;
-//}
-
-/****************************************************************************/
-
 G::Box Box::getBoundingBox () const
 {
         G::Box aabb;
@@ -126,7 +64,7 @@ G::Box Box::getBoundingBox () const
     		c, -s, -c * ct.x + s * ct.y + ct.x + translate.x,
     		s,  c, -s * ct.x - c * ct.y + ct.y + translate.y,
     		0,  0,  1
-	);
+        );
 
         Ring output;
         boost::geometry::transform (ring, output, matrix);

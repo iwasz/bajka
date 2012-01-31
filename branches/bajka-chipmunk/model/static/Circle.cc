@@ -26,53 +26,6 @@ Geometry::Point Circle::computeCenter () const
 
 /****************************************************************************/
 
-IModel *Circle::findContains (Point const &p)
-{
-        // - Punkt p jest we współrzędnych rodzica.
-
-        // A.
-        // - Weź mój aabb we wsp. rodzica, czyli równoległy do osi układu rodzica.
-        // -- Przetransformuj ll i ur
-        // --- Stwórz macierz.
-        // --- Przemnóż ll i ur przez tą macierz.
-        // -- Znajdz aabb (max i min x + max i min.y).
-        G::Box aabb = getBoundingBox ();
-
-        // - Sprawdź, czy p jest w aabb
-        // -- Jeśli nie, zwróć NULL.
-
-        if (!aabb.contains (p)) {
-                return NULL;
-        }
-
-        // -- Jeśli tak, to sprawdź dokładnie, za pomocą inside
-        if (!this->contains (p)) {
-                return NULL;
-        }
-
-        // --- Jeśli nie ma dzieci zwróć this.
-        if (!isContainer ()) {
-                return this;
-        }
-
-        // --- Jeśli są dzieci, to przetransformuj p przez moją macierz i puść w pętli do dzieci.
-        Point copy = p;
-        transform (&copy);
-
-        // Kastuj na kontener?
-        IModel *ret;
-
-        for (ModelVector::iterator i = begin (); i != end (); ++i) {
-                if ((ret = (*i)->findContains (p))) {
-                        return ret;
-                }
-        }
-
-        return this;
-}
-
-/****************************************************************************/
-
 bool Circle::contains (Point const &p) const
 {
         // TODO!
