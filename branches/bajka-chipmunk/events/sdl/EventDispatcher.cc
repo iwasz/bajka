@@ -30,7 +30,7 @@ void EventDispatcher::init ()
 static void runRec (Model::IModel *m, Event::IEvent *e)
 {
         C::IController *c;
-        bool skipChildren = false;
+//        bool skipChildren = false;
 
         if ((c = m->getController ())) {
                 if (e && e->getType () & c->getEventMask ()) {
@@ -39,12 +39,15 @@ static void runRec (Model::IModel *m, Event::IEvent *e)
                         }
                 }
                 else {
-                        skipChildren = true;
+//                        skipChildren = true;
+                	return;
                 }
         }
 
-        if (!skipChildren) {
-                std::for_each (m->begin (), m->end (), boost::bind (runRec, _1, e));
+//        if (!skipChildren) {
+        if (m->isGroup ()) {
+        		M::Group *g = static_cast <M::Group *> (m);
+                std::for_each (g->begin (), g->end (), boost::bind (runRec, _1, e));
         }
 }
 

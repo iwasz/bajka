@@ -49,7 +49,7 @@ void DrawUtil::drawCircle (Geometry::Point const &center, double angle, double r
         glVertexPointer(2, GL_FLOAT, 0, circleVAR);
 
         glPushMatrix(); {
-                glTranslatef(center.getX (), center.getY (), 0.0f);
+                glTranslatef(center.x, center.y, 0.0f);
                 glRotatef(angle*180.0f/M_PI, 0.0f, 0.0f, 1.0f);
                 glScalef(radius, radius, 1.0f);
 

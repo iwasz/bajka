@@ -47,4 +47,14 @@ std::string Box::toString () const
         return o.str ();
 }
 
+/****************************************************************************/
+
+void Box::merge (Box const &b)
+{
+	ll.x = std::min (ll.x, b.ll.x);
+	ll.y = std::min (ll.y, b.ll.y);
+	ur.x = std::max (ur.x, b.ur.x);
+	ur.y = std::max (ur.y, b.ur.y);
+}
+
 } // names

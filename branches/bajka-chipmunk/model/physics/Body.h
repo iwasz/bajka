@@ -9,16 +9,16 @@
 #ifndef BAJKA_BODY_H_
 #define BAJKA_BODY_H_
 
-#include "AbstractModel.h"
 #include "../../util/Exceptions.h"
+#include "../Group.h"
 
 namespace Model {
 
-class Body : public AbstractModel {
+class Body : public Group {
 public:
 
         C__ (void)
-        b_ ("AbstractModel")
+        b_ ("Group")
         Body ();
         virtual ~Body ();
 

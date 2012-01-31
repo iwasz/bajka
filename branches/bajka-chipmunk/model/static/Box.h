@@ -29,13 +29,13 @@ public:
         Geometry::Box const &getBox () const { return box; }
         m_ (setBox) void setBox (Geometry::Box const &b) { box = b; }
 
+        bool isBox () const { return true; }
+
 /*--------------------------------------------------------------------------*/
 
         Geometry::Point computeCenter () const;
-        virtual IModel *findContains (Geometry::Point const &p);
         virtual Geometry::Box getBoundingBox () const;
         virtual bool contains (Geometry::Point const &p) const;
-//        virtual void transform (Geometry::Point *p) const;
 
 protected:
 

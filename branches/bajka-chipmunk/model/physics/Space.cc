@@ -41,7 +41,7 @@ Geometry::Point Space::getGravity () const
 
 void Space::setGravity (Geometry::Point const &g)
 {
-        cpSpaceSetGravity (space, cpv (g.getX (), g.getY ()));
+        cpSpaceSetGravity (space, cpv (g.x, g.y));
 }
 
 /****************************************************************************/

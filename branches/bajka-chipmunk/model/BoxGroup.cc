@@ -6,56 +6,12 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include <boost/geometry/geometry.hpp>
-#include <boost/geometry/geometries/polygon.hpp>
-#include "Group.h"
-#include "../geometry/Ring.h"
+#include "BoxGroup.h"
 
 namespace Model {
 using namespace Geometry;
-using namespace boost::geometry;
-namespace trans = boost::geometry::strategy::transform;
 
-Box Group::getBoundingBox () const
-{
-	Box ret;
-
-	for (ModelVector::const_iterator i = children.begin (); i != children.end (); ++i) {
-		if (i == children.begin ()) {
-			ret = (*i)->getBoundingBox ();
-		}
-		else {
-			ret.merge ((*i)->getBoundingBox ());
-		}
-	}
-
-//	// TODO Zdubloway kod Model::Box!
-//    Ring ring;
-//    convert (ret, ring);
-//
-//    double aRad = angle * M_PI / 180.0;
-//    double s = scale * sin (aRad);
-//    double c = scale * cos (aRad);
-//    Point ct = getCenter ();
-//
-//    trans::ublas_transformer <Point, Point, 2, 2> matrix (
-//		c, -s, -c * ct.x + s * ct.y + ct.x + translate.x,
-//		s,  c, -s * ct.x - c * ct.y + ct.y + translate.y,
-//		0,  0,  1
-//    );
-//
-//    Ring output;
-//    boost::geometry::transform (ring, output, matrix);
-//    envelope (output, ret);
-
-	ret.ll += 1;
-	ret.ur += 1;
-	return ret;
-}
-
-/****************************************************************************/
-
-IModel *Group::findContains (Point const &p)
+IModel *BoxGroup::findContains (Point const &p)
 {
         // - Punkt p jest we współrzędnych rodzica.
 
@@ -65,7 +21,7 @@ IModel *Group::findContains (Point const &p)
         // --- Stwórz macierz.
         // --- Przemnóż ll i ur przez tą macierz.
         // -- Znajdz aabb (max i min x + max i min.y).
-        Box aabb = getBoundingBox ();
+        Geometry::Box aabb = getBoundingBox ();
 
         // - Sprawdź, czy p jest w aabb
         // -- Jeśli nie, zwróć NULL.
@@ -102,14 +58,14 @@ IModel *Group::findContains (Point const &p)
 
 /****************************************************************************/
 
-void Group::setChildren (ModelVector const &c)
+void BoxGroup::setChildren (ModelVector const &c)
 {
-        std::for_each (c.begin (), c.end (), boost::bind (&Group::addChild, this, _1));
+        std::for_each (c.begin (), c.end (), boost::bind (&BoxGroup::addChild, this, _1));
 }
 
 /****************************************************************************/
 
-void Group::addChild (IModel *m)
+void BoxGroup::addChild (IModel *m)
 {
         children.push_back (m);
         m->setParent (this);

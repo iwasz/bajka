@@ -39,12 +39,17 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
+        virtual bool isBox () const { return false; }
+        virtual bool isGroup () const { return false; }
+
+/*--------------------------------------------------------------------------*/
+
         virtual void transform (Geometry::Point *p) const;
 
-        // TODO wywalić kiedy byędzie zaimplem. w Space i Body.
-        virtual Geometry::Box getBoundingBox () const { return Geometry::Box (); }
-        // TODO wywalić kiedy byędzie zaimplem. w Space i Body.
-        virtual bool contains (Geometry::Point const &p) const { return true; }
+//        // TODO wywalić kiedy byędzie zaimplem. w Space i Body.
+//        virtual Geometry::Box getBoundingBox () const { return Geometry::Box (); }
+//        // TODO wywalić kiedy byędzie zaimplem. w Space i Body.
+//        virtual bool contains (Geometry::Point const &p) const { return true; }
 
 /*--------------------------------------------------------------------------*/
 
@@ -60,14 +65,6 @@ public:
         void setParent (IModel *m) { parent = m; }
         void parentCallback (IModel *m) {}
 
-        m_ (getChildren) ModelVector &getChildren () { return children; }
-        m_ (setChildren) void setChildren (ModelVector const &c);
-        void addChild (IModel *m);
-        ModelVector::iterator begin () { return children.begin (); }
-        ModelVector::iterator end () { return children.end (); }
-        ModelVector::const_iterator begin () const { return children.begin (); }
-        ModelVector::const_iterator end () const { return children.end (); }
-
 /*--------------------------------------------------------------------------*/
 
         View::IView *getView () { return view; }
@@ -79,8 +76,6 @@ public:
 protected:
 
         IModel *parent;
-        ModelVector children;
-
         Geometry::Point translate;
         double angle;
         double scale;

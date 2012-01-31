@@ -38,18 +38,13 @@ public:
 
 /*------access-methods------------------------------------------------------*/
 
-        const Point &getLL () const { return ll; }
-        const Point &getUR () const { return ur; }
-
-        void setLL (const Point &p) { ll = p; }
-        void setUR (const Point &p) { ur = p; }
-
         double getWidth () const { return ur.x - ll.x; }
         double getHeight () const { return ur.y - ll.y; }
 
 /*--------------------------------------------------------------------------*/
 
         bool contains (Geometry::Point const &p) const { return p.x >= ll.x && p.x <= ur.x && p.y >= ll.y && p.y <= ur.y; }
+        void merge (Box const &b);
 
 /*--------------------------------------------------------------------------*/
 
