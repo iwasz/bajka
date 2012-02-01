@@ -38,8 +38,14 @@ public:
 
 /*------access-methods------------------------------------------------------*/
 
+        /// Zwraca różnicę miedzy ur a ll
         double getWidth () const { return ur.x - ll.x; }
+        // Zmienia szerokość nie ruszając ll.
+        void setWidth (double w) { ur.x = ll.x + w; }
+        /// Zwraca różnicę miedzy ur a ll
         double getHeight () const { return ur.y - ll.y; }
+        // Zmienia wysokość nie ruszając ll.
+        void setHeight (double h) { ur.y = ll.y + h; }
 
 /*--------------------------------------------------------------------------*/
 

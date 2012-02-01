@@ -24,7 +24,9 @@ public:
 /*--------------------------------------------------------------------------*/
 
         double getWidth () const { return box.getWidth (); }
+        void setWidth (double w) { box.setWidth (w); }
         double getHeight () const { return box.getHeight (); }
+        void setHeight (double h) { box.setHeight (h); }
 
         Geometry::Box const &getBox () const { return box; }
         m_ (setBox) void setBox (Geometry::Box const &b) { box = b; }

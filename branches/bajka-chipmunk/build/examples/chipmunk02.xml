@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
+        "file:///home/iwasz/program/projects/tiliae/base/container/tiliae-container-1.0.dtd">
+
+<!--Ogólny schemat nazw : Ctr - kontroler, Wgt - widget, Mdl - model.-->
+<beans>
+
+    <bean id="space" class="BoxGroup" singleton="true">
+        <property name="box" value="-319, -240, 320, 239" />
+        <property name="controller" ref="emptyCtr"/>            
+        
+        
+        <property name="children">
+            <list class="ModelVector">
+                <bean class="BoxGroup" singleton="true">
+                    <property name="relW" value="90"/>
+                    <property name="relH" value="90"/>                    
+                </bean>
+            </list>
+        </property>
+
+    </bean>
+      
+</beans>

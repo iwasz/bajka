@@ -12,11 +12,11 @@
 #include <vector>
 #include <Object.h>
 #include <chipmunk.h>
+#include "../util/ReflectionMacros.h"
 #include "../view/IView.h"
 #include "../controller/IController.h"
-#include "../geometry/Point.h"
-#include "../util/ReflectionMacros.h"
 #include "../geometry/Box.h"
+#include "../geometry/AffineMatrix.h"
 
 namespace Model {
 
@@ -49,17 +49,22 @@ struct IModel : public virtual Core::Object {
         virtual Geometry::Point getTranslate () const = 0;
         virtual void setTranslate (Geometry::Point const &translate) = 0;
 
+        virtual double getAngle () const = 0;
+        virtual void setAngle (double a) = 0;
+
+        virtual double getScale () const = 0;
+        virtual void setScale (double a) = 0;
+
         /**
          * Punkt względem którego wykonywane są obroty i skalowanie.
          */
         virtual Geometry::Point getCenter () const = 0;
         virtual void setCenter (Geometry::Point const &p) = 0;
 
-        virtual double getAngle () const = 0;
-        virtual void setAngle (double a) = 0;
-
-        virtual double getScale () const = 0;
-        virtual void setScale (double a) = 0;
+        /**
+         * Macierz przekształceń.
+         */
+        virtual Geometry::AffineMatrix const &getMatrix () const = 0;
 
 /*------runtime type information--------------------------------------------*/
 

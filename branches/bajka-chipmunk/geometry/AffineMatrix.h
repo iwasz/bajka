@@ -1,4 +1,3 @@
-#if 0
 /****************************************************************************
  *                                                                          *
  *  Author : lukasz.iwaszkiewicz@tiliae.eu                                  *
@@ -7,13 +6,13 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_UTILS_H_
-#define BAJKA_UTILS_H_
+#ifndef BAJKA_UTILSAFFINE_MATRIX_H_
+#define BAJKA_UTILSAFFINE_MATRIX_H_
 
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/geometry/strategies/transform/matrix_transformers.hpp>
 #include <stack>
-#include <IToStringEnabled.h>
+//#include <IToStringEnabled.h>
 #include "Point.h"
 #include "Box.h"
 
@@ -32,10 +31,9 @@ typedef boost::numeric::ublas::matrix <double, boost::numeric::ublas::column_maj
 /**
  * Affine matrix type optimised to use with OpenGL. Dostęp do poszczególnych
  * elementów za pomocą operatora (). Najpierw numer wiersza, potem kolumny.
- * TODO Do osobnego pliku.
  * \ingroup Geometry
  */
-class AffineMatrix : public AffineMatrixType, public Core::IToStringEnabled {
+class AffineMatrix : public AffineMatrixType/*, public Core::IToStringEnabled*/ {
 public:
 
         AffineMatrix ();
@@ -59,26 +57,18 @@ public:
         void transform (Point *) const;
         Point getTransformed (const Point &) const;
 
-/*--------------------------------------------------------------------------*/
-
-        std::string toString () const;
+///*--------------------------------------------------------------------------*/
+//
+//        std::string toString () const;
 
 private:
 
         bool invertMatrix (const double m[16], double invOut[16]);
+        static const AffineMatrix UNITARY;
+
 };
 
-/**
- * Stos - dla eventów.
- */
-typedef std::stack <AffineMatrix> AffineMatrixStack;
-
-/**
- * Bounding box z dwóch innych boxów.
- */
-//extern Box getBoundingBox (Box const &b1, Box const &b2);
 
 } // namespace
 
 #	endif /* UTILS_H_ */
-#endif

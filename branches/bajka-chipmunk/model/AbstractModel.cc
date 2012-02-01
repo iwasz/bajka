@@ -14,8 +14,14 @@
 #include "Group.h"
 
 using View::DrawUtil;
-
 namespace Model {
+
+Geometry::AffineMatrix const &AbstractModel::getMatrix () const
+{
+
+}
+
+/****************************************************************************/
 
 Geometry::Point AbstractModel::getCenter () const
 {
@@ -47,10 +53,15 @@ void AbstractModel::update ()
                 controller->update (this, view);
         }
 
-        if (view) {
 #if 1
-                DrawUtil::drawRectangle (getBoundingBox(), View::Color::RED, View::Color::TRANSPARENT);
+        Geometry::Box aabb= getBoundingBox();
+
+        if (aabb.getHeight() && aabb.getHeight()) {
+        	DrawUtil::drawRectangle (aabb, View::Color::RED, View::Color::TRANSPARENT);
+        }
 #endif
+
+        if (view) {
                 view->preUpdate (this);
                 view->update (this);
         }
@@ -89,4 +100,5 @@ void AbstractModel::transform (Geometry::Point *p) const
         p->x = scale * c * (x - scale * ct.x) + scale * s * (scale * ct.y - p->y) + ct.x + translate.x;
         p->y = scale * c * (p->y - scale * ct.y) + scale * s * (x - scale * ct.x) + ct.y + translate.y;
 }
+
 } /* namespace Model1 */
