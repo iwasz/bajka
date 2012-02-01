@@ -15,7 +15,7 @@ using namespace boost::numeric::ublas;
 /**
  * Macierz jednostkowa.
  */
-const AffineMatrix UNITARY;
+const AffineMatrix AffineMatrix::UNITARY;
 
 /****************************************************************************/
 
@@ -123,24 +123,24 @@ Point AffineMatrix::getTransformed (const Point &p) const
 
 /****************************************************************************/
 
-//std::string AffineMatrix::toString () const
-//{
-//        std::string s = "AffineMatrix (";
-//
-//        typedef AffineMatrixType::array_type::const_iterator Iterator;
-//        for (Iterator i = data ().begin ();;) {
-//
-//                s += boost::lexical_cast <double> (*i);
-//
-//                if (++i == data ().end ()) {
-//                        break;
-//                }
-//
-//                s+= ",";
-//        }
-//
-//        return s + ")";
-//}
+std::string AffineMatrix::toString () const
+{
+        std::string s = "AffineMatrix (";
+
+        typedef AffineMatrixType::array_type::const_iterator Iterator;
+        for (Iterator i = data ().begin ();;) {
+
+                s += boost::lexical_cast <double> (*i);
+
+                if (++i == data ().end ()) {
+                        break;
+                }
+
+                s+= ",";
+        }
+
+        return s + ")";
+}
 
 /****************************************************************************/
 
