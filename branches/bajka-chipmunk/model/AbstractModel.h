@@ -19,23 +19,23 @@ public:
 
         d__
 
-        AbstractModel () : parent (0), angle (0), scale (1), view (0), controller (0) {}
+        AbstractModel () : parent (0), view (0), controller (0) {}
         virtual ~AbstractModel () {}
 
 /*--------------------------------------------------------------------------*/
 
-        virtual Geometry::Point getTranslate () const { return translate; }
-        m_ (setTranslate) virtual void setTranslate (Geometry::Point const &p) { translate = p; }
+        virtual Geometry::Point getTranslate () const;
+        m_ (setTranslate) virtual void setTranslate (Geometry::Point const &p);
 
         virtual Geometry::Point getCenter () const;
         m_ (setCenter) virtual void setCenter (Geometry::Point const &p);
         virtual Geometry::Point computeCenter () const = 0;
 
-        virtual double getAngle () const { return angle; }
-        m_ (setAngle) virtual void setAngle (double a) { angle = a; }
+        virtual double getAngle () const;
+        m_ (setAngle) virtual void setAngle (double a);
 
-        virtual double getScale () const { return scale; }
-        m_ (setScale) virtual void setScale (double s) { scale = s; }
+        virtual double getScale () const;
+        m_ (setScale) virtual void setScale (double s);
 
         virtual Geometry::AffineMatrix const &getMatrix () const;
 
@@ -47,11 +47,6 @@ public:
 /*--------------------------------------------------------------------------*/
 
         virtual void transform (Geometry::Point *p) const;
-
-//        // TODO wywalić kiedy byędzie zaimplem. w Space i Body.
-//        virtual Geometry::Box getBoundingBox () const { return Geometry::Box (); }
-//        // TODO wywalić kiedy byędzie zaimplem. w Space i Body.
-//        virtual bool contains (Geometry::Point const &p) const { return true; }
 
 /*--------------------------------------------------------------------------*/
 
@@ -78,10 +73,11 @@ public:
 protected:
 
         IModel *parent;
-        Geometry::Point translate;
-        double angle;
-        double scale;
         std::auto_ptr <Geometry::AffineMatrix> matrix;
+
+private:
+
+        void initMatrix ();
 
 private:
 

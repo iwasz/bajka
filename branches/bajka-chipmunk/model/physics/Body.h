@@ -30,16 +30,13 @@ public:
         Geometry::Point getTranslate () const;
         void setTranslate (Geometry::Point const &position);
 
-        /**
-         * Dlatego center wypada tam gdzie przesunięcie.
-         */
-        Geometry::Point computeCenter () const { return translate; }
-
         double getAngle () const;
         void setAngle (double a);
 
         double getScale () const { return 1; }
         void setScale (double s) { throw Util::OperationNotSupportedException (); }
+
+        void setCenter (Geometry::Point const &p) { throw Util::OperationNotSupportedException (); }
 
 /*--------------------------------------------------------------------------*/
 

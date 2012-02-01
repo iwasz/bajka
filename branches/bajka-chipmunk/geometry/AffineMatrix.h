@@ -33,7 +33,7 @@ typedef boost::numeric::ublas::matrix <double, boost::numeric::ublas::column_maj
  * elementów za pomocą operatora (). Najpierw numer wiersza, potem kolumny.
  * \ingroup Geometry
  */
-class AffineMatrix : public AffineMatrixType/*, public Core::IToStringEnabled*/ {
+class AffineMatrix : public AffineMatrixType, public Core::IToStringEnabled {
 public:
 
         AffineMatrix ();
@@ -58,13 +58,14 @@ public:
         Point getTransformed (const Point &) const;
 
 ///*--------------------------------------------------------------------------*/
-//
-//        std::string toString () const;
+
+        std::string toString () const;
+
+        static const AffineMatrix UNITARY;
 
 private:
 
         bool invertMatrix (const double m[16], double invOut[16]);
-        static const AffineMatrix UNITARY;
 
 };
 
