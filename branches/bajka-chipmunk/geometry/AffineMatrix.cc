@@ -1,4 +1,3 @@
-#if 0
 /****************************************************************************
  *                                                                          *
  *  Author : lukasz.iwaszkiewicz@tiliae.eu                                  *
@@ -12,6 +11,13 @@
 
 namespace Geometry {
 using namespace boost::numeric::ublas;
+
+/**
+ * Macierz jednostkowa.
+ */
+const AffineMatrix UNITARY;
+
+/****************************************************************************/
 
 AffineMatrix::AffineMatrix () : AffineMatrixType (4, 4)
 {
@@ -35,8 +41,8 @@ void AffineMatrix::move (const Geometry::Point &p)
 {
         AffineMatrixType m (4, 4);
 
-        m (0,0) = 1;   m (0,1) = 0;   m (0,2) = 0;   m (0,3) = p.getX ();
-        m (1,0) = 0;   m (1,1) = 1;   m (1,2) = 0;   m (1,3) = p.getY ();
+        m (0,0) = 1;   m (0,1) = 0;   m (0,2) = 0;   m (0,3) = p.x;
+        m (1,0) = 0;   m (1,1) = 1;   m (1,2) = 0;   m (1,3) = p.y;
         m (2,0) = 0;   m (2,1) = 0;   m (2,2) = 1;   m (2,3) = 0;
         m (3,0) = 0;   m (3,1) = 0;   m (3,2) = 0;   m (3,3) = 1;
 
@@ -71,8 +77,8 @@ void AffineMatrix::rotate (double r, Geometry::Point const &p)
         double c = cos (r);
         double s = sin (r);
 
-        m (0,0) = c;   m (0,1) = -s;   m (0,2) = 0;   m (0,3) = p.getX () - c * p.getX () + s * p.getY ();
-        m (1,0) = s;   m (1,1) = c;    m (1,2) = 0;   m (1,3) = p.getY () - s * p.getX () - c * p.getY ();
+        m (0,0) = c;   m (0,1) = -s;   m (0,2) = 0;   m (0,3) = p.x - c * p.x + s * p.y;
+        m (1,0) = s;   m (1,1) = c;    m (1,2) = 0;   m (1,3) = p.y - s * p.x - c * p.y;
         m (2,0) = 0;   m (2,1) = 0;    m (2,2) = 1;   m (2,3) = 0;
         m (3,0) = 0;   m (3,1) = 0;    m (3,2) = 0;   m (3,3) = 1;
 
@@ -86,8 +92,8 @@ void AffineMatrix::resize (double w, double h, Geometry::Point const &p)
 {
         AffineMatrixType m (4, 4);
 
-        m (0,0) = w;   m (0,1) = 0;   m (0,2) = 0;   m (0,3) = p.getX () - w * p.getX ();
-        m (1,0) = 0;   m (1,1) = h;   m (1,2) = 0;   m (1,3) = p.getY () - h * p.getX ();
+        m (0,0) = w;   m (0,1) = 0;   m (0,2) = 0;   m (0,3) = p.x - w * p.x;
+        m (1,0) = 0;   m (1,1) = h;   m (1,2) = 0;   m (1,3) = p.y - h * p.x;
         m (2,0) = 0;   m (2,1) = 0;   m (2,2) = 1;   m (2,3) = 0;
         m (3,0) = 0;   m (3,1) = 0;   m (3,2) = 0;   m (3,3) = 1;
 
@@ -98,12 +104,12 @@ void AffineMatrix::resize (double w, double h, Geometry::Point const &p)
 
 void AffineMatrix::transform (Point *p) const
 {
-        double x = p->getX ();
-        double y = p->getY ();
+        double x = p->x;
+        double y = p->y;
 
         // Looks odd, but it is like this_matrix (0, 0)
-        p->setX (x * operator()(0,0) + y * operator()(0,1) + operator()(0,3));
-        p->setY (x * operator()(1,0) + y * operator()(1,1) + operator()(1,3));
+        p->x = (x * operator()(0,0) + y * operator()(0,1) + operator()(0,3));
+        p->y = (x * operator()(1,0) + y * operator()(1,1) + operator()(1,3));
 }
 
 /****************************************************************************/
@@ -117,24 +123,24 @@ Point AffineMatrix::getTransformed (const Point &p) const
 
 /****************************************************************************/
 
-std::string AffineMatrix::toString () const
-{
-        std::string s = "AffineMatrix (";
-
-        typedef AffineMatrixType::array_type::const_iterator Iterator;
-        for (Iterator i = data ().begin ();;) {
-
-                s += boost::lexical_cast <double> (*i);
-
-                if (++i == data ().end ()) {
-                        break;
-                }
-
-                s+= ",";
-        }
-
-        return s + ")";
-}
+//std::string AffineMatrix::toString () const
+//{
+//        std::string s = "AffineMatrix (";
+//
+//        typedef AffineMatrixType::array_type::const_iterator Iterator;
+//        for (Iterator i = data ().begin ();;) {
+//
+//                s += boost::lexical_cast <double> (*i);
+//
+//                if (++i == data ().end ()) {
+//                        break;
+//                }
+//
+//                s+= ",";
+//        }
+//
+//        return s + ")";
+//}
 
 /****************************************************************************/
 
@@ -195,19 +201,4 @@ bool AffineMatrix::invertMatrix (const double m[16], double invOut[16])
         return true;
 }
 
-/*##########################################################################*/
-
-//Box getBoundingBox (Box const &b1, Box const &b2)
-//{
-//        Box ret;
-//
-//        ret.setX1 (std::min (b1.getX1 (), b2.getX1 ()));
-//        ret.setY1 (std::min (b1.getY1 (), b2.getY1 ()));
-//        ret.setX2 (std::max (b1.getX2 (), b2.getX2 ()));
-//        ret.setY2 (std::max (b1.getY2 (), b2.getY2 ()));
-//
-//        return ret;
-//}
-
 } // nam
-#endif

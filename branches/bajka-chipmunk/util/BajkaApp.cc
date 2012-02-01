@@ -210,7 +210,9 @@ void BajkaApp::loop ()
 				model->update ();
 
                 // Run chipmunk
-                cpSpaceStep (Model::Space::getSpace (), 1.0 / 60.0);
+				if (Model::Space::getSpace ()) {
+					cpSpaceStep (Model::Space::getSpace (), 1.0 / 60.0);
+				}
 
                 afterEvents ();
 

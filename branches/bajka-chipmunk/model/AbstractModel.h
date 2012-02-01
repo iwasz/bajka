@@ -37,6 +37,8 @@ public:
         virtual double getScale () const { return scale; }
         m_ (setScale) virtual void setScale (double s) { scale = s; }
 
+        virtual Geometry::AffineMatrix const &getMatrix () const;
+
 /*--------------------------------------------------------------------------*/
 
         virtual bool isBox () const { return false; }
@@ -79,6 +81,7 @@ protected:
         Geometry::Point translate;
         double angle;
         double scale;
+        std::auto_ptr <Geometry::AffineMatrix> matrix;
 
 private:
 

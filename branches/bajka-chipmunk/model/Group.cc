@@ -48,8 +48,6 @@ Box Group::getBoundingBox () const
 //    boost::geometry::transform (ring, output, matrix);
 //    envelope (output, ret);
 
-	ret.ll += 1;
-	ret.ur += 1;
 	return ret;
 }
 

@@ -19,6 +19,12 @@ namespace Model {
 /**
  * Podstawowa grupa modeli, czyli coś, co się rozciąga w nieskończoność (nie ma
  * swojego rozmiaru).
+ *
+ * Bounding box takiej grupy jest zawsze rozciągnięty żeby miściły się w nim wszystkie
+ * dzieci.
+ *
+ * Środek transformacji (obrotu i skali) domyślnie jest w punkcie 0,0 (nie jest
+ * wyliczany na podstawie rozmieszczenia dzieci).
  */
 class Group : public AbstractModel, public IGroup {
 public:
