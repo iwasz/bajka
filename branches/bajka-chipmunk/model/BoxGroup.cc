@@ -69,19 +69,20 @@ IModel *BoxGroup::findContains (Point const &p)
                 return NULL;
         }
 
-//        // --- Jeśli nie ma dzieci zwróć this.
+        // --- Jeśli nie ma dzieci zwróć this.
         if (children.empty ()) {
                 return this;
         }
 
         // --- Jeśli są dzieci, to przetransformuj p przez moją macierz i puść w pętli do dzieci.
         Point copy = p;
-        getMatrix ().transform (&copy);
+        // TODO od razu można zwracać odwróconą.
+        getMatrix ().getInversed ().transform (&copy);
 
         IModel *ret;
 
-        for (ModelVector::iterator i = begin (); i != end (); ++i) {
-                if ((ret = (*i)->findContains (p))) {
+        for (ModelVector::reverse_iterator i = children.rbegin (); i != children.rend (); ++i) {
+                if ((ret = (*i)->findContains (copy))) {
                         return ret;
                 }
         }

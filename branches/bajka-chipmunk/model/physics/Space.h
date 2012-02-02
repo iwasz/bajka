@@ -23,7 +23,7 @@ public:
         Space ();
         virtual ~Space ();
 
-        static cpSpace *getSpace () { return space; }
+        static cpSpace *getSpace ();
 
 /*--------------------------------------------------------------------------*/
 

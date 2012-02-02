@@ -29,7 +29,6 @@ Box Group::getBoundingBox () const
 		}
 	}
 
-//	// TODO Zdubloway kod Model::Box!
 //    Ring ring;
 //    convert (ret, ring);
 //
@@ -53,6 +52,7 @@ Box Group::getBoundingBox () const
 
 /****************************************************************************/
 
+//TODO to jest kopia z BoxGroup - wydzielić ten wspólny kod gdzieś.
 IModel *Group::findContains (Point const &p)
 {
         // - Punkt p jest we współrzędnych rodzica.
@@ -63,7 +63,7 @@ IModel *Group::findContains (Point const &p)
         // --- Stwórz macierz.
         // --- Przemnóż ll i ur przez tą macierz.
         // -- Znajdz aabb (max i min x + max i min.y).
-        Box aabb = getBoundingBox ();
+        Geometry::Box aabb = getBoundingBox ();
 
         // - Sprawdź, czy p jest w aabb
         // -- Jeśli nie, zwróć NULL.
@@ -77,19 +77,20 @@ IModel *Group::findContains (Point const &p)
                 return NULL;
         }
 
-//        // --- Jeśli nie ma dzieci zwróć this.
+        // --- Jeśli nie ma dzieci zwróć this.
         if (children.empty ()) {
                 return this;
         }
 
         // --- Jeśli są dzieci, to przetransformuj p przez moją macierz i puść w pętli do dzieci.
         Point copy = p;
-        getMatrix ().transform (&copy);
+        // TODO od razu można zwracać odwróconą.
+        getMatrix ().getInversed ().transform (&copy);
 
         IModel *ret;
 
-        for (ModelVector::iterator i = begin (); i != end (); ++i) {
-                if ((ret = (*i)->findContains (p))) {
+        for (ModelVector::reverse_iterator i = children.rbegin (); i != children.rend (); ++i) {
+                if ((ret = (*i)->findContains (copy))) {
                         return ret;
                 }
         }

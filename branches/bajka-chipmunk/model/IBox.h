@@ -24,7 +24,10 @@ public:
 /*--------------------------------------------------------------------------*/
 
         virtual double getWidth () const = 0;
+        virtual void setWidth (double w)  = 0;
         virtual double getHeight () const = 0;
+        virtual void setHeight (double h) = 0;
+
         virtual Geometry::Box getBox () const = 0;
 
 };

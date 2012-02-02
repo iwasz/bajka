@@ -16,6 +16,13 @@ cpSpace *Space::space = NULL;
 
 /****************************************************************************/
 
+cpSpace *Space::getSpace ()
+{
+        return space;
+}
+
+/****************************************************************************/
+
 Space::Space ()
 {
     	assertThrow (!space, "Space::Space : space is NULL");

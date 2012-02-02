@@ -46,7 +46,7 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        virtual IModel *findContains (Geometry::Point const &p) { return NULL; }
+        virtual IModel *findContains (Geometry::Point const &p);
 
 /*--------------------------------------------------------------------------*/
 
