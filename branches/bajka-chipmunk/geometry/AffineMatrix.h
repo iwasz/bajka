@@ -38,6 +38,7 @@ public:
 
         AffineMatrix ();
         AffineMatrix (const AffineMatrix &m);
+        AffineMatrix (Geometry::Point translate, double angle, double scale, Geometry::Point center);
 
         template<class AE>
         AffineMatrix (const boost::numeric::ublas::matrix_expression<AE> &ae) : AffineMatrixType (ae) {}
@@ -69,6 +70,29 @@ private:
 
 };
 
+/****************************************************************************/
+
+/**
+ * Transformer dla boost::geomoetry.
+ */
+class AffineMatrixTransformer {
+public :
+
+    inline AffineMatrixTransformer (AffineMatrix const& matrix) : m_matrix(matrix) {}
+
+    inline bool apply (Geometry::Point const& p1, Geometry::Point &p2) const
+    {
+    	p2 = p1;
+    	m_matrix.transform (&p2);
+        return true;
+    }
+
+    AffineMatrix const &matrix() const { return m_matrix; }
+
+protected:
+
+    AffineMatrix m_matrix;
+};
 
 } // namespace
 

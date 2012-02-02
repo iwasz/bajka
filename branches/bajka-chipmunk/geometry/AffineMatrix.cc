@@ -30,6 +30,20 @@ AffineMatrix::AffineMatrix (const AffineMatrix &m) : AffineMatrixType (m) {}
 
 /****************************************************************************/
 
+AffineMatrix::AffineMatrix (Geometry::Point translate, double angle, double scale, Geometry::Point ct) : AffineMatrixType (4, 4)
+{
+	double aRad = angle * M_PI / 180.0;
+	double s = scale * sin (aRad);
+	double c = scale * cos (aRad);
+
+	operator() (0,0) = c;   operator() (0,1) = -s;   operator() (0,2) = 0;   operator() (0,3) = -c * ct.x + s * ct.y + ct.x + translate.x;
+	operator() (1,0) = s;   operator() (1,1) = c;    operator() (1,2) = 0;   operator() (1,3) = -s * ct.x - c * ct.y + ct.y + translate.y;
+	operator() (2,0) = 0;   operator() (2,1) = 0;    operator() (2,2) = 1;   operator() (2,3) = 0;
+	operator() (3,0) = 0;   operator() (3,1) = 0;    operator() (3,2) = 0;   operator() (3,3) = 1;
+}
+
+/****************************************************************************/
+
 void AffineMatrix::resetIdentity ()
 {
         *this = identity_matrix <double> (4);

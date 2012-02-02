@@ -84,7 +84,7 @@ IModel *Group::findContains (Point const &p)
 
         // --- Jeśli są dzieci, to przetransformuj p przez moją macierz i puść w pętli do dzieci.
         Point copy = p;
-        transform (&copy);
+        getMatrix ().transform (&copy);
 
         IModel *ret;
 

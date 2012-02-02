@@ -28,24 +28,12 @@ Geometry::Point Box::computeCenter () const
 
 bool Box::contains (Point const &p) const
 {
-//        Ring ring;
-//        convert (box, ring);
-//
-//        double aRad = angle * M_PI / 180.0;
-//        double s = scale * sin (aRad);
-//        double c = scale * cos (aRad);
-//        Point ct = getCenter ();
-//
-//        trans::ublas_transformer <Point, Point, 2, 2> matrix (
-//                c, -s, -c * ct.x + s * ct.y + ct.x + translate.x,
-//                s,  c, -s * ct.x - c * ct.y + ct.y + translate.y,
-//                0,  0,  1
-//        );
-//
-//        Ring output;
-//        boost::geometry::transform (ring, output, matrix);
-//        return within (p, output);
-	return true;
+        Ring ring;
+        Ring output;
+        convert (box, ring);
+        AffineMatrixTransformer matrix (getMatrix ());
+        transform (ring, output, matrix);
+        return within (p, output);
 }
 
 /****************************************************************************/
@@ -53,25 +41,13 @@ bool Box::contains (Point const &p) const
 G::Box Box::getBoundingBox () const
 {
         G::Box aabb;
-//        Ring ring;
-//        convert (box, ring);
-//
-//        double aRad = angle * M_PI / 180.0;
-//        double s = scale * sin (aRad);
-//        double c = scale * cos (aRad);
-//        Point ct = getCenter ();
-//
-//        trans::ublas_transformer <Point, Point, 2, 2> matrix (
-//    		c, -s, -c * ct.x + s * ct.y + ct.x + translate.x,
-//    		s,  c, -s * ct.x - c * ct.y + ct.y + translate.y,
-//    		0,  0,  1
-//        );
-//
-//        Ring output;
-//        boost::geometry::transform (ring, output, matrix);
-//        envelope (output, aabb);
+        Ring ring;
+        Ring output;
+        convert (box, ring);
+        AffineMatrixTransformer matrix (getMatrix ());
+        transform (ring, output, matrix);
+        envelope (output, aabb);
         return aabb;
 }
-
 
 } /* namespace Model */

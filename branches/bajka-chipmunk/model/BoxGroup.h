@@ -11,8 +11,9 @@
 
 #include "../geometry/Point.h"
 #include "../util/ReflectionMacros.h"
-#include "../model/static/Box.h"
 #include "IGroup.h"
+#include "IBox.h"
+#include "AbstractModel.h"
 
 namespace Model {
 
@@ -32,14 +33,23 @@ namespace Model {
  * ustalaja swój rozmiar.
  *
  */
-class BoxGroup : public Box, public IGroup {
+class BoxGroup : public IGroup, public IBox, public AbstractModel  {
 public:
 
 	C__ (void)
-	b_ ("Box")
+	b_ ("AbstractModel")
 
-	BoxGroup () : relW (-1), relH (-1), relX (-1), relY (-1) {}
+	BoxGroup () : w (0), h(0), relW (-1), relH (-1), relX (-1), relY (-1) {}
 	virtual ~BoxGroup() {}
+
+/*--IBox--------------------------------------------------------------------*/
+
+    double getWidth () const { return w; }
+    m_ (setWidth) void setWidth (double w) { this->w = w; }
+    double getHeight () const { return h; }
+    m_ (setHeight) void setHeight (double h) { this->h = h; }
+
+    Geometry::Box getBox () const { return Geometry::Box (0, 0, w - 1, h - 1); }
 
 /*--layout------------------------------------------------------------------*/
 
@@ -50,9 +60,12 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-    virtual Geometry::Point computeCenter () const { return Box::computeCenter (); }
-    virtual bool contains (Geometry::Point const &p) const { return true; }
-    bool isGroup () const { return true; }
+	bool isGroup () const { return true; }
+    bool isBox () const { return true; }
+
+    Geometry::Point computeCenter () const { return Geometry::Point (w / 2, h / 2); }
+    virtual Geometry::Box getBoundingBox () const;
+    virtual bool contains (Geometry::Point const &p) const;
     virtual IModel *findContains (Geometry::Point const &p);
 
 /*--------------------------------------------------------------------------*/
@@ -73,6 +86,7 @@ private:
 
 private:
 
+    double w, h;
     ModelVector children;
     // Cache uzywany do inicjowania. Po inicjacji już nie używany.
     double relW, relH, relX, relY;
