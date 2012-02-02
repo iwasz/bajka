@@ -10,11 +10,13 @@
 #include "../geometry/AffineMatrix.h"
 #include "Body.h"
 #include "Space.h"
+#include "../../util/Exceptions.h"
 
 namespace Model {
 
 Body::Body ()
 {
+        assertThrow (Space::getSpace (), "Space::space == NULL");
         body = cpSpaceAddBody (Space::getSpace (), cpBodyNew (1, 1));
         cpBodySetUserData (body, this);
 }

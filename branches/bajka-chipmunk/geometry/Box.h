@@ -9,7 +9,6 @@
 #ifndef GEOMETRY_MODEL_BOX_H_
 #define GEOMETRY_MODEL_BOX_H_
 
-#undef error //TODO wymyślić coś mądrzejszego
 #include <boost/geometry/geometry.hpp>
 #include <boost/geometry/geometries/register/box.hpp>
 #include <Object.h>

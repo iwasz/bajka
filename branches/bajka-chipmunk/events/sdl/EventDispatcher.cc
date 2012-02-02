@@ -43,7 +43,7 @@ static void runRec (Model::IModel *m, Event::IEvent *e)
         }
 
         if (m->isGroup ()) {
-        		M::IGroup *g = dynamic_cast <M::IGroup *> (m);
+                M::IGroup *g = dynamic_cast<M::IGroup *> (m);
                 std::for_each (g->begin (), g->end (), boost::bind (runRec, _1, e));
         }
 }

@@ -46,20 +46,6 @@ private:
         E_ (View::Image)
 };
 
-/**
- *
- */
-struct Exception {
-
-};
-
-/**
- *
- */
-struct ImageException : public Exception {
-
-};
-
 }
 
 #	endif /* IMAGE_H_ */

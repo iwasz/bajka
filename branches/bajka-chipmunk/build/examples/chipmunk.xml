@@ -8,8 +8,8 @@
     <!--Konfiguracja-->
     <bean id="cfg" class="BajkaConfig" init-method="init" singleton="true">
         <property name="fullScreen" value="false"/>
-        <property name="resX" value="640"/>
-        <property name="resY" value="480"/>
+        <property name="resX" value="800"/>
+        <property name="resY" value="660"/>
         <property name="windowCaption" value="Chipmunk tests"/>
     </bean>
 

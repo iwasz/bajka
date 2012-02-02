@@ -22,6 +22,13 @@ namespace View {
 void Text::init (Model::IModel *model)
 {
         SDL_Surface *image = static_cast <SDL_Surface *> (font->render (text, getForeground (), getBackground ()));
+
+        if (model->isBox ()) {
+                Model::IBox *b = dynamic_cast <Model::IBox *> (model);
+                b->setWidth (image->w);
+                b->setHeight (image->h);
+        }
+
         SDL_Surface *texSurface = expandSurfacePowerOf2 (image);
         SDL_FreeSurface (image);
 

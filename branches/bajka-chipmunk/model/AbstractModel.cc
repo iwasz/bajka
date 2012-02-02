@@ -91,18 +91,20 @@ void AbstractModel::update ()
 
 /****************************************************************************/
 
-//void AbstractModel::transform (Geometry::Point *p) const
-//{
-////        double aRad = angle * M_PI / 180.0;
-////        // Pomnożyć sin i cos razy scale i podstawić.
-////        double s = sin (aRad);
-////        double c = cos (aRad);
-////        double x = p->x;
-////        Geometry::Point ct = getCenter ();
-////
-////        p->x = scale * c * (x - scale * ct.x) + scale * s * (scale * ct.y - p->y) + ct.x + translate.x;
-////        p->y = scale * c * (p->y - scale * ct.y) + scale * s * (x - scale * ct.x) + ct.y + translate.y;
-//	getMatrix ().transform (p);
-//}
+IModel *AbstractModel::findContains (Geometry::Point const &p)
+{
+        Geometry::Box aabb = getBoundingBox ();
+
+        if (!aabb.contains (p)) {
+                return NULL;
+        }
+
+        if (!this->contains (p)) {
+                return NULL;
+        }
+
+        return this;
+}
+
 
 } /* namespace Model1 */

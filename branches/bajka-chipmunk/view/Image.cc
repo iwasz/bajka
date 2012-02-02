@@ -15,8 +15,7 @@
 #include "Math.h"
 #include "Model.h"
 #include "../dependencies/sdl/Util.h"
-
-using Sdl::expandSurfacePowerOf2;
+#include "../util/Exceptions.h"
 
 namespace View {
 
@@ -27,15 +26,17 @@ void Image::init (Model::IModel *model)
 /*--------------------------------------------------------------------------*/
 
         SDL_Surface *image = IMG_Load (path.c_str ());
+        assertThrow (image != NULL, "Image::init : couldn't load image : [" + path + "]");
 
-        if (image == NULL) {
-                /// \todo Może jakieś info do cholery!?
-                throw ImageException ();
+        if (model->isBox ()) {
+                Model::IBox *b = dynamic_cast <Model::IBox *> (model);
+                b->setWidth (image->w);
+                b->setHeight (image->h);
         }
 
 /*--------------------------------------------------------------------------*/
 
-        SDL_Surface *texSurface = expandSurfacePowerOf2 (image);
+        SDL_Surface *texSurface = Sdl::expandSurfacePowerOf2 (image);
         SDL_FreeSurface (image);
 
         int width = texSurface->w;
@@ -66,9 +67,7 @@ void Image::init (Model::IModel *model)
         GLint tmpWidth;
         glGetTexLevelParameteriv(GL_PROXY_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &tmpWidth);
 
-        if (tmpWidth != width) {
-                throw ImageException ();
-        }
+        assertThrow (tmpWidth == width, "Image::init : tmpWidth != width");
 
 /*--------------------------------------------------------------------------*/
 
