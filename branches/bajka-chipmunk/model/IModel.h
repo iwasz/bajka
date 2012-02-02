@@ -64,7 +64,7 @@ struct IModel : public virtual Core::Object {
         /**
          * Macierz przekształceń.
          */
-        virtual Geometry::AffineMatrix const &getMatrix () const = 0;
+        virtual Geometry::AffineMatrix getMatrix () const = 0;
 
 /*------runtime type information--------------------------------------------*/
 
@@ -94,12 +94,6 @@ struct IModel : public virtual Core::Object {
          * @return
          */
         virtual bool contains (Geometry::Point const &p) const = 0;
-
-        /**
-         * Transforuje punkt przez affine matrix tego modelu, czyli nakłąda
-         * przesunięcie, skalę i obrót.
-         */
-        virtual void transform (Geometry::Point *p) const = 0;
 
 /*--------------------------------------------------------------------------*/
 

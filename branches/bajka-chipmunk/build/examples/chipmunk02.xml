@@ -6,7 +6,10 @@
 <beans>
 
     <bean id="space" class="BoxGroup" singleton="true">
-        <property name="box" value="-319, -240, 320, 239" />
+        <property name="width" value="640" />
+        <property name="height" value="480" />
+        <!-- TODO Czemu tu trzeba dać 319? -->
+        <property name="translate" value="-319, -240" />
         <property name="controller" ref="emptyCtr"/>            
         
         
@@ -15,7 +18,29 @@
                 <bean class="BoxGroup" singleton="true">
                     <property name="relW" value="90"/>
                     <property name="relH" value="90"/>                    
+                    <property name="relX" value="5"/>
+                    <property name="relY" value="5"/>                    
                 </bean>
+                
+<!-- 			    <bean class="Box" singleton="true"> -->
+<!-- 			        <property name="box" value="100, 100, 150, 150"/> -->
+<!-- 			        <property name="translate" value="-300, 0"/>         -->
+<!-- 			        <property name="angle" value="30"/> -->
+<!-- 			        <property name="scale" value="2"/> -->
+<!-- 			        <property name="view" ref="rectangleWgt"/> -->
+<!-- 			        <property name="controller" ref="emptyCtr"/>     -->
+<!-- 			    </bean> -->
+			
+<!-- 			    <bean class="Circle" singleton="true"> -->
+<!-- 			        <property name="view" ref="circleWgt"/>             -->
+<!-- 			        <property name="radius" value="20" />     -->
+<!-- 			        <property name="translate" value="10, -10"/>         -->
+<!-- 			        <property name="controller" ref="emptyCtr"/>     -->
+<!--                     <property name="origin" value="0, -50"/>         -->
+<!-- 			        <property name="angle" value="90"/> -->
+<!-- 			        <property name="scale" value="2"/> -->
+<!-- 			    </bean> -->
+                    
             </list>
         </property>
 

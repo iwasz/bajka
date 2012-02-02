@@ -10,10 +10,11 @@
 #define BAJKA_MODEDL_BOXB_H_
 
 #include "../AbstractModel.h"
+#include "../IBox.h"
 
 namespace Model {
 
-class Box : public AbstractModel {
+class Box : public IBox, public AbstractModel {
 public:
 
         C__ (void)
@@ -28,7 +29,7 @@ public:
         double getHeight () const { return box.getHeight (); }
         void setHeight (double h) { box.setHeight (h); }
 
-        Geometry::Box const &getBox () const { return box; }
+        Geometry::Box getBox () const { return box; }
         m_ (setBox) void setBox (Geometry::Box const &b) { box = b; }
 
         bool isBox () const { return true; }

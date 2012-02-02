@@ -23,6 +23,7 @@
 #include "Events.h"
 #include "BajkaApp.h"
 #include "../view/draw/Primitives.h"
+#include "../model/IGroup.h"
 
 namespace Util {
 namespace M = Model;
@@ -263,7 +264,7 @@ unsigned int BajkaApp::reindex (unsigned int eventMask, Model::IModel *m)
         unsigned int childMask = 0x0;
 
         if (m->isGroup ()) {
-        		M::Group *g = static_cast <M::Group *> (m);
+        		M::IGroup *g = dynamic_cast <M::IGroup *> (m);
 
 				for (Model::ModelVector::const_iterator i = g->getChildren ().begin ();
 					 i != g->getChildren ().end ();

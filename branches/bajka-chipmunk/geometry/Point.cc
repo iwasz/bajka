@@ -13,6 +13,7 @@
 #include <boost/tokenizer.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include "Point.h"
+#include "../util/Exceptions.h"
 
 
 /****************************************************************************/
@@ -28,10 +29,10 @@ Point::Point (std::string const &s)
         tokenizer tok (s, boost::char_separator<char> (","));
         tokenizer::iterator i = tok.begin ();
 
-        assert(i != tok.end ());
+        assertThrow (i != tok.end (), "Box::Box : problem parsing string : [" + s + "]");
         x = lexical_cast<double> (trim_copy (*i++));
 
-        assert(i != tok.end ());
+        assertThrow (i != tok.end (), "Box::Box : problem parsing string : [" + s + "]");
         y = lexical_cast<double> (trim_copy (*i));
 }
 

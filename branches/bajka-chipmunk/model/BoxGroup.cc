@@ -8,9 +8,42 @@
 
 #include "BoxGroup.h"
 #include "../util/Exceptions.h"
+#include "../geometry/Ring.h"
+#include "../geometry/AffineMatrix.h"
 
 namespace Model {
+using namespace boost::geometry;
 using namespace Geometry;
+namespace G = Geometry;
+namespace trans = boost::geometry::strategy::transform;
+
+/****************************************************************************/
+
+bool BoxGroup::contains (Point const &p) const
+{
+        Ring ring;
+        Ring output;
+        convert (getBox (), ring);
+        AffineMatrixTransformer matrix (getMatrix ());
+        transform (ring, output, matrix);
+        return within (p, output);
+}
+
+/****************************************************************************/
+
+G::Box BoxGroup::getBoundingBox () const
+{
+        G::Box aabb;
+        Ring ring;
+        Ring output;
+        convert (getBox (), ring);
+        AffineMatrixTransformer matrix (getMatrix ());
+        transform (ring, output, matrix);
+        envelope (output, aabb);
+        return aabb;
+}
+
+/****************************************************************************/
 
 IModel *BoxGroup::findContains (Point const &p)
 {
@@ -43,7 +76,7 @@ IModel *BoxGroup::findContains (Point const &p)
 
         // --- Jeśli są dzieci, to przetransformuj p przez moją macierz i puść w pętli do dzieci.
         Point copy = p;
-        transform (&copy);
+        getMatrix ().transform (&copy);
 
         IModel *ret;
 
@@ -140,31 +173,44 @@ void BoxGroup::setRelX (double x)
 		return;
 	}
 
-	double w = parGroup->getWidth () * x / 100.0;
-	double bw = box.getWidth ();
-
-	box.ll.x = w;
-	box.ur.x = box.ll.x + bw;
+	Point oldT = getTranslate ();
+	setTranslate (Point (parGroup->getWidth () * x / 100.0, oldT.y));
 }
 
 /****************************************************************************/
 
 void BoxGroup::setRelY (double y)
 {
+	BoxGroup *parGroup = getParGroup ();
 
+	if (!parGroup) {
+		relY = y;
+		return;
+	}
+
+	Point oldT = getTranslate ();
+	setTranslate (Point (oldT.x, parGroup->getHeight () * y / 100.0));
 }
 
 /****************************************************************************/
 
 void BoxGroup::parentCallback (IModel *m)
 {
-	// Uruchamiamy jeszcze raz, bo teraz mamy parenta.
+	// Uruchamiamy jeszcze raz, bo teraz mamy parenta (ułatwoenie dla kontenera).
 	if (relW >= 0.0) {
 		setRelW (relW);
 	}
 
 	if (relH >= 0.0) {
 		setRelH (relH);
+
+	}
+	if (relX >= 0.0) {
+		setRelX (relX);
+	}
+
+	if (relY >= 0.0) {
+		setRelY (relY);
 	}
 }
 

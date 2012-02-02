@@ -18,7 +18,7 @@ cpSpace *Space::space = NULL;
 
 Space::Space ()
 {
-        assert (!space);
+    	assertThrow (!space, "Space::Space : space is NULL");
         space = cpSpaceNew ();
 }
 
@@ -50,7 +50,7 @@ IModel *Space::findContains (Geometry::Point const &point)
 {
         Geometry::Point p = point;
         //? Czy to tu ma być?
-        transform (&p);
+        getMatrix ().transform (&p);
         cpShape *shape = cpSpacePointQueryFirst (space, cpv (p.x, p.y), 0xFFFF, CP_NO_GROUP);
 
         if (shape) {

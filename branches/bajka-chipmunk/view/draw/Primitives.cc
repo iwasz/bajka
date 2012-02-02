@@ -4,6 +4,9 @@
  *  ~~~~~~~~                                                                *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
+ *                                                                          *
+ *  Parts of this code are taken from chipmunk demo app.                    *
+ *                                                                          *
  ****************************************************************************/
 
 #include <SDL_opengl.h>
@@ -50,7 +53,7 @@ void DrawUtil::drawCircle (Geometry::Point const &center, double angle, double r
 
         glPushMatrix(); {
                 glTranslatef(center.x, center.y, 0.0f);
-                glRotatef(angle*180.0f/M_PI, 0.0f, 0.0f, 1.0f);
+                glRotatef(angle, 0.0f, 0.0f, 1.0f);
                 glScalef(radius, radius, 1.0f);
 
                 if (fillColor.getA () > 0){
