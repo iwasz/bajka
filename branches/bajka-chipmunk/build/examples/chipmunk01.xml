@@ -135,7 +135,7 @@
     </bean>
     
     
-    <bean id="image1Wgt" class="View::Image" singleton="true">
+    <bean id="image1Wgt" class="Image" singleton="true">
         <property name="path" value="gfx/1.png"/>
     </bean>
     

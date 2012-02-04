@@ -20,6 +20,10 @@ using namespace boost::geometry;
 using namespace boost;
 using namespace boost::algorithm;
 
+const Box Box::ZERO_BOX;
+
+/****************************************************************************/
+
 Box::Box (std::string const &s)
 {
         typedef boost::tokenizer<boost::char_separator<char> > tokenizer;

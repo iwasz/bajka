@@ -12,15 +12,26 @@
 
 namespace Sdl {
 
-SDL_Surface *expandSurfacePowerOf2 (SDL_Surface *input)
+SDL_Surface *expandSurfacePowerOf2 (SDL_Surface *input, Geometry::Box const *region)
 {
         SDL_Surface *texSurface = NULL;
 
-        // Podniesione do następnej potęgi
-        int width = Util::Math::nextSqr (input->w);
-        int height = Util::Math::nextSqr (input->h);
+        int origW, origH;
 
-        if (height != input->h || width != input->w) {
+        if (region) {
+                origW = region->getWidth ();
+                origH = region->getHeight ();
+        }
+        else {
+                origW = input->w;
+                origH = input->h;
+        }
+
+        // Podniesione do następnej potęgi
+        int width = Util::Math::nextSqr (origW);
+        int height = Util::Math::nextSqr (origH);
+
+        if (region || height != input->h || width != input->w) {
 
                 SDL_Surface *surface = SDL_CreateRGBSurface (SDL_SWSURFACE, width, height, 32,
                 #if SDL_BYTEORDER == SDL_LIL_ENDIAN
@@ -41,20 +52,34 @@ SDL_Surface *expandSurfacePowerOf2 (SDL_Surface *input)
                 }
 
                 Uint32 saved_flags = input->flags & (SDL_SRCALPHA | SDL_RLEACCELOK);
+
                 if ((saved_flags & SDL_SRCALPHA) == SDL_SRCALPHA) {
                         SDL_SetAlpha (input, 0, 0);
                 }
 
+                SDL_Rect destRct;
+
                 /* Copy the surface into the GL texture surface (texSurface) */
-                SDL_Rect area;
+                destRct.x = 0;
+                destRct.y = height - origH;
+                destRct.w = origW;
+                destRct.h = origH;
 
-                area.x = 0;
-                area.y = height - input->h;
-                area.w = input->w;
-                area.h = input->h;
+                if (!region) {
 
-                SDL_BlitSurface (input, NULL, surface, &area);
-//                SDL_FreeSurface (input);
+                        SDL_BlitSurface (input, NULL, surface, &destRct);
+                }
+                else {
+                        SDL_Rect srcRct;
+
+                        /* Copy the surface into the GL texture surface (texSurface) */
+                        srcRct.x = region->ll.x;
+                        srcRct.y = region->ll.y;
+                        srcRct.w = region->getWidth ();
+                        srcRct.h = region->getHeight ();
+
+                        SDL_BlitSurface (input, &srcRct, surface, &destRct);
+                }
 
                 texSurface = surface;
         }

@@ -25,7 +25,7 @@ class EventDispatcher : public Event::IDispatcher {
 public:
         C__ (void)
 
-        EventDispatcher () : /*observer (NULL),*/ resX2 (0), resY2 (0) {}
+        EventDispatcher () : /*observer (NULL),*/ resX2 (0), resY2 (0), prevMouseModel (NULL) {}
         virtual ~EventDispatcher () {}
 
         m_ (init) void init ();
@@ -69,6 +69,7 @@ private:
 
         // Screen resolution / 2
         int resX2, resY2;
+        Model::IModel *prevMouseModel;
 
         E_ (EventDispatcher)
 };

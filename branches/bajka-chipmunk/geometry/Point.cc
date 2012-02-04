@@ -15,13 +15,16 @@
 #include "Point.h"
 #include "../util/Exceptions.h"
 
-
 /****************************************************************************/
 
 namespace Geometry {
 using namespace boost::geometry;
 using namespace boost;
 using namespace boost::algorithm;
+
+const Point Point::ZERO_POINT;
+
+/****************************************************************************/
 
 Point::Point (std::string const &s)
 {

@@ -11,6 +11,8 @@
 
 #include "IView.h"
 #include "ReflectionMacros.h"
+#include <map>
+#include <string>
 
 namespace View {
 
@@ -18,7 +20,7 @@ class Widget : public IView {
 public:
 
         C__ (void)
-        Widget () : visible (true) {}
+        Widget () : visible (true), alpha (1) {}
         virtual ~Widget () {}
 
         virtual void preUpdate (Model::IModel *);
@@ -31,6 +33,9 @@ public:
         double getAlpha () const { return alpha; }
         m_ (setAlpha) void setAlpha (double d) { alpha = d; }
 
+        m_ (setState) virtual void setState (int) {}
+        virtual int getState () const { return 0; }
+
         static void defaultPreUpdate (Model::IModel *m);
         static void defaultPostUpdate (Model::IModel *m);
 
@@ -41,6 +46,14 @@ private:
 
         E_ (Widget)
 };
+
+/*##########################################################################*/
+
+typedef std::map <std::string, Widget *> StringWidgetMap;
+g_ (StringWidgetMap)
+
+typedef std::vector <Widget *> WidgetVector;
+g_ (WidgetVector)
 
 } /* namespace View */
 

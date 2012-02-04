@@ -11,6 +11,8 @@
 
 #include <SDL_opengl.h>
 #include "Widget.h"
+#include "resource/IBitmap.h"
+#include "../geometry/Box.h"
 
 namespace View {
 
@@ -29,8 +31,11 @@ public:
         /// Do the drawing.
         virtual void update (Model::IModel *model);
 
-        std::string const &getPath () const { return path; }
-        m_ (setPath) void setPath (std::string const &p) { path = p; }
+        m_ (getBitmap) Ptr <IBitmap> getBitmap () { return bitmap; }
+        S_ (setBitmap) void setBitmap (Ptr <IBitmap> b) { bitmap = b; }
+
+        Geometry::Box const &getRegion () const { return (region.get ()) ? (*region) : (Geometry::Box::ZERO_BOX); }
+        m_ (setRegion) void setRegion (Geometry::Box const &r) { region = std::auto_ptr <Geometry::Box> (new Geometry::Box (r)); }
 
 private:
 
@@ -40,10 +45,11 @@ private:
 
         GLuint texName;
         int texWidth, texHeight;
-        std::string path;
         bool initialized;
+        Ptr <IBitmap> bitmap;
+        std::auto_ptr <Geometry::Box> region;
 
-        E_ (View::Image)
+        E_ (Image)
 };
 
 }

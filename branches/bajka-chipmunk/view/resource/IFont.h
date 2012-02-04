@@ -6,23 +6,19 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_EXPOSEEVENT_H_
-#define BAJKA_EXPOSEEVENT_H_
+#ifndef BAJKA_FONT_H_
+#define BAJKA_FONT_H_
 
-#include "IEvent.h"
+#include <Object.h>
+#include "../draw/Color.h"
 
-namespace Event {
+namespace View {
 
-class ExposeEvent : public IEvent {
-public:
-        virtual ~ExposeEvent () {}
-
-        Type getType () const { return EXPOSE_EVENT; }
-        bool runCallback (Model::IModel *m, View::IView *v, Controller::IController *c) { return c->onExpose (static_cast <ExposeEvent *> (this), m, v); }
-
-        std::string toString () const { return "ExposeEvent ()"; }
+struct IFont : public Core::Object {
+        virtual ~IFont () {}
+        virtual void *render (std::string const &text, View::Color const &fgColor, View::Color const &bgColor) = 0;
 };
 
-} /* namespace Event */
+} /* namespace View */
 
-#	endif /* EXPOSEEVENT_H_ */
+#       endif /* TTFFONT_H_ */

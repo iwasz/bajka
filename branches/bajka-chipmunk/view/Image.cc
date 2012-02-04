@@ -25,19 +25,24 @@ void Image::init (Model::IModel *model)
 
 /*--------------------------------------------------------------------------*/
 
-        SDL_Surface *image = IMG_Load (path.c_str ());
-        assertThrow (image != NULL, "Image::init : couldn't load image : [" + path + "]");
+        SDL_Surface *image = static_cast <SDL_Surface *> (bitmap->getData ());
 
         if (model->isBox ()) {
                 Model::IBox *b = dynamic_cast <Model::IBox *> (model);
-                b->setWidth (image->w);
-                b->setHeight (image->h);
+
+                if (region.get ()) {
+                        b->setWidth (region->getWidth ());
+                        b->setHeight (region->getHeight ());
+                }
+                else {
+                        b->setWidth (image->w);
+                        b->setHeight (image->h);
+                }
         }
 
 /*--------------------------------------------------------------------------*/
 
-        SDL_Surface *texSurface = Sdl::expandSurfacePowerOf2 (image);
-        SDL_FreeSurface (image);
+        SDL_Surface *texSurface = Sdl::expandSurfacePowerOf2 (image, region.get ());
 
         int width = texSurface->w;
         int height = texSurface->h;

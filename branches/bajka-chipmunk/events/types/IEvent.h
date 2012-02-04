@@ -18,6 +18,10 @@ namespace Model {
 class IModel;
 }
 
+namespace View {
+class IView;
+}
+
 /**
  * Eventy.
  */
@@ -38,7 +42,9 @@ enum Type {
         ACTIVE_EVENT            = 0x01 << 7,
         EXPOSE_EVENT            = 0x01 << 8,
         RESIZE_EVENT            = 0x01 << 9,
-        EVENT_TERMINATOR        = 0x01 << 10 //!< Do not use.
+        MOUSE_OVER_EVENT        = 0x01 << 10,
+        MOUSE_OUT_EVENT         = 0x01 << 11,
+        EVENT_TERMINATOR        = 0x01 << 12 //!< Do not use.
 };
 
 const unsigned int MOUSE_EVENTS = MOUSE_MOTION_EVENT | BUTTON_PRESS_EVENT | BUTTON_RELEASE_EVENT;
@@ -52,7 +58,7 @@ public:
         virtual ~IEvent () {}
 
         virtual Type getType () const = 0;
-        virtual bool runCallback (Controller::IController *c) = 0;
+        virtual bool runCallback (Model::IModel *m, View::IView *v, Controller::IController *c) = 0;
 };
 
 /**

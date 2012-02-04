@@ -6,36 +6,37 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef IVIEW_H_
-#define IVIEW_H_
+#ifndef BAJKA_BITMAP_H_
+#define BAJKA_BITMAP_H_
 
-#include <Object.h>
-
-namespace Model {
-class IModel;
-}
+#include <SDL.h>
+#include <SDL_image.h>
+#include <string>
+#include "../../util/ReflectionMacros.h"
+#include "IBitmap.h"
 
 namespace View {
 
-/**
- * Widok.
- */
-struct IView : public Core::Object {
+class Bitmap : public IBitmap {
+public:
 
-        virtual ~IView () {}
+        C__ (void)
+        Bitmap () : image (NULL) {}
+        virtual ~Bitmap ();
 
-        virtual void preUpdate (Model::IModel *) = 0;
-        virtual void update (Model::IModel *) = 0;
-        virtual void postUpdate (Model::IModel *) = 0;
+        std::string const &getPath () const { return path; }
+        m_ (setPath) void setPath (std::string const &p);
 
-        /**
-         * Stany widoku - jeśli brak, to olać.
-         */
-        virtual void setState (int) = 0;
-        virtual int getState () const = 0;
+        void *getData () { return image; }
 
+private:
+
+        std::string path;
+        SDL_Surface *image;
+
+        E_ (Bitmap)
 };
 
 } /* namespace View */
 
-#	endif /* IVIEW_H_ */
+#	endif /* BITMAP_H_ */

@@ -11,7 +11,7 @@
 
 namespace Controller {
 
-bool EmptyController::onQuit (Event::QuitEvent *e)
+bool EmptyController::onQuit (Event::QuitEvent *e, Model::IModel *m, View::IView *v)
 {
         exit (0);
 }

@@ -10,11 +10,11 @@
 #define BAJKA_TTFFONT_H_
 
 #include "ReflectionMacros.h"
-#include "Font.h"
+#include "IFont.h"
 
 namespace View {
 
-class TTFFont : public Font {
+class TTFFont : public IFont {
 public:
 
         C__ (std::string const &)
