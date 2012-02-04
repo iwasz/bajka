@@ -6,19 +6,23 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_FONT_H_
-#define BAJKA_FONT_H_
-
-#include <Object.h>
-#include "../draw/Color.h"
+#include "Bitmap.h"
+#include "../../util/Exceptions.h"
 
 namespace View {
 
-struct Font : public Core::Object {
-        virtual ~Font () {}
-        virtual void *render (std::string const &text, View::Color const &fgColor, View::Color const &bgColor) = 0;
-};
+void Bitmap::setPath (std::string const &p)
+{
+        path = p;
+        image = IMG_Load (path.c_str ());
+        assertThrow (image != NULL, "Image::init : couldn't load image : [" + path + "]");
+}
+
+/****************************************************************************/
+
+Bitmap::~Bitmap ()
+{
+        SDL_FreeSurface (image);
+}
 
 } /* namespace View */
-
-#       endif /* TTFFONT_H_ */

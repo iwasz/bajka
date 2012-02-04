@@ -36,11 +36,11 @@ class ResizeEvent;
 namespace Controller {
 
 /**
- *
+ * Oszukany interfejs :D
  */
 struct IController : public Core::Object {
 
-        IController () : eventMask (0) {}
+        IController () : eventMask (0), pointerInside (false) {}
         virtual ~IController () {}
 
         virtual void preUpdate (Model::IModel *m, View::IView *v) = 0;
@@ -49,24 +49,29 @@ struct IController : public Core::Object {
 
 /*--------------------------------------------------------------------------*/
 
-        virtual bool onButtonPress (Event::ButtonPressEvent *e) = 0;
-        virtual bool onButtonRelease (Event::ButtonReleaseEvent *e) = 0;
-        virtual bool onMouseMotion (Event::MouseMotionEvent *e) = 0;
-        virtual bool onKeyDown (Event::KeyDownEvent *e) = 0;
-        virtual bool onKeyUp (Event::KeyUpEvent *e) = 0;
-        virtual bool onTimer (Event::TimerEvent *e) = 0;
-        virtual bool onQuit (Event::QuitEvent *e) = 0;
-        virtual bool onActive (Event::ActiveEvent *e) = 0;
-        virtual bool onExpose (Event::ExposeEvent *e) = 0;
-        virtual bool onResize (Event::ResizeEvent *e) = 0;
+        virtual bool onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual bool onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual bool onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual bool onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual bool onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual bool onKeyDown (Event::KeyDownEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual bool onKeyUp (Event::KeyUpEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual bool onTimer (Event::TimerEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual bool onQuit (Event::QuitEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual bool onActive (Event::ActiveEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual bool onExpose (Event::ExposeEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual bool onResize (Event::ResizeEvent *e, Model::IModel *m, View::IView *v) = 0;
 
         // Mały hack psujący interfejs - nie ma sensu wirtualne!
         unsigned int eventMask;
         unsigned int getEventMask () const { return eventMask; }
         void setEventMask (unsigned int b) { eventMask = b; }
 
+private:
+
+        bool pointerInside;
 };
 
-} /* namespace Controller1 */
+} /* namespace Controller */
 
 #	endif /* ICONTROLLER_H_ */

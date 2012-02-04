@@ -5,27 +5,45 @@
 <!--Ogólny schemat nazw : Ctr - kontroler, Wgt - widget, Mdl - model.-->
 <beans>
 
+    <bean id="buttonCtr" class="ButtonController" singleton="true">
+         <!-- TODO, tylko mouse. -->
+         <property name="eventMask" value="0xffff"/> 
+    </bean>      
+
     <bean id="space" class="BoxGroup" singleton="true">
         <property name="width" value="640" />
         <property name="height" value="480" />
         <!-- TODO Czemu tu trzeba dać 319? -->
         <property name="translate" value="-390, -310" />       
-<!--         <property name="controller" ref="emptyCtr"/>             -->
+        <property name="controller" ref="emptyCtr"/>            
         
         <property name="children">
             <list class="ModelVector">
 
-                <bean class="Box" singleton="true">
-                    <property name="view" ref="image1Wgt" />
-<!--                     <property name="controller" ref="emptyCtr"/>             -->
-                </bean>
+                <ref bean="mainBackground"/>
+                <ref bean="title" />
 
+<!--                 <bean class="Box" singleton="true"> -->
+<!--                     <property name="view" ref="depressedWgt" /> -->
+<!--                     <property name="translate" value="480, 0" />        -->
+<!--                 </bean> -->
+
+<!--                 <bean class="Box" singleton="true"> -->
+<!--                     <property name="view" ref="pressedWgt" /> -->
+<!--                     <property name="translate" value="530, 0" />        -->
+<!--                 </bean> -->
+
+                <bean class="Box" singleton="true">
+                    <property name="view" ref="2state" />
+                    <property name="translate" value="590, 0" />       
+                    <property name="controller" ref="buttonCtr"/>            
+                </bean>
+                
                 <bean class="BoxGroup" singleton="true">
                     <property name="relW" value="90"/>
                     <property name="relH" value="90"/>                    
                     <property name="relX" value="5"/>
                     <property name="relY" value="5"/>                    
-<!--                     <property name="controller" ref="emptyCtr"/>             -->
                 </bean>
                 
 			    <bean class="Box" singleton="true">
@@ -40,7 +58,6 @@
 			        <property name="view" ref="circleWgt"/>            
 			        <property name="radius" value="20" />    
 			        <property name="translate" value="10, -10"/>        
-<!-- 			        <property name="controller" ref="emptyCtr"/>     -->
                     <property name="origin" value="50, 50"/>        
 			        <property name="angle" value="90"/>
 			        <property name="scale" value="2"/>
@@ -49,8 +66,69 @@
         </property>
     </bean>
 
-    <bean id="image1Wgt" class="View::Image" singleton="true">
-        <property name="path" value="resources/img/ui/menu-wall-with-window.png" />
+<!-- ====================================================================================== -->
+<!-- Bitmapy, obrazki -->
+<!-- ====================================================================================== -->
+
+    <!-- Tło -->
+    <bean id="mainBackground" class="Box" singleton="true">
+        <property name="view">
+            <bean class="Image" singleton="true">
+                <property name="bitmap">
+                    <bean class="Bitmap" singleton="true">
+                        <property name="path" value="resources/img/ui/menu-wall-with-window.png" />
+                    </bean>
+                </property>
+            </bean>
+        </property>
     </bean>
-         
+    
+    <bean id="2state" class="StatefulWidget" singleton="true">
+        <property name="widgets">
+            <list class="WidgetVector">
+                <ref bean="depressedWgt"/>
+                <ref bean="pressedWgt"/>
+                <ref bean="pressedWgt"/>
+            </list>
+        </property>
+        <property name="state" value="0" />
+        
+<!--         <add name="widgets" ref="pressedWgt"/> -->
+<!--         <add name="widgets" ref="depressedWgt"/> -->
+<!--         <set name="state" value="0" /> -->
+    </bean>
+
+    <bean id="depressedWgt" class="Image" singleton="true">
+        <property name="bitmap" ref="arrowKeysBmp" />
+        <property name="region" value="1, 1, 48, 48" />       
+    </bean>
+
+    <bean id="pressedWgt" class="Image" singleton="true">
+        <property name="bitmap" ref="arrowKeysBmp" />
+        <property name="region" value="51, 1, 98, 48" />       
+    </bean>
+
+    <bean id="arrowKeysBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/instructions-arrow-keys.png" />
+    </bean>
+
+<!--    Tak powinno być, ale nie działa. -->
+<!--     <bean id="title" parent="mainBackground"> -->
+<!--         <property name="view.bitmap.path" value="resources/img/ui/title.png"/> -->
+<!--     </bean> -->
+
+    <bean id="title" class="Box" singleton="true">
+        <property name="view">
+            <bean class="Image" singleton="true">
+                <property name="bitmap">
+                    <bean class="Bitmap" singleton="true">
+                        <property name="path" value="resources/img/ui/title.png" />
+                    </bean>
+                </property>
+            </bean>
+        </property>
+        
+        <property name="translate" value="60, 420" />
+    </bean>
+    
 </beans>

@@ -25,16 +25,18 @@ struct EmptyController : public IController {
 
 /*--------------------------------------------------------------------------*/
 
-        virtual bool onButtonPress (Event::ButtonPressEvent *e) { return true; }
-        virtual bool onButtonRelease (Event::ButtonReleaseEvent *e) { return true; }
-        virtual bool onMouseMotion (Event::MouseMotionEvent *e) { return true; }
-        virtual bool onKeyDown (Event::KeyDownEvent *e) { return true; }
-        virtual bool onKeyUp (Event::KeyUpEvent *e) { return true; }
-        virtual bool onTimer (Event::TimerEvent *e) { return true; }
-        virtual bool onQuit (Event::QuitEvent *e);
-        virtual bool onActive (Event::ActiveEvent *e) { return true; }
-        virtual bool onExpose (Event::ExposeEvent *e) { return true; }
-        virtual bool onResize (Event::ResizeEvent *e) { return true; }
+        virtual bool onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v) { return true; }
+        virtual bool onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v) { return true; }
+        virtual bool onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) { return true; }
+        virtual bool onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) { return true; }
+        virtual bool onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) { return true; }
+        virtual bool onKeyDown (Event::KeyDownEvent *e, Model::IModel *m, View::IView *v) { return true; }
+        virtual bool onKeyUp (Event::KeyUpEvent *e, Model::IModel *m, View::IView *v) { return true; }
+        virtual bool onTimer (Event::TimerEvent *e, Model::IModel *m, View::IView *v) { return true; }
+        virtual bool onQuit (Event::QuitEvent *e, Model::IModel *m, View::IView *v);
+        virtual bool onActive (Event::ActiveEvent *e, Model::IModel *m, View::IView *v) { return true; }
+        virtual bool onExpose (Event::ExposeEvent *e, Model::IModel *m, View::IView *v) { return true; }
+        virtual bool onResize (Event::ResizeEvent *e, Model::IModel *m, View::IView *v) { return true; }
 
         m_ (setEventMask)
         E_ (EmptyController)

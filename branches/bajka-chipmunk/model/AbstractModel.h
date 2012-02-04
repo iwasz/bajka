@@ -60,10 +60,10 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        View::IView *getView () { return view; }
+        m_ (getView) View::IView *getView () { return view; }
         S_ (setView) void setView (View::IView *v) { view = v; }
 
-        Controller::IController *getController () { return controller; }
+        m_ (getController) Controller::IController *getController () { return controller; }
         S_ (setController) void setController (Controller::IController *c) { controller = c; }
 
 protected:

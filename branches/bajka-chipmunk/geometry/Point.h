@@ -72,6 +72,8 @@ public:
         double distance () const;
         double distance (Point const &p) const;
 
+        static const Point ZERO_POINT;
+
 public:
 
         double x;

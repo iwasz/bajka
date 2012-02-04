@@ -33,7 +33,7 @@ static void runRec (Model::IModel *m, Event::IEvent *e)
 
         if ((c = m->getController ())) {
                 if (e && e->getType () & c->getEventMask ()) {
-                        if (!e->runCallback (m->getController ())) {
+                        if (!e->runCallback (m, m->getView (), m->getController ())) {
                                 return;
                         }
                 }
@@ -55,7 +55,7 @@ void EventDispatcher::dispatchEventBackwards (Model::IModel *m, IEvent *e)
         C::IController *controller = m->getController ();
 
         if (controller && controller->getEventMask () & e->getType ()) {
-                e->runCallback (controller);
+                e->runCallback (m, m->getView (), controller);
         }
 
         if ((m = m->getParent ())) {
@@ -82,6 +82,28 @@ void EventDispatcher::run (Model::IModel *m, ModelIndex const &modeliIndex)
                         MouseEvent *mev = static_cast <MouseEvent *> (e);
                         G::Point const &p = mev->getPosition ();
                         M::IModel *model = m->findContains (p);
+
+                        if (type & Event::MOUSE_MOTION_EVENT && model != prevMouseModel) {
+                                MouseMotionEvent *mmev = static_cast <MouseMotionEvent *> (e);
+
+                                if (prevMouseModel) {
+                                        C::IController *ctr = prevMouseModel->getController ();
+
+                                        if (ctr && ctr->getEventMask () & Event::MOUSE_OUT_EVENT) {
+                                                ctr->onMouseOut (mmev, prevMouseModel, prevMouseModel->getView ());
+                                        }
+                                }
+
+                                if (model) {
+                                        C::IController *ctr = model->getController ();
+
+                                        if (ctr && ctr->getEventMask () & Event::MOUSE_OVER_EVENT) {
+                                                ctr->onMouseOver (mmev, model, model->getView ());
+                                        }
+                                }
+                        }
+
+                        prevMouseModel = model;
 
                         if (!model) {
                                 return;

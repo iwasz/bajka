@@ -6,25 +6,23 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef KEYUPEVENT_H_
-#define KEYUPEVENT_H_
+#ifndef BAJKA_BITMAP_INTERFACE_H_
+#define BAJKA_BITMAP_INTERFACE_H_
 
-#include "KeyboardEvent.h"
-#include <string>
+#include <Object.h>
 
-namespace Event {
+namespace View {
 
 /**
- * Event zwolnienie klawisza na klawiaturze.
- * \ingroup Events
+ * Czyste dane bitmapowe - żadnego renderowania.
  */
-struct KeyUpEvent : public KeyboardEvent {
-        virtual ~KeyUpEvent () {}
-        Type getType () const { return  KEY_UP_EVENT; }
-        virtual bool runCallback (Model::IModel *m, View::IView *v, Controller::IController *c) { return c->onKeyUp (static_cast <KeyUpEvent *> (this), m, v); }
-        virtual std::string toString () const;
+class IBitmap : public Core::Object {
+public:
+
+        virtual ~IBitmap () {}
+        virtual void *getData () = 0;
 };
 
-} /* namespace Event */
+} /* namespace View */
 
-#	endif /* KEYUPEVENT_H_ */
+#	endif /* BITMAP_H_ */

@@ -20,7 +20,7 @@ public:
         virtual ~ResizeEvent () {}
 
         Type getType () const { return RESIZE_EVENT; }
-        bool runCallback (Controller::IController *c) { return c->onResize (static_cast <ResizeEvent *> (this)); }
+        bool runCallback (Model::IModel *m, View::IView *v, Controller::IController *c) { return c->onResize (static_cast <ResizeEvent *> (this), m, v); }
         std::string toString () const;
 
         int getHeight () const { return height; }
