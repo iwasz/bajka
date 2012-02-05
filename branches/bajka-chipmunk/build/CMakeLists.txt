@@ -66,18 +66,20 @@ AUX_SOURCE_DIRECTORY (../dependencies/sdl SOURCES)
 
 AUX_SOURCE_DIRECTORY (../controller SOURCES)
 
+AUX_SOURCE_DIRECTORY (../tween SOURCES)
+AUX_SOURCE_DIRECTORY (../tween/ease SOURCES)
+
 # Local includes (inside project).
 INCLUDE_DIRECTORIES (/usr/local/include/chipmunk)
 INCLUDE_DIRECTORIES (../view)
 INCLUDE_DIRECTORIES (../model)
 INCLUDE_DIRECTORIES (../geometry)
-#INCLUDE_DIRECTORIES (../fluids)
 INCLUDE_DIRECTORIES (../util)
 INCLUDE_DIRECTORIES (../events)
 INCLUDE_DIRECTORIES (../controller)
 INCLUDE_DIRECTORIES (../dependencies/sdl)
 INCLUDE_DIRECTORIES (../dependencies/openGl)
-INCLUDE_DIRECTORIES (../base)
+INCLUDE_DIRECTORIES (../tween)
 
 # Biblioteka z silnikiem bajka.
 add_library (bajka SHARED ${SOURCES})
