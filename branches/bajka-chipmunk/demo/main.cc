@@ -33,7 +33,7 @@ int main (int argc, char **argv)
                 app->destroy ();
         }
         catch (Core::Exception const &e) {
-                std::cerr << "Exception caught : " << e.getMessage () << std::endl;
+                std::cerr << "Exception caught : \n" << e.getMessage () << std::endl;
         }
         catch (std::exception const &e) {
                 std::cerr << "exception caught : " << e.what () << std::endl;
