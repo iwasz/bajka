@@ -10,6 +10,7 @@
 #define STATEFULWIDGET_H_
 
 #include "Widget.h"
+#include "../util/Exceptions.h"
 
 namespace View {
 
@@ -44,7 +45,7 @@ public:
         m_ (setWidgets) void setWidgets (WidgetVector const &w) { widgets = w; }
 
         void addWidget (Widget *widget) { widgets.push_back (widget); }
-        Widget *getWidget (int i) { return widgets[i]; }
+        Widget *getWidget (int i) { assertThrow (widgets.size () -1 >= (unsigned)(i), "StatefulWidget::getWidget : No such widget"); return widgets[i]; }
         void setState (int s);
 
         //\}current
