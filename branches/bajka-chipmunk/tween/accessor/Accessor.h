@@ -6,16 +6,8 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_TWEEN_TIMELINE_H_
-#define BAJKA_TWEEN_TIMELINE_H_
+#ifndef ACCESSOR_H_
+#define ACCESSOR_H_
 
-namespace Tween {
 
-class Timeline {
-public:
-        virtual ~Timeline () {}
-};
-
-} /* namespace Tween */
-
-#	endif /* TIMELINE_H_ */
+#	endif /* ACCESSOR_H_ */

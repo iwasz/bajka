@@ -6,13 +6,21 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifndef ATOMICTWEEN_H_
+#define ATOMICTWEEN_H_
+
 #include "ITween.h"
 
 namespace Tween {
 
-ITween::~ITween ()
-{
-        // TODO Auto-generated destructor stub
+/**
+ * Tween dla pojedynczej wartości (na przykład współrzędnej X w punkcie).
+ */
+class AtomicTween : public ITween {
+public:
+        virtual ~AtomicTween () {}
+};
+
 }
 
-} /* namespace Tween */
+#	endif /* ATOMICTWEEN_H_ */

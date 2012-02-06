@@ -6,16 +6,17 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_TWEEN_TIMELINE_H_
-#define BAJKA_TWEEN_TIMELINE_H_
+#ifndef BAJKA_IACCESSOR_H_
+#define BAJKA_IACCESSOR_H_
 
 namespace Tween {
 
-class Timeline {
-public:
-        virtual ~Timeline () {}
+struct IAccessor {
+        virtual ~IAccessor () {}
+        virtual double getValue (void *obj) const = 0;
+        virtual void setValue (void *obj, double value) = 0;
 };
 
 } /* namespace Tween */
 
-#	endif /* TIMELINE_H_ */
+#	endif /* IACCESSOR_H_ */
