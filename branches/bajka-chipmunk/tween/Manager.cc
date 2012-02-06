@@ -10,9 +10,7 @@
 
 namespace Tween {
 
-Manager::~Manager ()
-{
-        // TODO Auto-generated destructor stub
-}
+static Manager *Manager::main = NULL;
+
 
 } /* namespace Tween */

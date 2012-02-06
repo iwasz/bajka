@@ -6,16 +6,8 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_TWEEN_TIMELINE_H_
-#define BAJKA_TWEEN_TIMELINE_H_
+#include "AtomicTween.h"
 
 namespace Tween {
 
-class Timeline {
-public:
-        virtual ~Timeline () {}
-};
-
 } /* namespace Tween */
-
-#	endif /* TIMELINE_H_ */

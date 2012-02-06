@@ -6,16 +6,21 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_TWEEN_TIMELINE_H_
-#define BAJKA_TWEEN_TIMELINE_H_
+#include "Functions.h"
 
 namespace Tween {
 
-class Timeline {
-public:
-        virtual ~Timeline () {}
-};
+/**
+ * Tworzy główny manager (singleton).
+ */
+void init ()
+{
+
+}
+
+void free ()
+{
+
+}
 
 } /* namespace Tween */
-
-#	endif /* TIMELINE_H_ */

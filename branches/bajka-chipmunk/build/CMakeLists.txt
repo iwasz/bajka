@@ -68,6 +68,7 @@ AUX_SOURCE_DIRECTORY (../controller SOURCES)
 
 AUX_SOURCE_DIRECTORY (../tween SOURCES)
 AUX_SOURCE_DIRECTORY (../tween/ease SOURCES)
+AUX_SOURCE_DIRECTORY (../tween/accessor SOURCES)
 
 # Local includes (inside project).
 INCLUDE_DIRECTORIES (/usr/local/include/chipmunk)
