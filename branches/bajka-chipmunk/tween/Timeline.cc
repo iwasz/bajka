@@ -10,5 +10,20 @@
 
 namespace Tween {
 
+void Timeline::update (int deltaMs)
+{
+        if (finished || tweens.empty ()) {
+                return;
+        }
+
+        (*current)->update (deltaMs);
+
+        if ((*current)->getFinished ()) {
+                if (++current == tweens.end ()) {
+                        finished = true;
+                        return;
+                }
+        }
+}
 
 } /* namespace Tween */

@@ -14,15 +14,23 @@
 
 namespace Tween {
 
+/**
+ * - Overwrite : co ma się dzieć, kiedy dodamy 2 tweeny do tego samego obiektu na ten
+ * sam czas.
+ * a) Drugi tween ma być ingnorowany.
+ * b) Pierwszy jest anulowany a wykonumemy drugi natychmiast.
+ * c) Drugi ustawia się w kolejce i czeka aż tenpierwszy skończy. (?) to dubluje funkcjonalność timeline.
+ * http://www.greensock.com/overwritemanager/ - ten ma mnóstwo opcji i nie wiem które są przydatne.
+ */
 class Manager {
 public:
 
-		Manager () : tween (NULL) {}
+        Manager () : tween (NULL) {}
         virtual ~Manager () {}
 
         void update (int deltaMs);
 
-		// TODO tymczasowe
+        // TODO tymczasowe
         void setTween (ITween *t) { tween = t; }
 
 /*--------------------------------------------------------------------------*/
