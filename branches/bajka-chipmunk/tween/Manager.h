@@ -10,14 +10,20 @@
 #define BAJKA_TWEEN_MANAGER_H_
 
 #include "../util/Exceptions.h"
+#include "ITween.h"
 
 namespace Tween {
 
 class Manager {
 public:
+
+		Manager () : tween (NULL) {}
         virtual ~Manager () {}
 
-        void update (int )
+        void update (int deltaMs);
+
+		// TODO tymczasowe
+        void setTween (ITween *t) { tween = t; }
 
 /*--------------------------------------------------------------------------*/
 
@@ -32,6 +38,8 @@ public:
 private:
 
         static Manager *main;
+
+        ITween *tween;
 
 };
 

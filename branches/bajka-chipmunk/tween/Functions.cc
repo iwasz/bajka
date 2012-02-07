@@ -7,6 +7,7 @@
  ****************************************************************************/
 
 #include "Functions.h"
+#include "Manager.h"
 
 namespace Tween {
 
@@ -15,12 +16,12 @@ namespace Tween {
  */
 void init ()
 {
-
+	Manager::init ();
 }
 
 void free ()
 {
-
+	Manager::free ();
 }
 
 } /* namespace Tween */

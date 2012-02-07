@@ -18,19 +18,30 @@ namespace Tween {
  *
  */
 struct TranslateXAccessor : public IAccessor {
-        ~TransitionXAccessor () {}
+        ~TranslateXAccessor () {}
         double getValue (void *obj) const { return static_cast <Model::IModel *> (obj)->getTranslate ().x; }
-        void setValue (void *obj, double value) { static_cast <Model::IModel *> (obj)->getTranslate ().x = value; }
+        void setValue (void *obj, double value)
+        {
+        	Model::IModel *m = static_cast <Model::IModel *> (obj);
+        	Geometry::Point p = m->getTranslate ();
+        	p.x = value;
+        	m->setTranslate (p);
+        }
 };
 
 /**
  *
  */
 struct TranslateYAccessor : public IAccessor {
-        ~TransitionYAccessor () {}
+        ~TranslateYAccessor () {}
         double getValue (void *obj) const { return static_cast <Model::IModel *> (obj)->getTranslate ().y; }
-        void setValue (void *obj, double value) { static_cast <Model::IModel *> (obj)->getTranslate ().y = value; }
-};
+        void setValue (void *obj, double value)
+        {
+        	Model::IModel *m = static_cast <Model::IModel *> (obj);
+        	Geometry::Point p = m->getTranslate ();
+        	p.y = value;
+        	m->setTranslate (p);
+        }};
 
 /**
  *

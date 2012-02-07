@@ -6,21 +6,28 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "Manager.h"
-#include <iostream>
+#ifndef TESTBUTTONCONTROLLER_H_
+#define TESTBUTTONCONTROLLER_H_
 
-namespace Tween {
+#include "../controller/ButtonController.h"
 
-Manager *Manager::main = NULL;
+class TestButtonController : public Controller::ButtonController {
+public:
 
-void Manager::update (int deltaMs)
-{
-//	assertThrow (tween, "Manager::update : !tween");
+	C__ (void)
+	b_ ("ButtonController")
 
-	if (tween) {
-		tween->update (deltaMs);
-	}
-}
+	virtual ~TestButtonController() {}
+    virtual bool onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v);
 
+    S_ (setTestModel) void setTestModel (Model::IModel *m) { testModel = m; }
 
-} /* namespace Tween */
+private:
+
+    Model::IModel *testModel;
+
+	E_ (TestButtonController)
+
+};
+
+#endif /* TESTBUTTONCONTROLLER_H_ */

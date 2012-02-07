@@ -14,6 +14,7 @@ namespace Tween {
 class ITween {
 public:
         virtual ~ITween () {}
+        virtual void update (int deltaMs) = 0;
 };
 
 } /* namespace Tween */
