@@ -84,7 +84,7 @@ public:
 
        m_ (loop) void loop ();
        m_ (debug) void debug (Core::String const &);
-       m_ (debug) void destroy ();
+       m_ (destroy) void destroy ();
 
 /*--------------------------------------------------------------------------*/
 

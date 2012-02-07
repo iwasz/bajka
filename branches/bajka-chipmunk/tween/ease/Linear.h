@@ -9,11 +9,11 @@
 #ifndef BAJKA_EQ_LINEAR_H_
 #define BAJKA_EQ_LINEAR_H_
 
-#include "Equation.h"
+#include "IEquation.h"
 
 namespace Tween {
 
-class Linear : public Equation {
+class Linear : public IEquation {
 public:
         virtual ~Linear () {}
 

@@ -28,7 +28,11 @@
         <property name="model" ref="space" />
     </bean>
       
-    <bean id="emptyCtr" class="DebugController" singleton="true">
+    <bean id="emptyCtr" class="EmptyController" singleton="true">
+         <property name="eventMask" value="0xffff"/> 
+    </bean>      
+
+    <bean id="debugCtr" class="DebugController" singleton="true">
          <property name="eventMask" value="0xffff"/> 
     </bean>      
       

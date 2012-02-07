@@ -19,11 +19,11 @@
 #include <cstdio>
 #include <boost/bind.hpp>
 
-
 #include "Events.h"
 #include "BajkaApp.h"
 #include "../view/draw/Primitives.h"
 #include "../model/IGroup.h"
+#include "../tween/Manager.h"
 
 namespace Util {
 namespace M = Model;
@@ -131,6 +131,8 @@ void BajkaConfig::init ()
         // Init rand
         srand (time (NULL));
 
+        Tween::Manager::init ();
+
 #endif
 #if 0
         if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
@@ -195,7 +197,13 @@ void BajkaApp::loop ()
         	throw InitException ("BajkaApp has no model.");
         }
 
+        Uint32 lastMs = SDL_GetTicks ();
+
         while (!done) {
+
+        		Uint32 currentMs = SDL_GetTicks ();
+        		int deltaMs = currentMs - lastMs;
+        		lastMs = currentMs;
 
                 glMatrixMode (GL_MODELVIEW);
                 glLoadIdentity ();
@@ -214,6 +222,8 @@ void BajkaApp::loop ()
 				if (Model::Space::getSpace ()) {
 					cpSpaceStep (Model::Space::getSpace (), 1.0 / 60.0);
 				}
+
+				Tween::Manager::getMain ()->update (deltaMs);
 
                 afterEvents ();
 
@@ -236,13 +246,14 @@ void BajkaApp::debug (Core::String const &msg)
 
 void BajkaApp::destroy ()
 {
+	Tween::Manager::free ();
+
         std::cerr << "+---------------QUIT----------------+" << std::endl;
         std::cerr << "gl version : " << glGetString(GL_VERSION) << std::endl;
 
         int i;
         glGetIntegerv (GL_MAX_TEXTURE_SIZE, &i);
         std::cerr << "max texture size : " << i << std::endl;
-
 }
 
 /****************************************************************************/

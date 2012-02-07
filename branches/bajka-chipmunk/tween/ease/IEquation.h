@@ -11,9 +11,9 @@
 
 namespace Tween {
 
-class Equation {
+class IEquation {
 public:
-        virtual ~Equation () {}
+        virtual ~IEquation () {}
 
         /**
          * Computes the next value of the interpolation.

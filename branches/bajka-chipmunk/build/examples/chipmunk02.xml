@@ -10,6 +10,11 @@
          <property name="eventMask" value="0xffff"/> 
     </bean>      
 
+    <bean id="testButtonCtr" class="TestButtonController" singleton="true">
+         <!-- TODO, tylko mouse. -->
+         <property name="eventMask" value="0xffff"/> 
+    </bean>      
+
     <bean id="space" class="BoxGroup" singleton="true">
         <property name="width" value="640" />
         <property name="height" value="480" />
@@ -41,6 +46,11 @@
                     <property name="view.widgets.1.bitmap" ref="buttonStartBmp"/>
                     <property name="view.widgets.1.region" value="3, 48, 77, 88"/>
                     <property name="translate" value="300, 350" />       
+                    <property name="controller">
+                        <bean parent="testButtonCtr">
+                            <property name="testModel" ref="testBox" />
+                        </bean>
+                    </property>            
                 </bean>
                 
                 <bean parent="buttonWgt">
@@ -82,7 +92,7 @@
 <!--                     <property name="relY" value="5"/>                     -->
 <!--                 </bean> -->
                 
-			    <bean class="Box" singleton="true">
+			    <bean id="testBox" class="Box" singleton="true">
 			        <property name="box" value="100, 100, 150, 150"/>
 			        <property name="angle" value="30"/>
 			        <property name="scale" value="2"/>
@@ -125,6 +135,7 @@
                     <list class="WidgetVector">
                         <bean class="Image" singleton="true"/>
                         <bean id="state1" class="Image" singleton="true"/>
+                        <ref bean="state1"/>
                     </list>
                 </property>
                 <property name="state" value="0" />
