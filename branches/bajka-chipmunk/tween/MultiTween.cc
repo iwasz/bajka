@@ -6,24 +6,22 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_TWEEN_ITWEEN_H_
-#define BAJKA_TWEEN_ITWEEN_H_
-
-#include <vector>
-#include <list>
+#include "MultiTween.h"
 
 namespace Tween {
 
-class ITween {
-public:
-        virtual ~ITween () {}
-        virtual void update (int deltaMs) = 0;
-        virtual bool getFinished () const = 0;
-};
+void MultiTween::update (int deltaMs)
+{
+        if (finished) {
+                return;
+        }
 
-typedef std::vector <ITween *> TweenVector;
-typedef std::list <ITween *> TweenList;
+        for (TweenVector::iterator i = tweens.begin (); i != tweens.end (); ++i) {
+                (*i)->update (deltaMs);
+                finished |= !(*i)->getFinished ();
+        }
+
+        finished = !finished;
+}
 
 } /* namespace Tween */
-
-#	endif /* ITWEEN_H_ */

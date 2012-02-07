@@ -6,40 +6,32 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ATOMICTWEEN_H_
-#define ATOMICTWEEN_H_
+#ifndef MULTITWEEN_H_
+#define MULTITWEEN_H_
 
 #include "ITween.h"
-#include "ease/IEquation.h"
-#include "accessor/IAccessor.h"
-#include <cstddef>
 
 namespace Tween {
 
 /**
- * Tween dla pojedynczej wartości (na przykład współrzędnej X w punkcie).
+ * Zawiera kolekcję tweenów i uruchamia je wszystkie naraz.
  */
-class AtomicTween : public ITween {
+class MultiTween : public ITween {
 public:
 
-        AtomicTween () : equation (NULL), accessor (NULL), durationMs (0), currentMs (0), startValue (0), targetValue (0), object (NULL), finished (false) {}
-        virtual ~AtomicTween () {}
+        MultiTween () : finished (false) {}
+        virtual ~MultiTween () {}
         void update (int deltaMs);
         bool getFinished () const { return finished; }
 
 //private:
 public:
 
-        IEquation *equation;
-        IAccessor *accessor;
-        unsigned int durationMs;
-        unsigned int currentMs;
-        double startValue;
-        double targetValue;
-        void *object;
+        TweenVector tweens;
         bool finished;
+
 };
 
-}
+} /* namespace Tween */
 
-#	endif /* ATOMICTWEEN_H_ */
+#	endif /* MULTITWEEN_H_ */
