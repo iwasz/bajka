@@ -131,7 +131,7 @@ void BajkaConfig::init ()
         // Init rand
         srand (time (NULL));
 
-        Tween::Manager::init ();
+        Tween::init ();
 
 #endif
 #if 0
@@ -246,7 +246,7 @@ void BajkaApp::debug (Core::String const &msg)
 
 void BajkaApp::destroy ()
 {
-	Tween::Manager::free ();
+	Tween::free ();
 
         std::cerr << "+---------------QUIT----------------+" << std::endl;
         std::cerr << "gl version : " << glGetString(GL_VERSION) << std::endl;

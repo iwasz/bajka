@@ -6,22 +6,21 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "Functions.h"
+#include "AbstractTween.h"
 #include "Manager.h"
 
 namespace Tween {
 
-/**
- * Tworzy główny manager (singleton).
- */
-void init ()
+void AbstractTween::start (Manager *m)
 {
-	Manager::init ();
+        if (m) {
+                m->setTween (this);
+        }
+        else {
+                Manager::getMain ()->setTween (this);
+        }
 }
 
-void free ()
-{
-	Manager::free ();
-}
+/****************************************************************************/
 
 } /* namespace Tween */

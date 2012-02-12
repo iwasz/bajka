@@ -9,5 +9,9 @@
 #ifndef BAJKA_TWEEN_H_
 #define BAJKA_TWEEN_H_
 
+#include "Functions.h"
+#include "AtomicTween.h"
+#include "accessor/Accessor.h"
+#include "Timeline.h"
 
 #	endif /* TWEEN_H_ */

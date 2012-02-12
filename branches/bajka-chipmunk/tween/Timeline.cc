@@ -10,6 +10,21 @@
 
 namespace Tween {
 
+Timeline *timeline ()
+{
+        return Timeline::create ();
+}
+
+/****************************************************************************/
+
+Timeline *Timeline::create ()
+{
+        // TODO pool
+        return new Timeline;
+}
+
+/****************************************************************************/
+
 void Timeline::update (int deltaMs)
 {
         if (finished || tweens.empty ()) {
@@ -24,6 +39,15 @@ void Timeline::update (int deltaMs)
                         return;
                 }
         }
+}
+
+/****************************************************************************/
+
+Timeline *Timeline::add (ITween *tween)
+{
+        tweens.push_back (tween);
+        current = tweens.begin ();
+        return this;
 }
 
 } /* namespace Tween */

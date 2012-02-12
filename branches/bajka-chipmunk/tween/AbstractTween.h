@@ -6,11 +6,30 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_TWEEN_FUNCTIONS_H_
-#define BAJKA_TWEEN_FUNCTIONS_H_
+#ifndef ABSTRACTTWEEN_H_
+#define ABSTRACTTWEEN_H_
+
+#include "ITween.h"
+#include <cstddef>
 
 namespace Tween {
+class Manager;
+
+class AbstractTween : public ITween {
+public:
+
+        AbstractTween () : finished (false) {}
+        virtual ~AbstractTween () {}
+
+        bool getFinished () const { return finished; }
+        void start (Manager *m = NULL);
+
+protected:
+
+        bool finished;
+
+};
 
 } /* namespace Tween */
 
-#	endif /* FUNCTIONS_H_ */
+#	endif /* ABSTRACTTWEEN_H_ */

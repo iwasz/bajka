@@ -9,36 +9,56 @@
 #ifndef ATOMICTWEEN_H_
 #define ATOMICTWEEN_H_
 
-#include "ITween.h"
+#include <cstddef>
+#include <memory>
 #include "ease/IEquation.h"
 #include "accessor/IAccessor.h"
-#include <cstddef>
+#include "AbstractTween.h"
 
 namespace Tween {
 
 /**
  * Tween dla pojedynczej wartości (na przykład współrzędnej X w punkcie).
  */
-class AtomicTween : public ITween {
+class AtomicTween : public AbstractTween {
 public:
 
-        AtomicTween () : equation (NULL), accessor (NULL), durationMs (0), currentMs (0), startValue (0), targetValue (0), object (NULL), finished (false) {}
         virtual ~AtomicTween () {}
+        static AtomicTween *create ();
+
         void update (int deltaMs);
-        bool getFinished () const { return finished; }
 
-//private:
-public:
+        friend AtomicTween *to (void *targetObject, unsigned int durationMs, Ease ease);
+        AtomicTween *abs (unsigned int property, double value) { return target (property, value, true); }
+        AtomicTween *rel (unsigned int property, double value) { return target (property, value, false); }
 
-        IEquation *equation;
-        IAccessor *accessor;
+protected:
+
+        AtomicTween () : AbstractTween (), equation (NULL), accessor (NULL), durationMs (0), currentMs (0), startValue (0), targetValue (0), object (NULL)  {}
+        void addTween (ITween *tween);
+        AtomicTween *target (unsigned int property, double value, bool abs);
+
+private:
+
+        IEquation const *equation;
+        IAccessor const *accessor;
         unsigned int durationMs;
         unsigned int currentMs;
         double startValue;
         double targetValue;
         void *object;
-        bool finished;
+        std::auto_ptr <TweenVector> tweens;
+
 };
+
+/**
+ *
+ * @param targetObject
+ * @param durationMs
+ * @param ease
+ * @return
+ */
+extern AtomicTween *to (void *targetObject, unsigned int durationMs, Ease ease = LINEAR_INOUT);
 
 }
 

@@ -14,7 +14,7 @@ namespace Tween {
 struct IAccessor {
         virtual ~IAccessor () {}
         virtual double getValue (void *obj) const = 0;
-        virtual void setValue (void *obj, double value) = 0;
+        virtual void setValue (void *obj, double value) const = 0;
 };
 
 } /* namespace Tween */

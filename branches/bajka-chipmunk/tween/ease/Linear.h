@@ -17,7 +17,7 @@ class Linear : public IEquation {
 public:
         virtual ~Linear () {}
 
-        double compute (double t, double b, double c, double d) {
+        double compute (double t, double b, double c, double d) const {
                 return c * t/d + b;
         }
 };
