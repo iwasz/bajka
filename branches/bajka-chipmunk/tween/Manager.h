@@ -9,8 +9,11 @@
 #ifndef BAJKA_TWEEN_MANAGER_H_
 #define BAJKA_TWEEN_MANAGER_H_
 
+#include <map>
 #include "../util/Exceptions.h"
 #include "ITween.h"
+#include "ease/IEquation.h"
+#include "accessor/IAccessor.h"
 
 namespace Tween {
 
@@ -25,31 +28,52 @@ namespace Tween {
 class Manager {
 public:
 
-        Manager () : tween (NULL) {}
-        virtual ~Manager () {}
+        Manager ();
+        virtual ~Manager ();
 
         void update (int deltaMs);
 
         // TODO tymczasowe
         void setTween (ITween *t) { tween = t; }
 
+        void registerAccessor (unsigned int id, IAccessor *a);
+
+        IEquation const *getEase (Ease e) const;
+        IAccessor const *getAccessor (unsigned int id) const;
+
 /*--------------------------------------------------------------------------*/
 
-        static void init () { main = new Manager; }
-        static void free () { delete main; }
+        static void init ();
+        static void free ();
         static Manager *getMain ()
         {
                 assertThrow (main, "Main tween manager is not created. Use Tween::init () first.");
                 return main;
         }
 
+
 private:
 
+        typedef std::map <Ease, IEquation *> EquationMap;
+        typedef std::map <unsigned int, IAccessor *> AccessorMap;
+
         static Manager *main;
+        EquationMap equations;
+        AccessorMap accessors;
 
         ITween *tween;
 
 };
+
+/**
+ *
+ */
+extern void init ();
+
+/**
+ *
+ */
+extern void free ();
 
 } /* namespace Tween */
 

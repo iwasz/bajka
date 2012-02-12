@@ -6,8 +6,9 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ACCESSOR_H_
-#define ACCESSOR_H_
+#ifndef BAJKA_ACCESSOR_H_
+#define BAJKA_ACCESSOR_H_
 
+#include "AffineAccessor.h"
 
 #	endif /* ACCESSOR_H_ */

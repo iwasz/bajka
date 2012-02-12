@@ -9,29 +9,31 @@
 #ifndef BAJKA_TWEEN_TIMELINE_H_
 #define BAJKA_TWEEN_TIMELINE_H_
 
-#include "ITween.h"
+#include "AbstractTween.h"
 
 namespace Tween {
 
 /**
  * Zawiera kolekcję tweenów i uruchamia je po kolei.
  */
-class Timeline : public ITween {
+class Timeline : public AbstractTween {
 public:
 
-        Timeline () : current (tweens.begin ()), finished (false) {}
+        Timeline () : current (tweens.begin ()) {}
         virtual ~Timeline () {}
-        void update (int deltaMs);
-        bool getFinished () const { return finished; }
+        static Timeline *create ();
 
-//private:
-public:
+        void update (int deltaMs);
+        Timeline *add (ITween *tween);
+
+private:
 
         TweenVector tweens;
         TweenVector::iterator current;
-        bool finished;
 
 };
+
+extern Timeline *timeline ();
 
 } /* namespace Tween */
 
