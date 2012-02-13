@@ -11,14 +11,20 @@
 
 #include <vector>
 #include <list>
+#include <cstddef>
 
 namespace Tween {
+class Manager;
 
 class ITween {
 public:
         virtual ~ITween () {}
         virtual void update (int deltaMs) = 0;
         virtual bool getFinished () const = 0;
+        virtual bool getStarted () const = 0;
+        virtual void start (Manager *m = NULL) = 0;
+        virtual ITween *repeat (unsigned int num, bool yoyo = false) = 0;
+        virtual ITween *delay (unsigned int duration) = 0;
 };
 
 typedef std::vector <ITween *> TweenVector;

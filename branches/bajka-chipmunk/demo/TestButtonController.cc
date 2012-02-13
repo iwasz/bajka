@@ -15,6 +15,8 @@ bool TestButtonController::onButtonPress (Event::ButtonPressEvent *e, Model::IMo
 {
 	std::cerr << "TestButtonController::onButtonPress" << std::endl;
 
+	Geometry::Point p = testModel->getTranslate ();
+
 	timeline ()->add (
                 to (testModel, 1000)->
                         rel (SCALE, 4)->
@@ -24,7 +26,9 @@ bool TestButtonController::onButtonPress (Event::ButtonPressEvent *e, Model::IMo
         )->add (
                 to (testModel, 1000)->
                         abs (SCALE, 1)->
-                        abs (ANGLE, 0)
+                        abs (ANGLE, 0)->
+                        abs (X, p.x)->
+                        abs (Y, p.y)
         )->start ();
 
 	return Controller::ButtonController::onButtonPress (e, m, v);

@@ -34,9 +34,12 @@ public:
 
 protected:
 
-        AtomicTween () : AbstractTween (), equation (NULL), accessor (NULL), durationMs (0), currentMs (0), startValue (0), targetValue (0), object (NULL)  {}
+        AtomicTween () : AbstractTween (), equation (NULL), accessor (NULL), durationMs (0), currentMs (0), startValue (0), targetValue (0), object (NULL), absolute (true)  {}
         void addTween (ITween *tween);
         AtomicTween *target (unsigned int property, double value, bool abs);
+
+        // Uruchamia się jeden raz na poczatku działania tweena (lub po repeat).
+        void init ();
 
 private:
 
@@ -47,6 +50,7 @@ private:
         double startValue;
         double targetValue;
         void *object;
+        bool absolute;
         std::auto_ptr <TweenVector> tweens;
 
 };

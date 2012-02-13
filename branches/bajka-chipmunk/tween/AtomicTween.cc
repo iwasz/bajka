@@ -8,7 +8,6 @@
 
 #include "AtomicTween.h"
 #include "Manager.h"
-#include "Functions.h"
 
 namespace Tween {
 
@@ -31,13 +30,35 @@ AtomicTween *AtomicTween::create ()
 
 /****************************************************************************/
 
+void AtomicTween::init ()
+{
+	assertThrow (accessor, "AtomicTween::init : !accessor")
+	startValue = accessor->getValue (object);
+
+	if (!absolute) {
+		targetValue += startValue;
+	}
+}
+
+/****************************************************************************/
+
 void AtomicTween::update (int deltaMs)
 {
 	if (finished) {
 		return;
 	}
 
+	if (!started) {
+		started = true;
+		init ();
+	}
+
 	currentMs += deltaMs;
+
+	if (currentMs > durationMs) {
+		currentMs = durationMs;
+	}
+
 	double deltaValue = targetValue - startValue;
 	double comuted = equation->compute (currentMs, startValue, deltaValue, durationMs);
 	accessor->setValue (object, comuted);
@@ -59,8 +80,8 @@ AtomicTween *AtomicTween::target (unsigned int property, double value, bool abs)
 {
         if (!accessor) {
                 accessor = Manager::getMain ()->getAccessor (property);
-                startValue = accessor->getValue (object);
-                targetValue = (abs) ? (startValue + value) : (value);
+                targetValue = value;
+                absolute = abs;
         }
         else {
                 AtomicTween *tween = AtomicTween::create ();
@@ -68,8 +89,8 @@ AtomicTween *AtomicTween::target (unsigned int property, double value, bool abs)
                 tween->durationMs = durationMs;
                 tween->object = object;
                 tween->accessor = Manager::getMain ()->getAccessor (property);
-                tween->startValue = tween->accessor->getValue (object);
-                tween->targetValue = (abs) ? (tween->startValue + value) : (value);
+                tween->targetValue = value;
+                tween->absolute = abs;
                 addTween (tween);
         }
 
