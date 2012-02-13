@@ -18,15 +18,23 @@ class Manager;
 class AbstractTween : public ITween {
 public:
 
-        AbstractTween () : finished (false) {}
+        AbstractTween () : started (false), finished (false), yoyo (false), repetitions (0), delayMs (0) {}
         virtual ~AbstractTween () {}
 
         bool getFinished () const { return finished; }
+        bool getStarted () const { return started; }
         void start (Manager *m = NULL);
+
+        ITween *repeat (unsigned int num, bool yoyo = false);
+        ITween *delay (unsigned int duration);
 
 protected:
 
+        bool started;
         bool finished;
+        bool yoyo;
+        unsigned int repetitions;
+        unsigned int delayMs;
 
 };
 
