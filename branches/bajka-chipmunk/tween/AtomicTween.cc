@@ -34,10 +34,6 @@ void AtomicTween::init ()
 {
 	assertThrow (accessor, "AtomicTween::init : !accessor")
 	startValue = accessor->getValue (object);
-
-	if (!absolute) {
-		targetValue += startValue;
-	}
 }
 
 /****************************************************************************/
@@ -48,18 +44,30 @@ void AtomicTween::update (int deltaMs)
 		return;
 	}
 
-	if (!started) {
-		started = true;
-		init ();
-	}
+        currentMs += deltaMs;
 
-	currentMs += deltaMs;
+	if (!started) {
+	        if (delayMs) {
+	                if (currentMs > delayMs) {
+                                currentMs = 0;
+                                started = true;
+                                init ();
+                        }
+                        else {
+                                return;
+                        }
+	        }
+	        else {
+                        started = true;
+                        init ();
+	        }
+	}
 
 	if (currentMs > durationMs) {
 		currentMs = durationMs;
 	}
 
-	double deltaValue = targetValue - startValue;
+	double deltaValue = targetValue - ((absolute) ? (startValue) : (0));
 	double comuted = equation->compute (currentMs, startValue, deltaValue, durationMs);
 	accessor->setValue (object, comuted);
 	bool notFinished = currentMs < durationMs;

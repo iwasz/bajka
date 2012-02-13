@@ -23,4 +23,10 @@ void AbstractTween::start (Manager *m)
 
 /****************************************************************************/
 
+void AbstractTween::clear ()
+{
+        yoyo = finished = started = false;
+        repetitions = delayMs = 0;
+}
+
 } /* namespace Tween */

@@ -28,7 +28,7 @@ bool TestButtonController::onButtonPress (Event::ButtonPressEvent *e, Model::IMo
                         abs (SCALE, 1)->
                         abs (ANGLE, 0)->
                         abs (X, p.x)->
-                        abs (Y, p.y)
+                        abs (Y, p.y)->delay (1000)
         )->start ();
 
 	return Controller::ButtonController::onButtonPress (e, m, v);
