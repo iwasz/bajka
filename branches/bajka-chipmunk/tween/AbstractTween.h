@@ -25,8 +25,10 @@ public:
         bool getStarted () const { return started; }
         void start (Manager *m = NULL);
 
-        ITween *repeat (unsigned int num, bool yoyo = false);
-        ITween *delay (unsigned int duration);
+        ITween *repeat (unsigned int num, bool y = false) { repetitions = num; yoyo = y; return this; }
+        ITween *delay (unsigned int d) { delayMs = d; return this; }
+
+        void clear ();
 
 protected:
 
