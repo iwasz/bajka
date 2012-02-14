@@ -18,22 +18,40 @@ class Manager;
 class AbstractTween : public ITween {
 public:
 
-        AbstractTween () : started (false), finished (false), yoyo (false), repetitions (0), delayMs (0) {}
+        AbstractTween () : state (INIT), /*started (false), finished (false),*/ yoyo (false), repetitions (0), delayMs (0) {}
         virtual ~AbstractTween () {}
 
-        bool getFinished () const { return finished; }
-        bool getStarted () const { return started; }
+//        bool getFinished () const { return finished; }
+//        bool getStarted () const { return started; }
+        State getState () const { return state; }
+
         void start (Manager *m = NULL);
 
-        ITween *repeat (unsigned int num, bool y = false) { repetitions = num; yoyo = y; return this; }
-        ITween *delay (unsigned int d) { delayMs = d; return this; }
+        virtual ITween *repeat (unsigned int num, bool y = false) { repetitions = num; yoyo = y; return this; }
+        virtual ITween *delay (unsigned int d) { delayMs = d; return this; }
 
-        void clear ();
+        virtual void clear ();
+//        virtual void rewind ();
 
 protected:
 
-        bool started;
-        bool finished;
+        State state;
+
+        State transition (State s);
+
+        virtual void initEntry () {}
+        virtual void initExit () {}
+        virtual void delayEntry () {}
+        virtual void delayExit () {}
+        virtual void forwardEntry () {}
+        virtual void forwardExit () {}
+        virtual void backwardEntry () {}
+        virtual void backwardExit () {}
+        virtual void finishedEntry  () {}
+        virtual void finishedExit () {}
+
+protected:
+
         bool yoyo;
         unsigned int repetitions;
         unsigned int delayMs;

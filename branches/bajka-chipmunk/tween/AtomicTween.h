@@ -32,14 +32,29 @@ public:
         AtomicTween *abs (unsigned int property, double value) { return target (property, value, true); }
         AtomicTween *rel (unsigned int property, double value) { return target (property, value, false); }
 
+        ITween *repeat (unsigned int num, bool y = false);
+        ITween *delay (unsigned int d);
+
+        void clear ();
+//        void rewind ();
+
 protected:
 
-        AtomicTween () : AbstractTween (), equation (NULL), accessor (NULL), durationMs (0), currentMs (0), startValue (0), targetValue (0), object (NULL), absolute (true)  {}
+        AtomicTween () : AbstractTween (), equation (NULL), accessor (NULL), durationMs (0), currentMs (0), currentRepetition (0), startValue (0), targetValue (0), object (NULL), absolute (true)  {}
         void addTween (ITween *tween);
         AtomicTween *target (unsigned int property, double value, bool abs);
 
         // Uruchamia się jeden raz na poczatku działania tweena (lub po repeat).
-        void init ();
+        void initEntry ();
+        void initExit ();
+        void delayEntry ();
+        void delayExit ();
+        void forwardEntry ();
+        void forwardExit ();
+        void backwardEntry ();
+        void backwardExit ();
+        void finishedEntry ();
+        void finishedExit ();
 
 private:
 
@@ -47,6 +62,7 @@ private:
         IAccessor const *accessor;
         unsigned int durationMs;
         unsigned int currentMs;
+        unsigned int currentRepetition;
         double startValue;
         double targetValue;
         void *object;
