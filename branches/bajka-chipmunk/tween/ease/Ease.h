@@ -6,8 +6,10 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef EASE_H_
-#define EASE_H_
+#ifndef BAJKA_EASE_H_
+#define BAJKA_EASE_H_
 
+#include "Linear.h"
+#include "Cubic.h"
 
 #	endif /* EASE_H_ */

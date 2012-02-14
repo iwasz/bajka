@@ -8,7 +8,7 @@
 
 #include "Manager.h"
 #include <iostream>
-#include "../tween/ease/Linear.h"
+#include "../tween/ease/Ease.h"
 #include "../tween/accessor/AffineAccessor.h"
 
 namespace Tween {
@@ -34,7 +34,37 @@ void free ()
 
 Manager::Manager () : tween (NULL)
 {
-        equations[LINEAR_INOUT] = new Linear;
+        equations[LINEAR_INOUT ] = new Linear;
+        equations[QUAD_IN      ] = new Linear;
+        equations[QUAD_OUT     ] = new Linear;
+        equations[QUAD_INOUT   ] = new Linear;
+        equations[CUBIC_IN     ] = new CubicIn;
+        equations[CUBIC_OUT    ] = new CubicOut;
+        equations[CUBIC_INOUT  ] = new CubicInOut;
+        equations[QUART_IN     ] = new Linear;
+        equations[QUART_OUT    ] = new Linear;
+        equations[QUART_INOUT  ] = new Linear;
+        equations[QUINT_IN     ] = new Linear;
+        equations[QUINT_OUT    ] = new Linear;
+        equations[QUINT_INOUT  ] = new Linear;
+        equations[CIRC_IN      ] = new Linear;
+        equations[CIRC_OUT     ] = new Linear;
+        equations[CIRC_INOUT   ] = new Linear;
+        equations[SINE_IN      ] = new Linear;
+        equations[SINE_OUT     ] = new Linear;
+        equations[SINE_INOUT   ] = new Linear;
+        equations[EXPO_IN      ] = new Linear;
+        equations[EXPO_OUT     ] = new Linear;
+        equations[EXPO_INOUT   ] = new Linear;
+        equations[BACK_IN      ] = new Linear;
+        equations[BACK_OUT     ] = new Linear;
+        equations[BACK_INOUT   ] = new Linear;
+        equations[BOUNCE_IN    ] = new Linear;
+        equations[BOUNCE_OUT   ] = new Linear;
+        equations[BOUNCE_INOUT ] = new Linear;
+        equations[ELASTIC_IN   ] = new Linear;
+        equations[ELASTIC_OUT  ] = new Linear;
+        equations[ELASTIC_INOUT] = new Linear;
 
         accessors[X] = new TranslateXAccessor;
         accessors[Y] = new TranslateYAccessor;
