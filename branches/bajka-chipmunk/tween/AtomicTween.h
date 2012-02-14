@@ -32,15 +32,12 @@ public:
         AtomicTween *abs (unsigned int property, double value) { return target (property, value, true); }
         AtomicTween *rel (unsigned int property, double value) { return target (property, value, false); }
 
-        ITween *repeat (unsigned int num, bool y = false);
-        ITween *delay (unsigned int d);
-
         void clear ();
 //        void rewind ();
 
 protected:
 
-        AtomicTween () : AbstractTween (), equation (NULL), accessor (NULL), durationMs (0), currentMs (0), currentRepetition (0), startValue (0), targetValue (0), object (NULL), absolute (true)  {}
+        AtomicTween () : AbstractTween (), equation (NULL), accessor (NULL), linked (NULL), durationMs (0), currentMs (0), currentRepetition (0), startValue (0), targetValue (0), object (NULL), absolute (true)  {}
         void addTween (ITween *tween);
         AtomicTween *target (unsigned int property, double value, bool abs);
 
@@ -58,8 +55,14 @@ protected:
 
 private:
 
+        unsigned int &getCurMs () { return ((linked) ? (linked->currentMs) : (currentMs)); }
+        unsigned int &getCurRepet () { return ((linked) ? (linked->currentRepetition) : (currentRepetition)); }
+
+private:
+
         IEquation const *equation;
         IAccessor const *accessor;
+        AtomicTween *linked;
         unsigned int durationMs;
         unsigned int currentMs;
         unsigned int currentRepetition;

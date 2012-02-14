@@ -31,12 +31,12 @@ bool TestButtonController::onButtonPress (Event::ButtonPressEvent *e, Model::IMo
 //                        abs (Y, p.y)->delay (200)
 //        )->start ();
 
-	to (testModel, 1000)->
+	to (testModel, 1000, CUBIC_INOUT)->
 		rel (SCALE, 4)->
 		rel (ANGLE, 90)->
 //		rel (X, 100)->
 //		rel (Y, 100)->
-		delay (1000)->
+		delay (200)->
 		repeat (2)->
 		start ();
 

@@ -42,6 +42,7 @@ void AtomicTween::clear ()
 
     equation = NULL;
     accessor = NULL;
+    linked = NULL;
     durationMs = 0;
     currentMs = 0;
     startValue = 0;
@@ -86,100 +87,69 @@ void AtomicTween::finishedExit ()
 void AtomicTween::update (int deltaMs)
 {
 	if (state == FINISHED) {
-		return;
-	}
-	else if (state == INIT) {
-		if (delayMs) {
-			transition (DELAY);
-		}
-		else {
-			transition (FORWARD);
-		}
-
-		update (deltaMs); // Żeby nie stracić iteracji.
-	}
-	else if (state == DELAY) {
-		currentMs += deltaMs;
-
-		int remainingMs = currentMs - delayMs;
-        if (remainingMs >= 0) {
-        	transition (FORWARD);
-		}
-
-        if (remainingMs > 0) {
-        	update (remainingMs);
+                return;
         }
-	}
+        else if (state == INIT) {
+                if (delayMs) {
+                        transition (DELAY);
+                }
+                else {
+                        transition (FORWARD);
+                }
+
+                update (deltaMs); // Żeby nie stracić iteracji.
+        }
+        else if (state == DELAY) {
+                if (!linked) {
+                        currentMs += deltaMs;
+                }
+
+                int remainingMs = getCurMs () - delayMs;
+                if (remainingMs >= 0) {
+                        transition (FORWARD);
+                }
+
+                if (remainingMs > 0) {
+                        update (remainingMs);
+                }
+        }
 	else if (state == FORWARD) {
-		currentMs += deltaMs;
+	        if (!linked) {
+	                currentMs += deltaMs;
 
-		if (currentMs > durationMs) {
-			currentMs = durationMs;
-		}
+	                if (currentMs > durationMs) {
+	                        currentMs = durationMs;
+	                }
+	        }
 
-		double deltaValue = targetValue - ((absolute) ? (startValue) : (0));
-		double comuted = equation->compute (currentMs, startValue, deltaValue, durationMs);
-		accessor->setValue (object, comuted);
-		bool notFinished = currentMs < durationMs;
+                double deltaValue = targetValue - ((absolute) ? (startValue) : (0));
+                double comuted = equation->compute (getCurMs (), startValue, deltaValue, durationMs);
+                accessor->setValue (object, comuted);
+                bool notFinished = getCurMs () < durationMs;
 
-		if (tweens.get ()) {
-		        for (TweenVector::iterator i = tweens->begin (); i != tweens->end (); ++i) {
-		                (*i)->update (deltaMs);
-		                notFinished |= (*i)->getState () != FINISHED;
-		        }
-		}
+                if (tweens.get ()) {
+                        for (TweenVector::iterator i = tweens->begin (); i != tweens->end (); ++i) {
+                                (*i)->update (deltaMs);
+                                notFinished |= (*i)->getState () != FINISHED;
+                        }
+                }
 
-		if (!notFinished) {
-			if (!currentRepetition) {
-				transition (FINISHED);
-			}
-			else {
-				--currentRepetition;
-				transition (FORWARD);
-			}
-		}
-	}
-	else if (state == FINISHED) {
-		return;
-	}
-
-
-#if 0
-	if (!started) {
-	        if (delayMs) {
-	                if (currentMs > delayMs) {
-                                currentMs = 0;
-                                started = true;
-                                init ();
+                if (!notFinished) {
+                        if (!getCurRepet ()) {
+                                transition (FINISHED);
                         }
                         else {
-                                return;
+                                if (!linked) {
+                                        --currentRepetition;
+                                }
+
+                                transition (FORWARD);
                         }
-	        }
-	        else {
-                        started = true;
-                        init ();
-	        }
-	}
-
-	if (currentMs > durationMs) {
-		currentMs = durationMs;
-	}
-
-	double deltaValue = targetValue - ((absolute) ? (startValue) : (0));
-	double comuted = equation->compute (currentMs, startValue, deltaValue, durationMs);
-	accessor->setValue (object, comuted);
-	bool notFinished = currentMs < durationMs;
-
-	if (tweens.get ()) {
-	        for (TweenVector::iterator i = tweens->begin (); i != tweens->end (); ++i) {
-	                (*i)->update (deltaMs);
-	                notFinished |= !(*i)->getFinished ();
-	        }
-	}
-
-	finished = !notFinished;
-#endif
+                }
+        }
+        else if (state == FINISHED) {
+                return;
+        }
 }
 
 /****************************************************************************/
@@ -199,6 +169,7 @@ AtomicTween *AtomicTween::target (unsigned int property, double value, bool abs)
                 tween->accessor = Manager::getMain ()->getAccessor (property);
                 tween->targetValue = value;
                 tween->absolute = abs;
+                tween->linked = this;
                 addTween (tween);
         }
 
@@ -214,36 +185,6 @@ void AtomicTween::addTween (ITween *tween)
         }
 
         tweens->push_back (tween);
-}
-
-/****************************************************************************/
-
-ITween *AtomicTween::repeat (unsigned int num, bool y)
-{
-	AbstractTween::repeat (num, y);
-
-	if (tweens.get ()) {
-	        for (TweenVector::iterator i = tweens->begin (); i != tweens->end (); ++i) {
-	                (*i)->repeat (num, y);
-	        }
-	}
-
-	return this;
-}
-
-/****************************************************************************/
-
-ITween *AtomicTween::delay (unsigned int d)
-{
-	AbstractTween::delay (d);
-
-	if (tweens.get ()) {
-	        for (TweenVector::iterator i = tweens->begin (); i != tweens->end (); ++i) {
-	                (*i)->delay (d);
-	        }
-	}
-
-	return this;
 }
 
 } /* namespace Tween */
