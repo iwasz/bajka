@@ -27,6 +27,8 @@ Timeline *Timeline::create ()
 
 void Timeline::update (int deltaMs)
 {
+#if 0
+
         if (finished || tweens.empty ()) {
                 return;
         }
@@ -39,6 +41,7 @@ void Timeline::update (int deltaMs)
                         return;
                 }
         }
+#endif
 }
 
 /****************************************************************************/

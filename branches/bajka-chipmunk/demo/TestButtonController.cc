@@ -17,19 +17,28 @@ bool TestButtonController::onButtonPress (Event::ButtonPressEvent *e, Model::IMo
 
 	Geometry::Point p = testModel->getTranslate ();
 
-	timeline ()->add (
-                to (testModel, 1000)->
-                        rel (SCALE, 4)->
-                        rel (ANGLE, 90)->
-                        rel (X, 100)->
-                        rel (Y, 100)
-        )->add (
-                to (testModel, 1000)->
-                        abs (SCALE, 1)->
-                        abs (ANGLE, 0)->
-                        abs (X, p.x)->
-                        abs (Y, p.y)->delay (1000)
-        )->start ();
+//	timeline ()->add (
+//                to (testModel, 1000)->
+//                        rel (SCALE, 4)->
+//                        rel (ANGLE, 90)->
+//                        rel (X, 100)->
+//                        rel (Y, 100)
+//        )->add (
+//                to (testModel, 1000)->
+//                        abs (SCALE, 1)->
+//                        abs (ANGLE, 0)->
+//                        abs (X, p.x)->
+//                        abs (Y, p.y)->delay (200)
+//        )->start ();
+
+	to (testModel, 1000)->
+		rel (SCALE, 4)->
+		rel (ANGLE, 90)->
+//		rel (X, 100)->
+//		rel (Y, 100)->
+		delay (1000)->
+		repeat (2)->
+		start ();
 
 	return Controller::ButtonController::onButtonPress (e, m, v);
 }
