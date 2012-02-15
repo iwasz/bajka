@@ -19,7 +19,7 @@ class Manager;
 class ITween {
 public:
         virtual ~ITween () {}
-        virtual void update (int deltaMs) = 0;
+        virtual void update (int deltaMs, bool reverse) = 0;
 
         enum State { INIT, DELAY, RUN, FINISHED };
         virtual State getState () const = 0;

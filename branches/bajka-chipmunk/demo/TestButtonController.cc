@@ -27,18 +27,27 @@ bool TestButtonController::onButtonPress (Event::ButtonPressEvent *e, Model::IMo
 //                        repeat (1, true)
 //        )->add (
 //                to (testModel, 1000)->
-//                        rel (SCALE, 0.5)->
+//                        abs (SCALE, 0)->
 //                        rel (ANGLE, -90)
 //        )->start ();
 
-        to (testModel, 1000, CUBIC_INOUT)->
-                rel (SCALE, 4)->
-                rel (ANGLE, 90)->
-                rel (X, 100)->
-                rel (Y, 100)->
-                delay (200)->
-                repeat (1, true)->
-                start ();
+//        to (testModel, 1000, CUBIC_INOUT)->
+//                rel (SCALE, 4)->
+//                rel (ANGLE, 90)->
+//                rel (X, 100)->
+//                rel (Y, 100)->
+//                delay (200)->
+//                repeat (1, true)->
+//                start ();
+
+        timeline ()->add (
+                to (testModel, 1000, CUBIC_INOUT)->
+                        rel (SCALE, 4)->
+                        rel (ANGLE, 90)->
+                        rel (X, 100)->
+                        rel (Y, 100)
+        )->repeat (1, true)->
+        start ();
 
 	return Controller::ButtonController::onButtonPress (e, m, v);
 }

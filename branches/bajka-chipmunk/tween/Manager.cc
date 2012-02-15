@@ -100,7 +100,7 @@ void Manager::update (int deltaMs)
 //	assertThrow (tween, "Manager::update : !tween");
 
 	if (tween) {
-		tween->update (deltaMs);
+		tween->update (deltaMs, false);
 	}
 }
 

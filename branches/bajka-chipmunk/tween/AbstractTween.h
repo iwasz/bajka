@@ -18,7 +18,7 @@ class Manager;
 class AbstractTween : public ITween {
 public:
 
-        AbstractTween () : currentDirection (true), yoyo (false), repetitions (0), delayMs (0), currentRepetition (0), state (INIT) {}
+        AbstractTween () : currentDirection (true), yoyo (false), repetitions (0), delayMs (0), currentRepetition (0), currentMs (0), state (INIT) {}
         virtual ~AbstractTween () {}
 
         State getState () const { return state; }
@@ -51,6 +51,7 @@ protected:
         unsigned int repetitions;
         unsigned int delayMs;
         unsigned int currentRepetition;
+        int currentMs;
         State state;
 
 };
