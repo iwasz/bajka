@@ -6,50 +6,56 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_EQ_CUBIC_H_
-#define BAJKA_EQ_CUBIC_H_
+#ifndef BAJKA_EQ_BACK_H_
+#define BAJKA_EQ_BACK_H_
 
 #include "IEquation.h"
 
 namespace Tween {
 
-class CubicIn : public IEquation {
+namespace {
+const double BACK_SCALE = 1.70158;
+}
+
+class BackIn : public IEquation {
 public:
-        virtual ~CubicIn () {}
+        virtual ~BackIn () {}
 
         double compute (double t, double b, double c, double d) const
         {
                 t /= d;
-                return c * t * t * t + b;
+                return c * t * t * ((BACK_SCALE + 1) * t - BACK_SCALE) + b;
         }
 };
 
-class CubicOut : public IEquation {
+class BackOut : public IEquation {
 public:
-        virtual ~CubicOut () {}
+        virtual ~BackOut () {}
 
         double compute (double t, double b, double c, double d) const
         {
                 t = t / d - 1;
-                return c * (t * t * t + 1) + b;
+                return c * (t * t * ((BACK_SCALE + 1) * t + BACK_SCALE) + 1) + b;
         }
 };
 
-class CubicInOut : public IEquation {
+class BackInOut : public IEquation {
 public:
-        virtual ~CubicInOut () {}
+        virtual ~BackInOut () {}
 
         double compute (double t, double b, double c, double d) const
         {
+                double s = BACK_SCALE * 1.525;
+
                 if ((t /= d / 2) < 1) {
-                        return c / 2 * t * t * t + b;
+                        return c / 2 * (t * t * ((s + 1) * t - s)) + b;
                 }
 
                 t -= 2;
-                return c / 2 * (t * t * t + 2) + b;
+                return c / 2 * (t * t * ((s + 1) * t + s) + 2) + b;
         }
 };
 
 } // namespace
 
-#	endif /* CUBIC_H_ */
+#	endif /* BACK_H_ */

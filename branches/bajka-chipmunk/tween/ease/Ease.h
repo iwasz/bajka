@@ -11,5 +11,7 @@
 
 #include "Linear.h"
 #include "Cubic.h"
+#include "Back.h"
+#include "Bounce.h"
 
 #	endif /* EASE_H_ */
