@@ -18,11 +18,9 @@ class Manager;
 class AbstractTween : public ITween {
 public:
 
-        AbstractTween () : state (INIT), /*started (false), finished (false),*/ yoyo (false), repetitions (0), delayMs (0) {}
+        AbstractTween () : currentDirection (true), yoyo (false), repetitions (0), delayMs (0), currentRepetition (0), state (INIT) {}
         virtual ~AbstractTween () {}
 
-//        bool getFinished () const { return finished; }
-//        bool getStarted () const { return started; }
         State getState () const { return state; }
 
         void start (Manager *m = NULL);
@@ -31,11 +29,8 @@ public:
         virtual ITween *delay (unsigned int d) { delayMs = d; return this; }
 
         virtual void clear ();
-//        virtual void rewind ();
 
 protected:
-
-        State state;
 
         State transition (State s);
 
@@ -43,18 +38,20 @@ protected:
         virtual void initExit () {}
         virtual void delayEntry () {}
         virtual void delayExit () {}
-        virtual void forwardEntry () {}
-        virtual void forwardExit () {}
-        virtual void backwardEntry () {}
-        virtual void backwardExit () {}
+        virtual void runEntry () {}
+        virtual void runExit () {}
         virtual void finishedEntry  () {}
         virtual void finishedExit () {}
 
 protected:
 
+        // true forward, false backward
+        bool currentDirection;
         bool yoyo;
         unsigned int repetitions;
         unsigned int delayMs;
+        unsigned int currentRepetition;
+        State state;
 
 };
 

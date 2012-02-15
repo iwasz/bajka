@@ -18,27 +18,27 @@ bool TestButtonController::onButtonPress (Event::ButtonPressEvent *e, Model::IMo
 	Geometry::Point p = testModel->getTranslate ();
 
 //	timeline ()->add (
-//                to (testModel, 1000)->
+//                to (testModel, 1000, CUBIC_INOUT)->
 //                        rel (SCALE, 4)->
 //                        rel (ANGLE, 90)->
 //                        rel (X, 100)->
-//                        rel (Y, 100)
+//                        rel (Y, 100)->
+//                        delay (200)->
+//                        repeat (1, true)
 //        )->add (
 //                to (testModel, 1000)->
-//                        abs (SCALE, 1)->
-//                        abs (ANGLE, 0)->
-//                        abs (X, p.x)->
-//                        abs (Y, p.y)->delay (200)
+//                        rel (SCALE, 0.5)->
+//                        rel (ANGLE, -90)
 //        )->start ();
 
-	to (testModel, 1000, CUBIC_INOUT)->
-		rel (SCALE, 4)->
-		rel (ANGLE, 90)->
-//		rel (X, 100)->
-//		rel (Y, 100)->
-		delay (200)->
-		repeat (2)->
-		start ();
+        to (testModel, 1000, CUBIC_INOUT)->
+                rel (SCALE, 4)->
+                rel (ANGLE, 90)->
+                rel (X, 100)->
+                rel (Y, 100)->
+                delay (200)->
+                repeat (1, true)->
+                start ();
 
 	return Controller::ButtonController::onButtonPress (e, m, v);
 }

@@ -27,21 +27,18 @@ Timeline *Timeline::create ()
 
 void Timeline::update (int deltaMs)
 {
-#if 0
-
-        if (finished || tweens.empty ()) {
-                return;
-        }
-
-        (*current)->update (deltaMs);
-
-        if ((*current)->getFinished ()) {
-                if (++current == tweens.end ()) {
-                        finished = true;
-                        return;
-                }
-        }
-#endif
+//        if (finished || tweens.empty ()) {
+//                return;
+//        }
+//
+//        (*current)->update (deltaMs);
+//
+//        if ((*current)->getFinished ()) {
+//                if (++current == tweens.end ()) {
+//                        finished = true;
+//                        return;
+//                }
+//        }
 }
 
 /****************************************************************************/

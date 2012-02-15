@@ -32,11 +32,6 @@ void AbstractTween::clear ()
 
 /****************************************************************************/
 
-//void AbstractTween::rewind ()
-//{
-//        finished = started = false;
-//}
-
 AbstractTween::State AbstractTween::transition (State s)
 {
 	switch (s) {
@@ -55,63 +50,40 @@ AbstractTween::State AbstractTween::transition (State s)
 			delayEntry ();
 		}
 
-		else if (state == FORWARD) {
+		else if (state == RUN) {
 			state = DELAY;
-			forwardExit ();
+			runExit ();
 			delayEntry ();
 		}
 
 		break;
 
-	case FORWARD:
+	case RUN:
 		if (state == INIT) {
-			state = FORWARD;
+			state = RUN;
 			initExit ();
-			forwardEntry ();
+			runEntry ();
 		}
-		else if (state == FORWARD) {
-			forwardExit ();
-			forwardEntry ();
+		else if (state == RUN) {
+			runExit ();
+			runEntry ();
 		}
 		else if (state == DELAY) {
-			state = FORWARD;
+			state = RUN;
 			delayExit ();
-			forwardEntry ();
-		}
-		else if (state == BACKWARD) {
-			state = FORWARD;
-			forwardExit ();
-			forwardEntry ();
+			runEntry ();
 		}
 		else if (state == FINISHED) {
-			state = FORWARD;
+			state = RUN;
 			finishedExit ();
-			forwardEntry ();
-		}
-		break;
-
-	case BACKWARD:
-		if (state == FORWARD) {
-			state = BACKWARD;
-			forwardExit ();
-			backwardEntry ();
-		}
-		else if (state == FINISHED) {
-			state = BACKWARD;
-			finishedExit ();
-			backwardEntry ();
+			runEntry ();
 		}
 		break;
 
 	case FINISHED:
-		if (state == FORWARD) {
+		if (state == RUN) {
 			state = FINISHED;
-			forwardExit ();
-			finishedEntry ();
-		}
-		else if (state == BACKWARD) {
-			state = FINISHED;
-			backwardExit ();
+			runExit ();
 			finishedEntry ();
 		}
 		break;
