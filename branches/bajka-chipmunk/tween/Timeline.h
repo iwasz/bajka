@@ -23,14 +23,17 @@ public:
         virtual ~Timeline () {}
         static Timeline *create ();
 
-        void update (int deltaMs, bool reverse);
         Timeline *add (ITween *tween);
 
 private:
 
-        void initExit ();
-        void finishedExit ();
-        void runEntry ();
+        void initExit (bool reverse);
+        void finishedExit (bool reverse);
+        void runEntry (bool reverse);
+        void updateRun (int deltaMs, bool direction);
+        bool checkEnd (bool direction);
+
+private:
 
         TweenVector tweens;
         TweenVector::iterator current;
