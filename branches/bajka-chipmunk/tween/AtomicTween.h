@@ -46,7 +46,7 @@ public:
         virtual ~AtomicTween () {}
         static AtomicTween *create ();
 
-        void update (int deltaMs);
+        void update (int deltaMs, bool reverse);
 
         friend AtomicTween *to (void *targetObject, unsigned int durationMs, Ease ease);
         AtomicTween *abs (unsigned int property, double value) { return target (property, value, true); }
@@ -56,7 +56,7 @@ public:
 
 protected:
 
-        AtomicTween () : AbstractTween (), equation (NULL), durationMs (0), currentMs (0), object (NULL)  {}
+        AtomicTween () : AbstractTween (), equation (NULL), durationMs (0), object (NULL)  {}
         AtomicTween *target (unsigned int property, double value, bool abs);
 
         // Uruchamia się jeden raz na poczatku działania tweena (lub po repeat).
@@ -64,10 +64,11 @@ protected:
         void initExit ();
         void delayEntry ();
         void delayExit ();
-        void forwardEntry ();
-        void forwardExit ();
-        void backwardEntry ();
-        void backwardExit ();
+
+        void runEntry ();
+        void runEntry2 (bool direction);
+        void runExit ();
+
         void finishedEntry ();
         void finishedExit ();
 
@@ -75,7 +76,6 @@ private:
 
         IEquation const *equation;
         int durationMs;
-        int currentMs;
         void *object;
         TargetVector targets;
 };

@@ -75,24 +75,28 @@ void AtomicTween::initEntry () {}
 void AtomicTween::initExit ()
 {
 	currentRepetition = repetitions;
-        currentMs = ((currentDirection) ? (0) : (durationMs));
+//        currentMs = ((currentDirection) ? (0) : (durationMs));
 
 	for (TargetVector::iterator i = targets.begin (); i != targets.end (); ++i) {
 		(*i)->init ();
 	}
-
 }
-void AtomicTween::delayEntry () {}
+void AtomicTween::delayEntry ()
+{
+        currentMs = 0;
+}
 void AtomicTween::delayExit ()
 {
 }
-void AtomicTween::forwardEntry ()
+void AtomicTween::runEntry ()
 {
-	currentMs = ((currentDirection) ? (0) : (durationMs));
+//	currentMs = ((currentDirection) ? (0) : (durationMs));
 }
-void AtomicTween::forwardExit () {}
-void AtomicTween::backwardEntry () {}
-void AtomicTween::backwardExit () {}
+void AtomicTween::runEntry2 (bool reverse)
+{
+        currentMs = ((currentDirection ^ reverse) ? (0) : (durationMs));
+}
+void AtomicTween::runExit () {}
 void AtomicTween::finishedEntry  () {}
 void AtomicTween::finishedExit ()
 {
@@ -101,37 +105,56 @@ void AtomicTween::finishedExit ()
 
 /****************************************************************************/
 
-void AtomicTween::update (int deltaMs)
+void AtomicTween::update (int deltaMs, bool reverse)
 {
         if (state == FINISHED) {
-                return;
+                if (!reverse) {
+                        return;
+                }
+
+                transition (RUN);
+                runEntry2 (reverse);
+                update (deltaMs, reverse);
         }
         else if (state == INIT) {
+                if (reverse) {
+                        return;
+                }
 
                 if (delayMs) {
                         transition(DELAY);
                 }
                 else {
                         transition (RUN);
+                        runEntry2 (reverse);
                 }
 
-                update (deltaMs); // Żeby nie stracić iteracji.
+                update (deltaMs, reverse); // Żeby nie stracić iteracji.
         }
         else if (state == DELAY) {
                 currentMs += deltaMs;
                 int remainingMs = currentMs - delayMs;
 
                 if (remainingMs >= 0) {
-                        transition (RUN);
+
+                        if (reverse) {
+                                transition (INIT);
+                        }
+                        else {
+                                transition (RUN);
+                                runEntry2 (reverse);
+                        }
                 }
 
                 if (remainingMs > 0) {
-                        update(remainingMs);
+                        update(remainingMs, reverse);
                 }
         }
         else if (state == RUN) {
 
-                if (currentDirection) {
+                bool direction = currentDirection ^ reverse;
+
+                if (direction) {
                         currentMs += deltaMs;
 
                         if (currentMs > durationMs) {
@@ -146,14 +169,14 @@ void AtomicTween::update (int deltaMs)
                         }
                 }
 
-                for (TargetVector::iterator i = targets.begin();
-                                i != targets.end(); ++i) {
+                for (TargetVector::iterator i = targets.begin(); i != targets.end(); ++i) {
                         (*i)->update ();
                 }
 
-                if ((currentDirection && currentMs >= durationMs) || (!currentDirection && currentMs <= 0)) {
+                if ((direction && currentMs >= durationMs) || (!direction && currentMs <= 0)) {
+
                         if (!currentRepetition) {
-                                transition(FINISHED);
+                                transition ((reverse) ? (DELAY) : (FINISHED));
                         }
                         else {
                                 --currentRepetition;
@@ -163,6 +186,7 @@ void AtomicTween::update (int deltaMs)
                                 }
 
                                 transition (RUN);
+                                runEntry2 (reverse);
                         }
                 }
         }

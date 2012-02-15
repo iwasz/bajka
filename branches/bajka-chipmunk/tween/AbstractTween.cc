@@ -25,9 +25,9 @@ void AbstractTween::start (Manager *m)
 
 void AbstractTween::clear ()
 {
-		state = INIT;
+        state = INIT;
         yoyo = false;
-        repetitions = delayMs = 0;
+        currentMs = repetitions = delayMs = 0;
 }
 
 /****************************************************************************/
@@ -36,31 +36,28 @@ AbstractTween::State AbstractTween::transition (State s)
 {
 	switch (s) {
 	case INIT:
-		if (state == DELAY) {
-			state = INIT;
+                if (state == DELAY) {
 			delayExit ();
 			initEntry ();
 		}
+                state = INIT;
 		break;
 
 	case DELAY:
-		if (state == INIT ) {
-			state = DELAY;
+                if (state == INIT ) {
 			initExit ();
 			delayEntry ();
 		}
 
 		else if (state == RUN) {
-			state = DELAY;
 			runExit ();
 			delayEntry ();
 		}
-
+                state = DELAY;
 		break;
 
 	case RUN:
-		if (state == INIT) {
-			state = RUN;
+                if (state == INIT) {
 			initExit ();
 			runEntry ();
 		}
@@ -69,23 +66,22 @@ AbstractTween::State AbstractTween::transition (State s)
 			runEntry ();
 		}
 		else if (state == DELAY) {
-			state = RUN;
 			delayExit ();
 			runEntry ();
 		}
 		else if (state == FINISHED) {
-			state = RUN;
 			finishedExit ();
 			runEntry ();
 		}
+                state = RUN;
 		break;
 
 	case FINISHED:
-		if (state == RUN) {
-			state = FINISHED;
+                if (state == RUN) {
 			runExit ();
 			finishedEntry ();
 		}
+                state = FINISHED;
 		break;
 
 	default:
