@@ -18,8 +18,10 @@ class Manager;
 class AbstractTween : public ITween {
 public:
 
-        AbstractTween () : currentDirection (true), yoyo (false), repetitions (0), delayMs (0), currentRepetition (0), currentMs (0), state (INIT) {}
+        AbstractTween () : forward (true), yoyo (false), repetitions (0), delayMs (0), currentRepetition (0), currentMs (0), state (INIT) {}
         virtual ~AbstractTween () {}
+
+        virtual void update (int deltaMs, bool reverse);
 
         State getState () const { return state; }
 
@@ -32,21 +34,24 @@ public:
 
 protected:
 
-        State transition (State s);
+        State transition (State s, bool reverse);
 
-        virtual void initEntry () {}
-        virtual void initExit () {}
-        virtual void delayEntry () {}
-        virtual void delayExit () {}
-        virtual void runEntry () {}
-        virtual void runExit () {}
-        virtual void finishedEntry  () {}
-        virtual void finishedExit () {}
+        virtual void initEntry (bool reverse) {}
+        virtual void initExit (bool reverse) {}
+        virtual void delayEntry (bool reverse) {}
+        virtual void delayExit (bool reverse) {}
+        virtual void runEntry (bool reverse) {}
+        virtual void runExit (bool reverse) {}
+        virtual void finishedEntry  (bool reverse) {}
+        virtual void finishedExit (bool reverse) {}
+
+        virtual void updateRun (int deltaMs, bool direction) = 0;
+        virtual bool checkEnd (bool direction) = 0;
 
 protected:
 
         // true forward, false backward
-        bool currentDirection;
+        bool forward;
         bool yoyo;
         unsigned int repetitions;
         unsigned int delayMs;

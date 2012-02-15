@@ -32,54 +32,110 @@ void AbstractTween::clear ()
 
 /****************************************************************************/
 
-AbstractTween::State AbstractTween::transition (State s)
+void AbstractTween::update (int deltaMs, bool reverse)
+{
+        if (state == FINISHED) {
+                if (!reverse) {
+                        return;
+                }
+
+                transition (RUN, reverse);
+                update (deltaMs, reverse);
+        }
+        else if (state == INIT) {
+                if (reverse) {
+                        return;
+                }
+
+                transition(((delayMs) ? (DELAY) : (RUN)), reverse);
+                update (deltaMs, reverse);
+        }
+        else if (state == DELAY) {
+                currentMs += deltaMs;
+                int remainingMs = currentMs - delayMs;
+
+                if (remainingMs >= 0) {
+                        transition ((((reverse)) ? (INIT) : (RUN)), reverse);
+                }
+
+                if (remainingMs > 0) {
+                        update (remainingMs, reverse);
+                }
+        }
+        else if (state == RUN) {
+
+                bool direction = forward ^ reverse;
+
+                updateRun (deltaMs, direction);
+
+                if (checkEnd (direction)) {
+
+                        if (!currentRepetition) {
+                                transition (((reverse) ? (DELAY) : (FINISHED)), reverse);
+                        }
+                        else {
+                                --currentRepetition;
+
+                                if (yoyo) {
+                                        forward = !forward;
+                                }
+
+                                transition (RUN, reverse);
+                        }
+                }
+        }
+}
+
+/****************************************************************************/
+
+AbstractTween::State AbstractTween::transition (State s, bool reverse)
 {
 	switch (s) {
 	case INIT:
                 if (state == DELAY) {
-			delayExit ();
-			initEntry ();
+			delayExit (reverse);
+			initEntry (reverse);
 		}
                 state = INIT;
 		break;
 
 	case DELAY:
                 if (state == INIT ) {
-			initExit ();
-			delayEntry ();
+			initExit (reverse);
+			delayEntry (reverse);
 		}
 
 		else if (state == RUN) {
-			runExit ();
-			delayEntry ();
+			runExit (reverse);
+			delayEntry (reverse);
 		}
                 state = DELAY;
 		break;
 
 	case RUN:
                 if (state == INIT) {
-			initExit ();
-			runEntry ();
+			initExit (reverse);
+			runEntry (reverse);
 		}
 		else if (state == RUN) {
-			runExit ();
-			runEntry ();
+			runExit (reverse);
+			runEntry (reverse);
 		}
 		else if (state == DELAY) {
-			delayExit ();
-			runEntry ();
+			delayExit (reverse);
+			runEntry (reverse);
 		}
 		else if (state == FINISHED) {
-			finishedExit ();
-			runEntry ();
+			finishedExit (reverse);
+			runEntry (reverse);
 		}
                 state = RUN;
 		break;
 
 	case FINISHED:
                 if (state == RUN) {
-			runExit ();
-			finishedEntry ();
+			runExit (reverse);
+			finishedEntry (reverse);
 		}
                 state = FINISHED;
 		break;

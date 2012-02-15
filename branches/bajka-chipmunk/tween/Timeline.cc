@@ -25,21 +25,21 @@ Timeline *Timeline::create ()
 
 /****************************************************************************/
 
-void Timeline::initExit ()
+void Timeline::initExit (bool reverse)
 {
         currentRepetition = repetitions;
 }
 
 /****************************************************************************/
 
-void Timeline::finishedExit ()
+void Timeline::finishedExit (bool reverse)
 {
         currentRepetition = repetitions;
 }
 
 /****************************************************************************/
 
-void Timeline::runEntry ()
+void Timeline::runEntry (bool reverse)
 {
         current = tweens.begin ();
         currentr = tweens.rbegin ();
@@ -47,95 +47,22 @@ void Timeline::runEntry ()
 
 /****************************************************************************/
 
-void Timeline::update (int deltaMs, bool reverse)
+void Timeline::updateRun (int deltaMs, bool direction)
 {
-        if (state == FINISHED) {
-                return;
+        if (direction) {
+                (*current)->update (deltaMs, !direction);
         }
-        else if (state == INIT) {
-
-                if (delayMs) {
-                        transition(DELAY);
-                }
-                else {
-                        transition (RUN);
-                }
-
-                update (deltaMs, reverse); // Żeby nie stracić iteracji.
+        else {
+                (*currentr)->update (deltaMs, !direction);
         }
-        else if (state == DELAY) {
-                currentMs += deltaMs;
-                int remainingMs = currentMs - delayMs;
+}
 
-                if (remainingMs >= 0) {
-                        transition (RUN);
-                }
+/****************************************************************************/
 
-                if (remainingMs > 0) {
-                        update(remainingMs, reverse);
-                }
-        }
-        else if (state == RUN) {
-
-                bool direction = currentDirection ^ reverse;
-
-//                if (currentDirection) {
-//                        currentMs += deltaMs;
-//
-//                        if (currentMs > durationMs) {
-//                                currentMs = durationMs;
-//                        }
-//                }
-//                else {
-//                        currentMs -= deltaMs;
-//
-//                        if (currentMs < 0) {
-//                                currentMs = 0;
-//                        }
-//                }
-
-                if (direction) {
-                        (*current)->update (deltaMs, !direction);
-//                        ++current;
-                }
-                else {
-                        (*currentr)->update (deltaMs, !direction);
-//                        ++currentr;
-                }
-
-                if ((direction && (*current)->getState () == FINISHED && ++current == tweens.end ()) ||
-                    (!direction && (*currentr)->getState () == INIT && ++currentr == tweens.rend ())) {
-
-//                if ((*current)->getState () == FINISHED && ((!direction && current == tweens.end ()) || (direction && currentr == tweens.rend ()))) {
-
-                        if (!currentRepetition) {
-                                transition ((reverse) ? (DELAY) : (FINISHED));
-                        }
-                        else {
-                                --currentRepetition;
-
-                                if (yoyo) {
-                                        currentDirection = !currentDirection;
-                                }
-
-                                transition (RUN);
-                        }
-                }
-        }
-
-
-//        if (finished || tweens.empty ()) {
-//                return;
-//        }
-//
-//        (*current)->update (deltaMs);
-//
-//        if ((*current)->getFinished ()) {
-//                if (++current == tweens.end ()) {
-//                        finished = true;
-//                        return;
-//                }
-//        }
+bool Timeline::checkEnd (bool direction)
+{
+        return (direction && (*current)->getState () == FINISHED && ++current == tweens.end ()) ||
+               (!direction && (*currentr)->getState () == INIT && ++currentr == tweens.rend ());
 }
 
 /****************************************************************************/

@@ -46,8 +46,6 @@ public:
         virtual ~AtomicTween () {}
         static AtomicTween *create ();
 
-        void update (int deltaMs, bool reverse);
-
         friend AtomicTween *to (void *targetObject, unsigned int durationMs, Ease ease);
         AtomicTween *abs (unsigned int property, double value) { return target (property, value, true); }
         AtomicTween *rel (unsigned int property, double value) { return target (property, value, false); }
@@ -60,17 +58,17 @@ protected:
         AtomicTween *target (unsigned int property, double value, bool abs);
 
         // Uruchamia się jeden raz na poczatku działania tweena (lub po repeat).
-        void initEntry ();
-        void initExit ();
-        void delayEntry ();
-        void delayExit ();
+        void initEntry (bool reverse);
+        void initExit (bool reverse);
+        void delayEntry (bool reverse);
+        void delayExit (bool reverse);
+        void runEntry (bool reverse);
+        void runExit (bool reverse);
+        void finishedEntry (bool reverse);
+        void finishedExit (bool reverse);
 
-        void runEntry ();
-        void runEntry2 (bool direction);
-        void runExit ();
-
-        void finishedEntry ();
-        void finishedExit ();
+        void updateRun (int deltaMs, bool direction);
+        bool checkEnd (bool direction);
 
 private:
 

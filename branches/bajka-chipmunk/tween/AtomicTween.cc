@@ -71,125 +71,65 @@ void AtomicTween::clear ()
 
 /****************************************************************************/
 
-void AtomicTween::initEntry () {}
-void AtomicTween::initExit ()
+void AtomicTween::initEntry (bool reverse) {}
+void AtomicTween::initExit (bool reverse)
 {
 	currentRepetition = repetitions;
-//        currentMs = ((currentDirection) ? (0) : (durationMs));
+//        currentMs = ((forward) ? (0) : (durationMs));
 
 	for (TargetVector::iterator i = targets.begin (); i != targets.end (); ++i) {
 		(*i)->init ();
 	}
 }
-void AtomicTween::delayEntry ()
+void AtomicTween::delayEntry (bool reverse)
 {
         currentMs = 0;
 }
-void AtomicTween::delayExit ()
+void AtomicTween::delayExit (bool reverse)
 {
 }
-void AtomicTween::runEntry ()
+void AtomicTween::runEntry (bool reverse)
 {
-//	currentMs = ((currentDirection) ? (0) : (durationMs));
+        currentMs = ((forward ^ reverse) ? (0) : (durationMs));
 }
-void AtomicTween::runEntry2 (bool reverse)
-{
-        currentMs = ((currentDirection ^ reverse) ? (0) : (durationMs));
-}
-void AtomicTween::runExit () {}
-void AtomicTween::finishedEntry  () {}
-void AtomicTween::finishedExit ()
+void AtomicTween::runExit (bool reverse) {}
+void AtomicTween::finishedEntry  (bool reverse) {}
+void AtomicTween::finishedExit (bool reverse)
 {
 	currentRepetition = repetitions;
 }
 
 /****************************************************************************/
 
-void AtomicTween::update (int deltaMs, bool reverse)
+void AtomicTween::updateRun (int deltaMs, bool direction)
 {
-        if (state == FINISHED) {
-                if (!reverse) {
-                        return;
-                }
-
-                transition (RUN);
-                runEntry2 (reverse);
-                update (deltaMs, reverse);
-        }
-        else if (state == INIT) {
-                if (reverse) {
-                        return;
-                }
-
-                if (delayMs) {
-                        transition(DELAY);
-                }
-                else {
-                        transition (RUN);
-                        runEntry2 (reverse);
-                }
-
-                update (deltaMs, reverse); // Żeby nie stracić iteracji.
-        }
-        else if (state == DELAY) {
+        // Wylicz currentMs
+        if (direction) {
                 currentMs += deltaMs;
-                int remainingMs = currentMs - delayMs;
 
-                if (remainingMs >= 0) {
-
-                        if (reverse) {
-                                transition (INIT);
-                        }
-                        else {
-                                transition (RUN);
-                                runEntry2 (reverse);
-                        }
-                }
-
-                if (remainingMs > 0) {
-                        update(remainingMs, reverse);
+                if (currentMs > durationMs) {
+                        currentMs = durationMs;
                 }
         }
-        else if (state == RUN) {
+        else {
+                currentMs -= deltaMs;
 
-                bool direction = currentDirection ^ reverse;
-
-                if (direction) {
-                        currentMs += deltaMs;
-
-                        if (currentMs > durationMs) {
-                                currentMs = durationMs;
-                        }
-                }
-                else {
-                        currentMs -= deltaMs;
-
-                        if (currentMs < 0) {
-                                currentMs = 0;
-                        }
-                }
-
-                for (TargetVector::iterator i = targets.begin(); i != targets.end(); ++i) {
-                        (*i)->update ();
-                }
-
-                if ((direction && currentMs >= durationMs) || (!direction && currentMs <= 0)) {
-
-                        if (!currentRepetition) {
-                                transition ((reverse) ? (DELAY) : (FINISHED));
-                        }
-                        else {
-                                --currentRepetition;
-
-                                if (yoyo) {
-                                        currentDirection = !currentDirection;
-                                }
-
-                                transition (RUN);
-                                runEntry2 (reverse);
-                        }
+                if (currentMs < 0) {
+                        currentMs = 0;
                 }
         }
+
+        // Tweenuj
+        for (TargetVector::iterator i = targets.begin(); i != targets.end(); ++i) {
+                (*i)->update ();
+        }
+}
+
+/****************************************************************************/
+
+bool AtomicTween::checkEnd (bool direction)
+{
+        return (direction && currentMs >= durationMs) || (!direction && currentMs <= 0);
 }
 
 /****************************************************************************/
