@@ -17,52 +17,13 @@ namespace Tween {
 
 Manager *Manager::main = NULL;
 
-template <typename T>
-struct CustomUserAllocator {
-
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
-
-        static char * malloc BOOST_PREVENT_MACRO_SUBSTITUTION(const size_type bytes)
-        {
-                char *p = new (std::nothrow) char[bytes];
-                return p;
-        }
-
-        static void free BOOST_PREVENT_MACRO_SUBSTITUTION(char * const block)
-        {
-                delete [] block;
-        }
-
-};
-
 struct Pool {
 
-        Pool ();
-        ~Pool ();
-
-//        boost::object_pool <AtomicTween, CustomUserAllocator<AtomicTween> > atomicTweens;
-//        boost::object_pool <AtomicTween::Target, CustomUserAllocator<AtomicTween::Target> > targets;
-//        boost::object_pool <Timeline, CustomUserAllocator<Timeline> > timelines;
         boost::object_pool <AtomicTween> atomicTweens;
         boost::object_pool <AtomicTween::Target> targets;
         boost::object_pool <Timeline> timelines;
 
 };
-
-/****************************************************************************/
-
-Pool::Pool ()
-{
-        std::cerr << "Pool::Pool : " << std::endl;
-}
-
-/****************************************************************************/
-
-Pool::~Pool ()
-{
-        std::cerr << "Pool::~Pool : " << std::endl;
-}
 
 /****************************************************************************/
 
@@ -145,36 +106,36 @@ void free ()
 Manager::Manager () : tween (NULL)
 {
         equations[LINEAR_INOUT ] = new Linear;
-        equations[QUAD_IN      ] = new Linear;
-        equations[QUAD_OUT     ] = new Linear;
-        equations[QUAD_INOUT   ] = new Linear;
+        equations[QUAD_IN      ] = new QuadIn;
+        equations[QUAD_OUT     ] = new QuadOut;
+        equations[QUAD_INOUT   ] = new QuadInOut;
         equations[CUBIC_IN     ] = new CubicIn;
         equations[CUBIC_OUT    ] = new CubicOut;
         equations[CUBIC_INOUT  ] = new CubicInOut;
-        equations[QUART_IN     ] = new Linear;
-        equations[QUART_OUT    ] = new Linear;
-        equations[QUART_INOUT  ] = new Linear;
-        equations[QUINT_IN     ] = new Linear;
-        equations[QUINT_OUT    ] = new Linear;
-        equations[QUINT_INOUT  ] = new Linear;
-        equations[CIRC_IN      ] = new Linear;
-        equations[CIRC_OUT     ] = new Linear;
-        equations[CIRC_INOUT   ] = new Linear;
-        equations[SINE_IN      ] = new Linear;
-        equations[SINE_OUT     ] = new Linear;
-        equations[SINE_INOUT   ] = new Linear;
-        equations[EXPO_IN      ] = new Linear;
-        equations[EXPO_OUT     ] = new Linear;
-        equations[EXPO_INOUT   ] = new Linear;
+        equations[QUART_IN     ] = new QuartIn;
+        equations[QUART_OUT    ] = new QuartOut;
+        equations[QUART_INOUT  ] = new QuartInOut;
+        equations[QUINT_IN     ] = new QuintIn;
+        equations[QUINT_OUT    ] = new QuintOut;
+        equations[QUINT_INOUT  ] = new QuintInOut;
+        equations[CIRC_IN      ] = new CircIn;
+        equations[CIRC_OUT     ] = new CircOut;
+        equations[CIRC_INOUT   ] = new CircInOut;
+        equations[SINE_IN      ] = new SineIn;
+        equations[SINE_OUT     ] = new SineOut;
+        equations[SINE_INOUT   ] = new SineInOut;
+        equations[EXPO_IN      ] = new ExpoIn;
+        equations[EXPO_OUT     ] = new ExpoOut;
+        equations[EXPO_INOUT   ] = new ExpoInOut;
         equations[BACK_IN      ] = new BackIn;
         equations[BACK_OUT     ] = new BackOut;
         equations[BACK_INOUT   ] = new BackInOut;
         equations[BOUNCE_IN    ] = new BounceIn;
         equations[BOUNCE_OUT   ] = new BounceOut;
         equations[BOUNCE_INOUT ] = new BounceInOut;
-        equations[ELASTIC_IN   ] = new Linear;
-        equations[ELASTIC_OUT  ] = new Linear;
-        equations[ELASTIC_INOUT] = new Linear;
+        equations[ELASTIC_IN   ] = new ElasticIn;
+        equations[ELASTIC_OUT  ] = new ElasticOut;
+        equations[ELASTIC_INOUT] = new ElasticInOut;
 
         accessors[X] = new TranslateXAccessor;
         accessors[Y] = new TranslateYAccessor;

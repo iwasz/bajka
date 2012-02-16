@@ -31,7 +31,7 @@ bool TestButtonController::onButtonPress (Event::ButtonPressEvent *e, Model::IMo
 //                        rel (ANGLE, -90)
 //        )->start ();
 
-        to (testModel, 1000, BOUNCE_INOUT)->
+        to (testModel, 1000, SINE_INOUT)->
                 rel (SCALE, 4)->
                 rel (ANGLE, 90)->
                 rel (X, 100)->
