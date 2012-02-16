@@ -7,20 +7,13 @@
  ****************************************************************************/
 
 #include "Timeline.h"
+#include "Manager.h"
 
 namespace Tween {
 
 Timeline *timeline ()
 {
-        return Timeline::create ();
-}
-
-/****************************************************************************/
-
-Timeline *Timeline::create ()
-{
-        // TODO pool
-        return new Timeline;
+        return Manager::getMain ()->newTimeline ();
 }
 
 /****************************************************************************/

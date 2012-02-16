@@ -14,8 +14,12 @@
 #include "ITween.h"
 #include "ease/IEquation.h"
 #include "accessor/IAccessor.h"
+#include <memory>
+#include "AtomicTween.h"
 
 namespace Tween {
+class Pool;
+class Timeline;
 
 /**
  * - Overwrite : co ma się dzieć, kiedy dodamy 2 tweeny do tego samego obiektu na ten
@@ -51,6 +55,16 @@ public:
                 return main;
         }
 
+/*--------------------------------------------------------------------------*/
+
+        AtomicTween *newAtomicTween ();
+        void freeAtomicTween (AtomicTween *);
+
+        AtomicTween::Target *newTarget ();
+        void freeTarget (AtomicTween::Target *);
+
+        Timeline *newTimeline ();
+        void freeTimeline (Timeline *);
 
 private:
 
@@ -60,9 +74,8 @@ private:
         static Manager *main;
         EquationMap equations;
         AccessorMap accessors;
-
         ITween *tween;
-
+        std::auto_ptr <Pool> pool;
 };
 
 /**
