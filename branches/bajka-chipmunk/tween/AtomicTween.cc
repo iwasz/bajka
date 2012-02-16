@@ -11,14 +11,14 @@
 
 namespace Tween {
 
-void AtomicTween::Target::clear ()
-{
-    accessor = NULL;
-    tween = NULL;
-    startValue = 0;
-    endValue = 0;
-    absolute = true;
-}
+//void AtomicTween::Target::clear ()
+//{
+//    accessor = NULL;
+//    tween = NULL;
+//    startValue = 0;
+//    endValue = 0;
+//    absolute = true;
+//}
 
 /****************************************************************************/
 
@@ -41,7 +41,7 @@ void AtomicTween::Target::update ()
 
 AtomicTween *to (void *targetObject, unsigned int durationMs, Ease ease)
 {
-        AtomicTween *tween = AtomicTween::create ();
+        AtomicTween *tween = Manager::getMain ()->newAtomicTween ();
         tween->equation = Manager::getMain ()->getEase (ease);
         tween->durationMs = durationMs;
         tween->object = targetObject;
@@ -50,24 +50,16 @@ AtomicTween *to (void *targetObject, unsigned int durationMs, Ease ease)
 
 /****************************************************************************/
 
-AtomicTween *AtomicTween::create ()
-{
-        // TODO pula.
-        return new AtomicTween;
-}
-
-/****************************************************************************/
-
-void AtomicTween::clear ()
-{
-	AbstractTween::clear ();
-
-        equation = NULL;
-        durationMs = 0;
-        currentMs = 0;
-        object = NULL;
-        targets.clear ();
-}
+//void AtomicTween::clear ()
+//{
+//	AbstractTween::clear ();
+//
+//        equation = NULL;
+//        durationMs = 0;
+//        currentMs = 0;
+//        object = NULL;
+//        targets.clear ();
+//}
 
 /****************************************************************************/
 
@@ -136,7 +128,7 @@ bool AtomicTween::checkEnd (bool direction)
 
 AtomicTween *AtomicTween::target (unsigned int property, double value, bool abs)
 {
-        Target *target = Target::create ();
+        Target *target = Manager::getMain ()->newTarget ();
         target->accessor = Manager::getMain ()->getAccessor (property);
         target->endValue = value;
         target->absolute = abs;

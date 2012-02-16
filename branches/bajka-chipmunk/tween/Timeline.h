@@ -21,7 +21,6 @@ public:
 
         Timeline () {}
         virtual ~Timeline () {}
-        static Timeline *create ();
 
         Timeline *add (ITween *tween);
 

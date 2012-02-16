@@ -11,6 +11,7 @@
 
 #include <cstddef>
 #include <memory>
+#include <iostream>
 #include "ease/IEquation.h"
 #include "accessor/IAccessor.h"
 #include "AbstractTween.h"
@@ -27,10 +28,7 @@ public:
 
                 Target () : accessor (NULL), tween (NULL), startValue (0), endValue (0), absolute (true) {}
 
-                // TODO pula
-                static Target *create () { return new Target; }
-
-                void clear ();
+//                void clear ();
                 void init ();
                 void update ();
 
@@ -43,18 +41,19 @@ public:
 
         typedef std::vector <Target *> TargetVector;
 
+        AtomicTween () : AbstractTween (), equation (NULL), durationMs (0), object (NULL) {}
         virtual ~AtomicTween () {}
-        static AtomicTween *create ();
 
-        friend AtomicTween *to (void *targetObject, unsigned int durationMs, Ease ease);
         AtomicTween *abs (unsigned int property, double value) { return target (property, value, true); }
         AtomicTween *rel (unsigned int property, double value) { return target (property, value, false); }
 
-        void clear ();
+//        void clear ();
+
+        friend AtomicTween *to (void *targetObject, unsigned int durationMs, Ease ease);
+//        friend void Manager::freeAtomicTween (AtomicTween *a);
 
 protected:
 
-        AtomicTween () : AbstractTween (), equation (NULL), durationMs (0), object (NULL)  {}
         AtomicTween *target (unsigned int property, double value, bool abs);
 
         // Uruchamia się jeden raz na poczatku działania tweena (lub po repeat).
