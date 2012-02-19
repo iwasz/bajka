@@ -11,21 +11,16 @@
 
 namespace Tween {
 
-//void AtomicTween::Target::clear ()
-//{
-//    accessor = NULL;
-//    tween = NULL;
-//    startValue = 0;
-//    endValue = 0;
-//    absolute = true;
-//}
-
-/****************************************************************************/
-
 void AtomicTween::Target::init ()
 {
 	assertThrow (accessor, "AtomicTween::init : !accessor");
-	startValue = accessor->getValue (tween->object);
+
+	if (tween->type == AtomicTween::TO) {
+	        startValue = accessor->getValue (tween->object);
+	}
+	else {
+                endValue = accessor->getValue (tween->object);
+	}
 }
 
 /****************************************************************************/
@@ -45,21 +40,21 @@ AtomicTween *to (void *targetObject, unsigned int durationMs, Ease ease)
         tween->equation = Manager::getMain ()->getEase (ease);
         tween->durationMs = durationMs;
         tween->object = targetObject;
+        tween->type = AtomicTween::TO;
         return tween;
 }
 
 /****************************************************************************/
 
-//void AtomicTween::clear ()
-//{
-//	AbstractTween::clear ();
-//
-//        equation = NULL;
-//        durationMs = 0;
-//        currentMs = 0;
-//        object = NULL;
-//        targets.clear ();
-//}
+AtomicTween *from (void *targetObject, unsigned int durationMs, Ease ease)
+{
+        AtomicTween *tween = Manager::getMain ()->newAtomicTween ();
+        tween->equation = Manager::getMain ()->getEase (ease);
+        tween->durationMs = durationMs;
+        tween->object = targetObject;
+        tween->type = AtomicTween::FROM;
+        return tween;
+}
 
 /****************************************************************************/
 
@@ -130,7 +125,14 @@ AtomicTween *AtomicTween::target (unsigned int property, double value, bool abs)
 {
         Target *target = Manager::getMain ()->newTarget ();
         target->accessor = Manager::getMain ()->getAccessor (property);
-        target->endValue = value;
+
+        if (type == TO) {
+                target->endValue = value;
+        }
+        else if (type == FROM) {
+                target->startValue = value;
+        }
+
         target->absolute = abs;
         target->tween = this;
         targets.push_back (target);

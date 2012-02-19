@@ -28,7 +28,6 @@ public:
 
                 Target () : accessor (NULL), tween (NULL), startValue (0), endValue (0), absolute (true) {}
 
-//                void clear ();
                 void init ();
                 void update ();
 
@@ -41,16 +40,18 @@ public:
 
         typedef std::vector <Target *> TargetVector;
 
-        AtomicTween () : AbstractTween (), equation (NULL), durationMs (0), object (NULL) {}
+        AtomicTween () : AbstractTween (), equation (NULL), durationMs (0), object (NULL), type (TO) {}
         virtual ~AtomicTween () {}
 
         AtomicTween *abs (unsigned int property, double value) { return target (property, value, true); }
         AtomicTween *rel (unsigned int property, double value) { return target (property, value, false); }
 
-//        void clear ();
-
         friend AtomicTween *to (void *targetObject, unsigned int durationMs, Ease ease);
+        friend AtomicTween *from (void *targetObject, unsigned int durationMs, Ease ease);
+
 //        friend void Manager::freeAtomicTween (AtomicTween *a);
+
+        enum Type { TO, FROM };
 
 protected:
 
@@ -75,6 +76,7 @@ private:
         int durationMs;
         void *object;
         TargetVector targets;
+        Type type;
 };
 
 /**
@@ -85,6 +87,8 @@ private:
  * @return
  */
 extern AtomicTween *to (void *targetObject, unsigned int durationMs, Ease ease = LINEAR_INOUT);
+
+extern AtomicTween *from (void *targetObject, unsigned int durationMs, Ease ease = LINEAR_INOUT);
 
 }
 

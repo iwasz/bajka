@@ -31,13 +31,13 @@ bool TestButtonController::onButtonPress (Event::ButtonPressEvent *e, Model::IMo
 //                        rel (ANGLE, -90)
 //        )->start ();
 
-        to (testModel, 1000, SINE_INOUT)->
-                rel (SCALE, 4)->
-                rel (ANGLE, 90)->
-                rel (X, 100)->
-                rel (Y, 100)->
-//                delay (200)->
-//                repeat (1, true)->
+        from (testModel, 1000, QUART_OUT)->
+                abs (SCALE, 6)->
+                abs (ANGLE, 90)->
+                abs (X, 100)->
+                abs (Y, 100)->
+                delay (200)->
+                repeat (2, true)->
                 start ();
 
 //        timeline ()->add (

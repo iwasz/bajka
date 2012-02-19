@@ -149,7 +149,7 @@ Manager::Manager () : tween (NULL)
 
 Manager::~Manager()
 {
-        // TODO skasowac equationsy
+        // TODO skasowac equationsy i accessory.
 }
 
 /****************************************************************************/
