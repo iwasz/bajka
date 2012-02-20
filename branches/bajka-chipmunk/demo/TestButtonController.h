@@ -17,14 +17,14 @@ public:
 	C__ (void)
 	b_ ("ButtonController")
 
-	virtual ~TestButtonController() {}
-    virtual bool onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v);
+        virtual ~TestButtonController() {}
+        virtual bool onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v);
 
-    S_ (setTestModel) void setTestModel (Model::IModel *m) { testModel = m; }
+        S_ (setTestModel) void setTestModel (Model::IModel *m) { testModel = m; }
 
 private:
 
-    Model::IModel *testModel;
+        Model::IModel *testModel;
 
 	E_ (TestButtonController)
 

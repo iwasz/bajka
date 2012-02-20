@@ -94,7 +94,7 @@ TARGET_LINK_LIBRARIES (bajka ${TILIAE_LIBRARIES})
 TARGET_LINK_LIBRARIES (bajka chipmunk)
 
 # Executable test.
-IF (1)
+IF (0)
     AUX_SOURCE_DIRECTORY (../test TEST_SOURCES)
     #AUX_SOURCE_DIRECTORY (../test/helpers TEST_SOURCES)
     

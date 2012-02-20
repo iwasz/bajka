@@ -28,8 +28,9 @@ int main (int argc, char **argv)
         try {
                 Ptr <Container::BeanFactoryContainer> container = Container::XmlContainerFactory::createContainer (fileName, true);
                 Ptr <Util::BajkaApp> app = vcast <Ptr <Util::BajkaApp> > (container->getBean ("app"));
+                app->setInstance (app.get ());
 
-//				app->init ();
+                app->init ();
                 app->loop ();
                 app->destroy ();
         }

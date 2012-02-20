@@ -10,6 +10,7 @@
 #define BAJKA_IMODEL_H_
 
 #include <vector>
+#include <map>
 #include <Object.h>
 #include <chipmunk.h>
 #include "../util/ReflectionMacros.h"
@@ -27,6 +28,9 @@ struct IModel;
  */
 typedef std::vector <IModel *> ModelVector;
 g_ (ModelVector)
+
+typedef std::map <std::string, IModel *> ModelMap;
+g_ (ModelMap)
 
 /**
  * Mam zamysł, żeby to było głownie nastawione na geometrię. Czyli kształty, pozycje
