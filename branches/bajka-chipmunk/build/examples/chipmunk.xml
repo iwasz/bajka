@@ -6,7 +6,7 @@
 <beans>
 
     <!--Konfiguracja-->
-    <bean id="cfg" class="BajkaConfig" init-method="init" singleton="true">
+    <bean id="cfg" class="BajkaConfig" singleton="true">
         <property name="fullScreen" value="false"/>
         <property name="resX" value="800"/>
         <property name="resY" value="800"/>
@@ -26,6 +26,7 @@
         </property>
         
         <property name="model" ref="space" />
+        <property name="manager" ref="modelManager" />        
     </bean>
       
     <bean id="emptyCtr" class="EmptyController" singleton="true">
@@ -53,5 +54,6 @@
       
 <!--     <import resource="examples/chipmunk01.xml"/> -->
     <import resource="examples/chipmunk02.xml"/>
+    <import resource="examples/chipmunk03.xml"/>
 
 </beans>

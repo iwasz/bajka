@@ -15,56 +15,12 @@
 #include "IDispatcher.h"
 #include "ReflectionMacros.h"
 #include "../events/types/IEvent.h"
+#include "ModelManager.h"
+#include "Config.h"
 
 using Event::ModelIndex;
 
 namespace Util {
-
-/*
- * Ta klasa jest tylko po to, żeby ułatwoć stosowanie bajki z kontenerem.
- * Otóż kolejność pracy programu musi być następująca:
- * - Utworzenie BajkaConfig.
- * - Ustawienie jej pól.
- * - Uruchomienie init ().
- * Treaz OpenGL i SDL są zainicjowane, można dodawać obiekty. I dopero teraz
- * można uruchomić pętlę programu:
- * - BajkaApp run.
- * INICJUJE OpenGL!
- */
-class BajkaConfig {
-public:
-        C__ (void)
-
-        BajkaConfig ();
-        ~BajkaConfig ();
-
-/*--------------------------------------------------------------------------*/
-
-        m_ (init) void init ();
-
-/*------access methods------------------------------------------------------*/
-
-        bool getFullScreen () const { return fullScreen; }
-        m_ (setFullScreen) void setFullScreen (bool fullScreen) { this->fullScreen = fullScreen; }
-
-        int getResX () const { return resX; }
-        m_ (setResX) void setResX (int resX) { this->resX = resX; }
-
-        int getResY () const { return resY; }
-        m_ (setResY)  void setResY (int resY) { this->resY = resY; }
-
-        const std::string &getWindowCaption () const { return windowCaption; }
-        m_ (setWindowCaption) void setWindowCaption (const std::string &windowCaption) { this->windowCaption = windowCaption; }
-
-private:
-
-        bool fullScreen;
-        int resX;
-        int resY;
-        std::string windowCaption;
-
-        E_ (BajkaConfig)
-};
 
 /**
  * Bajka application. It is bound to OpenGL and is not meant to
@@ -79,9 +35,10 @@ public:
 
        C__ (void)
 
-       BajkaApp () /*: dispatchers (new Event::DispatcherList)*/ {}
+       BajkaApp () : model (NULL) {}
        virtual ~BajkaApp () {}
 
+       void init ();
        m_ (loop) void loop ();
        m_ (debug) void debug (Core::String const &);
        m_ (destroy) void destroy ();
@@ -98,17 +55,24 @@ public:
        m_ (setConfig) void setConfig (Ptr <BajkaConfig> b) { config = b; }
 
        /// Głowny model.
-       Ptr <Model::IModel> getModel () const { return model; }
+       Model::IModel *getModel () const { return model; }
 
        /**
         * 1. Odłącza poprzedni rootControloer od dispatcherów.
         * 2. Ustawia główny kontroler.
         * 3. Podłącza ten nowy do wszystkich dispatcherów.
         */
-       S_ (setModel) void setModel (Ptr <Model::IModel> model);
+       S_ (setModel) void setModel (Model::IModel *model);
+//       void setModel2 (Model::IModel *m) { model2 = m; }
 
        Ptr <Event::DispatcherList> getDispatchers () const { return dispatchers; }
        m_ (setDispatchers) void setDispatchers (Ptr <Event::DispatcherList> d) { dispatchers = d; }
+
+       Ptr <ModelManager> getManager () { return manager; }
+       S_ (setManager) void setManager (Ptr <ModelManager> m);
+
+       static BajkaApp *instance ();
+       static void setInstance (BajkaApp *i) { instance_ = i; }
 
 private:
 
@@ -118,13 +82,20 @@ private:
 private:
 
        Ptr <BajkaConfig> config;
-       Ptr <Model::IModel> model;
+       Model::IModel *model;
+//       Model::IModel *model2;
        Ptr <Event::DispatcherList> dispatchers;
+       Ptr <ModelManager> manager;
        ModelIndex listeners;
+       static BajkaApp *instance_;
 
        E_ (BajkaApp)
 };
 
 } // nam
+
+extern Util::BajkaApp *app ();
+extern Util::BajkaConfig *config ();
+extern Util::ModelManager *manager ();
 
 #	endif /* BAJKAAPP_H_ */

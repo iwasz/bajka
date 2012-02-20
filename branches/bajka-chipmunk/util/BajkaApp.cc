@@ -25,21 +25,48 @@
 #include "../model/IGroup.h"
 #include "../tween/Manager.h"
 
+/****************************************************************************/
+
+Util::BajkaApp *app ()
+{
+        return Util::BajkaApp::instance ();
+}
+
+/****************************************************************************/
+
+Util::BajkaConfig *config ()
+{
+        return Util::BajkaApp::instance ()->getConfig ().get ();
+}
+
+/****************************************************************************/
+
+Util::ModelManager *manager ()
+{
+        return Util::BajkaApp::instance ()->getManager ().get ();
+}
+
+/****************************************************************************/
+
 namespace Util {
 namespace M = Model;
 namespace V = View;
 namespace C = Controller;
 namespace E = Event;
 
+BajkaApp *BajkaApp::instance_ = NULL;
+
 /****************************************************************************/
 
-BajkaConfig::BajkaConfig () : fullScreen (false), resX (640), resY (480), windowCaption ("BajkaApp")
+BajkaApp *BajkaApp::instance ()
 {
+        assertThrow (instance_, "!instance_")
+        return instance_;
 }
 
 /****************************************************************************/
 
-void BajkaConfig::init ()
+void BajkaApp::init ()
 {
 #if 1
 
@@ -50,7 +77,7 @@ void BajkaConfig::init ()
         }
 
         int flags;
-        if (fullScreen) {
+        if (::config ()->getFullScreen ()) {
             flags = SDL_OPENGL | SDL_FULLSCREEN;
             SDL_GL_SetAttribute(SDL_GL_RED_SIZE,   8);
             SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
@@ -62,6 +89,9 @@ void BajkaConfig::init ()
                 flags = SDL_OPENGL;
         }
 
+        int resX = ::config ()->getResX ();
+        int resY = ::config ()->getResY ();
+
         /* Create a OpenGL screen */
         if (SDL_SetVideoMode (resX, resY, 0, flags) == NULL) {
                 fprintf (stderr, "Unable to create OpenGL screen: %s\n", SDL_GetError ());
@@ -70,7 +100,7 @@ void BajkaConfig::init ()
         }
 
         /* Set the title bar in environments that support it */
-        SDL_WM_SetCaption (windowCaption.c_str (), NULL);
+        SDL_WM_SetCaption (::config ()->getWindowCaption ().c_str (), NULL);
 
 /*##########################################################################*/
 
@@ -181,13 +211,13 @@ void BajkaConfig::init ()
 
 /****************************************************************************/
 
-BajkaConfig::~BajkaConfig ()
+void BajkaApp::setManager (Ptr <ModelManager> m)
 {
-        TTF_Quit ();
-        SDL_Quit ();
+        manager = m;
+        manager->setApp (this);
 }
 
-/*##########################################################################*/
+/****************************************************************************/
 
 void BajkaApp::loop ()
 {
@@ -201,9 +231,9 @@ void BajkaApp::loop ()
 
         while (!done) {
 
-        		Uint32 currentMs = SDL_GetTicks ();
-        		int deltaMs = currentMs - lastMs;
-        		lastMs = currentMs;
+                Uint32 currentMs = SDL_GetTicks ();
+                int deltaMs = currentMs - lastMs;
+                lastMs = currentMs;
 
                 glMatrixMode (GL_MODELVIEW);
                 glLoadIdentity ();
@@ -211,19 +241,19 @@ void BajkaApp::loop ()
                 glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 // Run models, views and controllers.
-				// Generuj eventy.
-				for (Event::DispatcherList::const_iterator i = dispatchers->begin (); i != dispatchers->end (); i++) {
-                                        (*i)->run (model.get (), listeners);
-				}
+                // Generuj eventy.
+                for (Event::DispatcherList::const_iterator i = dispatchers->begin (); i != dispatchers->end (); i++) {
+                        (*i)->run (model/*.get ()*/, listeners);
+                }
 
-				model->update ();
+                model->update ();
 
                 // Run chipmunk
-				if (Model::Space::getSpace ()) {
-					cpSpaceStep (Model::Space::getSpace (), 1.0 / 60.0);
-				}
+                if (Model::Space::getSpace ()) {
+                        cpSpaceStep (Model::Space::getSpace (), 1.0 / 60.0);
+                }
 
-				Tween::Manager::getMain ()->update (deltaMs);
+                Tween::Manager::getMain ()->update (deltaMs);
 
                 afterEvents ();
 
@@ -246,6 +276,8 @@ void BajkaApp::debug (Core::String const &msg)
 
 void BajkaApp::destroy ()
 {
+        TTF_Quit ();
+        SDL_Quit ();
 	Tween::free ();
 
         std::cerr << "+---------------QUIT----------------+" << std::endl;
@@ -258,10 +290,10 @@ void BajkaApp::destroy ()
 
 /****************************************************************************/
 
-void BajkaApp::setModel (Ptr <Model::IModel> m)
+void BajkaApp::setModel (Model::IModel *m)
 {
         model = m;
-        reindex (0xFFFFu & ~(Event::MOUSE_MOTION_EVENT | Event::BUTTON_PRESS_EVENT | Event::BUTTON_RELEASE_EVENT), m.get ());
+        reindex (0xFFFFu & ~(Event::MOUSE_MOTION_EVENT | Event::BUTTON_PRESS_EVENT | Event::BUTTON_RELEASE_EVENT), m/*.get ()*/);
 }
 
 /****************************************************************************/
