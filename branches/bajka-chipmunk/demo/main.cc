@@ -10,6 +10,10 @@
 #include <cstdlib>
 #include <Container.h>
 #include <ContainerFactory.h>
+#include "TiliaeModelManager.h"
+#include "LoadButtonController.h"
+
+using Demo::TiliaeModelManager;
 
 /**
  * Main entry.
@@ -29,6 +33,10 @@ int main (int argc, char **argv)
                 Ptr <Container::BeanFactoryContainer> container = Container::XmlContainerFactory::createContainer (fileName, true);
                 Ptr <Util::BajkaApp> app = vcast <Ptr <Util::BajkaApp> > (container->getBean ("app"));
                 app->setInstance (app.get ());
+                // TODO to się powinno samo ustawiać w XML.
+                Demo::TiliaeModelManager *manager = vcast <Demo::TiliaeModelManager *> (container->getBean ("modelManager"));
+                manager->setMainContainer (container);
+                manager->play ("space2");
 
                 app->init ();
                 app->loop ();

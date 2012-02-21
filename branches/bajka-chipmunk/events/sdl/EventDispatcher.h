@@ -25,17 +25,15 @@ class EventDispatcher : public Event::IDispatcher {
 public:
         C__ (void)
 
-        EventDispatcher () : /*observer (NULL),*/ resX2 (0), resY2 (0), prevMouseModel (NULL) {}
+        EventDispatcher () : app (NULL), prevMouseModel (NULL) {}
         virtual ~EventDispatcher () {}
-
-        m_ (init) void init ();
 
         void run (Model::IModel *m, ModelIndex const &modeliIndex);
 
 /*------getters-setters-----------------------------------------------------*/
 
-        Ptr <Util::BajkaConfig> getConfig () const { return config; }
-        m_ (setConfig) void setConfig (Ptr <Util::BajkaConfig> b) { config = b; }
+        Util::BajkaApp *getApp () { return app; }
+        void setApp (Util::BajkaApp *a) { app = a; }
 
 private:
 
@@ -66,9 +64,7 @@ private:
         Event::ExposeEvent exposeEvent;
 
         Ptr <Util::BajkaConfig> config;
-
-        // Screen resolution / 2
-        int resX2, resY2;
+        Util::BajkaApp *app;
         Model::IModel *prevMouseModel;
 
         E_ (EventDispatcher)

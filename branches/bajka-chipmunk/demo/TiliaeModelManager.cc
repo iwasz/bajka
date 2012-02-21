@@ -19,6 +19,8 @@ void TiliaeModelManager::play (/*std::string const &parent, */std::string const 
         IModel *m = models[name];
 
         if (!m) {
+                app->dropIteration ();
+
                 Core::StringMap::const_iterator i = mapping.find (name);
                 assertThrow (i != mapping.end (), "TiliaeModelManager::play : cant find model in mapping.");
 
@@ -27,7 +29,7 @@ void TiliaeModelManager::play (/*std::string const &parent, */std::string const 
                         childContainer = XmlContainerFactory::createContainer (currentFile, false, mainContainer);
                 }
 
-                m = vcast <IModel *> (childContainer->getBean (name));
+                m = ocast <IModel *> (childContainer->getBean (name));
         }
 
         app->setModel (m);

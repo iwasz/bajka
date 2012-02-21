@@ -218,6 +218,8 @@ void BajkaApp::setManager (Ptr <ModelManager> m)
 }
 
 /****************************************************************************/
+#define checkBreak() { if (dropIteration_) { break; } }
+#define checkContinue() { if (dropIteration_) { continue; } }
 
 void BajkaApp::loop ()
 {
@@ -231,6 +233,7 @@ void BajkaApp::loop ()
 
         while (!done) {
 
+                dropIteration_ = false;
                 Uint32 currentMs = SDL_GetTicks ();
                 int deltaMs = currentMs - lastMs;
                 lastMs = currentMs;
@@ -244,9 +247,12 @@ void BajkaApp::loop ()
                 // Generuj eventy.
                 for (Event::DispatcherList::const_iterator i = dispatchers->begin (); i != dispatchers->end (); i++) {
                         (*i)->run (model/*.get ()*/, listeners);
+                        checkBreak ();
                 }
 
+                checkContinue ();
                 model->update ();
+                checkContinue ();
 
                 // Run chipmunk
                 if (Model::Space::getSpace ()) {
@@ -254,8 +260,7 @@ void BajkaApp::loop ()
                 }
 
                 Tween::Manager::getMain ()->update (deltaMs);
-
-                afterEvents ();
+                checkContinue ();
 
                 glFlush ();
                 // swap buffers to display, since we're double buffered.
@@ -293,6 +298,7 @@ void BajkaApp::destroy ()
 void BajkaApp::setModel (Model::IModel *m)
 {
         model = m;
+        listeners.clear ();
         reindex (0xFFFFu & ~(Event::MOUSE_MOTION_EVENT | Event::BUTTON_PRESS_EVENT | Event::BUTTON_RELEASE_EVENT), m/*.get ()*/);
 }
 
@@ -342,5 +348,17 @@ unsigned int BajkaApp::reindex (unsigned int eventMask, Model::IModel *m)
 
         return eventsToRun;
 }
+
+/****************************************************************************/
+
+void BajkaApp::setDispatchers (Ptr <Event::DispatcherList> d)
+{
+        dispatchers = d;
+
+        for (Event::DispatcherList::const_iterator i = dispatchers->begin (); i != dispatchers->end (); i++) {
+                (*i)->setApp (this);
+        }
+}
+
 
 } // Nam

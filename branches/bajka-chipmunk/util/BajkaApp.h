@@ -35,7 +35,7 @@ public:
 
        C__ (void)
 
-       BajkaApp () : model (NULL) {}
+       BajkaApp () : model (NULL), dropIteration_ (false) {}
        virtual ~BajkaApp () {}
 
        void init ();
@@ -44,12 +44,6 @@ public:
        m_ (destroy) void destroy ();
 
 /*--------------------------------------------------------------------------*/
-
-       /**
-        * Wykonywane w głównej pętli PO wykonaniu wszystkich procedur obsługi eventow.
-        * Domyślnie ta metoda jest pusta, ale można ją oczywiście przedefiniować.
-        */
-       virtual void afterEvents () {}
 
        Ptr <BajkaConfig> getConfig () const { return config; }
        m_ (setConfig) void setConfig (Ptr <BajkaConfig> b) { config = b; }
@@ -63,16 +57,22 @@ public:
         * 3. Podłącza ten nowy do wszystkich dispatcherów.
         */
        S_ (setModel) void setModel (Model::IModel *model);
-//       void setModel2 (Model::IModel *m) { model2 = m; }
 
        Ptr <Event::DispatcherList> getDispatchers () const { return dispatchers; }
-       m_ (setDispatchers) void setDispatchers (Ptr <Event::DispatcherList> d) { dispatchers = d; }
+       m_ (setDispatchers) void setDispatchers (Ptr <Event::DispatcherList> d);
 
        Ptr <ModelManager> getManager () { return manager; }
        S_ (setManager) void setManager (Ptr <ModelManager> m);
 
        static BajkaApp *instance ();
        static void setInstance (BajkaApp *i) { instance_ = i; }
+
+       /**
+        * Powoduje zawieszenie wykonywania aktualnej iteracji i rozpoczęcie następnej.
+        * Wszystkie czekające eventy zostają odrzucone etc.
+        */
+       void dropIteration () { dropIteration_ = true;}
+       bool getDropIteration () const { return dropIteration_; }
 
 private:
 
@@ -83,11 +83,11 @@ private:
 
        Ptr <BajkaConfig> config;
        Model::IModel *model;
-//       Model::IModel *model2;
        Ptr <Event::DispatcherList> dispatchers;
        Ptr <ModelManager> manager;
        ModelIndex listeners;
        static BajkaApp *instance_;
+       bool dropIteration_;
 
        E_ (BajkaApp)
 };

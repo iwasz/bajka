@@ -19,36 +19,33 @@ namespace C = Controller;
 namespace G = Geometry;
 using namespace Event;
 
-void EventDispatcher::init ()
-{
-        resX2 = config->getResX ();
-        resY2 = config->getResY ();
-}
+/****************************************************************************/
+// CO TO ROBIŁO!?!?!?
+
+//static void runRec (Model::IModel *m, Event::IEvent *e)
+//{
+//        C::IController *c;
+//
+//        if ((c = m->getController ())) {
+//                if (e && e->getType () & c->getEventMask ()) {
+//                        if (!e->runCallback (m, m->getView (), m->getController ())) {
+//                                return;
+//                        }
+//                }
+//                else {
+//                	return;
+//                }
+//        }
+//
+//        if (m->isGroup ()) {
+//                M::IGroup *g = dynamic_cast<M::IGroup *> (m);
+//                std::for_each (g->begin (), g->end (), boost::bind (runRec, _1, e));
+//        }
+//}
 
 /****************************************************************************/
-
-static void runRec (Model::IModel *m, Event::IEvent *e)
-{
-        C::IController *c;
-
-        if ((c = m->getController ())) {
-                if (e && e->getType () & c->getEventMask ()) {
-                        if (!e->runCallback (m, m->getView (), m->getController ())) {
-                                return;
-                        }
-                }
-                else {
-                	return;
-                }
-        }
-
-        if (m->isGroup ()) {
-                M::IGroup *g = dynamic_cast<M::IGroup *> (m);
-                std::for_each (g->begin (), g->end (), boost::bind (runRec, _1, e));
-        }
-}
-
-/****************************************************************************/
+#define checkBreak() { if (app->getDropIteration ()) { break; } }
+#define checkContinue() { if (app->getDropIteration ()) { continue; } }
 
 void EventDispatcher::dispatchEventBackwards (Model::IModel *m, IEvent *e)
 {
@@ -56,6 +53,10 @@ void EventDispatcher::dispatchEventBackwards (Model::IModel *m, IEvent *e)
 
         if (controller && controller->getEventMask () & e->getType ()) {
                 e->runCallback (m, m->getView (), controller);
+
+                if (app->getDropIteration ()) {
+                        return;
+                }
         }
 
         if ((m = m->getParent ())) {
@@ -94,6 +95,8 @@ void EventDispatcher::run (Model::IModel *m, ModelIndex const &modeliIndex)
                                         }
                                 }
 
+                                checkBreak ();
+
                                 if (model) {
                                         C::IController *ctr = model->getController ();
 
@@ -101,6 +104,8 @@ void EventDispatcher::run (Model::IModel *m, ModelIndex const &modeliIndex)
                                                 ctr->onMouseOver (mmev, model, model->getView ());
                                         }
                                 }
+
+                                checkBreak ();
                         }
 
                         prevMouseModel = model;
@@ -110,12 +115,14 @@ void EventDispatcher::run (Model::IModel *m, ModelIndex const &modeliIndex)
                         }
 
                         dispatchEventBackwards (model, mev);
+                        checkBreak ();
                 }
                 else {
                         std::pair <ModelIndex::const_iterator, ModelIndex::const_iterator> t = modeliIndex.equal_range (type);
 
                         for (ModelIndex::const_iterator i = t.first; i != t.second; ++i) {
                                 dispatchEventBackwards (i->second, e);
+                                checkBreak ();
                         }
                 }
         }
@@ -182,6 +189,9 @@ MouseMotionEvent *EventDispatcher::updateMouseMotionEvent (SDL_Event *event)
 {
         mouseMotionEvent.setButtons ((unsigned int)event->motion.state);
 
+        int resX2 = app->getConfig ()->getResX ();
+        int resY2 = app->getConfig ()->getResY ();
+
         G::Point p;
         V::Util::mouseToDisplay (event->button.x, event->button.y, resX2, resY2, &p.x, &p.y);
         mouseMotionEvent.setPosition (p);
@@ -210,6 +220,9 @@ MouseButtonEvent *EventDispatcher::updateMouseButtonEvent (SDL_Event *event)
 MouseButtonEvent *EventDispatcher::updateMouseButtonEventImpl (MouseButtonEvent *output, SDL_Event *event)
 {
         output->setButton (translateMouseButton (event));
+
+        int resX2 = app->getConfig ()->getResX ();
+        int resY2 = app->getConfig ()->getResY ();
 
         G::Point p;
         V::Util::mouseToDisplay (event->button.x, event->button.y, resX2, resY2, &p.x, &p.y);

@@ -17,6 +17,10 @@ namespace Model {
 class IModel;
 }
 
+namespace Util {
+class BajkaApp;
+}
+
 namespace Event {
 
 /**
@@ -26,8 +30,9 @@ namespace Event {
 class IDispatcher : public Core::Object {
 public:
         virtual ~IDispatcher () {}
-
         virtual void run (Model::IModel *m, ModelIndex const &modeliIndex) = 0;
+        virtual Util::BajkaApp *getApp () = 0;
+        virtual void setApp (Util::BajkaApp *a) = 0;
 };
 
 /**
