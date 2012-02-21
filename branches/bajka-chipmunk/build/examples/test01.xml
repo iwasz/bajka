@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
+        "file:///home/iwasz/program/projects/tiliae/base/container/tiliae-container-1.0.dtd">
+
+<!--Ogólny schemat nazw : Ctr - kontroler, Wgt - widget, Mdl - model.-->
+<beans>
+
+    <bean id="test01" class="BoxGroup" singleton="true">
+        <property name="width" value="640" />
+        <property name="height" value="480" />
+        <!-- TODO Czemu tu trzeba dać 319? -->
+        <property name="translate" value="-390, -310" />       
+        <property name="controller" ref="emptyCtr"/>            
+        
+        <property name="children">
+            <list class="ModelVector">
+
+              <bean class="Circle" singleton="true">
+                  <property name="view" ref="circleWgt"/>            
+                  <property name="radius" value="20" />    
+                  <property name="translate" value="10, -10"/>        
+                  <property name="origin" value="50, 50"/>        
+                  <property name="angle" value="90"/>
+                  <property name="scale" value="2"/>
+              </bean>
+              
+              <bean class="Box" singleton="true">
+                <property name="view">
+                  <bean id="textWgt" class="Text" singleton="true">
+                      <property name="text" value="Hello World!!!"/>
+                      <property name="font" ref="volterFont"/>        
+                  </bean>
+                </property>            
+              </bean>
+              
+            </list>
+        </property>
+    </bean>
+
+
+    <bean id="volterFont" class="TTFFont" singleton="true">
+        <constructor-arg><value type="text">gfx/volter.ttf</value></constructor-arg>    
+    </bean>
+
+</beans>

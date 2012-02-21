@@ -15,7 +15,7 @@
          <property name="eventMask" value="0xffff"/> 
     </bean>      
 
-    <bean id="space" class="BoxGroup" singleton="true">
+    <bean id="space2" class="BoxGroup" singleton="true">
         <property name="width" value="640" />
         <property name="height" value="480" />
         <!-- TODO Czemu tu trzeba dać 319? -->
@@ -59,6 +59,13 @@
                     <property name="view.widgets.1.bitmap" ref="buttonInstructionsBmp"/>
                     <property name="view.widgets.1.region" value="3, 48, 145, 88"/>
                     <property name="translate" value="300, 300" />       
+                    <property name="controller">
+                      <bean class="LoadButtonController" singleton="true">
+                           <!-- TODO, tylko mouse. -->
+                           <property name="eventMask" value="0xffff"/>
+                           <property name="name" value="test01"/>          
+                      </bean>
+                    </property>      
                 </bean>
 
                 <bean parent="buttonWgt">

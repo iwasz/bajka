@@ -23,7 +23,7 @@ class TimerDispatcher : public Event::IDispatcher {
 public:
         C__ (void)
 
-        TimerDispatcher () : tickInterval (30), prevTime (0)/*, observer (NULL)*/ {}
+        TimerDispatcher () : tickInterval (30), prevTime (0), app (NULL) {}
         virtual ~TimerDispatcher () {}
 
         void run (Model::IModel *m, Event::ModelIndex const &modeliIndex);
@@ -33,11 +33,15 @@ public:
         unsigned int getTickInterval () const { return tickInterval; }
         m_ (setTickInterval) void setTickInterval (unsigned int tickInterval) { this->tickInterval = tickInterval; }
 
+        Util::BajkaApp *getApp () { return app; }
+        void setApp (Util::BajkaApp *a) { app = a; }
+
 private:
 
         unsigned int tickInterval;
         unsigned int prevTime;
         Event::TimerEvent timerEvent;
+        Util::BajkaApp *app;
 
         E_ (TimerDispatcher)
 };
