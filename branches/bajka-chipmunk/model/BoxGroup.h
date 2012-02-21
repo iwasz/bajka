@@ -39,17 +39,17 @@ public:
 	C__ (void)
 	b_ ("AbstractModel")
 
-	BoxGroup () : w (0), h(0), relW (-1), relH (-1), relX (-1), relY (-1) {}
+	BoxGroup () : w (0), h(0), relW (-1), relH (-1), relX (-1), relY (-1), expand (false) {}
 	virtual ~BoxGroup() {}
 
 /*--IBox--------------------------------------------------------------------*/
 
-    double getWidth () const { return w; }
-    m_ (setWidth) void setWidth (double w) { this->w = w; }
-    double getHeight () const { return h; }
-    m_ (setHeight) void setHeight (double h) { this->h = h; }
+        double getWidth () const;
+        m_ (setWidth) void setWidth (double w) { this->w = w; }
+        double getHeight () const;
+        m_ (setHeight) void setHeight (double h) { this->h = h; }
 
-    Geometry::Box getBox () const { return Geometry::Box (0, 0, w - 1, h - 1); }
+        Geometry::Box getBox () const;
 
 /*--layout------------------------------------------------------------------*/
 
@@ -58,38 +58,45 @@ public:
 	m_ (setRelX) void setRelX (double x);
 	m_ (setRelY) void setRelY (double y);
 
-/*--------------------------------------------------------------------------*/
-
-	bool isGroup () const { return true; }
-    bool isBox () const { return true; }
-
-    Geometry::Point computeCenter () const { return Geometry::Point (w / 2, h / 2); }
-    virtual Geometry::Box getBoundingBox () const;
-    virtual bool contains (Geometry::Point const &p) const;
-    virtual IModel *findContains (Geometry::Point const &p);
+	/**
+	 * Czy grupa rozciąga się pod wpływem zawieranych modli, czy nie.
+	 */
+	               bool getExpand () const { return expand; }
+	m_ (setExpand) void setExpand (bool e) { expand = e; }
 
 /*--------------------------------------------------------------------------*/
 
-    void parentCallback (IModel *m);
-    m_ (getChildren) ModelVector &getChildren () { return children; }
-    m_ (setChildren) void setChildren (ModelVector const &c);
-    void addChild (IModel *m);
-    ModelVector::iterator begin () { return children.begin (); }
-    ModelVector::iterator end () { return children.end (); }
-    ModelVector::const_iterator begin () const { return children.begin (); }
-    ModelVector::const_iterator end () const { return children.end (); }
+        bool isGroup () const { return true; }
+        bool isBox () const { return true; }
+
+        Geometry::Point computeCenter () const { return Geometry::Point (w / 2, h / 2); }
+        virtual Geometry::Box getBoundingBox () const;
+        virtual bool contains (Geometry::Point const &p) const;
+        virtual IModel *findContains (Geometry::Point const &p);
+
+/*--------------------------------------------------------------------------*/
+
+        void parentCallback (IModel *m);
+        m_ (getChildren) ModelVector &getChildren () { return children; }
+        m_ (setChildren) void setChildren (ModelVector const &c);
+        void addChild (IModel *m);
+        ModelVector::iterator begin () { return children.begin (); }
+        ModelVector::iterator end () { return children.end (); }
+        ModelVector::const_iterator begin () const { return children.begin (); }
+        ModelVector::const_iterator end () const { return children.end (); }
 
 private:
 
-    BoxGroup const *getParGroup () const;
-    BoxGroup *getParGroup ();
+        BoxGroup const *getParGroup () const;
+        BoxGroup *getParGroup ();
 
 private:
 
-    double w, h;
-    ModelVector children;
-    // Cache uzywany do inicjowania. Po inicjacji już nie używany.
-    double relW, relH, relX, relY;
+        double w, h;
+        ModelVector children;
+        // Cache uzywany do inicjowania. Po inicjacji już nie używany.
+        double relW, relH, relX, relY;
+        bool expand;
 
     E_ (BoxGroup)
 };

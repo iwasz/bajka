@@ -11,10 +11,11 @@
         <property name="resX" value="800"/>
         <property name="resY" value="800"/>
         <property name="windowCaption" value="Chipmunk tests"/>
+        <property name="showAABB" value="false"/>
     </bean>
 
     <!--Obiekt app, czyli aplikacja :)-->
-    <bean id="app" class="BajkaApp" singleton="true">
+    <bean id="app" class="BajkaApp" singleton="true" >
         <property name="config" ref="cfg" />
         
         <property name="dispatchers">

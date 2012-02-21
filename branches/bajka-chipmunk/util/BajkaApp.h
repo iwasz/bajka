@@ -38,7 +38,7 @@ public:
        BajkaApp () : model (NULL), dropIteration_ (false) {}
        virtual ~BajkaApp () {}
 
-       void init ();
+       m_ (init) void init ();
        m_ (loop) void loop ();
        m_ (debug) void debug (Core::String const &);
        m_ (destroy) void destroy ();

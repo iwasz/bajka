@@ -12,6 +12,7 @@
 #include <boost/bind.hpp>
 #include "../view/draw/Primitives.h"
 #include "Group.h"
+#include "../util/BajkaApp.h"
 
 namespace Model {
 using View::DrawUtil;
@@ -56,13 +57,13 @@ void AbstractModel::update ()
                 controller->update (this, view);
         }
 
-#if 1
-        Geometry::Box aabb= getBoundingBox();
+        if (config ()->getShowAABB ()) {
+                Geometry::Box aabb= getBoundingBox();
 
-        if (aabb.getHeight() && aabb.getHeight()) {
-        	DrawUtil::drawRectangle (aabb, View::Color::RED, View::Color::TRANSPARENT);
+                if (aabb.getHeight() && aabb.getHeight()) {
+                        DrawUtil::drawRectangle (aabb, View::Color::RED, View::Color::TRANSPARENT);
+                }
         }
-#endif
 
         if (view) {
                 view->preUpdate (this);

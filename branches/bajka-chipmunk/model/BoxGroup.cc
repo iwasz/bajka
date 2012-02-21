@@ -36,11 +36,65 @@ G::Box BoxGroup::getBoundingBox () const
         G::Box aabb;
         Ring ring;
         Ring output;
-        convert (getBox (), ring);
+
+        if (!expand) {
+                convert (getBox (), ring);
+        }
+        else {
+                Box envel;
+
+                for (ModelVector::const_iterator i = children.begin (); i != children.end (); ++i) {
+                        if (i == children.begin ()) {
+                                envel = (*i)->getBoundingBox ();
+                        }
+                        else {
+                                envel.merge ((*i)->getBoundingBox ());
+                        }
+                }
+
+                convert (envel, ring);
+        }
+
         AffineMatrixTransformer matrix (getMatrix ());
         transform (ring, output, matrix);
         envelope (output, aabb);
         return aabb;
+}
+
+/****************************************************************************/
+
+double BoxGroup::getWidth () const
+{
+        if (!expand) {
+                return w;
+        }
+        else {
+                return getBoundingBox ().getWidth ();
+        }
+}
+
+/****************************************************************************/
+
+double BoxGroup::getHeight () const
+{
+        if (!expand) {
+                return w;
+        }
+        else {
+                return getBoundingBox ().getHeight ();
+        }
+}
+
+/****************************************************************************/
+
+Geometry::Box BoxGroup::getBox () const
+{
+        if (!expand) {
+                return Geometry::Box (0, 0, w - 1, h - 1);
+        }
+        else {
+                return getBoundingBox ();
+        }
 }
 
 /****************************************************************************/
