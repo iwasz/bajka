@@ -18,8 +18,8 @@ using namespace Geometry;
 void Rectangle::update (Model::IModel *model)
 {
         // TODO CAst zależny od makra DEBUG
-        Model::Box *cB = dynamic_cast <Model::Box *>  (model);
-
+        Model::IBox *cB = dynamic_cast <Model::IBox *>  (model);
+        assertThrow (cB, "Rectangle::update : !cB")
         Geometry::Box const &b = cB->getBox ();
         DrawUtil::drawRectangle (b.ll,
                                  b.ur,

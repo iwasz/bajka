@@ -44,12 +44,16 @@ public:
         const std::string &getWindowCaption () const { return windowCaption; }
         m_ (setWindowCaption) void setWindowCaption (const std::string &windowCaption) { this->windowCaption = windowCaption; }
 
+        bool getShowAABB () const { return showAABB; }
+        m_ (setShowAABB) void setShowAABB (bool b) { showAABB = b; }
+
 private:
 
         bool fullScreen;
         int resX;
         int resY;
         std::string windowCaption;
+        bool showAABB;
 
         E_ (BajkaConfig)
 };

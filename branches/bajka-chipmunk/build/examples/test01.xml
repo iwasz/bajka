@@ -24,22 +24,39 @@
                   <property name="scale" value="2"/>
               </bean>
               
+                <ref bean="debugButton"/>              
+<!--                 <bean parent="debugButton" singleton="true"> -->
+<!--                     <property name="children.0.view.text" value="Halo!!!"/> -->
+<!--                 </bean> -->
+            </list>
+        </property>
+    </bean>
+
+    <bean id="debugButton" class="BoxGroup" singleton="true">        
+        <property name="expand" value="true" />
+        
+        <property name="children">
+            <list class="ModelVector">
               <bean class="Box" singleton="true">
                 <property name="view">
-                  <bean id="textWgt" class="Text" singleton="true">
+                  <bean class="Text" singleton="true">
                       <property name="text" value="Hello World!!!"/>
                       <property name="font" ref="volterFont"/>        
                   </bean>
                 </property>            
               </bean>
-              
             </list>
         </property>
+        
+        <property name="view" ref="rectangleWgt"/>
+        <property name="children.0.view.text" value="Halo!!!"/>
     </bean>
+    
 
 
     <bean id="volterFont" class="TTFFont" singleton="true">
         <constructor-arg><value type="text">gfx/volter.ttf</value></constructor-arg>    
+        <constructor-arg><value type="int">18</value></constructor-arg>    
     </bean>
 
 </beans>
