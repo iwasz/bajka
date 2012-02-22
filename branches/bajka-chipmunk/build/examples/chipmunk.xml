@@ -63,4 +63,7 @@
         <property name="background" ref="randomColor"/>
     </bean>  
       
+    <bean id="circle" class="Circle" singleton="true">
+        <property name="view" ref="circleWgt"/>            
+    </bean>      
 </beans>

@@ -39,6 +39,10 @@ G::Box BoxGroup::getBoundingBox () const
 
         if (!expand) {
                 convert (getBox (), ring);
+                AffineMatrixTransformer matrix (getMatrix ());
+                transform (ring, output, matrix);
+                envelope (output, aabb);
+                return aabb;
         }
         else {
                 Box envel;
@@ -52,13 +56,8 @@ G::Box BoxGroup::getBoundingBox () const
                         }
                 }
 
-                convert (envel, ring);
+                return envel;
         }
-
-        AffineMatrixTransformer matrix (getMatrix ());
-        transform (ring, output, matrix);
-        envelope (output, aabb);
-        return aabb;
 }
 
 /****************************************************************************/

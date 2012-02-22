@@ -44,12 +44,45 @@
                       <property name="font" ref="volterFont"/>        
                   </bean>
                 </property>            
+<!--                 <property name="controller" ref="emptyCtr"/>             -->
+<!--         <property name="controller" ref="debugCtr"/> -->
               </bean>
             </list>
         </property>
         
-        <property name="view" ref="rectangleWgt"/>
-        <property name="children.0.view.text" value="Halo!!!"/>
+<!--         <property name="view" ref="rectangleWgt"/> -->
+        <property name="view">
+            <bean class="StatefulWidget" singleton="true">
+                <property name="widgets">
+                    <list class="WidgetVector">
+                        <bean id="state0" class="Rectangle" singleton="true">
+                            <property name="foreground" value="000000FF"/>
+                            <property name="background" value="ff000077"/>
+                        </bean>                          
+                        <bean id="state1" class="Rectangle" singleton="true">
+                            <property name="foreground" value="000000FF"/>
+                            <property name="background" value="ff0000ff"/>
+                        </bean>                          
+                        <ref bean="state1"/>
+                    </list>
+                </property>
+                <property name="state" value="0" />
+            </bean>
+        </property>
+                
+        <property name="controller">
+          <bean class="LoadButtonController" singleton="true">
+<!--                TODO, tylko mouse. -->
+               <property name="eventMask" value="0xffff"/>
+               <property name="name" value="space2"/>          
+          </bean>
+        </property>  
+                    
+<!--         <property name="controller" ref="debugCtr"/> -->
+                    
+        <!--         <property name="children.0.view.text" value="Halo!!!"/> -->
+<!--         <property name="translate" value="100, 100"/> -->
+        
     </bean>
     
 
