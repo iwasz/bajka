@@ -74,6 +74,9 @@ public:
         virtual bool contains (Geometry::Point const &p) const;
         virtual IModel *findContains (Geometry::Point const &p);
 
+        void screenToGroup (Geometry::Point *p) const;
+        void groupToScreen (Geometry::Point *p) const;
+
 /*--------------------------------------------------------------------------*/
 
         void parentCallback (IModel *m);

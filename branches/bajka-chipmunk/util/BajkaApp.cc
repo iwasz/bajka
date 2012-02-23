@@ -360,5 +360,17 @@ void BajkaApp::setDispatchers (Ptr <Event::DispatcherList> d)
         }
 }
 
+/****************************************************************************/
+
+void BajkaApp::reset ()
+{
+        dropIteration ();
+
+        listeners.clear ();
+
+        for (Event::DispatcherList::const_iterator i = dispatchers->begin (); i != dispatchers->end (); i++) {
+                (*i)->reset ();
+        }
+}
 
 } // Nam

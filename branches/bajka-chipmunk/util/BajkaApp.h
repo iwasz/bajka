@@ -58,6 +58,12 @@ public:
         */
        S_ (setModel) void setModel (Model::IModel *model);
 
+       /**
+        * Resetuje stan, dropuje iterację, resetuje dispatchery,
+        * resetuje tweeny etc.
+        */
+       void reset ();
+
        Ptr <Event::DispatcherList> getDispatchers () const { return dispatchers; }
        m_ (setDispatchers) void setDispatchers (Ptr <Event::DispatcherList> d);
 

@@ -34,21 +34,25 @@ public:
 
 	virtual ~Group() {}
 
-    virtual Geometry::Point computeCenter () const { return Geometry::Point (); }
-    virtual Geometry::Box getBoundingBox () const;
-    virtual bool contains (Geometry::Point const &p) const { return true; }
-    bool isGroup () const { return true; }
-    virtual IModel *findContains (Geometry::Point const &p);
+        virtual Geometry::Point computeCenter () const { return Geometry::Point (); }
+        virtual Geometry::Box getBoundingBox () const;
+        virtual bool contains (Geometry::Point const &p) const { return true; }
+        bool isGroup () const { return true; }
+        virtual IModel *findContains (Geometry::Point const &p);
+
+        // TODO
+        void screenToGroup (Geometry::Point *p) const;
+        void groupToScreen (Geometry::Point *p) const;
 
 /*--------------------------------------------------------------------------*/
 
-    m_ (getChildren) ModelVector &getChildren () { return children; }
-    m_ (setChildren) void setChildren (ModelVector const &c);
-    void addChild (IModel *m);
-    ModelVector::iterator begin () { return children.begin (); }
-    ModelVector::iterator end () { return children.end (); }
-    ModelVector::const_iterator begin () const { return children.begin (); }
-    ModelVector::const_iterator end () const { return children.end (); }
+        m_ (getChildren) ModelVector &getChildren () { return children; }
+        m_ (setChildren) void setChildren (ModelVector const &c);
+        void addChild (IModel *m);
+        ModelVector::iterator begin () { return children.begin (); }
+        ModelVector::iterator end () { return children.end (); }
+        ModelVector::const_iterator begin () const { return children.begin (); }
+        ModelVector::const_iterator end () const { return children.end (); }
 
 private:
 

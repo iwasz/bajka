@@ -26,10 +26,11 @@ class EventDispatcher : public Event::IDispatcher {
 public:
         C__ (void)
 
-        EventDispatcher () : app (NULL), prevMouseModel (NULL) {}
+        EventDispatcher () : app (NULL) {}
         virtual ~EventDispatcher () {}
 
         void run (Model::IModel *m, ModelIndex const &modeliIndex);
+        void reset ();
 
         void setPointerInside (Model::IModel *m);
         void removePointerInside (Model::IModel *m);
@@ -70,7 +71,6 @@ private:
 
         Ptr <Util::BajkaConfig> config;
         Util::BajkaApp *app;
-        Model::IModel *prevMouseModel;
         boost::unordered_set <Model::IModel *> pointerInside;
 
         E_ (EventDispatcher)
