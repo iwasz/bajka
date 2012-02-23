@@ -33,6 +33,10 @@ public:
         virtual void run (Model::IModel *m, ModelIndex const &modeliIndex) = 0;
         virtual Util::BajkaApp *getApp () = 0;
         virtual void setApp (Util::BajkaApp *a) = 0;
+
+        virtual void setPointerInside (Model::IModel *m) = 0;
+        virtual void removePointerInside (Model::IModel *m) = 0;
+        virtual bool isPointerInside (Model::IModel *m) const = 0;
 };
 
 /**

@@ -35,7 +35,7 @@ public:
 
         std::string toString () const;
         Type getType () const { return ACTIVE_EVENT; }
-        bool runCallback (Model::IModel *m, View::IView *v, Controller::IController *c) { return c->onActive (static_cast <ActiveEvent *> (this), m, v); }
+        bool runCallback (Model::IModel *m, View::IView *v, Controller::IController *c, IDispatcher *d) { return c->onActive (static_cast <ActiveEvent *> (this), m, v); }
 
 private:
 

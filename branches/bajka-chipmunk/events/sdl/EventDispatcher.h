@@ -10,6 +10,7 @@
 #define EVENTDISPATCHER_H_
 
 #include <SDL.h>
+#include <boost/unordered_set.hpp>
 #include "ReflectionMacros.h"
 #include "IDispatcher.h"
 #include "BajkaApp.h"
@@ -29,6 +30,10 @@ public:
         virtual ~EventDispatcher () {}
 
         void run (Model::IModel *m, ModelIndex const &modeliIndex);
+
+        void setPointerInside (Model::IModel *m);
+        void removePointerInside (Model::IModel *m);
+        bool isPointerInside (Model::IModel *m) const;
 
 /*------getters-setters-----------------------------------------------------*/
 
@@ -66,6 +71,7 @@ private:
         Ptr <Util::BajkaConfig> config;
         Util::BajkaApp *app;
         Model::IModel *prevMouseModel;
+        boost::unordered_set <Model::IModel *> pointerInside;
 
         E_ (EventDispatcher)
 };

@@ -28,6 +28,10 @@ public:
 
         void run (Model::IModel *m, Event::ModelIndex const &modeliIndex);
 
+        void setPointerInside (Model::IModel *m) {}
+        void removePointerInside (Model::IModel *m) {}
+        bool isPointerInside (Model::IModel *m) const { return false; }
+
 /*--------------------------------------------------------------------------*/
 
         unsigned int getTickInterval () const { return tickInterval; }

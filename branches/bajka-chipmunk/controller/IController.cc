@@ -6,23 +6,21 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_EXPOSEEVENT_H_
-#define BAJKA_EXPOSEEVENT_H_
+#include "IController.h"
+#include <iostream>
+#include "../events/IDispatcher.h"
 
-#include "IEvent.h"
+namespace Controller {
 
-namespace Event {
+bool IController::onMouseMotionDispatch (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v, Event::IDispatcher *d)
+{
+        if (!d->isPointerInside (m)) {
+                d->setPointerInside (m);
+                onMouseOver (e, m, v);
+        }
 
-class ExposeEvent : public IEvent {
-public:
-        virtual ~ExposeEvent () {}
+        onMouseMotion (e, m, v);
+        return true;
+}
 
-        Type getType () const { return EXPOSE_EVENT; }
-        bool runCallback (Model::IModel *m, View::IView *v, Controller::IController *c, IDispatcher *d) { return c->onExpose (static_cast <ExposeEvent *> (this), m, v); }
-
-        std::string toString () const { return "ExposeEvent ()"; }
-};
-
-} /* namespace Event */
-
-#	endif /* EXPOSEEVENT_H_ */
+} /* namespace Controller */

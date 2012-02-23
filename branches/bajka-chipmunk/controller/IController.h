@@ -31,6 +31,8 @@ class QuitEvent;
 class ActiveEvent;
 class ExposeEvent;
 class ResizeEvent;
+
+class IDispatcher;
 }
 
 namespace Controller {
@@ -40,7 +42,7 @@ namespace Controller {
  */
 struct IController : public Core::Object {
 
-        IController () : eventMask (0), pointerInside (false) {}
+        IController () : eventMask (0) {}
         virtual ~IController () {}
 
         virtual void preUpdate (Model::IModel *m, View::IView *v) = 0;
@@ -51,6 +53,7 @@ struct IController : public Core::Object {
 
         virtual bool onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v) = 0;
         virtual bool onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v) = 0;
+                bool onMouseMotionDispatch (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v, Event::IDispatcher *d);
         virtual bool onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) = 0;
         virtual bool onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) = 0;
         virtual bool onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) = 0;
@@ -67,9 +70,6 @@ struct IController : public Core::Object {
         unsigned int getEventMask () const { return eventMask; }
         void setEventMask (unsigned int b) { eventMask = b; }
 
-private:
-
-        bool pointerInside;
 };
 
 } /* namespace Controller */
