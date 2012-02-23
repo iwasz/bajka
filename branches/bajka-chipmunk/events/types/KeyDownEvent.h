@@ -21,7 +21,7 @@ namespace Event {
 struct KeyDownEvent : public KeyboardEvent {
         virtual ~KeyDownEvent () {}
         Type getType () const { return  KEY_DOWN_EVENT; }
-        virtual bool runCallback (Model::IModel *m, View::IView *v, Controller::IController *c) { return c->onKeyDown (static_cast <KeyDownEvent *> (this), m, v); }
+        virtual bool runCallback (Model::IModel *m, View::IView *v, Controller::IController *c, IDispatcher *d) { return c->onKeyDown (static_cast <KeyDownEvent *> (this), m, v); }
         virtual std::string toString () const;
 };
 

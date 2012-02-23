@@ -20,7 +20,7 @@ namespace Event {
 struct ButtonPressEvent : public MouseButtonEvent {
         virtual ~ButtonPressEvent () {}
         Type getType () const { return  BUTTON_PRESS_EVENT; }
-        virtual bool runCallback (Model::IModel *m, View::IView *v, Controller::IController *c) { return c->onButtonPress (static_cast <ButtonPressEvent *> (this), m, v); }
+        virtual bool runCallback (Model::IModel *m, View::IView *v, Controller::IController *c, IDispatcher *d) { return c->onButtonPress (static_cast <ButtonPressEvent *> (this), m, v); }
         virtual std::string toString () const;
 };
 

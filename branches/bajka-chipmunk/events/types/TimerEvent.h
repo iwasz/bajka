@@ -28,7 +28,7 @@ public:
         void setTicks (unsigned int ticks) { this->ticks = ticks; }
 
         Type getType () const { return TIMER_EVENT; }
-        virtual bool runCallback (Model::IModel *m, View::IView *v, Controller::IController *c) { return c->onTimer (static_cast <TimerEvent *> (this), m, v); }
+        virtual bool runCallback (Model::IModel *m, View::IView *v, Controller::IController *c, IDispatcher *d) { return c->onTimer (static_cast <TimerEvent *> (this), m, v); }
 
         virtual std::string toString () const;
 

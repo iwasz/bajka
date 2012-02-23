@@ -26,6 +26,7 @@ class IView;
  * Eventy.
  */
 namespace Event {
+class IDispatcher;
 
 /**
  * Typ eventu.
@@ -58,7 +59,7 @@ public:
         virtual ~IEvent () {}
 
         virtual Type getType () const = 0;
-        virtual bool runCallback (Model::IModel *m, View::IView *v, Controller::IController *c) = 0;
+        virtual bool runCallback (Model::IModel *m, View::IView *v, Controller::IController *c, IDispatcher *d) = 0;
 };
 
 /**

@@ -52,7 +52,7 @@ void EventDispatcher::dispatchEventBackwards (Model::IModel *m, IEvent *e)
         C::IController *controller = m->getController ();
 
         if (controller && controller->getEventMask () & e->getType ()) {
-                e->runCallback (m, m->getView (), controller);
+                e->runCallback (m, m->getView (), controller, this);
 
                 if (app->getDropIteration ()) {
                         return;
@@ -84,31 +84,31 @@ void EventDispatcher::run (Model::IModel *m, ModelIndex const &modeliIndex)
                         G::Point const &p = mev->getPosition ();
                         M::IModel *model = m->findContains (p);
 
-                        if (type & Event::MOUSE_MOTION_EVENT && model != prevMouseModel) {
-                                MouseMotionEvent *mmev = static_cast <MouseMotionEvent *> (e);
-
-                                if (prevMouseModel) {
-                                        C::IController *ctr = prevMouseModel->getController ();
-
-                                        if (ctr && ctr->getEventMask () & Event::MOUSE_OUT_EVENT) {
-                                                ctr->onMouseOut (mmev, prevMouseModel, prevMouseModel->getView ());
-                                        }
-                                }
-
-                                checkBreak ();
-
-                                if (model) {
-                                        C::IController *ctr = model->getController ();
-
-                                        if (ctr && ctr->getEventMask () & Event::MOUSE_OVER_EVENT) {
-                                                ctr->onMouseOver (mmev, model, model->getView ());
-                                        }
-                                }
-
-                                checkBreak ();
-                        }
-
-                        prevMouseModel = model;
+//                        if (type & Event::MOUSE_MOTION_EVENT && model != prevMouseModel) {
+//                                MouseMotionEvent *mmev = static_cast <MouseMotionEvent *> (e);
+//
+//                                if (prevMouseModel) {
+//                                        C::IController *ctr = prevMouseModel->getController ();
+//
+//                                        if (ctr && ctr->getEventMask () & Event::MOUSE_OUT_EVENT) {
+//                                                ctr->onMouseOut (mmev, prevMouseModel, prevMouseModel->getView ());
+//                                        }
+//                                }
+//
+//                                checkBreak ();
+//
+//                                if (model) {
+//                                        C::IController *ctr = model->getController ();
+//
+//                                        if (ctr && ctr->getEventMask () & Event::MOUSE_OVER_EVENT) {
+//                                                ctr->onMouseOver (mmev, model, model->getView ());
+//                                        }
+//                                }
+//
+//                                checkBreak ();
+//                        }
+//
+//                        prevMouseModel = model;
 
                         if (!model) {
                                 return;
@@ -278,6 +278,27 @@ Event::ResizeEvent *EventDispatcher::updateResizeEvent (SDL_Event *event)
         resizeEvent.setWidth (event->resize.w);
         resizeEvent.setHeight (event->resize.h);
         return &resizeEvent;
+}
+
+/****************************************************************************/
+
+void EventDispatcher::setPointerInside (Model::IModel *m)
+{
+        pointerInside.insert (m);
+}
+
+/****************************************************************************/
+
+void EventDispatcher::removePointerInside (Model::IModel *m)
+{
+        pointerInside.erase (m);
+}
+
+/****************************************************************************/
+
+bool EventDispatcher::isPointerInside (Model::IModel *m) const
+{
+        return pointerInside.find (m) != pointerInside.end ();
 }
 
 } // nam
