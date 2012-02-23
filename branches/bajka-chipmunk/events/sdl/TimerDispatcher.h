@@ -27,6 +27,7 @@ public:
         virtual ~TimerDispatcher () {}
 
         void run (Model::IModel *m, Event::ModelIndex const &modeliIndex);
+        void reset () {}
 
         void setPointerInside (Model::IModel *m) {}
         void removePointerInside (Model::IModel *m) {}

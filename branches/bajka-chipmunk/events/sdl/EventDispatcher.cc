@@ -82,40 +82,50 @@ void EventDispatcher::run (Model::IModel *m, ModelIndex const &modeliIndex)
                 if (type & MOUSE_EVENTS) {
                         MouseEvent *mev = static_cast <MouseEvent *> (e);
                         G::Point const &p = mev->getPosition ();
-                        M::IModel *model = m->findContains (p);
 
-//                        if (type & Event::MOUSE_MOTION_EVENT && model != prevMouseModel) {
-//                                MouseMotionEvent *mmev = static_cast <MouseMotionEvent *> (e);
-//
-//                                if (prevMouseModel) {
-//                                        C::IController *ctr = prevMouseModel->getController ();
-//
-//                                        if (ctr && ctr->getEventMask () & Event::MOUSE_OUT_EVENT) {
-//                                                ctr->onMouseOut (mmev, prevMouseModel, prevMouseModel->getView ());
-//                                        }
-//                                }
-//
-//                                checkBreak ();
-//
-//                                if (model) {
-//                                        C::IController *ctr = model->getController ();
-//
-//                                        if (ctr && ctr->getEventMask () & Event::MOUSE_OVER_EVENT) {
-//                                                ctr->onMouseOver (mmev, model, model->getView ());
-//                                        }
-//                                }
-//
-//                                checkBreak ();
-//                        }
-//
-//                        prevMouseModel = model;
+                        if (type & Event::MOUSE_MOTION_EVENT) {
+                                MouseMotionEvent *mmev = static_cast <MouseMotionEvent *> (e);
 
-                        if (!model) {
-                                return;
+                                /*
+                                 * Sprawdzamy czy onMouseOut. Uwaga! pointerInside jest unordered (hash), czyli
+                                 * onMouseOut odpali się w losowej kolejności. Zastanowić się, czy to bardzo źle.
+                                 */
+                                typedef boost::unordered_set <Model::IModel *>::const_iterator Iterator;
+                                for (Iterator i = pointerInside.begin (); i != pointerInside.end ();) {
+                                        M::IModel *parent;
+                                        G::Point copy = p;
+
+                                        if ((parent = (*i)->getParent ())) {
+                                                dynamic_cast <M::IGroup *> (parent)->groupToScreen (&copy);
+                                        }
+
+                                        if (!(*i)->contains (copy)) {
+                                                Iterator j = i;
+                                                ++j;
+
+                                                // Zawsze będzie kontroler (bo to on dodaje model do kolekcji pointerInside), ale i tak sprawdzamy.
+                                                C::IController *ctr;
+                                                if ((ctr = (*i)->getController ())) {
+                                                        ctr->onMouseOut (mmev, *i, (*i)->getView ());
+                                                }
+
+                                                pointerInside.erase (*i);
+                                                i = j;
+                                        }
+                                        else {
+                                                ++i;
+                                        }
+                                }
                         }
 
-                        dispatchEventBackwards (model, mev);
                         checkBreak ();
+
+                        M::IModel *model = m->findContains (p);
+
+                        if (model) {
+                                dispatchEventBackwards (model, mev);
+                                checkBreak ();
+                        }
                 }
                 else {
                         std::pair <ModelIndex::const_iterator, ModelIndex::const_iterator> t = modeliIndex.equal_range (type);
@@ -299,6 +309,18 @@ void EventDispatcher::removePointerInside (Model::IModel *m)
 bool EventDispatcher::isPointerInside (Model::IModel *m) const
 {
         return pointerInside.find (m) != pointerInside.end ();
+}
+
+/****************************************************************************/
+
+void EventDispatcher::reset ()
+{
+        pointerInside.clear ();
+
+        // Discard all pending events
+        SDL_Event event;
+        while (SDL_PollEvent (&event) > 0)
+                ;
 }
 
 } // nam

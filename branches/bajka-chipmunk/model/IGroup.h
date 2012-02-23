@@ -21,6 +21,9 @@ struct IGroup : public virtual Core::Object {
 
         virtual ~IGroup () {}
 
+        virtual void screenToGroup (Geometry::Point *p) const = 0;
+        virtual void groupToScreen (Geometry::Point *p) const = 0;
+
         virtual ModelVector &getChildren () = 0;
         virtual void setChildren (ModelVector const &) = 0;
         virtual void addChild (IModel *m) = 0;

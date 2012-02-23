@@ -115,4 +115,26 @@ void Group::addChild (IModel *m)
         m->parentCallback (this);
 }
 
+/****************************************************************************/
+
+void Group::screenToGroup (Geometry::Point *p) const
+{
+        if (parent && parent->isGroup ()) {
+                dynamic_cast <IGroup *> (parent)->screenToGroup (p);
+        }
+
+        getMatrix ().transform (p);
+}
+
+/****************************************************************************/
+
+void Group::groupToScreen (Geometry::Point *p) const
+{
+        getMatrix ().getInversed ().transform (p);
+
+        if (parent && parent->isGroup ()) {
+                dynamic_cast <IGroup *> (parent)->groupToScreen (p);
+        }
+}
+
 } /* namespace Model */

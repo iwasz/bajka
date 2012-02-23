@@ -25,7 +25,7 @@ void TiliaeModelManager::play (/*std::string const &parent, */std::string const 
         IModel *m = models[nameCopy];
 
         if (!m) {
-                app->dropIteration ();
+                app->reset ();
 
                 Core::StringMap::const_iterator i = mapping.find (nameCopy);
                 assertThrow (i != mapping.end (), "TiliaeModelManager::play : cant find model in mapping.");

@@ -268,4 +268,26 @@ void BoxGroup::parentCallback (IModel *m)
 	}
 }
 
+/****************************************************************************/
+
+void BoxGroup::screenToGroup (Geometry::Point *p) const
+{
+        if (parent && parent->isGroup ()) {
+                dynamic_cast <IGroup *> (parent)->screenToGroup (p);
+        }
+
+        getMatrix ().transform (p);
+}
+
+/****************************************************************************/
+
+void BoxGroup::groupToScreen (Geometry::Point *p) const
+{
+        getMatrix ().getInversed ().transform (p);
+
+        if (parent && parent->isGroup ()) {
+                dynamic_cast <IGroup *> (parent)->groupToScreen (p);
+        }
+}
+
 } /* namespace Model */
