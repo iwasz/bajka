@@ -20,6 +20,7 @@ public:
         C__ (void)
         b_ ("AbstractModel")
 
+        Box ();
         virtual ~Box () {}
 
 /*--------------------------------------------------------------------------*/
@@ -35,7 +36,8 @@ public:
         bool isBox () const { return true; }
 
 /*--------------------------------------------------------------------------*/
-
+        m_ (getView) View::IView *getView () { return AbstractModel::getView (); }
+//        S_ (setView) void setView (View::IView *v) { AbstractModel::setView (v); }
         Geometry::Point computeCenter () const;
         virtual Geometry::Box getBoundingBox () const;
         virtual bool contains (Geometry::Point const &p) const;

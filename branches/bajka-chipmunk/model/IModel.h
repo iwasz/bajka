@@ -21,17 +21,6 @@
 
 namespace Model {
 
-struct IModel;
-
-/**
- *
- */
-typedef std::vector <IModel *> ModelVector;
-g_ (ModelVector)
-
-typedef std::map <std::string, IModel *> ModelMap;
-g_ (ModelMap)
-
 /**
  * Mam zamysł, żeby to było głownie nastawione na geometrię. Czyli kształty, pozycje
  * kąty etc. Jeśli mam obrazek, to ścieżka do obrazka będzie polem widoku, a nie modelu
@@ -123,6 +112,15 @@ struct IModel : public virtual Core::Object {
         virtual void setController (Controller::IController *c) = 0;
 
 };
+
+/**
+ *
+ */
+typedef std::vector <IModel *> ModelVector;
+g_ (ModelVector)
+
+typedef std::map <std::string, IModel *> ModelMap;
+g_ (ModelMap)
 
 } /* namespace Geometry */
 

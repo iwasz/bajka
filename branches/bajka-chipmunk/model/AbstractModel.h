@@ -11,6 +11,8 @@
 
 #include "IModel.h"
 #include "../util/ReflectionMacros.h"
+#include "IBox.h"
+#include "IGroup.h"
 
 namespace Model {
 
@@ -60,7 +62,7 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        m_ (getView) View::IView *getView () { return view; }
+        /*m_ (getView)*/ virtual View::IView *getView () { return view; }
         S_ (setView) void setView (View::IView *v) { view = v; }
 
         m_ (getController) Controller::IController *getController () { return controller; }

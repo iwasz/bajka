@@ -10,21 +10,23 @@
 #include "../util/Exceptions.h"
 #include "../geometry/Ring.h"
 #include "../geometry/AffineMatrix.h"
+#include "../model/static/Box.h"
+#include "../model/static/Circle.h"
 
 namespace Model {
 using namespace boost::geometry;
-using namespace Geometry;
+//using namespace Geometry;
 namespace G = Geometry;
 namespace trans = boost::geometry::strategy::transform;
 
 /****************************************************************************/
 
-bool BoxGroup::contains (Point const &p) const
+bool BoxGroup::contains (G::Point const &p) const
 {
-        Ring ring;
-        Ring output;
+        G::Ring ring;
+        G::Ring output;
         convert (getBox (), ring);
-        AffineMatrixTransformer matrix (getMatrix ());
+        G::AffineMatrixTransformer matrix (getMatrix ());
         transform (ring, output, matrix);
         return within (p, output);
 }
@@ -34,18 +36,18 @@ bool BoxGroup::contains (Point const &p) const
 G::Box BoxGroup::getBoundingBox () const
 {
         G::Box aabb;
-        Ring ring;
-        Ring output;
+        G::Ring ring;
+        G::Ring output;
 
         if (!expand) {
                 convert (getBox (), ring);
-                AffineMatrixTransformer matrix (getMatrix ());
+                G::AffineMatrixTransformer matrix (getMatrix ());
                 transform (ring, output, matrix);
                 envelope (output, aabb);
                 return aabb;
         }
         else {
-                Box envel;
+                G::Box envel;
 
                 for (ModelVector::const_iterator i = children.begin (); i != children.end (); ++i) {
                         if (i == children.begin ()) {
@@ -98,7 +100,7 @@ Geometry::Box BoxGroup::getBox () const
 
 /****************************************************************************/
 
-IModel *BoxGroup::findContains (Point const &p)
+IModel *BoxGroup::findContains (G::Point const &p)
 {
         // - Punkt p jest we współrzędnych rodzica.
 
@@ -128,7 +130,7 @@ IModel *BoxGroup::findContains (Point const &p)
         }
 
         // --- Jeśli są dzieci, to przetransformuj p przez moją macierz i puść w pętli do dzieci.
-        Point copy = p;
+        G::Point copy = p;
         // TODO od razu można zwracać odwróconą.
         getMatrix ().getInversed ().transform (&copy);
 
@@ -227,8 +229,8 @@ void BoxGroup::setRelX (double x)
 		return;
 	}
 
-	Point oldT = getTranslate ();
-	setTranslate (Point (parGroup->getWidth () * x / 100.0, oldT.y));
+	G::Point oldT = getTranslate ();
+	setTranslate (G::Point (parGroup->getWidth () * x / 100.0, oldT.y));
 }
 
 /****************************************************************************/
@@ -242,8 +244,8 @@ void BoxGroup::setRelY (double y)
 		return;
 	}
 
-	Point oldT = getTranslate ();
-	setTranslate (Point (oldT.x, parGroup->getHeight () * y / 100.0));
+	G::Point oldT = getTranslate ();
+	setTranslate (G::Point (oldT.x, parGroup->getHeight () * y / 100.0));
 }
 
 /****************************************************************************/
@@ -288,6 +290,21 @@ void BoxGroup::groupToScreen (Geometry::Point *p) const
         if (parent && parent->isGroup ()) {
                 dynamic_cast <IGroup *> (parent)->groupToScreen (p);
         }
+}
+
+IModel *BoxGroup::getFirst ()
+{
+        return new Box ();
+//        return children.front ();
+
+
+//        AbstractModel *m = new AbstractModel ();
+//        m->setView (children.front ()->getView ());
+
+
+//        return dynamic_cast <AbstractModel *> (children.front());
+
+//        return new Model::Circle ();
 }
 
 } /* namespace Model */

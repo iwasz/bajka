@@ -17,6 +17,11 @@ using namespace Geometry;
 namespace G = Geometry;
 namespace trans = boost::geometry::strategy::transform;
 
+Box::Box ()
+{
+        std::cerr << std::hex << (unsigned long  int)this << std::endl;
+}
+
 /****************************************************************************/
 
 Geometry::Point Box::computeCenter () const
