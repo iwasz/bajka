@@ -292,19 +292,4 @@ void BoxGroup::groupToScreen (Geometry::Point *p) const
         }
 }
 
-IModel *BoxGroup::getFirst ()
-{
-        return new Box ();
-//        return children.front ();
-
-
-//        AbstractModel *m = new AbstractModel ();
-//        m->setView (children.front ()->getView ());
-
-
-//        return dynamic_cast <AbstractModel *> (children.front());
-
-//        return new Model::Circle ();
-}
-
 } /* namespace Model */

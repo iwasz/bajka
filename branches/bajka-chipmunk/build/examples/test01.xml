@@ -24,10 +24,8 @@
                   <property name="scale" value="2"/>
               </bean>
               
-<!--                 <ref bean="debugButton"/>               -->
                 <bean parent="debugButton" singleton="true">
-<!--                     <property name="children.0.view.text" value="Halo!!!"/> -->
-                    <property name="first.view.text" value="Halo!!!"/>
+                    <property name="children.0.view.text" value="Halo!!!"/>
                 </bean>
             </list>
         </property>
