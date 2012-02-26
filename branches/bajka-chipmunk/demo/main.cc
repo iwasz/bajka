@@ -39,7 +39,7 @@ int main (int argc, char **argv)
         assert (dynamic_cast <Model::AbstractModel *> (static_cast <Core::Object *> (ptr)));
 
 
-        Core::Variant v (m);
+        Core::Variant v (o);
         Model::AbstractModel *a = ocast <Model::AbstractModel *> (v);
         assert (a);
 
