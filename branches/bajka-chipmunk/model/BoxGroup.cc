@@ -79,7 +79,7 @@ double BoxGroup::getWidth () const
 double BoxGroup::getHeight () const
 {
         if (!expand) {
-                return w;
+                return h;
         }
         else {
                 return getBoundingBox ().getHeight ();
@@ -164,34 +164,6 @@ void BoxGroup::addChild (IModel *m)
 
 /****************************************************************************/
 
-BoxGroup *BoxGroup::getParGroup ()
-{
-	IModel *parent = getParent();
-
-	if (!parent) {
-		return NULL;
-	}
-
-	if (!parent->isBox()) {
-		throw Util::RuntimeException("BoxGroup : !parent->isBox ()");
-	}
-
-	if (!parent->isGroup()) {
-		throw Util::RuntimeException("BoxGroup : !parent->isGroup()");
-	}
-
-	return static_cast<BoxGroup *>(parent);
-}
-
-/****************************************************************************/
-
-BoxGroup const *BoxGroup::getParGroup () const
-{
-	return const_cast <BoxGroup *> (this)->getParGroup ();
-}
-
-/****************************************************************************/
-
 void BoxGroup::setRelW (double w)
 {
 	BoxGroup *parGroup = getParGroup ();
@@ -220,55 +192,55 @@ void BoxGroup::setRelH (double h)
 
 /****************************************************************************/
 
-void BoxGroup::setRelX (double x)
-{
-	BoxGroup *parGroup = getParGroup ();
-
-	if (!parGroup) {
-		relX = x;
-		return;
-	}
-
-	G::Point oldT = getTranslate ();
-	setTranslate (G::Point (parGroup->getWidth () * x / 100.0, oldT.y));
-}
+//void BoxGroup::setRelX (double x)
+//{
+//	BoxGroup *parGroup = getParGroup ();
+//
+//	if (!parGroup) {
+//		relX = x;
+//		return;
+//	}
+//
+//	G::Point oldT = getTranslate ();
+//	setTranslate (G::Point (parGroup->getWidth () * x / 100.0, oldT.y));
+//}
+//
+///****************************************************************************/
+//
+//void BoxGroup::setRelY (double y)
+//{
+//	BoxGroup *parGroup = getParGroup ();
+//
+//	if (!parGroup) {
+//		relY = y;
+//		return;
+//	}
+//
+//	G::Point oldT = getTranslate ();
+//	setTranslate (G::Point (oldT.x, parGroup->getHeight () * y / 100.0));
+//}
 
 /****************************************************************************/
 
-void BoxGroup::setRelY (double y)
-{
-	BoxGroup *parGroup = getParGroup ();
-
-	if (!parGroup) {
-		relY = y;
-		return;
-	}
-
-	G::Point oldT = getTranslate ();
-	setTranslate (G::Point (oldT.x, parGroup->getHeight () * y / 100.0));
-}
-
-/****************************************************************************/
-
-void BoxGroup::parentCallback (IModel *m)
-{
-	// Uruchamiamy jeszcze raz, bo teraz mamy parenta (ułatwoenie dla kontenera).
-	if (relW >= 0.0) {
-		setRelW (relW);
-	}
-
-	if (relH >= 0.0) {
-		setRelH (relH);
-
-	}
-	if (relX >= 0.0) {
-		setRelX (relX);
-	}
-
-	if (relY >= 0.0) {
-		setRelY (relY);
-	}
-}
+//void BoxGroup::parentCallback (IModel *m)
+//{
+//	// Uruchamiamy jeszcze raz, bo teraz mamy parenta (ułatwoenie dla kontenera).
+//	if (relW >= 0.0) {
+//		setRelW (relW);
+//	}
+//
+//	if (relH >= 0.0) {
+//		setRelH (relH);
+//
+//	}
+//	if (relX >= 0.0) {
+//		setRelX (relX);
+//	}
+//
+//	if (relY >= 0.0) {
+//		setRelY (relY);
+//	}
+//}
 
 /****************************************************************************/
 

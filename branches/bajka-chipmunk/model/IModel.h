@@ -42,6 +42,24 @@ struct IModel : public virtual Core::Object {
         virtual Geometry::Point getTranslate () const = 0;
         virtual void setTranslate (Geometry::Point const &translate) = 0;
 
+        /**
+         * Przesunięcie względem rozmiarów rodzica. Działa tylko w gdy rodzic jest
+         * typu BoxGroup.
+         */
+        virtual void setTranslateRel (Geometry::Point const &translate) = 0;
+
+        enum Align {
+                TOP     = 0x01,
+                BOTTOM  = 0x02,
+                VCENTER = 0x04,
+                LEFT    = 0x08,
+                RIGHT   = 0x10,
+                HCENTER = 0x20
+        };
+
+        virtual Align getAlign () const = 0;
+        virtual void setAlign (Align a) = 0;
+
         virtual double getAngle () const = 0;
         virtual void setAngle (double a) = 0;
 

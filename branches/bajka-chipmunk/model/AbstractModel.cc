@@ -6,12 +6,13 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "AbstractModel.h"
-#include "../view/Widget.h"
 #include <algorithm>
 #include <boost/bind.hpp>
-#include "../view/draw/Primitives.h"
+#include "AbstractModel.h"
 #include "Group.h"
+#include "BoxGroup.h"
+#include "../view/Widget.h"
+#include "../view/draw/Primitives.h"
 #include "../util/BajkaApp.h"
 
 namespace Model {
@@ -107,5 +108,57 @@ IModel *AbstractModel::findContains (Geometry::Point const &p)
         return this;
 }
 
+/****************************************************************************/
+
+void AbstractModel::setTranslateRel (Geometry::Point const &t)
+{
+        BoxGroup *parGroup = getParGroup ();
+        relativeTranslation = true;
+
+        if (!parGroup) {
+                translate = t;
+                return;
+        }
+
+        setTranslate (Point (parGroup->getWidth() * t.x / 100.0, parGroup->getHeight () * t.y / 100.0));
+}
+
+/****************************************************************************/
+
+void AbstractModel::parentCallback (IModel *m)
+{
+        // Uruchamiamy jeszcze raz, bo teraz mamy parenta (ułatwoenie dla kontenera).
+        if (relativeTranslation) {
+                setTranslateRel (translate);
+        }
+}
+
+/****************************************************************************/
+
+BoxGroup *AbstractModel::getParGroup ()
+{
+        IModel *parent = getParent();
+
+        if (!parent) {
+                return NULL;
+        }
+
+        if (!parent->isBox()) {
+                throw Util::RuntimeException("BoxGroup : !parent->isBox ()");
+        }
+
+        if (!parent->isGroup()) {
+                throw Util::RuntimeException("BoxGroup : !parent->isGroup()");
+        }
+
+        return static_cast<BoxGroup *>(parent);
+}
+
+/****************************************************************************/
+
+BoxGroup const *AbstractModel::getParGroup () const
+{
+        return const_cast <AbstractModel *> (this)->getParGroup ();
+}
 
 } /* namespace Model1 */
