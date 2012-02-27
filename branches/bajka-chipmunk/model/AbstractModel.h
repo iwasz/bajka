@@ -15,19 +15,24 @@
 #include "IGroup.h"
 
 namespace Model {
+class BoxGroup;
 
 class AbstractModel : public IModel {
 public:
 
         d__
 
-        AbstractModel () : parent (0), angle (0), scale (1), view (0), controller (0) {}
+        AbstractModel () : parent (0), angle (0), scale (1), view (0), controller (0), relativeTranslation (false), align ((Align)(LEFT | BOTTOM)) {}
         virtual ~AbstractModel () {}
 
 /*--------------------------------------------------------------------------*/
 
         virtual Geometry::Point getTranslate () const { return translate; }
-        m_ (setTranslate) virtual void setTranslate (Geometry::Point const &p) { translate = p; }
+        m_ (setTranslate) virtual void setTranslate (Geometry::Point const &p) { relativeTranslation = false; translate = p; }
+        m_ (setTranslateRel) virtual void setTranslateRel (Geometry::Point const &translate);
+
+        virtual Align getAlign () const { return align; }
+        virtual void setAlign (Align a) { align = a; }
 
         virtual Geometry::Point getCenter () const;
         m_ (setCenter) virtual void setCenter (Geometry::Point const &p);
@@ -58,7 +63,7 @@ public:
 
         IModel *getParent () { return parent; }
         void setParent (IModel *m) { parent = m; }
-        void parentCallback (IModel *m) {}
+        void parentCallback (IModel *m);
 
 /*--------------------------------------------------------------------------*/
 
@@ -67,6 +72,15 @@ public:
 
         m_ (getController) Controller::IController *getController () { return controller; }
         S_ (setController) void setController (Controller::IController *c) { controller = c; }
+
+protected:
+
+        /**
+         * Zwraca rodzica jako BoxGroup. Zrzuca wyjątek, jeśli rodzic nie jest tego typu.
+         * @return
+         */
+        BoxGroup const *getParGroup () const;
+        BoxGroup *getParGroup ();
 
 protected:
 
@@ -81,6 +95,8 @@ private:
         std::auto_ptr <Geometry::Point> center;
         View::IView *view;
         Controller::IController *controller;
+        bool relativeTranslation;
+        Align align;
 
         E_ (AbstractModel)
 };

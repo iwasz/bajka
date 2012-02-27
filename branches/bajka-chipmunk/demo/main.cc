@@ -51,7 +51,7 @@ int main (int argc, char **argv)
                 fileName = *(argv + 1);
         }
         else {
-                fileName = "examples/chipmunk.xml";
+                fileName = "mail-sorter/main.xml";
         }
 
         try {
@@ -61,7 +61,7 @@ int main (int argc, char **argv)
                 // TODO to się powinno samo ustawiać w XML.
                 Demo::TiliaeModelManager *manager = vcast <Demo::TiliaeModelManager *> (container->getBean ("modelManager"));
                 manager->setMainContainer (container);
-                manager->play ("space2");
+                manager->play ("menu");
 
                 app->init ();
                 app->loop ();

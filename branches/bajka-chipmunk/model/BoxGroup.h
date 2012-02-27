@@ -55,8 +55,8 @@ public:
 
 	m_ (setRelW) void setRelW (double w);
 	m_ (setRelH) void setRelH (double w);
-	m_ (setRelX) void setRelX (double x);
-	m_ (setRelY) void setRelY (double y);
+//	m_ (setRelX) void setRelX (double x);
+//	m_ (setRelY) void setRelY (double y);
 
 	/**
 	 * Czy grupa rozciąga się pod wpływem zawieranych modli, czy nie.
@@ -79,7 +79,7 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        void parentCallback (IModel *m);
+//        void parentCallback (IModel *m);
         m_ (getChildren) ModelVector &getChildren () { return children; }
         m_ (setChildren) void setChildren (ModelVector const &c);
         void addChild (IModel *m);
@@ -87,11 +87,6 @@ public:
         ModelVector::iterator end () { return children.end (); }
         ModelVector::const_iterator begin () const { return children.begin (); }
         ModelVector::const_iterator end () const { return children.end (); }
-
-private:
-
-        BoxGroup const *getParGroup () const;
-        BoxGroup *getParGroup ();
 
 private:
 

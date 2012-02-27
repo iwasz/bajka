@@ -8,13 +8,12 @@
     <!--Konfiguracja-->
     <bean id="cfg" class="BajkaConfig" singleton="true">
         <property name="fullScreen" value="false"/>
-        <property name="resX" value="800"/>
-        <property name="resY" value="800"/>
-        <property name="windowCaption" value="Chipmunk tests"/>
+        <property name="resX" value="480"/>
+        <property name="resY" value="640"/>
+        <property name="windowCaption" value="MailSorter"/>
         <property name="showAABB" value="false"/>
     </bean>
 
-    <!--Obiekt app, czyli aplikacja :)-->
     <bean id="app" class="BajkaApp" singleton="true" >
         <property name="config" ref="cfg" />
         
@@ -31,10 +30,7 @@
     <bean id="modelManager" class="TiliaeModelManager" singleton="true">
         <property name="mapping">
           <map class="StringMap">
-                <entry key="test01" value="examples/test01.xml"/>
-                <entry key="mainMenu" value="examples/mainMenu.xml"/>
-                <entry key="space" value="examples/chipmunk01.xml"/>                
-                <entry key="space2" value="examples/chipmunk02.xml"/>                
+                <entry key="menu" value="mail-sorter/menu.xml"/>                
           </map>
         </property>
     </bean>
