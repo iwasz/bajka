@@ -48,7 +48,7 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        virtual void parentCallback (IModel *m);
+        virtual void onParentSet (IModel *m);
         virtual Geometry::Box getBoundingBox () const;
 
 private:

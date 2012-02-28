@@ -63,7 +63,7 @@ public:
 
         IModel *getParent () { return parent; }
         void setParent (IModel *m) { parent = m; }
-        void parentCallback (IModel *m);
+        void onParentSet (IModel *m);
 
 /*--------------------------------------------------------------------------*/
 

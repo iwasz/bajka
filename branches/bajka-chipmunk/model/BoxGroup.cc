@@ -159,7 +159,7 @@ void BoxGroup::addChild (IModel *m)
 {
         children.push_back (m);
         m->setParent (this);
-        m->parentCallback (this);
+        m->onParentSet (this);
 }
 
 /****************************************************************************/
@@ -222,7 +222,7 @@ void BoxGroup::setRelH (double h)
 
 /****************************************************************************/
 
-//void BoxGroup::parentCallback (IModel *m)
+//void BoxGroup::onParentSet (IModel *m)
 //{
 //	// Uruchamiamy jeszcze raz, bo teraz mamy parenta (ułatwoenie dla kontenera).
 //	if (relW >= 0.0) {

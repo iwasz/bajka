@@ -43,7 +43,7 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        void parentCallback (IModel *m);
+        void onParentSet (IModel *m);
 
         E_ (CPBox)
 };

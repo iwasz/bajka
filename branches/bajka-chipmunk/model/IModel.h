@@ -122,8 +122,8 @@ struct IModel : public virtual Core::Object {
 
 /*--------------------------------------------------------------------------*/
 
-        virtual void parentCallback (IModel *m) = 0;
-        virtual void onFirstUpdate () = 0;;
+        virtual void onParentSet (IModel *m) = 0;
+//        virtual void onFirstUpdate () = 0;
 
 /*------additional-functionalities------------------------------------------*/
 
