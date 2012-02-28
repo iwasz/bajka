@@ -84,6 +84,78 @@
         
     </bean>
     
+    
+        <bean id="test02" class="BoxGroup">
+                <set width="640" height="480" translate="-390, -310" controller="@emptyCtr" />
+                <add children="@">
+                        <bean class="Circle">
+                                <set radius="20" translate="10, -10" origin="50, 50" angle="90" scale="2" view="@circleWgt"/>
+                        </bean>
+                        <bean parent="debugButton">
+                                <set children.0.view.text="Halo!!!" />
+                        </bean>
+                </add>
+        </bean>    
+    
+	<bean id="debugButton2" class="BoxGroup">
+	    <set expand="true"/>
+
+	    <add children="@">
+		<bean class="Box">
+		    <set view="@">
+			<bean class="Text">
+			    <set text="Hello world" font="@volterFont"/>
+			</bean>
+		    </set>
+		</bean>
+	    </add>
+	    
+	    <set view="@">
+		<bean class="StatefulWidget">
+		    <add widgets="@">
+                        <bean class="Rectangle">
+                            <set foreground="000000FF" background="ff000077"/>
+                        </bean>
+                        <bean id="state1" class="Rectangle">
+                            <set foreground="000000FF" background="ff0000ff"/>
+                        </bean>
+                        <ref bean="state1"/>
+		    </add>
+		    <set state="0"/>
+		</bean>
+	    </set>
+	    
+	    <set controller="@">
+        	<bean class="LoadButtonController">
+            	    <set eventMask="0xffff" name="space2"/>
+        	</bean>
+	    </set>
+	</bean>
+
+	<bean id="debugButton2" class="BoxGroup">
+	    <set expand="true"/>
+
+	    <bean class="Box" add="children">
+		<bean class="Text" set="view">
+		    <set text="Hello world" font="@volterFont"/>
+		</bean>
+	    </bean>
+    
+	    <bean class="StatefulWidget" set="view">
+        	<bean class="Rectangle" add="widgets">
+            	    <set foreground="000000FF" background="ff000077"/>
+                </bean>
+                <bean id="state1" class="Rectangle" add="widgets">
+            	    <set foreground="000000FF" background="ff0000ff"/>
+                </bean>
+                <ref bean="state1" add="widgets"/>
+		<set state="0"/>
+	    </bean>
+	    
+	    <bean class="LoadButtonController" set="controller">
+        	<set eventMask="0xffff" name="space2"/>
+	    </bean>
+	</bean>
 
 
     <bean id="volterFont" class="TTFFont" singleton="true">

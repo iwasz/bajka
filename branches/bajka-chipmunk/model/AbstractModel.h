@@ -22,7 +22,7 @@ public:
 
         d__
 
-        AbstractModel () : parent (0), angle (0), scale (1), view (0), controller (0), relativeTranslation (false), align ((Align)(LEFT | BOTTOM)) {}
+        AbstractModel () : parent (0), angle (0), scale (1), view (0), controller (0), relativeTranslation (false), align ((Align)(HCENTER | TOP)) {}
         virtual ~AbstractModel () {}
 
 /*--------------------------------------------------------------------------*/
@@ -32,7 +32,7 @@ public:
         m_ (setTranslateRel) virtual void setTranslateRel (Geometry::Point const &translate);
 
         virtual Align getAlign () const { return align; }
-        virtual void setAlign (Align a) { align = a; }
+        m_ (setAlign) virtual void setAlign (Align a) { align = a; }
 
         virtual Geometry::Point getCenter () const;
         m_ (setCenter) virtual void setCenter (Geometry::Point const &p);
