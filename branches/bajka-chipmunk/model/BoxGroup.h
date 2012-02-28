@@ -79,7 +79,7 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-//        void parentCallback (IModel *m);
+//        void onParentSet (IModel *m);
         m_ (getChildren) ModelVector &getChildren () { return children; }
         m_ (setChildren) void setChildren (ModelVector const &c);
         void addChild (IModel *m);

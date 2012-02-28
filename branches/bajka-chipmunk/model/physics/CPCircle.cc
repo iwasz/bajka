@@ -33,7 +33,7 @@ Geometry::Point CPCircle::getOrigin () const
 
 /****************************************************************************/
 
-void CPCircle::parentCallback (IModel *m)
+void CPCircle::onParentSet (IModel *m)
 {
         Body *b = static_cast <Body *> (m);
         shape = cpSpaceAddShape (Space::getSpace(), cpCircleShapeNew (b->getBody (), radius, cpv (origin.x, origin.y)));
@@ -41,7 +41,7 @@ void CPCircle::parentCallback (IModel *m)
 
         // TODO można zrobic cast w zalezności od define DEBUG/RELEASE.
         b->addInertia (cpMomentForCircle (b->getMass (), 0, radius, cpv (origin.x, origin.y)));
-        AbstractModel::parentCallback (m);
+        AbstractModel::onParentSet (m);
 }
 
 /****************************************************************************/

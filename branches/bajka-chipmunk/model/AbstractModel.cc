@@ -148,7 +148,7 @@ void AbstractModel::setTranslateRel (Geometry::Point const &t)
 
 /****************************************************************************/
 
-void AbstractModel::parentCallback (IModel *m)
+void AbstractModel::onParentSet (IModel *m)
 {
         // Uruchamiamy jeszcze raz, bo teraz mamy parenta (ułatwoenie dla kontenera).
         if (relativeTranslation) {

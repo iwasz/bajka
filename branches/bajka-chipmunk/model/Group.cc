@@ -112,7 +112,7 @@ void Group::addChild (IModel *m)
 {
         children.push_back (m);
         m->setParent (this);
-        m->parentCallback (this);
+        m->onParentSet (this);
 }
 
 /****************************************************************************/

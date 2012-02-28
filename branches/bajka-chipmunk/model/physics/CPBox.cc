@@ -28,7 +28,7 @@ Geometry::Point CPBox::getCenter () const
 
 /****************************************************************************/
 
-void CPBox::parentCallback (IModel *m)
+void CPBox::onParentSet (IModel *m)
 {
         Body *b = static_cast <Body *> (m);
         shape = cpSpaceAddShape (Space::getSpace(), cpBoxShapeNew2 (b->getBody (),
@@ -36,7 +36,7 @@ void CPBox::parentCallback (IModel *m)
         cpShapeSetUserData (shape, this);
 
         b->addInertia (cpMomentForBox (b->getMass (), getWidth (), getHeight ()));
-        AbstractModel::parentCallback (m);
+        AbstractModel::onParentSet (m);
 }
 
 
