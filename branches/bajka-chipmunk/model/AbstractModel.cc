@@ -120,7 +120,30 @@ void AbstractModel::setTranslateRel (Geometry::Point const &t)
                 return;
         }
 
-        setTranslate (Point (parGroup->getWidth() * t.x / 100.0, parGroup->getHeight () * t.y / 100.0));
+        // Przypadek domyślny - nie pobieramy aabb
+        if (align == (TOP | RIGHT)) {
+                setTranslate (Point (parGroup->getWidth() * t.x / 100.0, parGroup->getHeight () * t.y / 100.0));
+        }
+        else {
+                Geometry::Box aabb = getBoundingBox ();
+                Geometry::Point ct = Point (parGroup->getWidth() * t.x / 100.0, parGroup->getHeight () * t.y / 100.0);
+
+                if (align & HCENTER) {
+                        ct.x -= aabb.getWidth () / 2.0;
+                }
+                else if (align & LEFT) {
+                        ct.x -= aabb.getWidth ();
+                }
+
+                if (align & VCENTER) {
+                        ct.y -= aabb.getHeight () / 2.0;
+                }
+                else if (align & BOTTOM) {
+                        ct.y -= aabb.getHeight ();
+                }
+
+                setTranslate (ct);
+        }
 }
 
 /****************************************************************************/
