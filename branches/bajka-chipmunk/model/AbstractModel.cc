@@ -19,6 +19,33 @@ namespace Model {
 using View::DrawUtil;
 using namespace Geometry;
 
+Geometry::Point AbstractModel::getTranslate () const
+{
+        if (!layout) {
+                return translate;
+        }
+        else {
+                Point const &p = layout->getTranslateRel ();
+
+                if (p.x < 0 || p.y < 0) {
+                        return translate;
+                }
+
+                return layout->calculateTranslation (this);
+        }
+}
+
+/****************************************************************************/
+
+void AbstractModel::setTranslate (Geometry::Point const &p)
+{
+        translate = p;
+
+        if (layout) {
+                layout->resetTranslateRel ();
+        }
+}
+
 /****************************************************************************/
 
 AffineMatrix AbstractModel::getMatrix () const
@@ -110,78 +137,50 @@ IModel *AbstractModel::findContains (Geometry::Point const &p)
 
 /****************************************************************************/
 
-void AbstractModel::setTranslateRel (Geometry::Point const &t)
-{
-        BoxGroup *parGroup = getParGroup ();
-        relativeTranslation = true;
-
-        if (!parGroup) {
-                translate = t;
-                return;
-        }
-
-        // Przypadek domyślny - nie pobieramy aabb
-        if (align == (TOP | RIGHT)) {
-                setTranslate (Point (parGroup->getWidth() * t.x / 100.0, parGroup->getHeight () * t.y / 100.0));
-        }
-        else {
-                Geometry::Box aabb = getBoundingBox ();
-                Geometry::Point ct = Point (parGroup->getWidth() * t.x / 100.0, parGroup->getHeight () * t.y / 100.0);
-
-                if (align & HCENTER) {
-                        ct.x -= aabb.getWidth () / 2.0;
-                }
-                else if (align & LEFT) {
-                        ct.x -= aabb.getWidth ();
-                }
-
-                if (align & VCENTER) {
-                        ct.y -= aabb.getHeight () / 2.0;
-                }
-                else if (align & BOTTOM) {
-                        ct.y -= aabb.getHeight ();
-                }
-
-                setTranslate (ct);
-        }
-}
-
-/****************************************************************************/
-
-void AbstractModel::onParentSet (IModel *m)
-{
-        // Uruchamiamy jeszcze raz, bo teraz mamy parenta (ułatwoenie dla kontenera).
-        if (relativeTranslation) {
-                setTranslateRel (translate);
-        }
-}
+//void AbstractModel::setTranslateRel (Geometry::Point const &t)
+//{
+//        BoxGroup *parGroup = getParGroup ();
+//        relativeTranslation = true;
+//
+//        if (!parGroup) {
+//                translate = t;
+//                return;
+//        }
+//
+//        // Przypadek domyślny - nie pobieramy aabb
+//        if (align == (TOP | RIGHT)) {
+//                setTranslate (Point (parGroup->getWidth() * t.x / 100.0, parGroup->getHeight () * t.y / 100.0));
+//        }
+//        else {
+//                Geometry::Box aabb = getBoundingBox ();
+//                Geometry::Point ct = Point (parGroup->getWidth() * t.x / 100.0, parGroup->getHeight () * t.y / 100.0);
+//
+//                if (align & HCENTER) {
+//                        ct.x -= aabb.getWidth () / 2.0;
+//                }
+//                else if (align & LEFT) {
+//                        ct.x -= aabb.getWidth ();
+//                }
+//
+//                if (align & VCENTER) {
+//                        ct.y -= aabb.getHeight () / 2.0;
+//                }
+//                else if (align & BOTTOM) {
+//                        ct.y -= aabb.getHeight ();
+//                }
+//
+//                setTranslate (ct);
+//        }
+//}
 
 /****************************************************************************/
 
-BoxGroup *AbstractModel::getParGroup ()
-{
-        IModel *parent = getParent();
-
-        if (!parent) {
-                return NULL;
-        }
-
-        if (!parent->isBox()) {
-                throw Util::RuntimeException("BoxGroup : !parent->isBox ()");
-        }
-
-        if (!parent->isGroup()) {
-                throw Util::RuntimeException("BoxGroup : !parent->isGroup()");
-        }
-
-        return static_cast<BoxGroup *>(parent);
-}
-
-/****************************************************************************/
-
-BoxGroup const *AbstractModel::getParGroup () const
-{
-        return const_cast <AbstractModel *> (this)->getParGroup ();
-}
+//void AbstractModel::onParentSet (IModel *m)
+//{
+////        // Uruchamiamy jeszcze raz, bo teraz mamy parenta (ułatwoenie dla kontenera).
+////        if (relativeTranslation) {
+////                setTranslateRel (translate);
+////        }
+//}
 
 } /* namespace Model1 */

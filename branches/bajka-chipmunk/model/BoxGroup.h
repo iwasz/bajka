@@ -79,6 +79,15 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
+        /**
+         * Zwraca rodzica jako BoxGroup. Zrzuca wyjątek, jeśli rodzic nie jest tego typu.
+         * @return
+         */
+        static BoxGroup const *getParGroup (IModel const *m);
+        static BoxGroup *getParGroup (IModel *m);
+
+/*--------------------------------------------------------------------------*/
+
 //        void onParentSet (IModel *m);
         m_ (getChildren) ModelVector &getChildren () { return children; }
         m_ (setChildren) void setChildren (ModelVector const &c);
