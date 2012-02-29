@@ -166,7 +166,7 @@ void BoxGroup::addChild (IModel *m)
 
 void BoxGroup::setRelW (double w)
 {
-	BoxGroup *parGroup = getParGroup ();
+	BoxGroup *parGroup = getParGroup (this);
 
 	if (!parGroup) {
 		relW = w;
@@ -180,7 +180,7 @@ void BoxGroup::setRelW (double w)
 
 void BoxGroup::setRelH (double h)
 {
-	BoxGroup *parGroup = getParGroup ();
+	BoxGroup *parGroup = getParGroup (this);
 
 	if (!parGroup) {
 		relH = h;
@@ -262,6 +262,34 @@ void BoxGroup::groupToScreen (Geometry::Point *p) const
         if (parent && parent->isGroup ()) {
                 dynamic_cast <IGroup *> (parent)->groupToScreen (p);
         }
+}
+
+/****************************************************************************/
+
+BoxGroup *BoxGroup::getParGroup (IModel *m)
+{
+        IModel *parent = m->getParent();
+
+        if (!parent) {
+                return NULL;
+        }
+
+        if (!parent->isBox()) {
+                throw Util::RuntimeException("BoxGroup : !parent->isBox ()");
+        }
+
+        if (!parent->isGroup()) {
+                throw Util::RuntimeException("BoxGroup : !parent->isGroup()");
+        }
+
+        return static_cast<BoxGroup *>(parent);
+}
+
+/****************************************************************************/
+
+BoxGroup const *BoxGroup::getParGroup (IModel const *m)
+{
+        return getParGroup (const_cast <IModel *> (m));
 }
 
 } /* namespace Model */

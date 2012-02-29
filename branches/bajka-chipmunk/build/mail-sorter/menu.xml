@@ -2,7 +2,6 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
         "file:///home/iwasz/program/projects/tiliae/base/container/tiliae-container-1.0.dtd">
 
-<!--Ogólny schemat nazw : Ctr - kontroler, Wgt - widget, Mdl - model.-->
 <beans>
 
     <bean id="buttonCtr" class="ButtonController" singleton="true">
@@ -45,7 +44,12 @@
                     <property name="view.widgets.0.region" value="3, 3, 77, 43"/>
                     <property name="view.widgets.1.bitmap" ref="buttonStartBmp"/>
                     <property name="view.widgets.1.region" value="3, 48, 77, 88"/>
-                    <property name="translateRel" value="50, 50" />       
+<!--                     <property name="translateRel" value="50, 50" />        -->
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="50, 50" />       
+                        </bean>
+                    </property>
                 </bean>
                 
                 <bean parent="buttonWgt">
@@ -53,7 +57,7 @@
                     <property name="view.widgets.0.region" value="3, 3, 145, 43"/>
                     <property name="view.widgets.1.bitmap" ref="buttonInstructionsBmp"/>
                     <property name="view.widgets.1.region" value="3, 48, 145, 88"/>
-                    <property name="translateRel" value="50, 43" />       
+<!--                     <property name="translateRel" value="50, 43" />        -->
                     <property name="controller">
                       <bean class="LoadButtonController" singleton="true">
                            <!-- TODO, tylko mouse. -->
@@ -68,7 +72,7 @@
                     <property name="view.widgets.0.region" value="3, 3, 94, 43"/>
                     <property name="view.widgets.1.bitmap" ref="buttonCreditsBmp"/>
                     <property name="view.widgets.1.region" value="3, 48, 94, 88"/>
-                    <property name="translateRel" value="50, 36" />       
+<!--                     <property name="translateRel" value="50, 36" />        -->
                 </bean>
 
                 <bean parent="buttonWgt">
@@ -76,7 +80,7 @@
                     <property name="view.widgets.0.region" value="3, 3, 136, 43"/>
                     <property name="view.widgets.1.bitmap" ref="buttonMoreBmp"/>
                     <property name="view.widgets.1.region" value="3, 48, 136, 88"/>
-                    <property name="translateRel" value="50, 29" />       
+<!--                     <property name="translateRel" value="50, 29" />        -->
                 </bean>                
                                
                 <bean parent="buttonWgt">
@@ -84,7 +88,7 @@
                     <property name="view.widgets.0.region" value="0, 0, 84, 10"/>
                     <property name="view.widgets.1.bitmap" ref="vigeoBmp"/>
                     <property name="view.widgets.1.region" value="0, 10, 84, 20"/>
-                    <property name="translate" value="200, 50" />       
+<!--                     <property name="translate" value="200, 50" />        -->
                 </bean>                               
             </list>
         </property>
