@@ -37,11 +37,11 @@
                     </property>
                 </bean>
 
-                <bean class="Box" singleton="true">
-                    <property name="view" ref="2state" />
-                    <property name="translate" value="590, 0" />       
-                    <property name="controller" ref="buttonCtr"/>            
-                </bean>
+<!--                 <bean class="Box" singleton="true"> -->
+<!--                     <property name="view" ref="2state" /> -->
+<!--                     <property name="translate" value="590, 0" />        -->
+<!--                     <property name="controller" ref="buttonCtr"/>             -->
+<!--                 </bean> -->
 
                 <bean parent="buttonWgt">
                     <property name="view.widgets.0.bitmap" ref="buttonStartBmp"/>
