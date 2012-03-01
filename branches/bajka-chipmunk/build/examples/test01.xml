@@ -97,6 +97,7 @@
                 </add>
         </bean>    
     
+        <!-- Pomysł składni 1 -->
 	<bean id="debugButton2" class="BoxGroup">
 	    <set expand="true"/>
 
@@ -132,6 +133,7 @@
 	    </set>
 	</bean>
 
+        <!-- Pomysł składni 2 (inner beany mają parametr gdzie mają się dodać) -->
 	<bean id="debugButton2" class="BoxGroup">
 	    <set expand="true"/>
 
@@ -156,6 +158,21 @@
         	<set eventMask="0xffff" name="space2"/>
 	    </bean>
 	</bean>
+
+        <!-- Składnia 3 : brak taga bean, parametry jako rgumenty taga -->
+        <BoxGroup id="debugButton3" expand="true">
+                <Box add="children">
+                        <Text set="view" text="Hello world" font="@volterFont"/>
+                </Box>
+                
+                <StatefulWidget set="view" state="0">
+                        <Rectangle add="widgets" foreground="000000FF" background="ff000077" />
+                        <Rectangle add="widgets" id="state1" foreground="000000FF" background="ff0000ff" />
+                        <ref bean="state1" add="widgets"/>
+                </StatefulWidget>
+
+                <LoadButtonController" set="controller" eventMask="0xffff" name="space2"/>
+        </BoxGroup> 
 
 
     <bean id="volterFont" class="TTFFont" singleton="true">

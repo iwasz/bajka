@@ -49,7 +49,7 @@ public:
 /*--------------------------------------------------------------------------*/
 
         virtual void onParentSet (IModel *m);
-        virtual Geometry::Box getBoundingBox () const;
+        virtual Geometry::Box getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const;
 
 private:
 

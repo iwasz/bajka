@@ -35,7 +35,7 @@ public:
 	virtual ~Group() {}
 
         virtual Geometry::Point computeCenter () const { return Geometry::Point (); }
-        virtual Geometry::Box getBoundingBox () const;
+        virtual Geometry::Box getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const;
         virtual bool contains (Geometry::Point const &p) const { return true; }
         bool isGroup () const { return true; }
         virtual IModel *findContains (Geometry::Point const &p);

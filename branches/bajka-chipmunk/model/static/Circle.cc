@@ -34,7 +34,7 @@ bool Circle::contains (Point const &p) const
 
 /****************************************************************************/
 
-G::Box Circle::getBoundingBox () const
+G::Box Circle::getBoundingBoxImpl (Geometry::AffineMatrix const &) const
 {
         double r = radius * scale;
         double x = translate.x + origin.x;

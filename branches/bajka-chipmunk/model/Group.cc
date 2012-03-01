@@ -16,7 +16,7 @@ using namespace Geometry;
 using namespace boost::geometry;
 namespace trans = boost::geometry::strategy::transform;
 
-Box Group::getBoundingBox () const
+Box Group::getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const
 {
 	Box ret;
 

@@ -64,7 +64,7 @@ void CPCircle::setRadius (double r)
 
 /****************************************************************************/
 
-Geometry::Box CPCircle::getBoundingBox () const
+Geometry::Box CPCircle::getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const
 {
 	cpBB b = cpShapeGetBB (shape);
 	return Geometry::Box (b.l, b.b, b.r, b.t);
