@@ -8,7 +8,7 @@
     <!--Konfiguracja-->
     <bean id="cfg" class="BajkaConfig" singleton="true">
         <property name="fullScreen" value="false"/>
-        <property name="resX" value="480"/>
+        <property name="resX" value="1280"/>
         <property name="resY" value="640"/>
         <property name="windowCaption" value="MailSorter"/>
         <property name="showAABB" value="false"/>

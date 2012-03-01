@@ -19,7 +19,7 @@
 
 namespace View {
 
-void Image::init (Model::IModel *model)
+void Image::init (Model::IModel *model, bool updateModelDimension)
 {
         initialized = true;
 
@@ -94,9 +94,9 @@ void Image::update (Model::IModel *model)
                 init (model);
         }
 
-        glEnable(GL_TEXTURE_2D);
-        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-        glBindTexture(GL_TEXTURE_2D, texName);
+        glEnable (GL_TEXTURE_2D);
+        glTexEnvf (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+        glBindTexture (GL_TEXTURE_2D, texName);
 
         glBegin (GL_QUADS);
                 glTexCoord2i (0, 1); glVertex2i (0, 0);
