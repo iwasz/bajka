@@ -29,10 +29,6 @@ public:
 
         virtual Geometry::Point getTranslate () const; /*{ return translate; }*/
         m_ (setTranslate) virtual void setTranslate (Geometry::Point const &p);// { /*relativeTranslation = false;*/ translate = p; }
-//        m_ (setTranslateRel) virtual void setTranslateRel (Geometry::Point const &translate);
-
-//        virtual Align getAlign () const { return align; }
-//        m_ (setAlign) virtual void setAlign (Align a) { align = a; }
 
         virtual Geometry::Point getCenter () const;
         m_ (setCenter) virtual void setCenter (Geometry::Point const &p);
@@ -59,6 +55,7 @@ public:
 /*--------------------------------------------------------------------------*/
 
         virtual IModel *findContains (Geometry::Point const &p);
+        virtual Geometry::Box getBoundingBox () const { return getBoundingBoxImpl (getMatrix ()); }
 
 /*--------------------------------------------------------------------------*/
 

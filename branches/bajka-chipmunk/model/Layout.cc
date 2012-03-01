@@ -15,12 +15,12 @@
 namespace Model {
 namespace G = Geometry;
 
-G::Point Layout::calculateTranslation (IModel const *m) const
+G::Point Layout::calculateTranslation (IModel const *m, Geometry::Point const &currentTranslate, double aabbW, double aabbH) const
 {
         BoxGroup const *parGroup = BoxGroup::getParGroup (m);
 
         if (!parGroup) {
-                return m->getTranslate ();
+                return currentTranslate;
         }
 
         // Przypadek domyślny - nie pobieramy aabb
@@ -28,21 +28,20 @@ G::Point Layout::calculateTranslation (IModel const *m) const
                 return G::Point (parGroup->getWidth() * translateRel.x / 100.0, parGroup->getHeight () * translateRel.y / 100.0);
         }
         else {
-                G::Box aabb = m->getBoundingBox ();
                 G::Point ct = G::Point (parGroup->getWidth() * translateRel.x / 100.0, parGroup->getHeight () * translateRel.y / 100.0);
 
                 if (align & HCENTER) {
-                        ct.x -= aabb.getWidth () / 2.0;
+                        ct.x -= aabbW / 2.0;
                 }
                 else if (align & LEFT) {
-                        ct.x -= aabb.getWidth ();
+                        ct.x -= aabbW;
                 }
 
                 if (align & VCENTER) {
-                        ct.y -= aabb.getHeight () / 2.0;
+                        ct.y -= aabbH / 2.0;
                 }
                 else if (align & BOTTOM) {
-                        ct.y -= aabb.getHeight ();
+                        ct.y -= aabbH;
                 }
 
                 return ct;

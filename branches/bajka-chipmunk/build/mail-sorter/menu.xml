@@ -30,7 +30,11 @@
             
                 <bean parent="image">
                     <property name="view.bitmap.path" value="resources/img/ui/title.png"/>
-                    <property name="translate" value="60, 420" />
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="50, 65" />       
+                        </bean>
+                    </property>
                 </bean>
 
                 <bean class="Box" singleton="true">
@@ -44,7 +48,6 @@
                     <property name="view.widgets.0.region" value="3, 3, 77, 43"/>
                     <property name="view.widgets.1.bitmap" ref="buttonStartBmp"/>
                     <property name="view.widgets.1.region" value="3, 48, 77, 88"/>
-<!--                     <property name="translateRel" value="50, 50" />        -->
                     <property name="layout">
                         <bean class="Layout" singleton="true">
                             <property name="translateRel" value="50, 50" />       
@@ -57,7 +60,11 @@
                     <property name="view.widgets.0.region" value="3, 3, 145, 43"/>
                     <property name="view.widgets.1.bitmap" ref="buttonInstructionsBmp"/>
                     <property name="view.widgets.1.region" value="3, 48, 145, 88"/>
-<!--                     <property name="translateRel" value="50, 43" />        -->
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="50, 43" />       
+                        </bean>
+                    </property>
                     <property name="controller">
                       <bean class="LoadButtonController" singleton="true">
                            <!-- TODO, tylko mouse. -->
@@ -72,7 +79,11 @@
                     <property name="view.widgets.0.region" value="3, 3, 94, 43"/>
                     <property name="view.widgets.1.bitmap" ref="buttonCreditsBmp"/>
                     <property name="view.widgets.1.region" value="3, 48, 94, 88"/>
-<!--                     <property name="translateRel" value="50, 36" />        -->
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="50, 36" />       
+                        </bean>
+                    </property>
                 </bean>
 
                 <bean parent="buttonWgt">
@@ -80,7 +91,11 @@
                     <property name="view.widgets.0.region" value="3, 3, 136, 43"/>
                     <property name="view.widgets.1.bitmap" ref="buttonMoreBmp"/>
                     <property name="view.widgets.1.region" value="3, 48, 136, 88"/>
-<!--                     <property name="translateRel" value="50, 29" />        -->
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="50, 29" />       
+                        </bean>
+                    </property>
                 </bean>                
                                
                 <bean parent="buttonWgt">

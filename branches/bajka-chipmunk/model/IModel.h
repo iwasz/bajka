@@ -86,6 +86,7 @@ struct IModel : public virtual Core::Object {
          * @return
          */
         virtual Geometry::Box getBoundingBox () const = 0;
+        virtual Geometry::Box getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const = 0;
 
         /**
          * Czy podany punkt jest wewnątrz kształtu.
@@ -107,11 +108,7 @@ struct IModel : public virtual Core::Object {
          * @param m
          */
         virtual void setParent (IModel *m) = 0;
-
-/*--------------------------------------------------------------------------*/
-
         virtual void onParentSet (IModel *m) = 0;
-//        virtual void onFirstUpdate () = 0;
 
 /*------additional-functionalities------------------------------------------*/
 

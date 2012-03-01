@@ -42,7 +42,13 @@ struct Layout {
 
 /*--------------------------------------------------------------------------*/
 
-        Geometry::Point calculateTranslation (IModel const *m) const;
+        /**
+         * @param m Model którego dotyczy request
+         * @param origTranslate Aktualne przesunięcie tego modelu.
+         * @param w Aktualna wysokość boundingBoxa modelu m
+         * @param h Aktualna szerokość boundingBoxa modelu m
+         */
+        Geometry::Point calculateTranslation (IModel const *m, Geometry::Point const &currentTranslate, double aabbW, double aabbH) const;
 
 private:
 

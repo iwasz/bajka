@@ -34,7 +34,7 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        virtual Geometry::Box getBoundingBox () const;
+        virtual Geometry::Box getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const;
         virtual bool contains (Geometry::Point const &p) const;
 
 protected:

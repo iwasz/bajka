@@ -17,11 +17,6 @@ using namespace Geometry;
 namespace G = Geometry;
 namespace trans = boost::geometry::strategy::transform;
 
-Box::Box ()
-{
-        std::cerr << std::hex << (unsigned long  int)this << std::endl;
-}
-
 /****************************************************************************/
 
 Geometry::Point Box::computeCenter () const
@@ -43,13 +38,13 @@ bool Box::contains (Point const &p) const
 
 /****************************************************************************/
 
-G::Box Box::getBoundingBox () const
+Geometry::Box Box::getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const
 {
         G::Box aabb;
         Ring ring;
         Ring output;
         convert (box, ring);
-        AffineMatrixTransformer matrix (getMatrix ());
+        AffineMatrixTransformer matrix (transformation);
         transform (ring, output, matrix);
         envelope (output, aabb);
         return aabb;

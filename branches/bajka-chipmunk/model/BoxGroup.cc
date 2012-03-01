@@ -33,7 +33,7 @@ bool BoxGroup::contains (G::Point const &p) const
 
 /****************************************************************************/
 
-G::Box BoxGroup::getBoundingBox () const
+G::Box BoxGroup::getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const
 {
         G::Box aabb;
         G::Ring ring;
@@ -41,7 +41,7 @@ G::Box BoxGroup::getBoundingBox () const
 
         if (!expand) {
                 convert (getBox (), ring);
-                G::AffineMatrixTransformer matrix (getMatrix ());
+                G::AffineMatrixTransformer matrix (transformation);
                 transform (ring, output, matrix);
                 envelope (output, aabb);
                 return aabb;
