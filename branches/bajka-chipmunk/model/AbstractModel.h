@@ -22,13 +22,13 @@ public:
 
         d__
 
-        AbstractModel () : parent (0), angle (0), scale (1), view (0), controller (0)/*, relativeTranslation (false)*/, layout (NULL) {}
+        AbstractModel () : parent (0), angle (0), scale (1), view (0), controller (0), layout (NULL) {}
         virtual ~AbstractModel () {}
 
 /*--------------------------------------------------------------------------*/
 
-        virtual Geometry::Point getTranslate () const; /*{ return translate; }*/
-        m_ (setTranslate) virtual void setTranslate (Geometry::Point const &p);// { /*relativeTranslation = false;*/ translate = p; }
+        virtual Geometry::Point getTranslate () const;
+        m_ (setTranslate) virtual void setTranslate (Geometry::Point const &p);
 
         virtual Geometry::Point getCenter () const;
         m_ (setCenter) virtual void setCenter (Geometry::Point const &p);
@@ -59,7 +59,7 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        virtual void update ();
+        virtual void update (Event::UpdateEvent *e);
 
 /*--------------------------------------------------------------------------*/
 
@@ -81,14 +81,12 @@ protected:
         Geometry::Point translate;
         double angle;
         double scale;
-        //std::auto_ptr <Geometry::AffineMatrix> matrix;
 
 private:
 
         std::auto_ptr <Geometry::Point> center;
         View::IView *view;
         Controller::IController *controller;
-//        bool relativeTranslation;
         Layout *layout;
 
         E_ (AbstractModel)

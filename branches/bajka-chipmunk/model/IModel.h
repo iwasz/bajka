@@ -20,6 +20,10 @@
 #include "../geometry/AffineMatrix.h"
 #include "Layout.h"
 
+namespace Event {
+class UpdateEvent;
+}
+
 namespace Model {
 
 /**
@@ -97,7 +101,7 @@ struct IModel : public virtual Core::Object {
 
 /*--------------------------------------------------------------------------*/
 
-        virtual void update () = 0;
+        virtual void update (Event::UpdateEvent *e) = 0;
 
 /*------parent-child--------------------------------------------------------*/
 

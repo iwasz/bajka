@@ -25,7 +25,7 @@ public:
         C__ (void)
         b_ ("Widget")
 
-        Image () : texName (0), texWidth (0), texHeight (0), initialized (false) {}
+        Image () : texName (0), texWidth (0), texHeight (0), imgWidth (0), imgHeight (0), initialized (false) {}
         virtual ~Image () {}
 
         /// Do the drawing.
@@ -41,10 +41,13 @@ protected:
 
         void init (Model::IModel *model, bool updateModelDimension = true);
 
-private:
+protected:
 
         GLuint texName;
+        // Rozmiary textury (potęga 2jki)
         int texWidth, texHeight;
+        // Faktyczne rozmiary bitmapy (równe rozmiarom regionu, lub rozmiarom obrazka, jeśli region pusty).
+        int imgWidth, imgHeight;
         bool initialized;
         Ptr <IBitmap> bitmap;
         std::auto_ptr <Geometry::Box> region;

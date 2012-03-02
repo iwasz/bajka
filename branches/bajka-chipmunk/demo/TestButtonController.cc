@@ -9,6 +9,7 @@
 #include "TestButtonController.h"
 #include "../tween/Tween.h"
 #include "../util/BajkaApp.h"
+#include "../view/LoopImage.h"
 
 using namespace Tween;
 
@@ -32,14 +33,14 @@ bool TestButtonController::onButtonPress (Event::ButtonPressEvent *e, Model::IMo
 //                        rel (ANGLE, -90)
 //        )->start ();
 
-        from (testModel, 1000, QUART_OUT)->
-                abs (SCALE, 6)->
-                abs (ANGLE, 90)->
-                abs (X, 100)->
-                abs (Y, 100)->
-                delay (200)->
-                repeat (2, true)->
-                start ();
+//        from (testModel, 1000, QUART_OUT)->
+//                abs (SCALE, 6)->
+//                abs (ANGLE, 90)->
+//                abs (X, 100)->
+//                abs (Y, 100)->
+//                delay (200)->
+//                repeat (2, true)->
+//                start ();
 
 //        timeline ()->add (
 //                to (testModel, 1000, BACK_OUT)->
@@ -49,6 +50,14 @@ bool TestButtonController::onButtonPress (Event::ButtonPressEvent *e, Model::IMo
 //                        rel (Y, 100)
 //        )->repeat (1, true)->
 //        start ();
+
+
+
+        from (testModel->getView (), 2000, SINE_INOUT)->
+                abs (LOOP_X, -144)->
+                repeat (5, false)->
+                start ();
+
 
 	return Controller::ButtonController::onButtonPress (e, m, v);
 }

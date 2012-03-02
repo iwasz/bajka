@@ -23,7 +23,34 @@
                 
         <property name="children">
             <list class="ModelVector">
+                
+                <!-- Czemu to kurwa nie działa? -->
+<!--                 <bean id="stack2" parent="stack1"> -->
+<!--                         <property name="translate" value="90, 45"/> -->
+<!--                 </bean> -->
 
+                <bean id="stack2" class="Box" singleton="true">
+                        <property name="translate" value="90, 70"/>
+                        <property name="box" value="0, 0, 300, 99"/>
+                        <property name="view">
+                                <bean class="LoopImage" singleton="true">
+                                        <property name="bitmap" ref="mailStackBmp"/>
+                                        <property name="offsetX" value="20"/>
+                                </bean>
+                        </property>
+                </bean>
+                
+                <bean id="stack1" class="Box" singleton="true">
+                        <property name="translate" value="90, 30"/>
+                        <property name="box" value="0, 0, 300, 99"/>
+                        <property name="view">
+                                <bean class="LoopImage" singleton="true">
+                                        <property name="bitmap" ref="mailStackBmp"/>
+                                        <property name="offsetX" value="20"/>
+                                </bean>
+                        </property>
+                </bean>
+                                
                 <bean parent="image">
                     <property name="view.bitmap.path" value="resources/img/ui/menu-wall-with-window.png"/>
                 </bean>
@@ -52,6 +79,12 @@
                         <bean class="Layout" singleton="true">
                             <property name="translateRel" value="50, 50" />       
                         </bean>
+                    </property>
+                    <property name="controller">
+                      <bean id="buttonCtr" class="TestButtonController" singleton="true">
+                           <property name="eventMask" value="0xffff"/> 
+                           <property name="testModel" ref="stack1"/> 
+                      </bean>      
                     </property>
                 </bean>
                 
@@ -104,7 +137,8 @@
                     <property name="view.widgets.1.bitmap" ref="vigeoBmp"/>
                     <property name="view.widgets.1.region" value="0, 10, 84, 20"/>
 <!--                     <property name="translate" value="200, 50" />        -->
-                </bean>                               
+                </bean>
+                
             </list>
         </property>
     </bean>
@@ -194,6 +228,10 @@
     
     <bean id="vigeoBmp" class="Bitmap" singleton="true">
         <property name="path" value="resources/img/ui/button-vigeo-games-2011.png" />
+    </bean>
+
+    <bean id="mailStackBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/menu-mail-stack-loop.png" />
     </bean>
 
 </beans>

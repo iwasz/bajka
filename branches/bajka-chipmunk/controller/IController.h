@@ -31,6 +31,7 @@ class QuitEvent;
 class ActiveEvent;
 class ExposeEvent;
 class ResizeEvent;
+class UpdateEvent;
 
 class IDispatcher;
 }
@@ -45,9 +46,9 @@ struct IController : public Core::Object {
         IController () : eventMask (0) {}
         virtual ~IController () {}
 
-        virtual void preUpdate (Model::IModel *m, View::IView *v) = 0;
-        virtual void update (Model::IModel *m, View::IView *v) = 0;
-        virtual void postUpdate (Model::IModel *m, View::IView *v) = 0;
+        virtual void onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual void onUpdate (Event::UpdateEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual void onPostUpdate (Event::UpdateEvent *e, Model::IModel *m, View::IView *v) = 0;
 
 /*--------------------------------------------------------------------------*/
 
