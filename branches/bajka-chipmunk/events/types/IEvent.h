@@ -45,7 +45,8 @@ enum Type {
         RESIZE_EVENT            = 0x01 << 9,
         MOUSE_OVER_EVENT        = 0x01 << 10,
         MOUSE_OUT_EVENT         = 0x01 << 11,
-        EVENT_TERMINATOR        = 0x01 << 12 //!< Do not use.
+        UPDATE_EVENT            = 0x01 << 12,
+        EVENT_TERMINATOR        = 0x01 << 13 //!< Do not use.
 };
 
 const unsigned int MOUSE_EVENTS = MOUSE_MOTION_EVENT | BUTTON_PRESS_EVENT | BUTTON_RELEASE_EVENT;

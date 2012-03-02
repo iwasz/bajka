@@ -24,6 +24,7 @@
 #include "../view/draw/Primitives.h"
 #include "../model/IGroup.h"
 #include "../tween/Manager.h"
+#include "../events/types/UpdateEvent.h"
 
 /****************************************************************************/
 
@@ -54,7 +55,30 @@ namespace V = View;
 namespace C = Controller;
 namespace E = Event;
 
+/**
+ * pimpl
+ */
+struct Impl {
+
+        Impl () : model (NULL), dropIteration_ (false) {}
+
+        Ptr <BajkaConfig> config;
+        Ptr <Event::DispatcherList> dispatchers;
+        Ptr <ModelManager> manager;
+
+        Model::IModel *model;
+        ModelIndex listeners;
+
+        bool dropIteration_;
+        Event::UpdateEvent updateEvent;
+};
+
 BajkaApp *BajkaApp::instance_ = NULL;
+
+/****************************************************************************/
+
+BajkaApp::BajkaApp () : impl (new Impl) {}
+BajkaApp::~BajkaApp () { delete impl; }
 
 /****************************************************************************/
 
@@ -120,7 +144,6 @@ void BajkaApp::init ()
          */
         glEnable (GL_BLEND);
         glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glEnable (GL_TEXTURE_2D);
 
 /*##########################################################################*/
 
@@ -211,22 +234,14 @@ void BajkaApp::init ()
 }
 
 /****************************************************************************/
-
-void BajkaApp::setManager (Ptr <ModelManager> m)
-{
-        manager = m;
-        manager->setApp (this);
-}
-
-/****************************************************************************/
-#define checkBreak() { if (dropIteration_) { break; } }
-#define checkContinue() { if (dropIteration_) { continue; } }
+#define checkBreak() { if (impl->dropIteration_) { break; } }
+#define checkContinue() { if (impl->dropIteration_) { continue; } }
 
 void BajkaApp::loop ()
 {
         bool done = false;
 
-        if (!model) {
+        if (!impl->model) {
         	throw InitException ("BajkaApp has no model.");
         }
 
@@ -234,7 +249,7 @@ void BajkaApp::loop ()
 
         while (!done) {
 
-                dropIteration_ = false;
+                impl->dropIteration_ = false;
                 Uint32 currentMs = SDL_GetTicks ();
                 int deltaMs = currentMs - lastMs;
                 lastMs = currentMs;
@@ -246,13 +261,14 @@ void BajkaApp::loop ()
 
                 // Run models, views and controllers.
                 // Generuj eventy.
-                for (Event::DispatcherList::const_iterator i = dispatchers->begin (); i != dispatchers->end (); i++) {
-                        (*i)->run (model/*.get ()*/, listeners);
+                for (Event::DispatcherList::const_iterator i = impl->dispatchers->begin (); i != impl->dispatchers->end (); i++) {
+                        (*i)->run (impl->model, impl->listeners);
                         checkBreak ();
                 }
 
                 checkContinue ();
-                model->update ();
+                impl->updateEvent.setDeltaMs (deltaMs);
+                impl->model->update (&impl->updateEvent);
                 checkContinue ();
 
                 // Run chipmunk
@@ -296,11 +312,47 @@ void BajkaApp::destroy ()
 
 /****************************************************************************/
 
+Ptr <BajkaConfig> BajkaApp::getConfig () const
+{
+        return impl->config;
+}
+
+/****************************************************************************/
+
+void BajkaApp::setConfig (Ptr <BajkaConfig> b)
+{
+        impl->config = b;
+}
+
+/****************************************************************************/
+
+Model::IModel *BajkaApp::getModel () const
+{
+        return impl->model;
+}
+
+/****************************************************************************/
+
 void BajkaApp::setModel (Model::IModel *m)
 {
-        model = m;
-        listeners.clear ();
-        reindex (0xFFFFu & ~(Event::MOUSE_MOTION_EVENT | Event::BUTTON_PRESS_EVENT | Event::BUTTON_RELEASE_EVENT), m/*.get ()*/);
+        impl->model = m;
+        impl->listeners.clear ();
+        reindex (0xFFFFu & ~(Event::MOUSE_MOTION_EVENT | Event::BUTTON_PRESS_EVENT | Event::BUTTON_RELEASE_EVENT), m);
+}
+
+/****************************************************************************/
+
+Ptr <ModelManager> BajkaApp::getManager ()
+{
+        return impl->manager;
+}
+
+/****************************************************************************/
+
+void BajkaApp::setManager (Ptr <ModelManager> m)
+{
+        impl->manager = m;
+        impl->manager->setApp (this);
 }
 
 /****************************************************************************/
@@ -339,7 +391,7 @@ unsigned int BajkaApp::reindex (unsigned int eventMask, Model::IModel *m)
                 for (unsigned int i = 1; i != Event::EVENT_TERMINATOR; i <<= 1) {
 
                         if (m->getController ()->getEventMask () & i) {
-                                listeners.insert (std::make_pair ((Event::Type)i, m));
+                                impl->listeners.insert (std::make_pair ((Event::Type)i, m));
                                 childMask &= ~i;
                         }
                 }
@@ -352,11 +404,18 @@ unsigned int BajkaApp::reindex (unsigned int eventMask, Model::IModel *m)
 
 /****************************************************************************/
 
+Ptr <Event::DispatcherList> BajkaApp::getDispatchers () const
+{
+        return impl->dispatchers;
+}
+
+/****************************************************************************/
+
 void BajkaApp::setDispatchers (Ptr <Event::DispatcherList> d)
 {
-        dispatchers = d;
+        impl->dispatchers = d;
 
-        for (Event::DispatcherList::const_iterator i = dispatchers->begin (); i != dispatchers->end (); i++) {
+        for (Event::DispatcherList::const_iterator i = impl->dispatchers->begin (); i != impl->dispatchers->end (); i++) {
                 (*i)->setApp (this);
         }
 }
@@ -367,11 +426,25 @@ void BajkaApp::reset ()
 {
         dropIteration ();
 
-        listeners.clear ();
+        impl->listeners.clear ();
 
-        for (Event::DispatcherList::const_iterator i = dispatchers->begin (); i != dispatchers->end (); i++) {
+        for (Event::DispatcherList::const_iterator i = impl->dispatchers->begin (); i != impl->dispatchers->end (); i++) {
                 (*i)->reset ();
         }
+}
+
+/****************************************************************************/
+
+void BajkaApp::dropIteration ()
+{
+        impl->dropIteration_ = true;
+}
+
+/****************************************************************************/
+
+bool BajkaApp::getDropIteration () const
+{
+        return impl->dropIteration_;
 }
 
 } // Nam

@@ -6,12 +6,13 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "Manager.h"
 #include <iostream>
 #include <boost/pool/object_pool.hpp>
+#include "Manager.h"
+#include "Timeline.h"
 #include "../tween/ease/Ease.h"
 #include "../tween/accessor/AffineAccessor.h"
-#include "Timeline.h"
+#include "../view/LoopImage.h"
 
 namespace Tween {
 
@@ -141,6 +142,8 @@ Manager::Manager () : tween (NULL)
         accessors[Y] = new TranslateYAccessor;
         accessors[SCALE] = new ScaleAccessor;
         accessors[ANGLE] = new AngleAccessor;
+        accessors[LOOP_X] = new LoopImageXAccessor;
+        accessors[LOOP_Y] = new LoopImageYAccessor;
 
         pool = std::auto_ptr <Pool> (new Pool);
 }

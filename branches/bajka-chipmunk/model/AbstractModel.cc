@@ -14,6 +14,7 @@
 #include "../view/Widget.h"
 #include "../view/draw/Primitives.h"
 #include "../util/BajkaApp.h"
+#include "../events/types/UpdateEvent.h"
 
 namespace Model {
 using View::DrawUtil;
@@ -84,11 +85,11 @@ void AbstractModel::setCenter (Geometry::Point const &p)
 
 /****************************************************************************/
 
-void AbstractModel::update ()
+void AbstractModel::update (Event::UpdateEvent *e)
 {
         if (controller) {
-                controller->preUpdate (this, view);
-                controller->update (this, view);
+                controller->onPreUpdate (e, this, view);
+                controller->onUpdate (e, this, view);
         }
 
         if (config ()->getShowAABB ()) {
@@ -109,7 +110,8 @@ void AbstractModel::update ()
 
         if (isGroup ()) {
         		IGroup *g = dynamic_cast <IGroup *> (this);
-        		std::for_each (g->begin (), g->end (), boost::mem_fn (&IModel::update));
+//                        std::for_each (g->begin (), g->end (), boost::mem_fn (&IModel::update));
+                        std::for_each (g->begin (), g->end (), boost::bind (&IModel::update, _1, e));
         }
 
         if (view) {
@@ -120,7 +122,7 @@ void AbstractModel::update ()
         }
 
         if (controller) {
-                controller->postUpdate (this, view);
+                controller->onPostUpdate (e, this, view);
         }
 }
 
@@ -140,53 +142,5 @@ IModel *AbstractModel::findContains (Geometry::Point const &p)
 
         return this;
 }
-
-/****************************************************************************/
-
-//void AbstractModel::setTranslateRel (Geometry::Point const &t)
-//{
-//        BoxGroup *parGroup = getParGroup ();
-//        relativeTranslation = true;
-//
-//        if (!parGroup) {
-//                translate = t;
-//                return;
-//        }
-//
-//        // Przypadek domyślny - nie pobieramy aabb
-//        if (align == (TOP | RIGHT)) {
-//                setTranslate (Point (parGroup->getWidth() * t.x / 100.0, parGroup->getHeight () * t.y / 100.0));
-//        }
-//        else {
-//                Geometry::Box aabb = getBoundingBox ();
-//                Geometry::Point ct = Point (parGroup->getWidth() * t.x / 100.0, parGroup->getHeight () * t.y / 100.0);
-//
-//                if (align & HCENTER) {
-//                        ct.x -= aabb.getWidth () / 2.0;
-//                }
-//                else if (align & LEFT) {
-//                        ct.x -= aabb.getWidth ();
-//                }
-//
-//                if (align & VCENTER) {
-//                        ct.y -= aabb.getHeight () / 2.0;
-//                }
-//                else if (align & BOTTOM) {
-//                        ct.y -= aabb.getHeight ();
-//                }
-//
-//                setTranslate (ct);
-//        }
-//}
-
-/****************************************************************************/
-
-//void AbstractModel::onParentSet (IModel *m)
-//{
-////        // Uruchamiamy jeszcze raz, bo teraz mamy parenta (ułatwoenie dla kontenera).
-////        if (relativeTranslation) {
-////                setTranslateRel (translate);
-////        }
-//}
 
 } /* namespace Model1 */

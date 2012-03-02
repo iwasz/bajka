@@ -21,6 +21,7 @@
 using Event::ModelIndex;
 
 namespace Util {
+class Impl;
 
 /**
  * Bajka application. It is bound to OpenGL and is not meant to
@@ -35,8 +36,8 @@ public:
 
        C__ (void)
 
-       BajkaApp () : model (NULL), dropIteration_ (false) {}
-       virtual ~BajkaApp () {}
+       BajkaApp ();
+       virtual ~BajkaApp ();
 
        m_ (init) void init ();
        m_ (loop) void loop ();
@@ -45,11 +46,11 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-       Ptr <BajkaConfig> getConfig () const { return config; }
-       m_ (setConfig) void setConfig (Ptr <BajkaConfig> b) { config = b; }
+       Ptr <BajkaConfig> getConfig () const;
+       m_ (setConfig) void setConfig (Ptr <BajkaConfig> b);
 
        /// Głowny model.
-       Model::IModel *getModel () const { return model; }
+       Model::IModel *getModel () const;
 
        /**
         * 1. Odłącza poprzedni rootControloer od dispatcherów.
@@ -64,10 +65,10 @@ public:
         */
        void reset ();
 
-       Ptr <Event::DispatcherList> getDispatchers () const { return dispatchers; }
+       Ptr <Event::DispatcherList> getDispatchers () const;
        m_ (setDispatchers) void setDispatchers (Ptr <Event::DispatcherList> d);
 
-       Ptr <ModelManager> getManager () { return manager; }
+       Ptr <ModelManager> getManager ();
        S_ (setManager) void setManager (Ptr <ModelManager> m);
 
        static BajkaApp *instance ();
@@ -77,8 +78,8 @@ public:
         * Powoduje zawieszenie wykonywania aktualnej iteracji i rozpoczęcie następnej.
         * Wszystkie czekające eventy zostają odrzucone etc.
         */
-       void dropIteration () { dropIteration_ = true;}
-       bool getDropIteration () const { return dropIteration_; }
+       void dropIteration ();
+       bool getDropIteration () const;
 
 private:
 
@@ -87,13 +88,8 @@ private:
 
 private:
 
-       Ptr <BajkaConfig> config;
-       Model::IModel *model;
-       Ptr <Event::DispatcherList> dispatchers;
-       Ptr <ModelManager> manager;
-       ModelIndex listeners;
+       Impl *impl;
        static BajkaApp *instance_;
-       bool dropIteration_;
 
        E_ (BajkaApp)
 };

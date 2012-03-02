@@ -6,7 +6,12 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#include <SDL_opengl.h>
+#include <SDL_image.h>
 #include "LoopImage.h"
+#include "../model/IModel.h"
+#include "../model/IBox.h"
+#include "../util/Exceptions.h"
 
 namespace View {
 
@@ -30,26 +35,28 @@ void LoopImage::update (Model::IModel *model)
                 init (model, false);
         }
 
-        Model::IBox *b = dynamic_cast <Model::IBox *> (model);
-
-        int countHoriz = int (b->getWidth () + 0.5) / texWidth + 1;
-        int countVert = int (b->getHeight () + 0.5) / texHeight + 1
-
+        glEnable (GL_TEXTURE_2D);
         glTexEnvf (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
         glBindTexture (GL_TEXTURE_2D, texName);
 
+        Model::IBox *b = dynamic_cast <Model::IBox *> (model);
+
+        int bW = int (b->getWidth ());
+        int bH = int (b->getHeight ());
+        int oModW = offsetX % imgWidth;
+        int oModH = offsetY % imgHeight;
+        int oW = (oModW) ? (oModW - imgWidth) : (0);
+        int oH = (oModH) ? (oModH - imgHeight) : (0);
+        int countHoriz = bW / imgWidth + ((bW % imgWidth) != 0) + (oW != 0);
+        int countVert = bH / imgHeight + ((bH % imgHeight) != 0) + (oH != 0);
+
         for (int i = 0; i < countHoriz; ++i) {
                 for (int j = 0; j < countVert; ++j) {
-                        drawTile (i * offset.x, j * offset.y);
+                        drawTile (i * imgWidth + oW, j * imgHeight + oH);
                 }
         }
 
-        if (offset.x > 0.0) {
-                for (int j = 0; j < countVert; ++j) {
-                        drawTile (offset.x, j * offset.y);
-                }
-        }
-
+        glDisable (GL_TEXTURE_2D);
 }
 
 } /* namespace View */

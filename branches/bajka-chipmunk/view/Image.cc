@@ -27,7 +27,7 @@ void Image::init (Model::IModel *model, bool updateModelDimension)
 
         SDL_Surface *image = static_cast <SDL_Surface *> (bitmap->getData ());
 
-        if (model->isBox ()) {
+        if (updateModelDimension && model->isBox ()) {
                 Model::IBox *b = dynamic_cast <Model::IBox *> (model);
 
                 if (region.get ()) {
@@ -41,6 +41,15 @@ void Image::init (Model::IModel *model, bool updateModelDimension)
         }
 
 /*--------------------------------------------------------------------------*/
+
+        if (region.get ()) {
+                imgWidth = region->getWidth ();
+                imgHeight = region->getHeight ();
+        }
+        else {
+                imgWidth = image->w;
+                imgHeight = image->h;
+        }
 
         SDL_Surface *texSurface = Sdl::expandSurfacePowerOf2 (image, region.get ());
 
