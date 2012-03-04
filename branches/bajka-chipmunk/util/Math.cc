@@ -9,6 +9,10 @@
  ****************************************************************************/
 
 #include <climits>
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/lagged_fibonacci.hpp>
+#include <boost/random/uniform_int.hpp>
+#include <boost/random/uniform_real.hpp>
 #include "Math.h"
 
 namespace Util {
@@ -38,5 +42,24 @@ unsigned int Math::nextSqr (unsigned int n)
         return ++n;
 }
 
+/****************************************************************************/
+
+static boost::mt19937 genInt (time (0));
+
+int Math::randInt (int from, int to)
+{
+        boost::uniform_int <> dist (from, to);
+        return dist (genInt);
+}
+
+/****************************************************************************/
+
+static boost::lagged_fibonacci3217 genDouble (time (0));
+
+double Math::randDouble (double from, double to)
+{
+        boost::uniform_real <> dist (from, to);
+        return dist (genDouble);
+}
 
 }

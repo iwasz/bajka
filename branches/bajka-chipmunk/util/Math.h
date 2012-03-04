@@ -19,7 +19,8 @@ struct Math {
          * Returns next power of two equal or greater than i.
          */
         static unsigned int nextSqr (unsigned int i);
-
+        static int randInt (int from, int to);
+        static double randDouble (double from, double to);
 };
 
 }

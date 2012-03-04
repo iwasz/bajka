@@ -26,10 +26,6 @@ struct ButtonController : public EmptyController {
         b_ ("EmptyController")
         virtual ~ButtonController () {}
 
-        virtual void preUpdate (Model::IModel *m, View::IView *v) {}
-        virtual void update (Model::IModel *m, View::IView *v) {}
-        virtual void postUpdate (Model::IModel *m, View::IView *v) {}
-
 /*--------------------------------------------------------------------------*/
 
         virtual bool onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v);

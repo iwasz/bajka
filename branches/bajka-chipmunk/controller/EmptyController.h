@@ -19,9 +19,9 @@ struct EmptyController : public IController {
         C__ (void)
         virtual ~EmptyController () {}
 
-        virtual void preUpdate (Model::IModel *m, View::IView *v) {}
-        virtual void update (Model::IModel *m, View::IView *v) {}
-        virtual void postUpdate (Model::IModel *m, View::IView *v) {}
+        virtual void onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View::IView *v) {}
+        virtual void onUpdate (Event::UpdateEvent *e, Model::IModel *m, View::IView *v) {}
+        virtual void onPostUpdate (Event::UpdateEvent *e, Model::IModel *m, View::IView *v) {}
 
 /*--------------------------------------------------------------------------*/
 
