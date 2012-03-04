@@ -14,12 +14,23 @@
          <property name="eventMask" value="0xffff"/> 
     </bean>      
 
+    <bean parent="image" id="pointer">
+        <property name="view.bitmap.path" value="gfx/cursor.png"/>
+    </bean>
+
     <bean id="menu" class="BoxGroup" singleton="true">
         <property name="translate" value="-240, -320" />       
         <property name="controller" ref="emptyCtr"/>            
 <!--         <property name="expand" value="true"/>             -->
         <property name="width" value="480"/>
         <property name="height" value="640"/>
+                
+        <property name="controller">
+            <bean class="PointerController" singleton="true">
+                <property name="pointer" ref="pointer"/>
+                <property name="eventMask" value="0xffff"/> 
+            </bean>
+        </property>
                 
         <property name="children">
             <list class="ModelVector">
@@ -60,7 +71,9 @@
                 <bean parent="image">
                     <property name="view.bitmap.path" value="resources/img/ui/menu-wall-with-window.png"/>
                 </bean>
-            
+                
+                <ref bean="pointer"/>
+                
                 <bean parent="image">
                     <property name="view.bitmap.path" value="resources/img/ui/title.png"/>
                     <property name="layout">
