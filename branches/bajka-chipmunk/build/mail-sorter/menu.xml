@@ -44,10 +44,16 @@
                         <property name="translate" value="90, 30"/>
                         <property name="box" value="0, 0, 300, 99"/>
                         <property name="view">
-                                <bean class="LoopImage" singleton="true">
+                                <bean id="image" class="LoopImage" singleton="true">
                                         <property name="bitmap" ref="mailStackBmp"/>
                                         <property name="offsetX" value="20"/>
                                 </bean>
+                        </property>
+                        <property name="controller">
+                            <bean class="MailStackController" singleton="true">
+                                <property name="eventMask" value="0x1000"/>
+                                <property name="image" ref="image"/> 
+                            </bean>
                         </property>
                 </bean>
                                 

@@ -87,7 +87,7 @@ void AbstractModel::setCenter (Geometry::Point const &p)
 
 void AbstractModel::update (Event::UpdateEvent *e)
 {
-        if (controller) {
+        if (controller && controller->getEventMask () & Event::UPDATE_EVENT) {
                 controller->onPreUpdate (e, this, view);
                 controller->onUpdate (e, this, view);
         }
@@ -121,7 +121,7 @@ void AbstractModel::update (Event::UpdateEvent *e)
         	View::Widget::defaultPostUpdate (this);
         }
 
-        if (controller) {
+        if (controller && controller->getEventMask () & Event::UPDATE_EVENT) {
                 controller->onPostUpdate (e, this, view);
         }
 }
