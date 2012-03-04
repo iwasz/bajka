@@ -187,6 +187,8 @@ void BajkaApp::init ()
 
         Tween::init ();
 
+        SDL_ShowCursor (impl->config->getShowSystemCursor ());
+
 #endif
 #if 0
         if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {

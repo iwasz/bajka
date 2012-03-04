@@ -6,20 +6,17 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "Config.h"
+#include "PointerController.h"
+#include "../model/IModel.h"
+#include "../events/types/MouseMotionEvent.h"
 
-namespace Util {
+namespace Demo {
 
-/****************************************************************************/
-
-BajkaConfig::BajkaConfig () :
-                fullScreen (false),
-                resX (640),
-                resY (480),
-                showAABB (false),
-                showSystemCursor (true)
+bool PointerController::onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
 {
+        pointer->setTranslate (e->getPosition ());
+//        std::cerr << e->getPosition () << std::endl;
+        return true;
 }
 
-
-} /* namespace Util */
+} /* namespace Demo */

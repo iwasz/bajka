@@ -47,6 +47,9 @@ public:
         bool getShowAABB () const { return showAABB; }
         m_ (setShowAABB) void setShowAABB (bool b) { showAABB = b; }
 
+        bool getShowSystemCursor () const { return showSystemCursor; }
+        m_ (setShowSystemCursor) void setShowSystemCursor (bool b) { showSystemCursor = b; }
+
 private:
 
         bool fullScreen;
@@ -54,6 +57,7 @@ private:
         int resY;
         std::string windowCaption;
         bool showAABB;
+        bool showSystemCursor;
 
         E_ (BajkaConfig)
 };
