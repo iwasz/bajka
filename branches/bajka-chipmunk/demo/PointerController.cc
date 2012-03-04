@@ -14,8 +14,7 @@ namespace Demo {
 
 bool PointerController::onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
 {
-        pointer->setTranslate (e->getPosition ());
-//        std::cerr << e->getPosition () << std::endl;
+        pointer->setTranslate (e->getPosition () + offset);
         return true;
 }
 

@@ -10,6 +10,7 @@
 #define POINTERCONTROLLER_H_
 
 #include "../controller/EmptyController.h"
+#include "../geometry/Point.h"
 
 namespace Demo {
 
@@ -24,9 +25,13 @@ public:
         S_ (setPointer)
         void setPointer (Model::IModel *p) { pointer = p; }
 
+        m_ (setOffset)
+        void setOffset (Geometry::Point const &p) { offset = p; }
+
 private:
 
         Model::IModel *pointer;
+        Geometry::Point offset;
 
         E_ (PointerController)
 };
