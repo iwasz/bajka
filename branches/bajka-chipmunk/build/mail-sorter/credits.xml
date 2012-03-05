@@ -73,8 +73,9 @@
                 </bean>
 
                 <bean parent="label">
-                    <property name="view.text" value="Lukasz Iwaszkiewicz"/>
-                    <property name="view.font" ref="accidentFont" />        
+                    <property name="view.text" value="design / graphics"/>
+                    <property name="view.font" ref="accident14" />
+                    <property name="view.foreground" value="A8A16Cff"/>        
                     <property name="layout">
                         <bean class="Layout" singleton="true">
                             <property name="translateRel" value="50, 80" />       
@@ -83,6 +84,42 @@
                     </property>
                 </bean>
 
+                <bean parent="label">
+                    <property name="view.text" value="Adrian Kulasek"/>
+                    <property name="view.font" ref="accident24" />
+                    <property name="view.foreground" value="423F2Aff"/>        
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="50, 70" />       
+                            <property name="align" value="0x24" />       
+                        </bean>
+                    </property>
+                </bean>
+
+                <bean parent="label">
+                    <property name="view.text" value="programming"/>
+                    <property name="view.font" ref="accident14" />
+                    <property name="view.foreground" value="A8A16Cff"/>        
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="50, 65" />       
+                            <property name="align" value="0x24" />       
+                        </bean>
+                    </property>
+                </bean>
+
+                <bean parent="label">
+                    <property name="view.text" value="Lukasz Iwaszkiewicz"/>
+                    <property name="view.font" ref="accident24" />
+                    <property name="view.foreground" value="423F2Aff"/>        
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="50, 60" />       
+                            <property name="align" value="0x24" />       
+                        </bean>
+                    </property>
+                </bean>
+                
                 <bean parent="buttonWgt">
                     <property name="view.widgets.0.bitmap" ref="buttonCloseBmp"/>
                     <property name="view.widgets.0.region" value="3, 3, 77, 43"/>
@@ -160,9 +197,16 @@
         <property name="path" value="resources/img/ui/button-close.png" />
     </bean>
     
-    <bean id="accidentFont" class="TTFFont" singleton="true">
+    <bean id="accident24" class="TTFFont" singleton="true">
         <constructor-arg><value type="text">resources/fonts/AccidentalPresident.ttf</value></constructor-arg>    
-        <constructor-arg><value type="int">24</value></constructor-arg>    
+        <constructor-arg><value type="int">24</value></constructor-arg>
+        <property name="type" value="2"/>    
+    </bean>
+
+    <bean id="accident14" class="TTFFont" singleton="true">
+        <constructor-arg><value type="text">resources/fonts/AccidentalPresident.ttf</value></constructor-arg>    
+        <constructor-arg><value type="int">14</value></constructor-arg>
+        <property name="type" value="2"/>    
     </bean>
         
 <!-- #A8A16C - jasno brązowy / oliwkowy - linia i tytuły sekcji -->

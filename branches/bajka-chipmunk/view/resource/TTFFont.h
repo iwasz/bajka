@@ -28,22 +28,37 @@ public:
 
         ~TTFFont ();
 
+        enum Type {
+                SOLID,
+                SHADED,
+                BLENDED
+        };
+
+        enum Encoding {
+                ASCII,
+                UTF8
+        };
+
         void *render (std::string const &text, View::Color const &fgColor, View::Color const &bgColor);
 
         int getHinting () const;
         m_ (setHinting) void setHinting (int hint);
 
+        int getType () const { return type; }
+        m_ (setType) void setType (int t) { type = t; }
+
+        int getEncoding () const { return encoding; }
+        m_ (setEncoding) void setEncoding (int e) { encoding = e; }
+
 private:
 
         void open (std::string const &path, int ptSize = -1, long int index = -1);
 
-        void *renderSolid (std::string const &text, View::Color const &fgColor);
-        void *renderShaded (std::string const &text, View::Color const &fgColor, View::Color const &bgColor);
-        void *renderBlended (std::string const &text, View::Color const &fgColor);
-
 private:
 
         TTF_Font *font;
+        int type; // TODO to powinno być typu Type
+        int encoding; // TODO powinno być typu Encoding
 
         E_ (TTFFont)
 };
