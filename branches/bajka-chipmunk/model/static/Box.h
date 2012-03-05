@@ -35,8 +35,7 @@ public:
         bool isBox () const { return true; }
 
 /*--------------------------------------------------------------------------*/
-        m_ (getView) View::IView *getView () { return AbstractModel::getView (); }
-//        S_ (setView) void setView (View::IView *v) { AbstractModel::setView (v); }
+
         Geometry::Point computeCenter () const;
         virtual Geometry::Box getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const;
         virtual bool contains (Geometry::Point const &p) const;

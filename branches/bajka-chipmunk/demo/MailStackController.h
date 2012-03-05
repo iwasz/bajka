@@ -32,7 +32,8 @@ public:
 private:
 
         View::LoopImage *image;
-        double offsetX, speed;
+        double offsetX, currentSpeed, nextSpeed;
+        unsigned int currentMs, nextChangeMs;
 
         E_ (MailStackController)
 };

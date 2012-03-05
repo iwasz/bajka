@@ -35,6 +35,25 @@
         </property>
     </bean>
 
+
+    <bean id="stack" class="Box" singleton="true">
+            <property name="translate" value="90, 70"/>
+            <property name="box" value="0, 0, 300, 99"/>
+            <property name="view">
+                    <bean id="image" class="LoopImage" singleton="true">
+                            <property name="bitmap" ref="mailStackBmp"/>
+                            <property name="offsetX" value="20"/>
+                    </bean>
+            </property>
+            <property name="controller">
+                <bean class="MailStackController" singleton="true">
+                    <property name="eventMask" value="0x1000"/>
+                    <property name="image" ref="image"/> 
+                </bean>
+            </property>
+    </bean>
+
+
     <bean id="menu1" class="BoxGroup" singleton="true">
         <property name="translate" value="-240, -320" />       
         <property name="controller" ref="emptyCtr"/>            
@@ -45,37 +64,15 @@
         <property name="children">
             <list class="ModelVector">
                 
-                <!-- Czemu to kurwa nie działa? -->
-<!--                 <bean id="stack2" parent="stack1"> -->
-<!--                         <property name="translate" value="90, 45"/> -->
-<!--                 </bean> -->
-
-                <bean id="stack2" class="Box" singleton="true">
-                        <property name="translate" value="90, 70"/>
-                        <property name="box" value="0, 0, 300, 99"/>
-                        <property name="view">
-                                <bean class="LoopImage" singleton="true">
-                                        <property name="bitmap" ref="mailStackBmp"/>
-                                        <property name="offsetX" value="20"/>
-                                </bean>
-                        </property>
+                <bean parent="stack">
+                        <property name="translate" value="90, 120"/>
                 </bean>
+
+                <ref bean="stack"/>
                 
-                <bean id="stack1" class="Box" singleton="true">
-                        <property name="translate" value="90, 30"/>
-                        <property name="box" value="0, 0, 300, 99"/>
-                        <property name="view">
-                                <bean id="image" class="LoopImage" singleton="true">
-                                        <property name="bitmap" ref="mailStackBmp"/>
-                                        <property name="offsetX" value="20"/>
-                                </bean>
-                        </property>
-                        <property name="controller">
-                            <bean class="MailStackController" singleton="true">
-                                <property name="eventMask" value="0x1000"/>
-                                <property name="image" ref="image"/> 
-                            </bean>
-                        </property>
+                <!-- Czemu to kurwa nie działa, jeśli bean stack jest zdefiniowany w liscie? -->
+                <bean parent="stack">
+                        <property name="translate" value="90, 20"/>
                 </bean>
                                 
                 <bean parent="image">
@@ -107,12 +104,6 @@
                             <property name="translateRel" value="50, 50" />       
                         </bean>
                     </property>
-                    <property name="controller">
-                      <bean id="buttonCtr" class="TestButtonController" singleton="true">
-                           <property name="eventMask" value="0xffff"/> 
-                           <property name="testModel" ref="stack1"/> 
-                      </bean>      
-                    </property>
                 </bean>
                 
                 <bean parent="buttonWgt">
@@ -129,7 +120,7 @@
                       <bean class="LoadButtonController" singleton="true">
                            <!-- TODO, tylko mouse. -->
                            <property name="eventMask" value="0xffff"/>
-                           <property name="name" value="test01"/>          
+                           <property name="name" value="credits"/>          
                       </bean>
                     </property>      
                 </bean>

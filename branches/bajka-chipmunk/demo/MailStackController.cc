@@ -15,16 +15,36 @@ using Util::Math;
 
 namespace Demo {
 
-MailStackController::MailStackController () : image (NULL), offsetX (0)
+MailStackController::MailStackController () : image (NULL), offsetX (0), currentMs (0)
 {
-        speed = Math::randDouble (0.01, 0.1);
+        currentSpeed = Math::randDouble (0.01, 0.1);
+        nextSpeed = Math::randDouble (0.01, 0.1);
+        nextChangeMs = Math::randInt (500, 2000);
 }
 
 /****************************************************************************/
 
 void MailStackController::onUpdate (Event::UpdateEvent *e, Model::IModel *m, View::IView *v)
 {
-        offsetX += e->getDeltaMs () * speed;
+        currentMs += e->getDeltaMs ();
+
+        // Losuj nastepną prędkość.
+        if (currentMs >= nextChangeMs) {
+                currentMs = 0;
+                nextChangeMs = Math::randInt (500, 2000);
+                nextSpeed = Math::randDouble (0.01, 0.1);
+        }
+
+        // Płynnie przyspiesz lub zwolnij do nastepnej prędkości.
+        if (currentSpeed > nextSpeed + 0.005) {
+                currentSpeed -= 0.005;
+        }
+        else if (currentSpeed < nextSpeed - 0.005) {
+                currentSpeed += 0.005;
+        }
+
+        // Wykonaj przesunięcie.
+        offsetX += e->getDeltaMs () * currentSpeed;
         image->setOffsetX (offsetX);
 }
 

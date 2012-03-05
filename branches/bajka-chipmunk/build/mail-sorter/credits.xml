@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
+        "file:///home/iwasz/program/projects/tiliae/base/container/tiliae-container-1.0.dtd">
+
+<beans>
+
+    <bean id="buttonCtr" class="ButtonController" singleton="true">
+         <!-- TODO, tylko mouse. -->
+         <property name="eventMask" value="0xffff"/> 
+    </bean>      
+
+    <bean id="testButtonCtr" class="TestButtonController" singleton="true">
+         <!-- TODO, tylko mouse. -->
+         <property name="eventMask" value="0xffff"/> 
+    </bean>      
+
+    <bean parent="image" id="pointer">
+        <property name="view.bitmap.path" value="gfx/cursor.png"/>
+    </bean>
+
+    <bean id="credits" class="Group" singleton="true">
+        <property name="children">
+            <list class="ModelVector">
+                <ref bean="menu1"/>
+                <ref bean="pointer"/>
+            </list>
+        </property>                
+
+        <property name="controller">
+            <bean class="PointerController" singleton="true">
+                <property name="pointer" ref="pointer"/>
+                <property name="eventMask" value="0xffff"/>
+                <property name="offset" value="0, -32" />
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="menu1" class="BoxGroup" singleton="true">
+        <property name="translate" value="-240, -320" />       
+        <property name="controller" ref="emptyCtr"/>            
+        <property name="width" value="480"/>
+        <property name="height" value="640"/>
+                                
+        <property name="children">
+            <list class="ModelVector">
+                                                
+                <bean parent="image">
+                    <property name="view.bitmap.path" value="resources/img/ui/menu-wall-with-window.png"/>
+                </bean>
+
+                <bean parent="image">
+                    <property name="view.bitmap.path" value="resources/img/ui/panel-background-307x588.png"/>
+
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="50, 50" />       
+                            <property name="align" value="0x24" />       
+                        </bean>
+                    </property>
+                </bean>
+
+                <bean parent="image">
+                    <property name="view.bitmap.path" value="resources/img/ui/button-credits.png"/>
+                    <property name="view.region" value="3, 48, 94, 88" />                    
+
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="50, 85" />       
+                            <property name="align" value="0x24" />       
+                        </bean>
+                    </property>
+                </bean>
+
+                <bean parent="label">
+                    <property name="view.text" value="Lukasz Iwaszkiewicz"/>
+                    <property name="view.font" ref="accidentFont" />        
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="50, 80" />       
+                            <property name="align" value="0x24" />       
+                        </bean>
+                    </property>
+                </bean>
+
+                <bean parent="buttonWgt">
+                    <property name="view.widgets.0.bitmap" ref="buttonCloseBmp"/>
+                    <property name="view.widgets.0.region" value="3, 3, 77, 43"/>
+                    <property name="view.widgets.1.bitmap" ref="buttonCloseBmp"/>
+                    <property name="view.widgets.1.region" value="3, 48, 77, 88"/>
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="50, 10" />       
+                        </bean>
+                    </property>
+                    <property name="controller">
+                      <bean class="LoadButtonController" singleton="true">
+                           <!-- TODO, tylko mouse. -->
+                           <property name="eventMask" value="0xffff"/>
+                           <property name="name" value="menu"/>          
+                      </bean>
+                    </property>      
+                </bean>
+                
+            </list>
+        </property>
+    </bean>
+
+<!-- ====================================================================================== -->
+<!-- Bitmapy, obrazki -->
+<!-- ====================================================================================== -->
+
+    <!-- Statyczny obrazek -->
+    <bean id="image" class="Box" singleton="true" abstract="true">
+        <property name="view">
+            <bean class="Image" singleton="true">
+                <property name="bitmap">
+                    <bean class="Bitmap" singleton="true"/>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- Statyczny label -->
+    <bean id="label" class="Box" singleton="true" abstract="true">
+        <property name="view">
+                <bean class="Text" singleton="true">
+<!--                     <property name="text" value="Hello World!!!"/> -->
+<!--                     <property name="font" ref="accidentFont" />         -->
+                </bean>
+        </property>
+    </bean>
+    
+    <!-- 2 stanowy guzik - ma tylko 2 obrazki - clicked jest taki sam jak hover -->
+    <bean id="buttonWgt" class="Box" singleton="true" abstract="true">
+        <property name="view">
+            <bean id="buttonStartWgt" class="StatefulWidget" singleton="true">
+                <property name="widgets">
+                    <list class="WidgetVector">
+                        <bean class="Image" singleton="true"/>
+                        <bean id="state1" class="Image" singleton="true"/>
+                        <ref bean="state1"/>
+                    </list>
+                </property>
+                <property name="state" value="0" />
+            </bean>
+        </property>
+        
+        <property name="translate" value="300, 50" />       
+        <property name="controller" ref="buttonCtr"/>            
+    </bean>
+        
+<!-- ====================================================================================== -->
+   
+    <bean id="mailStackBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/menu-mail-stack-loop.png" />
+    </bean>
+
+    <bean id="buttonCloseBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/button-close.png" />
+    </bean>
+    
+    <bean id="accidentFont" class="TTFFont" singleton="true">
+        <constructor-arg><value type="text">resources/fonts/AccidentalPresident.ttf</value></constructor-arg>    
+        <constructor-arg><value type="int">24</value></constructor-arg>    
+    </bean>
+        
+<!-- #A8A16C - jasno brązowy / oliwkowy - linia i tytuły sekcji -->
+<!-- #7E1F12 - wiśniowy - linki -->
+<!-- #423F2A - ciemno brązowy - teksty -->
+        
+</beans>
