@@ -32,6 +32,7 @@
         <property name="mapping">
           <map class="StringMap">
                 <entry key="menu" value="mail-sorter/menu.xml"/>                
+                <entry key="credits" value="mail-sorter/credits.xml"/>                
           </map>
         </property>
     </bean>

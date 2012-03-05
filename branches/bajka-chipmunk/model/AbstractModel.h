@@ -69,7 +69,7 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        /*m_ (getView)*/ virtual View::IView *getView () { return view; }
+        m_ (getView) virtual View::IView *getView () { return view; }
         S_ (setView) void setView (View::IView *v) { view = v; }
 
         m_ (getController) Controller::IController *getController () { return controller; }

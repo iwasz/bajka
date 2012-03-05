@@ -18,7 +18,7 @@ struct IModel;
 struct Layout {
 
         C__ (void)
-        Layout () : align ((Align)(HCENTER | TOP)), translateRel (-1, -1) {}
+        Layout () : align (HCENTER | TOP), translateRel (-1, -1) {}
 
         /**
          * Przesunięcie względem rozmiarów rodzica. Działa tylko w gdy rodzic jest
@@ -37,8 +37,8 @@ struct Layout {
                 HCENTER = 0x20
         };
 
-        Align getAlign () const { return align; }
-        m_ (setAlign) void setAlign (Align a) { align = a; }
+        int getAlign () const { return align; }
+        m_ (setAlign) void setAlign (int a) { align = a; }
 
 /*--------------------------------------------------------------------------*/
 
@@ -52,7 +52,7 @@ struct Layout {
 
 private:
 
-        Align align;
+        int align;
         Geometry::Point translateRel;
 
         E_ (Layout)

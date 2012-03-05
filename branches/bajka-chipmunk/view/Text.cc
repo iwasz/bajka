@@ -89,6 +89,7 @@ void Text::update (Model::IModel *model)
                 hash = h;
         }
 
+        glEnable (GL_TEXTURE_2D);
         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
         glBindTexture(GL_TEXTURE_2D, texName);
 
@@ -98,6 +99,8 @@ void Text::update (Model::IModel *model)
                 glTexCoord2i (1, 0); glVertex2i (texWidth, texHeight);
                 glTexCoord2i (1, 1); glVertex2i (texWidth, 0);
         glEnd();
+
+        glDisable (GL_TEXTURE_2D);
 }
 
 

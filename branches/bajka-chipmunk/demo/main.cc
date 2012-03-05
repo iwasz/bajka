@@ -20,31 +20,6 @@ using Demo::TiliaeModelManager;
  */
 int main (int argc, char **argv)
 {
-        Model::Box *mb = new Model::Box;
-        std::cerr << "Model::Box " << std::hex << (unsigned long int)mb << std::endl;
-
-        Model::IModel *m = mb;
-        std::cerr << "Model::IModel " << std::hex << (unsigned long int)m << std::endl;
-
-        assert (m == mb);
-//        assert ((unsigned long)m == (unsigned long)mb);
-
-
-        Core::Object *o = mb;
-        std::cerr << "Core::Object " << std::hex << (unsigned long int)o << std::endl;
-
-        assert (dynamic_cast <Model::AbstractModel *> (m));
-
-        void *ptr = static_cast <Core::Object *> (m);
-        assert (dynamic_cast <Model::AbstractModel *> (static_cast <Core::Object *> (ptr)));
-
-
-        Core::Variant v (o);
-        Model::AbstractModel *a = ocast <Model::AbstractModel *> (v);
-        assert (a);
-
-        std::cerr << v.toString () << ", " << typeid (Model::AbstractModel).name () << std::endl;
-
         std::string fileName;
 
         if (argc > 1) {
