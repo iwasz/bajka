@@ -19,7 +19,7 @@ namespace View {
 class Text : public Primitive {
 public:
         C__ (void)
-        b_ ("Widget")
+        b_ ("Primitive")
 
         Text () : hash (0) {}
         virtual ~Text () {}
