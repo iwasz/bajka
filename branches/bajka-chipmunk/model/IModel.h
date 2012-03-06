@@ -66,7 +66,7 @@ struct IModel : public virtual Core::Object {
 
 /*------layout--------------------------------------------------------------*/
 
-        virtual Layout const *getLayout () const = 0;
+        virtual Layout *getLayout () = 0;
         virtual void setLayout (Layout *) = 0;
 
 /*------runtime type information--------------------------------------------*/

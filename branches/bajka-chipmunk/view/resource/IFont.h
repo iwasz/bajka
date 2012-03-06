@@ -15,8 +15,26 @@
 namespace View {
 
 struct IFont : public Core::Object {
+
+        enum TextAlign {
+                LEFT,
+                RIGHT,
+                CENTER
+        };
+
         virtual ~IFont () {}
+
+        /**
+         * Renderuj pojedynczą linię tekstu (nie rozumie znaków nowej linii).
+         */
         virtual void *render (std::string const &text, View::Color const &fgColor, View::Color const &bgColor) = 0;
+
+        /**
+         * Renderuj tekst w wielu liniach (akceptuje znaki nowej linii, oraz
+         * umie wrapować tekst).
+         */
+        virtual void *renderMulti (std::string const &text, View::Color const &fgColor, View::Color const &bgColor, TextAlign textAlign = LEFT) = 0;
+
 };
 
 } /* namespace View */

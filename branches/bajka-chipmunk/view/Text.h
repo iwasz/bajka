@@ -21,7 +21,7 @@ public:
         C__ (void)
         b_ ("Primitive")
 
-        Text () : hash (0) {}
+        Text () : hash (0), multiline (false), align (IFont::LEFT) {}
         virtual ~Text () {}
 
         /// Do the drawing.
@@ -32,6 +32,12 @@ public:
 
         std::string getText () const { return text; }
         m_ (setText) void setText (std::string const &s) { text = s; }
+
+        bool getMultiline () const { return multiline; }
+        m_ (setMultiline) void setMultiline (bool b) { multiline = b; }
+
+        IFont::TextAlign getAlign () const { return align; }
+        m_ (setAlign) void setAlign (int a) { align = (IFont::TextAlign)a; } // TODO typ na Align
 
 private:
 
@@ -44,6 +50,8 @@ private:
         std::size_t hash;
         GLuint texName;
         int texWidth, texHeight;
+        bool multiline;
+        IFont::TextAlign align;
 
         E_ (Text)
 };

@@ -44,7 +44,7 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        Layout const *getLayout () const { return layout; }
+        m_ (getLayout) Layout *getLayout () { return layout; }
         m_ (setLayout) void setLayout (Layout *l) { layout = l; }
 
 /*--------------------------------------------------------------------------*/

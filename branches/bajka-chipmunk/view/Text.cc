@@ -21,7 +21,14 @@ namespace View {
 
 void Text::init (Model::IModel *model)
 {
-        SDL_Surface *image = static_cast <SDL_Surface *> (font->render (text, getForeground (), getBackground ()));
+        SDL_Surface *image = NULL;
+
+        if (multiline) {
+                image = static_cast <SDL_Surface *> (font->renderMulti (text, getForeground (), getBackground (), align));
+        }
+        else {
+                image = static_cast <SDL_Surface *> (font->render (text, getForeground (), getBackground ()));
+        }
 
         if (model->isBox ()) {
                 Model::IBox *b = dynamic_cast <Model::IBox *> (model);

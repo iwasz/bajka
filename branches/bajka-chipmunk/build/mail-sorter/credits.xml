@@ -72,52 +72,58 @@
                     </property>
                 </bean>
 
-                <bean parent="label">
+                <bean parent="header">
                     <property name="view.text" value="design / graphics"/>
-                    <property name="view.font" ref="accident14" />
-                    <property name="view.foreground" value="A8A16Cff"/>        
-                    <property name="layout">
-                        <bean class="Layout" singleton="true">
-                            <property name="translateRel" value="50, 80" />       
-                            <property name="align" value="0x24" />       
-                        </bean>
-                    </property>
+                    <property name="layout.translateRel" value="50, 75"/>
                 </bean>
-
-                <bean parent="label">
+                <bean parent="info">
                     <property name="view.text" value="Adrian Kulasek"/>
-                    <property name="view.font" ref="accident24" />
-                    <property name="view.foreground" value="423F2Aff"/>        
-                    <property name="layout">
-                        <bean class="Layout" singleton="true">
-                            <property name="translateRel" value="50, 70" />       
-                            <property name="align" value="0x24" />       
-                        </bean>
-                    </property>
+                    <property name="layout.translateRel" value="50, 71" />       
+                </bean>
+                <bean parent="URL">
+                    <property name="view.text" value="http://about.me/goshki"/>
+                    <property name="layout.translateRel" value="50, 68" />       
                 </bean>
 
-                <bean parent="label">
+                <bean parent="header">
                     <property name="view.text" value="programming"/>
-                    <property name="view.font" ref="accident14" />
-                    <property name="view.foreground" value="A8A16Cff"/>        
-                    <property name="layout">
-                        <bean class="Layout" singleton="true">
-                            <property name="translateRel" value="50, 65" />       
-                            <property name="align" value="0x24" />       
-                        </bean>
-                    </property>
+                    <property name="layout.translateRel" value="50, 64"/>
+                </bean>
+                <bean parent="info">
+                    <property name="view.text" value="Lukasz Iwaszkiewicz"/>
+                    <property name="layout.translateRel" value="50, 60" />       
+                </bean>
+                <bean parent="URL">
+                    <property name="view.text" value="http://iwasz.pl/soft"/>
+                    <property name="layout.translateRel" value="50, 57" />       
                 </bean>
 
-                <bean parent="label">
-                    <property name="view.text" value="Lukasz Iwaszkiewicz"/>
-                    <property name="view.font" ref="accident24" />
-                    <property name="view.foreground" value="423F2Aff"/>        
-                    <property name="layout">
-                        <bean class="Layout" singleton="true">
-                            <property name="translateRel" value="50, 60" />       
-                            <property name="align" value="0x24" />       
-                        </bean>
+                <bean parent="header">
+                    <property name="view.text" value="music"/>
+                    <property name="layout.translateRel" value="50, 53"/>
+                </bean>
+                <bean parent="info">
+                    <property name="view.text" value="Tomasz Marciniak"/>
+                    <property name="layout.translateRel" value="50, 49" />       
+                </bean>
+                <bean parent="URL">
+                    <property name="view.text" value="http://soundcloud.com/tomaszmarciniak"/>
+                    <property name="layout.translateRel" value="50, 46" />       
+                </bean>
+
+                <bean parent="header">
+                    <property name="view.text" value="MailSorter is powered by:"/>
+                    <property name="layout.translateRel" value="50, 35"/>
+                </bean>
+                <bean parent="info">
+                    <property name="view.multiline" value="true"/>                        
+                    <property name="view.align" value="2"/>                        
+                    <property name="view.text">                        
+<value>libbajka
+libtiliae
+Boost</value>
                     </property>
+                    <property name="layout.translateRel" value="50, 26" />       
                 </bean>
                 
                 <bean parent="buttonWgt">
@@ -161,13 +167,40 @@
     <!-- Statyczny label -->
     <bean id="label" class="Box" singleton="true" abstract="true">
         <property name="view">
-                <bean class="Text" singleton="true">
-<!--                     <property name="text" value="Hello World!!!"/> -->
-<!--                     <property name="font" ref="accidentFont" />         -->
-                </bean>
+                <bean class="Text" singleton="true"/>
         </property>
     </bean>
-    
+
+    <bean id="header" parent="label">
+        <property name="view.font" ref="accident14" />
+        <property name="view.foreground" value="A8A16Cff"/>        
+        <property name="layout">
+            <bean class="Layout" singleton="true">
+                <property name="align" value="0x24" />       
+            </bean>
+        </property>
+    </bean>
+        
+    <bean id="info" parent="label">
+        <property name="view.font" ref="accident24" />
+        <property name="view.foreground" value="423F2Aff"/>        
+        <property name="layout">
+            <bean class="Layout" singleton="true">
+                <property name="align" value="0x24" />       
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="URL" parent="label">
+        <property name="view.font" ref="accident16" />
+        <property name="view.foreground" value="7E1F12ff"/>        
+        <property name="layout">
+            <bean class="Layout" singleton="true">
+                <property name="align" value="0x24" />       
+            </bean>
+        </property>
+    </bean>
+                
     <!-- 2 stanowy guzik - ma tylko 2 obrazki - clicked jest taki sam jak hover -->
     <bean id="buttonWgt" class="Box" singleton="true" abstract="true">
         <property name="view">
@@ -200,17 +233,22 @@
     <bean id="accident24" class="TTFFont" singleton="true">
         <constructor-arg><value type="text">resources/fonts/AccidentalPresident.ttf</value></constructor-arg>    
         <constructor-arg><value type="int">24</value></constructor-arg>
-        <property name="type" value="2"/>    
+        <property name="type" value="2"/>
+        <property name="hinting" value="3"/>        
     </bean>
 
     <bean id="accident14" class="TTFFont" singleton="true">
         <constructor-arg><value type="text">resources/fonts/AccidentalPresident.ttf</value></constructor-arg>    
         <constructor-arg><value type="int">14</value></constructor-arg>
-        <property name="type" value="2"/>    
+        <property name="type" value="2"/>
+        <property name="hinting" value="3"/>        
     </bean>
-        
-<!-- #A8A16C - jasno brązowy / oliwkowy - linia i tytuły sekcji -->
-<!-- #7E1F12 - wiśniowy - linki -->
-<!-- #423F2A - ciemno brązowy - teksty -->
-        
+
+    <bean id="accident16" class="TTFFont" singleton="true">
+        <constructor-arg><value type="text">resources/fonts/AccidentalPresident.ttf</value></constructor-arg>    
+        <constructor-arg><value type="int">16</value></constructor-arg>
+        <property name="type" value="2"/>
+        <property name="hinting" value="3"/>        
+    </bean>
+                
 </beans>

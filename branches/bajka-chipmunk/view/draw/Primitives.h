@@ -9,9 +9,9 @@
 #ifndef BAJKA_DRAWUTIL_H_
 #define BAJKA_DRAWUTIL_H_
 
+#include "Color.h"
 #include "../../geometry/Point.h"
 #include "../../geometry/Box.h"
-#include "Color.h"
 
 namespace View {
 
@@ -27,7 +27,6 @@ public:
 //        static void drawPolygon (int count, cpVect *verts, Color lineColor, Color fillColor);
 //        static void drawPoints (cpFloat size, int count, cpVect *verts, Color color);
 //        static void drawBox (Geometry::Box const &b, Color const &color);
-
 };
 
 }
