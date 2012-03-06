@@ -12,6 +12,32 @@
 
 namespace Sdl {
 
+SDL_Surface *createSurface (int w, int h)
+{
+        SDL_Surface *surface = SDL_CreateRGBSurface (SDL_SWSURFACE, w, h, 32,
+
+        #if SDL_BYTEORDER == SDL_LIL_ENDIAN
+                    0x000000FF,
+                    0x0000FF00,
+                    0x00FF0000,
+                    0xFF000000
+        #else
+                    0xFF000000,
+                    0x00FF0000,
+                    0x0000FF00,
+                    0x000000FF
+        #endif
+        );
+
+        if (surface == NULL) {
+                throw Util::RuntimeException ("expandSurfacePowerOf2 : surface == NULL");
+        }
+
+        return surface;
+}
+
+/****************************************************************************/
+
 SDL_Surface *expandSurfacePowerOf2 (SDL_Surface *input, Geometry::Box const *region)
 {
         SDL_Surface *texSurface = NULL;
@@ -33,23 +59,7 @@ SDL_Surface *expandSurfacePowerOf2 (SDL_Surface *input, Geometry::Box const *reg
 
         if (region || height != input->h || width != input->w) {
 
-                SDL_Surface *surface = SDL_CreateRGBSurface (SDL_SWSURFACE, width, height, 32,
-                #if SDL_BYTEORDER == SDL_LIL_ENDIAN
-                            0x000000FF,
-                            0x0000FF00,
-                            0x00FF0000,
-                            0xFF000000
-                #else
-                            0xFF000000,
-                            0x00FF0000,
-                            0x0000FF00,
-                            0x000000FF
-                #endif
-                );
-
-                if (surface == NULL) {
-                        throw Util::RuntimeException ("expandSurfacePowerOf2 : surface == NULL");
-                }
+                SDL_Surface *surface = createSurface (width, height);
 
                 Uint32 saved_flags = input->flags & (SDL_SRCALPHA | SDL_RLEACCELOK);
 

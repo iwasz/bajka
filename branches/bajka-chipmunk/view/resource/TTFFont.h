@@ -9,6 +9,7 @@
 #ifndef BAJKA_TTFFONT_H_
 #define BAJKA_TTFFONT_H_
 
+#include <SDL_ttf.h>
 #include "ReflectionMacros.h"
 #include "IFont.h"
 
@@ -34,21 +35,43 @@ public:
                 BLENDED
         };
 
-        enum Encoding {
-                ASCII,
-                UTF8
+        enum Style {
+                NORMAL          = TTF_STYLE_NORMAL,
+                BOLD            = TTF_STYLE_BOLD,
+                ITALIC          = TTF_STYLE_ITALIC,
+                UNDERLINE       = TTF_STYLE_UNDERLINE,
+                STRIKETHROUGH   = TTF_STYLE_STRIKETHROUGH
+        };
+
+        // TODO Tu jest jakoś źle chyba.
+        enum Hinting {
+                FULL,
+                LIGHT,
+                MONO,
+                NONE
         };
 
         void *render (std::string const &text, View::Color const &fgColor, View::Color const &bgColor);
+        void *renderMulti (std::string const &text, View::Color const &fgColor, View::Color const &bgColor, TextAlign textAlign = LEFT);
 
+        // TODO Typ zwracany powinien być Hinting
         int getHinting () const;
         m_ (setHinting) void setHinting (int hint);
 
         int getType () const { return type; }
         m_ (setType) void setType (int t) { type = t; }
 
-        int getEncoding () const { return encoding; }
-        m_ (setEncoding) void setEncoding (int e) { encoding = e; }
+        bool getUtf8 () const { return utf8; }
+        m_ (setUtf8) void setUtf8 (bool b) { utf8 = b; }
+
+        int getStyle () const;
+        m_ (setStyle) void setStyle (int i);
+
+        int getOutline () const;
+        m_ (setOutline) void setOutline (int i);
+
+        bool getKerning () const;
+        m_ (setKerning) void setKerning (bool b);
 
 private:
 
@@ -58,7 +81,7 @@ private:
 
         TTF_Font *font;
         int type; // TODO to powinno być typu Type
-        int encoding; // TODO powinno być typu Encoding
+        bool utf8;
 
         E_ (TTFFont)
 };
