@@ -66,12 +66,6 @@
                     </property>
                 </bean>
 
-<!--                 <bean class="Box" singleton="true"> -->
-<!--                     <property name="view" ref="2state" /> -->
-<!--                     <property name="translate" value="590, 0" />        -->
-<!--                     <property name="controller" ref="buttonCtr"/>             -->
-<!--                 </bean> -->
-
                 <bean parent="buttonWgt">
                     <property name="view.widgets.0.bitmap" ref="buttonStartBmp"/>
                     <property name="view.widgets.0.region" value="3, 3, 77, 43"/>
@@ -94,13 +88,6 @@
                             <property name="translateRel" value="50, 43" />       
                         </bean>
                     </property>
-                    <property name="controller">
-                      <bean class="LoadButtonController" singleton="true">
-                           <!-- TODO, tylko mouse. -->
-                           <property name="eventMask" value="0xffff"/>
-                           <property name="name" value="credits"/>          
-                      </bean>
-                    </property>      
                 </bean>
 
                 <bean parent="buttonWgt">
@@ -113,6 +100,13 @@
                             <property name="translateRel" value="50, 36" />       
                         </bean>
                     </property>
+                    <property name="controller">
+                      <bean class="LoadButtonController" singleton="true">
+                           <!-- TODO, tylko mouse. -->
+                           <property name="eventMask" value="0xffff"/>
+                           <property name="name" value="credits"/>          
+                      </bean>
+                    </property>      
                 </bean>
 
                 <bean parent="buttonWgt">

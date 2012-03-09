@@ -50,59 +50,60 @@
                     </property>
                 </bean>
 
-                <bean parent="dheader">
+                <bean parent="_header">
                     <property name="view.text" value="design / graphics"/>
                     <property name="layout.translateRel" value="50, 75"/>
                 </bean>
-<!--                 <bean parent="info"> -->
-<!--                     <property name="view.text" value="Adrian Kulasek"/> -->
-<!--                     <property name="layout.translateRel" value="50, 71" />        -->
-<!--                 </bean> -->
-<!--                 <bean parent="URL"> -->
-<!--                     <property name="view.text" value="http://about.me/goshki"/> -->
-<!--                     <property name="layout.translateRel" value="50, 68" />        -->
-<!--                 </bean> -->
+                
+                <bean parent="_info">
+                    <property name="view.text" value="Adrian Kulasek"/>
+                    <property name="layout.translateRel" value="50, 71" />       
+                </bean>
+                <bean parent="URL">
+                    <property name="view.text" value="http://about.me/goshki"/>
+                    <property name="layout.translateRel" value="50, 68" />       
+                </bean>
 
-<!--                 <bean parent="header"> -->
-<!--                     <property name="view.text" value="programming"/> -->
-<!--                     <property name="layout.translateRel" value="50, 64"/> -->
-<!--                 </bean> -->
-<!--                 <bean parent="info"> -->
-<!--                     <property name="view.text" value="Lukasz Iwaszkiewicz"/> -->
-<!--                     <property name="layout.translateRel" value="50, 60" />        -->
-<!--                 </bean> -->
-<!--                 <bean parent="URL"> -->
-<!--                     <property name="view.text" value="http://iwasz.pl/soft"/> -->
-<!--                     <property name="layout.translateRel" value="50, 57" />        -->
-<!--                 </bean> -->
+                <bean parent="_header">
+                    <property name="view.text" value="programming"/>
+                    <property name="layout.translateRel" value="50, 64"/>
+                </bean>
+                <bean parent="_info">
+                    <property name="view.text" value="Lukasz Iwaszkiewicz"/>
+                    <property name="layout.translateRel" value="50, 60" />       
+                </bean>
+                <bean parent="URL">
+                    <property name="view.text" value="http://iwasz.pl/soft"/>
+                    <property name="layout.translateRel" value="50, 57" />       
+                </bean>
 
-<!--                 <bean parent="header"> -->
-<!--                     <property name="view.text" value="music"/> -->
-<!--                     <property name="layout.translateRel" value="50, 53"/> -->
-<!--                 </bean> -->
-<!--                 <bean parent="info"> -->
-<!--                     <property name="view.text" value="Tomasz Marciniak"/> -->
-<!--                     <property name="layout.translateRel" value="50, 49" />        -->
-<!--                 </bean> -->
-<!--                 <bean parent="URL"> -->
-<!--                     <property name="view.text" value="http://soundcloud.com/tomaszmarciniak"/> -->
-<!--                     <property name="layout.translateRel" value="50, 46" />        -->
-<!--                 </bean> -->
+                <bean parent="_header">
+                    <property name="view.text" value="music"/>
+                    <property name="layout.translateRel" value="50, 53"/>
+                </bean>
+                <bean parent="_info">
+                    <property name="view.text" value="Tomasz Marciniak"/>
+                    <property name="layout.translateRel" value="50, 49" />       
+                </bean>
+                <bean parent="URL">
+                    <property name="view.text" value="http://soundcloud.com/tomaszmarciniak"/>
+                    <property name="layout.translateRel" value="50, 46" />       
+                </bean>
 
-<!--                 <bean parent="header"> -->
-<!--                     <property name="view.text" value="MailSorter is powered by:"/> -->
-<!--                     <property name="layout.translateRel" value="50, 35"/> -->
-<!--                 </bean> -->
-<!--                 <bean parent="info"> -->
-<!--                     <property name="view.multiline" value="true"/>                         -->
-<!--                     <property name="view.align" value="2"/>                         -->
-<!--                     <property name="view.text">                         -->
-<!-- <value>libbajka -->
-<!-- libtiliae -->
-<!-- Boost</value> -->
-<!--                     </property> -->
-<!--                     <property name="layout.translateRel" value="50, 26" />        -->
-<!--                 </bean> -->
+                <bean parent="_header">
+                    <property name="view.text" value="MailSorter is powered by:"/>
+                    <property name="layout.translateRel" value="50, 35"/>
+                </bean>
+                <bean parent="_info">
+                    <property name="view.multiline" value="true"/>                        
+                    <property name="view.align" value="2"/>                        
+                    <property name="view.text">                        
+<value>libbajka
+libtiliae
+Boost</value>
+                    </property>
+                    <property name="layout.translateRel" value="50, 26" />       
+                </bean>
                 
                 <bean parent="buttonWgt">
                     <property name="view.widgets.0.bitmap" ref="buttonCloseBmp"/>
@@ -138,7 +139,7 @@
         </property>
     </bean>
 
-    <bean id="dheader" parent="label">
+    <bean id="_header" parent="label">
         <property name="view.font" ref="accident14" />
         <property name="view.foreground" value="A8A16Cff"/>        
         <property name="layout">
@@ -148,7 +149,7 @@
         </property>
     </bean>
         
-    <bean id="info" parent="label">
+    <bean id="_info" parent="label">
         <property name="view.font" ref="accident24" />
         <property name="view.foreground" value="423F2Aff"/>        
         <property name="layout">
