@@ -145,23 +145,6 @@ IModel *BoxGroup::findContains (G::Point const &p)
         return this;
 }
 
-
-/****************************************************************************/
-
-void BoxGroup::setChildren (ModelVector const &c)
-{
-        std::for_each (c.begin (), c.end (), boost::bind (&BoxGroup::addChild, this, _1));
-}
-
-/****************************************************************************/
-
-void BoxGroup::addChild (IModel *m)
-{
-        children.push_back (m);
-        m->setParent (this);
-        m->onParentSet (this);
-}
-
 /****************************************************************************/
 
 void BoxGroup::setRelW (double w)
@@ -188,80 +171,6 @@ void BoxGroup::setRelH (double h)
 	}
 
 	setHeight (parGroup->getHeight () * h / 100.0);
-}
-
-/****************************************************************************/
-
-//void BoxGroup::setRelX (double x)
-//{
-//	BoxGroup *parGroup = getParGroup ();
-//
-//	if (!parGroup) {
-//		relX = x;
-//		return;
-//	}
-//
-//	G::Point oldT = getTranslate ();
-//	setTranslate (G::Point (parGroup->getWidth () * x / 100.0, oldT.y));
-//}
-//
-///****************************************************************************/
-//
-//void BoxGroup::setRelY (double y)
-//{
-//	BoxGroup *parGroup = getParGroup ();
-//
-//	if (!parGroup) {
-//		relY = y;
-//		return;
-//	}
-//
-//	G::Point oldT = getTranslate ();
-//	setTranslate (G::Point (oldT.x, parGroup->getHeight () * y / 100.0));
-//}
-
-/****************************************************************************/
-
-//void BoxGroup::onParentSet (IModel *m)
-//{
-//	// Uruchamiamy jeszcze raz, bo teraz mamy parenta (ułatwoenie dla kontenera).
-//	if (relW >= 0.0) {
-//		setRelW (relW);
-//	}
-//
-//	if (relH >= 0.0) {
-//		setRelH (relH);
-//
-//	}
-//	if (relX >= 0.0) {
-//		setRelX (relX);
-//	}
-//
-//	if (relY >= 0.0) {
-//		setRelY (relY);
-//	}
-//}
-
-/****************************************************************************/
-
-void BoxGroup::screenToGroup (Geometry::Point *p) const
-{
-        if (parent && parent->isGroup ()) {
-                dynamic_cast <IGroup *> (parent)->screenToGroup (p);
-        }
-
-        getMatrix ().transform (p);
-}
-
-/****************************************************************************/
-
-void BoxGroup::groupToScreen (Geometry::Point *p) const
-{
-        getMatrix ().getInversed ().transform (p);
-
-        if (parent && parent->isGroup ()) {
-                dynamic_cast <IGroup *> (parent)->groupToScreen (p);
-        }
 }
 
 /****************************************************************************/

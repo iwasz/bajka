@@ -6,14 +6,12 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_MODEL_BOX_GROUP_H_
-#define BAJKA_MODEL_BOX_GROUP_H_
+#ifndef BAJKA_MODEL_BOX_GROUP2_H_
+#define BAJKA_MODEL_BOX_GROUP2_H_
 
-#include "../geometry/Point.h"
 #include "../util/ReflectionMacros.h"
-#include "IGroup.h"
 #include "IBox.h"
-#include "AbstractModel.h"
+#include "Group.h"
 
 namespace Model {
 
@@ -33,11 +31,11 @@ namespace Model {
  * ustalaja swój rozmiar.
  *
  */
-class BoxGroup : public IGroup, public IBox, public AbstractModel  {
+class BoxGroup : public IBox, public Group  {
 public:
 
 	C__ (void)
-	b_ ("AbstractModel")
+	b_ ("Group")
 
 	BoxGroup () : w (0), h(0), relW (-1), relH (-1), relX (-1), relY (-1), expand (false) {}
 	virtual ~BoxGroup() {}
@@ -66,16 +64,12 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        bool isGroup () const { return true; }
         bool isBox () const { return true; }
 
-        Geometry::Point computeCenter () const { return Geometry::Point (w / 2, h / 2); }
+        virtual Geometry::Point computeCenter () const { return Geometry::Point (w / 2, h / 2); }
         virtual Geometry::Box getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const;
         virtual bool contains (Geometry::Point const &p) const;
         virtual IModel *findContains (Geometry::Point const &p);
-
-        void screenToGroup (Geometry::Point *p) const;
-        void groupToScreen (Geometry::Point *p) const;
 
 /*--------------------------------------------------------------------------*/
 
@@ -86,26 +80,14 @@ public:
         static BoxGroup const *getParGroup (IModel const *m);
         static BoxGroup *getParGroup (IModel *m);
 
-/*--------------------------------------------------------------------------*/
-
-//        void onParentSet (IModel *m);
-        m_ (getChildren) ModelVector &getChildren () { return children; }
-        m_ (setChildren) void setChildren (ModelVector const &c);
-        void addChild (IModel *m);
-        ModelVector::iterator begin () { return children.begin (); }
-        ModelVector::iterator end () { return children.end (); }
-        ModelVector::const_iterator begin () const { return children.begin (); }
-        ModelVector::const_iterator end () const { return children.end (); }
-
 private:
 
         double w, h;
-        ModelVector children;
         // Cache uzywany do inicjowania. Po inicjacji już nie używany.
         double relW, relH, relX, relY;
         bool expand;
 
-    E_ (BoxGroup)
+        E_ (BoxGroup)
 };
 
 } /* namespace Model */

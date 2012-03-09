@@ -40,7 +40,6 @@ public:
         bool isGroup () const { return true; }
         virtual IModel *findContains (Geometry::Point const &p);
 
-        // TODO
         void screenToGroup (Geometry::Point *p) const;
         void groupToScreen (Geometry::Point *p) const;
 
@@ -49,12 +48,14 @@ public:
         m_ (getChildren) ModelVector &getChildren () { return children; }
         m_ (setChildren) void setChildren (ModelVector const &c);
         void addChild (IModel *m);
+        void popChild ();
+        IModel *getTop ();
         ModelVector::iterator begin () { return children.begin (); }
         ModelVector::iterator end () { return children.end (); }
         ModelVector::const_iterator begin () const { return children.begin (); }
         ModelVector::const_iterator end () const { return children.end (); }
 
-private:
+protected:
 
     ModelVector children;
 

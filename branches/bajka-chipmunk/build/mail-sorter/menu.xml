@@ -14,28 +14,6 @@
          <property name="eventMask" value="0xffff"/> 
     </bean>      
 
-    <bean parent="image" id="pointer">
-        <property name="view.bitmap.path" value="gfx/cursor.png"/>
-    </bean>
-
-    <bean id="menu" class="Group" singleton="true">
-        <property name="children">
-            <list class="ModelVector">
-                <ref bean="menu1"/>
-                <ref bean="pointer"/>
-            </list>
-        </property>                
-
-        <property name="controller">
-            <bean class="PointerController" singleton="true">
-                <property name="pointer" ref="pointer"/>
-                <property name="eventMask" value="0xffff"/>
-                <property name="offset" value="0, -32" />
-            </bean>
-        </property>
-    </bean>
-
-
     <bean id="stack" class="Box" singleton="true">
             <property name="translate" value="90, 70"/>
             <property name="box" value="0, 0, 300, 99"/>
@@ -54,7 +32,7 @@
     </bean>
 
 
-    <bean id="menu1" class="BoxGroup" singleton="true">
+    <bean id="menu" class="BoxGroup" singleton="true">
         <property name="translate" value="-240, -320" />       
         <property name="controller" ref="emptyCtr"/>            
 <!--         <property name="expand" value="true"/>             -->
@@ -164,17 +142,6 @@
 <!-- ====================================================================================== -->
 <!-- Bitmapy, obrazki -->
 <!-- ====================================================================================== -->
-
-    <!-- Statyczny obrazek -->
-    <bean id="image" class="Box" singleton="true" abstract="true">
-        <property name="view">
-            <bean class="Image" singleton="true">
-                <property name="bitmap">
-                    <bean class="Bitmap" singleton="true"/>
-                </property>
-            </bean>
-        </property>
-    </bean>
     
     <!-- 2 stanowy guzik - ma tylko 2 obrazki - clicked jest taki sam jak hover -->
     <bean id="buttonWgt" class="Box" singleton="true" abstract="true">
@@ -196,37 +163,6 @@
     </bean>
     
 <!-- ====================================================================================== -->
-    
-    <bean id="2state" class="StatefulWidget" singleton="true">
-        <property name="widgets">
-            <list class="WidgetVector">
-                <ref bean="depressedWgt"/>
-                <ref bean="pressedWgt"/>
-                <ref bean="pressedWgt"/>
-            </list>
-        </property>
-        <property name="state" value="0" />
-        
-<!--         <add name="widgets" ref="pressedWgt"/> -->
-<!--         <add name="widgets" ref="depressedWgt"/> -->
-<!--         <set name="state" value="0" /> -->
-    </bean>
-
-    <bean id="depressedWgt" class="Image" singleton="true">
-        <property name="bitmap" ref="arrowKeysBmp" />
-        <property name="region" value="1, 1, 48, 48" />       
-    </bean>
-
-    <bean id="pressedWgt" class="Image" singleton="true">
-        <property name="bitmap" ref="arrowKeysBmp" />
-        <property name="region" value="51, 1, 98, 48" />       
-    </bean>
-    
-<!-- ====================================================================================== -->
-
-    <bean id="arrowKeysBmp" class="Bitmap" singleton="true">
-        <property name="path" value="resources/img/ui/instructions-arrow-keys.png" />
-    </bean>
     
     <bean id="buttonStartBmp" class="Bitmap" singleton="true">
         <property name="path" value="resources/img/ui/button-start.png" />
