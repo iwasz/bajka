@@ -2,7 +2,6 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
         "file:///home/iwasz/program/projects/tiliae/base/container/tiliae-container-1.0.dtd">
 
-<!--Ogólny schemat nazw : Ctr - kontroler, Wgt - widget, Mdl - model.-->
 <beans>
 
     <!--Konfiguracja-->
@@ -24,7 +23,8 @@
             </list>
         </property>
         
-        <property name="manager" ref="modelManager" />        
+        <property name="manager" ref="modelManager" />
+        <property name="model" ref="rootModel" />
     </bean>
 
     <!-- Manager modeli -->          
@@ -35,9 +35,35 @@
                 <entry key="credits" value="mail-sorter/credits.xml"/>                
           </map>
         </property>
+        
+        <property name="mainModel" ref="mainModel"/>
     </bean>
+
+    <!-- Tu bedą się osadzać inne modele -->
+    <bean id="mainModel" class="Group" singleton="true"/>
+    
+    <!-- Główny model, który jest podpięty do BajkaApp -->
+    <bean id="rootModel" class="Group" singleton="true">
+        <property name="children">
+            <list class="ModelVector">
+                <ref bean="mainModel"/>
+                <ref bean="pointer"/>
+            </list>
+        </property>                
+
+        <property name="controller">
+            <bean class="PointerController" singleton="true">
+                <property name="pointer" ref="pointer"/>
+                <property name="eventMask" value="0xffff"/>
+                <property name="offset" value="0, -32" />
+            </bean>
+        </property>
+    </bean>      
       
-      
+    <bean parent="image" id="pointer">
+        <property name="view.bitmap.path" value="gfx/cursor.png"/>
+    </bean>
+            
     <bean id="emptyCtr" class="EmptyController" singleton="true">
          <property name="eventMask" value="0xffff"/> 
     </bean>      
@@ -62,5 +88,17 @@
       
     <bean id="circle" class="Circle" singleton="true">
         <property name="view" ref="circleWgt"/>            
-    </bean>      
+    </bean>
+    
+    <!-- Statyczny obrazek -->
+    <bean id="image" class="Box" singleton="true" abstract="true">
+        <property name="view">
+            <bean class="Image" singleton="true">
+                <property name="bitmap">
+                    <bean class="Bitmap" singleton="true"/>
+                </property>
+            </bean>
+        </property>
+    </bean>
+          
 </beans>

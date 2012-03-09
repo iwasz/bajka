@@ -14,5 +14,6 @@
 #include "IModel.h"
 #include "AbstractModel.h"
 #include "Group.h"
+#include "BoxGroup.h"
 
 #	endif /* MODEL_H_ */

@@ -13,8 +13,13 @@
 #include "../util/ModelManager.h"
 #include "../util/ReflectionMacros.h"
 
-namespace Demo {
+namespace Util {
 
+/**
+ * Ładuje modele z kontenera IoC. Ta klasa ma referencję do głownego konteera i do jednego child-kontenera
+ * i z nich próibuje załadować model o podanej nazwie. Jeśli nie znajdziem, to szuka w mapowaniu mapping
+ * w jakim pliku jest szukany model i ładuje ten plik jednocześnie wyrzucajac z pamięci poprzedni.
+ */
 class TiliaeModelManager : public Util::ModelManager {
 public:
         C__ (void)
@@ -22,10 +27,10 @@ public:
 
         virtual ~TiliaeModelManager () {}
 
-        virtual void play (/*std::string const &parent, */std::string const &name);
-        virtual void pause (std::string const &name);
-        virtual void stop (std::string const &name);
-        virtual void cut (std::string const &name);
+        void play (std::string const &name);
+//        void pause (std::string const &name);
+//        void stop (std::string const &name);
+        void cut (std::string const &name);
 
         void setMainContainer (Ptr <Container::BeanFactoryContainer> mc) { mainContainer = mc; }
 
@@ -33,6 +38,10 @@ public:
 
         /// Nazwa modelu -> plik.
         m_ (setMapping) void setMapping (Core::StringMap const &m) { mapping = m; }
+
+private:
+
+        void load (std::string const &name, bool cut = false);
 
 private:
 
@@ -45,6 +54,6 @@ private:
         E_ (TiliaeModelManager)
 };
 
-} /* namespace Demo */
+} /* namespace Util */
 
 #	endif /* TILIAEMODELMANAGER_H_ */

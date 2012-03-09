@@ -137,4 +137,22 @@ void Group::groupToScreen (Geometry::Point *p) const
         }
 }
 
+/****************************************************************************/
+
+void Group::popChild ()
+{
+        if (children.empty ()) {
+                return;
+        }
+
+        children.pop_back ();
+}
+
+/****************************************************************************/
+
+IModel *Group::getTop ()
+{
+        return (children.empty ()) ? (NULL) : (children.back ());
+}
+
 } /* namespace Model */
