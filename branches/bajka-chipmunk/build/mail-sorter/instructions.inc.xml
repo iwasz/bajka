@@ -4,7 +4,7 @@
 
 <beans>
 
-    <bean id="credits" class="BoxGroup" singleton="true">
+    <bean id="instructionsBase" class="BoxGroup" singleton="true" abstract="true">
         <property name="translate" value="-240, -320" />       
         <property name="controller" ref="emptyCtr"/>            
         <property name="width" value="480"/>
@@ -29,8 +29,8 @@
                 </bean>
 
                 <bean parent="image">
-                    <property name="view.bitmap.path" value="resources/img/ui/button-credits.png"/>
-                    <property name="view.region" value="3, 48, 94, 88" />                    
+                    <property name="view.bitmap.path" value="resources/img/ui/button-instructions.png"/>
+                    <property name="view.region" value="3, 48, 145, 88" />                    
 
                     <property name="layout">
                         <bean class="Layout" singleton="true">
@@ -40,61 +40,16 @@
                     </property>
                 </bean>
 
-                <bean parent="header">
-                    <property name="view.text" value="design / graphics"/>
-                    <property name="layout.translateRel" value="50, 75"/>
-                </bean>
-                
-                <bean parent="info">
-                    <property name="view.text" value="Adrian Kulasek"/>
-                    <property name="layout.translateRel" value="50, 71" />       
-                </bean>
-                <bean parent="url">
-                    <property name="view.text" value="http://about.me/goshki"/>
-                    <property name="layout.translateRel" value="50, 68" />       
-                </bean>
+                <!-- To dodajemy instrukcje obrazkowe -->
+                <bean class="BoxGroup" singleton="true"/>
 
                 <bean parent="header">
-                    <property name="view.text" value="programming"/>
-                    <property name="layout.translateRel" value="50, 64"/>
+                    <property name="layout.translateRel" value="50, 42"/>
                 </bean>
-                <bean parent="info">
-                    <property name="view.text" value="Lukasz Iwaszkiewicz"/>
-                    <property name="layout.translateRel" value="50, 60" />       
-                </bean>
-                <bean parent="url">
-                    <property name="view.text" value="http://iwasz.pl/soft"/>
-                    <property name="layout.translateRel" value="50, 57" />       
+                <bean parent="infoSmall">
+                    <property name="layout.translateRel" value="50, 40" />       
                 </bean>
 
-                <bean parent="header">
-                    <property name="view.text" value="music"/>
-                    <property name="layout.translateRel" value="50, 53"/>
-                </bean>
-                <bean parent="info">
-                    <property name="view.text" value="Tomasz Marciniak"/>
-                    <property name="layout.translateRel" value="50, 49" />       
-                </bean>
-                <bean parent="url">
-                    <property name="view.text" value="http://soundcloud.com/tomaszmarciniak"/>
-                    <property name="layout.translateRel" value="50, 46" />       
-                </bean>
-
-                <bean parent="header">
-                    <property name="view.text" value="MailSorter is powered by:"/>
-                    <property name="layout.translateRel" value="50, 35"/>
-                </bean>
-                <bean parent="info">
-                    <property name="view.multiline" value="true"/>                        
-                    <property name="view.align" value="2"/>                        
-                    <property name="view.text">                        
-<value>libbajka
-libtiliae
-Boost</value>
-                    </property>
-                    <property name="layout.translateRel" value="50, 26" />       
-                </bean>
-                
                 <bean parent="buttonWgt">
                     <property name="view.widgets.0.bitmap" ref="buttonCloseBmp"/>
                     <property name="view.widgets.0.region" value="3, 3, 77, 43"/>
@@ -102,7 +57,7 @@ Boost</value>
                     <property name="view.widgets.1.region" value="3, 48, 77, 88"/>
                     <property name="layout">
                         <bean class="Layout" singleton="true">
-                            <property name="translateRel" value="50, 10" />       
+                            <property name="translateRel" value="35, 12" />       
                         </bean>
                     </property>
                     <property name="controller">
@@ -114,6 +69,24 @@ Boost</value>
                     </property>      
                 </bean>
                 
+                <bean parent="buttonWgt">
+                    <property name="view.widgets.0.bitmap" ref="buttonNextBmp"/>
+                    <property name="view.widgets.0.region" value="3, 3, 65, 43"/>
+                    <property name="view.widgets.1.bitmap" ref="buttonNextBmp"/>
+                    <property name="view.widgets.1.region" value="3, 48, 65, 88"/>
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="65, 12" />       
+                        </bean>
+                    </property>
+                    <property name="controller">
+                      <bean class="LoadButtonController" singleton="true">
+<!--                            TODO, tylko mouse. -->
+                           <property name="eventMask" value="0xffff"/>
+                           <property name="name" value="override"/>          
+                      </bean>
+                    </property>      
+                </bean>
             </list>
         </property>
     </bean>
@@ -122,12 +95,12 @@ Boost</value>
 <!-- Bitmapy, obrazki -->
 <!-- ====================================================================================== -->
 
-    <bean id="mailStackBmp" class="Bitmap" singleton="true">
-        <property name="path" value="resources/img/ui/menu-mail-stack-loop.png" />
-    </bean>
-
     <bean id="buttonCloseBmp" class="Bitmap" singleton="true">
         <property name="path" value="resources/img/ui/button-close.png" />
+    </bean>
+
+    <bean id="buttonNextBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/button-next.png" />
     </bean>
     
 </beans>

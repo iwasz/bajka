@@ -94,11 +94,11 @@ void BajkaApp::init ()
 {
 #if 1
 
-        /* Initialize SDL for video output */
-        if (SDL_Init (SDL_INIT_VIDEO) < 0) {
-                fprintf (stderr, "Unable to initialize SDL: %s\n", SDL_GetError ());
-                exit (1);
-        }
+//        /* Initialize SDL for video output */
+//        if (SDL_Init (SDL_INIT_VIDEO) < 0) {
+//                fprintf (stderr, "Unable to initialize SDL: %s\n", SDL_GetError ());
+//                exit (1);
+//        }
 
         int flags;
         if (::config ()->getFullScreen ()) {
@@ -128,9 +128,9 @@ void BajkaApp::init ()
 
 /*##########################################################################*/
 
-        if (TTF_Init () < 0) {
-            throw InitException ("TTF_Init failed");
-        }
+//        if (TTF_Init () < 0) {
+//            throw InitException ("TTF_Init failed");
+//        }
 
 /*##########################################################################*/
 

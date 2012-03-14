@@ -136,6 +136,10 @@ void *TTFFont::renderMulti (std::string const &text, View::Color const &fgColor,
 
         for (Core::StringVector::const_iterator i = tokens.begin (); i != tokens.end (); ++i, ++cnt) {
 
+                if (i->empty ()) {
+                        continue;
+                }
+
                 // The rendered text:
                 sTemp = static_cast <SDL_Surface *> (render (*i, fgColor, bgColor));
 
