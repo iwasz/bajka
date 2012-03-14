@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
+        "file:///home/iwasz/program/projects/tiliae/base/container/tiliae-container-1.0.dtd">
+
+<beans>
+
+    <import resource="mail-sorter/instructions.inc.xml"/>
+
+    <bean id="instructions1" parent="instructionsBase">
+        <property name="children.4.view.text" value="1 / 5"/>
+        <property name="children.5.view.text">
+                        <value>Use LEFT and RIGHT arrows to move and
+collect falling mail. Each mail is worth 1
+point. The longer you play, the faster the
+mail fails.
+
+Don't let any mail fall on ground!</value>
+        </property>
+        <property name="children.7.controller.name" value="instructions2"/>
+        
+        <!-- Box z animacjami -->
+        <property name="children.3.children">
+            <list class="ModelVector">
+                <bean parent="image">
+                    <property name="view.bitmap.path" value="resources/img/ui/instructions-principal.png"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+    
+</beans>

@@ -39,7 +39,7 @@ public:
        BajkaApp ();
        virtual ~BajkaApp ();
 
-       m_ (init) void init ();
+       void init ();
        m_ (loop) void loop ();
        m_ (debug) void debug (Core::String const &);
        m_ (destroy) void destroy ();

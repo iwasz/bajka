@@ -76,6 +76,13 @@
                             <property name="translateRel" value="50, 50" />       
                         </bean>
                     </property>
+                    <property name="controller">
+                      <bean class="LoadButtonController" singleton="true">
+                           <!-- TODO, tylko mouse. -->
+                           <property name="eventMask" value="0xffff"/>
+                           <property name="name" value="goAdrian"/>          
+                      </bean>
+                    </property>      
                 </bean>
                 
                 <bean parent="buttonWgt">
@@ -88,6 +95,13 @@
                             <property name="translateRel" value="50, 43" />       
                         </bean>
                     </property>
+                    <property name="controller">
+                      <bean class="LoadButtonController" singleton="true">
+                           <!-- TODO, tylko mouse. -->
+                           <property name="eventMask" value="0xffff"/>
+                           <property name="name" value="instructions1"/>          
+                      </bean>
+                    </property>      
                 </bean>
 
                 <bean parent="buttonWgt">
