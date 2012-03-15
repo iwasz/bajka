@@ -72,8 +72,6 @@ SDL_Surface *expandSurfacePowerOf2 (SDL_Surface *input, Geometry::Box const *reg
                 /* Copy the surface into the GL texture surface (texSurface) */
                 destRct.x = 0;
                 destRct.y = height - origH;
-                destRct.w = origW;
-                destRct.h = origH;
 
                 if (!region) {
 

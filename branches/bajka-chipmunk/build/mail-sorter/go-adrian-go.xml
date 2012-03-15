@@ -50,6 +50,38 @@ GO!</value>
                     </property>      
                 </bean>
                 
+                <bean class="Box" singleton="true">
+                        <property name="layout">
+                            <bean class="Layout" singleton="true">
+                                <property name="translateRel" value="50, 5" />       
+                            </bean>
+                        </property>
+
+                        <property name="view">
+                                <bean class="Animation" singleton="true">
+                                        <property name="bitmap" ref="playerBmp"/>
+                                        <property name="region" value="0, 0, 30, 50"/>
+                                        <property name="count" value="5"/>
+                                        <property name="frames.default">
+                                                <bean class="FrameSet" singleton="true">
+                                                        <property name="fps" value="2"/>
+                                                        <property name="loop" value="true"/>
+                                                        <property name="frames">
+                                                                <list class="IntVector" singleton="true">
+                                                                        <value>0</value>
+                                                                        <value>1</value>
+                                                                        <value>2</value>
+                                                                        <value>3</value>
+                                                                        <value>4</value>
+                                                                </list>
+                                                        </property>
+                                                </bean>
+                                        </property>
+                                        <property name="default" value="default"/>
+                                </bean>
+                        </property>
+                </bean>
+                
             </list>
         </property>
     </bean>
@@ -63,6 +95,11 @@ GO!</value>
 
     <bean id="buttonCloseBmp" class="Bitmap" singleton="true">
         <property name="path" value="resources/img/ui/button-close.png" />
+    </bean>
+
+
+    <bean id="playerBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/instructions-player.png" />
     </bean>
 
 </beans>

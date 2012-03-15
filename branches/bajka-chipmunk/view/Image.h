@@ -26,7 +26,7 @@ public:
         b_ ("Widget")
 
         Image () : texName (0), texWidth (0), texHeight (0), imgWidth (0), imgHeight (0), initialized (false) {}
-        virtual ~Image () {}
+        virtual ~Image ();
 
         /// Do the drawing.
         virtual void update (Model::IModel *model);
