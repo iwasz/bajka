@@ -9,7 +9,6 @@
  ****************************************************************************/
 
 #include <SDL.h>
-#include <SDL_opengl.h>
 #include <SDL_image.h>
 #include "Image.h"
 #include "Math.h"
@@ -18,6 +17,13 @@
 #include "../util/Exceptions.h"
 
 namespace View {
+
+Image::~Image ()
+{
+        glDeleteTextures (1, &texName);
+}
+
+/****************************************************************************/
 
 void Image::init (Model::IModel *model, bool updateModelDimension)
 {

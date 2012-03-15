@@ -16,17 +16,17 @@
 
 namespace Util {
 
-typedef std::list <int> IntList;
-f_ (IntList)
+//typedef std::list <int> IntList;
+//g_ (IntList)
 
 typedef std::vector <int> IntVector;
-f_ (IntVector)
+g_ (IntVector)
 
 typedef std::list <double> DoubleList;
-f_ (DoubleList)
+g_ (DoubleList)
 
-typedef std::vector <double> DoubleVector;
-f_ (DoubleVector)
+//typedef std::vector <double> DoubleVector;
+//g_ (DoubleVector)
 
 /*
  * Typ ConvertPtr_t

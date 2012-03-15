@@ -130,4 +130,8 @@ Boost</value>
         <property name="path" value="resources/img/ui/button-close.png" />
     </bean>
     
+<!--     <Animation bitmap="@mailStackBmp" region="0, 0, 10, 10"> -->
+<!--         <FrameSet add="frameSets" name="default" fps="2" frames="0, 1, 2, 3"/> -->
+<!--     </Animation> -->
+    
 </beans>
