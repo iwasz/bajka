@@ -110,7 +110,6 @@ void AbstractModel::update (Event::UpdateEvent *e)
 
         if (isGroup ()) {
         		IGroup *g = dynamic_cast <IGroup *> (this);
-//                        std::for_each (g->begin (), g->end (), boost::mem_fn (&IModel::update));
                         std::for_each (g->begin (), g->end (), boost::bind (&IModel::update, _1, e));
         }
 

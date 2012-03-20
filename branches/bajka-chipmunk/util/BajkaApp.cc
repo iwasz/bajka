@@ -269,8 +269,8 @@ void BajkaApp::loop ()
 
                 glMatrixMode (GL_MODELVIEW);
                 glLoadIdentity ();
-                glClearColor (0.35, 0.75, 1.0, 1.0);
-                glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//                glClearColor (0.35, 0.75, 1.0, 1.0);
+//                glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 // Run models, views and controllers.
                 // Generuj eventy.
@@ -279,10 +279,10 @@ void BajkaApp::loop ()
                         checkBreak ();
                 }
 
-                checkContinue ();
+//                checkContinue ();
                 impl->updateEvent.setDeltaMs (deltaMs);
                 impl->model->update (&impl->updateEvent);
-                checkContinue ();
+//                checkContinue ();
 
                 // Run chipmunk
                 if (Model::Space::getSpace ()) {
@@ -290,9 +290,9 @@ void BajkaApp::loop ()
                 }
 
                 Tween::Manager::getMain ()->update (deltaMs);
-                checkContinue ();
+//                checkContinue ();
 
-                glFlush ();
+//                glFlush ();
                 // swap buffers to display, since we're double buffered.
                 SDL_GL_SwapBuffers ();
                 // Tak śmiga, że damy delay
