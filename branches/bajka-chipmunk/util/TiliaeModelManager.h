@@ -28,8 +28,6 @@ public:
         virtual ~TiliaeModelManager () {}
 
         void play (std::string const &name);
-//        void pause (std::string const &name);
-//        void stop (std::string const &name);
         void cut (std::string const &name);
 
         void setMainContainer (Ptr <Container::BeanFactoryContainer> mc) { mainContainer = mc; }

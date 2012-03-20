@@ -10,7 +10,6 @@
 #include <SDL_image.h>
 #include <SDL_opengl.h>
 #include <SDL_ttf.h>
-
 #include <iostream>
 #include <cmath>
 #include <ctime>
@@ -25,6 +24,8 @@
 #include "../model/IGroup.h"
 #include "../tween/Manager.h"
 #include "../events/types/UpdateEvent.h"
+#include "../events/EventIdex.h"
+#include "../events/PointerInsideIndex.h"
 
 /****************************************************************************/
 
@@ -67,7 +68,8 @@ struct Impl {
         Ptr <ModelManager> manager;
 
         Model::IModel *model;
-        ModelIndex listeners;
+        Event::EventIndex eventIndex;
+        Event::PointerInsideIndex pointerInsideIndex;
 
         bool dropIteration_;
         Event::UpdateEvent updateEvent;
@@ -273,7 +275,7 @@ void BajkaApp::loop ()
                 // Run models, views and controllers.
                 // Generuj eventy.
                 for (Event::DispatcherList::const_iterator i = impl->dispatchers->begin (); i != impl->dispatchers->end (); i++) {
-                        (*i)->run (impl->model, impl->listeners);
+                        (*i)->run (impl->model, impl->eventIndex, &impl->pointerInsideIndex);
                         checkBreak ();
                 }
 
@@ -347,8 +349,14 @@ Model::IModel *BajkaApp::getModel () const
 void BajkaApp::setModel (Model::IModel *m)
 {
         impl->model = m;
-        impl->listeners.clear ();
-        reindex (0xFFFFu & ~(Event::MOUSE_MOTION_EVENT | Event::BUTTON_PRESS_EVENT | Event::BUTTON_RELEASE_EVENT), m);
+        impl->eventIndex.clear ();
+        impl->pointerInsideIndex.clear ();
+        impl->eventIndex.add (0xFFFFu & ~Event::MOUSE_EVENTS, m);
+
+        if (m->isGroup ()) {
+                Model::IGroup *g = dynamic_cast <Model::IGroup *> (m);
+                g->setIndices (&impl->eventIndex, &impl->pointerInsideIndex);
+        }
 }
 
 /****************************************************************************/
@@ -364,53 +372,6 @@ void BajkaApp::setManager (Ptr <ModelManager> m)
 {
         impl->manager = m;
         impl->manager->setApp (this);
-}
-
-/****************************************************************************/
-
-unsigned int BajkaApp::reindex (unsigned int eventMask, Model::IModel *m)
-{
-        /*
-         * Wszystkie eventy na które reagują moje dzieci - ja już nie muszę na nie reagować,
-         * bo eventy idą od dziecka do rodzica i wówczas jest jeszcze jedno sprawdzenie
-         */
-        unsigned int childMask = 0x0;
-
-        if (m->isGroup ()) {
-                M::IGroup *g = dynamic_cast <M::IGroup *> (m);
-
-                for (Model::ModelVector::const_iterator i = g->getChildren ().begin ();
-                         i != g->getChildren ().end ();
-                         ++i) {
-
-                                childMask |= reindex (eventMask, *i);
-                }
-        }
-
-        unsigned int eventsToRun = 0x0;
-
-        if (m->getController ()) {
-                eventsToRun = m->getController ()->getEventMask ();
-
-                if (!eventsToRun) {
-                        return 0;
-                }
-
-                eventsToRun &= ~(eventsToRun & childMask);
-                childMask = eventsToRun; // Zmienna uzyta ponownie, ale w innym celu.
-
-                for (unsigned int i = 1; i != Event::EVENT_TERMINATOR; i <<= 1) {
-
-                        if (m->getController ()->getEventMask () & i) {
-                                impl->listeners.insert (std::make_pair ((Event::Type)i, m));
-                                childMask &= ~i;
-                        }
-                }
-
-                return childMask;
-        }
-
-        return eventsToRun;
 }
 
 /****************************************************************************/
@@ -437,7 +398,8 @@ void BajkaApp::reset ()
 {
         dropIteration ();
 
-        impl->listeners.clear ();
+        impl->eventIndex.clear ();
+        impl->pointerInsideIndex.clear ();
 
         for (Event::DispatcherList::const_iterator i = impl->dispatchers->begin (); i != impl->dispatchers->end (); i++) {
                 (*i)->reset ();

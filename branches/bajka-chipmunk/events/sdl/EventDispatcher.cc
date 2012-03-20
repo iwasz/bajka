@@ -11,6 +11,8 @@
 #include "EventDispatcher.h"
 #include "Common.h"
 #include "../../dependencies/openGl/Util.h"
+#include "../EventIdex.h"
+#include "../PointerInsideIndex.h"
 
 namespace Sdl {
 namespace M = Model;
@@ -20,39 +22,18 @@ namespace G = Geometry;
 using namespace Event;
 
 /****************************************************************************/
-// CO TO ROBIŁO!?!?!?
 
-//static void runRec (Model::IModel *m, Event::IEvent *e)
-//{
-//        C::IController *c;
-//
-//        if ((c = m->getController ())) {
-//                if (e && e->getType () & c->getEventMask ()) {
-//                        if (!e->runCallback (m, m->getView (), m->getController ())) {
-//                                return;
-//                        }
-//                }
-//                else {
-//                	return;
-//                }
-//        }
-//
-//        if (m->isGroup ()) {
-//                M::IGroup *g = dynamic_cast<M::IGroup *> (m);
-//                std::for_each (g->begin (), g->end (), boost::bind (runRec, _1, e));
-//        }
-//}
-
-/****************************************************************************/
 #define checkBreak() { if (app->getDropIteration ()) { break; } }
 #define checkContinue() { if (app->getDropIteration ()) { continue; } }
 
-void EventDispatcher::dispatchEventBackwards (Model::IModel *m, IEvent *e)
+/****************************************************************************/
+
+void EventDispatcher::dispatchEventBackwards (Model::IModel *m, IEvent *e, Event::PointerInsideIndex *pointerInsideIndex)
 {
         C::IController *controller = m->getController ();
 
         if (controller && controller->getEventMask () & e->getType ()) {
-                e->runCallback (m, m->getView (), controller, this);
+                e->runCallback (m, m->getView (), controller, pointerInsideIndex);
 
                 if (app->getDropIteration ()) {
                         return;
@@ -60,13 +41,13 @@ void EventDispatcher::dispatchEventBackwards (Model::IModel *m, IEvent *e)
         }
 
         if ((m = m->getParent ())) {
-                dispatchEventBackwards (m, e);
+                dispatchEventBackwards (m, e, pointerInsideIndex);
         }
 }
 
 /****************************************************************************/
 
-void EventDispatcher::run (Model::IModel *m, ModelIndex const &modeliIndex)
+void EventDispatcher::run (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex)
 {
         SDL_Event event;
 
@@ -90,8 +71,8 @@ void EventDispatcher::run (Model::IModel *m, ModelIndex const &modeliIndex)
                                  * Sprawdzamy czy onMouseOut. Uwaga! pointerInside jest unordered (hash), czyli
                                  * onMouseOut odpali się w losowej kolejności. Zastanowić się, czy to bardzo źle.
                                  */
-                                typedef boost::unordered_set <Model::IModel *>::const_iterator Iterator;
-                                for (Iterator i = pointerInside.begin (); i != pointerInside.end ();) {
+                                typedef Event::PointerInsideIndex::Iterator Iterator;
+                                for (Iterator i = pointerInsideIndex->begin (); i != pointerInsideIndex->end ();) {
                                         M::IModel *parent;
                                         G::Point copy = p;
 
@@ -109,7 +90,7 @@ void EventDispatcher::run (Model::IModel *m, ModelIndex const &modeliIndex)
                                                         ctr->onMouseOut (mmev, *i, (*i)->getView ());
                                                 }
 
-                                                pointerInside.erase (*i);
+                                                pointerInsideIndex->remove (*i);
                                                 i = j;
                                         }
                                         else {
@@ -123,15 +104,18 @@ void EventDispatcher::run (Model::IModel *m, ModelIndex const &modeliIndex)
                         M::IModel *model = m->findContains (p);
 
                         if (model) {
-                                dispatchEventBackwards (model, mev);
+                                dispatchEventBackwards (model, mev, pointerInsideIndex);
                                 checkBreak ();
                         }
                 }
                 else {
-                        std::pair <ModelIndex::const_iterator, ModelIndex::const_iterator> t = modeliIndex.equal_range (type);
+                        typedef Event::EventIndex::Iterator Iterator;
+                        typedef Event::EventIndex::Pair Pair;
 
-                        for (ModelIndex::const_iterator i = t.first; i != t.second; ++i) {
-                                dispatchEventBackwards (i->second, e);
+                        Pair pair = modeliIndex.getModels (type);
+
+                        for (Iterator i = pair.first; i != pair.second; ++i) {
+                                dispatchEventBackwards (i->second, e, pointerInsideIndex);
                                 checkBreak ();
                         }
                 }
@@ -292,33 +276,11 @@ Event::ResizeEvent *EventDispatcher::updateResizeEvent (SDL_Event *event)
 
 /****************************************************************************/
 
-void EventDispatcher::setPointerInside (Model::IModel *m)
-{
-        pointerInside.insert (m);
-}
-
-/****************************************************************************/
-
-void EventDispatcher::removePointerInside (Model::IModel *m)
-{
-        pointerInside.erase (m);
-}
-
-/****************************************************************************/
-
-bool EventDispatcher::isPointerInside (Model::IModel *m) const
-{
-        return pointerInside.find (m) != pointerInside.end ();
-}
-
-/****************************************************************************/
-
 void EventDispatcher::reset ()
 {
-        pointerInside.clear ();
-
         // Discard all pending events
         SDL_Event event;
+
         while (SDL_PollEvent (&event) > 0)
                 ;
 }

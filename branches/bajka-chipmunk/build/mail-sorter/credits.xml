@@ -88,9 +88,9 @@
                     <property name="view.multiline" value="true"/>                        
                     <property name="view.align" value="2"/>                        
                     <property name="view.text">                        
-<value>libbajka
+<value><![CDATA[libbajka
 libtiliae
-Boost</value>
+Boost]]></value>
                     </property>
                     <property name="layout.translateRel" value="50, 26" />       
                 </bean>

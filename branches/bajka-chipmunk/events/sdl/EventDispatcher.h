@@ -10,7 +10,6 @@
 #define EVENTDISPATCHER_H_
 
 #include <SDL.h>
-#include <boost/unordered_set.hpp>
 #include "ReflectionMacros.h"
 #include "IDispatcher.h"
 #include "BajkaApp.h"
@@ -29,12 +28,8 @@ public:
         EventDispatcher () : app (NULL) {}
         virtual ~EventDispatcher () {}
 
-        void run (Model::IModel *m, ModelIndex const &modeliIndex);
+        void run (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex);
         void reset ();
-
-        void setPointerInside (Model::IModel *m);
-        void removePointerInside (Model::IModel *m);
-        bool isPointerInside (Model::IModel *m) const;
 
 /*------getters-setters-----------------------------------------------------*/
 
@@ -44,7 +39,7 @@ public:
 private:
 
         Event::IEvent *translate (SDL_Event *event);
-        void dispatchEventBackwards (Model::IModel *m, Event::IEvent *e);
+        void dispatchEventBackwards (Model::IModel *m, Event::IEvent *e, Event::PointerInsideIndex *pointerInsideIndex);
 
         Event::KeyboardEvent *updateKeyboardUpEvent (SDL_Event *event);
         Event::KeyboardEvent *updateKeyboardDownEvent (SDL_Event *event);
@@ -71,7 +66,6 @@ private:
 
         Ptr <Util::BajkaConfig> config;
         Util::BajkaApp *app;
-        boost::unordered_set <Model::IModel *> pointerInside;
 
         E_ (EventDispatcher)
 };

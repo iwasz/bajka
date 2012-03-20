@@ -6,21 +6,26 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "IController.h"
-#include <iostream>
-#include "../events/PointerInsideIndex.h"
+#include "PointerInsideIndex.h"
+#include "../model/IModel.h"
+#include "../model/IGroup.h"
 
-namespace Controller {
+namespace Event {
 
-bool IController::onMouseMotionDispatch (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v, Event::PointerInsideIndex *d)
+void PointerInsideIndex::remove (Model::IModel *m)
 {
-        if (!d->isPointerInside (m)) {
-                d->add (m);
-                onMouseOver (e, m, v);
+        if (m->isGroup ()) {
+                Model::IGroup *g = dynamic_cast <Model::IGroup *> (m);
+
+                for (Model::ModelVector::const_iterator i = g->getChildren ().begin ();
+                         i != g->getChildren ().end ();
+                         ++i) {
+
+                                remove (*i);
+                }
         }
 
-        onMouseMotion (e, m, v);
-        return true;
+        index.erase (m);
 }
 
-} /* namespace Controller */
+} /* namespace Event */

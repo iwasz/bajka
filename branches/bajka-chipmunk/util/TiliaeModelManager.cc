@@ -9,6 +9,8 @@
 #include "TiliaeModelManager.h"
 #include "../util/Exceptions.h"
 #include "../util/BajkaApp.h"
+#include <ContainerFactory.h>
+#include <inputFormat/mxml/MXmlMetaService.h>
 
 namespace Util {
 using namespace Model;
@@ -17,6 +19,7 @@ using namespace Container;
 void TiliaeModelManager::load (std::string const &name, bool cut)
 {
         bool isCut = cut;
+        app->dropIteration ();
 
         /*
          * Kopię tworzymy, ponieważ podana w argumencie referencja do stringa (nazwa) może
@@ -29,8 +32,12 @@ void TiliaeModelManager::load (std::string const &name, bool cut)
         assertThrow (i != mapping.end (), "TiliaeModelManager::play : cant find model in mapping.");
 
         if (currentFile != i->second) {
-                isCut = true;
-                app->reset ();
+
+                // Zdejmujemy stary model, bo on zaraz przestanie istnieć.
+                mainModel->popChild ();
+
+                // Ustawiam isCunt na false, żeby nie zrobić popChild drugi raz.
+                isCut = false;
                 currentFile = i->second;
 
                 /*
@@ -39,7 +46,9 @@ void TiliaeModelManager::load (std::string const &name, bool cut)
                  * (na przykład guzik). Nawet obiekt stringa zawierający nazwę modelu do
                  * załadowania może przestać istnieć po tej linii. Dlatego mamy kopię.
                  */
-                childContainer = XmlContainerFactory::createContainer (currentFile, false, mainContainer);
+                childContainer = ContainerFactory::createContainer (MXmlMetaService::parseFile (currentFile), false, mainContainer);
+
+/*--------------poniżej tej linii stary model już nie istnieje----------------------------------------------------------------------------------------------------------------------------------------------------*/
         }
 
         IModel *m = ocast <IModel *> (childContainer->getBean (nameCopy));
@@ -69,17 +78,5 @@ void TiliaeModelManager::cut (std::string const &name)
 {
         load (name, true);
 }
-
-//void TiliaeModelManager::pause (std::string const &name)
-//{
-//
-//}
-//
-//void TiliaeModelManager::stop (std::string const &name)
-//{
-//
-//}
-
-
 
 } /* namespace Util */

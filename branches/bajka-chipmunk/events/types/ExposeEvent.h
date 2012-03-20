@@ -18,7 +18,7 @@ public:
         virtual ~ExposeEvent () {}
 
         Type getType () const { return EXPOSE_EVENT; }
-        bool runCallback (Model::IModel *m, View::IView *v, Controller::IController *c, IDispatcher *d) { return c->onExpose (static_cast <ExposeEvent *> (this), m, v); }
+        bool runCallback (Model::IModel *m, View::IView *v, Controller::IController *c, void *d) { return c->onExpose (static_cast <ExposeEvent *> (this), m, v); }
 
         std::string toString () const { return "ExposeEvent ()"; }
 };

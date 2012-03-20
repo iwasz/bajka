@@ -9,13 +9,13 @@
     <bean id="instructions3" parent="instructionsBase">
         <property name="children.4.view.text" value="3 / 5"/>
         <property name="children.5.view.text">
-            <value>Sime special modes change rules of play.
+            <value><![CDATA[Sime special modes change rules of play.
 In Stacking Mode you have to press LEFT,
 RIGHT or DOWN arrows to send the lowest
 mail on stack to an appropriate slot.
 Pressing wrong key sends the mail to the
 top of the stack.
-If the stack gets to high, you loose a life.</value>
+If the stack gets to high, you loose a life.]]></value>
         </property>
         <property name="children.7.controller.name" value="instructions4"/>
         

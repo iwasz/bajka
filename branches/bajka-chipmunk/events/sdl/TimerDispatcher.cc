@@ -17,21 +17,9 @@
 namespace Sdl {
 using namespace Event;
 
-//void TimerDispatcher::addObserver (Ptr <IObserver> o)
-//{
-//        observers.push_back (o);
-//}
-//
-///****************************************************************************/
-//
-//void TimerDispatcher::removeObserver (Ptr <IObserver> o)
-//{
-//        observers.erase (std::remove (observers.begin (), observers.end (), o), observers.end ());
-//}
-
 /****************************************************************************/
 
-void TimerDispatcher::run (Model::IModel *m, ModelIndex const &modeliIndex)
+void TimerDispatcher::run (Model::IModel *m, EventIndex const &modeliIndex, PointerInsideIndex *pointerInsideIndex)
 {
         unsigned int now = SDL_GetTicks ();
 

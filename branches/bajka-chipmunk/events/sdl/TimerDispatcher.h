@@ -26,12 +26,8 @@ public:
         TimerDispatcher () : tickInterval (30), prevTime (0), app (NULL) {}
         virtual ~TimerDispatcher () {}
 
-        void run (Model::IModel *m, Event::ModelIndex const &modeliIndex);
+        void run (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex);
         void reset () {}
-
-        void setPointerInside (Model::IModel *m) {}
-        void removePointerInside (Model::IModel *m) {}
-        bool isPointerInside (Model::IModel *m) const { return false; }
 
 /*--------------------------------------------------------------------------*/
 
