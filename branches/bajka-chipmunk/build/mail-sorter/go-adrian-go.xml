@@ -14,9 +14,9 @@
             <list class="ModelVector">
                 <bean parent="label">
                     <property name="view.text">
-                        <value>GO
+                        <value><![CDATA[GO
 Adrian,
-GO!</value>
+GO!]]></value>
                     </property>                        
                     <property name="view.multiline" value="true"/>                        
                     <property name="view.font" ref="accidentBig" />

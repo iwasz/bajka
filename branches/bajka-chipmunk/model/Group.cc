@@ -10,6 +10,8 @@
 #include <boost/geometry/geometries/polygon.hpp>
 #include "Group.h"
 #include "../geometry/Ring.h"
+#include "../events/EventIdex.h"
+#include "../events/PointerInsideIndex.h"
 
 namespace Model {
 using namespace Geometry;
@@ -113,6 +115,29 @@ void Group::addChild (IModel *m)
         children.push_back (m);
         m->setParent (this);
         m->onParentSet (this);
+
+        if (eventIndex) {
+                eventIndex->add (0xFFFFu & ~Event::MOUSE_EVENTS, m);
+
+                if (m->isGroup ()) {
+                        Model::IGroup *g = dynamic_cast <Model::IGroup *> (m);
+                        g->setIndices (eventIndex, pointerInsideIndex);
+                }
+        }
+}
+
+/****************************************************************************/
+
+void Group::popChild ()
+{
+        if (children.empty ()) {
+                return;
+        }
+
+        IModel *back = children.back ();
+        eventIndex->remove (back);
+        pointerInsideIndex->remove (back);
+        children.pop_back ();
 }
 
 /****************************************************************************/
@@ -139,20 +164,24 @@ void Group::groupToScreen (Geometry::Point *p) const
 
 /****************************************************************************/
 
-void Group::popChild ()
+IModel *Group::getTop ()
 {
-        if (children.empty ()) {
-                return;
-        }
-
-        children.pop_back ();
+        return (children.empty ()) ? (NULL) : (children.back ());
 }
 
 /****************************************************************************/
 
-IModel *Group::getTop ()
+void Group::setIndices (Event::EventIndex *e1, Event::PointerInsideIndex *e2)
 {
-        return (children.empty ()) ? (NULL) : (children.back ());
+        eventIndex = e1;
+        pointerInsideIndex = e2;
+
+        for (ModelVector::const_iterator i = children.begin (); i != children.end (); ++i) {
+                if ((*i)->isGroup ()) {
+                        Model::IGroup *g = dynamic_cast <Model::IGroup *> (*i);
+                        g->setIndices (e1, e2);
+                }
+        }
 }
 
 } /* namespace Model */

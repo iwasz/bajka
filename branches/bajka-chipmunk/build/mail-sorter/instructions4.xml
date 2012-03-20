@@ -9,12 +9,12 @@
     <bean id="instructions4" parent="instructionsBase">
         <property name="children.4.view.text" value="4 / 5"/>
         <property name="children.5.view.text">
-            <value>Another special mode is Deflection Mode in
+            <value><![CDATA[Another special mode is Deflection Mode in
 which the mail falls freely on different
 lanes (lanes change periodically).
 
 You don't have to collect all the mail in
-this mode, just as much as you can. :-)</value>
+this mode, just as much as you can. :-)]]></value>
         </property>
         <property name="children.7.controller.name" value="instructions5"/>
         

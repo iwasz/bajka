@@ -21,6 +21,7 @@
 #include "types/Types.h"
 #include "IDispatcher.h"
 #include "Common.h"
+#include "EventIdex.h"
 
 namespace Event {
 

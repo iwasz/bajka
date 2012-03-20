@@ -32,6 +32,7 @@ public:
 	C__ (void)
 	b_ ("AbstractModel")
 
+	Group () : eventIndex (NULL), pointerInsideIndex (NULL) {}
 	virtual ~Group() {}
 
         virtual Geometry::Point computeCenter () const { return Geometry::Point (); }
@@ -42,6 +43,10 @@ public:
 
         void screenToGroup (Geometry::Point *p) const;
         void groupToScreen (Geometry::Point *p) const;
+
+/*--------------------------------------------------------------------------*/
+
+        void setIndices (Event::EventIndex *e1, Event::PointerInsideIndex *e2);
 
 /*--------------------------------------------------------------------------*/
 
@@ -57,9 +62,24 @@ public:
 
 protected:
 
-    ModelVector children;
+        ModelVector children;
 
-    E_ (Group)
+        /**
+         * Ustawiane przez BajkaApp (mogło by być prywatne + friend, ale mi się nie chce kombinować).
+         * Jest to indeks modeli, w którym można szybko wyszukać Event::Type -> IModel. Dzieki temu
+         * dispatchery wiedzą gdzie kierować eventy;
+         */
+        Event::EventIndex *eventIndex;
+
+        /**
+         * Ustawiane przez BajkaApp. To jest indeks, który zawiera informację o modelach, nad którymi
+         * aktualnie znajduje się kursor myszy. Ten indeks ułatwia generowanie eventów onMouseOut.
+         * Grupy mają do niego wskaźnik, żeby mogły usuwać z niego na berząco modele, gdy user usunie
+         * model z grupy.
+         */
+        Event::PointerInsideIndex *pointerInsideIndex;
+
+        E_ (Group)
 };
 
 } /* namespace Model */

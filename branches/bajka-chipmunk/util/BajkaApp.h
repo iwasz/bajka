@@ -18,8 +18,6 @@
 #include "ModelManager.h"
 #include "Config.h"
 
-using Event::ModelIndex;
-
 namespace Util {
 class Impl;
 
@@ -80,11 +78,6 @@ public:
         */
        void dropIteration ();
        bool getDropIteration () const;
-
-private:
-
-       /// Szuka wśród modeli które mają trafić na które listy.
-       unsigned int reindex (unsigned int eventMask, Model::IModel *m);
 
 private:
 

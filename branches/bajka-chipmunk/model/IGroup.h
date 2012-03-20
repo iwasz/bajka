@@ -12,6 +12,11 @@
 #include <Object.h>
 #include "IModel.h"
 
+namespace Event {
+class EventIndex;
+class PointerInsideIndex;
+}
+
 namespace Model {
 
 /**
@@ -67,6 +72,10 @@ struct IGroup : public virtual Core::Object {
         virtual ModelVector::const_iterator begin () const = 0;
         virtual ModelVector::const_iterator end () const = 0;
 
+        /**
+         * Ustawiane przez bajkaApp. Bardziej szczegółowa dokumentacja w klasie Group.
+         */
+        virtual void setIndices (Event::EventIndex *e1, Event::PointerInsideIndex *e2) = 0;
 };
 
 }

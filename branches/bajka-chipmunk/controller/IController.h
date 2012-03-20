@@ -33,7 +33,7 @@ class ExposeEvent;
 class ResizeEvent;
 class UpdateEvent;
 
-class IDispatcher;
+class PointerInsideIndex;
 }
 
 namespace Controller {
@@ -54,7 +54,7 @@ struct IController : public Core::Object {
 
         virtual bool onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v) = 0;
         virtual bool onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v) = 0;
-                bool onMouseMotionDispatch (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v, Event::IDispatcher *d);
+                bool onMouseMotionDispatch (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v, Event::PointerInsideIndex *d);
         virtual bool onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) = 0;
         virtual bool onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) = 0;
         virtual bool onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) = 0;

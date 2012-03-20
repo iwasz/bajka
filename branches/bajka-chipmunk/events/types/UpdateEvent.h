@@ -28,7 +28,7 @@ public:
         void setDeltaMs (unsigned int i) { this->deltaMs = i; }
 
         Type getType () const { return UPDATE_EVENT; }
-        virtual bool runCallback (Model::IModel *m, View::IView *v, Controller::IController *c, IDispatcher *d) { return true; }
+        virtual bool runCallback (Model::IModel *m, View::IView *v, Controller::IController *c, void *d) { return true; }
 
         virtual std::string toString () const { return "UpdateEvent ()"; }
 

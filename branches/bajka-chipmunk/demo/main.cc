@@ -10,8 +10,11 @@
 #include <cstdlib>
 #include <Container.h>
 #include <ContainerFactory.h>
+#include <inputFormat/mxml/MXmlMetaService.h>
 #include "TiliaeModelManager.h"
 #include "LoadButtonController.h"
+
+using namespace Container;
 
 /**
  * Main entry.
@@ -28,7 +31,7 @@ int main (int argc, char **argv)
         }
 
         try {
-                Ptr <Container::BeanFactoryContainer> container = Container::XmlContainerFactory::createContainer (fileName, true);
+                Ptr <Container::BeanFactoryContainer> container = ContainerFactory::createContainer (MXmlMetaService::parseFile (fileName), true);
                 Ptr <Util::BajkaApp> app = vcast <Ptr <Util::BajkaApp> > (container->getBean ("app"));
                 app->setInstance (app.get ());
 

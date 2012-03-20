@@ -11,6 +11,7 @@
 
 #include <Object.h>
 #include "ReflectionMacros.h"
+#include "EventIdex.h"
 #include "../events/types/IEvent.h"
 
 namespace Model {
@@ -22,6 +23,7 @@ class BajkaApp;
 }
 
 namespace Event {
+class PointerInsideIndex;
 
 /**
  * Do wysyłania eventów.
@@ -31,15 +33,12 @@ class IDispatcher : public Core::Object {
 public:
         virtual ~IDispatcher () {}
 
-        virtual void run (Model::IModel *m, ModelIndex const &modeliIndex) = 0;
+        virtual void run (Model::IModel *m, EventIndex const &modeliIndex, PointerInsideIndex *pointerInsideIndex) = 0;
         virtual void reset () = 0;
 
         virtual Util::BajkaApp *getApp () = 0;
         virtual void setApp (Util::BajkaApp *a) = 0;
 
-        virtual void setPointerInside (Model::IModel *m) = 0;
-        virtual void removePointerInside (Model::IModel *m) = 0;
-        virtual bool isPointerInside (Model::IModel *m) const = 0;
 };
 
 /**
