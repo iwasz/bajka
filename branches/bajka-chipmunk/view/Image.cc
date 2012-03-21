@@ -25,6 +25,48 @@ Image::~Image ()
 
 /****************************************************************************/
 
+double Image::getWidthHint () const
+{
+        if (!bitmap) {
+                return 0;
+        }
+
+        SDL_Surface *image = static_cast <SDL_Surface *> (bitmap->getData ());
+
+        if (region.get ()) {
+                return region->getWidth ();
+        }
+
+        if (image) {
+                return image->w;
+        }
+
+        return 0;
+}
+
+/****************************************************************************/
+
+double Image::getHeightHint () const
+{
+        if (!bitmap) {
+                return 0;
+        }
+
+        SDL_Surface *image = static_cast <SDL_Surface *> (bitmap->getData ());
+
+        if (region.get ()) {
+                return region->getHeight ();
+        }
+
+        if (image) {
+                return image->h;
+        }
+
+        return 0;
+}
+
+/****************************************************************************/
+
 void Image::init (Model::IModel *model, bool updateModelDimension)
 {
         initialized = true;
@@ -32,21 +74,6 @@ void Image::init (Model::IModel *model, bool updateModelDimension)
 /*--------------------------------------------------------------------------*/
 
         SDL_Surface *image = static_cast <SDL_Surface *> (bitmap->getData ());
-
-        if (updateModelDimension && model->isBox ()) {
-                Model::IBox *b = dynamic_cast <Model::IBox *> (model);
-
-                if (region.get ()) {
-                        b->setWidth (region->getWidth ());
-                        b->setHeight (region->getHeight ());
-                }
-                else {
-                        b->setWidth (image->w);
-                        b->setHeight (image->h);
-                }
-        }
-
-/*--------------------------------------------------------------------------*/
 
         if (region.get ()) {
                 imgWidth = region->getWidth ();

@@ -150,28 +150,7 @@
 <!-- ====================================================================================== -->
 <!-- Bitmapy, obrazki -->
 <!-- ====================================================================================== -->
-    
-    <!-- 2 stanowy guzik - ma tylko 2 obrazki - clicked jest taki sam jak hover -->
-    <bean id="buttonWgt" class="Box" singleton="true" abstract="true">
-        <property name="view">
-            <bean id="buttonStartWgt" class="StatefulWidget" singleton="true">
-                <property name="widgets">
-                    <list class="WidgetVector">
-                        <bean class="Image" singleton="true"/>
-                        <bean id="state1" class="Image" singleton="true"/>
-                        <ref bean="state1"/>
-                    </list>
-                </property>
-                <property name="state" value="0" />
-            </bean>
-        </property>
         
-        <property name="translate" value="300, 50" />       
-        <property name="controller" ref="buttonCtr"/>            
-    </bean>
-    
-<!-- ====================================================================================== -->
-    
     <bean id="buttonStartBmp" class="Bitmap" singleton="true">
         <property name="path" value="resources/img/ui/button-start.png" />
     </bean>

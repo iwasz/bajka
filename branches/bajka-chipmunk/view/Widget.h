@@ -36,6 +36,9 @@ public:
         m_ (setState) virtual void setState (int) {}
         virtual int getState () const { return 0; }
 
+        virtual double getWidthHint () const { return 0; }
+        virtual double getHeightHint () const { return 0; }
+
         static void defaultPreUpdate (Model::IModel *m);
         static void defaultPostUpdate (Model::IModel *m);
 

@@ -48,6 +48,9 @@ public:
         Widget *getWidget (int i) { assertThrow (widgets.size () -1 >= (unsigned)(i), "StatefulWidget::getWidget : No such widget"); return widgets[i]; }
         void setState (int s);
 
+        double getWidthHint () const;
+        double getHeightHint () const;
+
         //\}current
 
 private:

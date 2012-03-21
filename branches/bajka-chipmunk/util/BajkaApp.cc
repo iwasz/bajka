@@ -26,6 +26,7 @@
 #include "../events/types/UpdateEvent.h"
 #include "../events/EventIdex.h"
 #include "../events/PointerInsideIndex.h"
+#include "../events/IDispatcher.h"
 
 /****************************************************************************/
 
@@ -260,6 +261,14 @@ void BajkaApp::loop ()
 
         Uint32 lastMs = SDL_GetTicks ();
 
+        if (!impl->dispatchers) {
+                impl->dispatchers = boost::make_shared <Event::DispatcherList> ();
+        }
+
+        if (!impl->model) {
+                throw Util::RuntimeException ("BajkaApp::loop : model == NULL.");
+        }
+
         while (!done) {
 
                 impl->dropIteration_ = false;
@@ -269,8 +278,8 @@ void BajkaApp::loop ()
 
                 glMatrixMode (GL_MODELVIEW);
                 glLoadIdentity ();
-//                glClearColor (0.35, 0.75, 1.0, 1.0);
-//                glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                glClearColor (0.35, 0.75, 1.0, 1.0);
+                glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 // Run models, views and controllers.
                 // Generuj eventy.

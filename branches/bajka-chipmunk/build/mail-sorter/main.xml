@@ -118,7 +118,7 @@
     </bean>
     
     <!-- Statyczny obrazek -->
-    <bean id="image" class="Box" singleton="true" abstract="true">
+    <bean id="image" class="Box" singleton="true" abstract="true" init-method="updateToViewSize">
         <property name="view">
             <bean class="Image" singleton="true">
                 <property name="bitmap">
@@ -129,7 +129,7 @@
     </bean>
        
     <!-- 2 stanowy guzik - ma tylko 2 obrazki - clicked jest taki sam jak hover -->
-    <bean id="buttonWgt" class="Box" singleton="true" abstract="true">
+    <bean id="buttonWgt" class="Box" singleton="true" abstract="true"  init-method="updateToViewSize">
         <property name="view">
             <bean id="buttonStartWgt" class="StatefulWidget" singleton="true">
                 <property name="widgets">
@@ -151,6 +151,7 @@
 
     <!-- Statyczny label -->
     <bean id="label" class="Box" singleton="true" abstract="true">
+        <property name="autoUpdateToViewSize" value="true"/>
         <property name="view">
                 <bean class="Text" singleton="true"/>
         </property>
@@ -158,7 +159,7 @@
 
     <bean id="header" parent="label">
         <property name="view.font" ref="accident14" />
-        <property name="view.foreground" value="A8A16Cff"/>        
+        <property name="view.foreground" value="A8A16Cff"/>
         <property name="layout">
             <bean class="Layout" singleton="true">
                 <property name="align" value="0x24" />       
@@ -171,13 +172,13 @@
         <property name="view.foreground" value="423F2Aff"/>        
         <property name="layout">
             <bean class="Layout" singleton="true">
-                <property name="align" value="0x24" />       
+                <property name="align" value="0x24" />
             </bean>
         </property>
     </bean>
 
     <bean id="infoSmall" parent="label">
-        <property name="view.multiline" value="true"/>                        
+        <property name="view.multiline" value="true"/>
         <property name="view.font" ref="accident16" />
         <property name="view.foreground" value="423F2Aff"/>        
         <property name="layout">

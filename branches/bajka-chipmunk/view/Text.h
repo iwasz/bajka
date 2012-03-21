@@ -21,7 +21,7 @@ public:
         C__ (void)
         b_ ("Primitive")
 
-        Text () : hash (0), multiline (false), align (IFont::LEFT) {}
+        Text () : hash (0), texWidth (0), texHeight (0), imgWidth (0), imgHeight (0), multiline (false), align (IFont::LEFT) {}
         virtual ~Text () {}
 
         /// Do the drawing.
@@ -39,9 +39,13 @@ public:
         IFont::TextAlign getAlign () const { return align; }
         m_ (setAlign) void setAlign (int a) { align = (IFont::TextAlign)a; } // TODO typ na Align
 
+        double getWidthHint () const;
+        double getHeightHint () const;
+
 private:
 
-        void init (Model::IModel *model);
+        void init ();
+        void initIf ();
 
 private:
 
@@ -49,7 +53,10 @@ private:
         std::string text;
         std::size_t hash;
         GLuint texName;
+        // Rozmiary textury (potęga 2jki)
         int texWidth, texHeight;
+        // Faktyczne rozmiary bitmapy (równe rozmiarom regionu, lub rozmiarom obrazka, jeśli region pusty).
+        int imgWidth, imgHeight;
         bool multiline;
         IFont::TextAlign align;
 

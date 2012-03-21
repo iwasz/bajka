@@ -34,6 +34,17 @@ struct IView : public Core::Object {
         virtual void setState (int) = 0;
         virtual int getState () const = 0;
 
+        /**
+         * Nieobowiązkowa metoda, która określa rozmiar danego widgeta. Taki rozmiar
+         * moze być wykorzystany w modelu do automatycznego określenia rozmiaru modelu
+         * na podstawie jego widoku. Tylko niektóre widoki implementują te metody, bo
+         * tylko niektóre ustalają swój rozmiar same (obrazek Image i tekst Text).
+         * Większość widoków czerpie informację o swoim rozmiarze z modelu, a nie na
+         * odwrót.
+         */
+        virtual double getWidthHint () const = 0;
+        virtual double getHeightHint () const = 0;
+
 };
 
 } /* namespace View */
