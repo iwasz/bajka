@@ -13,6 +13,28 @@
 namespace View {
 using namespace std;
 
+double StatefulWidget::getWidthHint () const
+{
+        if (widgets.empty ()) {
+                return 0;
+        }
+
+        return widgets.front ()->getWidthHint ();
+}
+
+/****************************************************************************/
+
+double StatefulWidget::getHeightHint () const
+{
+        if (widgets.empty ()) {
+                return 0;
+        }
+
+        return widgets.front ()->getHeightHint ();
+}
+
+/****************************************************************************/
+
 void StatefulWidget::update (Model::IModel *m)
 {
         if (current) {

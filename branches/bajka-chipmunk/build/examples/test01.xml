@@ -172,7 +172,7 @@
                 </StatefulWidget>
 
                 <LoadButtonController" set="controller" eventMask="0xffff" name="space2"/>
-        </BoxGroup> 
+        </BoxGroup>
 
 
     <bean id="volterFont" class="TTFFont" singleton="true">

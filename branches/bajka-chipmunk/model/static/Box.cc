@@ -19,8 +19,33 @@ namespace trans = boost::geometry::strategy::transform;
 
 /****************************************************************************/
 
+double Box::getWidth () const
+{
+        updateToViewSizeIf ();
+        return box.getWidth ();
+}
+
+/****************************************************************************/
+
+double Box::getHeight () const
+{
+        updateToViewSizeIf ();
+        return box.getHeight ();
+}
+
+/****************************************************************************/
+
+Geometry::Box Box::getBox () const
+{
+        updateToViewSizeIf ();
+        return box;
+}
+
+/****************************************************************************/
+
 Geometry::Point Box::computeCenter () const
 {
+        updateToViewSizeIf ();
         return Point ((box.ll.x + box.ur.x) / 2.0, (box.ll.y + box.ur.y) / 2.0);
 }
 
@@ -28,6 +53,8 @@ Geometry::Point Box::computeCenter () const
 
 bool Box::contains (Point const &p) const
 {
+        updateToViewSizeIf ();
+
         Ring ring;
         Ring output;
         convert (box, ring);
@@ -40,6 +67,8 @@ bool Box::contains (Point const &p) const
 
 Geometry::Box Box::getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const
 {
+        updateToViewSizeIf ();
+
         G::Box aabb;
         Ring ring;
         Ring output;

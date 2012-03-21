@@ -19,7 +19,25 @@ using Sdl::expandSurfacePowerOf2;
 
 namespace View {
 
-void Text::init (Model::IModel *model)
+/****************************************************************************/
+
+double Text::getWidthHint () const
+{
+        const_cast <Text *> (this)->initIf ();
+        return imgWidth;
+}
+
+/****************************************************************************/
+
+double Text::getHeightHint () const
+{
+        const_cast <Text *> (this)->initIf ();
+        return imgHeight;
+}
+
+/****************************************************************************/
+
+void Text::init ()
 {
         SDL_Surface *image = NULL;
 
@@ -30,11 +48,8 @@ void Text::init (Model::IModel *model)
                 image = static_cast <SDL_Surface *> (font->render (text, getForeground (), getBackground ()));
         }
 
-        if (model->isBox ()) {
-                Model::IBox *b = dynamic_cast <Model::IBox *> (model);
-                b->setWidth (image->w);
-                b->setHeight (image->h);
-        }
+        imgWidth = image->w;
+        imgHeight = image->h;
 
         SDL_Surface *texSurface = expandSurfacePowerOf2 (image);
         SDL_FreeSurface (image);
@@ -86,15 +101,22 @@ void Text::init (Model::IModel *model)
 
 /****************************************************************************/
 
-void Text::update (Model::IModel *model)
+void Text::initIf ()
 {
         static boost::hash <std::string> hf = boost::hash <std::string> ();
         std::size_t h = hf (text);
 
         if (h != hash) {
-                init (model);
+                init ();
                 hash = h;
         }
+}
+
+/****************************************************************************/
+
+void Text::update (Model::IModel *model)
+{
+        initIf ();
 
         glEnable (GL_TEXTURE_2D);
         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);

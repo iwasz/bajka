@@ -37,6 +37,9 @@ public:
         Geometry::Box const &getRegion () const { return (region.get ()) ? (*region) : (Geometry::Box::ZERO_BOX); }
         m_ (setRegion) void setRegion (Geometry::Box const &r) { region = std::auto_ptr <Geometry::Box> (new Geometry::Box (r)); }
 
+        double getWidthHint () const;
+        double getHeightHint () const;
+
 protected:
 
         void init (Model::IModel *model, bool updateModelDimension = true);
