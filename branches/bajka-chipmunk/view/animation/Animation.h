@@ -38,6 +38,7 @@ public:
                 current (NULL),
                 count (0),
                 currentFrame (0),
+                currentMs (0),
                 paused (true),
                 initialized (false) {}
 
@@ -60,7 +61,7 @@ public:
         virtual void stop ();
 
         /// Do the drawing.
-        virtual void update (Model::IModel *model);
+        virtual void update (Model::IModel *model, Event::UpdateEvent *e);
 
         m_ (getBitmap) Ptr <IBitmap> getBitmap () { return bitmap; }
         S_ (setBitmap) void setBitmap (Ptr <IBitmap> b) { bitmap = b; }
@@ -85,7 +86,7 @@ public:
 
 protected:
 
-        void init (Model::IModel *model, bool updateModelDimension = true);
+        void init (Model::IModel *model);
 
 private:
 
@@ -101,6 +102,7 @@ private:
         FrameSet *current;
         int count;
         int currentFrame;
+        int currentMs;
         bool paused;
         bool initialized;
 

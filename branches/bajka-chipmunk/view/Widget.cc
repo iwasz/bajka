@@ -12,7 +12,7 @@
 
 namespace View {
 
-void Widget::preUpdate (Model::IModel *model)
+void Widget::preUpdate (Model::IModel *model, Event::UpdateEvent *)
 {
         if (!visible) {
                 return;
@@ -23,7 +23,7 @@ void Widget::preUpdate (Model::IModel *model)
 
 /****************************************************************************/
 
-void Widget::postUpdate (Model::IModel *model)
+void Widget::postUpdate (Model::IModel *model, Event::UpdateEvent *)
 {
         if (!visible) {
                 return;

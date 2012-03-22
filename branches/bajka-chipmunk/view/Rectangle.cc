@@ -15,7 +15,7 @@
 namespace View {
 using namespace Geometry;
 
-void Rectangle::update (Model::IModel *model)
+void Rectangle::update (Model::IModel *model, Event::UpdateEvent *)
 {
         // TODO CAst zależny od makra DEBUG
         Model::IBox *cB = dynamic_cast <Model::IBox *>  (model);

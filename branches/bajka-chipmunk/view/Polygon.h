@@ -21,7 +21,7 @@ public:
         b_ ("Primitive")
 
         virtual ~Polygon () {}
-        virtual void update (Model::IModel *model) {}
+        virtual void update (Model::IModel *model, Event::UpdateEvent *e) {}
 
         E_ (Polygon)
 };

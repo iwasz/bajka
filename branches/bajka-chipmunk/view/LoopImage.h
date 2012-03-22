@@ -25,7 +25,7 @@ public:
 
         LoopImage () : offsetX (0), offsetY (0) {}
         virtual ~LoopImage () {}
-        virtual void update (Model::IModel *model);
+        virtual void update (Model::IModel *model, Event::UpdateEvent *e);
 
                         int getOffsetX () const { return offsetX; }
         m_ (setOffsetX) void setOffsetX (int o) { offsetX = o; }

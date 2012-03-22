@@ -25,7 +25,7 @@ public:
         virtual ~Text () {}
 
         /// Do the drawing.
-        virtual void update (Model::IModel *model);
+        virtual void update (Model::IModel *model, Event::UpdateEvent *e);
 
         Ptr <IFont> getFont () const { return font; }
         S_ (setFont) void setFont (Ptr <IFont> f) { font = f; }

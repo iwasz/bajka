@@ -114,7 +114,7 @@ void Text::initIf ()
 
 /****************************************************************************/
 
-void Text::update (Model::IModel *model)
+void Text::update (Model::IModel *model, Event::UpdateEvent *)
 {
         initIf ();
 

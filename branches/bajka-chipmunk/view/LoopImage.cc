@@ -27,12 +27,12 @@ void LoopImage::drawTile (double x, double y)
 
 /****************************************************************************/
 
-void LoopImage::update (Model::IModel *model)
+void LoopImage::update (Model::IModel *model, Event::UpdateEvent *)
 {
         assertThrow (model->isBox (), "LoopImage::update : only box models are supported here.");
 
         if (!initialized) {
-                init (model, false);
+                init (model);
         }
 
         glEnable (GL_TEXTURE_2D);

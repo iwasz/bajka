@@ -101,8 +101,8 @@ void AbstractModel::update (Event::UpdateEvent *e)
         }
 
         if (view) {
-                view->preUpdate (this);
-                view->update (this);
+                view->preUpdate (this, e);
+                view->update (this, e);
         }
         else {
         	View::Widget::defaultPreUpdate (this);
@@ -114,7 +114,7 @@ void AbstractModel::update (Event::UpdateEvent *e)
         }
 
         if (view) {
-                view->postUpdate (this);
+                view->postUpdate (this, e);
         }
         else {
         	View::Widget::defaultPostUpdate (this);

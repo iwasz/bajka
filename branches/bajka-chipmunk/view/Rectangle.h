@@ -24,7 +24,7 @@ public:
         b_ ("Primitive")
 
         virtual ~Rectangle () {}
-        virtual void update (Model::IModel *model);
+        virtual void update (Model::IModel *model, Event::UpdateEvent *e);
 
         E_ (Rectangle)
 };
