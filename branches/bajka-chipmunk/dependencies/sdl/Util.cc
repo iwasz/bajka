@@ -87,6 +87,11 @@ SDL_Surface *expandSurfacePowerOf2 (SDL_Surface *input, Geometry::Box const *reg
                         srcRct.h = region->getHeight ();
 
                         SDL_BlitSurface (input, &srcRct, surface, &destRct);
+
+#if 0
+                        std::cerr << srcRct.x << "," << srcRct.y << "," << srcRct.w << "," << srcRct.h << ","
+                                << destRct.x << "," << destRct.y << "," << destRct.w << "," << destRct.h << std::endl;
+#endif
                 }
 
                 texSurface = surface;

@@ -80,6 +80,9 @@ public:
         m_ (setDefault)
         void setDefault (std::string const &s) { play (s); }
 
+        double getWidthHint () const;
+        double getHeightHint () const;
+
 protected:
 
         void init (Model::IModel *model, bool updateModelDimension = true);

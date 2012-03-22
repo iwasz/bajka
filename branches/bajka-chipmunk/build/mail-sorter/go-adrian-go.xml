@@ -50,7 +50,7 @@ GO!]]></value>
                     </property>      
                 </bean>
                 
-                <bean class="Box" singleton="true">
+                <bean class="Box" singleton="true" init-method="updateToViewSize">
                         <property name="layout">
                             <bean class="Layout" singleton="true">
                                 <property name="translateRel" value="50, 5" />       
@@ -81,7 +81,7 @@ GO!]]></value>
                                 </bean>
                         </property>
                 </bean>
-                
+                                
             </list>
         </property>
     </bean>
