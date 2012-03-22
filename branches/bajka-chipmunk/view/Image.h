@@ -29,7 +29,7 @@ public:
         virtual ~Image ();
 
         /// Do the drawing.
-        virtual void update (Model::IModel *model);
+        virtual void update (Model::IModel *model, Event::UpdateEvent *e);
 
         m_ (getBitmap) Ptr <IBitmap> getBitmap () { return bitmap; }
         S_ (setBitmap) void setBitmap (Ptr <IBitmap> b) { bitmap = b; }
@@ -42,7 +42,7 @@ public:
 
 protected:
 
-        void init (Model::IModel *model, bool updateModelDimension = true);
+        void init (Model::IModel *model);
 
 protected:
 

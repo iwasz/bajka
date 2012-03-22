@@ -67,7 +67,7 @@ double Image::getHeightHint () const
 
 /****************************************************************************/
 
-void Image::init (Model::IModel *model, bool updateModelDimension)
+void Image::init (Model::IModel *model)
 {
         initialized = true;
 
@@ -130,7 +130,7 @@ void Image::init (Model::IModel *model, bool updateModelDimension)
 
 /****************************************************************************/
 
-void Image::update (Model::IModel *model)
+void Image::update (Model::IModel *model, Event::UpdateEvent *)
 {
         if (!initialized) {
                 init (model);

@@ -25,7 +25,7 @@ public:
         b_ ("Primitive")
 
         virtual ~Circle () {}
-        virtual void update (Model::IModel *model);
+        virtual void update (Model::IModel *model, Event::UpdateEvent *e);
 
         E_ (View::Circle)
 };

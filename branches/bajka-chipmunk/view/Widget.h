@@ -23,9 +23,9 @@ public:
         Widget () : visible (true), alpha (1) {}
         virtual ~Widget () {}
 
-        virtual void preUpdate (Model::IModel *);
-        virtual void update (Model::IModel *) {}
-        virtual void postUpdate (Model::IModel *);
+        virtual void preUpdate (Model::IModel *, Event::UpdateEvent *e);
+        virtual void update (Model::IModel *, Event::UpdateEvent *e) {}
+        virtual void postUpdate (Model::IModel *, Event::UpdateEvent *e);
 
         bool getVisible () const { return visible; }
         m_ (setVisible) void setVisible (bool v) { visible = v; }

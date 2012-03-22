@@ -13,6 +13,7 @@
 #include "../../model/IBox.h"
 #include "../../dependencies/sdl/Util.h"
 #include "../../util/Exceptions.h"
+#include "../../events/types/UpdateEvent.h"
 
 namespace View {
 
@@ -73,7 +74,7 @@ void Animation::stop ()
 
 /****************************************************************************/
 
-void Animation::init (Model::IModel *model, bool updateModelDimension)
+void Animation::init (Model::IModel *model)
 {
         initialized = true;
 
@@ -120,7 +121,7 @@ void Animation::init (Model::IModel *model, bool updateModelDimension)
 
 /****************************************************************************/
 
-void Animation::update (Model::IModel *model)
+void Animation::update (Model::IModel *model, Event::UpdateEvent *e)
 {
         if (!initialized) {
                 init (model);
@@ -140,8 +141,13 @@ void Animation::update (Model::IModel *model)
         glDisable (GL_TEXTURE_2D);
 
         if (!paused) {
-                current->inc ();
-                currentFrame = current->getCurrentFrame ();
+                currentMs += e->getDeltaMs ();
+
+                if (currentMs >= 1000.0 / current->getFps ()) {
+                        current->inc ();
+                        currentFrame = current->getCurrentFrame ();
+                        currentMs = 0;
+                }
         }
 }
 

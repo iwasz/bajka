@@ -11,6 +11,10 @@
 
 #include <Object.h>
 
+namespace Event {
+class UpdateEvent;
+}
+
 namespace Model {
 class IModel;
 }
@@ -24,9 +28,9 @@ struct IView : public Core::Object {
 
         virtual ~IView () {}
 
-        virtual void preUpdate (Model::IModel *) = 0;
-        virtual void update (Model::IModel *) = 0;
-        virtual void postUpdate (Model::IModel *) = 0;
+        virtual void preUpdate (Model::IModel *, Event::UpdateEvent *e) = 0;
+        virtual void update (Model::IModel *, Event::UpdateEvent *e) = 0;
+        virtual void postUpdate (Model::IModel *, Event::UpdateEvent *e) = 0;
 
         /**
          * Stany widoku - jeśli brak, to olać.

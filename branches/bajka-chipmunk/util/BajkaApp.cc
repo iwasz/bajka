@@ -269,12 +269,22 @@ void BajkaApp::loop ()
                 throw Util::RuntimeException ("BajkaApp::loop : model == NULL.");
         }
 
+//        int second = 0, frames = 0;
+
         while (!done) {
 
                 impl->dropIteration_ = false;
                 Uint32 currentMs = SDL_GetTicks ();
                 int deltaMs = currentMs - lastMs;
                 lastMs = currentMs;
+
+//                second += deltaMs;
+//                ++frames;
+//
+//                if (second >= 1000) {
+//                        std::cerr << "fps=" << frames << std::endl;
+//                        frames = second = 0;
+//                }
 
                 glMatrixMode (GL_MODELVIEW);
                 glLoadIdentity ();
@@ -305,7 +315,7 @@ void BajkaApp::loop ()
                 // swap buffers to display, since we're double buffered.
                 SDL_GL_SwapBuffers ();
                 // Tak śmiga, że damy delay
-                SDL_Delay (5);
+                SDL_Delay (17); // 60fps
         }
 }
 
