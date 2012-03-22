@@ -24,6 +24,20 @@ Animation::~Animation ()
 
 /****************************************************************************/
 
+double Animation::getWidthHint () const
+{
+        return region.getWidth ();
+}
+
+/****************************************************************************/
+
+double Animation::getHeightHint () const
+{
+        return region.getHeight ();
+}
+
+/****************************************************************************/
+
 void Animation::play ()
 {
         FrameSetMap::iterator i = frames.begin ();
@@ -68,14 +82,6 @@ void Animation::init (Model::IModel *model, bool updateModelDimension)
         // W image jest cały grid obrazków.
         SDL_Surface *image = static_cast <SDL_Surface *> (bitmap->getData ());
 
-        if (updateModelDimension && model->isBox ()) {
-                Model::IBox *b = dynamic_cast <Model::IBox *> (model);
-                b->setWidth (region.getWidth ());
-                b->setHeight (region.getHeight ());
-        }
-
-/*--------------------------------------------------------------------------*/
-
         // Rozmiary jednej klatki - takie jakie wyświetlimy na ekranie.
         imgWidth = region.getWidth ();
         imgHeight = region.getHeight ();
@@ -105,7 +111,7 @@ void Animation::init (Model::IModel *model, bool updateModelDimension)
                 texHeight = texSurface->h;
 
                 glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, texWidth,
-                              texWidth, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                              texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
                               texSurface->pixels);
 
                 SDL_FreeSurface (texSurface);

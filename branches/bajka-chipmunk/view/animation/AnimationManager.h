@@ -11,6 +11,7 @@
 
 namespace View {
 
+//TODO Do wywalenia.
 class AnimationManager {
 public:
         virtual ~AnimationManager();
