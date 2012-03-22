@@ -37,6 +37,8 @@ struct EmptyController : public IController {
         virtual bool onActive (Event::ActiveEvent *e, Model::IModel *m, View::IView *v) { return true; }
         virtual bool onExpose (Event::ExposeEvent *e, Model::IModel *m, View::IView *v) { return true; }
         virtual bool onResize (Event::ResizeEvent *e, Model::IModel *m, View::IView *v) { return true; }
+        virtual bool onManagerLoad (Event::ManagerEvent *e, Model::IModel *m, View::IView *v) { return true; }
+        virtual bool onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v) { return true; }
 
         m_ (setEventMask)
         E_ (EmptyController)

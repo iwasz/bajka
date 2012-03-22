@@ -32,6 +32,7 @@ class ActiveEvent;
 class ExposeEvent;
 class ResizeEvent;
 class UpdateEvent;
+class ManagerEvent;
 
 class PointerInsideIndex;
 }
@@ -65,6 +66,8 @@ struct IController : public Core::Object {
         virtual bool onActive (Event::ActiveEvent *e, Model::IModel *m, View::IView *v) = 0;
         virtual bool onExpose (Event::ExposeEvent *e, Model::IModel *m, View::IView *v) = 0;
         virtual bool onResize (Event::ResizeEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual bool onManagerLoad (Event::ManagerEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual bool onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v) = 0;
 
         // Mały hack psujący interfejs - nie ma sensu wirtualne!
         unsigned int eventMask;

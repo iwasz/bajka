@@ -106,4 +106,20 @@ bool DebugController::onResize (Event::ResizeEvent *e, Model::IModel *m, View::I
         return true;
 }
 
+/****************************************************************************/
+
+bool DebugController::onManagerLoad (Event::ManagerEvent *e, Model::IModel *m, View::IView *v)
+{
+        std::cout << std::hex << this << std::dec << " " << e->toString () << std::endl;
+        return true;
+}
+
+/****************************************************************************/
+
+bool DebugController::onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v)
+{
+        std::cout << std::hex << this << std::dec << " " << e->toString () << std::endl;
+        return true;
+}
+
 } /* namespace Controller */

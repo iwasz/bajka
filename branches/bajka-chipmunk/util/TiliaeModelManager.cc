@@ -33,6 +33,13 @@ void TiliaeModelManager::load (std::string const &name, bool cut)
 
         if (currentFile != i->second) {
 
+                Model::IModel *currentModel = mainModel->getTop ();
+
+                // Wywołaj handler eventu w kontrolerze.
+                if (currentModel && currentModel->getController () && currentModel->getController ()->getEventMask () & Event::MANAGER_EVENT) {
+                        currentModel->getController ()->onManagerUnload (&event, currentModel, currentModel->getView ());
+                }
+
                 // Zdejmujemy stary model, bo on zaraz przestanie istnieć.
                 mainModel->popChild ();
 
@@ -62,6 +69,11 @@ void TiliaeModelManager::load (std::string const &name, bool cut)
                 }
 
                 mainModel->addChild (m);
+        }
+
+        // Wywołaj handler eventu w kontrolerze.
+        if (m && m->getController () && m->getController ()->getEventMask () & Event::MANAGER_EVENT) {
+                m->getController ()->onManagerLoad (&event, m, m->getView ());
         }
 }
 

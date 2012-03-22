@@ -41,7 +41,11 @@
                 </bean>
 
                 <!-- To dodajemy instrukcje obrazkowe -->
-                <bean class="BoxGroup" singleton="true"/>
+                <bean class="BoxGroup" singleton="true">
+                    <property name="translate" value="110, 300" />       
+                    <property name="width" value="250"/>
+                    <property name="height" value="200"/>
+                </bean>
 
                 <bean parent="header">
                     <property name="layout.translateRel" value="50, 42"/>
@@ -102,5 +106,9 @@
     <bean id="buttonNextBmp" class="Bitmap" singleton="true">
         <property name="path" value="resources/img/ui/button-next.png" />
     </bean>
+
+<!--     <bean id="keysBmp" class="Bitmap" singleton="true"> -->
+<!--         <property name="path" value="resources/img/ui/instructions-arrow-keys.png" /> -->
+<!--     </bean> -->
     
 </beans>
