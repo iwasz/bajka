@@ -12,6 +12,7 @@
 #include <Container.h>
 #include "../util/ModelManager.h"
 #include "../util/ReflectionMacros.h"
+#include "../events/types/ManagerEvent.h"
 
 namespace Util {
 
@@ -48,6 +49,7 @@ private:
         Ptr <Container::BeanFactoryContainer> childContainer;
         Core::StringMap mapping;
         std::string currentFile;
+        Event::ManagerEvent event;
 
         E_ (TiliaeModelManager)
 };

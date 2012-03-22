@@ -22,10 +22,27 @@ Don't let any mail fall on ground!]]></value>
         <property name="children.3.children">
             <list class="ModelVector">
                 <bean parent="image">
-                    <property name="view.bitmap.path" value="resources/img/ui/instructions-principal.png"/>
+                    <property name="view.bitmap.path" value="resources/img/ui/instructions-arrow-keys.png"/>
+                    <property name="view.region" value="0, 0, 50, 50" />
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="20, 0" />       
+                        </bean>
+                    </property>
+                </bean>
+
+                <bean parent="image">
+                    <property name="view.bitmap.path" value="resources/img/ui/instructions-arrow-keys.png"/>
+                    <property name="view.region" value="100, 0, 150, 50" />
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="80, 0" />       
+                        </bean>
+                    </property>
                 </bean>
             </list>
         </property>
+        
     </bean>
     
 </beans>

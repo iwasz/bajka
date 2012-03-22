@@ -37,6 +37,8 @@ struct DebugController : public IController {
         bool onActive (Event::ActiveEvent *e, Model::IModel *m, View::IView *v);
         bool onExpose (Event::ExposeEvent *e, Model::IModel *m, View::IView *v);
         bool onResize (Event::ResizeEvent *e, Model::IModel *m, View::IView *v);
+        bool onManagerLoad (Event::ManagerEvent *e, Model::IModel *m, View::IView *v);
+        bool onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v);
 
         // linia do dołu
         m_ (setEventMask)

@@ -6,24 +6,26 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_EVENT_TYPES_H_
-#define BAJKA_EVENT_TYPES_H_
+#ifndef BAJKA_MANAGER_EVENT_H_
+#define BAJKA_MANAGER_EVENT_H_
 
-#include "ButtonPressEvent.h"
-#include "ButtonReleaseEvent.h"
 #include "IEvent.h"
-#include "KeyboardEvent.h"
-#include "KeyDownEvent.h"
-#include "KeyUpEvent.h"
-#include "MouseButtonEvent.h"
-#include "MouseEvent.h"
-#include "MouseMotionEvent.h"
-#include "QuitEvent.h"
-#include "TimerEvent.h"
-#include "KeyCode.h"
-#include "ExposeEvent.h"
-#include "ResizeEvent.h"
-#include "ActiveEvent.h"
-#include "ManagerEvent.h"
 
-#	endif /* TYPES_H_ */
+namespace Event {
+
+/**
+ * Event zglaszany przez managera.
+ */
+class ManagerEvent : public IEvent {
+public:
+        virtual ~ManagerEvent () {}
+
+        Type getType () const { return MANAGER_EVENT; }
+        bool runCallback (Model::IModel *m, View::IView *v, Controller::IController *c, void *d) { return true; }
+
+        std::string toString () const { return ""; }
+};
+
+} /* namespace Event */
+
+#	endif /* EXPOSEEVENT_H_ */
