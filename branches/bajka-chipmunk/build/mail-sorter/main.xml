@@ -13,7 +13,7 @@
         <property name="resX" value="480"/>
         <property name="resY" value="640"/>
         <property name="windowCaption" value="MailSorter"/>
-        <property name="showAABB" value="true"/>
+        <property name="showAABB" value="false"/>
         <property name="showSystemCursor" value="false"/>        
     </bean>
 

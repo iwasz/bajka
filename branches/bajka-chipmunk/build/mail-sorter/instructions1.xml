@@ -5,14 +5,26 @@
 <beans>
 
     <import resource="mail-sorter/instructions.inc.xml"/>
+    
+    <!-- TODO A czemu ten bean nie może być zdefiniowany w instructions1? -->
+    <bean id="kL" parent="key"/>
 
     <bean id="instructions1" parent="instructionsBase">
+
+        <property name="controller">
+            <bean class="Instructions1Controller" singleton="true">
+                <property name="eventMask" value="0x2000"/>
+                <property name="player" ref="player"/>
+                <property name="buttonLeft" ref="kL"/>                
+            </bean>
+        </property>
+            
         <property name="children.4.view.text" value="1 / 5"/>
         <property name="children.5.view.text">
                         <value><![CDATA[Use LEFT and RIGHT arrows to move and
 collect falling mail. Each mail is worth 1
 point. The longer you play, the faster the
-mail fails.
+mail falls.
 
 Don't let any mail fall on ground!]]></value>
         </property>
@@ -21,28 +33,44 @@ Don't let any mail fall on ground!]]></value>
         <!-- Box z animacjami -->
         <property name="children.3.children">
             <list class="ModelVector">
-                <bean parent="image">
-                    <property name="view.bitmap.path" value="resources/img/ui/instructions-arrow-keys.png"/>
-                    <property name="view.region" value="0, 0, 50, 50" />
-                    <property name="layout">
-                        <bean class="Layout" singleton="true">
-                            <property name="translateRel" value="20, 0" />       
-                        </bean>
-                    </property>
-                </bean>
+                      
+                <ref bean="player"/>
+                                           
+                <ref bean="kL"/>
+                
+                <bean id="kR" parent="key">
+                    <property name="view.widgets.0.region" value="200, 0, 250, 50"/>
+                    <property name="view.widgets.1.region" value="250, 0, 300, 50"/>
 
-                <bean parent="image">
-                    <property name="view.bitmap.path" value="resources/img/ui/instructions-arrow-keys.png"/>
-                    <property name="view.region" value="100, 0, 150, 50" />
                     <property name="layout">
                         <bean class="Layout" singleton="true">
                             <property name="translateRel" value="80, 0" />       
                         </bean>
                     </property>
                 </bean>
+                
+                <bean id="e1" parent="envelope">
+                    <property name="layout.translateRel" value="80, 50"/>
+                </bean>
+                
+                <bean id="e2" parent="envelope">
+                    <property name="layout.translateRel" value="65, 50"/>
+                </bean>
+                
+                <bean id="e3" parent="envelope">
+                    <property name="layout.translateRel" value="50, 50"/>
+                </bean>
+                
+                <bean id="e4" parent="envelope">
+                    <property name="layout.translateRel" value="35, 50"/>
+                </bean>
+                
+                <bean id="e5" parent="envelope">
+                    <property name="layout.translateRel" value="20, 50"/>
+                </bean>
+                
             </list>
-        </property>
-        
+        </property>        
     </bean>
-    
+       
 </beans>

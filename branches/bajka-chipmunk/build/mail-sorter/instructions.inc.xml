@@ -96,6 +96,77 @@
     </bean>
 
 <!-- ====================================================================================== -->
+<!-- Powtarzające się widgety. -->
+<!-- ====================================================================================== -->
+
+    <bean id="player" class="Box" singleton="true" init-method="updateToViewSize">
+        <property name="layout">
+            <bean class="Layout" singleton="true">
+                <property name="translateRel" value="50, 25" />
+            </bean>
+        </property>
+
+        <property name="view">
+            <bean class="Animation" singleton="true">
+                <property name="bitmap" ref="playerBmp" />
+                <property name="region" value="0, 0, 30, 50" />
+                <property name="count" value="5" />
+                <property name="frames.default">
+                    <bean class="FrameSet" singleton="true">
+                        <property name="fps" value="2" />
+                        <property name="loop" value="true" />
+                        <property name="frames">
+                            <list class="IntVector" singleton="true">
+                                <value>0</value>
+                                <value>1</value>
+                            </list>
+                        </property>
+                    </bean>
+                </property>
+                <property name="default" value="default" />
+            </bean>
+        </property>
+    </bean>
+                
+    <bean id="key" abstract="true" class="Box" singleton="true" init-method="updateToViewSize">
+        <property name="view">
+            <bean class="StatefulWidget" singleton="true">
+                <property name="widgets">
+                    <list class="WidgetVector" singleton="true">
+                        <bean id="s1" class="Image" singleton="true">
+                            <property name="bitmap" ref="keysBmp"/>
+                            <property name="region" value="0, 0, 50, 50" />
+                        </bean>
+                        <bean class="Image" singleton="true">
+                            <property name="bitmap" ref="keysBmp"/>
+                            <property name="region" value="50, 0, 100, 50" />
+                        </bean>
+                    </list>
+                </property>
+                <property name="state" value="0" />
+            </bean>
+        </property>
+        
+        <property name="controller" ref="buttonCtr"/>            
+
+        <property name="layout">
+            <bean class="Layout" singleton="true">
+                <property name="translateRel" value="20, 0" />       
+            </bean>
+        </property>
+    </bean>
+    
+    <bean id="envelope" parent="image">
+        <property name="view.bitmap" ref="mailBmp" />
+        <property name="view.region" value="0, 0, 30, 24" />
+        <property name="layout">
+            <bean class="Layout" singleton="true">
+                <property name="translateRel" value="80, 50" />       
+            </bean>
+        </property>
+    </bean>
+    
+<!-- ====================================================================================== -->
 <!-- Bitmapy, obrazki -->
 <!-- ====================================================================================== -->
 
@@ -107,8 +178,16 @@
         <property name="path" value="resources/img/ui/button-next.png" />
     </bean>
 
-<!--     <bean id="keysBmp" class="Bitmap" singleton="true"> -->
-<!--         <property name="path" value="resources/img/ui/instructions-arrow-keys.png" /> -->
-<!--     </bean> -->
+    <bean id="playerBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/instructions-player.png" />
+    </bean>
+    
+    <bean id="keysBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/instructions-arrow-keys.png" />
+    </bean>
+
+    <bean id="mailBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/instructions-mail.png" />
+    </bean>
     
 </beans>
