@@ -6,9 +6,10 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "IController.h"
 #include <iostream>
+#include "IController.h"
 #include "../events/PointerInsideIndex.h"
+#include "../events/types/IEvent.h"
 
 namespace Controller {
 
@@ -16,10 +17,16 @@ bool IController::onMouseMotionDispatch (Event::MouseMotionEvent *e, Model::IMod
 {
         if (!d->isPointerInside (m)) {
                 d->add (m);
-                onMouseOver (e, m, v);
+
+                if (eventMask & Event::MOUSE_OVER_EVENT) {
+                        onMouseOver (e, m, v);
+                }
         }
 
-        onMouseMotion (e, m, v);
+        if (eventMask & Event::MOUSE_MOTION_EVENT) {
+                onMouseMotion (e, m, v);
+        }
+
         return true;
 }
 
