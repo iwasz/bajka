@@ -9,13 +9,50 @@
     <!-- TODO A czemu ten bean nie może być zdefiniowany w instructions1? -->
     <bean id="kL" parent="key"/>
 
-    <bean id="instructions1" parent="instructionsBase">
+    <bean id="kR" parent="key">
+        <property name="view.widgets.0.region" value="200, 0, 250, 50"/>
+        <property name="view.widgets.1.region" value="250, 0, 300, 50"/>
 
+        <property name="layout">
+            <bean class="Layout" singleton="true">
+                <property name="translateRel" value="80, 0" />       
+            </bean>
+        </property>
+    </bean>
+    
+    <bean id="e1" parent="envelope">
+        <property name="layout.translateRel" value="80, 50"/>
+    </bean>
+    
+    <bean id="e2" parent="envelope">
+        <property name="layout.translateRel" value="65, 50"/>
+    </bean>
+    
+    <bean id="e3" parent="envelope">
+        <property name="layout.translateRel" value="50, 50"/>
+    </bean>
+    
+    <bean id="e4" parent="envelope">
+        <property name="layout.translateRel" value="35, 50"/>
+    </bean>
+    
+    <bean id="e5" parent="envelope">
+        <property name="layout.translateRel" value="20, 50"/>
+    </bean>
+                
+    <bean id="instructions1" parent="instructionsBase">
+    
         <property name="controller">
             <bean class="Instructions1Controller" singleton="true">
                 <property name="eventMask" value="0x2000"/>
                 <property name="player" ref="player"/>
-                <property name="buttonLeft" ref="kL"/>                
+                <property name="buttonLeft" ref="kL"/>
+                <property name="buttonRight" ref="kR"/>
+                <property name="envelope1" ref="e1"/>
+                <property name="envelope2" ref="e2"/>
+                <property name="envelope3" ref="e3"/>
+                <property name="envelope4" ref="e4"/>
+                <property name="envelope5" ref="e5"/>
             </bean>
         </property>
             
@@ -32,43 +69,15 @@ Don't let any mail fall on ground!]]></value>
         
         <!-- Box z animacjami -->
         <property name="children.3.children">
-            <list class="ModelVector">
-                      
+            <list class="ModelVector">                      
                 <ref bean="player"/>
-                                           
                 <ref bean="kL"/>
-                
-                <bean id="kR" parent="key">
-                    <property name="view.widgets.0.region" value="200, 0, 250, 50"/>
-                    <property name="view.widgets.1.region" value="250, 0, 300, 50"/>
-
-                    <property name="layout">
-                        <bean class="Layout" singleton="true">
-                            <property name="translateRel" value="80, 0" />       
-                        </bean>
-                    </property>
-                </bean>
-                
-                <bean id="e1" parent="envelope">
-                    <property name="layout.translateRel" value="80, 50"/>
-                </bean>
-                
-                <bean id="e2" parent="envelope">
-                    <property name="layout.translateRel" value="65, 50"/>
-                </bean>
-                
-                <bean id="e3" parent="envelope">
-                    <property name="layout.translateRel" value="50, 50"/>
-                </bean>
-                
-                <bean id="e4" parent="envelope">
-                    <property name="layout.translateRel" value="35, 50"/>
-                </bean>
-                
-                <bean id="e5" parent="envelope">
-                    <property name="layout.translateRel" value="20, 50"/>
-                </bean>
-                
+                <ref bean="kR"/>
+                <ref bean="e1"/>
+                <ref bean="e2"/>
+                <ref bean="e3"/>
+                <ref bean="e4"/>
+                <ref bean="e5"/>
             </list>
         </property>        
     </bean>
