@@ -6,13 +6,22 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_TWEEN_H_
-#define BAJKA_TWEEN_H_
+#ifndef BAJKA_SETTWEEN_H_
+#define BAJKA_SETTWEEN_H_
 
-#include "AtomicTween.h"
-#include "accessor/Accessor.h"
-#include "Timeline.h"
-#include "MultiTween.h"
-#include "SetTween.h"
+#include "AbstractTween.h"
 
-#	endif /* TWEEN_H_ */
+namespace Tween {
+
+/**
+ * Tween ustawiający zadaną wartość natychmiast, bez interpolacji.
+ * \ingroup Tween
+ */
+class SetTween : public AbstractTween {
+public:
+        virtual ~SetTween () {}
+};
+
+} /* namespace Tween */
+
+#	endif /* SETTWEEN_H_ */

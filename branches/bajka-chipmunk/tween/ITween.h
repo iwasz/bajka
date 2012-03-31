@@ -21,7 +21,7 @@ public:
         virtual ~ITween () {}
         virtual void update (int deltaMs, bool reverse) = 0;
 
-        enum State { INIT, DELAY, RUN, FINISHED };
+        enum State { INIT, DELAY, RUN, FINISHED, END };
         virtual State getState () const = 0;
 
         virtual void start (Manager *m = NULL) = 0;

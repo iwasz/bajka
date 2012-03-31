@@ -34,8 +34,12 @@ void AbstractTween::clear ()
 
 void AbstractTween::update (int deltaMs, bool reverse)
 {
-        if (state == FINISHED) {
+        if (state == END) {
+                return;
+        }
+        else if (state == FINISHED) {
                 if (!reverse) {
+                        transition (END, reverse);
                         return;
                 }
 
@@ -44,6 +48,7 @@ void AbstractTween::update (int deltaMs, bool reverse)
         }
         else if (state == INIT) {
                 if (reverse) {
+                        transition (END, reverse);
                         return;
                 }
 
@@ -101,6 +106,7 @@ AbstractTween::State AbstractTween::transition (State s, bool reverse)
 
 	case DELAY:
                 if (state == INIT ) {
+                        currentRepetition = repetitions;
 			initExit (reverse);
 			delayEntry (reverse);
 		}
@@ -114,6 +120,7 @@ AbstractTween::State AbstractTween::transition (State s, bool reverse)
 
 	case RUN:
                 if (state == INIT) {
+                        currentRepetition = repetitions;
 			initExit (reverse);
 			runEntry (reverse);
 		}
@@ -126,6 +133,7 @@ AbstractTween::State AbstractTween::transition (State s, bool reverse)
 			runEntry (reverse);
 		}
 		else if (state == FINISHED) {
+		        currentRepetition = repetitions;
 			finishedExit (reverse);
 			runEntry (reverse);
 		}
@@ -139,6 +147,10 @@ AbstractTween::State AbstractTween::transition (State s, bool reverse)
 		}
                 state = FINISHED;
 		break;
+
+        case END:
+                state = END;
+                break;
 
 	default:
 		break;

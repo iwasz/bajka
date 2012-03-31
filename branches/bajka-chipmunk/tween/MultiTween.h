@@ -6,24 +6,29 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_TWEEN_TIMELINE_H_
-#define BAJKA_TWEEN_TIMELINE_H_
+#ifndef BAJKA_MULTITWEEN_H_
+#define BAJKA_MULTITWEEN_H_
 
 #include "AbstractTween.h"
 
 namespace Tween {
 
 /**
- * Zawiera kolekcję tweenów i uruchamia je po kolei.
+ * Zawiera kolekcję tweenów i uruchamia je jednocześnie. Kończy swoją pracę, kiedy
+ * ostatni z tweenów zakończy działanie. Jest dopełnieniem Timeline. Timeline uruchamia
+ * szeregowo, a MultiTween równolegle.
  * \ingroup Tween
  */
-class Timeline : public AbstractTween {
+class MultiTween : public AbstractTween {
 public:
 
-        Timeline () {}
-        virtual ~Timeline () {}
+        virtual ~MultiTween () {}
 
-        Timeline *add (ITween *tween);
+        MultiTween *add (ITween *tween)
+        {
+                tweens.push_back (tween);
+                return this;
+        }
 
 private:
 
@@ -36,13 +41,11 @@ private:
 private:
 
         TweenVector tweens;
-        TweenVector::iterator current;
-        TweenVector::reverse_iterator currentr;
 
 };
 
-extern Timeline *timeline ();
+extern MultiTween *multi ();
 
 } /* namespace Tween */
 
-#	endif /* TIMELINE_H_ */
+#	endif /* MULTITWEEN_H_ */

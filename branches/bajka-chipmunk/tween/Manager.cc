@@ -13,6 +13,8 @@
 #include "../tween/ease/Ease.h"
 #include "../tween/accessor/AffineAccessor.h"
 #include "../view/LoopImage.h"
+#include "MultiTween.h"
+#include "SetTween.h"
 
 namespace Tween {
 
@@ -23,6 +25,8 @@ struct Pool {
         boost::object_pool <AtomicTween> atomicTweens;
         boost::object_pool <AtomicTween::Target> targets;
         boost::object_pool <Timeline> timelines;
+        boost::object_pool <MultiTween> multiTweens;
+        boost::object_pool <SetTween> setTweens;
 
 };
 
@@ -66,7 +70,6 @@ AtomicTween::Target *Manager::newTarget ()
 
 void Manager::freeTarget (AtomicTween::Target *t)
 {
-//        t->clear ();
         pool->targets.free (t);
 }
 
@@ -83,8 +86,40 @@ Timeline *Manager::newTimeline ()
 
 void Manager::freeTimeline (Timeline *t)
 {
-//        t->clear ();
         pool->timelines.free (t);
+}
+
+/****************************************************************************/
+
+MultiTween *Manager::newMultiTween ()
+{
+        MultiTween *ret = new (pool->multiTweens.malloc ()) MultiTween;
+        assertThrow (ret, "Manager::newMultiTween : failed to create object.")
+        return ret;
+}
+
+/****************************************************************************/
+
+void Manager::freeMultiTween (MultiTween *t)
+{
+        pool->multiTweens.free (t);
+}
+
+/****************************************************************************/
+
+SetTween *Manager::newSetTween ()
+{
+//        SetTween *ret = new (pool->setTweens.malloc ()) SetTween;
+//        assertThrow (ret, "Manager::newSetTween : failed to create object.")
+//        return ret;
+        return NULL;
+}
+
+/****************************************************************************/
+
+void Manager::freeSetTween (SetTween *t)
+{
+        pool->setTweens.free (t);
 }
 
 /**

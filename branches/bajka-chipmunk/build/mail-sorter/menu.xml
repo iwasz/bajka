@@ -32,7 +32,7 @@
     </bean>
 
 
-    <bean id="menu" class="BoxGroup" singleton="true">
+    <bean id="menu" class="BoxGroup">
         <property name="translate" value="-240, -320" />       
         <property name="controller" ref="emptyCtr"/>            
 <!--         <property name="expand" value="true"/>-->
