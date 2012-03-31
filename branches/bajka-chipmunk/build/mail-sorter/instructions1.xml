@@ -42,19 +42,19 @@
                 
     <bean id="instructions1" parent="instructionsBase">
     
-        <property name="controller">
-            <bean class="Instructions1Controller" singleton="true">
-                <property name="eventMask" value="0x2000"/>
-                <property name="player" ref="player"/>
-                <property name="buttonLeft" ref="kL"/>
-                <property name="buttonRight" ref="kR"/>
-                <property name="envelope1" ref="e1"/>
-                <property name="envelope2" ref="e2"/>
-                <property name="envelope3" ref="e3"/>
-                <property name="envelope4" ref="e4"/>
-                <property name="envelope5" ref="e5"/>
-            </bean>
-        </property>
+<!--         <property name="controller"> -->
+<!--             <bean class="Instructions1Controller" singleton="true"> -->
+<!--                 <property name="eventMask" value="0x2000"/> -->
+<!--                 <property name="player" ref="player"/> -->
+<!--                 <property name="buttonLeft" ref="kL"/> -->
+<!--                 <property name="buttonRight" ref="kR"/> -->
+<!--                 <property name="envelope1" ref="e1"/> -->
+<!--                 <property name="envelope2" ref="e2"/> -->
+<!--                 <property name="envelope3" ref="e3"/> -->
+<!--                 <property name="envelope4" ref="e4"/> -->
+<!--                 <property name="envelope5" ref="e5"/> -->
+<!--             </bean> -->
+<!--         </property> -->
             
         <property name="children.4.view.text" value="1 / 5"/>
         <property name="children.5.view.text">

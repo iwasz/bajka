@@ -20,6 +20,8 @@
 namespace Tween {
 class Pool;
 class Timeline;
+class MultiTween;
+class SetTween;
 
 /**
  * - Overwrite : co ma się dzieć, kiedy dodamy 2 tweeny do tego samego obiektu na ten
@@ -65,6 +67,12 @@ public:
 
         Timeline *newTimeline ();
         void freeTimeline (Timeline *);
+
+        MultiTween *newMultiTween ();
+        void freeMultiTween (MultiTween *);
+
+        SetTween *newSetTween ();
+        void freeSetTween (SetTween *);
 
 private:
 

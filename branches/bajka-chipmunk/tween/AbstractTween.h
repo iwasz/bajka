@@ -46,6 +46,13 @@ protected:
         virtual void finishedExit (bool reverse) {}
 
         virtual void updateRun (int deltaMs, bool direction) = 0;
+
+        /**
+         * Sprawdza czy aktualne powtórzenie się zakończyło. Jeśli tween ma ustawiony repeat,
+         * to zostanie on uruchomiony jeszcze raz.
+         * @param direction
+         * @return
+         */
         virtual bool checkEnd (bool direction) = 0;
 
 protected:
