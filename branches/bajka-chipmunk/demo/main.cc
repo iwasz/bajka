@@ -6,7 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "../util/BajkaApp.h"
+#include "../util/App.h"
 #include <cstdlib>
 #include <Container.h>
 #include <ContainerFactory.h>
@@ -32,7 +32,7 @@ int main (int argc, char **argv)
 
         try {
                 Ptr <Container::BeanFactoryContainer> container = ContainerFactory::createContainer (MXmlMetaService::parseFile (fileName), true);
-                Ptr <Util::BajkaApp> app = vcast <Ptr <Util::BajkaApp> > (container->getBean ("app"));
+                Ptr <Util::App> app = vcast <Ptr <Util::App> > (container->getBean ("app"));
                 app->setInstance (app.get ());
 
                 // TODO to się powinno samo ustawiać w XML.

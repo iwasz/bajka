@@ -19,7 +19,7 @@ class IModel;
 }
 
 namespace Util {
-class BajkaApp;
+class App;
 }
 
 namespace Event {
@@ -36,8 +36,8 @@ public:
         virtual void run (Model::IModel *m, EventIndex const &modeliIndex, PointerInsideIndex *pointerInsideIndex) = 0;
         virtual void reset () = 0;
 
-        virtual Util::BajkaApp *getApp () = 0;
-        virtual void setApp (Util::BajkaApp *a) = 0;
+        virtual Util::App *getApp () = 0;
+        virtual void setApp (Util::App *a) = 0;
 
 };
 

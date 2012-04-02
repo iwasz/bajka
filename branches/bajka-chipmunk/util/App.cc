@@ -19,7 +19,7 @@
 #include <boost/bind.hpp>
 
 #include "Events.h"
-#include "BajkaApp.h"
+#include "App.h"
 #include "../view/draw/Primitives.h"
 #include "../model/IGroup.h"
 #include "../tween/Manager.h"
@@ -30,23 +30,23 @@
 
 /****************************************************************************/
 
-Util::BajkaApp *app ()
+Util::App *app ()
 {
-        return Util::BajkaApp::instance ();
+        return Util::App::instance ();
 }
 
 /****************************************************************************/
 
-Util::BajkaConfig *config ()
+Util::Config *config ()
 {
-        return Util::BajkaApp::instance ()->getConfig ().get ();
+        return Util::App::instance ()->getConfig ().get ();
 }
 
 /****************************************************************************/
 
 Util::ModelManager *manager ()
 {
-        return Util::BajkaApp::instance ()->getManager ().get ();
+        return Util::App::instance ()->getManager ().get ();
 }
 
 /****************************************************************************/
@@ -64,7 +64,7 @@ struct Impl {
 
         Impl () : model (NULL), dropIteration_ (false) {}
 
-        Ptr <BajkaConfig> config;
+        Ptr <Config> config;
         Ptr <Event::DispatcherList> dispatchers;
         Ptr <ModelManager> manager;
 
@@ -76,16 +76,16 @@ struct Impl {
         Event::UpdateEvent updateEvent;
 };
 
-BajkaApp *BajkaApp::instance_ = NULL;
+App *App::instance_ = NULL;
 
 /****************************************************************************/
 
-BajkaApp::BajkaApp () : impl (new Impl) {}
-BajkaApp::~BajkaApp () { delete impl; }
+App::App () : impl (new Impl) {}
+App::~App () { delete impl; }
 
 /****************************************************************************/
 
-BajkaApp *BajkaApp::instance ()
+App *App::instance ()
 {
         assertThrow (instance_, "!instance_")
         return instance_;
@@ -93,10 +93,8 @@ BajkaApp *BajkaApp::instance ()
 
 /****************************************************************************/
 
-void BajkaApp::init ()
+void App::init ()
 {
-#if 1
-
 //        /* Initialize SDL for video output */
 //        if (SDL_Init (SDL_INIT_VIDEO) < 0) {
 //                fprintf (stderr, "Unable to initialize SDL: %s\n", SDL_GetError ());
@@ -200,63 +198,18 @@ void BajkaApp::init ()
          */
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-#endif
-#if 0
-        if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-            return ;
-        }
-
-        SDL_GL_SetAttribute(SDL_GL_RED_SIZE,            8);
-        SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE,          8);
-        SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,           8);
-        SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE,          8);
-
-        SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE,          16);
-        SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE,            32);
-
-        SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE,        8);
-        SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE,    8);
-        SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE,        8);
-        SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE,    8);
-
-        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS,  1);
-
-        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,  2);
-
-        if((/*Surf_Display = */SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL)) == NULL) {
-            return;
-        }
-
-        glClearColor(0, 0, 0, 0);
-
-        glViewport(0, 0, 640, 480);
-
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-
-        glOrtho(0, 640, 480, 0, 1, -1);
-
-        glMatrixMode(GL_MODELVIEW);
-
-        glEnable(GL_TEXTURE_2D);
-
-        glLoadIdentity();
-
-        return;
-#endif
 }
 
 /****************************************************************************/
 #define checkBreak() { if (impl->dropIteration_) { break; } }
 #define checkContinue() { if (impl->dropIteration_) { continue; } }
 
-void BajkaApp::loop ()
+void App::loop ()
 {
         bool done = false;
 
         if (!impl->model) {
-        	throw InitException ("BajkaApp has no model.");
+        	throw InitException ("App has no model.");
         }
 
         Uint32 lastMs = SDL_GetTicks ();
@@ -266,7 +219,7 @@ void BajkaApp::loop ()
         }
 
         if (!impl->model) {
-                throw Util::RuntimeException ("BajkaApp::loop : model == NULL.");
+                throw Util::RuntimeException ("App::loop : model == NULL.");
         }
 
 //        int second = 0, frames = 0;
@@ -321,14 +274,14 @@ void BajkaApp::loop ()
 
 /****************************************************************************/
 
-void BajkaApp::debug (Core::String const &msg)
+void App::debug (Core::String const &msg)
 {
         std::cerr << "+---------------DEBUG-------[" << msg << "]--------+" << std::endl;
 }
 
 /****************************************************************************/
 
-void BajkaApp::destroy ()
+void App::destroy ()
 {
         TTF_Quit ();
         SDL_Quit ();
@@ -344,28 +297,28 @@ void BajkaApp::destroy ()
 
 /****************************************************************************/
 
-Ptr <BajkaConfig> BajkaApp::getConfig () const
+Ptr <Config> App::getConfig () const
 {
         return impl->config;
 }
 
 /****************************************************************************/
 
-void BajkaApp::setConfig (Ptr <BajkaConfig> b)
+void App::setConfig (Ptr <Config> b)
 {
         impl->config = b;
 }
 
 /****************************************************************************/
 
-Model::IModel *BajkaApp::getModel () const
+Model::IModel *App::getModel () const
 {
         return impl->model;
 }
 
 /****************************************************************************/
 
-void BajkaApp::setModel (Model::IModel *m)
+void App::setModel (Model::IModel *m)
 {
         impl->model = m;
         impl->eventIndex.clear ();
@@ -380,14 +333,14 @@ void BajkaApp::setModel (Model::IModel *m)
 
 /****************************************************************************/
 
-Ptr <ModelManager> BajkaApp::getManager ()
+Ptr <ModelManager> App::getManager ()
 {
         return impl->manager;
 }
 
 /****************************************************************************/
 
-void BajkaApp::setManager (Ptr <ModelManager> m)
+void App::setManager (Ptr <ModelManager> m)
 {
         impl->manager = m;
         impl->manager->setApp (this);
@@ -395,14 +348,14 @@ void BajkaApp::setManager (Ptr <ModelManager> m)
 
 /****************************************************************************/
 
-Ptr <Event::DispatcherList> BajkaApp::getDispatchers () const
+Ptr <Event::DispatcherList> App::getDispatchers () const
 {
         return impl->dispatchers;
 }
 
 /****************************************************************************/
 
-void BajkaApp::setDispatchers (Ptr <Event::DispatcherList> d)
+void App::setDispatchers (Ptr <Event::DispatcherList> d)
 {
         impl->dispatchers = d;
 
@@ -413,7 +366,7 @@ void BajkaApp::setDispatchers (Ptr <Event::DispatcherList> d)
 
 /****************************************************************************/
 
-void BajkaApp::reset ()
+void App::reset ()
 {
         dropIteration ();
 
@@ -427,14 +380,14 @@ void BajkaApp::reset ()
 
 /****************************************************************************/
 
-void BajkaApp::dropIteration ()
+void App::dropIteration ()
 {
         impl->dropIteration_ = true;
 }
 
 /****************************************************************************/
 
-bool BajkaApp::getDropIteration () const
+bool App::getDropIteration () const
 {
         return impl->dropIteration_;
 }

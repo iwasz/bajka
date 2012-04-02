@@ -15,7 +15,7 @@
 #include "ReflectionMacros.h"
 
 namespace Util {
-class BajkaApp;
+class App;
 
 /**
  * Przyporządkowuje nazwy modelom i ułatwia ich tworzenie i wyświetlanie.
@@ -45,14 +45,14 @@ public:
         m_ (getMainModel) Model::IGroup *getMainModel () { return mainModel; }
         S_ (setMainModel) void setMainModel (Model::IGroup *g) { mainModel = g; }
 
-        BajkaApp *getApp () { return app; }
-        void setApp (BajkaApp *a) { app = a; }
+        App *getApp () { return app; }
+        void setApp (App *a) { app = a; }
 
 protected:
 
         Model::ModelMap models;
         Model::IGroup *mainModel;
-        BajkaApp *app;
+        App *app;
 
         E_ (ModelManager)
 };

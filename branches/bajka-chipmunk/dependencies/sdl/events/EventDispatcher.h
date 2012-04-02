@@ -12,7 +12,7 @@
 #include <SDL.h>
 #include "ReflectionMacros.h"
 #include "IDispatcher.h"
-#include "BajkaApp.h"
+#include "App.h"
 #include "types/Types.h"
 
 namespace Sdl {
@@ -33,8 +33,8 @@ public:
 
 /*------getters-setters-----------------------------------------------------*/
 
-        Util::BajkaApp *getApp () { return app; }
-        void setApp (Util::BajkaApp *a) { app = a; }
+        Util::App *getApp () { return app; }
+        void setApp (Util::App *a) { app = a; }
 
 private:
 
@@ -64,8 +64,8 @@ private:
         Event::ActiveEvent activeEvent;
         Event::ExposeEvent exposeEvent;
 
-        Ptr <Util::BajkaConfig> config;
-        Util::BajkaApp *app;
+        Ptr <Util::Config> config;
+        Util::App *app;
 
         E_ (EventDispatcher)
 };

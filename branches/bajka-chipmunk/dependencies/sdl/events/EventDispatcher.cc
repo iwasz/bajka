@@ -11,8 +11,8 @@
 #include "EventDispatcher.h"
 #include "Common.h"
 #include "../../dependencies/openGl/Util.h"
-#include "../EventIdex.h"
-#include "../PointerInsideIndex.h"
+#include "../../../events/PointerInsideIndex.h"
+#include "../../../events/EventIdex.h"
 
 namespace Sdl {
 namespace M = Model;
