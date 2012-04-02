@@ -6,7 +6,6 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include <SDL_opengl.h>
 #include "Rectangle.h"
 #include "draw/Primitives.h"
 #include "../model/static/Box.h"

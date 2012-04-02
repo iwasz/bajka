@@ -6,7 +6,6 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include <SDL_opengl.h>
 #include "draw/Primitives.h"
 #include "../model/static/Circle.h"
 #include "Circle.h"
