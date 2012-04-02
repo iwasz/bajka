@@ -17,7 +17,6 @@
  * \}
  */
 
-#include "sdl/Sdl.h"
 #include "types/Types.h"
 #include "IDispatcher.h"
 #include "Common.h"

@@ -16,19 +16,19 @@ namespace Util {
 /*
  * Ta klasa jest tylko po to, żeby ułatwoć stosowanie bajki z kontenerem.
  * Otóż kolejność pracy programu musi być następująca:
- * - Utworzenie BajkaConfig.
+ * - Utworzenie Config.
  * - Ustawienie jej pól.
  * - Uruchomienie init ().
  * Treaz OpenGL i SDL są zainicjowane, można dodawać obiekty. I dopero teraz
  * można uruchomić pętlę programu:
- * - BajkaApp run.
+ * - App run.
  * INICJUJE OpenGL!
  */
-class BajkaConfig {
+class Config {
 public:
         C__ (void)
 
-        BajkaConfig ();
+        Config ();
 
 /*------access methods------------------------------------------------------*/
 
@@ -59,7 +59,7 @@ private:
         bool showAABB;
         bool showSystemCursor;
 
-        E_ (BajkaConfig)
+        E_ (Config)
 };
 
 } /* namespace Util */

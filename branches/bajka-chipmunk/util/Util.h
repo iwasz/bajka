@@ -17,7 +17,7 @@
  */
 
 #include "Math.h"
-#include "BajkaApp.h"
+#include "App.h"
 #include "Commons.h"
 
 #	endif /* UTIL_H_ */

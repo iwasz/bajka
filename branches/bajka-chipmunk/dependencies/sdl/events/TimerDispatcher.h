@@ -34,15 +34,15 @@ public:
         unsigned int getTickInterval () const { return tickInterval; }
         m_ (setTickInterval) void setTickInterval (unsigned int tickInterval) { this->tickInterval = tickInterval; }
 
-        Util::BajkaApp *getApp () { return app; }
-        void setApp (Util::BajkaApp *a) { app = a; }
+        Util::App *getApp () { return app; }
+        void setApp (Util::App *a) { app = a; }
 
 private:
 
         unsigned int tickInterval;
         unsigned int prevTime;
         Event::TimerEvent timerEvent;
-        Util::BajkaApp *app;
+        Util::App *app;
 
         E_ (TimerDispatcher)
 };

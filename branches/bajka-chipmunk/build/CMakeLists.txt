@@ -64,6 +64,7 @@ AUX_SOURCE_DIRECTORY (../util SOURCES)
 
 AUX_SOURCE_DIRECTORY (../dependencies/openGl SOURCES)
 AUX_SOURCE_DIRECTORY (../dependencies/sdl SOURCES)
+AUX_SOURCE_DIRECTORY (../dependencies/sdl/events SOURCES)
 
 AUX_SOURCE_DIRECTORY (../controller SOURCES)
 

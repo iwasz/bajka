@@ -4,7 +4,7 @@
 
 <beans>
 
-    <bean id="goAdrian" class="BoxGroup" singleton="true" abstract="true">
+    <bean id="goAdrian" class="BoxGroup" singleton="true" >
         <property name="translate" value="-240, -320" />       
         <property name="controller" ref="emptyCtr"/>            
         <property name="width" value="480"/>

@@ -8,7 +8,7 @@
 
 #include "TestButtonController.h"
 #include "../tween/Tween.h"
-#include "../util/BajkaApp.h"
+#include "../util/App.h"
 #include "../view/LoopImage.h"
 
 using namespace Tween;

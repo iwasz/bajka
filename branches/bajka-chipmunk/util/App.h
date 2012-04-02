@@ -29,13 +29,13 @@ class Impl;
  * CR : Kiedyś kiedyś : umożliwić stosowanie czegoś innego niż SDL.
  * Można z tego dziedziczyć i dodawać swoje metody game-specific.
  */
-class BajkaApp : public Core::Object {
+class App : public Core::Object {
 public:
 
        C__ (void)
 
-       BajkaApp ();
-       virtual ~BajkaApp ();
+       App ();
+       virtual ~App ();
 
        void init ();
        m_ (loop) void loop ();
@@ -44,8 +44,8 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-       Ptr <BajkaConfig> getConfig () const;
-       m_ (setConfig) void setConfig (Ptr <BajkaConfig> b);
+       Ptr <Config> getConfig () const;
+       m_ (setConfig) void setConfig (Ptr <Config> b);
 
        /// Głowny model.
        Model::IModel *getModel () const;
@@ -69,8 +69,8 @@ public:
        Ptr <ModelManager> getManager ();
        S_ (setManager) void setManager (Ptr <ModelManager> m);
 
-       static BajkaApp *instance ();
-       static void setInstance (BajkaApp *i) { instance_ = i; }
+       static App *instance ();
+       static void setInstance (App *i) { instance_ = i; }
 
        /**
         * Powoduje zawieszenie wykonywania aktualnej iteracji i rozpoczęcie następnej.
@@ -82,15 +82,15 @@ public:
 private:
 
        Impl *impl;
-       static BajkaApp *instance_;
+       static App *instance_;
 
-       E_ (BajkaApp)
+       E_ (App)
 };
 
 } // nam
 
-extern Util::BajkaApp *app ();
-extern Util::BajkaConfig *config ();
+extern Util::App *app ();
+extern Util::Config *config ();
 extern Util::ModelManager *manager ();
 
 #	endif /* BAJKAAPP_H_ */

@@ -12,7 +12,7 @@ namespace Util {
 
 /****************************************************************************/
 
-BajkaConfig::BajkaConfig () :
+Config::Config () :
                 fullScreen (false),
                 resX (640),
                 resY (480),

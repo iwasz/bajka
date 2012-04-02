@@ -8,7 +8,7 @@
 
 #include "TiliaeModelManager.h"
 #include "../util/Exceptions.h"
-#include "../util/BajkaApp.h"
+#include "../util/App.h"
 #include <ContainerFactory.h>
 #include <inputFormat/mxml/MXmlMetaService.h>
 

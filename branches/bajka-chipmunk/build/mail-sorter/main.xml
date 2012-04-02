@@ -8,7 +8,7 @@
     <bean class="Initializer" singleton="true" />
 
     <!--Konfiguracja-->
-    <bean id="cfg" class="BajkaConfig" singleton="true">
+    <bean id="cfg" class="Config" singleton="true">
         <property name="fullScreen" value="false"/>
         <property name="resX" value="480"/>
         <property name="resY" value="640"/>
@@ -17,7 +17,7 @@
         <property name="showSystemCursor" value="false"/>        
     </bean>
 
-    <bean id="app" class="BajkaApp" singleton="true">
+    <bean id="app" class="App" singleton="true">
         <property name="config" ref="cfg" />
         
         <property name="dispatchers">

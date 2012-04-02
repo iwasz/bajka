@@ -10,7 +10,7 @@
 #define LOAD_BUTTONCONTROLLER_H_
 
 #include "../controller/ButtonController.h"
-#include "../util/BajkaApp.h"
+#include "../util/App.h"
 
 class LoadButtonController : public Controller::ButtonController {
 public:
