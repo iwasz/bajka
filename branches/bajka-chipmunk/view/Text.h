@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifndef ANDROID
 #ifndef BAJKA_VIEW_TEXT_H_
 #define BAJKA_VIEW_TEXT_H_
 
@@ -65,4 +66,5 @@ private:
 
 } /* namespace View */
 
-#	endif /* TEXT_H_ */
+#endif /* TEXT_H_ */
+#endif

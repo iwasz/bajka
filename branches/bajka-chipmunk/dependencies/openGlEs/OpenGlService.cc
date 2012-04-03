@@ -6,18 +6,23 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_OPEN_GL_UTIL_H_
-#define BAJKA_OPEN_GL_UTIL_H_
+#if USE_OPENGLES
+#include "OpenGlService.h"
+#include "OpenGl.h"
 
 namespace View {
 
-struct Util {
+void OpenGlService::init ()
+{
+}
 
-        static void mouseToDisplay (int x, int y, int windowWidth, int windowHeight, double *nx, double *ny);
-//        static void mouseToDisplayRelative (int x, int y, double *nx, double *ny);
+/****************************************************************************/
 
-};
+void OpenGlService::free ()
+{
+
+}
 
 } /* namespace View */
 
-#	endif /* UTIL_H_ */
+#endif

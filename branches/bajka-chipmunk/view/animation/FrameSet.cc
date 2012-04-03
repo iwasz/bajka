@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifndef ANDROID
 #include "FrameSet.h"
 
 namespace View {
@@ -51,3 +52,4 @@ void FrameSet::setFrames (Util::IntVector const &f)
 }
 
 } /* namespace View */
+#endif

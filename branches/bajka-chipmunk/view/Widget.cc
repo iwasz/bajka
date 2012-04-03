@@ -6,7 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include <SDL_opengl.h>
+#include "OpenGl.h"
 #include "Widget.h"
 #include "../model/IModel.h"
 
@@ -43,10 +43,10 @@ void Widget::defaultPreUpdate (Model::IModel *model)
                 Geometry::Point c = model->getCenter ();
                 Geometry::Point p = model->getTranslate ();
 
-                glTranslated (c.x + p.x, c.y + p.y, 0.0);
-                glRotated (model->getAngle(), 0.0, 0.0, 1.0); // angle * 180.0f / M_PI
-                glScaled (model->getScale (), model->getScale (), 1.0);
-                glTranslated (-c.x, -c.y, 0.0);
+                glTranslatef (c.x + p.x, c.y + p.y, 0.0);
+                glRotatef (model->getAngle(), 0.0, 0.0, 1.0); // angle * 180.0f / M_PI
+                glScalef (model->getScale (), model->getScale (), 1.0);
+                glTranslatef (-c.x, -c.y, 0.0);
         }
 }
 

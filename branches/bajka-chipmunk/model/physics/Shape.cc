@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef USE_CHIPMUNK
 #include <chipmunk.h>
 #include "../geometry/AffineMatrix.h"
 #include "Shape.h"
@@ -20,3 +21,4 @@ Shape::~Shape ()
 }
 
 } /* namespace Model */
+#endif

@@ -6,25 +6,26 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_SDL_UTIL_H_
-#define BAJKA_SDL_UTIL_H_
-
+#ifdef USE_SDL
+#include "TimeInterface.h"
 #include <SDL.h>
-#include "../../geometry/Box.h"
 
-namespace Sdl {
+namespace Util {
 
-/**
- * Tworzy SDL surface z domyślnymi dla bajki parametrami.
- */
-extern SDL_Surface *createSurface (int w, int h);
-
-/**
- * Rozszerza surface takj, żeby jego wys i szer były potęgami 2. Za skasowanie
- * zwróconego surface jest odpowiedzialny user.
- */
-extern SDL_Surface *expandSurfacePowerOf2 (SDL_Surface *, Geometry::Box const *region = NULL);
-
+uint32_t TimeInterface::getCurrentMs ()
+{
+        return SDL_GetTicks ();
 }
 
-#	endif /* UTIL_H_ */
+/****************************************************************************/
+
+void TimeInterface::delayMs (uint32_t ms)
+{
+        SDL_Delay (ms);
+}
+
+
+
+} /* namespace Util */
+
+#endif

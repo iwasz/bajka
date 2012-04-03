@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifndef ANDROID
 #include <SDL.h>
 #include <SDL_image.h>
 #include "Math.h"
@@ -13,9 +14,7 @@
 #include "Text.h"
 #include "../util/Exceptions.h"
 #include <boost/functional/hash.hpp>
-#include "../dependencies/sdl/Util.h"
-
-using Sdl::expandSurfacePowerOf2;
+#include "GraphicsInterface.h"
 
 namespace View {
 
@@ -51,7 +50,7 @@ void Text::init ()
         imgWidth = image->w;
         imgHeight = image->h;
 
-        SDL_Surface *texSurface = expandSurfacePowerOf2 (image);
+        SDL_Surface *texSurface = GraphicsInterface::expandSurfacePowerOf2 (image);
         SDL_FreeSurface (image);
 
         int width = texSurface->w;
@@ -134,3 +133,4 @@ void Text::update (Model::IModel *model, Event::UpdateEvent *)
 
 
 } /* namespace View */
+#endif

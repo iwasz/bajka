@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef USE_CHIPMUNK
 #ifndef BAJKA_PHYSICS_H_
 #define BAJKA_PHYSICS_H_
 
@@ -18,3 +19,4 @@
 #include "StaticBody.h"
 
 #endif /* PHYSICS_H_ */
+#endif

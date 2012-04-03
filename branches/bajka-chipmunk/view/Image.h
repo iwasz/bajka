@@ -6,10 +6,11 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifndef ANDROID
 #ifndef BAJKA_VIEW_IMAGE_H_
 #define BAJKA_VIEW_IMAGE_H_
 
-#include <SDL_opengl.h>
+#include "OpenGl.h"
 #include "Widget.h"
 #include "resource/IBitmap.h"
 #include "../geometry/Box.h"
@@ -60,4 +61,5 @@ protected:
 
 }
 
-#	endif /* IMAGE_H_ */
+#endif /* IMAGE_H_ */
+#endif

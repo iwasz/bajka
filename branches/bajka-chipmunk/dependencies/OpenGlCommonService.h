@@ -6,20 +6,9 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifdef USE_CHIPMUNK
-#ifndef BAJKA_RIGIDBODY_H_
-#define BAJKA_RIGIDBODY_H_
+#ifndef IMPLOPENGLCOMMONSERVICE_H_
+#define IMPLOPENGLCOMMONSERVICE_H_
 
-#include "Body.h"
+#include "openGlCommon/OpenGlCommonService.h"
 
-namespace Model {
-
-class RigidBody : public Body {
-public:
-        virtual ~RigidBody () {}
-};
-
-}
-
-#endif /* RIGIDBODY_H_ */
-#endif
+#endif /* OPENGLCOMMONSERVICE_H_ */

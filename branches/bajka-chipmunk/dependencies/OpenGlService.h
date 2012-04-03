@@ -6,22 +6,13 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_INITIALIZER_H_
-#define BAJKA_INITIALIZER_H_
+#ifndef IMPL_OPENGLSERVICE_H_
+#define IMPL_OPENGLSERVICE_H_
 
-#include "ReflectionMacros.h"
+#if defined (USE_OPENGL)
+#include "openGl/OpenGlService.h"
+#elif defined (USE_OPENGLES)
+#include "openGlEs/OpenGlService.h"
+#endif
 
-namespace Util {
-
-/**
- * Klasa pomocnicza służąca do inicjowania bibliotek przez kontener IoC.
- */
-class Initializer {
-public:
-
-        Initializer ();
-        e__ (Initializer)
-};
-
-} /* namespace Util */
-#endif /* INITIALIZER_H_ */
+#	endif /* OPENGLSERVICE_H_ */

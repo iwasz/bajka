@@ -10,6 +10,7 @@
 #define BAJKA_CONFIG_H_
 
 #include "ReflectionMacros.h"
+#include "draw/Color.h"
 
 namespace Util {
 
@@ -50,6 +51,9 @@ public:
         bool getShowSystemCursor () const { return showSystemCursor; }
         m_ (setShowSystemCursor) void setShowSystemCursor (bool b) { showSystemCursor = b; }
 
+        View::Color const &getClearColor () const { return clearColor; }
+        m_ (setClearColor) void setClearColor (View::Color const &c) { clearColor = c; }
+
 private:
 
         bool fullScreen;
@@ -58,6 +62,7 @@ private:
         std::string windowCaption;
         bool showAABB;
         bool showSystemCursor;
+        View::Color clearColor;
 
         E_ (Config)
 };

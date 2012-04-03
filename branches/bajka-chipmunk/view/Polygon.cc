@@ -6,7 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include <SDL_opengl.h>
+#include "OpenGl.h"
 #include "Polygon.h"
 
 namespace View {

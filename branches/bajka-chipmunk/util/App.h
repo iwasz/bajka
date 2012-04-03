@@ -39,7 +39,6 @@ public:
 
        void init ();
        m_ (loop) void loop ();
-       m_ (debug) void debug (Core::String const &);
        m_ (destroy) void destroy ();
 
 /*--------------------------------------------------------------------------*/

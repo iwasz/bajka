@@ -6,20 +6,25 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifdef USE_CHIPMUNK
-#ifndef BAJKA_RIGIDBODY_H_
-#define BAJKA_RIGIDBODY_H_
+#ifdef ANDROID
+#include "TimeInterface.h"
 
-#include "Body.h"
+namespace Util {
 
-namespace Model {
+uint32_t TimeInterface::getCurrentMs ()
+{
+        return 0;
+}
 
-class RigidBody : public Body {
-public:
-        virtual ~RigidBody () {}
-};
+/****************************************************************************/
+
+void TimeInterface::delayMs (uint32_t)
+{
 
 }
 
-#endif /* RIGIDBODY_H_ */
+
+
+} /* namespace Util */
+
 #endif

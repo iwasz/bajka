@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef USE_CHIPMUNK
 #include <chipmunk.h>
 #include "StaticBody.h"
 #include "Space.h"
@@ -29,3 +30,5 @@ StaticBody::~StaticBody ()
 }
 
 } /* namespace Model */
+
+#endif

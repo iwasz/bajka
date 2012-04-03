@@ -6,20 +6,22 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifdef USE_CHIPMUNK
-#ifndef BAJKA_RIGIDBODY_H_
-#define BAJKA_RIGIDBODY_H_
+#ifdef ANDROID
+#ifndef ANDROID_TIMEINTERFACE_H_
+#define ANDROID_TIMEINTERFACE_H_
 
-#include "Body.h"
+#include <stdint.h>
 
-namespace Model {
+namespace Util {
 
-class RigidBody : public Body {
-public:
-        virtual ~RigidBody () {}
+struct TimeInterface {
+
+        static uint32_t getCurrentMs ();
+        static void delayMs (uint32_t);
+
 };
 
-}
+} /* namespace Util */
 
-#endif /* RIGIDBODY_H_ */
+#endif /* TIMEINTERFACE_H_ */
 #endif

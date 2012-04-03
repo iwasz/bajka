@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef USE_SDL
 #ifndef TIMERDISPATCHER_H_
 #define TIMERDISPATCHER_H_
 
@@ -49,4 +50,5 @@ private:
 
 }
 
-#	endif /* TIMERDISPATCHER_H_ */
+#endif /* TIMERDISPATCHER_H_ */
+#endif

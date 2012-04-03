@@ -15,6 +15,7 @@
         <property name="windowCaption" value="MailSorter"/>
         <property name="showAABB" value="false"/>
         <property name="showSystemCursor" value="false"/>        
+        <property name="clearColor" value="858585ff"/>        
     </bean>
 
     <bean id="app" class="App" singleton="true">

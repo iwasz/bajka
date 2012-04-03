@@ -6,20 +6,22 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifdef USE_CHIPMUNK
-#ifndef BAJKA_RIGIDBODY_H_
-#define BAJKA_RIGIDBODY_H_
+#if USE_OPENGLES
+#ifndef ES_OPENGLSERVICE_H_
+#define ES_OPENGLSERVICE_H_
 
-#include "Body.h"
+namespace View {
 
-namespace Model {
-
-class RigidBody : public Body {
+class OpenGlService {
 public:
-        virtual ~RigidBody () {}
+
+        static void init ();
+        static void free ();
+
 };
 
-}
+} /* namespace View */
 
-#endif /* RIGIDBODY_H_ */
+#endif /* OPENGLSERVICE_H_ */
 #endif
+

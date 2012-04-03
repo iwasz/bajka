@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef USE_CHIPMUNK
 #ifndef BAJKA_STATICBODY_H_
 #define BAJKA_STATICBODY_H_
 
@@ -34,4 +35,5 @@ private:
 
 }
 
-#	endif /* STATICBODY_H_ */
+#endif /* STATICBODY_H_ */
+#endif

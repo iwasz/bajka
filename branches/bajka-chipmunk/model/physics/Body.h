@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef USE_CHIPMUNK
 #ifndef BAJKA_BODY_H_
 #define BAJKA_BODY_H_
 
@@ -60,4 +61,5 @@ protected:
 
 } /* namespace Model */
 
-#	endif /* BODY_H_ */
+#endif /* BODY_H_ */
+#endif

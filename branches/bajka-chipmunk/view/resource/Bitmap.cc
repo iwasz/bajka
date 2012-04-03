@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifndef ANDROID
 #include "Bitmap.h"
 #include "../../util/Exceptions.h"
 
@@ -26,3 +27,4 @@ Bitmap::~Bitmap ()
 }
 
 } /* namespace View */
+#endif

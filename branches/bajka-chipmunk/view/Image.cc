@@ -8,12 +8,13 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifndef ANDROID
 #include <SDL.h>
 #include <SDL_image.h>
 #include "Image.h"
 #include "Math.h"
 #include "Model.h"
-#include "../dependencies/sdl/Util.h"
+#include "GraphicsInterface.h"
 #include "../util/Exceptions.h"
 
 namespace View {
@@ -84,7 +85,7 @@ void Image::init (Model::IModel *model)
                 imgHeight = image->h;
         }
 
-        SDL_Surface *texSurface = Sdl::expandSurfacePowerOf2 (image, region.get ());
+        SDL_Surface *texSurface = GraphicsInterface::expandSurfacePowerOf2 (image, region.get ());
 
         int width = texSurface->w;
         int height = texSurface->h;
@@ -151,3 +152,4 @@ void Image::update (Model::IModel *model, Event::UpdateEvent *)
 }
 
 } // nam
+#endif
