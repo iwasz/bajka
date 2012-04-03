@@ -8,11 +8,12 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef USE_SDL
 #include "EventDispatcher.h"
 #include "Common.h"
-#include "../../dependencies/openGl/Util.h"
 #include "../../../events/PointerInsideIndex.h"
 #include "../../../events/EventIdex.h"
+#include "OpenGlService.h"
 
 namespace Sdl {
 namespace M = Model;
@@ -187,7 +188,7 @@ MouseMotionEvent *EventDispatcher::updateMouseMotionEvent (SDL_Event *event)
         int resY2 = app->getConfig ()->getResY ();
 
         G::Point p;
-        V::Util::mouseToDisplay (event->button.x, event->button.y, resX2, resY2, &p.x, &p.y);
+        V::OpenGlService::mouseToDisplay (event->button.x, event->button.y, resX2, resY2, &p.x, &p.y);
         mouseMotionEvent.setPosition (p);
 
 #if 0
@@ -219,7 +220,7 @@ MouseButtonEvent *EventDispatcher::updateMouseButtonEventImpl (MouseButtonEvent 
         int resY2 = app->getConfig ()->getResY ();
 
         G::Point p;
-        V::Util::mouseToDisplay (event->button.x, event->button.y, resX2, resY2, &p.x, &p.y);
+        V::OpenGlService::mouseToDisplay (event->button.x, event->button.y, resX2, resY2, &p.x, &p.y);
         output->setPosition (p);
         return output;
 }
@@ -286,3 +287,5 @@ void EventDispatcher::reset ()
 }
 
 } // nam
+
+#endif

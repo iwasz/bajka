@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef USE_CHIPMUNK
 #ifndef BAJKA_PHYS_CIRCLE_H_
 #define BAJKA_PHYS_CIRCLE_H_
 
@@ -62,4 +63,5 @@ private:
 
 } /* namespace Model */
 
-#	endif /* CIRCLE_H_ */
+#endif /* CIRCLE_H_ */
+#endif

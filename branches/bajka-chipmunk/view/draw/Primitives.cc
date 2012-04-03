@@ -9,7 +9,7 @@
  *                                                                          *
  ****************************************************************************/
 
-#include <SDL_opengl.h>
+#include "OpenGl.h"
 #include <chipmunk.h>
 #include "Primitives.h"
 
@@ -79,26 +79,23 @@ void DrawUtil::drawRectangle (Geometry::Box const &b, Color const &lineColor, Co
 
 void DrawUtil::drawRectangle (Geometry::Point const &a, Geometry::Point const &b, Color const &lineColor, Color const &fillColor)
 {
-        if (fillColor.getA () > 0) {
-                glColor4d (fillColor.getR (), fillColor.getG (), fillColor.getB (), fillColor.getA ());
+        GLfloat verts[] = {
+                a.x, a.y,
+                a.x, b.y,
+                b.x, b.y,
+                b.x, a.y
+        };
 
-                glBegin (GL_TRIANGLE_FAN);
-                        glVertex2d (a.x, a.y);
-                        glVertex2d (a.x, b.y);
-                        glVertex2d (b.x, b.y);
-                        glVertex2d (b.x, a.y);
-                glEnd ();
+        glVertexPointer (4, GL_FLOAT, 0, verts);
+
+        if (fillColor.getA () > 0) {
+                glColor4f (fillColor.getR (), fillColor.getG (), fillColor.getB (), fillColor.getA ());
+                glDrawArrays (GL_TRIANGLE_FAN, 0, 4);
         }
 
         if (lineColor.getA () > 0) {
-                glColor4d (lineColor.getR (), lineColor.getG (), lineColor.getB (), lineColor.getA ());
-
-                glBegin (GL_LINE_LOOP);
-                        glVertex2d (a.x, a.y);
-                        glVertex2d (a.x, b.y);
-                        glVertex2d (b.x, b.y);
-                        glVertex2d (b.x, a.y);
-                glEnd ();
+                glColor4f (lineColor.getR (), lineColor.getG (), lineColor.getB (), lineColor.getA ());
+                glDrawArrays (GL_LINE_LOOP, 0, 4);
         }
 }
 
@@ -106,20 +103,15 @@ void DrawUtil::drawRectangle (Geometry::Point const &a, Geometry::Point const &b
 
 void DrawUtil::drawLine (Geometry::Point const &a, Geometry::Point const &b, Color const &color)
 {
-//        GLfloat verts[] = {
-//                a.getX (), a.getY (),
-//                b.getX (), b.getY ()
-//        };
-//
-//        glVertexPointer(2, GL_FLOAT, 0, verts);
         if (color.getA () > 0) {
-                glColor4d (color.getR (), color.getG (), color.getB (), color.getA ());
-//        glDrawArrays (GL_LINE, 0, 2);
+                GLfloat verts[] = {
+                        a.x, a.y,
+                        b.x, b.y
+                };
 
-                glBegin (GL_LINES);
-                        glVertex2d (a.x, a.y);
-                        glVertex2d (b.x, b.y);
-                glEnd ();
+                glVertexPointer(2, GL_FLOAT, 0, verts);
+                glColor4f (color.getR (), color.getG (), color.getB (), color.getA ());
+                glDrawArrays (GL_LINES, 0, 2);
         }
 }
 

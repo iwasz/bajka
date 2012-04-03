@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifndef ANDROID
 #ifndef BAJKA_ANIMATION_H_
 #define BAJKA_ANIMATION_H_
 
@@ -112,3 +113,4 @@ private:
 } /* namespace View */
 
 #endif /* ANIMATION_H_ */
+#endif

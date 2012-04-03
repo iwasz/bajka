@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef USE_CHIPMUNK
 #ifndef BAJKA_PHYS_BOX_H_
 #define BAJKA_PHYS_BOX_H_
 
@@ -50,4 +51,5 @@ public:
 
 } /* namespace Model1 */
 
-#	endif /* BOX_H_ */
+#endif /* BOX_H_ */
+#endif

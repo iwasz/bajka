@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifndef ANDROID
 #ifndef BAJKA_BITMAP_INTERFACE_H_
 #define BAJKA_BITMAP_INTERFACE_H_
 
@@ -25,4 +26,5 @@ public:
 
 } /* namespace View */
 
-#	endif /* BITMAP_H_ */
+#endif /* BITMAP_H_ */
+#endif

@@ -8,6 +8,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef USE_SDL
 #include <iostream>
 #include <algorithm>
 #include <SDL.h>
@@ -40,3 +41,5 @@ void TimerDispatcher::run (Model::IModel *m, EventIndex const &modeliIndex, Poin
 }
 
 }
+
+#endif

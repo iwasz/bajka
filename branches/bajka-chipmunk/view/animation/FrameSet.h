@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifndef ANDROID
 #ifndef BAJKA_FRAMESET_H_
 #define BAJKA_FRAMESET_H_
 
@@ -69,3 +70,4 @@ g_ (FrameSetMap);
 } /* namespace View */
 
 #endif /* FRAMESET_H_ */
+#endif

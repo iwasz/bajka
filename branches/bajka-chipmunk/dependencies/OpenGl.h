@@ -6,20 +6,13 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifdef USE_CHIPMUNK
-#ifndef BAJKA_RIGIDBODY_H_
-#define BAJKA_RIGIDBODY_H_
+#ifndef BAJKA_IMPL_OPENGL_H_
+#define BAJKA_IMPL_OPENGL_H_
 
-#include "Body.h"
-
-namespace Model {
-
-class RigidBody : public Body {
-public:
-        virtual ~RigidBody () {}
-};
-
-}
-
-#endif /* RIGIDBODY_H_ */
+#if defined (LINUX)
+#include <SDL_opengl.h>
+#elif defined (ANDROID)
+#include <GLES/gl.h>
 #endif
+
+#	endif /* OPENGL_H_ */

@@ -2,22 +2,17 @@
  *                                                                          *
  *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 18, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef SDL_H_
-#define SDL_H_
+#ifndef IMPL_TIMEINTERFACE_H_
+#define IMPL_TIMEINTERFACE_H_
 
-/**
- * \defgroup Sdl
- * \ingroup Events
- * Klasy implementujące podystem eventów zależne od Sdl.
- */
+#if defined (LINUX)
+#include "sdl/TimeInterface.h"
+#elif defined (ANDROID)
+#include "androidEgl/TimeInterface.h"
+#endif
 
-#include "EventDispatcher.h"
-#include "TimerDispatcher.h"
-
-#	endif /* SDL_H_ */
+#	endif /* TIMEINTERFACE_H_ */

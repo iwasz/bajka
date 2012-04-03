@@ -9,6 +9,7 @@
 #ifndef EVENTDISPATCHER_H_
 #define EVENTDISPATCHER_H_
 
+#ifdef USE_SDL
 #include <SDL.h>
 #include "ReflectionMacros.h"
 #include "IDispatcher.h"
@@ -72,4 +73,5 @@ private:
 
 }
 
-#	endif /* EVENTDISPATCHER_H_ */
+#endif /* EVENTDISPATCHER_H_ */
+#endif

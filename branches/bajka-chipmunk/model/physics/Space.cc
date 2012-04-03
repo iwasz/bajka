@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef USE_CHIPMUNK
 #include "../geometry/AffineMatrix.h"
 #include "Space.h"
 #include "../util/Exceptions.h"
@@ -86,3 +87,5 @@ IModel *Space::findContains (Geometry::Point const &point)
 }
 
 } /* namespace Model */
+
+#endif

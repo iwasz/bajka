@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef USE_CHIPMUNK
 #include <chipmunk.h>
 #include "CPBox.h"
 #include "Body.h"
@@ -41,3 +42,5 @@ void CPBox::onParentSet (IModel *m)
 
 
 } /* namespace Model1 */
+
+#endif

@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef USE_CHIPMUNK
 #include <chipmunk.h>
 #include "../geometry/AffineMatrix.h"
 #include "Body.h"
@@ -97,3 +98,5 @@ void Body::addInertia (double i)
 }
 
 } /* namespace Model */
+
+#endif

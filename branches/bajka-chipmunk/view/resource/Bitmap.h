@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifndef ANDROID
 #ifndef BAJKA_BITMAP_H_
 #define BAJKA_BITMAP_H_
 
@@ -39,4 +40,5 @@ private:
 
 } /* namespace View */
 
-#	endif /* BITMAP_H_ */
+#endif /* BITMAP_H_ */
+#endif

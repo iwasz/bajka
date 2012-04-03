@@ -6,10 +6,6 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_opengl.h>
-#include <SDL_ttf.h>
 #include <iostream>
 #include <cmath>
 #include <ctime>
@@ -27,6 +23,16 @@
 #include "../events/EventIdex.h"
 #include "../events/PointerInsideIndex.h"
 #include "../events/IDispatcher.h"
+
+#include "../dependencies/GraphicsInterface.h"
+#include "../dependencies/TimeInterface.h"
+#include "../dependencies/OpenGlService.h"
+#include "../dependencies/OpenGlCommonService.h"
+
+#ifdef USE_SDL
+#include <SDL.h>
+#include <SDL_ttf.h>
+#endif
 
 /****************************************************************************/
 
@@ -95,109 +101,20 @@ App *App::instance ()
 
 void App::init ()
 {
-//        /* Initialize SDL for video output */
-//        if (SDL_Init (SDL_INIT_VIDEO) < 0) {
-//                fprintf (stderr, "Unable to initialize SDL: %s\n", SDL_GetError ());
-//                exit (1);
-//        }
+        int requestedResX = impl->config->getResX ();
+        int requestedResY = impl->config->getResY ();
 
-        int flags;
-        if (::config ()->getFullScreen ()) {
-            flags = SDL_OPENGL | SDL_FULLSCREEN;
-            SDL_GL_SetAttribute(SDL_GL_RED_SIZE,   8);
-            SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-            SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,  8);
-            SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE,  8);
-            SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
-        }
-        else {
-                flags = SDL_OPENGL;
-        }
+        View::GraphicsInterface::init (impl->config->getFullScreen (),
+                                       &requestedResX,
+                                       &requestedResY,
+                                       impl->config->getWindowCaption (),
+                                       impl->config->getShowSystemCursor ());
 
-        int resX = ::config ()->getResX ();
-        int resY = ::config ()->getResY ();
 
-        /* Create a OpenGL screen */
-        if (SDL_SetVideoMode (resX, resY, 0, flags) == NULL) {
-                fprintf (stderr, "Unable to create OpenGL screen: %s\n", SDL_GetError ());
-                SDL_Quit ();
-                exit (2);
-        }
+        View::OpenGlService::init (requestedResX, requestedResY);
 
-        /* Set the title bar in environments that support it */
-        SDL_WM_SetCaption (::config ()->getWindowCaption ().c_str (), NULL);
-
-/*##########################################################################*/
-
-//        if (TTF_Init () < 0) {
-//            throw InitException ("TTF_Init failed");
-//        }
-
-/*##########################################################################*/
-
-        glShadeModel(GL_FLAT);
-        glDisable (GL_DEPTH_TEST);
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-        /*
-         * Alpha blending. Niestety tekstura jest w niektorych miejscach
-         * przezroczysta, ale wystaje spodniej niebieski kolor prostokątu.
-         */
-        glEnable (GL_BLEND);
-        glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-/*##########################################################################*/
-
-        // Transformacje.
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        // gluPerspective(60.0, (GLfloat) w/(GLfloat) h, 1.0, 30.0);
-        gluOrtho2D (-resX/2, resX/2, -resY/2, resY/2);
-
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        gluOrtho2D (-resX/2, resX/2, -resY/2, resY/2);
-//        glViewport (0, 0, (GLsizei) resX, (GLsizei) resY);
-
-        GLfloat params[100];
-        glGetFloatv (GL_ALIASED_POINT_SIZE_RANGE, params);
-        std::cerr << "GL_ALIASED_POINT_SIZE_RANGE : " << params[0] << ", " << params[1] << std::endl;
-
-        glGetFloatv (GL_SMOOTH_POINT_SIZE_RANGE, params);
-        std::cerr << "GL_SMOOTH_POINT_SIZE_RANGE : " << params[0] << ", " << params[1] << std::endl;
-
-        glGetFloatv (GL_SMOOTH_POINT_SIZE_GRANULARITY, params);
-        std::cerr << "GL_SMOOTH_POINT_SIZE_GRANULARITY : " << params[0] << ", " << params[1] << std::endl;
-
-//        glEnable(GL_LINE_SMOOTH);
-//        glEnable(GL_POINT_SMOOTH);
-//        glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
-//        glHint(GL_POINT_SMOOTH_HINT, GL_DONT_CARE);
-
-        std::cerr << "is enabled GL_POINT_SMOOTH : " << ((glIsEnabled (GL_POINT_SMOOTH)) ? ("true") : ("false")) << std::endl;
-
-        glPointSize (3);
-        glGetFloatv (GL_POINT_SIZE, params);
-        std::cerr << "GL_POINT_SIZE : " << params[0] << std::endl;
-
-        // glDrawArrays
-        glEnableClientState(GL_VERTEX_ARRAY);
-
-        // Init rand
         srand (time (NULL));
-
         Tween::init ();
-
-        SDL_ShowCursor (impl->config->getShowSystemCursor ());
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-        /*
-         * Te dwie poniższe komendy ustawiają filtrowanie dla przybliżania i
-         * oddalania. GL_NEAREST - kolor z 1 teksela najbliższego pixelowi.
-         */
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 }
 
 /****************************************************************************/
@@ -212,7 +129,7 @@ void App::loop ()
         	throw InitException ("App has no model.");
         }
 
-        Uint32 lastMs = SDL_GetTicks ();
+        uint32_t lastMs = Util::TimeInterface::getCurrentMs ();
 
         if (!impl->dispatchers) {
                 impl->dispatchers = boost::make_shared <Event::DispatcherList> ();
@@ -222,27 +139,30 @@ void App::loop ()
                 throw Util::RuntimeException ("App::loop : model == NULL.");
         }
 
-//        int second = 0, frames = 0;
+#if 0
+        int second = 0, frames = 0;
+#endif
+
+        View::Color const &clearColor = impl->config->getClearColor ();
 
         while (!done) {
 
                 impl->dropIteration_ = false;
-                Uint32 currentMs = SDL_GetTicks ();
+                uint32_t currentMs = Util::TimeInterface::getCurrentMs ();
                 int deltaMs = currentMs - lastMs;
                 lastMs = currentMs;
 
-//                second += deltaMs;
-//                ++frames;
-//
-//                if (second >= 1000) {
-//                        std::cerr << "fps=" << frames << std::endl;
-//                        frames = second = 0;
-//                }
+#if 0
+                second += deltaMs;
+                ++frames;
 
-                glMatrixMode (GL_MODELVIEW);
-                glLoadIdentity ();
-                glClearColor (0.35, 0.75, 1.0, 1.0);
-                glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                if (second >= 1000) {
+                        std::cerr << "fps=" << frames << std::endl;
+                        frames = second = 0;
+                }
+#endif
+
+                View::OpenGlCommonService::clear (clearColor);
 
                 // Run models, views and controllers.
                 // Generuj eventy.
@@ -256,43 +176,33 @@ void App::loop ()
                 impl->model->update (&impl->updateEvent);
 //                checkContinue ();
 
+#if USE_CHIPMUNK
                 // Run chipmunk
                 if (Model::Space::getSpace ()) {
                         cpSpaceStep (Model::Space::getSpace (), 1.0 / 60.0);
                 }
+#endif
 
                 Tween::Manager::getMain ()->update (deltaMs);
 //                checkContinue ();
 
-//                glFlush ();
                 // swap buffers to display, since we're double buffered.
-                SDL_GL_SwapBuffers ();
+                View::GraphicsInterface::swapBuffers ();
+
                 // Tak śmiga, że damy delay
-                SDL_Delay (17); // 60fps
+                Util::TimeInterface::delayMs (17); // 60fps
         }
-}
-
-/****************************************************************************/
-
-void App::debug (Core::String const &msg)
-{
-        std::cerr << "+---------------DEBUG-------[" << msg << "]--------+" << std::endl;
 }
 
 /****************************************************************************/
 
 void App::destroy ()
 {
+#ifdef USE_SDL
         TTF_Quit ();
         SDL_Quit ();
+#endif
 	Tween::free ();
-
-        std::cerr << "+---------------QUIT----------------+" << std::endl;
-        std::cerr << "gl version : " << glGetString(GL_VERSION) << std::endl;
-
-        int i;
-        glGetIntegerv (GL_MAX_TEXTURE_SIZE, &i);
-        std::cerr << "max texture size : " << i << std::endl;
 }
 
 /****************************************************************************/

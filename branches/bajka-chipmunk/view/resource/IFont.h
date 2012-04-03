@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifndef ANDROID
 #ifndef BAJKA_FONT_H_
 #define BAJKA_FONT_H_
 
@@ -39,4 +40,5 @@ struct IFont : public Core::Object {
 
 } /* namespace View */
 
-#       endif /* TTFFONT_H_ */
+#endif /* TTFFONT_H_ */
+#endif

@@ -2,22 +2,17 @@
  *                                                                          *
  *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 22, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef OPENGL_H_
-#define OPENGL_H_
+#ifndef IMPL_GRAPHICSINTERFACE_H_
+#define IMPL_GRAPHICSINTERFACE_H_
 
-/**
- * \defgroup OpenGl
- * \ingroup View
- * Klasy zależne od Open GL. Helpery implementujące funkcje graficzne OpenGL na niskim poziomie abstrakcji.
- */
+#if defined (LINUX)
+#include "sdl/GraphicsInterface.h"
+#elif defined (ANDROID)
+#include "androidEgl/GraphicsInterface.h"
+#endif
 
-#include "GLUtil.h"
-#include "Util.h"
-
-#	endif /* OPENGL_H_ */
+#	endif /* GRAPHICSINTERFACE_H_ */

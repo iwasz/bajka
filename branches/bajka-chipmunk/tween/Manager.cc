@@ -177,8 +177,8 @@ Manager::Manager () : tween (NULL)
         accessors[Y] = new TranslateYAccessor;
         accessors[SCALE] = new ScaleAccessor;
         accessors[ANGLE] = new AngleAccessor;
-        accessors[LOOP_X] = new LoopImageXAccessor;
-        accessors[LOOP_Y] = new LoopImageYAccessor;
+//        accessors[LOOP_X] = new LoopImageXAccessor;
+//        accessors[LOOP_Y] = new LoopImageYAccessor;
 
         pool = std::auto_ptr <Pool> (new Pool);
 }

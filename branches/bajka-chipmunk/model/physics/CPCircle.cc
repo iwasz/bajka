@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef USE_CHIPMUNK
 #include <chipmunk.h>
 #include "CPCircle.h"
 #include "../util/Exceptions.h"
@@ -71,3 +72,5 @@ Geometry::Box CPCircle::getBoundingBoxImpl (Geometry::AffineMatrix const &transf
 }
 
 } /* namespace Model */
+
+#endif

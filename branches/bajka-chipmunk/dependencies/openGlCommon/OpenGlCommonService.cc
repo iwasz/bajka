@@ -6,20 +6,20 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifdef USE_CHIPMUNK
-#ifndef BAJKA_RIGIDBODY_H_
-#define BAJKA_RIGIDBODY_H_
+#if defined (USE_OPENGL) || defined (USE_OPENGLES)
+#include "OpenGlCommonService.h"
+#include "OpenGl.h"
 
-#include "Body.h"
+namespace View {
 
-namespace Model {
-
-class RigidBody : public Body {
-public:
-        virtual ~RigidBody () {}
-};
-
+void OpenGlCommonService::clear (View::Color const &c)
+{
+        glMatrixMode (GL_MODELVIEW);
+        glLoadIdentity ();
+        glClearColor (c.r, c.g, c.b, c.a);
+        glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-#endif /* RIGIDBODY_H_ */
+} /* namespace View */
+
 #endif

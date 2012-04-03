@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef USE_CHIPMUNK
 #ifndef BAJKA_SPACE_H_
 #define BAJKA_SPACE_H_
 
@@ -48,4 +49,5 @@ private:
 
 } /* namespace Model */
 
-#	endif /* SPACE_H_ */
+#endif /* SPACE_H_ */
+#endif

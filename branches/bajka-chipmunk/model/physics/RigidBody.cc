@@ -6,8 +6,10 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef USE_CHIPMUNK
 #include "RigidBody.h"
 
 namespace Model {
 
 } /* namespace Model */
+#endif
