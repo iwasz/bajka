@@ -6,15 +6,15 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifdef USE_SDL
-#ifndef SDL_TIMEINTERFACE_H_
-#define SDL_TIMEINTERFACE_H_
+#ifdef ANDROID
+#ifndef ANDROID_TIMEINTERFACE_H_
+#define ANDROID_TIMEINTERFACE_H_
 
 #include <stdint.h>
 
 namespace Util {
 
-struct TimeInterface {
+struct TimeService {
 
         static uint32_t getCurrentMs ();
         static void delayMs (uint32_t);

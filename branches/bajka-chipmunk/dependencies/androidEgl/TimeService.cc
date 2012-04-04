@@ -6,22 +6,21 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifdef USE_SDL
-#include "TimeInterface.h"
-#include <SDL.h>
+#ifdef ANDROID
+#include "TimeService.h"
 
 namespace Util {
 
-uint32_t TimeInterface::getCurrentMs ()
+uint32_t TimeService::getCurrentMs ()
 {
-        return SDL_GetTicks ();
+        return 0;
 }
 
 /****************************************************************************/
 
-void TimeInterface::delayMs (uint32_t ms)
+void TimeService::delayMs (uint32_t)
 {
-        SDL_Delay (ms);
+
 }
 
 

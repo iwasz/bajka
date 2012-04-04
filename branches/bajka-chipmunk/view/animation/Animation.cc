@@ -12,7 +12,7 @@
 #include "Animation.h"
 #include "../../model/IModel.h"
 #include "../../model/IBox.h"
-#include "../../dependencies/GraphicsInterface.h"
+#include "../../dependencies/GraphicsService.h"
 #include "../../util/Exceptions.h"
 #include "../../events/types/UpdateEvent.h"
 
@@ -106,7 +106,7 @@ void Animation::init (Model::IModel *model)
                 srcRegion.ll.x += imgWidth * i;
                 srcRegion.ur.x += imgWidth * i;
 
-                SDL_Surface *texSurface = GraphicsInterface::expandSurfacePowerOf2 (image, &srcRegion);
+                SDL_Surface *texSurface = GraphicsService::expandSurfacePowerOf2 (image, &srcRegion);
 
                 // Rozmiary tekstury - potęga dwójki. Zawsze równe lub większe imgWidth i imgHeight
                 texWidth = texSurface->w;

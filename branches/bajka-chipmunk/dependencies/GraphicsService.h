@@ -6,25 +6,13 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifdef ANDROID
-#include "TimeInterface.h"
+#ifndef IMPL_GRAPHICSINTERFACE_H_
+#define IMPL_GRAPHICSINTERFACE_H_
 
-namespace Util {
-
-uint32_t TimeInterface::getCurrentMs ()
-{
-        return 0;
-}
-
-/****************************************************************************/
-
-void TimeInterface::delayMs (uint32_t)
-{
-
-}
-
-
-
-} /* namespace Util */
-
+#if defined (LINUX)
+#include "sdl/GraphicsService.h"
+#elif defined (ANDROID)
+#include "androidEgl/GraphicsService.h"
 #endif
+
+#	endif /* GRAPHICSINTERFACE_H_ */

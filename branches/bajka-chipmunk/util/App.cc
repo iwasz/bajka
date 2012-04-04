@@ -24,8 +24,8 @@
 #include "../events/PointerInsideIndex.h"
 #include "../events/IDispatcher.h"
 
-#include "../dependencies/GraphicsInterface.h"
-#include "../dependencies/TimeInterface.h"
+#include "../dependencies/GraphicsService.h"
+#include "../dependencies/TimeService.h"
 #include "../dependencies/OpenGlService.h"
 #include "../dependencies/OpenGlCommonService.h"
 
@@ -104,7 +104,7 @@ void App::init ()
         int requestedResX = impl->config->getResX ();
         int requestedResY = impl->config->getResY ();
 
-        View::GraphicsInterface::init (impl->config->getFullScreen (),
+        View::GraphicsService::init (impl->config->getFullScreen (),
                                        &requestedResX,
                                        &requestedResY,
                                        impl->config->getWindowCaption (),
@@ -129,7 +129,7 @@ void App::loop ()
         	throw InitException ("App has no model.");
         }
 
-        uint32_t lastMs = Util::TimeInterface::getCurrentMs ();
+        uint32_t lastMs = Util::TimeService::getCurrentMs ();
 
         if (!impl->dispatchers) {
                 impl->dispatchers = boost::make_shared <Event::DispatcherList> ();
@@ -148,7 +148,7 @@ void App::loop ()
         while (!done) {
 
                 impl->dropIteration_ = false;
-                uint32_t currentMs = Util::TimeInterface::getCurrentMs ();
+                uint32_t currentMs = Util::TimeService::getCurrentMs ();
                 int deltaMs = currentMs - lastMs;
                 lastMs = currentMs;
 
@@ -187,10 +187,10 @@ void App::loop ()
 //                checkContinue ();
 
                 // swap buffers to display, since we're double buffered.
-                View::GraphicsInterface::swapBuffers ();
+                View::GraphicsService::swapBuffers ();
 
                 // Tak śmiga, że damy delay
-                Util::TimeInterface::delayMs (17); // 60fps
+                Util::TimeService::delayMs (17); // 60fps
         }
 }
 

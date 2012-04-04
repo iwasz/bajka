@@ -6,13 +6,26 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef IMPL_GRAPHICSINTERFACE_H_
-#define IMPL_GRAPHICSINTERFACE_H_
+#ifdef USE_SDL
+#include "TimeService.h"
+#include <SDL.h>
 
-#if defined (LINUX)
-#include "sdl/GraphicsInterface.h"
-#elif defined (ANDROID)
-#include "androidEgl/GraphicsInterface.h"
+namespace Util {
+
+uint32_t TimeService::getCurrentMs ()
+{
+        return SDL_GetTicks ();
+}
+
+/****************************************************************************/
+
+void TimeService::delayMs (uint32_t ms)
+{
+        SDL_Delay (ms);
+}
+
+
+
+} /* namespace Util */
+
 #endif
-
-#	endif /* GRAPHICSINTERFACE_H_ */
