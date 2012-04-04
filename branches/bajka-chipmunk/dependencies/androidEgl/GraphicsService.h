@@ -6,16 +6,15 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifdef USE_SDL
-#ifndef SDL_GRAPHICSINTERFACE_H_
-#define SDL_GRAPHICSINTERFACE_H_
+#ifdef ANDROID
+#ifndef ANDROID_GRAPHICSINTERFACE_H_
+#define ANDROID_GRAPHICSINTERFACE_H_
 
-#include <SDL.h>
 #include "../../geometry/Box.h"
 
 namespace View {
 
-struct GraphicsInterface {
+struct GraphicsService {
 
         /**
          * Inicjuje SDL.
@@ -38,13 +37,13 @@ struct GraphicsInterface {
         /**
          * Tworzy SDL surface z domyślnymi dla bajki parametrami.
          */
-        static SDL_Surface *createSurface (int w, int h);
+//        static SDL_Surface *createSurface (int w, int h);
 
         /**
          * Rozszerza surface takj, żeby jego wys i szer były potęgami 2. Za skasowanie
          * zwróconego surface jest odpowiedzialny user.
          */
-        static SDL_Surface *expandSurfacePowerOf2 (SDL_Surface *, Geometry::Box const *region = NULL);
+//        static SDL_Surface *expandSurfacePowerOf2 (SDL_Surface *, Geometry::Box const *region = NULL);
 
         static void swapBuffers ();
 

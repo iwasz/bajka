@@ -10,7 +10,7 @@
 #include <boost/algorithm/string.hpp>
 #include "TTFFont.h"
 #include "../../util/Exceptions.h"
-#include "../../dependencies/GraphicsInterface.h"
+#include "../../dependencies/GraphicsService.h"
 
 namespace View {
 
@@ -129,7 +129,7 @@ void *TTFFont::renderMulti (std::string const &text, View::Color const &fgColor,
         height = (tokens.size () - 1) * lineSkip + height;
 
         // Stwórz surface zdolne pomiescić cały tekst (wszytskie linijki).
-        SDL_Surface *surface = GraphicsInterface::createSurface (width, height);
+        SDL_Surface *surface = GraphicsService::createSurface (width, height);
 
         // Renderuj
         SDL_Surface *sTemp = NULL;

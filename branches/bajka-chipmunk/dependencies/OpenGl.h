@@ -9,6 +9,10 @@
 #ifndef BAJKA_IMPL_OPENGL_H_
 #define BAJKA_IMPL_OPENGL_H_
 
+/**
+ * Inkluduje nagłówki OpenGL zależne od platformy.
+ */
+
 #if defined (LINUX)
 #include <SDL_opengl.h>
 #elif defined (ANDROID)

@@ -15,7 +15,7 @@ namespace View {
 class OpenGlService {
 public:
 
-        static void init ();
+        static void init (int, int);
         static void free ();
 
 };

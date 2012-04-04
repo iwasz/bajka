@@ -14,7 +14,7 @@
 #include "Image.h"
 #include "Math.h"
 #include "Model.h"
-#include "GraphicsInterface.h"
+#include "GraphicsService.h"
 #include "../util/Exceptions.h"
 
 namespace View {
@@ -85,7 +85,7 @@ void Image::init (Model::IModel *model)
                 imgHeight = image->h;
         }
 
-        SDL_Surface *texSurface = GraphicsInterface::expandSurfacePowerOf2 (image, region.get ());
+        SDL_Surface *texSurface = GraphicsService::expandSurfacePowerOf2 (image, region.get ());
 
         int width = texSurface->w;
         int height = texSurface->h;

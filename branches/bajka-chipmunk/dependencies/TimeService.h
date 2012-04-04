@@ -6,22 +6,13 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifdef ANDROID
-#ifndef ANDROID_TIMEINTERFACE_H_
-#define ANDROID_TIMEINTERFACE_H_
+#ifndef IMPL_TIMEINTERFACE_H_
+#define IMPL_TIMEINTERFACE_H_
 
-#include <stdint.h>
-
-namespace Util {
-
-struct TimeInterface {
-
-        static uint32_t getCurrentMs ();
-        static void delayMs (uint32_t);
-
-};
-
-} /* namespace Util */
-
-#endif /* TIMEINTERFACE_H_ */
+#if defined (LINUX)
+#include "sdl/TimeService.h"
+#elif defined (ANDROID)
+#include "androidEgl/TimeService.h"
 #endif
+
+#	endif /* TIMEINTERFACE_H_ */

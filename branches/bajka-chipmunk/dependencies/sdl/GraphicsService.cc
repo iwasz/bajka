@@ -7,14 +7,14 @@
  ****************************************************************************/
 
 #ifdef USE_SDL
-#include "GraphicsInterface.h"
+#include "GraphicsService.h"
 #include "../../util/Exceptions.h"
 #include "../../util/Math.h"
 #include "../../util/App.h"
 
 namespace View {
 
-void GraphicsInterface::init (bool fullScreen,
+void GraphicsService::init (bool fullScreen,
                               int *resX,
                               int *resY,
                               std::string const &caption,
@@ -35,13 +35,13 @@ void GraphicsInterface::init (bool fullScreen,
         SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
 
         if (!resX || !resY) {
-                throw Util::InitException ("GraphicsInterface::init : !resX || !resY");
+                throw Util::InitException ("GraphicsService::init : !resX || !resY");
         }
 
         /* Create a OpenGL screen */
         if (SDL_SetVideoMode (*resX, *resY, 0, flags) == NULL) {
                 SDL_Quit ();
-                throw Util::InitException (std::string ("GraphicsInterface::init : Unable to create OpenGL screen : ") + SDL_GetError ());
+                throw Util::InitException (std::string ("GraphicsService::init : Unable to create OpenGL screen : ") + SDL_GetError ());
         }
 
         /* Set the title bar in environments that support it */
@@ -52,14 +52,14 @@ void GraphicsInterface::init (bool fullScreen,
 
 /****************************************************************************/
 
-void GraphicsInterface::free ()
+void GraphicsService::free ()
 {
 
 }
 
 /****************************************************************************/
 
-SDL_Surface *GraphicsInterface::createSurface (int w, int h)
+SDL_Surface *GraphicsService::createSurface (int w, int h)
 {
         SDL_Surface *surface = SDL_CreateRGBSurface (SDL_SWSURFACE, w, h, 32,
 
@@ -85,7 +85,7 @@ SDL_Surface *GraphicsInterface::createSurface (int w, int h)
 
 /****************************************************************************/
 
-SDL_Surface *GraphicsInterface::expandSurfacePowerOf2 (SDL_Surface *input, Geometry::Box const *region)
+SDL_Surface *GraphicsService::expandSurfacePowerOf2 (SDL_Surface *input, Geometry::Box const *region)
 {
         SDL_Surface *texSurface = NULL;
 
@@ -152,7 +152,7 @@ SDL_Surface *GraphicsInterface::expandSurfacePowerOf2 (SDL_Surface *input, Geome
 
 /****************************************************************************/
 
-void GraphicsInterface::swapBuffers ()
+void GraphicsService::swapBuffers ()
 {
         SDL_GL_SwapBuffers ();
 }

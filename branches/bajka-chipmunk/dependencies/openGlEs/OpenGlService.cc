@@ -12,7 +12,7 @@
 
 namespace View {
 
-void OpenGlService::init ()
+void OpenGlService::init (int, int)
 {
 }
 

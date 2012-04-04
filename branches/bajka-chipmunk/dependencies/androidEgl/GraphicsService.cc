@@ -7,14 +7,14 @@
  ****************************************************************************/
 
 #ifdef ANDROID
-#include "GraphicsInterface.h"
+#include "GraphicsService.h"
 #include "../../util/Exceptions.h"
 #include "../../util/Math.h"
 #include "../../util/App.h"
 
 namespace View {
 
-void GraphicsInterface::init (bool fullScreen,
+void GraphicsService::init (bool fullScreen,
                               int *resX,
                               int *resY,
                               std::string const &caption,
@@ -24,14 +24,14 @@ void GraphicsInterface::init (bool fullScreen,
 
 /****************************************************************************/
 
-void GraphicsInterface::free ()
+void GraphicsService::free ()
 {
 
 }
 
 /****************************************************************************/
 
-//SDL_Surface *GraphicsInterface::createSurface (int w, int h)
+//SDL_Surface *GraphicsService::createSurface (int w, int h)
 //{
 //        SDL_Surface *surface = SDL_CreateRGBSurface (SDL_SWSURFACE, w, h, 32,
 //
@@ -57,7 +57,7 @@ void GraphicsInterface::free ()
 //
 ///****************************************************************************/
 //
-//SDL_Surface *GraphicsInterface::expandSurfacePowerOf2 (SDL_Surface *input, Geometry::Box const *region)
+//SDL_Surface *GraphicsService::expandSurfacePowerOf2 (SDL_Surface *input, Geometry::Box const *region)
 //{
 //        SDL_Surface *texSurface = NULL;
 //
@@ -124,7 +124,7 @@ void GraphicsInterface::free ()
 
 /****************************************************************************/
 
-void GraphicsInterface::swapBuffers ()
+void GraphicsService::swapBuffers ()
 {
 }
 
