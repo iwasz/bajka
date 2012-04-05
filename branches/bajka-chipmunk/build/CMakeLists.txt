@@ -110,6 +110,8 @@ AUX_SOURCE_DIRECTORY (../dependencies/openGlCommon SOURCES)
 AUX_SOURCE_DIRECTORY (../dependencies/sdl SOURCES)
 AUX_SOURCE_DIRECTORY (../dependencies/sdl/events SOURCES)
 AUX_SOURCE_DIRECTORY (../dependencies/androidEgl SOURCES)
+AUX_SOURCE_DIRECTORY (../dependencies/android SOURCES)
+AUX_SOURCE_DIRECTORY (../dependencies/linux SOURCES)
 
 AUX_SOURCE_DIRECTORY (../controller SOURCES)
 

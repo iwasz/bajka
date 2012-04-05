@@ -1,18 +1,18 @@
 /****************************************************************************
  *                                                                          *
- *  Author : lukasz.iwaszkiewicz@tiliae.eu                                  *
+ *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
  *  ~~~~~~~~                                                                *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef LINUX
 #include "../util/App.h"
 #include <cstdlib>
 #include <Container.h>
 #include <ContainerFactory.h>
 #include <inputFormat/mxml/MXmlMetaService.h>
 #include "TiliaeModelManager.h"
-#include "LoadButtonController.h"
 
 using namespace Container;
 
@@ -35,8 +35,8 @@ int main (int argc, char **argv)
                 Ptr <Util::App> app = vcast <Ptr <Util::App> > (container->getBean ("app"));
                 app->setInstance (app.get ());
 
-                // TODO to się powinno samo ustawiać w XML.
                 Util::TiliaeModelManager *manager = vcast <Util::TiliaeModelManager *> (container->getBean ("modelManager"));
+                // TODO to się powinno samo ustawiać w XML.
                 manager->setMainContainer (container);
                 manager->play ("menu");
 
@@ -57,3 +57,7 @@ int main (int argc, char **argv)
 
         return EXIT_SUCCESS;
 }
+#endif
+
+
+
