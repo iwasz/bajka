@@ -29,8 +29,8 @@ endif ()
 
 message(STATUS "Target platform='${TARGET_PLATFORM}'")
 
-#ADD_DEFINITIONS (-O3)
-ADD_DEFINITIONS (-g)
+ADD_DEFINITIONS (-O3)
+ADD_DEFINITIONS (-g -fvisibility=hidden)
 ADD_DEFINITIONS (-Winvalid-pch)
 #ADD_DEFINITIONS (-H)
 ADD_DEFINITIONS (-Wall)
