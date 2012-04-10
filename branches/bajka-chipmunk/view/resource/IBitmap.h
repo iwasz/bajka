@@ -21,7 +21,14 @@ class IBitmap : public Core::Object {
 public:
 
         virtual ~IBitmap () {}
+
+        /**
+         * Format danych RGBA 8888.
+         */
         virtual void *getData () = 0;
+
+        virtual int getWidth () const = 0;
+        virtual int getHeight () const = 0;
 };
 
 } /* namespace View */

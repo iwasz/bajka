@@ -32,17 +32,11 @@ double Image::getWidthHint () const
                 return 0;
         }
 
-        SDL_Surface *image = static_cast <SDL_Surface *> (bitmap->getData ());
-
         if (region.get ()) {
                 return region->getWidth ();
         }
 
-        if (image) {
-                return image->w;
-        }
-
-        return 0;
+        return bitmap->getWidth ();
 }
 
 /****************************************************************************/
@@ -53,17 +47,11 @@ double Image::getHeightHint () const
                 return 0;
         }
 
-        SDL_Surface *image = static_cast <SDL_Surface *> (bitmap->getData ());
-
         if (region.get ()) {
                 return region->getHeight ();
         }
 
-        if (image) {
-                return image->h;
-        }
-
-        return 0;
+        return bitmap->getHeight ();
 }
 
 /****************************************************************************/
@@ -81,8 +69,8 @@ void Image::init (Model::IModel *model)
                 imgHeight = region->getHeight ();
         }
         else {
-                imgWidth = image->w;
-                imgHeight = image->h;
+                imgWidth = bitmap->getWidth ();
+                imgHeight = bitmap->getHeight ();
         }
 
         SDL_Surface *texSurface = GraphicsService::expandSurfacePowerOf2 (image, region.get ());
