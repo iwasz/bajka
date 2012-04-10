@@ -10,7 +10,7 @@
 #include <boost/algorithm/string.hpp>
 #include "TTFFont.h"
 #include "../../util/Exceptions.h"
-#include "../../dependencies/GraphicsService.h"
+#include "GraphicsService.h"
 
 namespace View {
 

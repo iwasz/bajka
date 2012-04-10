@@ -14,6 +14,13 @@
 #include <inputFormat/mxml/MXmlMetaService.h>
 #include "TiliaeModelManager.h"
 
+#ifdef USE_SDL
+#include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_opengl.h>
+#include <SDL_ttf.h>
+#endif
+
 using namespace Container;
 
 /**
@@ -31,6 +38,18 @@ int main (int argc, char **argv)
         }
 
         try {
+
+#ifdef USE_SDL
+                /* Initialize SDL for video output */
+                if (SDL_Init (SDL_INIT_VIDEO) < 0) {
+                        throw Util::InitException ("Unable to initialize SDL : " + std::string (SDL_GetError ()));
+                }
+
+                if (TTF_Init () < 0) {
+                        throw Util::InitException ("TTF_Init failed");
+                }
+#endif
+
                 Ptr <Container::BeanFactoryContainer> container = ContainerFactory::createContainer (MXmlMetaService::parseFile (fileName), true);
                 Ptr <Util::App> app = vcast <Ptr <Util::App> > (container->getBean ("app"));
                 app->setInstance (app.get ());
@@ -43,6 +62,11 @@ int main (int argc, char **argv)
                 app->init ();
                 app->loop ();
                 app->destroy ();
+
+#ifdef USE_SDL
+                TTF_Quit ();
+                SDL_Quit ();
+#endif
         }
         catch (Core::Exception const &e) {
                 std::cerr << "Exception caught : \n" << e.getMessage () << std::endl;
@@ -58,6 +82,3 @@ int main (int argc, char **argv)
         return EXIT_SUCCESS;
 }
 #endif
-
-
-

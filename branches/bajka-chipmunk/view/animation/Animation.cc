@@ -12,7 +12,7 @@
 #include "Animation.h"
 #include "../../model/IModel.h"
 #include "../../model/IBox.h"
-#include "../../dependencies/GraphicsService.h"
+#include "GraphicsService.h"
 #include "../../util/Exceptions.h"
 #include "../../events/types/UpdateEvent.h"
 
