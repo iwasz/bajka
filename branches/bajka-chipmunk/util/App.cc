@@ -24,10 +24,10 @@
 #include "../events/PointerInsideIndex.h"
 #include "../events/IDispatcher.h"
 
-#include "../dependencies/GraphicsService.h"
-#include "../dependencies/TimeService.h"
-#include "../dependencies/OpenGlService.h"
-#include "../dependencies/OpenGlCommonService.h"
+#include "GraphicsService.h"
+#include "TimeService.h"
+#include "OpenGlService.h"
+#include "OpenGlCommonService.h"
 
 #ifdef USE_SDL
 #include <SDL.h>
@@ -198,10 +198,6 @@ void App::loop ()
 
 void App::destroy ()
 {
-#ifdef USE_SDL
-        TTF_Quit ();
-        SDL_Quit ();
-#endif
 	Tween::free ();
 }
 

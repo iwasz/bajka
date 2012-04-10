@@ -4,9 +4,6 @@
 
 <beans>
 
-    <!-- Inicjowanie (pierwsze) -->
-    <bean class="Initializer" singleton="true" />
-
     <!--Konfiguracja-->
     <bean id="cfg" class="Config" singleton="true">
         <property name="fullScreen" value="false"/>
