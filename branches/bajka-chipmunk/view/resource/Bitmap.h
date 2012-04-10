@@ -18,6 +18,9 @@
 
 namespace View {
 
+/**
+ * Bitmapa z pliku.
+ */
 class Bitmap : public IBitmap {
 public:
 
@@ -29,6 +32,9 @@ public:
         m_ (setPath) void setPath (std::string const &p);
 
         void *getData () { return image; }
+
+        int getWidth () const;
+        int getHeight () const;
 
 private:
 

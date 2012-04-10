@@ -26,5 +26,27 @@ Bitmap::~Bitmap ()
         SDL_FreeSurface (image);
 }
 
+/****************************************************************************/
+
+int Bitmap::getWidth () const
+{
+        if (!image) {
+                return -1;
+        }
+
+        return image->w;
+}
+
+/****************************************************************************/
+
+int Bitmap::getHeight () const
+{
+        if (!image) {
+                return -1;
+        }
+
+        return image->h;
+}
+
 } /* namespace View */
 #endif
