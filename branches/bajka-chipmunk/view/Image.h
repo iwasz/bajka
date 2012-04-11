@@ -6,7 +6,6 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ANDROID
 #ifndef BAJKA_VIEW_IMAGE_H_
 #define BAJKA_VIEW_IMAGE_H_
 
@@ -62,4 +61,3 @@ protected:
 }
 
 #endif /* IMAGE_H_ */
-#endif

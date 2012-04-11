@@ -180,6 +180,7 @@ elseif (ANDROID)
     TARGET_LINK_LIBRARIES (bajka GLESv1_CM)
     TARGET_LINK_LIBRARIES (bajka stdc++)
     TARGET_LINK_LIBRARIES (bajka tiliae)
+    TARGET_LINK_LIBRARIES (bajka mxml)
 
 endif ()
 

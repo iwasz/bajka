@@ -6,13 +6,11 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ANDROID
-#include <SDL.h>
-#include <SDL_image.h>
 #include "Animation.h"
+#include "GraphicsService.h"
+#include "Math.h"
 #include "../../model/IModel.h"
 #include "../../model/IBox.h"
-#include "GraphicsService.h"
 #include "../../util/Exceptions.h"
 #include "../../events/types/UpdateEvent.h"
 
@@ -79,16 +77,9 @@ void Animation::init (Model::IModel *model)
 {
         initialized = true;
 
-/*--------------------------------------------------------------------------*/
-
-        // W image jest cały grid obrazków.
-        SDL_Surface *image = static_cast <SDL_Surface *> (bitmap->getData ());
-
         // Rozmiary jednej klatki - takie jakie wyświetlimy na ekranie.
         imgWidth = region.getWidth ();
         imgHeight = region.getHeight ();
-
-/*--------------------------------------------------------------------------*/
 
         texName = new GLuint[count];
         glGenTextures(count, texName);
@@ -106,17 +97,13 @@ void Animation::init (Model::IModel *model)
                 srcRegion.ll.x += imgWidth * i;
                 srcRegion.ur.x += imgWidth * i;
 
-                SDL_Surface *texSurface = GraphicsService::expandSurfacePowerOf2 (image, &srcRegion);
-
-                // Rozmiary tekstury - potęga dwójki. Zawsze równe lub większe imgWidth i imgHeight
-                texWidth = texSurface->w;
-                texHeight = texSurface->h;
+                texWidth = Util::Math::nextSqr (imgWidth);
+                texHeight = Util::Math::nextSqr (imgHeight);
+                Ptr <IBitmap> texSurface = bitmap->blit (&srcRegion, texWidth, texHeight);
 
                 glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, texWidth,
                               texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                              texSurface->pixels);
-
-                SDL_FreeSurface (texSurface);
+                              texSurface->getData ());
         }
 }
 
@@ -153,4 +140,3 @@ void Animation::update (Model::IModel *model, Event::UpdateEvent *e)
 }
 
 } /* namespace View */
-#endif
