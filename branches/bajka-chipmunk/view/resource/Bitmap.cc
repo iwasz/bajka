@@ -48,5 +48,73 @@ int Bitmap::getHeight () const
         return image->h;
 }
 
+/****************************************************************************/
+
+Ptr <IBitmap> Bitmap::blit (Geometry::Box const *srcRect = NULL, int destW = -1, int destH = -1)
+{
+        SDL_Surface *texSurface = NULL;
+
+        int origW, origH;
+
+        if (region) {
+                origW = region->getWidth ();
+                origH = region->getHeight ();
+        }
+        else {
+                origW = input->w;
+                origH = input->h;
+        }
+
+        // Podniesione do następnej potęgi
+        int width = Util::Math::nextSqr (origW);
+        int height = Util::Math::nextSqr (origH);
+
+        if (region || height != input->h || width != input->w) {
+
+                SDL_Surface *surface = createSurface (width, height);
+
+                Uint32 saved_flags = input->flags & (SDL_SRCALPHA | SDL_RLEACCELOK);
+
+                if ((saved_flags & SDL_SRCALPHA) == SDL_SRCALPHA) {
+                        SDL_SetAlpha (input, 0, 0);
+                }
+
+                SDL_Rect destRct;
+
+                /* Copy the surface into the GL texture surface (texSurface) */
+                destRct.x = 0;
+                destRct.y = height - origH;
+
+                if (!region) {
+
+                        SDL_BlitSurface (input, NULL, surface, &destRct);
+                }
+                else {
+                        SDL_Rect srcRct;
+
+                        /* Copy the surface into the GL texture surface (texSurface) */
+                        srcRct.x = region->ll.x;
+                        srcRct.y = region->ll.y;
+                        srcRct.w = region->getWidth ();
+                        srcRct.h = region->getHeight ();
+
+                        SDL_BlitSurface (input, &srcRct, surface, &destRct);
+
+#if 0
+                        std::cerr << srcRct.x << "," << srcRct.y << "," << srcRct.w << "," << srcRct.h << ","
+                                << destRct.x << "," << destRct.y << "," << destRct.w << "," << destRct.h << std::endl;
+#endif
+                }
+
+                texSurface = surface;
+        }
+        else {
+                texSurface = input;
+        }
+
+        return texSurface;
+}
+
+
 } /* namespace View */
 #endif

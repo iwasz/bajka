@@ -14,6 +14,7 @@
 #include "../../geometry/Box.h"
 
 namespace View {
+class IBitmap;
 
 struct GraphicsService {
 
@@ -44,7 +45,7 @@ struct GraphicsService {
          * Rozszerza surface takj, żeby jego wys i szer były potęgami 2. Za skasowanie
          * zwróconego surface jest odpowiedzialny user.
          */
-        static SDL_Surface *expandSurfacePowerOf2 (SDL_Surface *, Geometry::Box const *region = NULL);
+        static IBitmap *expandSurfacePowerOf2 (IBitmap *, Geometry::Box const *region = NULL);
 
         static void swapBuffers ();
 
