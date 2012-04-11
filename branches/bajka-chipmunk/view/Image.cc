@@ -8,9 +8,6 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ANDROID
-#include <SDL.h>
-#include <SDL_image.h>
 #include "Image.h"
 #include "Math.h"
 #include "Model.h"
@@ -62,21 +59,23 @@ void Image::init (Model::IModel *model)
 
 /*--------------------------------------------------------------------------*/
 
-        SDL_Surface *image = static_cast <SDL_Surface *> (bitmap->getData ());
-
         if (region.get ()) {
+                // Image będzie wycinkiem bitmapy
                 imgWidth = region->getWidth ();
                 imgHeight = region->getHeight ();
         }
         else {
+                // Image będzie zawierało całą bitmapę.
                 imgWidth = bitmap->getWidth ();
                 imgHeight = bitmap->getHeight ();
         }
 
-        SDL_Surface *texSurface = GraphicsService::expandSurfacePowerOf2 (image, region.get ());
+        // Rozmiar bitmapy na texturę podniesiony do następnej potęgi
+        texWidth = Util::Math::nextSqr (imgWidth);
+        texHeight = Util::Math::nextSqr (imgHeight);
 
-        int width = texSurface->w;
-        int height = texSurface->h;
+        // Kopia o rozmiarach własciwych dla textury.
+        Ptr <IBitmap> texBitmap = bitmap->blit (region.get (), texWidth, texHeight);
 
 /*--------------------------------------------------------------------------*/
 
@@ -107,14 +106,9 @@ void Image::init (Model::IModel *model)
 #endif
 /*--------------------------------------------------------------------------*/
 
-        glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, width,
-                     height, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                     texSurface->pixels);
-
-        texWidth = width;
-        texHeight = height;
-
-        SDL_FreeSurface (texSurface);
+        glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, texWidth,
+                     texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                     texBitmap->getData ());
 }
 
 /****************************************************************************/
@@ -140,4 +134,3 @@ void Image::update (Model::IModel *model, Event::UpdateEvent *)
 }
 
 } // nam
-#endif

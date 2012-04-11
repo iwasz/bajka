@@ -50,7 +50,8 @@ void Text::init ()
         imgWidth = image->w;
         imgHeight = image->h;
 
-        SDL_Surface *texSurface = GraphicsService::expandSurfacePowerOf2 (image);
+        // TODO
+        SDL_Surface *texSurface ;//= GraphicsService::expandSurfacePowerOf2 (image);
         SDL_FreeSurface (image);
 
         int width = texSurface->w;

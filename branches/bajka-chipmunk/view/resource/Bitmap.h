@@ -25,7 +25,7 @@ class Bitmap : public IBitmap {
 public:
 
         C__ (void)
-        Bitmap () : image (NULL) {}
+        Bitmap (SDL_Surface *i = NULL) : image (i) {}
         virtual ~Bitmap ();
 
         std::string const &getPath () const { return path; }
@@ -35,6 +35,8 @@ public:
 
         int getWidth () const;
         int getHeight () const;
+
+        Ptr <IBitmap> blit (Geometry::Box const *srcRect = NULL, int destW = -1, int destH = -1);
 
 private:
 
