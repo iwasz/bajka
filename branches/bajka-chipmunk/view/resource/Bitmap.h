@@ -6,7 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ANDROID
+#ifdef USE_SDL
 #ifndef BAJKA_BITMAP_H_
 #define BAJKA_BITMAP_H_
 
@@ -31,7 +31,7 @@ public:
         std::string const &getPath () const { return path; }
         m_ (setPath) void setPath (std::string const &p);
 
-        void *getData () { return image; }
+        void *getData () { return image->pixels; }
 
         int getWidth () const;
         int getHeight () const;

@@ -20,10 +20,11 @@ void android_main(struct android_app* state) {
 
     // Make sure glue isn't stripped.
     app_dummy();
+    __android_log_print(ANDROID_LOG_WARN, "bajka", "bajka test");
 
-    Ptr <BeanFactoryContainer> container = ContainerFactory::createContainer (MXmlMetaService::parseFile ("main.xml"));
-    std::string mainText = vcast <std::string> (container->getBean ("main"));
-    __android_log_print (ANDROID_LOG_INFO, "bajka", mainText.c_str ());
+//    Ptr <BeanFactoryContainer> container = ContainerFactory::createContainer (MXmlMetaService::parseFile ("main.xml"));
+//    std::string mainText = vcast <std::string> (container->getBean ("main"));
+//    __android_log_print (ANDROID_LOG_INFO, "bajka", mainText.c_str ());
 
 //    struct engine engine;
 //    memset(&engine, 0, sizeof(engine));

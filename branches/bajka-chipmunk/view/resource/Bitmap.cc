@@ -6,9 +6,11 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ANDROID
+#ifdef USE_SDL
+#include <SDL.h>
 #include "Bitmap.h"
 #include "../../util/Exceptions.h"
+#include "GraphicsService.h"
 
 namespace View {
 
@@ -50,10 +52,8 @@ int Bitmap::getHeight () const
 
 /****************************************************************************/
 
-Ptr <IBitmap> Bitmap::blit (Geometry::Box const *srcRect = NULL, int destW = -1, int destH = -1)
+Ptr <IBitmap> Bitmap::blit (Geometry::Box const *region, int width, int height)
 {
-        SDL_Surface *texSurface = NULL;
-
         int origW, origH;
 
         if (region) {
@@ -61,58 +61,48 @@ Ptr <IBitmap> Bitmap::blit (Geometry::Box const *srcRect = NULL, int destW = -1,
                 origH = region->getHeight ();
         }
         else {
-                origW = input->w;
-                origH = input->h;
+                origW = getWidth ();
+                origH = getHeight ();
         }
 
-        // Podniesione do następnej potęgi
-        int width = Util::Math::nextSqr (origW);
-        int height = Util::Math::nextSqr (origH);
+        width = (width < 0) ? origW : width;
+        height = (height < 0) ? origH : height;
 
-        if (region || height != input->h || width != input->w) {
+        SDL_Surface *surface = GraphicsService::createSurface (width, height);
 
-                SDL_Surface *surface = createSurface (width, height);
+        Uint32 saved_flags = image->flags & (SDL_SRCALPHA | SDL_RLEACCELOK);
 
-                Uint32 saved_flags = input->flags & (SDL_SRCALPHA | SDL_RLEACCELOK);
+        if ((saved_flags & SDL_SRCALPHA) == SDL_SRCALPHA) {
+                SDL_SetAlpha (image, 0, 0);
+        }
 
-                if ((saved_flags & SDL_SRCALPHA) == SDL_SRCALPHA) {
-                        SDL_SetAlpha (input, 0, 0);
-                }
+        SDL_Rect destRct;
 
-                SDL_Rect destRct;
+        /* Copy the surface into the GL texture surface (texSurface) */
+        destRct.x = 0;
+        destRct.y = height - origH;
 
-                /* Copy the surface into the GL texture surface (texSurface) */
-                destRct.x = 0;
-                destRct.y = height - origH;
-
-                if (!region) {
-
-                        SDL_BlitSurface (input, NULL, surface, &destRct);
-                }
-                else {
-                        SDL_Rect srcRct;
-
-                        /* Copy the surface into the GL texture surface (texSurface) */
-                        srcRct.x = region->ll.x;
-                        srcRct.y = region->ll.y;
-                        srcRct.w = region->getWidth ();
-                        srcRct.h = region->getHeight ();
-
-                        SDL_BlitSurface (input, &srcRct, surface, &destRct);
-
-#if 0
-                        std::cerr << srcRct.x << "," << srcRct.y << "," << srcRct.w << "," << srcRct.h << ","
-                                << destRct.x << "," << destRct.y << "," << destRct.w << "," << destRct.h << std::endl;
-#endif
-                }
-
-                texSurface = surface;
+        if (!region) {
+                SDL_BlitSurface (image, NULL, surface, &destRct);
         }
         else {
-                texSurface = input;
+                SDL_Rect srcRct;
+
+                /* Copy the surface into the GL texture surface (texSurface) */
+                srcRct.x = region->ll.x;
+                srcRct.y = region->ll.y;
+                srcRct.w = region->getWidth ();
+                srcRct.h = region->getHeight ();
+
+                SDL_BlitSurface (image, &srcRct, surface, &destRct);
+
+#if 0
+                std::cerr << srcRct.x << "," << srcRct.y << "," << srcRct.w << "," << srcRct.h << ","
+                        << destRct.x << "," << destRct.y << "," << destRct.w << "," << destRct.h << std::endl;
+#endif
         }
 
-        return texSurface;
+        return boost::make_shared <Bitmap> (surface);
 }
 
 
