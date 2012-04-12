@@ -6,9 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ANDROID
 #include "OpenGl.h"
-#include <SDL_image.h>
 #include "LoopImage.h"
 #include "../model/IModel.h"
 #include "../model/IBox.h"
@@ -61,4 +59,3 @@ void LoopImage::update (Model::IModel *model, Event::UpdateEvent *)
 }
 
 } /* namespace View */
-#endif
