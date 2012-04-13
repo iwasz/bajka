@@ -171,7 +171,7 @@
                         <ref bean="state1" add="widgets"/>
                 </StatefulWidget>
 
-                <LoadButtonController" set="controller" eventMask="0xffff" name="space2"/>
+                <LoadButtonController set="controller" eventMask="0xffff" name="space2"/>
         </BoxGroup>
 
 
