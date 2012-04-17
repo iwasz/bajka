@@ -6,10 +6,11 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifndef ANDRIOD
 #ifndef BAJKA_ANIMATION_H_
 #define BAJKA_ANIMATION_H_
 
-#include <SDL_opengl.h>
+#include "OpenGl.h"
 #include "FrameSet.h"
 #include "../Widget.h"
 #include "../resource/IBitmap.h"
@@ -112,3 +113,4 @@ private:
 } /* namespace View */
 
 #endif /* ANIMATION_H_ */
+#endif

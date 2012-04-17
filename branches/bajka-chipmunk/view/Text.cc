@@ -6,9 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ANDROID
-#include <SDL.h>
-#include <SDL_image.h>
+#if 0
 #include "Math.h"
 #include "Model.h"
 #include "Text.h"
