@@ -8,6 +8,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifndef ANDROID
 #include "Image.h"
 #include "Math.h"
 #include "Model.h"
@@ -134,3 +135,4 @@ void Image::update (Model::IModel *model, Event::UpdateEvent *)
 }
 
 } // nam
+#endif

@@ -38,6 +38,7 @@ public:
          * - Jeśli destH jest równe -1, to domyślnie zostanie uzyta wysokość prostokąta źródłowego.
          */
         virtual Ptr <IBitmap> blit (Geometry::Box const *srcRect = NULL, int destW = -1, int destH = -1) = 0;
+//        virtual IBitmap *blit (IBitmap *dest, Geometry::Box const *srcRect = NULL, int destW = -1, int destH = -1) = 0;
 };
 
 } /* namespace View */

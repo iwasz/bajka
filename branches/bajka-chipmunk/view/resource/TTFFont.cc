@@ -6,11 +6,12 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ANDROID
+#ifdef USE_SDL
 #include <boost/algorithm/string.hpp>
 #include "TTFFont.h"
 #include "../../util/Exceptions.h"
 #include "GraphicsService.h"
+#include "Bitmap.h"
 
 namespace View {
 
@@ -61,7 +62,7 @@ void TTFFont::open (std::string const &path, int ptSize, long int index)
 
 /****************************************************************************/
 
-void *TTFFont::render (std::string const &text, View::Color const &fgColor, View::Color const &bgColor)
+Ptr <IBitmap> TTFFont::render (std::string const &text, View::Color const &fgColor, View::Color const &bgColor)
 {
         SDL_Color fg = { fgColor.r * 255, fgColor.g * 255, fgColor.b * 255 };
         SDL_Surface *ret = NULL;
@@ -95,12 +96,12 @@ void *TTFFont::render (std::string const &text, View::Color const &fgColor, View
                 SDL_SetAlpha (ret, 0, 0);
         }
 
-        return ret;
+        return boost::make_shared <Bitmap> (ret);
 }
 
 /****************************************************************************/
 
-void *TTFFont::renderMulti (std::string const &text, View::Color const &fgColor, View::Color const &bgColor, TextAlign textLaign)
+Ptr <IBitmap> TTFFont::renderMulti (std::string const &text, View::Color const &fgColor, View::Color const &bgColor, TextAlign textLaign)
 {
         // Bez lineWrapu.
         int lineSkip = TTF_FontLineSkip (font);
@@ -132,7 +133,6 @@ void *TTFFont::renderMulti (std::string const &text, View::Color const &fgColor,
         SDL_Surface *surface = GraphicsService::createSurface (width, height);
 
         // Renderuj
-        SDL_Surface *sTemp = NULL;
         int cnt = 0;
 
         for (Core::StringVector::const_iterator i = tokens.begin (); i != tokens.end (); ++i, ++cnt) {
@@ -142,28 +142,29 @@ void *TTFFont::renderMulti (std::string const &text, View::Color const &fgColor,
                 }
 
                 // The rendered text:
-                sTemp = static_cast <SDL_Surface *> (render (*i, fgColor, bgColor));
+                Ptr <IBitmap> sTemp = render (*i, fgColor, bgColor);
 
                 // Put it on the surface (sText):
                 SDL_Rect destRct = { 0, cnt * lineSkip, 0, 0 };
 
                 if (textLaign == CENTER) {
-                        destRct.x = (surface->w - sTemp->w) / 2;
+                        destRct.x = (surface->w - sTemp->getWidth ()) / 2;
                 }
                 else if (textLaign == RIGHT) {
-                        destRct.x = (surface->w - sTemp->w);
+                        destRct.x = (surface->w - sTemp->getWidth ());
                 }
 
                 // Niemożliwe, żeby nie przeszło, ale i tak...
                 assertThrow (destRct.x >= 0, "TTFFont::renderMulti : destRct.x < 0")
 
-                SDL_BlitSurface (sTemp, NULL, surface, &destRct);
+//                TODO
+//                SDL_BlitSurface (sTemp->getData (), NULL, surface, &destRct);
 
                 // Clean up:
-                SDL_FreeSurface(sTemp);
+                //SDL_FreeSurface(sTemp);
         }
 
-        return surface;
+        return boost::make_shared <Bitmap> (surface);
 }
 
 /****************************************************************************/

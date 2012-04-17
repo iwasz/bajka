@@ -6,7 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ANDROID
+#ifdef USE_SDL
 #ifndef BAJKA_TTFFONT_H_
 #define BAJKA_TTFFONT_H_
 
@@ -52,8 +52,8 @@ public:
                 NONE
         };
 
-        void *render (std::string const &text, View::Color const &fgColor, View::Color const &bgColor);
-        void *renderMulti (std::string const &text, View::Color const &fgColor, View::Color const &bgColor, TextAlign textAlign = LEFT);
+        Ptr <IBitmap> render (std::string const &text, View::Color const &fgColor, View::Color const &bgColor);
+        Ptr <IBitmap> renderMulti (std::string const &text, View::Color const &fgColor, View::Color const &bgColor, TextAlign textAlign = LEFT);
 
         // TODO Typ zwracany powinien być Hinting
         int getHinting () const;

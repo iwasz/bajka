@@ -6,11 +6,11 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ANDROID
 #ifndef BAJKA_FONT_H_
 #define BAJKA_FONT_H_
 
 #include <Object.h>
+#include "IBitmap.h"
 #include "../draw/Color.h"
 
 namespace View {
@@ -28,17 +28,16 @@ struct IFont : public Core::Object {
         /**
          * Renderuj pojedynczą linię tekstu (nie rozumie znaków nowej linii).
          */
-        virtual void *render (std::string const &text, View::Color const &fgColor, View::Color const &bgColor) = 0;
+        virtual Ptr <IBitmap> render (std::string const &text, View::Color const &fgColor, View::Color const &bgColor) = 0;
 
         /**
          * Renderuj tekst w wielu liniach (akceptuje znaki nowej linii, oraz
          * umie wrapować tekst).
          */
-        virtual void *renderMulti (std::string const &text, View::Color const &fgColor, View::Color const &bgColor, TextAlign textAlign = LEFT) = 0;
+        virtual Ptr <IBitmap> renderMulti (std::string const &text, View::Color const &fgColor, View::Color const &bgColor, TextAlign textAlign = LEFT) = 0;
 
 };
 
 } /* namespace View */
 
 #endif /* TTFFONT_H_ */
-#endif

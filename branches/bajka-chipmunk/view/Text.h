@@ -6,7 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ANDROID
+#if 0
 #ifndef BAJKA_VIEW_TEXT_H_
 #define BAJKA_VIEW_TEXT_H_
 

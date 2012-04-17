@@ -26,6 +26,7 @@ public:
 
         C__ (void)
         Bitmap (SDL_Surface *i = NULL) : image (i) {}
+        Bitmap (int width, int height);
         virtual ~Bitmap ();
 
         std::string const &getPath () const { return path; }
@@ -37,6 +38,7 @@ public:
         int getHeight () const;
 
         Ptr <IBitmap> blit (Geometry::Box const *srcRect = NULL, int destW = -1, int destH = -1);
+//        IBitmap *blit (IBitmap *dest, Geometry::Box const *srcRect = NULL, int destW = -1, int destH = -1);
 
 private:
 
