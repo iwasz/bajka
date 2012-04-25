@@ -92,6 +92,7 @@ void AbstractModel::update (Event::UpdateEvent *e)
                 controller->onUpdate (e, this, view);
         }
 
+#ifndef ANDROID // TODO wyrzucić.
         if (config ()->getShowAABB ()) {
                 Geometry::Box aabb= getBoundingBox();
 
@@ -99,6 +100,7 @@ void AbstractModel::update (Event::UpdateEvent *e)
                         DrawUtil::drawRectangle (aabb, View::Color::RED, View::Color::TRANSPARENT);
                 }
         }
+#endif
 
         if (view) {
                 view->preUpdate (this, e);
@@ -109,8 +111,8 @@ void AbstractModel::update (Event::UpdateEvent *e)
         }
 
         if (isGroup ()) {
-        		IGroup *g = dynamic_cast <IGroup *> (this);
-                        std::for_each (g->begin (), g->end (), boost::bind (&IModel::update, _1, e));
+                IGroup *g = dynamic_cast <IGroup *> (this);
+                std::for_each (g->begin (), g->end (), boost::bind (&IModel::update, _1, e));
         }
 
         if (view) {
