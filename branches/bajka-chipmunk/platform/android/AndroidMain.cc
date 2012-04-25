@@ -9,6 +9,7 @@
 #include <Container.h>
 #include <ContainerFactory.h>
 #include <inputFormat/mxml/MXmlMetaService.h>
+#include <sstream>
 
 #include <jni.h>
 #include <errno.h>
@@ -19,13 +20,18 @@
 #include <android/sensor.h>
 #include <android/log.h>
 #include <android_native_app_glue.h>
+#include "IModel.h"
+#include "draw/Primitives.h"
 
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "native-activity", __VA_ARGS__))
 
-//extern void printMessage ();
-
 using namespace Container;
+namespace M = Model;
+namespace V = View;
+namespace C = Controller;
+namespace E = Event;
+namespace G = Geometry;
 
 /**
  * Our saved state data.
@@ -119,6 +125,11 @@ static int engine_init_display(struct engine* engine) {
     glEnable(GL_CULL_FACE);
     glShadeModel(GL_SMOOTH);
     glDisable(GL_DEPTH_TEST);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+
+//    gluOrtho2D (-resX / 2.0, resX / 2.0, -resY / 2.0, resY / 2.0);
+    glOrthof (-w / 2.0, w / 2.0, -h / 2.0, h / 2.0, -1, 1);
 
     return 0;
 }
@@ -126,7 +137,7 @@ static int engine_init_display(struct engine* engine) {
 /**
  * Just the current frame in the display.
  */
-static void engine_draw_frame(struct engine* engine) {
+static void engine_draw_frame (struct engine* engine, M::IModel *model = NULL) {
     if (engine->display == NULL) {
         // No display.
         return;
@@ -136,6 +147,12 @@ static void engine_draw_frame(struct engine* engine) {
     glClearColor(((float)engine->state.x)/engine->width, engine->state.angle,
             ((float)engine->state.y)/engine->height, 1);
     glClear(GL_COLOR_BUFFER_BIT);
+
+//    if (model) {
+//        model->update (NULL);
+//    }
+
+//    V::DrawUtil::drawRectangle (G::Box (-10, -10, 10, 10), V::Color (1, 0, 0), V::Color (0, 1, 0));
 
     eglSwapBuffers(engine->display, engine->surface);
 }
@@ -227,81 +244,101 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
  * event loop for receiving input events and doing other things.
  */
 void android_main(struct android_app* state) {
-    struct engine engine;
+        struct engine engine;
 
-    // Make sure glue isn't stripped.
-    app_dummy();
+        std::ostringstream stream;
 
-    memset(&engine, 0, sizeof(engine));
-    state->userData = &engine;
-    state->onAppCmd = engine_handle_cmd;
-    state->onInputEvent = engine_handle_input;
-    engine.app = state;
+        try {
 
-    // Prepare to monitor accelerometer
-    engine.sensorManager = ASensorManager_getInstance();
-    engine.accelerometerSensor = ASensorManager_getDefaultSensor(engine.sensorManager,
-            ASENSOR_TYPE_ACCELEROMETER);
-    engine.sensorEventQueue = ASensorManager_createEventQueue(engine.sensorManager,
-            state->looper, LOOPER_ID_USER, NULL, NULL);
+            // Make sure glue isn't stripped.
+            app_dummy();
 
-    if (state->savedState != NULL) {
-        // We are starting with a previous saved state; restore from it.
-        engine.state = *(struct saved_state*)state->savedState;
-    }
+            memset(&engine, 0, sizeof(engine));
+            state->userData = &engine;
+            state->onAppCmd = engine_handle_cmd;
+            state->onInputEvent = engine_handle_input;
+            engine.app = state;
 
-//    Ptr <BeanFactoryContainer> container = ContainerFactory::createContainer (MXmlMetaService::parseAndroidAsset (state->activity->assetManager,  "main.xml"));
-//    vcast <int> (container->getBean ("int2"));
+            // Prepare to monitor accelerometer
+            engine.sensorManager = ASensorManager_getInstance();
+            engine.accelerometerSensor = ASensorManager_getDefaultSensor(engine.sensorManager,
+                    ASENSOR_TYPE_ACCELEROMETER);
+            engine.sensorEventQueue = ASensorManager_createEventQueue(engine.sensorManager,
+                    state->looper, LOOPER_ID_USER, NULL, NULL);
 
-    // loop waiting for stuff to do.
-    while (1) {
-        // Read all pending events.
-        int ident;
-        int events;
-        struct android_poll_source* source;
-
-        // If not animating, we will block forever waiting for events.
-        // If animating, we loop until all events are read, then continue
-        // to draw the next frame of animation.
-        while ((ident=ALooper_pollAll(engine.animating ? 0 : -1, NULL, &events,
-                (void**)&source)) >= 0) {
-
-            // Process this event.
-            if (source != NULL) {
-                source->process(state, source);
+            if (state->savedState != NULL) {
+                // We are starting with a previous saved state; restore from it.
+                engine.state = *(struct saved_state*)state->savedState;
             }
 
-            // If a sensor has data, process it now.
-            if (ident == LOOPER_ID_USER) {
-                if (engine.accelerometerSensor != NULL) {
-                    ASensorEvent event;
-                    while (ASensorEventQueue_getEvents(engine.sensorEventQueue,
-                            &event, 1) > 0) {
-                        LOGI("accelerometer: x=%f y=%f z=%f",
-                                event.acceleration.x, event.acceleration.y,
-                                event.acceleration.z);
+            Ptr <BeanFactoryContainer> container = ContainerFactory::createContainer (MXmlMetaService::parseAndroidAsset (state->activity->assetManager,  "main.xml"));
+            Ptr <M::IModel> model = ocast <Ptr <M::IModel> > (container->getBean ("model"));
+
+            // loop waiting for stuff to do.
+            while (1) {
+                // Read all pending events.
+                int ident;
+                int events;
+                struct android_poll_source* source;
+
+                // If not animating, we will block forever waiting for events.
+                // If animating, we loop until all events are read, then continue
+                // to draw the next frame of animation.
+                while ((ident=ALooper_pollAll(engine.animating ? 0 : -1, NULL, &events,
+                        (void**)&source)) >= 0) {
+
+                    // Process this event.
+                    if (source != NULL) {
+                        source->process(state, source);
                     }
+
+                    // If a sensor has data, process it now.
+                    if (ident == LOOPER_ID_USER) {
+                        if (engine.accelerometerSensor != NULL) {
+                            ASensorEvent event;
+                            while (ASensorEventQueue_getEvents(engine.sensorEventQueue,
+                                    &event, 1) > 0) {
+                                LOGI("accelerometer: x=%f y=%f z=%f",
+                                        event.acceleration.x, event.acceleration.y,
+                                        event.acceleration.z);
+                            }
+                        }
+                    }
+
+                    // Check if we are exiting.
+                    if (state->destroyRequested != 0) {
+                        engine_term_display(&engine);
+                        return;
+                    }
+                }
+
+                if (engine.animating) {
+                    // Done with events; draw next animation frame.
+                    engine.state.angle += .01f;
+                    if (engine.state.angle > 1) {
+                        engine.state.angle = 0;
+                    }
+
+                    // Drawing is throttled to the screen update rate, so there
+                    // is no need to do timing here.
+                    engine_draw_frame(&engine, model.get ());
                 }
             }
 
-            // Check if we are exiting.
-            if (state->destroyRequested != 0) {
-                engine_term_display(&engine);
-                return;
-            }
+        }
+        catch (Core::Exception const &e) {
+            stream << "Exception caught : \n" << e.getMessage () << std::endl;
+        }
+        catch (std::exception const &e) {
+            stream << "exception caught : " << e.what () << std::endl;
+        }
+        catch (...) {
+            stream << "Unknown exception." << std::endl;
         }
 
-        if (engine.animating) {
-            // Done with events; draw next animation frame.
-            engine.state.angle += .01f;
-            if (engine.state.angle > 1) {
-                engine.state.angle = 0;
-            }
-
-            // Drawing is throttled to the screen update rate, so there
-            // is no need to do timing here.
-            engine_draw_frame(&engine);
+        if (stream) {
+            __android_log_print (ANDROID_LOG_FATAL, "bajka", stream.str ().c_str ());
+            exit (1);
         }
-    }
 }
 //END_INCLUDE(all)
