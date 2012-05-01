@@ -50,6 +50,9 @@ static const int circleVAR_count = sizeof(circleVAR)/sizeof(GLfloat)/2;
 void DrawUtil::drawCircle (Geometry::Point const &center, double angle, double radius, Color const &lineColor, Color const &fillColor)
 {
         glVertexPointer(2, GL_FLOAT, 0, circleVAR);
+        glDisableClientState(GL_NORMAL_ARRAY);
+        glDisableClientState(GL_COLOR_ARRAY);
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
         glPushMatrix(); {
                 glTranslatef(center.x, center.y, 0.0f);
@@ -79,14 +82,17 @@ void DrawUtil::drawRectangle (Geometry::Box const &b, Color const &lineColor, Co
 
 void DrawUtil::drawRectangle (Geometry::Point const &a, Geometry::Point const &b, Color const &lineColor, Color const &fillColor)
 {
-        GLfloat verts[] = {
+        static GLfloat verts[] = {
                 a.x, a.y,
                 a.x, b.y,
                 b.x, b.y,
                 b.x, a.y
         };
 
-        glVertexPointer (4, GL_FLOAT, 0, verts);
+        glVertexPointer (2, GL_FLOAT, 0, verts);
+        glDisableClientState(GL_NORMAL_ARRAY);
+        glDisableClientState(GL_COLOR_ARRAY);
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
         if (fillColor.getA () > 0) {
                 glColor4f (fillColor.getR (), fillColor.getG (), fillColor.getB (), fillColor.getA ());
@@ -110,6 +116,9 @@ void DrawUtil::drawLine (Geometry::Point const &a, Geometry::Point const &b, Col
                 };
 
                 glVertexPointer(2, GL_FLOAT, 0, verts);
+                glDisableClientState(GL_NORMAL_ARRAY);
+                glDisableClientState(GL_COLOR_ARRAY);
+                glDisableClientState(GL_TEXTURE_COORD_ARRAY);
                 glColor4f (color.getR (), color.getG (), color.getB (), color.getA ());
                 glDrawArrays (GL_LINES, 0, 2);
         }
@@ -153,6 +162,9 @@ void DrawUtil::drawFatLine (Geometry::Point const &a, Geometry::Point const &b, 
 {
         if (radius) {
                 glVertexPointer(3, GL_FLOAT, 0, pillVAR);
+                glDisableClientState(GL_NORMAL_ARRAY);
+                glDisableClientState(GL_COLOR_ARRAY);
+                glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
                 glPushMatrix(); {
 
