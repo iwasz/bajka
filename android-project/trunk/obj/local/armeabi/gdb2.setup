@@ -1,0 +1,4 @@
+set solib-search-path ./obj/local/armeabi
+directory /home/iwasz/local/share/android-ndk-r7b/platforms/android-9/arch-arm/usr/include /home/iwasz/local/share/android-ndk-r7b/sources/android/native_app_glue jni /home/iwasz/local/share/android-ndk-r7b/sources/cxx-stl/system /home/iwasz/workspace/bajka-chipmunk-android /home/iwasz/workspace/bajka-chipmunk-android/platform /home/iwasz/workspace/bajka-chipmunk-android/platform/android
+file ./obj/local/armeabi/app_process
+#target remote :5039
