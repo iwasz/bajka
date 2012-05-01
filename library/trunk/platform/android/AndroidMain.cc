@@ -148,11 +148,12 @@ static void engine_draw_frame (struct engine* engine, M::IModel *model = NULL) {
             ((float)engine->state.y)/engine->height, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
-//    if (model) {
-//        model->update (NULL);
-//    }
 
-//    V::DrawUtil::drawRectangle (G::Box (-10, -10, 10, 10), V::Color (1, 0, 0), V::Color (0, 1, 0));
+    if (model) {
+        model->update (NULL);
+    }
+
+//        V::DrawUtil::drawRectangle (G::Box (-10, -10, 10, 10), V::Color (1, 0, 0), V::Color (0, 1, 0));
 
     eglSwapBuffers(engine->display, engine->surface);
 }
@@ -182,12 +183,24 @@ static void engine_term_display(struct engine* engine) {
  */
 static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) {
     struct engine* engine = (struct engine*)app->userData;
+
+//    glClearColor(1, 1, 1, 1);
+//    glClear(GL_COLOR_BUFFER_BIT);
+//
+//    glDisableClientState(GL_NORMAL_ARRAY);
+//    glDisableClientState(GL_COLOR_ARRAY);
+//    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+//
+//    glVertexPointer (2, GL_FLOAT, 0, verts);
+//    glDrawArrays (GL_LINE_LOOP, 0, 4);
+
     if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
         engine->animating = 1;
         engine->state.x = AMotionEvent_getX(event, 0);
         engine->state.y = AMotionEvent_getY(event, 0);
         return 1;
     }
+
     return 0;
 }
 
@@ -298,9 +311,9 @@ void android_main(struct android_app* state) {
                             ASensorEvent event;
                             while (ASensorEventQueue_getEvents(engine.sensorEventQueue,
                                     &event, 1) > 0) {
-                                LOGI("accelerometer: x=%f y=%f z=%f",
-                                        event.acceleration.x, event.acceleration.y,
-                                        event.acceleration.z);
+//                                LOGI("accelerometer: x=%f y=%f z=%f",
+//                                        event.acceleration.x, event.acceleration.y,
+//                                        event.acceleration.z);
                             }
                         }
                     }
@@ -322,6 +335,7 @@ void android_main(struct android_app* state) {
                     // Drawing is throttled to the screen update rate, so there
                     // is no need to do timing here.
                     engine_draw_frame(&engine, model.get ());
+//                    engine_draw_frame(&engine, NULL);
                 }
             }
 
