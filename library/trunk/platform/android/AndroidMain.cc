@@ -14,17 +14,18 @@
 #include <jni.h>
 #include <errno.h>
 
-#include <EGL/egl.h>
 #include <GLES/gl.h>
 
 #include <android/sensor.h>
-#include <android/log.h>
-#include <android_native_app_glue.h>
+#include "android_native_app_glue.h"
 #include "IModel.h"
 #include "draw/Primitives.h"
+#include "App.h"
+#include "android/AndroidEngine.h"
+#include "../../util/Config.h"
+#include "Functions.h"
 
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
-#define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "native-activity", __VA_ARGS__))
+using Util::App;
 
 using namespace Container;
 namespace M = Model;
@@ -34,221 +35,149 @@ namespace E = Event;
 namespace G = Geometry;
 
 /**
- * Our saved state data.
- */
-struct saved_state {
-    float angle;
-    int32_t x;
-    int32_t y;
-};
-
-/**
- * Shared state for our app.
- */
-struct engine {
-    struct android_app* app;
-
-    ASensorManager* sensorManager;
-    const ASensor* accelerometerSensor;
-    ASensorEventQueue* sensorEventQueue;
-
-    int animating;
-    EGLDisplay display;
-    EGLSurface surface;
-    EGLContext context;
-    int32_t width;
-    int32_t height;
-    struct saved_state state;
-};
-
-/**
  * Initialize an EGL context for the current display.
  */
-static int engine_init_display(struct engine* engine) {
-    // initialize OpenGL ES and EGL
+static int engineInitDisplay (App *bajkaApp)
+{
+        LOGI ("engineInitDisplay");
 
-    /*
-     * Here specify the attributes of the desired configuration.
-     * Below, we select an EGLConfig with at least 8 bits per color
-     * component compatible with on-screen windows
-     */
-    const EGLint attribs[] = {
-            EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-            EGL_BLUE_SIZE, 8,
-            EGL_GREEN_SIZE, 8,
-            EGL_RED_SIZE, 8,
-            EGL_NONE
-    };
-    EGLint w, h, format;
-    EGLint numConfigs;
-    EGLConfig config;
-    EGLSurface surface;
-    EGLContext context;
+        // initialize OpenGL ES and EGL
+        android_app *androidApp = bajkaApp->getAndroidEngine ()->androidApp;
+        Util::AndroidEngine *androidEngine = bajkaApp->getAndroidEngine ();
+        Util::Config *bajkaConfig = bajkaApp->getConfig ().get ();
 
-    EGLDisplay display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+	/*
+	* Here specify the attributes of the desired configuration.
+	* Below, we select an EGLConfig with at least 8 bits per color
+	* component compatible with on-screen windows
+	*/
+	const EGLint attribs[] = {
+	    EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+	    EGL_BLUE_SIZE, 8,
+	    EGL_GREEN_SIZE, 8,
+	    EGL_RED_SIZE, 8,
+	    EGL_NONE
+	};
 
-    eglInitialize(display, 0, 0);
+	EGLint w, h, format;
+	EGLint numConfigs;
+	EGLConfig config;
+	EGLSurface surface;
+	EGLContext context;
 
-    /* Here, the application chooses the configuration it desires. In this
-     * sample, we have a very simplified selection process, where we pick
-     * the first EGLConfig that matches our criteria */
-    eglChooseConfig(display, attribs, &config, 1, &numConfigs);
+        EGLDisplay display = eglGetDisplay (EGL_DEFAULT_DISPLAY);
 
-    /* EGL_NATIVE_VISUAL_ID is an attribute of the EGLConfig that is
-     * guaranteed to be accepted by ANativeWindow_setBuffersGeometry().
-     * As soon as we picked a EGLConfig, we can safely reconfigure the
-     * ANativeWindow buffers to match, using EGL_NATIVE_VISUAL_ID. */
-    eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format);
+        eglInitialize (display, 0, 0);
 
-    ANativeWindow_setBuffersGeometry(engine->app->window, 0, 0, format);
+        /* Here, the application chooses the configuration it desires. In this
+         * sample, we have a very simplified selection process, where we pick
+         * the first EGLConfig that matches our criteria */
+        eglChooseConfig (display, attribs, &config, 1, &numConfigs);
 
-    surface = eglCreateWindowSurface(display, config, engine->app->window, NULL);
-    context = eglCreateContext(display, config, NULL, NULL);
+        /* EGL_NATIVE_VISUAL_ID is an attribute of the EGLConfig that is
+         * guaranteed to be accepted by ANativeWindow_setBuffersGeometry().
+         * As soon as we picked a EGLConfig, we can safely reconfigure the
+         * ANativeWindow buffers to match, using EGL_NATIVE_VISUAL_ID. */
+        eglGetConfigAttrib (display, config, EGL_NATIVE_VISUAL_ID, &format);
 
-    if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE) {
-        LOGW("Unable to eglMakeCurrent");
-        return -1;
-    }
+        ANativeWindow_setBuffersGeometry (androidApp->window, 0, 0, format);
 
-    eglQuerySurface(display, surface, EGL_WIDTH, &w);
-    eglQuerySurface(display, surface, EGL_HEIGHT, &h);
+        surface = eglCreateWindowSurface (display, config, androidApp->window, NULL);
+        context = eglCreateContext (display, config, NULL, NULL);
 
-    engine->display = display;
-    engine->context = context;
-    engine->surface = surface;
-    engine->width = w;
-    engine->height = h;
-    engine->state.angle = 0;
+        if (eglMakeCurrent (display, surface, surface, context) == EGL_FALSE) {
+                LOGW("Unable to eglMakeCurrent");
+                return -1;
+        }
 
-    // Initialize GL state.
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
-    glEnable(GL_CULL_FACE);
-    glShadeModel(GL_SMOOTH);
-    glDisable(GL_DEPTH_TEST);
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
+        eglQuerySurface (display, surface, EGL_WIDTH, &w);
+        eglQuerySurface (display, surface, EGL_HEIGHT, &h);
 
-//    gluOrtho2D (-resX / 2.0, resX / 2.0, -resY / 2.0, resY / 2.0);
-    glOrthof (-w / 2.0, w / 2.0, -h / 2.0, h / 2.0, -1, 1);
+        androidEngine->display = display;
+        androidEngine->context = context;
+        androidEngine->surface = surface;
+        bajkaConfig->setResX (w);
+        bajkaConfig->setResY (h);
 
-    return 0;
-}
+        // Initialize GL state.
+        glHint (GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
+        glEnable (GL_CULL_FACE);
+        glShadeModel (GL_SMOOTH);
+        glDisable (GL_DEPTH_TEST);
+        glEnableClientState (GL_VERTEX_ARRAY);
+        glEnableClientState (GL_COLOR_ARRAY);
 
-/**
- * Just the current frame in the display.
- */
-static void engine_draw_frame (struct engine* engine, M::IModel *model = NULL) {
-    if (engine->display == NULL) {
-        // No display.
-        return;
-    }
+        glMatrixMode (GL_PROJECTION);
+        glLoadIdentity ();
+        glOrthof (-w / 2.0, w / 2.0, -h / 2.0, h / 2.0, -1, 1);
+        androidEngine->running = true;
 
-    // Just fill the screen with a color.
-    glClearColor(((float)engine->state.x)/engine->width, engine->state.angle,
-            ((float)engine->state.y)/engine->height, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
+        LOGI ("RES : %d, %d", w, h);
 
-
-    if (model) {
-        model->update (NULL);
-    }
-
-//        V::DrawUtil::drawRectangle (G::Box (-10, -10, 10, 10), V::Color (1, 0, 0), V::Color (0, 1, 0));
-
-    eglSwapBuffers(engine->display, engine->surface);
+        return 0;
 }
 
 /**
  * Tear down the EGL context currently associated with the display.
  */
-static void engine_term_display(struct engine* engine) {
-    if (engine->display != EGL_NO_DISPLAY) {
-        eglMakeCurrent(engine->display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-        if (engine->context != EGL_NO_CONTEXT) {
-            eglDestroyContext(engine->display, engine->context);
+static void engineTermDisplay (App *bajkaApp)
+{
+        Util::AndroidEngine *androidEngine = bajkaApp->getAndroidEngine ();
+
+        if (androidEngine->display != EGL_NO_DISPLAY) {
+
+                eglMakeCurrent (androidEngine->display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+
+                if (androidEngine->context != EGL_NO_CONTEXT) {
+                        eglDestroyContext (androidEngine->display, androidEngine->context);
+                }
+
+                if (androidEngine->surface != EGL_NO_SURFACE) {
+                        eglDestroySurface (androidEngine->display, androidEngine->surface);
+                }
+
+                eglTerminate (androidEngine->display);
         }
-        if (engine->surface != EGL_NO_SURFACE) {
-            eglDestroySurface(engine->display, engine->surface);
-        }
-        eglTerminate(engine->display);
-    }
-    engine->animating = 0;
-    engine->display = EGL_NO_DISPLAY;
-    engine->context = EGL_NO_CONTEXT;
-    engine->surface = EGL_NO_SURFACE;
+
+        androidEngine->display = EGL_NO_DISPLAY;
+        androidEngine->context = EGL_NO_CONTEXT;
+        androidEngine->surface = EGL_NO_SURFACE;
+        androidEngine->running = false;
 }
 
 /**
  * Process the next input event.
  */
-static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) {
-    struct engine* engine = (struct engine*)app->userData;
-
-//    glClearColor(1, 1, 1, 1);
-//    glClear(GL_COLOR_BUFFER_BIT);
-//
-//    glDisableClientState(GL_NORMAL_ARRAY);
-//    glDisableClientState(GL_COLOR_ARRAY);
-//    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-//
-//    glVertexPointer (2, GL_FLOAT, 0, verts);
-//    glDrawArrays (GL_LINE_LOOP, 0, 4);
-
-    if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
-        engine->animating = 1;
-        engine->state.x = AMotionEvent_getX(event, 0);
-        engine->state.y = AMotionEvent_getY(event, 0);
-        return 1;
-    }
-
-    return 0;
+static int32_t engineHandleInput (struct android_app* androidApp, AInputEvent* androidEvent)
+{
+        App *bajkaApp = static_cast <App *> (androidApp->userData);
+        // 0 nieobsłużony przez moją aplikację, 1 obsłużony.
+        return bajkaApp->engineHandleInput (androidEvent);
 }
 
 /**
  * Process the next main command.
  */
-static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
-    struct engine* engine = (struct engine*)app->userData;
-    switch (cmd) {
-        case APP_CMD_SAVE_STATE:
-            // The system has asked us to save our current state.  Do so.
-            engine->app->savedState = malloc(sizeof(struct saved_state));
-            *((struct saved_state*)engine->app->savedState) = engine->state;
-            engine->app->savedStateSize = sizeof(struct saved_state);
-            break;
+static void engineHandleCmd (struct android_app* androidApp, int32_t cmd)
+{
+        App *bajkaApp = static_cast <App *> (androidApp->userData);
+
+        switch (cmd) {
         case APP_CMD_INIT_WINDOW:
-            // The window is being shown, get it ready.
-            if (engine->app->window != NULL) {
-                engine_init_display(engine);
-                engine_draw_frame(engine);
-            }
-            break;
+                // The window is being shown, get it ready.
+                if (androidApp->window != NULL) {
+                        engineInitDisplay (bajkaApp);
+                }
+
+                break;
+
         case APP_CMD_TERM_WINDOW:
-            // The window is being hidden or closed, clean it up.
-            engine_term_display(engine);
-            break;
-        case APP_CMD_GAINED_FOCUS:
-            // When our app gains focus, we start monitoring the accelerometer.
-            if (engine->accelerometerSensor != NULL) {
-                ASensorEventQueue_enableSensor(engine->sensorEventQueue,
-                        engine->accelerometerSensor);
-                // We'd like to get 60 events per second (in us).
-                ASensorEventQueue_setEventRate(engine->sensorEventQueue,
-                        engine->accelerometerSensor, (1000L/60)*1000);
-            }
-            break;
-        case APP_CMD_LOST_FOCUS:
-            // When our app loses focus, we stop monitoring the accelerometer.
-            // This is to avoid consuming battery while not being used.
-            if (engine->accelerometerSensor != NULL) {
-                ASensorEventQueue_disableSensor(engine->sensorEventQueue,
-                        engine->accelerometerSensor);
-            }
-            // Also stop animating.
-            engine->animating = 0;
-            engine_draw_frame(engine);
-            break;
-    }
+                // The window is being hidden or closed, clean it up.
+                engineTermDisplay (bajkaApp);
+                break;
+        }
+
+        bajkaApp->engineHandleCmd (cmd);
 }
 
 /**
@@ -256,88 +185,87 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
  * android_native_app_glue.  It runs in its own thread, with its own
  * event loop for receiving input events and doing other things.
  */
-void android_main(struct android_app* state) {
-        struct engine engine;
+void android_main (struct android_app* state) {
 
         std::ostringstream stream;
 
         try {
 
-            // Make sure glue isn't stripped.
-            app_dummy();
+                app_dummy();
 
-            memset(&engine, 0, sizeof(engine));
-            state->userData = &engine;
-            state->onAppCmd = engine_handle_cmd;
-            state->onInputEvent = engine_handle_input;
-            engine.app = state;
+                Ptr <BeanFactoryContainer> container = ContainerFactory::createContainer (MXmlMetaService::parseAndroidAsset (state->activity->assetManager,  "main.xml"));
+                Ptr <Util::App> app = vcast <Ptr <Util::App> > (container->getBean ("app"));
+                app->setInstance (app.get ());
+                app->getAndroidEngine ()->androidApp = state;
+                app->init ();
 
-            // Prepare to monitor accelerometer
-            engine.sensorManager = ASensorManager_getInstance();
-            engine.accelerometerSensor = ASensorManager_getDefaultSensor(engine.sensorManager,
-                    ASENSOR_TYPE_ACCELEROMETER);
-            engine.sensorEventQueue = ASensorManager_createEventQueue(engine.sensorManager,
-                    state->looper, LOOPER_ID_USER, NULL, NULL);
+                state->userData = app.get ();
+                state->onAppCmd = engineHandleCmd;
+                state->onInputEvent = engineHandleInput;
 
-            if (state->savedState != NULL) {
-                // We are starting with a previous saved state; restore from it.
-                engine.state = *(struct saved_state*)state->savedState;
-            }
+//            // Prepare to monitor accelerometer
+//            engine.accelerometerSensor = ASensorManager_getDefaultSensor(engine.sensorManager, ASENSOR_TYPE_ACCELEROMETER);
+//            engine.sensorEventQueue = ASensorManager_createEventQueue(engine.sensorManager, state->looper, LOOPER_ID_USER, NULL, NULL);
 
-            Ptr <BeanFactoryContainer> container = ContainerFactory::createContainer (MXmlMetaService::parseAndroidAsset (state->activity->assetManager,  "main.xml"));
-            Ptr <M::IModel> model = ocast <Ptr <M::IModel> > (container->getBean ("model"));
+//            if (state->savedState != NULL) {
+//                // We are starting with a previous saved state; restore from it.
+//                engine.state = *(struct saved_state*)state->savedState;
+//            }
 
-            // loop waiting for stuff to do.
-            while (1) {
-                // Read all pending events.
-                int ident;
-                int events;
-                struct android_poll_source* source;
+                app->loop ();
+                app->destroy ();
 
-                // If not animating, we will block forever waiting for events.
-                // If animating, we loop until all events are read, then continue
-                // to draw the next frame of animation.
-                while ((ident=ALooper_pollAll(engine.animating ? 0 : -1, NULL, &events,
-                        (void**)&source)) >= 0) {
-
-                    // Process this event.
-                    if (source != NULL) {
-                        source->process(state, source);
-                    }
-
-                    // If a sensor has data, process it now.
-                    if (ident == LOOPER_ID_USER) {
-                        if (engine.accelerometerSensor != NULL) {
-                            ASensorEvent event;
-                            while (ASensorEventQueue_getEvents(engine.sensorEventQueue,
-                                    &event, 1) > 0) {
-//                                LOGI("accelerometer: x=%f y=%f z=%f",
-//                                        event.acceleration.x, event.acceleration.y,
-//                                        event.acceleration.z);
-                            }
-                        }
-                    }
-
-                    // Check if we are exiting.
-                    if (state->destroyRequested != 0) {
-                        engine_term_display(&engine);
-                        return;
-                    }
-                }
-
-                if (engine.animating) {
-                    // Done with events; draw next animation frame.
-                    engine.state.angle += .01f;
-                    if (engine.state.angle > 1) {
-                        engine.state.angle = 0;
-                    }
-
-                    // Drawing is throttled to the screen update rate, so there
-                    // is no need to do timing here.
-                    engine_draw_frame(&engine, model.get ());
+//            // loop waiting for stuff to do.
+//            while (1) {
+//                // Read all pending events.
+//                int ident;
+//                int events;
+//                struct android_poll_source* source;
+//
+//                // If not animating, we will block forever waiting for events.
+//                // If animating, we loop until all events are read, then continue
+//                // to draw the next frame of animation.
+//                while ((ident=ALooper_pollAll(engine.animating ? 0 : -1, NULL, &events,
+//                        (void**)&source)) >= 0) {
+//
+//                    // Process this event.
+//                    if (source != NULL) {
+//                        source->process(state, source);
+//                    }
+//
+//                    // If a sensor has data, process it now.
+//                    if (ident == LOOPER_ID_USER) {
+//                        if (engine.accelerometerSensor != NULL) {
+//                            ASensorEvent event;
+//                            while (ASensorEventQueue_getEvents(engine.sensorEventQueue,
+//                                    &event, 1) > 0) {
+////                                LOGI("accelerometer: x=%f y=%f z=%f",
+////                                        event.acceleration.x, event.acceleration.y,
+////                                        event.acceleration.z);
+//                            }
+//                        }
+//                    }
+//
+//                    // Check if we are exiting.
+//                    if (state->destroyRequested != 0) {
+//                        engineTermDisplay(&engine);
+//                        return;
+//                    }
+//                }
+//
+//                if (engine.animating) {
+//                    // Done with events; draw next animation frame.
+//                    engine.state.angle += .01f;
+//                    if (engine.state.angle > 1) {
+//                        engine.state.angle = 0;
+//                    }
+//
+//                    // Drawing is throttled to the screen update rate, so there
+//                    // is no need to do timing here.
+////                    engine_draw_frame(&engine, model.get ());
 //                    engine_draw_frame(&engine, NULL);
-                }
-            }
+//                }
+//            }
 
         }
         catch (Core::Exception const &e) {

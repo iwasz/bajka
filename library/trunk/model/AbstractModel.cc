@@ -13,7 +13,6 @@
 #include "BoxGroup.h"
 #include "../view/Widget.h"
 #include "../view/draw/Primitives.h"
-#include "../util/App.h"
 #include "../events/types/UpdateEvent.h"
 
 namespace Model {

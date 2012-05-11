@@ -7,8 +7,8 @@
  ****************************************************************************/
 
 #include "TiliaeModelManager.h"
+#include "App.h"
 #include "../util/Exceptions.h"
-#include "../util/App.h"
 #include <ContainerFactory.h>
 #include <inputFormat/mxml/MXmlMetaService.h>
 

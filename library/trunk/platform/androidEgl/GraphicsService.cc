@@ -10,7 +10,6 @@
 #include "GraphicsService.h"
 #include "../../util/Exceptions.h"
 #include "../../util/Math.h"
-#include "../../util/App.h"
 
 namespace View {
 

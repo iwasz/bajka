@@ -48,7 +48,7 @@ void EventDispatcher::dispatchEventBackwards (Model::IModel *m, IEvent *e, Event
 
 /****************************************************************************/
 
-void EventDispatcher::run (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex)
+void EventDispatcher::run (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex, void *)
 {
         SDL_Event event;
 
