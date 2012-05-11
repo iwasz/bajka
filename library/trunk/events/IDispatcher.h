@@ -34,7 +34,8 @@ public:
         virtual ~IDispatcher () {}
 
         /**
-         * Zwraca true, kiedy event został obsłużony przez grę.
+         * Zwraca true, kiedy event został obsłużony przez grę i nie powinien zostać przekazany do
+         * systemu. Ma to znaczenie w androidzie, gdzie aplikacja i system współdzielą eventy.
          */
         virtual bool run (Model::IModel *m, EventIndex const &modeliIndex, PointerInsideIndex *pointerInsideIndex, void *platformDependentData) = 0;
         virtual void reset () = 0;

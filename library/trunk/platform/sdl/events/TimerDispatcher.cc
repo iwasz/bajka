@@ -15,10 +15,7 @@
 
 #include "TimerDispatcher.h"
 
-namespace Sdl {
-using namespace Event;
-
-/****************************************************************************/
+namespace Event {
 
 void TimerDispatcher::run (Model::IModel *m, EventIndex const &modeliIndex, PointerInsideIndex *pointerInsideIndex)
 {

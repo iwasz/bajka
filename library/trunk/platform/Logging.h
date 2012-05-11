@@ -6,23 +6,13 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ANDROIDINPUTDISPATCHER_H_
-#define ANDROIDINPUTDISPATCHER_H_
-#include "AbstractEventDispatcher.h"
+#ifndef IMPL_LOGGING_H_
+#define IMPL_LOGGING_H_
 
-namespace Event {
+#if defined (LINUX)
+#include "linux/Logging.h"
+#elif defined (ANDROID)
+#include "android/Logging.h"
+#endif
 
-class AndroidInputDispatcher : public AbstractEventDispatcher {
-public:
-
-        virtual ~AndroidInputDispatcher () {}
-        bool run (Model::IModel *m, EventIndex const &modeliIndex, PointerInsideIndex *pointerInsideIndex, void *platformDependentData);
-        void reset ();
-
-        Util::App *getApp () {}
-        void setApp (Util::App *a) {}
-
-};
-
-} /* namespace Event */
-#endif /* ANDROIDINPUTDISPATCHER_H_ */
+#	endif /* GRAPHICSINTERFACE_H_ */
