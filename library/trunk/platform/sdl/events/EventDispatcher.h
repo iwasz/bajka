@@ -12,35 +12,29 @@
 #ifdef USE_SDL
 #include <SDL.h>
 #include "ReflectionMacros.h"
-#include "IDispatcher.h"
+#include "AbstractEventDispatcher.h"
 #include "App.h"
 #include "types/Types.h"
 
-namespace Sdl {
+namespace Event {
 
 /**
  * Generuje eventy używając do tego SDL.
  * \ingroup Events
  */
-class EventDispatcher : public Event::IDispatcher {
+class EventDispatcher : public AbstractEventDispatcher {
 public:
-        C__ (void)
+        b__ ("AbstractEventDispatcher")
+        C_ (void)
 
-        EventDispatcher () : app (NULL) {}
         virtual ~EventDispatcher () {}
 
-        void run (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex, void *platformDependentData);
+        void pollAndDispatch (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex);
         void reset ();
-
-/*------getters-setters-----------------------------------------------------*/
-
-        Util::App *getApp () { return app; }
-        void setApp (Util::App *a) { app = a; }
 
 private:
 
         Event::IEvent *translate (SDL_Event *event);
-        void dispatchEventBackwards (Model::IModel *m, Event::IEvent *e, Event::PointerInsideIndex *pointerInsideIndex);
 
         Event::KeyboardEvent *updateKeyboardUpEvent (SDL_Event *event);
         Event::KeyboardEvent *updateKeyboardDownEvent (SDL_Event *event);
@@ -64,9 +58,6 @@ private:
         Event::ResizeEvent resizeEvent;
         Event::ActiveEvent activeEvent;
         Event::ExposeEvent exposeEvent;
-
-        Ptr <Util::Config> config;
-        Util::App *app;
 
         E_ (EventDispatcher)
 };

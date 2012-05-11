@@ -14,7 +14,7 @@
 #include "types/TimerEvent.h"
 #include "IDispatcher.h"
 
-namespace Sdl {
+namespace Event {
 
 /**
  * Generuje eventy zegarowe używając do tego timerów SDL.

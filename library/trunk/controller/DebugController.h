@@ -25,20 +25,20 @@ struct DebugController : public IController {
 
 /*--------------------------------------------------------------------------*/
 
-        bool onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v);
-        bool onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v);
-        bool onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v);
-        bool onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v);
-        bool onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v);
-        bool onKeyDown (Event::KeyDownEvent *e, Model::IModel *m, View::IView *v);
-        bool onKeyUp (Event::KeyUpEvent *e, Model::IModel *m, View::IView *v);
-        bool onTimer (Event::TimerEvent *e, Model::IModel *m, View::IView *v);
-        bool onQuit (Event::QuitEvent *e, Model::IModel *m, View::IView *v);
-        bool onActive (Event::ActiveEvent *e, Model::IModel *m, View::IView *v);
-        bool onExpose (Event::ExposeEvent *e, Model::IModel *m, View::IView *v);
-        bool onResize (Event::ResizeEvent *e, Model::IModel *m, View::IView *v);
-        bool onManagerLoad (Event::ManagerEvent *e, Model::IModel *m, View::IView *v);
-        bool onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v);
+        HandlingType onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v);
+        HandlingType onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v);
+        HandlingType onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v);
+        HandlingType onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v);
+        HandlingType onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v);
+        HandlingType onKeyDown (Event::KeyDownEvent *e, Model::IModel *m, View::IView *v);
+        HandlingType onKeyUp (Event::KeyUpEvent *e, Model::IModel *m, View::IView *v);
+        HandlingType onTimer (Event::TimerEvent *e, Model::IModel *m, View::IView *v);
+        HandlingType onQuit (Event::QuitEvent *e, Model::IModel *m, View::IView *v);
+        HandlingType onActive (Event::ActiveEvent *e, Model::IModel *m, View::IView *v);
+        HandlingType onExpose (Event::ExposeEvent *e, Model::IModel *m, View::IView *v);
+        HandlingType onResize (Event::ResizeEvent *e, Model::IModel *m, View::IView *v);
+        HandlingType onManagerLoad (Event::ManagerEvent *e, Model::IModel *m, View::IView *v);
+        HandlingType onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v);
 
         // linia do dołu
         m_ (setEventMask)
