@@ -71,8 +71,8 @@ if (LINUX)
 
 elseif (ANDROID)
     
-    AUX_SOURCE_DIRECTORY ("$ENV{NDK}/sources/android/native_app_glue" SOURCES)
-    INCLUDE_DIRECTORIES ("$ENV{NDK}/sources/android/native_app_glue")
+#    AUX_SOURCE_DIRECTORY ("$ENV{NDK}/sources/android/native_app_glue" SOURCES)
+#    INCLUDE_DIRECTORIES ("$ENV{NDK}/sources/android/native_app_glue")
     
     #find_library (TILIAE_LIBRARIES "mxml")
     INCLUDE_DIRECTORIES ("$ENV{ANDROID_STANDALONE_TOOLCHAIN}/user/include/tiliae")

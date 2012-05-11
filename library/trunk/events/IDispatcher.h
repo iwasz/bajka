@@ -33,7 +33,10 @@ class IDispatcher : public Core::Object {
 public:
         virtual ~IDispatcher () {}
 
-        virtual void run (Model::IModel *m, EventIndex const &modeliIndex, PointerInsideIndex *pointerInsideIndex) = 0;
+        /**
+         * Zwraca true, kiedy event został obsłużony przez grę.
+         */
+        virtual bool run (Model::IModel *m, EventIndex const &modeliIndex, PointerInsideIndex *pointerInsideIndex, void *platformDependentData) = 0;
         virtual void reset () = 0;
 
         virtual Util::App *getApp () = 0;

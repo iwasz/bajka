@@ -29,7 +29,7 @@ public:
         EventDispatcher () : app (NULL) {}
         virtual ~EventDispatcher () {}
 
-        void run (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex);
+        void run (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex, void *platformDependentData);
         void reset ();
 
 /*------getters-setters-----------------------------------------------------*/
