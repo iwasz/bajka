@@ -50,7 +50,11 @@ INSTALL (
     FILES_MATCHING PATTERN "*.h"
     PATTERN "*.svn*" EXCLUDE
     PATTERN "*test*" EXCLUDE)
-    
+
+if (LINUX)
+    SET (CMAKE_INSTALL_PREFIX "/home/iwasz/local") 
+endif()
+
 if (LINUX)
 
     # Boost, można zakomentowa, you can skip this
@@ -97,48 +101,48 @@ elseif (ANDROID)
 endif ()
 
 # Sources
-AUX_SOURCE_DIRECTORY (../view SOURCES)
-AUX_SOURCE_DIRECTORY (../view/draw SOURCES)
-AUX_SOURCE_DIRECTORY (../view/resource SOURCES)
-AUX_SOURCE_DIRECTORY (../view/animation SOURCES)
+AUX_SOURCE_DIRECTORY (../src/view SOURCES)
+AUX_SOURCE_DIRECTORY (../src/view/draw SOURCES)
+AUX_SOURCE_DIRECTORY (../src/view/resource SOURCES)
+AUX_SOURCE_DIRECTORY (../src/view/animation SOURCES)
 
-AUX_SOURCE_DIRECTORY (../events SOURCES)
-AUX_SOURCE_DIRECTORY (../events/filter SOURCES)
-AUX_SOURCE_DIRECTORY (../events/sdl SOURCES)
-AUX_SOURCE_DIRECTORY (../events/types SOURCES)
+AUX_SOURCE_DIRECTORY (../src/events SOURCES)
+AUX_SOURCE_DIRECTORY (../src/events/filter SOURCES)
+AUX_SOURCE_DIRECTORY (../src/events/sdl SOURCES)
+AUX_SOURCE_DIRECTORY (../src/events/types SOURCES)
 
-AUX_SOURCE_DIRECTORY (../model SOURCES)
-AUX_SOURCE_DIRECTORY (../model/static SOURCES)
-AUX_SOURCE_DIRECTORY (../model/physics SOURCES)
+AUX_SOURCE_DIRECTORY (../src/model SOURCES)
+AUX_SOURCE_DIRECTORY (../src/model/static SOURCES)
+AUX_SOURCE_DIRECTORY (../src/model/physics SOURCES)
 
-AUX_SOURCE_DIRECTORY (../geometry SOURCES)
-AUX_SOURCE_DIRECTORY (../util SOURCES)
+AUX_SOURCE_DIRECTORY (../src/geometry SOURCES)
+AUX_SOURCE_DIRECTORY (../src/util SOURCES)
 
-AUX_SOURCE_DIRECTORY (../platform/openGl SOURCES)
-AUX_SOURCE_DIRECTORY (../platform/openGlEs SOURCES)
-AUX_SOURCE_DIRECTORY (../platform/openGlCommon SOURCES)
-AUX_SOURCE_DIRECTORY (../platform/sdl SOURCES)
-AUX_SOURCE_DIRECTORY (../platform/sdl/events SOURCES)
-AUX_SOURCE_DIRECTORY (../platform/androidEgl SOURCES)
-AUX_SOURCE_DIRECTORY (../platform/android SOURCES)
-AUX_SOURCE_DIRECTORY (../platform/linux SOURCES)
+AUX_SOURCE_DIRECTORY (../src/platform/openGl SOURCES)
+AUX_SOURCE_DIRECTORY (../src/platform/openGlEs SOURCES)
+AUX_SOURCE_DIRECTORY (../src/platform/openGlCommon SOURCES)
+AUX_SOURCE_DIRECTORY (../src/platform/sdl SOURCES)
+AUX_SOURCE_DIRECTORY (../src/platform/sdl/events SOURCES)
+AUX_SOURCE_DIRECTORY (../src/platform/androidEgl SOURCES)
+AUX_SOURCE_DIRECTORY (../src/platform/android SOURCES)
+AUX_SOURCE_DIRECTORY (../src/platform/linux SOURCES)
 
-AUX_SOURCE_DIRECTORY (../controller SOURCES)
+AUX_SOURCE_DIRECTORY (../src/controller SOURCES)
 
-AUX_SOURCE_DIRECTORY (../tween SOURCES)
-AUX_SOURCE_DIRECTORY (../tween/ease SOURCES)
-AUX_SOURCE_DIRECTORY (../tween/accessor SOURCES)
+AUX_SOURCE_DIRECTORY (../src/tween SOURCES)
+AUX_SOURCE_DIRECTORY (../src/tween/ease SOURCES)
+AUX_SOURCE_DIRECTORY (../src/tween/accessor SOURCES)
 
 # Local includes (inside project).
 INCLUDE_DIRECTORIES (/usr/local/include/chipmunk)
-INCLUDE_DIRECTORIES (../view)
-INCLUDE_DIRECTORIES (../model)
-INCLUDE_DIRECTORIES (../geometry)
-INCLUDE_DIRECTORIES (../util)
-INCLUDE_DIRECTORIES (../events)
-INCLUDE_DIRECTORIES (../controller)
-INCLUDE_DIRECTORIES (../platform)
-INCLUDE_DIRECTORIES (../tween)
+INCLUDE_DIRECTORIES (../src/view)
+INCLUDE_DIRECTORIES (../src/model)
+INCLUDE_DIRECTORIES (../src/geometry)
+INCLUDE_DIRECTORIES (../src/util)
+INCLUDE_DIRECTORIES (../src/events)
+INCLUDE_DIRECTORIES (../src/controller)
+INCLUDE_DIRECTORIES (../src/platform)
+INCLUDE_DIRECTORIES (../src/tween)
 
 if (LINUX)
 
