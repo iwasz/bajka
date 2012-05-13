@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef ANDROID
 #include "Logging.h"
 #include <string>
 #include <boost/lexical_cast.hpp>
@@ -159,3 +160,4 @@ static std::string edgeFlagsToString (int32_t edgeFlags)
                 return "UNKNOWN";
         }
 }
+#endif

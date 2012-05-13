@@ -29,12 +29,12 @@ public:
 
         virtual ~EventDispatcher () {}
 
-        void pollAndDispatch (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex);
+        bool pollAndDispatch (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex);
         void reset ();
 
 private:
 
-        Event::IEvent *translate (SDL_Event *event);
+        Event::IEvent *translate (void *platformDependentEvent);
 
         Event::KeyboardEvent *updateKeyboardUpEvent (SDL_Event *event);
         Event::KeyboardEvent *updateKeyboardDownEvent (SDL_Event *event);

@@ -14,6 +14,7 @@
 #include "../view/Widget.h"
 #include "../view/draw/Primitives.h"
 #include "../events/types/UpdateEvent.h"
+#include "../util/App.h"
 
 namespace Model {
 using View::DrawUtil;

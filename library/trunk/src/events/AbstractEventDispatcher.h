@@ -38,7 +38,7 @@ private:
 
         void dispatchEventBackwards (Model::IModel *m, IEvent *e, PointerInsideIndex *pointerInsideIndex);
 
-private:
+protected:
 
         Util::App *app;
 };

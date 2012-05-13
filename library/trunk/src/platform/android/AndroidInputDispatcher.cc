@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef ANDROID
 #include <android/input.h>
 #include "AndroidInputDispatcher.h"
 #include "Logging.h"
@@ -35,3 +36,4 @@ IEvent *AndroidInputDispatcher::translate (void *platformDependentEvent)
 }
 
 } /* namespace Event */
+#endif

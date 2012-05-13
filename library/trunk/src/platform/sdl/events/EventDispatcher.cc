@@ -21,19 +21,24 @@ namespace V = View;
 namespace C = Controller;
 namespace G = Geometry;
 
-void EventDispatcher::pollAndDispatch (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex)
+bool EventDispatcher::pollAndDispatch (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex)
 {
         SDL_Event event;
+        bool ret = false;
 
         while (SDL_PollEvent (&event)) {
-                dispatch (m, modeliIndex, pointerInsideIndex, &event);
+                ret |= dispatch (m, modeliIndex, pointerInsideIndex, &event);
         }
+
+        return ret;
 }
 
 /****************************************************************************/
 
-Event::IEvent *EventDispatcher::translate (SDL_Event *event)
+Event::IEvent *EventDispatcher::translate (void *platformDependentEvent)
 {
+        SDL_Event *event = static_cast <SDL_Event *> (platformDependentEvent);
+
         switch (event->type) {
         case SDL_MOUSEMOTION:
                 return updateMouseMotionEvent (event);

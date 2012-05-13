@@ -15,6 +15,7 @@
  *
  */
 
+#ifdef ANDROID
 #ifndef _ANDROID_NATIVE_APP_GLUE_H
 #define _ANDROID_NATIVE_APP_GLUE_H
 
@@ -347,3 +348,4 @@ extern void android_main(struct android_app* app);
 #endif
 
 #endif /* _ANDROID_NATIVE_APP_GLUE_H */
+#endif

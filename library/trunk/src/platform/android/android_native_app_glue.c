@@ -15,6 +15,7 @@
  *
  */
 
+#ifdef ANDROID
 #include <jni.h>
 
 #include <errno.h>
@@ -440,3 +441,4 @@ void ANativeActivity_onCreate(ANativeActivity* activity,
 
     activity->instance = android_app_create(activity, savedState, savedStateSize);
 }
+#endif

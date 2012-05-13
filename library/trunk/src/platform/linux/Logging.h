@@ -12,7 +12,7 @@
 
 #include <cstdio>
 
-#define LOGI(fromat, ...) ((void)vprintf (format, __VA_ARGS__))
+#define LOGI(format, ...) ((void)printf (format, __VA_ARGS__))
 #define LOGW LOGI
 
 #endif /* FUNCTIONS_H_ */

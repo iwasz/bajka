@@ -106,7 +106,9 @@ App *App::instance ()
 
 void App::init ()
 {
+#ifdef ANDROID
         impl->androidEngine.sensorManager = ASensorManager_getInstance ();
+#endif
 
         int requestedResX = impl->config->getResX ();
         int requestedResY = impl->config->getResY ();
@@ -150,6 +152,8 @@ void App::loop ()
 
         while (!done) {
 
+// TODO!!!
+#ifdef ANDROID
                 // Read all pending events.
                  int ident;
                  int events;
@@ -190,6 +194,7 @@ void App::loop ()
                         Util::TimeService::delayMs (17); // 60fps
                         continue;
                 }
+#endif
 
                 impl->dropIteration_ = false;
                 uint32_t currentMs = Util::TimeService::getCurrentMs ();
@@ -232,7 +237,10 @@ void App::loop ()
 
                 // swap buffers to display, since we're double buffered.
                 View::GraphicsService::swapBuffers ();
+// TODO
+#ifdef ANDROID
                 eglSwapBuffers (impl->androidEngine.display, impl->androidEngine.surface);
+#endif
 
                 // Tak śmiga, że damy delay
                 Util::TimeService::delayMs (17); // 60fps
@@ -360,7 +368,7 @@ bool App::getDropIteration () const
 }
 
 /****************************************************************************/
-
+#ifdef ANDROID
 Util::AndroidEngine const *App::getAndroidEngine () const
 {
         return &impl->androidEngine;
@@ -372,5 +380,6 @@ Util::AndroidEngine *App::getAndroidEngine ()
 {
         return &impl->androidEngine;
 }
+#endif
 
 } // Nam
