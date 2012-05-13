@@ -11,9 +11,10 @@
 
 namespace Controller {
 
-bool EmptyController::onQuit (Event::QuitEvent *e, Model::IModel *m, View::IView *v)
+IController::HandlingType EmptyController::onQuit (Event::QuitEvent *e, Model::IModel *m, View::IView *v)
 {
         exit (0);
+        return HANDLED_BREAK;
 }
 
 } /* namespace Controller */

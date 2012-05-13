@@ -22,7 +22,10 @@
 #include "Config.h"
 
 #ifdef ANDROID
-#include "android/AndroidEngine.h"
+#include <android/input.h>
+namespace Util {
+struct AndroidEngine;
+}
 #endif
 
 namespace Util {

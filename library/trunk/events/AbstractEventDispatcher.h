@@ -6,36 +6,24 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ABSTRACT_EVENTDISPATCHER_H_
-#define ABSTRACT_EVENTDISPATCHER_H_
+#ifndef ABSTRACTEVENTDISPATCHER_H_
+#define ABSTRACTEVENTDISPATCHER_H_
 
-#include "ReflectionMacros.h"
 #include "IDispatcher.h"
-#include "App.h"
 #include "types/Types.h"
+#include "App.h"
 
 namespace Event {
 
-/**
- * Wspólna implemntacja dla różncyh platform.
- * \ingroup Events
- */
 class AbstractEventDispatcher : public IDispatcher {
 public:
-        C__ (void)
-
         AbstractEventDispatcher () : app (NULL) {}
         virtual ~AbstractEventDispatcher () {}
 
         /**
-         * Pobiera kolejne eventy z systemu i przekazuje je do dispatch.
-         */
-        virtual void pollAndDispatch (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex) = 0;
-
-        /**
          * Konweruje event systemowy na event zrozumiały dla bajki i rozprowadza go po systemie.
          */
-        void dispatch (Model::IModel *m, EventIndex const &modeliIndex, PointerInsideIndex *pointerInsideIndex, void *platformDependentEvent);
+        bool dispatch (Model::IModel *m, EventIndex const &modeliIndex, PointerInsideIndex *pointerInsideIndex, void *platformDependentEvent);
 
 /*------getters-setters-----------------------------------------------------*/
 
@@ -53,10 +41,8 @@ private:
 private:
 
         Util::App *app;
-
-        E_ (AbstractEventDispatcher)
 };
 
-}
+} /* namespace Event */
 
-#endif /* EVENTDISPATCHER_H_ */
+#endif /* ABSTRACTEVENTDISPATCHER_H_ */

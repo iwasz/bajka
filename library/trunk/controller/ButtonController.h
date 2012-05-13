@@ -28,10 +28,10 @@ struct ButtonController : public EmptyController {
 
 /*--------------------------------------------------------------------------*/
 
-        virtual bool onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v);
-        virtual bool onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v);
-        virtual bool onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v);
-        virtual bool onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v);
+        virtual HandlingType onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v);
+        virtual HandlingType onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v);
+        virtual HandlingType onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v);
+        virtual HandlingType onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v);
 
         E_ (ButtonController)
 };

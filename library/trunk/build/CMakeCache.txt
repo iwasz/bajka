@@ -180,7 +180,7 @@ CMAKE_USE_RELATIVE_PATHS:BOOL=OFF
 CMAKE_VERBOSE_MAKEFILE:BOOL=OFF
 
 //Output directory for applications
-EXECUTABLE_OUTPUT_PATH:PATH=/home/iwasz/workspace/bajka-chipmunk-android-sub/bin
+EXECUTABLE_OUTPUT_PATH:PATH=/home/iwasz/workspace/bajka-chipmunk-android/build/bin
 
 //path for android libs
 LIBRARY_OUTPUT_PATH:PATH=/home/iwasz/workspace/bajka-chipmunk-android-sub/libs/armeabi-v7a
@@ -246,7 +246,7 @@ CMAKE_CACHE_MAJOR_VERSION:INTERNAL=2
 //Minor version of cmake used to create the current loaded cache
 CMAKE_CACHE_MINOR_VERSION:INTERNAL=8
 //Patch version of cmake used to create the current loaded cache
-CMAKE_CACHE_PATCH_VERSION:INTERNAL=5
+CMAKE_CACHE_PATCH_VERSION:INTERNAL=7
 //ADVANCED property for variable: CMAKE_COLOR_MAKEFILE
 CMAKE_COLOR_MAKEFILE-ADVANCED:INTERNAL=1
 //Path to CMake executable.
