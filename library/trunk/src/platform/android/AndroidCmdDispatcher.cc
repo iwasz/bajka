@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef ANDROID
 #include "AndroidCmdDispatcher.h"
 
 namespace Event {
@@ -30,3 +31,4 @@ IEvent *AndroidCmdDispatcher::translate (void *platformDependentEvent)
 }
 
 } /* namespace Event */
+#endif

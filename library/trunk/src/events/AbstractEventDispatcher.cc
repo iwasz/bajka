@@ -24,9 +24,10 @@ namespace G = Geometry;
 bool AbstractEventDispatcher::dispatch (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex, void *platformDependentData)
 {
         Event::IEvent *e = translate (platformDependentData);
+        bool eventHandled = false;
 
         if (!e) {
-                return false;
+                return eventHandled;
         }
 
         Event::Type type = e->getType();
@@ -62,7 +63,15 @@ bool AbstractEventDispatcher::dispatch (Model::IModel *m, Event::EventIndex cons
                                         // Zawsze będzie kontroler (bo to on dodaje model do kolekcji pointerInside), ale i tak sprawdzamy.
                                         C::IController *ctr;
                                         if ((ctr = (*i)->getController ())) {
-                                                ctr->onMouseOut (mmev, *i, (*i)->getView ());
+                                                C::IController::HandlingType h = ctr->onMouseOut (mmev, *i, (*i)->getView ());
+
+                                                if (h >= C::IController::HANDLED) {
+                                                        eventHandled = true;
+                                                }
+
+                                                if (h == C::IController::HANDLED_BREAK) {
+                                                        break;
+                                                }
                                         }
 
                                         pointerInsideIndex->remove (*i);
@@ -75,7 +84,7 @@ bool AbstractEventDispatcher::dispatch (Model::IModel *m, Event::EventIndex cons
                 }
 
                 if (app->getDropIteration ()) {
-                        return;
+                        return false;
                 }
 #endif
 

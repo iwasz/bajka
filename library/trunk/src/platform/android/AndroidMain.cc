@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef ANDROID
 #include <Container.h>
 #include <ContainerFactory.h>
 #include <inputFormat/mxml/MXmlMetaService.h>
@@ -285,3 +286,4 @@ void android_main (struct android_app* state) {
         }
 }
 //END_INCLUDE(all)
+#endif

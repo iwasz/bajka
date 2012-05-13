@@ -44,6 +44,13 @@ ADD_DEFINITIONS (-DBAJKA_DEBUG)
 #SET (LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR})
 #SET (CMAKE_VERBOSE_MAKEFILE 0)
 
+INSTALL (
+    DIRECTORY "${PROJECT_SOURCE_DIR}/../src/"
+    DESTINATION "include/bajka" 
+    FILES_MATCHING PATTERN "*.h"
+    PATTERN "*.svn*" EXCLUDE
+    PATTERN "*test*" EXCLUDE)
+    
 if (LINUX)
 
     # Boost, można zakomentowa, you can skip this
@@ -157,7 +164,7 @@ if (LINUX)
         TARGET_LINK_LIBRARIES (test boost_prg_exec_monitor)
     ENDIF ()
     
-    IF (1)
+    IF (0)
         # Executable demo.
         AUX_SOURCE_DIRECTORY (../demo DEMO_SOURCES)
         #LIST(APPEND DEMO_SOURCES ${SOURCES})
