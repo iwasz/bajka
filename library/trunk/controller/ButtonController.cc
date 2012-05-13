@@ -16,38 +16,38 @@ using View::StatefulWidget;
 
 namespace Controller {
 
-bool ButtonController::onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v)
+IController::HandlingType ButtonController::onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v)
 {
         assertThrow (v, "!v");
         v->setState (2);
-        return true;
+        return HANDLED;
 }
 
 /****************************************************************************/
 
-bool ButtonController::onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v)
+IController::HandlingType ButtonController::onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v)
 {
         assertThrow (v, "!v");
         v->setState (0);
-        return true;
+        return HANDLED;
 }
 
 /****************************************************************************/
 
-bool ButtonController::onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
+IController::HandlingType ButtonController::onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
 {
         assertThrow (v, "!v");
         v->setState (1);
-        return true;
+        return HANDLED;
 }
 
 /****************************************************************************/
 
-bool ButtonController::onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
+IController::HandlingType ButtonController::onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
 {
         assertThrow (v, "!v");
         v->setState (0);
-        return true;
+        return HANDLED;
 }
 
 } /* namespace Controller */

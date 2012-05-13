@@ -9,20 +9,23 @@
 #ifdef ANDROID
 #ifndef ANDROIDCMDDISPATCHER_H_
 #define ANDROIDCMDDISPATCHER_H_
-#include "../../events/IDispatcher.h"
+#include "AbstractEventDispatcher.h"
 
 namespace Event {
 
-class AndroidCmdDispatcher : public IDispatcher {
+
+class AndroidCmdDispatcher : public AbstractEventDispatcher {
 public:
 
         virtual ~AndroidCmdDispatcher () {}
 
-        bool run (Model::IModel *m, EventIndex const &modeliIndex, PointerInsideIndex *pointerInsideIndex, void *platformDependentData);
+        bool pollAndDispatch (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex);
+        bool dispatch (Model::IModel *m, EventIndex const &modeliIndex, PointerInsideIndex *pointerInsideIndex, void *platformDependentData);
         void reset ();
 
-        Util::App *getApp () {}
-        void setApp (Util::App *a) {}
+protected:
+
+        IEvent *translate (void *platformDependentEvent);
 
 };
 

@@ -6,10 +6,10 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef USE_SDL
 #ifndef EVENTDISPATCHER_H_
 #define EVENTDISPATCHER_H_
 
-#ifdef USE_SDL
 #include <SDL.h>
 #include "ReflectionMacros.h"
 #include "AbstractEventDispatcher.h"

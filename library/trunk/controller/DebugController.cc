@@ -12,114 +12,114 @@
 
 namespace Controller {
 
-bool DebugController::onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v)
+IController::IController::HandlingType DebugController::onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v)
 {
-        LOGI ("DebugController::onButtonPress : %x, %s", this, e->toString ().c_str ());
-        return IGNORED;;
+        LOGI ("DebugController::onButtonPress : %p, %s", this, e->toString ().c_str ());
+        return IGNORED;
 }
 
 /****************************************************************************/
 
-bool DebugController::onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v)
+IController::HandlingType DebugController::onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v)
 {
-        LOGI ("DebugController::onButtonRelease : %x, %s", this, e->toString ().c_str ());
-        return IGNORED;;
+        LOGI ("DebugController::onButtonRelease : %p, %s", this, e->toString ().c_str ());
+        return IGNORED;
 }
 
 /****************************************************************************/
 
-bool DebugController::onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
+IController::HandlingType DebugController::onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
 {
-        LOGI ("DebugController::onMouseMotion : %x, %s", this, e->toString ().c_str ());
-        return IGNORED;;
+        LOGI ("DebugController::onMouseMotion : %p, %s", this, e->toString ().c_str ());
+        return IGNORED;
 }
 
 /****************************************************************************/
 
-bool DebugController::onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
+IController::HandlingType DebugController::onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
 {
-        LOGI ("DebugController::onMouseOver : %x, %s", this, e->toString ().c_str ());
-        return IGNORED;;
+        LOGI ("DebugController::onMouseOver : %p, %s", this, e->toString ().c_str ());
+        return IGNORED;
 }
 
 /****************************************************************************/
 
-bool DebugController::onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
+IController::HandlingType DebugController::onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
 {
-        LOGI ("DebugController::onMouseOut : %x, %s", this, e->toString ().c_str ());
-        return IGNORED;;
+        LOGI ("DebugController::onMouseOut : %p, %s", this, e->toString ().c_str ());
+        return IGNORED;
 }
 
 /****************************************************************************/
 
-bool DebugController::onKeyDown (Event::KeyDownEvent *e, Model::IModel *m, View::IView *v)
+IController::HandlingType DebugController::onKeyDown (Event::KeyDownEvent *e, Model::IModel *m, View::IView *v)
 {
-        LOGI ("DebugController::onKeyDown : %x, %s", this, e->toString ().c_str ());
-        return IGNORED;;
+        LOGI ("DebugController::onKeyDown : %p, %s", this, e->toString ().c_str ());
+        return IGNORED;
 }
 
 /****************************************************************************/
 
-bool DebugController::onKeyUp (Event::KeyUpEvent *e, Model::IModel *m, View::IView *v)
+IController::HandlingType DebugController::onKeyUp (Event::KeyUpEvent *e, Model::IModel *m, View::IView *v)
 {
-        LOGI ("DebugController::onKeyUp : %x, %s", this, e->toString ().c_str ());
-        return IGNORED;;
+        LOGI ("DebugController::onKeyUp : %p, %s", this, e->toString ().c_str ());
+        return IGNORED;
 }
 
 /****************************************************************************/
 
-bool DebugController::onTimer (Event::TimerEvent *e, Model::IModel *m, View::IView *v)
+IController::HandlingType DebugController::onTimer (Event::TimerEvent *e, Model::IModel *m, View::IView *v)
 {
-        LOGI ("DebugController::onTimer : %x, %s", this, e->toString ().c_str ());
-        return IGNORED;;
+        LOGI ("DebugController::onTimer : %p, %s", this, e->toString ().c_str ());
+        return IGNORED;
 }
 
 /****************************************************************************/
 
-bool DebugController::onQuit (Event::QuitEvent *e, Model::IModel *m, View::IView *v)
+IController::HandlingType DebugController::onQuit (Event::QuitEvent *e, Model::IModel *m, View::IView *v)
 {
-        LOGI ("DebugController::onQuit : %x, %s", this, e->toString ().c_str ());
+        LOGI ("DebugController::onQuit : %p, %s", this, e->toString ().c_str ());
         exit (0);
 }
 
 /****************************************************************************/
 
-bool DebugController::onActive (Event::ActiveEvent *e, Model::IModel *m, View::IView *v)
+IController::HandlingType DebugController::onActive (Event::ActiveEvent *e, Model::IModel *m, View::IView *v)
 {
-        LOGI ("DebugController::onActive : %x, %s", this, e->toString ().c_str ());
-        return IGNORED;;
+        LOGI ("DebugController::onActive : %p, %s", this, e->toString ().c_str ());
+        return IGNORED;
 }
 
 /****************************************************************************/
 
-bool DebugController::onExpose (Event::ExposeEvent *e, Model::IModel *m, View::IView *v)
+IController::HandlingType DebugController::onExpose (Event::ExposeEvent *e, Model::IModel *m, View::IView *v)
 {
-        LOGI ("DebugController::onExpose : %x, %s", this, e->toString ().c_str ());
-        return IGNORED;;
+        LOGI ("DebugController::onExpose : %p, %s", this, e->toString ().c_str ());
+        return IGNORED;
 }
 
 /****************************************************************************/
 
-bool DebugController::onResize (Event::ResizeEvent *e, Model::IModel *m, View::IView *v)
+IController::HandlingType DebugController::onResize (Event::ResizeEvent *e, Model::IModel *m, View::IView *v)
 {
-        LOGI ("DebugController::onResize : %x, %s", this, e->toString ().c_str ());
-        return IGNORED;;
+        LOGI ("DebugController::onResize : %p, %s", this, e->toString ().c_str ());
+        return IGNORED;
 }
 
 /****************************************************************************/
 
-bool DebugController::onManagerLoad (Event::ManagerEvent *e, Model::IModel *m, View::IView *v)
+IController::HandlingType DebugController::onManagerLoad (Event::ManagerEvent *e, Model::IModel *m, View::IView *v)
 {
-        LOGI ("DebugController::onManagerLoad : %x, %s", this, e->toString ().c_str ());
-        return IGNORED;;
+        LOGI ("DebugController::onManagerLoad : %p, %s", this, e->toString ().c_str ());
+        return IGNORED;
 }
 
 /****************************************************************************/
 
-bool DebugController::onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v)
+IController::HandlingType DebugController::onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v)
 {
-        LOGI ("DebugController::onManagerUnload : %x, %s", this, e->toString ().c_str ());
-        return IGNORED;;
+        LOGI ("DebugController::onManagerUnload : %p, %s", this, e->toString ().c_str ());
+        return IGNORED;
 }
 
 } /* namespace Controller */

@@ -20,10 +20,10 @@
 #include "android_native_app_glue.h"
 #include "IModel.h"
 #include "draw/Primitives.h"
-#include "App.h"
 #include "android/AndroidEngine.h"
+#include "App.h"
 #include "../../util/Config.h"
-#include "Functions.h"
+#include "Logging.h"
 
 using Util::App;
 
@@ -188,6 +188,7 @@ static void engineHandleCmd (struct android_app* androidApp, int32_t cmd)
 void android_main (struct android_app* state) {
 
         std::ostringstream stream;
+        LOGI ("Bajka start");
 
         try {
 

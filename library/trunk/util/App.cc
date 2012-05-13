@@ -28,7 +28,11 @@
 #include "TimeService.h"
 #include "OpenGlService.h"
 #include "OpenGlCommonService.h"
+
+#ifdef ANDROID
 #include "android/AndroidEngine.h"
+#endif
+
 
 /****************************************************************************/
 
@@ -207,7 +211,7 @@ void App::loop ()
                 // Run models, views and controllers.
                 // Generuj eventy.
                 for (Event::DispatcherList::const_iterator i = impl->dispatchers->begin (); i != impl->dispatchers->end (); i++) {
-                        (*i)->run (impl->model, impl->eventIndex, &impl->pointerInsideIndex, NULL);
+                        (*i)->pollAndDispatch (impl->model, impl->eventIndex, &impl->pointerInsideIndex);
                         checkBreak ();
                 }
 
@@ -240,15 +244,14 @@ void App::loop ()
 
 void App::engineHandleCmd (int32_t cmd)
 {
-        impl->androidEngine.cmdDispatcher.run (impl->model, impl->eventIndex, &impl->pointerInsideIndex, &cmd);
+        impl->androidEngine.cmdDispatcher.dispatch (impl->model, impl->eventIndex, &impl->pointerInsideIndex, &cmd);
 }
 
 /****************************************************************************/
 
 int32_t App::engineHandleInput (AInputEvent* androidEvent)
 {
-        impl->androidEngine.inputDispatcher.run (impl->model, impl->eventIndex, &impl->pointerInsideIndex, androidEvent);
-        return 1;
+        return impl->androidEngine.inputDispatcher.dispatch (impl->model, impl->eventIndex, &impl->pointerInsideIndex, androidEvent);
 }
 
 #endif
@@ -358,14 +361,14 @@ bool App::getDropIteration () const
 
 /****************************************************************************/
 
-AndroidEngine const *App::getAndroidEngine () const
+Util::AndroidEngine const *App::getAndroidEngine () const
 {
         return &impl->androidEngine;
 }
 
 /****************************************************************************/
 
-AndroidEngine *App::getAndroidEngine ()
+Util::AndroidEngine *App::getAndroidEngine ()
 {
         return &impl->androidEngine;
 }

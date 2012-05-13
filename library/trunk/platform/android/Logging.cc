@@ -6,12 +6,14 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "Functions.h"
+#include "Logging.h"
+#include <string>
+#include <boost/lexical_cast.hpp>
 
-std::string actionToString (int32_t action)
-std::string flagsToString (int32_t flags)
-std::string metaStateToString (int32_t metaState)
-std::string esgeFlagsToString (int32_t edgeFlags)
+static std::string actionToString (int32_t action);
+static std::string flagsToString (int32_t flags);
+static std::string metaStateToString (int32_t metaState);
+static std::string edgeFlagsToString (int32_t edgeFlags);
 
 void logEvent (AInputEvent *androidEvent)
 {
@@ -24,7 +26,7 @@ void logEvent (AInputEvent *androidEvent)
                 std::string flagsStr = flagsToString (flags);
 
                 int32_t metaState = AMotionEvent_getMetaState (androidEvent);
-                std::string metaStateStr = metaStateToString (metaStateStr);
+                std::string metaStateStr = metaStateToString (metaState);
 
                 int32_t edgeFlags = AMotionEvent_getEdgeFlags (androidEvent);
                 std::string edgeFlagsStr = edgeFlagsToString (edgeFlags);
@@ -40,8 +42,9 @@ void logEvent (AInputEvent *androidEvent)
 
                 size_t pointerCount = AMotionEvent_getPointerCount (androidEvent);
 
-                LOGI ("MOTION : action=%s, flags=%s, meta=%s, edge=%s, dTime=%d, eTime=%d, offset=(%f.2, %f.2), prec=(%f.2, %f.2)",
-                                actionStr, flagsStr, metaStateStr, edgeFlagsStr, downTime, eventTime, xOffset, yOffset, xPrecission, yPrecission);
+                LOGI ("MOTION : action=%s, flags=%s, meta=%s, edge=%s, dTime=%lld, eTime=%lld, offset=(%.2f, %.2f), prec=(%.2f, %.2f)",
+                                actionStr.c_str (), flagsStr.c_str (), metaStateStr.c_str (), edgeFlagsStr.c_str (),
+                                downTime, eventTime, xOffset, yOffset, xPrecission, yPrecission);
 
                 for (size_t i = 0; i < pointerCount; ++i) {
 
@@ -57,7 +60,7 @@ void logEvent (AInputEvent *androidEvent)
                         float toolMinor = AMotionEvent_getToolMinor(androidEvent, i);
                         float orientation = AMotionEvent_getOrientation(androidEvent, i);
 
-                        LOGI ("  POINTER(%d) : raw=(%f.2, %f.2), pos=(%f.2, %f.2), pressure=%f.2, size=%f.2, touch=(%f.2, %f.2), tool=(%f.2, %f.2), orient=%f.2",
+                        LOGI ("  POINTER(%d) : raw=(%.2f, %.2f), pos=(%.2f, %.2f), pressure=%.2f, size=%.2f, touch=(%.2f, %.2f), tool=(%.2f, %.2f), orient=%.2f",
                                         i, rawX, rawY, x, y, pressure, size, touchMajor, touchMinor, toolMajor, toolMinor, orientation);
                 }
 
@@ -134,7 +137,7 @@ static std::string metaStateToString (int32_t metaState)
         }
 }
 
-static std::string esgeFlagsToString (int32_t edgeFlags)
+static std::string edgeFlagsToString (int32_t edgeFlags)
 {
         switch (edgeFlags) {
         case AMOTION_EVENT_EDGE_FLAG_NONE:

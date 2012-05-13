@@ -8,10 +8,10 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "EventDispatcher.h"
+#include "AbstractEventDispatcher.h"
 #include "Common.h"
-#include "../../../events/PointerInsideIndex.h"
-#include "../../../events/EventIdex.h"
+#include "PointerInsideIndex.h"
+#include "EventIdex.h"
 
 namespace Event {
 namespace M = Model;
@@ -21,17 +21,12 @@ namespace G = Geometry;
 
 /****************************************************************************/
 
-#define checkBreak() { if (app->getDropIteration ()) { break; } }
-#define checkContinue() { if (app->getDropIteration ()) { continue; } }
-
-/****************************************************************************/
-
-void EventDispatcher::dispatch (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex, void *platformDependentData)
+bool AbstractEventDispatcher::dispatch (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex, void *platformDependentData)
 {
         Event::IEvent *e = translate (platformDependentData);
 
         if (!e) {
-                return;
+                return false;
         }
 
         Event::Type type = e->getType();
@@ -79,14 +74,15 @@ void EventDispatcher::dispatch (Model::IModel *m, Event::EventIndex const &model
                         }
                 }
 
-                checkBreak ();
+                if (app->getDropIteration ()) {
+                        return;
+                }
 #endif
 
                 M::IModel *model = m->findContains (p);
 
                 if (model) {
                         dispatchEventBackwards (model, mev, pointerInsideIndex);
-                        checkBreak ();
                 }
         }
         else {
@@ -97,14 +93,17 @@ void EventDispatcher::dispatch (Model::IModel *m, Event::EventIndex const &model
 
                 for (Iterator i = pair.first; i != pair.second; ++i) {
                         dispatchEventBackwards (i->second, e, pointerInsideIndex);
-                        checkBreak ();
+
+                        if (app->getDropIteration ()) {
+                                break;
+                        }
                 }
         }
 }
 
 /****************************************************************************/
 
-void EventDispatcher::dispatchEventBackwards (Model::IModel *m, IEvent *e, Event::PointerInsideIndex *pointerInsideIndex)
+void AbstractEventDispatcher::dispatchEventBackwards (Model::IModel *m, IEvent *e, Event::PointerInsideIndex *pointerInsideIndex)
 {
         C::IController *controller = m->getController ();
 

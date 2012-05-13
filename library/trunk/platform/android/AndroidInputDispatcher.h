@@ -6,8 +6,9 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ANDROIDINPUTDISPATCHER_H_
-#define ANDROIDINPUTDISPATCHER_H_
+#ifdef ANDROID
+#ifndef BAJKA_ANDROIDINPUTDISPATCHER_H_
+#define BAJKA_ANDROIDINPUTDISPATCHER_H_
 #include "AbstractEventDispatcher.h"
 
 namespace Event {
@@ -16,13 +17,16 @@ class AndroidInputDispatcher : public AbstractEventDispatcher {
 public:
 
         virtual ~AndroidInputDispatcher () {}
-        bool run (Model::IModel *m, EventIndex const &modeliIndex, PointerInsideIndex *pointerInsideIndex, void *platformDependentData);
+        bool pollAndDispatch (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex);
+        bool dispatch (Model::IModel *m, EventIndex const &modeliIndex, PointerInsideIndex *pointerInsideIndex, void *platformDependentData);
         void reset ();
 
-        Util::App *getApp () {}
-        void setApp (Util::App *a) {}
+protected:
+
+        virtual IEvent *translate (void *platformDependentEvent);
 
 };
 
 } /* namespace Event */
 #endif /* ANDROIDINPUTDISPATCHER_H_ */
+#endif
