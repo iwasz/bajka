@@ -14,6 +14,9 @@
 
 namespace Geometry {
 
+/**
+ * Otwarty ciąg odcinków.
+ */
 struct LineString : public boost::geometry::model::linestring <Point> {
 };
 

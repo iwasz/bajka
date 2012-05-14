@@ -6,23 +6,18 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef GEOMETRY_BAJKA_POLYGON_H_
-#define GEOMETRY_BAJKA_POLYGON_H_
-
-#include <boost/geometry/geometries/polygon.hpp>
-#include "Point.h"
+#ifndef SEGMENT_H_
+#define SEGMENT_H_
 
 namespace Geometry {
 
 /**
- * Skomplikowany poligon, kŧóry składa się z jedego pierścienia (ring) zewnętrznego
- * i zero lub więcej pierścieni wewnętrznych (dziurek).
+ * Pojedynczy odcinek.
  */
-struct Polygon : public boost::geometry::model::polygon <Point> {
+class Segment {
+public:
+        virtual ~Segment();
 };
 
 } /* namespace Geometry */
-
-// TODO! Nie ma jak zarejestrować! Nie ma makra!
-
-#endif /* POLYGON_H_ */
+#endif /* SEGMENT_H_ */

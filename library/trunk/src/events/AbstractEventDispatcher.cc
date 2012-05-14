@@ -108,6 +108,8 @@ bool AbstractEventDispatcher::dispatch (Model::IModel *m, Event::EventIndex cons
                         }
                 }
         }
+
+        return eventHandled;
 }
 
 /****************************************************************************/
@@ -115,6 +117,7 @@ bool AbstractEventDispatcher::dispatch (Model::IModel *m, Event::EventIndex cons
 void AbstractEventDispatcher::dispatchEventBackwards (Model::IModel *m, IEvent *e, Event::PointerInsideIndex *pointerInsideIndex)
 {
         C::IController *controller = m->getController ();
+        bool eventHandled = false;
 
         if (controller && controller->getEventMask () & e->getType ()) {
                 e->runCallback (m, m->getView (), controller, pointerInsideIndex);

@@ -6,23 +6,15 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef GEOMETRY_BAJKA_POLYGON_H_
-#define GEOMETRY_BAJKA_POLYGON_H_
+#ifndef CPRING_H_
+#define CPRING_H_
 
-#include <boost/geometry/geometries/polygon.hpp>
-#include "Point.h"
+namespace Model {
 
-namespace Geometry {
-
-/**
- * Skomplikowany poligon, kŧóry składa się z jedego pierścienia (ring) zewnętrznego
- * i zero lub więcej pierścieni wewnętrznych (dziurek).
- */
-struct Polygon : public boost::geometry::model::polygon <Point> {
+class CPRing {
+public:
+        virtual ~CPRing();
 };
 
-} /* namespace Geometry */
-
-// TODO! Nie ma jak zarejestrować! Nie ma makra!
-
-#endif /* POLYGON_H_ */
+} /* namespace Model */
+#endif /* CPRING_H_ */
