@@ -82,8 +82,6 @@ public:
         E_ (Point)
 };
 
-typedef std::vector <Point> PointVector;
-
 /**
  * Wyrzucanie pinktu do strumienia.
  * \ingroup Geometry

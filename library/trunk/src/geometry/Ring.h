@@ -16,7 +16,8 @@
 namespace Geometry {
 
 /**
- * Poligon, który nie ma dziurek.
+ * Poligon, który nie ma dziurek (zamknięty ciąg odcinków). Może być wklęsły, może być
+ * wypukły, ale odcinki nie mogą się przecinać.
  */
 struct Ring : public boost::geometry::model::ring <Point> {
 
