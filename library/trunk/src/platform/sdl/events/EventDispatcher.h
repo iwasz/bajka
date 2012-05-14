@@ -24,8 +24,7 @@ namespace Event {
  */
 class EventDispatcher : public AbstractEventDispatcher {
 public:
-        b__ ("AbstractEventDispatcher")
-        C_ (void)
+        C__ (void)
 
         virtual ~EventDispatcher () {}
 

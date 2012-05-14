@@ -34,7 +34,7 @@ int main (int argc, char **argv)
                 fileName = *(argv + 1);
         }
         else {
-                fileName = "mail-sorter/main.xml";
+                fileName = "main.xml";
         }
 
         try {
@@ -54,10 +54,10 @@ int main (int argc, char **argv)
                 Ptr <Util::App> app = vcast <Ptr <Util::App> > (container->getBean ("app"));
                 app->setInstance (app.get ());
 
-                Util::TiliaeModelManager *manager = vcast <Util::TiliaeModelManager *> (container->getBean ("modelManager"));
-                // TODO to się powinno samo ustawiać w XML.
-                manager->setMainContainer (container);
-                manager->play ("menu");
+//                Util::TiliaeModelManager *manager = vcast <Util::TiliaeModelManager *> (container->getBean ("modelManager"));
+//                // TODO to się powinno samo ustawiać w XML.
+//                manager->setMainContainer (container);
+//                manager->play ("menu");
 
                 app->init ();
                 app->loop ();
