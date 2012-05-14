@@ -51,6 +51,12 @@ INSTALL (
     PATTERN "*.svn*" EXCLUDE
     PATTERN "*test*" EXCLUDE)
 
+INSTALL (
+    DIRECTORY "${PROJECT_SOURCE_DIR}/pc/"
+    DESTINATION "lib/pkgconfig"
+    FILES_MATCHING PATTERN "*.pc"
+    PATTERN "*.svn*" EXCLUDE)
+     
 if (LINUX)
     SET (CMAKE_INSTALL_PREFIX "/home/iwasz/local") 
 endif()
@@ -155,6 +161,14 @@ if (LINUX)
     TARGET_LINK_LIBRARIES (bajka ${JPEG_LIBRARIES})
     TARGET_LINK_LIBRARIES (bajka ${TILIAE_LIBRARIES})
     TARGET_LINK_LIBRARIES (bajka chipmunk)
+    
+INSTALL (
+    TARGETS bajka
+    DESTINATION lib 
+    PERMISSIONS
+    OWNER_READ OWNER_WRITE OWNER_EXECUTE
+    GROUP_READ GROUP_EXECUTE
+    WORLD_READ WORLD_EXECUTE)
     
     # Executable test.
     IF (0)

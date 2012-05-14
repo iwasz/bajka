@@ -26,13 +26,18 @@ void OpenGlService::init (int resX, int resY)
         glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         // Transformacje.
+//        glMatrixMode (GL_MODELVIEW);
+//        glLoadIdentity ();
+//        gluOrtho2D (0, 0, resX, resY);
+
+        float aspectRatio = double (resY) / resX;
+        float rX = 100.0;
+        float rY = rX * aspectRatio;
+
         glMatrixMode (GL_PROJECTION);
         glLoadIdentity ();
-        gluOrtho2D (-resX / 2.0, resX / 2.0, -resY / 2.0, resY / 2.0);
-
-        glMatrixMode (GL_MODELVIEW);
-        glLoadIdentity ();
-        gluOrtho2D (-resX / 2.0, resX / 2.0, -resY / 2.0, resY / 2.0);
+//        gluOrtho2D (-resX / 2.0, resX / 2.0, -resY / 2.0, resY / 2.0);
+        gluOrtho2D (-rX, rX, -rY, rY);
 
 //        glEnable(GL_LINE_SMOOTH);
 //        glEnable(GL_POINT_SMOOTH);
