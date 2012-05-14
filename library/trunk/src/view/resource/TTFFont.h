@@ -10,7 +10,7 @@
 #ifndef BAJKA_TTFFONT_H_
 #define BAJKA_TTFFONT_H_
 
-#include <SDL_ttf.h>
+#include <SDL/SDL_ttf.h>
 #include "ReflectionMacros.h"
 #include "IFont.h"
 

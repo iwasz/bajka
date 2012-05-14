@@ -18,8 +18,10 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_opengl.h>
-#include <SDL_ttf.h>
+#include <SDL/SDL_ttf.h>
 #endif
+
+#include "Point.h"
 
 using namespace Container;
 
@@ -50,7 +52,13 @@ int main (int argc, char **argv)
                 }
 #endif
 
-                Ptr <Container::BeanFactoryContainer> container = ContainerFactory::createContainer (MXmlMetaService::parseFile (fileName), true);
+                ContainerFactory factory;
+                Ptr <MetaContainer> metaContainer = MXmlMetaService::parseFile (fileName);
+                Ptr <BeanFactoryContainer> container = factory.createEmptyContainer (metaContainer, true, Ptr <BeanFactoryContainer> (), factory);
+                container->addConversion (typeid (Geometry::Point), Geometry::stringToPointVariant);
+                factory.fill (container, metaContainer);
+
+
                 Ptr <Util::App> app = vcast <Ptr <Util::App> > (container->getBean ("app"));
                 app->setInstance (app.get ());
 

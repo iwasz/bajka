@@ -12,7 +12,7 @@ namespace Event {
 
 std::string ButtonPressEvent::toString () const
 {
-        return "ButtonPressEvent (position=" + position.toString () + ", button=" + boost::lexical_cast <std::string> (button)+ ")";
+        return "ButtonPressEvent (position=" + Geometry::toString (position) + ", button=" + boost::lexical_cast <std::string> (button)+ ")";
 }
 
 } /* namespace Event1 */

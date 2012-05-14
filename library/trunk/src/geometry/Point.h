@@ -12,7 +12,7 @@
 #include <iostream>
 #include <boost/geometry/geometries/register/point.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
-#include <IToStringEnabled.h>
+//#include <IToStringEnabled.h>
 #include "ReflectionMacros.h"
 
 /**
@@ -24,62 +24,62 @@ namespace Geometry {
  * Punkt.
  * \ingroup Geometry
  */
-class Point : public Core::IToStringEnabled {
+class Point /*: public Core::IToStringEnabled*/ {
 public:
 
-        C__ (void)
-        Point () : x (0.0), y (0.0) {}
-        explicit Point (double d) : x (d), y (d) {}
-        Point (double x, double y) : x (x), y (y) {}
-        C_ (std::string const &)
-        Point (std::string const &s);
-        Point (const Point &p) : x (p.x), y (p.y) {}
+//        C__ (void)
+//        Point () : x (0.0), y (0.0) {}
+//        explicit Point (double d) : x (d), y (d) {}
+//        Point (double x, double y) : x (x), y (y) {}
+//        C_ (std::string const &)
+//        Point (std::string const &s);
+//        Point (const Point &p) : x (p.x), y (p.y) {}
 
 /*--------------------------------------------------------------------------*/
 
-        virtual std::string toString () const;
+//        virtual std::string toString () const;
 
 /*--------------------------------------------------------------------------*/
 
-        Point &operator+= (const Point &p);
-        Point operator+ (const Point &p) const { Point tmp = *this; tmp += p; return tmp; }
+//        Point &operator+= (const Point &p);
+//        Point operator+ (const Point &p) const { Point tmp = *this; tmp += p; return tmp; }
+//
+//        Point &operator-= (const Point &p);
+//        Point operator- (const Point &p) const { Point tmp = *this; tmp -= p; return tmp; }
+//
+//        Point &operator*= (const Point &p);
+//        Point operator* (const Point &p) const { Point tmp = *this; tmp *= p; return tmp; }
+//
+//        Point &operator/= (const Point &p);
+//        Point operator/ (const Point &p) const { Point tmp = *this; tmp /= p; return tmp; }
+//
+//        Point &operator+= (double d);
+//        Point operator+ (double d) const { Point tmp = *this; tmp += d; return tmp; }
+//
+//        Point &operator-= (double d);
+//        Point operator- (double d) const { Point tmp = *this; tmp -= d; return tmp; }
+//
+//        Point &operator*= (double d);
+//        Point operator* (double d) const { Point tmp = *this; tmp *= d; return tmp; }
+//
+//        Point &operator/= (double d);
+//        Point operator/ (double d) const { Point tmp = *this; tmp /= d; return tmp; }
 
-        Point &operator-= (const Point &p);
-        Point operator- (const Point &p) const { Point tmp = *this; tmp -= p; return tmp; }
+//        bool operator== (const Point &p) const { return x == p.x && y == p.y; }
+//        bool operator== (double d) const { return x == d && y == d; }
+//        bool operator! () const { return x == 0.0 && y == 0.0; }
 
-        Point &operator*= (const Point &p);
-        Point operator* (const Point &p) const { Point tmp = *this; tmp *= p; return tmp; }
+//        double distance () const;
+//        double distance (Point const &p) const;
 
-        Point &operator/= (const Point &p);
-        Point operator/ (const Point &p) const { Point tmp = *this; tmp /= p; return tmp; }
+//        static const Point ZERO_POINT;
 
-        Point &operator+= (double d);
-        Point operator+ (double d) const { Point tmp = *this; tmp += d; return tmp; }
-
-        Point &operator-= (double d);
-        Point operator- (double d) const { Point tmp = *this; tmp -= d; return tmp; }
-
-        Point &operator*= (double d);
-        Point operator* (double d) const { Point tmp = *this; tmp *= d; return tmp; }
-
-        Point &operator/= (double d);
-        Point operator/ (double d) const { Point tmp = *this; tmp /= d; return tmp; }
-
-        bool operator== (const Point &p) const { return x == p.x && y == p.y; }
-        bool operator== (double d) const { return x == d && y == d; }
-        bool operator! () const { return x == 0.0 && y == 0.0; }
-
-        double distance () const;
-        double distance (Point const &p) const;
-
-        static const Point ZERO_POINT;
-
-public:
+//public:
 
         double x;
         double y;
 
-        E_ (Point)
+//        E_ (Point)
 };
 
 /**
@@ -87,6 +87,23 @@ public:
  * \ingroup Geometry
  */
 extern std::ostream &operator<< (std::ostream &o, Geometry::Point const &p);
+extern std::string toString (Geometry::Point const &p);
+
+const Point ZERO_POINT = {0, 0};
+
+static inline Point makePoint (float x, float y)
+{
+        Point p = {x, y};
+        return p;
+}
+
+static inline Point makePoint ()
+{
+        return ZERO_POINT;
+}
+
+extern Point stringToPoint (std::string const &p);
+extern Core::Variant stringToPointVariant (std::string const &p);
 
 } // namespace
 

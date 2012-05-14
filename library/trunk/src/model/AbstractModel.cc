@@ -37,7 +37,7 @@ Geometry::Point AbstractModel::getTranslate () const
                  * działają czybciej niż getBoundingBox. Tylko nie wiem, czy da się szybciej niż transformując
                  * punkty obiektu przez macierz?
                  */
-                Geometry::Box aabb = getBoundingBoxImpl (AffineMatrix (Point (0, 0), getAngle (), getScale (), getCenter ()));
+                Geometry::Box aabb = getBoundingBoxImpl (AffineMatrix (Geometry::ZERO_POINT, getAngle (), getScale (), getCenter ()));
                 return layout->calculateTranslation (this, translate, aabb.getWidth (), aabb.getHeight ());
         }
 }

@@ -50,8 +50,8 @@ public:
         AffineMatrix getInversed () const;
 
         void move (const Geometry::Point &p);
-        void rotate (double r, Geometry::Point const &p = Geometry::Point (0, 0));
-        void resize (double w, double h, Geometry::Point const &p = Geometry::Point (0, 0));
+        void rotate (double r, Geometry::Point const &p = ZERO_POINT);
+        void resize (double w, double h, Geometry::Point const &p = ZERO_POINT);
 
 /*------apply-transformation------------------------------------------------*/
 

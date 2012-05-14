@@ -35,7 +35,7 @@ Body::~Body ()
 Geometry::Point Body::getTranslate () const
 {
         cpVect v = cpBodyGetPos (body);
-        return Geometry::Point (v.x, v.y);
+        return Geometry::makePoint (v.x, v.y);
 }
 
 /****************************************************************************/
