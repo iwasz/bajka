@@ -30,7 +30,7 @@ public:
         C__ (void)
         Box () {}
         Box (const Point &ll, const Point &ur) : ll (ll), ur (ur) {}
-        Box (double a, double b, double c, double d) : ll (a, b), ur (c, d) {}
+        Box (double a, double b, double c, double d) { ll.x = a; ll.y = b; ur.x = c; ur.y = d; }
         C_ (std::string const &)
         Box (std::string const &s);
         virtual ~Box () {}

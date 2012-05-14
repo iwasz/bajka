@@ -108,7 +108,7 @@ MouseMotionEvent *EventDispatcher::updateMouseMotionEvent (SDL_Event *event)
 #endif
 
         // ?
-        mouseMotionEvent.setMovement (G::Point (event->motion.xrel, event->motion.yrel));
+        mouseMotionEvent.setMovement (G::makePoint (event->motion.xrel, event->motion.yrel));
 
         return &mouseMotionEvent;
 }

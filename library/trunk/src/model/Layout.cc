@@ -25,10 +25,10 @@ G::Point Layout::calculateTranslation (IModel const *m, Geometry::Point const &c
 
         // Przypadek domyślny - nie pobieramy aabb
         if (align == (TOP | RIGHT)) {
-                return G::Point (parGroup->getWidth() * translateRel.x / 100.0, parGroup->getHeight () * translateRel.y / 100.0);
+                return G::makePoint (parGroup->getWidth() * translateRel.x / 100.0, parGroup->getHeight () * translateRel.y / 100.0);
         }
         else {
-                G::Point ct = G::Point (parGroup->getWidth() * translateRel.x / 100.0, parGroup->getHeight () * translateRel.y / 100.0);
+                G::Point ct = G::makePoint (parGroup->getWidth() * translateRel.x / 100.0, parGroup->getHeight () * translateRel.y / 100.0);
 
                 if (align & HCENTER) {
                         ct.x -= aabbW / 2.0;

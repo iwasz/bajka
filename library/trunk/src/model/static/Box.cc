@@ -46,7 +46,7 @@ Geometry::Box Box::getBox () const
 Geometry::Point Box::computeCenter () const
 {
         updateToViewSizeIf ();
-        return Point ((box.ll.x + box.ur.x) / 2.0, (box.ll.y + box.ur.y) / 2.0);
+        return makePoint ((box.ll.x + box.ur.x) / 2.0, (box.ll.y + box.ur.y) / 2.0);
 }
 
 /****************************************************************************/

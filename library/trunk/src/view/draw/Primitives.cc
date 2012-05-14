@@ -126,74 +126,54 @@ void DrawUtil::drawLine (Geometry::Point const &a, Geometry::Point const &b, Col
 
 /****************************************************************************/
 
-static const GLfloat pillVAR[] = {
-         0.0000f,  1.0000f, 1.0f,
-         0.2588f,  0.9659f, 1.0f,
-         0.5000f,  0.8660f, 1.0f,
-         0.7071f,  0.7071f, 1.0f,
-         0.8660f,  0.5000f, 1.0f,
-         0.9659f,  0.2588f, 1.0f,
-         1.0000f,  0.0000f, 1.0f,
-         0.9659f, -0.2588f, 1.0f,
-         0.8660f, -0.5000f, 1.0f,
-         0.7071f, -0.7071f, 1.0f,
-         0.5000f, -0.8660f, 1.0f,
-         0.2588f, -0.9659f, 1.0f,
-         0.0000f, -1.0000f, 1.0f,
+struct MyPoint {
 
-         0.0000f, -1.0000f, 0.0f,
-        -0.2588f, -0.9659f, 0.0f,
-        -0.5000f, -0.8660f, 0.0f,
-        -0.7071f, -0.7071f, 0.0f,
-        -0.8660f, -0.5000f, 0.0f,
-        -0.9659f, -0.2588f, 0.0f,
-        -1.0000f, -0.0000f, 0.0f,
-        -0.9659f,  0.2588f, 0.0f,
-        -0.8660f,  0.5000f, 0.0f,
-        -0.7071f,  0.7071f, 0.0f,
-        -0.5000f,  0.8660f, 0.0f,
-        -0.2588f,  0.9659f, 0.0f,
-         0.0000f,  1.0000f, 0.0f,
+        float x, y;
 };
 
-static const int pillVAR_count = sizeof(pillVAR)/sizeof(GLfloat)/3;
+BOOST_STATIC_ASSERT (boost::has_trivial_assign <MyPoint>::value);
+BOOST_STATIC_ASSERT (boost::has_trivial_copy <MyPoint>::value);
+BOOST_STATIC_ASSERT (boost::is_pod <MyPoint>::value);
 
-void DrawUtil::drawFatLine (Geometry::Point const &a, Geometry::Point const &b, double radius, Color const &lineColor, Color const &fillColor)
+void DrawUtil::draw ()
 {
-        if (radius) {
-                glVertexPointer(3, GL_FLOAT, 0, pillVAR);
-                glDisableClientState(GL_NORMAL_ARRAY);
-                glDisableClientState(GL_COLOR_ARRAY);
-                glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+//        static GLfloat verts[] = {
+//                -50, 50,
+//                50, 50,
+//                50, -50,
+//                -50, -50
+//        };
 
-                glPushMatrix(); {
 
-                        G::Point d = b - a;
-                        G::Point r = d * radius / d.distance ();
+        std::vector <MyPoint> points;
 
-                        const GLfloat matrix[] = {
-                                 r.x, r.y, 0.0f, 0.0f,
-                                -r.y, r.x, 0.0f, 0.0f,
-                                 d.x, d.y, 0.0f, 0.0f,
-                                 a.x, a.y, 0.0f, 1.0f,
-                        };
-                        glMultMatrixf(matrix);
-
-                        if (fillColor.getA () > 0){
-                                glColor4f (fillColor.getR (), fillColor.getG (), fillColor.getB (), fillColor.getA ());
-                                glDrawArrays(GL_TRIANGLE_FAN, 0, pillVAR_count);
-                        }
-
-                        if (lineColor.getA () > 0){
-                                glColor4f (lineColor.getR (), lineColor.getG (), lineColor.getB (), lineColor.getA ());
-                                glDrawArrays(GL_LINE_LOOP, 0, pillVAR_count);
-                        }
-
-                } glPopMatrix();
-
-        } else {
-                drawLine (a, b, lineColor);
+        {
+                MyPoint p = {-50, 50};
+                points.push_back (p);
         }
+
+        {
+                MyPoint p = {50, 50};
+                points.push_back (p);
+        }
+
+        {
+                MyPoint p = {50, -50};
+                points.push_back (p);
+        }
+
+        {
+                MyPoint p = {-50, -50};
+                points.push_back (p);
+        }
+
+        glVertexPointer (2, GL_FLOAT, 0, &points[0]);
+        glDisableClientState(GL_NORMAL_ARRAY);
+        glDisableClientState(GL_COLOR_ARRAY);
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+        glColor4f (0, 0, 0, 1);
+        glDrawArrays (GL_LINE_LOOP, 0, 4);
 }
 
 } /* namespace View */

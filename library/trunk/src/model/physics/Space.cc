@@ -42,7 +42,7 @@ Space::~Space ()
 Geometry::Point Space::getGravity () const
 {
         cpVect g = cpSpaceGetGravity (space);
-        return Geometry::Point (g.x, g.y);
+        return Geometry::makePoint (g.x, g.y);
 }
 
 /****************************************************************************/

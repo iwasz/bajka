@@ -59,10 +59,10 @@ INSTALL (
      
 if (LINUX)
     SET (CMAKE_INSTALL_PREFIX "/home/iwasz/local") 
-endif()
-
-if (LINUX)
-
+    SET (CMAKE_PREFIX_PATH "/home/iwasz/local")
+    INCLUDE_DIRECTORIES ("/home/iwasz/local/include")
+    link_directories("/home/iwasz/local/lib")
+    
     # Boost, można zakomentowa, you can skip this
     SET(Boost_ADDITIONAL_VERSIONS "1.46" "1.46.0")
     find_package (Boost 1.46.0)
@@ -85,8 +85,12 @@ if (LINUX)
     include (FindSDL_image)
     INCLUDE_DIRECTORIES (${SDL_SDLIMAGE_INCLUDE_DIR})
     
-    include (FindSDL_ttf) 
+    pkg_check_modules (SDLTTF "SDL_ttf")    
     INCLUDE_DIRECTORIES (${SDLTTF_INCLUDE_DIR})
+    link_directories(${SDLTTF_LIBRARY_DIRS})
+
+    INCLUDE_DIRECTORIES ("/usr/local/include/chipmunk")
+    INCLUDE_DIRECTORIES ("/home/iwasz/local/include/chipmunk")
 
 elseif (ANDROID)
     
@@ -140,7 +144,6 @@ AUX_SOURCE_DIRECTORY (../src/tween/ease SOURCES)
 AUX_SOURCE_DIRECTORY (../src/tween/accessor SOURCES)
 
 # Local includes (inside project).
-INCLUDE_DIRECTORIES (/usr/local/include/chipmunk)
 INCLUDE_DIRECTORIES (../src/view)
 INCLUDE_DIRECTORIES (../src/model)
 INCLUDE_DIRECTORIES (../src/geometry)
@@ -157,7 +160,7 @@ if (LINUX)
     TARGET_LINK_LIBRARIES (bajka ${OPENGL_LIBRARIES})
     TARGET_LINK_LIBRARIES (bajka ${SDL_LIBRARY})
     TARGET_LINK_LIBRARIES (bajka ${SDLIMAGE_LIBRARY})
-    TARGET_LINK_LIBRARIES (bajka ${SDLTTF_LIBRARY})
+    TARGET_LINK_LIBRARIES (bajka ${SDLTTF_LIBRARIES})
     TARGET_LINK_LIBRARIES (bajka ${JPEG_LIBRARIES})
     TARGET_LINK_LIBRARIES (bajka ${TILIAE_LIBRARIES})
     TARGET_LINK_LIBRARIES (bajka chipmunk)

@@ -23,7 +23,7 @@ public:
         static void drawRectangle (Geometry::Point const &a, Geometry::Point const &b, Color const &lineColor, Color const &fillColor);
         static void drawRectangle (Geometry::Box const &b, Color const &lineColor, Color const &fillColor);
 
-        static void drawFatLine (Geometry::Point const &a, Geometry::Point const &b, double radius, Color const &lineColor, Color const &fillColor);
+        static void draw ();
 //        static void drawPolygon (int count, cpVect *verts, Color lineColor, Color fillColor);
 //        static void drawPoints (cpFloat size, int count, cpVect *verts, Color color);
 //        static void drawBox (Geometry::Box const &b, Color const &color);

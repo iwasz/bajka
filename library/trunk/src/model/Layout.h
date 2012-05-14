@@ -18,7 +18,7 @@ struct IModel;
 struct Layout {
 
         C__ (void)
-        Layout () : align (HCENTER | TOP), translateRel (-1, -1) {}
+        Layout () : align ((HCENTER | TOP)), translateRel (Geometry::makePoint (-1, -1)) {}
 
         /**
          * Przesunięcie względem rozmiarów rodzica. Działa tylko w gdy rodzic jest

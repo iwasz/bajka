@@ -29,7 +29,7 @@ void CPCircle::setOrigin (Geometry::Point const &p)
 Geometry::Point CPCircle::getOrigin () const
 {
         cpVect v = cpCircleShapeGetOffset (shape);
-        return Geometry::Point (v.x, v.y);
+        return Geometry::makePoint (v.x, v.y);
 }
 
 /****************************************************************************/
