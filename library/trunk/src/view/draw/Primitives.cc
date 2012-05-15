@@ -13,10 +13,12 @@
 #include <chipmunk.h>
 #include "Primitives.h"
 #include "../../geometry/LineString.h"
+#include <boost/geometry/geometry.hpp>
+#include <boost/geometry/arithmetic/arithmetic.hpp>
 
 namespace View {
-
 namespace G = Geometry;
+using namespace boost::geometry;
 
 static const GLfloat circleVAR[] = {
          0.0000f,  1.0000f,
@@ -48,7 +50,7 @@ static const GLfloat circleVAR[] = {
 };
 static const int circleVAR_count = sizeof(circleVAR)/sizeof(GLfloat)/2;
 
-void DrawUtil::drawCircle (Geometry::Point const &center, double angle, double radius, Color const &lineColor, Color const &fillColor)
+void DrawUtil::drawCircle (G::Point const &center, double angle, double radius, Color const &lineColor, Color const &fillColor)
 {
         glVertexPointer(2, GL_FLOAT, 0, circleVAR);
         glDisableClientState(GL_NORMAL_ARRAY);
@@ -74,14 +76,14 @@ void DrawUtil::drawCircle (Geometry::Point const &center, double angle, double r
 
 /****************************************************************************/
 
-void DrawUtil::drawRectangle (Geometry::Box const &b, Color const &lineColor, Color const &fillColor)
+void DrawUtil::drawRectangle (G::Box const &b, Color const &lineColor, Color const &fillColor)
 {
         drawRectangle (b.ll, b.ur, lineColor, fillColor);
 }
 
 /****************************************************************************/
 
-void DrawUtil::drawRectangle (Geometry::Point const &a, Geometry::Point const &b, Color const &lineColor, Color const &fillColor)
+void DrawUtil::drawRectangle (G::Point const &a, G::Point const &b, Color const &lineColor, Color const &fillColor)
 {
         static GLfloat verts[] = {
                 a.x, a.y,
@@ -108,7 +110,7 @@ void DrawUtil::drawRectangle (Geometry::Point const &a, Geometry::Point const &b
 
 /****************************************************************************/
 
-void DrawUtil::drawLine (Geometry::Point const &a, Geometry::Point const &b, Color const &color)
+void DrawUtil::drawLine (G::Point const &a, G::Point const &b, Color const &color)
 {
         if (color.getA () > 0) {
                 GLfloat verts[] = {
@@ -127,23 +129,136 @@ void DrawUtil::drawLine (Geometry::Point const &a, Geometry::Point const &b, Col
 
 /****************************************************************************/
 
-void DrawUtil::draw ()
+void DrawUtil::drawThinSegments (void *buffer, size_t pointCnt, Color const &line, Color const &fill)
 {
-//        G::LineString points;
-        std::vector <G::Point> points;
+        glVertexPointer (2, GL_FLOAT, 0, buffer);
 
-        points.push_back (G::makePoint (-50, 50));
-        points.push_back (G::makePoint (50, 50));
-        points.push_back (G::makePoint (50, -50));
-        points.push_back (G::makePoint (-50, -50));
-
-        glVertexPointer (2, GL_FLOAT, 0, &points[0]);
         glDisableClientState(GL_NORMAL_ARRAY);
         glDisableClientState(GL_COLOR_ARRAY);
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-        glColor4f (0, 0, 0, 1);
-        glDrawArrays (GL_LINE_LOOP, 0, 4);
+        if (fill.a > 0) {
+                glColor4f (fill.r, fill.g, fill.b, fill.a);
+                glDrawArrays (GL_TRIANGLE_FAN, 0, pointCnt);
+        }
+
+        if (line.a > 0) {
+                glColor4f (line.r, line.g, line.b, line.a);
+                glDrawArrays (GL_LINE_LOOP, 0, pointCnt);
+        }
+}
+
+/****************************************************************************/
+
+void DrawUtil::drawThickSegments (void *buffer, size_t pointCnt, Color const &line, Color const &fill, float thickness)
+{
+        glVertexPointer (2, GL_FLOAT, 0, buffer);
+
+        glDisableClientState(GL_NORMAL_ARRAY);
+        glDisableClientState(GL_COLOR_ARRAY);
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+        if (fill.a > 0) {
+                glColor4f (fill.r, fill.g, fill.b, fill.a);
+                glDrawArrays (GL_TRIANGLE_FAN, 0, pointCnt);
+        }
+
+        if (line.a > 0) {
+                float *floatBuf = static_cast <float *> (buffer);
+                G::Point a;
+
+                for (size_t i = 0; i < pointCnt * 2; i += 2) {
+                        float x = *(floatBuf + i);
+                        float y = *(floatBuf + i + 1);
+                        G::Point b = Geometry::makePoint (x, y);
+
+                        if (i) {
+                                drawThickSegment (a, b, line, line, thickness);
+                        }
+
+                        a = b;
+                }
+        }
+}
+
+/****************************************************************************/
+
+void DrawUtil::drawSegments (void *buffer, size_t pointCnt, Color const &lineColor, Color const &fillColor, float thickness)
+{
+        glLineWidth (thickness);
+
+        if (thickness) {
+                drawThickSegments (buffer, pointCnt, lineColor, fillColor, thickness);
+        }
+        else {
+                drawThinSegments (buffer, pointCnt, lineColor, fillColor);
+        }
+}
+
+static const GLfloat pillVAR[] = {
+         0.0000f,  1.0000f, 1.0f,
+         0.2588f,  0.9659f, 1.0f,
+         0.5000f,  0.8660f, 1.0f,
+         0.7071f,  0.7071f, 1.0f,
+         0.8660f,  0.5000f, 1.0f,
+         0.9659f,  0.2588f, 1.0f,
+         1.0000f,  0.0000f, 1.0f,
+         0.9659f, -0.2588f, 1.0f,
+         0.8660f, -0.5000f, 1.0f,
+         0.7071f, -0.7071f, 1.0f,
+         0.5000f, -0.8660f, 1.0f,
+         0.2588f, -0.9659f, 1.0f,
+         0.0000f, -1.0000f, 1.0f,
+
+         0.0000f, -1.0000f, 0.0f,
+        -0.2588f, -0.9659f, 0.0f,
+        -0.5000f, -0.8660f, 0.0f,
+        -0.7071f, -0.7071f, 0.0f,
+        -0.8660f, -0.5000f, 0.0f,
+        -0.9659f, -0.2588f, 0.0f,
+        -1.0000f, -0.0000f, 0.0f,
+        -0.9659f,  0.2588f, 0.0f,
+        -0.8660f,  0.5000f, 0.0f,
+        -0.7071f,  0.7071f, 0.0f,
+        -0.5000f,  0.8660f, 0.0f,
+        -0.2588f,  0.9659f, 0.0f,
+         0.0000f,  1.0000f, 0.0f,
+};
+
+static const int pillVAR_count = sizeof(pillVAR)/sizeof(GLfloat)/3;
+
+void DrawUtil::drawThickSegment (G::Point const &a, G::Point const &b, Color const &line, Color const &fill, float thickness)
+{
+        glVertexPointer(3, GL_FLOAT, 0, pillVAR);
+        glDisableClientState(GL_NORMAL_ARRAY);
+        glDisableClientState(GL_COLOR_ARRAY);
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+        glPushMatrix(); {
+
+                G::Point d = b;
+                subtract_point (d, a);
+
+                G::Point r = d;
+                multiply_value (r, thickness / distance (G::ZERO_POINT, d));
+
+                const GLfloat matrix[] = {
+                         r.x, r.y, 0.0f, 0.0f,
+                        -r.y, r.x, 0.0f, 0.0f,
+                         d.x, d.y, 0.0f, 0.0f,
+                         a.x, a.y, 0.0f, 1.0f,
+                };
+                glMultMatrixf(matrix);
+
+                if (fill.a > 0) {
+                        glColor4f (fill.r, fill.g, fill.b, fill.a);
+                        glDrawArrays(GL_TRIANGLE_FAN, 0, pillVAR_count);
+                }
+
+                if (line.a > 0) {
+                        glColor4f (line.r, line.g, line.b, line.a);
+                        glDrawArrays(GL_LINE_LOOP, 0, pillVAR_count);
+                }
+        } glPopMatrix();
 }
 
 } /* namespace View */

@@ -223,7 +223,6 @@ void App::loop ()
 //                checkContinue ();
                 impl->updateEvent.setDeltaMs (deltaMs);
                 impl->model->update (&impl->updateEvent);
-                View::DrawUtil::draw ();
 //                checkContinue ();
 
 #ifdef USE_CHIPMUNK
