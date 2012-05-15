@@ -193,12 +193,6 @@ INSTALL (
         add_executable (demo ${DEMO_SOURCES})
         TARGET_LINK_LIBRARIES (demo bajka)
     ENDIF ()
-
-    IF (1)
-        AUX_SOURCE_DIRECTORY (../demo2 DEMO_SOURCES)
-        add_executable (demo2 ${DEMO_SOURCES})
-        TARGET_LINK_LIBRARIES (demo2 bajka)
-    ENDIF ()
     
 elseif (ANDROID)
 

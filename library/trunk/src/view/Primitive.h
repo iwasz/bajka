@@ -19,6 +19,7 @@ public:
         C__ (void)
         b_ ("Widget")
 
+        Primitive () : thickness (1) {}
         virtual ~Primitive () {}
         virtual void update (Model::IModel *model, Event::UpdateEvent *e);
 
@@ -28,10 +29,17 @@ public:
         Color const &getForeground () const { return foreground; }
         m_ (setForeground) void setForeground (Color const &foreground) { this->foreground = foreground; }
 
+        /**
+         * Grubość linii w pixelach.
+         */
+        float getThickness () const { return thickness; }
+        m_ (setThickness) void setThickness (float t) { thickness = t; }
+
 private:
 
         Color foreground;
         Color background;
+        float thickness;
 
         E_ (Primitive)
 };
