@@ -6,15 +6,33 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_SEGMENT_H_
-#define BAJKA_SEGMENT_H_
+#include "LineString.h"
 
-#include <boost/geometry/geometries/segment.hpp>
-#include "Point.h"
+namespace Model {
 
-namespace Geometry {
+Geometry::Box LineString::getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const
+{
 
-typedef boost::geometry::model::segment <Point> Segment;
+}
 
-} /* namespace Geometry */
-#endif /* SEGMENT_H_ */
+bool LineString::contains (Geometry::Point const &p) const
+{
+
+}
+
+Geometry::Point LineString::computeCenter () const
+{
+
+}
+
+void *LineString::getPointArray () const
+{
+        return &data->operator [] (0);
+}
+
+size_t LineString::getNumberOfPoints () const
+{
+        return data->size ();
+}
+
+} /* namespace Model */

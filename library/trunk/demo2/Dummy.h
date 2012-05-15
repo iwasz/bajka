@@ -6,15 +6,15 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_SEGMENT_H_
-#define BAJKA_SEGMENT_H_
+#ifndef DUMMY_H_
+#define DUMMY_H_
 
-#include <boost/geometry/geometries/segment.hpp>
-#include "Point.h"
+namespace Model {
 
-namespace Geometry {
+class Dummy {
+public:
+        virtual ~Dummy();
+};
 
-typedef boost::geometry::model::segment <Point> Segment;
-
-} /* namespace Geometry */
-#endif /* SEGMENT_H_ */
+} /* namespace Model */
+#endif /* DUMMY_H_ */

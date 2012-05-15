@@ -16,10 +16,11 @@ namespace View {
 
 class Primitive : public Widget {
 public:
-        d__
+        C__ (void)
         b_ ("Widget")
 
         virtual ~Primitive () {}
+        virtual void update (Model::IModel *model, Event::UpdateEvent *e);
 
         Color const &getBackground () const { return background; }
         m_ (setBackground) void setBackground (Color const &background) { this->background = background; }

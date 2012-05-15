@@ -22,6 +22,7 @@
 #endif
 
 #include "Point.h"
+#include "../../geometry/LineString.h"
 
 using namespace Container;
 
@@ -56,6 +57,7 @@ int main (int argc, char **argv)
                 Ptr <MetaContainer> metaContainer = MXmlMetaService::parseFile (fileName);
                 Ptr <BeanFactoryContainer> container = factory.createEmptyContainer (metaContainer, true, Ptr <BeanFactoryContainer> (), factory);
                 container->addConversion (typeid (Geometry::Point), Geometry::stringToPointVariant);
+                container->addConversion (typeid (Geometry::LineString), Geometry::stringToLineStringVariant);
                 factory.fill (container, metaContainer);
 
 

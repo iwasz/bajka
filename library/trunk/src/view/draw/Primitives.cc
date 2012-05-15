@@ -12,6 +12,7 @@
 #include "OpenGl.h"
 #include <chipmunk.h>
 #include "Primitives.h"
+#include "../../geometry/LineString.h"
 
 namespace View {
 
@@ -126,46 +127,15 @@ void DrawUtil::drawLine (Geometry::Point const &a, Geometry::Point const &b, Col
 
 /****************************************************************************/
 
-struct MyPoint {
-
-        float x, y;
-};
-
-BOOST_STATIC_ASSERT (boost::has_trivial_assign <MyPoint>::value);
-BOOST_STATIC_ASSERT (boost::has_trivial_copy <MyPoint>::value);
-BOOST_STATIC_ASSERT (boost::is_pod <MyPoint>::value);
-
 void DrawUtil::draw ()
 {
-//        static GLfloat verts[] = {
-//                -50, 50,
-//                50, 50,
-//                50, -50,
-//                -50, -50
-//        };
+//        G::LineString points;
+        std::vector <G::Point> points;
 
-
-        std::vector <MyPoint> points;
-
-        {
-                MyPoint p = {-50, 50};
-                points.push_back (p);
-        }
-
-        {
-                MyPoint p = {50, 50};
-                points.push_back (p);
-        }
-
-        {
-                MyPoint p = {50, -50};
-                points.push_back (p);
-        }
-
-        {
-                MyPoint p = {-50, -50};
-                points.push_back (p);
-        }
+        points.push_back (G::makePoint (-50, 50));
+        points.push_back (G::makePoint (50, 50));
+        points.push_back (G::makePoint (50, -50));
+        points.push_back (G::makePoint (-50, -50));
 
         glVertexPointer (2, GL_FLOAT, 0, &points[0]);
         glDisableClientState(GL_NORMAL_ARRAY);
