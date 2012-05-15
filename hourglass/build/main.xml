@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+
+	<!--Konfiguracja-->
+    <bean id="cfg" class="Config" singleton="true">
+        <property name="fullScreen" value="false"/>
+        <property name="windowCaption" value="MailSorter"/>
+        <property name="showAABB" value="false"/>
+        <property name="clearColor" value="858585ff"/>        
+        
+        <property name="showSystemCursor" value="true"/>        
+        <property name="resX" value="480"/>        
+        <property name="resY" value="800"/>        
+    </bean>
+
+    <bean id="app" class="App" singleton="true">
+        <property name="config" ref="cfg" />
+        
+<!--         <property name="dispatchers"> -->
+<!--             <list class="DispatcherList"> -->
+<!--                 <bean class="EventDispatcher" singleton="true"/> -->
+<!--             </list> -->
+<!--         </property> -->
+        
+<!--         <property name="manager" ref="modelManager" /> -->
+        <property name="model" ref="lineString" />
+    </bean>
+
+
+    <bean id="model" class="Circle" singleton="true">
+        <property name="view" ref="circleWgt" />
+        <property name="radius" value="20" />
+        <property name="origin" value="0, 0" />
+    </bean>
+    
+    <bean id="lineString" class="LineString" singleton="true">
+        <property name="data" value="1,2, 3, 4, 56, 6,567 ,567 567,6,5 7,5"/>
+        <property name="view" ref="primitiveWgt"/>
+    </bean>          
+    
+    
+    
+    <bean id="randomColor" class="Color" singleton="false">
+        <constructor-arg><value type="bool">true</value></constructor-arg>
+    </bean>
+    
+    <bean id="circleWgt" class="View::Circle" singleton="true">
+        <property name="foreground" value="000000FF"/>
+        <property name="background" ref="randomColor"/>
+    </bean>  
+    
+    <bean id="primitiveWgt" class="Primitive"  singleton="true">
+        <property name="foreground" value="000000FF"/>
+        <property name="background" value="00ffffFF"/>
+    </bean>
+        
+</beans>
