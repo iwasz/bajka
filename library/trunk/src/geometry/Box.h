@@ -13,6 +13,7 @@
 #include <boost/geometry/geometries/register/box.hpp>
 #include <Object.h>
 #include "Point.h"
+#include "ReflectionMacros.h"
 
 namespace Geometry {
 
@@ -25,7 +26,7 @@ namespace Geometry {
  * </pre>
  * \ingroup Geometry
  */
-class Box : public Core::IToStringEnabled {
+class Box {
 public:
         C__ (void)
         Box () {}
@@ -53,10 +54,6 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        std::string toString () const;
-
-/*--------------------------------------------------------------------------*/
-
         static const Box ZERO_BOX;
 
 public:
@@ -66,6 +63,8 @@ public:
 
         E_ (Geometry::Box)
 };
+
+extern std::string toString (Box const &b);
 
 }
 

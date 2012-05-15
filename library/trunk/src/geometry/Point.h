@@ -9,11 +9,10 @@
 #ifndef MODEL2_POINT_H_
 #define MODEL2_POINT_H_
 
-#include <iostream>
 #include <boost/geometry/geometries/register/point.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
-//#include <IToStringEnabled.h>
-#include "ReflectionMacros.h"
+#include <string>
+#include <variant/Variant.h>
 
 /**
  * Prymitywy geometryczne.
@@ -24,63 +23,15 @@ namespace Geometry {
  * Punkt.
  * \ingroup Geometry
  */
-class Point /*: public Core::IToStringEnabled*/ {
-public:
+struct Point {
 
-//        C__ (void)
-//        Point () : x (0.0), y (0.0) {}
-//        explicit Point (double d) : x (d), y (d) {}
-//        Point (double x, double y) : x (x), y (y) {}
-//        C_ (std::string const &)
-//        Point (std::string const &s);
-//        Point (const Point &p) : x (p.x), y (p.y) {}
-
-/*--------------------------------------------------------------------------*/
-
-//        virtual std::string toString () const;
-
-/*--------------------------------------------------------------------------*/
-
-//        Point &operator+= (const Point &p);
-//        Point operator+ (const Point &p) const { Point tmp = *this; tmp += p; return tmp; }
-//
-//        Point &operator-= (const Point &p);
-//        Point operator- (const Point &p) const { Point tmp = *this; tmp -= p; return tmp; }
-//
-//        Point &operator*= (const Point &p);
-//        Point operator* (const Point &p) const { Point tmp = *this; tmp *= p; return tmp; }
-//
-//        Point &operator/= (const Point &p);
-//        Point operator/ (const Point &p) const { Point tmp = *this; tmp /= p; return tmp; }
-//
-//        Point &operator+= (double d);
-//        Point operator+ (double d) const { Point tmp = *this; tmp += d; return tmp; }
-//
-//        Point &operator-= (double d);
-//        Point operator- (double d) const { Point tmp = *this; tmp -= d; return tmp; }
-//
-//        Point &operator*= (double d);
-//        Point operator* (double d) const { Point tmp = *this; tmp *= d; return tmp; }
-//
-//        Point &operator/= (double d);
-//        Point operator/ (double d) const { Point tmp = *this; tmp /= d; return tmp; }
-
-//        bool operator== (const Point &p) const { return x == p.x && y == p.y; }
-//        bool operator== (double d) const { return x == d && y == d; }
-//        bool operator! () const { return x == 0.0 && y == 0.0; }
-
-//        double distance () const;
-//        double distance (Point const &p) const;
-
-//        static const Point ZERO_POINT;
-
-//public:
-
-        double x;
-        double y;
-
-//        E_ (Point)
+        float x;
+        float y;
 };
+
+BOOST_STATIC_ASSERT (boost::has_trivial_assign <Point>::value);
+BOOST_STATIC_ASSERT (boost::has_trivial_copy <Point>::value);
+BOOST_STATIC_ASSERT (boost::is_pod <Point>::value);
 
 /**
  * Wyrzucanie pinktu do strumienia.
@@ -89,20 +40,36 @@ public:
 extern std::ostream &operator<< (std::ostream &o, Geometry::Point const &p);
 extern std::string toString (Geometry::Point const &p);
 
+/**
+ * Początek układu współrzednych - stała.
+ */
 const Point ZERO_POINT = {0, 0};
 
+/**
+ * Tworzy punkt.
+ */
 static inline Point makePoint (float x, float y)
 {
         Point p = {x, y};
         return p;
 }
 
+/**
+ * Zwraca początek układu współrzędnych.
+ */
 static inline Point makePoint ()
 {
         return ZERO_POINT;
 }
 
+/**
+ * Tworzy punkt z reprezentacji napisowej.
+ */
 extern Point stringToPoint (std::string const &p);
+
+/**
+ * Tworzy punkt z reprezentacji napisowej, zwraca jako Core::Variant.
+ */
 extern Core::Variant stringToPointVariant (std::string const &p);
 
 } // namespace

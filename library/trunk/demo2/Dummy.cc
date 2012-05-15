@@ -6,15 +6,12 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_SEGMENT_H_
-#define BAJKA_SEGMENT_H_
+#include "Dummy.h"
 
-#include <boost/geometry/geometries/segment.hpp>
-#include "Point.h"
+namespace Model {
 
-namespace Geometry {
+Dummy::~Dummy() {
+        // TODO Auto-generated destructor stub
+}
 
-typedef boost::geometry::model::segment <Point> Segment;
-
-} /* namespace Geometry */
-#endif /* SEGMENT_H_ */
+} /* namespace Model */

@@ -9,8 +9,6 @@
 #ifndef BAJKA_BASIC_H_
 #define BAJKA_BASIC_H_
 
-#include "Polygon.h"
-#include "Line.h"
 #include "Box.h"
 #include "Circle.h"
 

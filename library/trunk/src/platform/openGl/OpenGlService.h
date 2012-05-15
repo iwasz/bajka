@@ -17,7 +17,7 @@ public:
 
         static void init (int resX, int resY);
         static void free ();
-        static void mouseToDisplay (int x, int y, int windowWidth, int windowHeight, double *nx, double *ny);
+        static void mouseToDisplay (int x, int y, int windowWidth, int windowHeight, float *nx, float *ny);
 
 };
 

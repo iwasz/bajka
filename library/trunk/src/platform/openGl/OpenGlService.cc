@@ -69,7 +69,7 @@ void OpenGlService::free ()
 
 /****************************************************************************/
 
-void OpenGlService::mouseToDisplay (int x, int y, int windowWidth, int windowHeight, double *nx, double *ny)
+void OpenGlService::mouseToDisplay (int x, int y, int windowWidth, int windowHeight, float *nx, float *ny)
 {
         GLdouble model[16];
         glGetDoublev (GL_MODELVIEW_MATRIX, model);
@@ -80,8 +80,10 @@ void OpenGlService::mouseToDisplay (int x, int y, int windowWidth, int windowHei
         GLint view[4];
         glGetIntegerv (GL_VIEWPORT, view);
 
-        GLdouble mz;
-        gluUnProject(x, windowHeight - y, 0.0f, model, proj, view, nx, ny, &mz);
+        GLdouble mx, my, mz;
+        gluUnProject(x, windowHeight - y, 0.0f, model, proj, view, &mx, &my, &mz);
+        *nx = mx;
+        *ny = my;
 }
 
 } /* namespace View */

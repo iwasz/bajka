@@ -10,8 +10,5 @@
 
 namespace Geometry {
 
-Segment::~Segment() {
-        // TODO Auto-generated destructor stub
-}
 
 } /* namespace Geometry */

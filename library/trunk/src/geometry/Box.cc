@@ -45,21 +45,21 @@ Box::Box (std::string const &s)
 
 /****************************************************************************/
 
-std::string Box::toString () const
-{
-        std::ostringstream o;
-        o << "Box (" << ll << ", " << ur << ")";
-        return o.str ();
-}
-
-/****************************************************************************/
-
 void Box::merge (Box const &b)
 {
 	ll.x = std::min (ll.x, b.ll.x);
 	ll.y = std::min (ll.y, b.ll.y);
 	ur.x = std::max (ur.x, b.ur.x);
 	ur.y = std::max (ur.y, b.ur.y);
+}
+
+/****************************************************************************/
+
+std::string toString (Box const &b)
+{
+        std::ostringstream o;
+        o << "Box (" << b.ll << ", " << b.ur << ")";
+        return o.str ();
 }
 
 } // names
