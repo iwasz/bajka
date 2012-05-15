@@ -52,6 +52,7 @@
     <bean id="primitiveWgt" class="Primitive"  singleton="true">
         <property name="foreground" value="000000FF"/>
         <property name="background" value="00ffffFF"/>
+        <property name="thickness" value="0" />
     </bean>
         
 </beans>
