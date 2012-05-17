@@ -9,8 +9,8 @@
         <property name="clearColor" value="858585ff"/>        
         
         <property name="showSystemCursor" value="true"/>        
-        <property name="resX" value="480"/>        
-        <property name="resY" value="800"/>        
+        <property name="resX" value="200"/>        
+        <property name="resY" value="320"/>        
     </bean>
 
     <bean id="app" class="App" singleton="true">
@@ -41,6 +41,10 @@
     
     
     
+    
+    
+    
+    
     <bean id="randomColor" class="Color" singleton="false">
         <constructor-arg><value type="bool">true</value></constructor-arg>
     </bean>
@@ -53,7 +57,7 @@
     <bean id="primitiveWgt" class="Primitive"  singleton="true">
         <property name="foreground" value="000000FF"/>
         <property name="background" value="00000000"/>
-        <property name="thickness" value="2" />
+        <property name="thickness" value="3" />
     </bean>
         
 </beans>
