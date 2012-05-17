@@ -19,13 +19,13 @@ void Primitive::update (Model::IModel *model, Event::UpdateEvent *)
 {
         Model::IPointArray *array = dynamic_cast <Model::IPointArray *>  (model);
         assertThrow (array , "Primitive::update : !cB")
-        DrawUtil::drawSegments (array->getPointArray (), array->getNumberOfPoints (), getForeground (), getBackground (), getThickness ());
 
-//        DrawUtil::drawFatSegment(Geometry::makePoint (-50, -50),
-//                                 Geometry::makePoint (-50, 50),
-//                                 getForeground (),
-//                                 getBackground (),
-//                                 getThickness ());
+        if (prettyJoin) {
+                DrawUtil::drawSegmentsPrettyJoin (array->getPointArray (), array->getNumberOfPoints (), getForeground (), getBackground (), getThickness ());
+        }
+        else {
+                DrawUtil::drawSegments (array->getPointArray (), array->getNumberOfPoints (), getForeground (), getBackground (), getThickness ());
+        }
 }
 
 } /* namespace View */

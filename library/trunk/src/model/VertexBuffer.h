@@ -6,18 +6,29 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef CPRING_H_
-#define CPRING_H_
+#ifndef VERTEXBUFFER_H_
+#define VERTEXBUFFER_H_
 
 namespace Model {
 
 /**
- * Zaimplementowane za pomocą cpPolyShape
+ * Klasa DTO przechowująca informacje o buforze z punktami. Wykorzystana do
+ * zwracania dużych ilości danych z modeli do widoków.
  */
-class CPRing {
-public:
-        virtual ~CPRing();
+struct VertexBuffer {
+
+        // ? takie typy?
+        enum PointType { FLOAT, DOUBLE, SHORT, INT, FIXED };
+
+        void *buffer;
+        PointType pointType;
+        size_t numVertices;
+        size_t stride;
+
+//        Geometry::Point extrtaPoint;
+//        bool closed;
+
 };
 
 } /* namespace Model */
-#endif /* CPRING_H_ */
+#endif /* VERTEXBUFFER_H_ */
