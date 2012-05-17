@@ -6,9 +6,8 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "OpenGl.h"
-#include "Polygon.h"
+#include "VertexBuffer.h"
 
-namespace View {
+namespace Model {
 
-} /* namespace View */
+} /* namespace Model */

@@ -183,10 +183,8 @@ void DrawUtil::drawThickSegments (void *buffer, size_t pointCnt, Color const &li
 
 /****************************************************************************/
 
-void DrawUtil::drawSegments (void *buffer, size_t pointCnt, Color const &lineColor, Color const &fillColor, float thickness)
+void DrawUtil::drawSegmentsPrettyJoin (void *buffer, size_t pointCnt, Color const &lineColor, Color const &fillColor, float thickness)
 {
-        glLineWidth (thickness);
-
         if (thickness) {
                 drawThickSegments (buffer, pointCnt, lineColor, fillColor, thickness);
         }
@@ -194,6 +192,16 @@ void DrawUtil::drawSegments (void *buffer, size_t pointCnt, Color const &lineCol
                 drawThinSegments (buffer, pointCnt, lineColor, fillColor);
         }
 }
+
+/****************************************************************************/
+
+void DrawUtil::drawSegments (void *buffer, size_t pointCnt, Color const &lineColor, Color const &fillColor, float thickness)
+{
+        glLineWidth (thickness);
+        drawThinSegments (buffer, pointCnt, lineColor, fillColor);
+}
+
+/****************************************************************************/
 
 static const GLfloat pillVAR[] = {
          0.0000f,  1.0000f, 1.0f,

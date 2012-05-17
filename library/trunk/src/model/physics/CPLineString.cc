@@ -6,26 +6,33 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_VIEW_POLYGON_H_
-#define BAJKA_VIEW_POLYGON_H_
+#include "LineString.h"
 
-#include "ReflectionMacros.h"
-#include "Primitive.h"
+namespace Model {
 
-namespace View {
+Geometry::Box LineString::getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const
+{
 
-class Polygon : public Primitive {
-public:
+}
 
-        C__ (void)
-        b_ ("Primitive")
+bool LineString::contains (Geometry::Point const &p) const
+{
 
-        virtual ~Polygon () {}
-        virtual void update (Model::IModel *model, Event::UpdateEvent *e) {}
+}
 
-        E_ (Polygon)
-};
+Geometry::Point LineString::computeCenter () const
+{
 
-} // namespace
+}
 
-#	endif /* POLYGON_H_ */
+void *LineString::getPointArray () const
+{
+        return &data->operator [] (0);
+}
+
+size_t LineString::getNumberOfPoints () const
+{
+        return data->size ();
+}
+
+} /* namespace Model */
