@@ -6,25 +6,31 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef MODEL_LINESTRING_H_
-#define MODEL_LINESTRING_H_
+#ifdef USE_CHIPMUNK
+#ifndef PHYSICS_MODEL_LINESTRING_H_
+#define PHYSICS_MODEL_LINESTRING_H_
 
 #include "../../geometry/LineString.h"
 #include "../AbstractModel.h"
 #include "../IPointArray.h"
 
 namespace Model {
+class CPLineStringImpl;
 
-class LineString : public AbstractModel, public IPointArray {
+class CPLineString : public AbstractModel, public IPointArray {
 public:
 
         C__ (void)
         b_ ("AbstractModel")
 
-        virtual ~LineString() {}
+        CPLineString ();
+        virtual ~CPLineString();
 
-        Ptr <Geometry::LineString> getData () { return data; }
-        m_ (setData) void setData (Ptr <Geometry::LineString> d) { data = d; }
+        m_ (setData) void setData (Ptr <Geometry::LineString> d);
+        void addPoint (Geometry::Point const &p);
+
+        float getRadius () const { return radius; }
+        m_ (setRadius) void setRadius (float f) { radius = f; }
 
         //--
 
@@ -39,11 +45,13 @@ public:
 
 private:
 
-        Ptr <Geometry::LineString> data;
+        CPLineStringImpl *impl;
+        float radius;
 
-        E_ (LineString)
+        E_ (CPLineString)
 
 };
 
 } /* namespace Model */
 #endif /* LINESTRING_H_ */
+#endif

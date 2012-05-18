@@ -36,6 +36,7 @@ void CPBox::onParentSet (IModel *m)
                    cpBBNew (box.ll.x, box.ll.y, box.ur.x, box.ur.y)));
         cpShapeSetUserData (shape, this);
 
+        // TODO czy to powinna być masa całego body?
         b->addInertia (cpMomentForBox (b->getMass (), getWidth (), getHeight ()));
         AbstractModel::onParentSet (m);
 }
