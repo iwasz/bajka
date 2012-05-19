@@ -84,14 +84,14 @@ bool AbstractEventDispatcher::dispatch (Model::IModel *m, Event::EventIndex cons
                 }
 
                 if (app->getDropIteration ()) {
-                        return false;
+                        return eventHandled;
                 }
 #endif
 
                 M::IModel *model = m->findContains (p);
 
                 if (model) {
-                        dispatchEventBackwards (model, mev, pointerInsideIndex);
+                        eventHandled |= dispatchEventBackwards (model, mev, pointerInsideIndex);
                 }
         }
         else {
@@ -101,7 +101,7 @@ bool AbstractEventDispatcher::dispatch (Model::IModel *m, Event::EventIndex cons
                 Pair pair = modeliIndex.getModels (type);
 
                 for (Iterator i = pair.first; i != pair.second; ++i) {
-                        dispatchEventBackwards (i->second, e, pointerInsideIndex);
+                        eventHandled |= dispatchEventBackwards (i->second, e, pointerInsideIndex);
 
                         if (app->getDropIteration ()) {
                                 break;
@@ -114,22 +114,24 @@ bool AbstractEventDispatcher::dispatch (Model::IModel *m, Event::EventIndex cons
 
 /****************************************************************************/
 
-void AbstractEventDispatcher::dispatchEventBackwards (Model::IModel *m, IEvent *e, Event::PointerInsideIndex *pointerInsideIndex)
+bool AbstractEventDispatcher::dispatchEventBackwards (Model::IModel *m, IEvent *e, Event::PointerInsideIndex *pointerInsideIndex)
 {
         C::IController *controller = m->getController ();
         bool eventHandled = false;
 
         if (controller && controller->getEventMask () & e->getType ()) {
-                e->runCallback (m, m->getView (), controller, pointerInsideIndex);
+                eventHandled |= e->runCallback (m, m->getView (), controller, pointerInsideIndex);
 
                 if (app->getDropIteration ()) {
-                        return;
+                        return eventHandled;
                 }
         }
 
         if ((m = m->getParent ())) {
-                dispatchEventBackwards (m, e, pointerInsideIndex);
+                eventHandled |= dispatchEventBackwards (m, e, pointerInsideIndex);
         }
+
+        return eventHandled;
 }
 
 } // nam

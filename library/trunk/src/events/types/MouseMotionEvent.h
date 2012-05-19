@@ -25,7 +25,7 @@ class PointerInsideIndex;
 class MouseMotionEvent : public MouseEvent {
 public:
 
-        MouseMotionEvent () {}
+        MouseMotionEvent () : movement (Geometry::ZERO_POINT) {}
         MouseMotionEvent (const Geometry::Point &position, const Geometry::Point &movement, unsigned int b) :
                 MouseEvent (position),
                 movement (movement),

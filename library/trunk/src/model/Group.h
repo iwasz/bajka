@@ -35,7 +35,7 @@ public:
 	Group () : eventIndex (NULL), pointerInsideIndex (NULL) {}
 	virtual ~Group() {}
 
-        virtual Geometry::Point computeCenter () const { return Geometry::Point (); }
+        virtual Geometry::Point computeCenter () const { return Geometry::ZERO_POINT; }
         virtual Geometry::Box getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const;
         virtual bool contains (Geometry::Point const &p) const { return true; }
         bool isGroup () const { return true; }

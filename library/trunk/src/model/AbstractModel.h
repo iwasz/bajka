@@ -22,7 +22,14 @@ public:
 
         d__
 
-        AbstractModel () : parent (0), angle (0), scale (1), view (0), controller (0), layout (NULL) {}
+        AbstractModel () : parent (0),
+                translate (Geometry::ZERO_POINT),
+                angle (0),
+                scale (1),
+                view (0),
+                controller (0),
+                layout (NULL) {}
+
         virtual ~AbstractModel () {}
 
 /*--------------------------------------------------------------------------*/

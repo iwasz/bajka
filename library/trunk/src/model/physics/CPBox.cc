@@ -16,7 +16,7 @@ namespace Model {
 
 Geometry::Point CPBox::getTranslate () const
 {
-        return Geometry::Point ();
+        return Geometry::ZERO_POINT;
 }
 
 /****************************************************************************/
@@ -24,7 +24,7 @@ Geometry::Point CPBox::getTranslate () const
 Geometry::Point CPBox::getCenter () const
 {
         // Zwracamy pusty, bo i tak Angle zawsze jest 0, a scale 1;
-        return Geometry::Point ();
+        return Geometry::ZERO_POINT;
 }
 
 /****************************************************************************/

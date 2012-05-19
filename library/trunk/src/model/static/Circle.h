@@ -19,7 +19,7 @@ public:
         C__ (void)
         b_ ("AbstractModel")
 
-        Circle () : radius (0) {}
+        Circle () : radius (0), origin (Geometry::ZERO_POINT) {}
         virtual ~Circle () {}
 
 /*--------------------------------------------------------------------------*/

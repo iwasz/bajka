@@ -27,6 +27,7 @@ struct Point {
 
         float x;
         float y;
+
 };
 
 BOOST_STATIC_ASSERT (boost::has_trivial_assign <Point>::value);

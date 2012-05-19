@@ -23,6 +23,7 @@ public:
         C__ (void)
         b_ ("Circle", "Shape")
 
+        CPCircle () : radius (0), position (Geometry::ZERO_POINT) {}
         virtual ~CPCircle () {}
 
 /*--------------------------------------------------------------------------*/
@@ -36,7 +37,7 @@ public:
 /*--------------------------------------------------------------------------*/
 
         // Szejpów chipmunkowych nie można zmieniać i nie można transformowac. Tylko body można.
-        Geometry::Point getTranslate () const { return Geometry::Point (); }
+        Geometry::Point getTranslate () const { return Geometry::ZERO_POINT; }
         void setTranslate (Geometry::Point const &p) { throw Util::OperationNotSupportedException (); }
 
         void setCenter (Geometry::Point const &p) { throw Util::OperationNotSupportedException (); }
