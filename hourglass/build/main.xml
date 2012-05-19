@@ -9,8 +9,8 @@
         <property name="clearColor" value="858585ff"/>        
         
         <property name="showSystemCursor" value="true"/>        
-        <property name="resX" value="200"/>        
-        <property name="resY" value="320"/>        
+        <property name="resX" value="480"/>        
+        <property name="resY" value="800"/>        
     </bean>
 
     <bean id="app" class="App" singleton="true">
@@ -23,24 +23,53 @@
 <!--         </property> -->
         
 <!--         <property name="manager" ref="modelManager" /> -->
-        <property name="model" ref="lineString" />
+        <property name="model" ref="space" />
     </bean>
 
 
-    <bean id="model" class="Circle" singleton="true">
-        <property name="view" ref="circleWgt" />
-        <property name="radius" value="20" />
-        <property name="origin" value="0, 0" />
+            
+    <bean id="space" class="Space" singleton="true">
+		<property name="gravity" value="0, -100"/>
+		<property name="children">
+            <list class="ModelVector">
+			    <bean class="StaticBody" singleton="true">
+			        <constructor-arg><value type="bool">true</value></constructor-arg>
+			    
+			        <property name="children">
+			            <list class="ModelVector">
+						    <bean class="CPLineString" singleton="true">
+						        <property name="data" value="m 13.467041,291.77376 3.436104,-32.57502 9.05882,-23.6274 12.807296,-16.74414 14.681534,-11.92548 14.681536,-9.17112 12.807296,-8.48136 9.058818,-9.85596 3.436104,-13.29504 -3.439218,-14.61432 -9.067032,-10.9905 -12.818906,-9.32076 -14.694844,-9.60492 -14.694844,-11.84316 -12.818906,-16.0353 -9.067032,-22.18146 -3.439218,-30.28158 0,0 173.210901,0 0,0 -3.43922,30.28158 -9.06703,22.18146 -12.8189,16.0353 -14.69485,11.84316 -14.69484,9.60492 -12.81891,9.32076 -9.06703,10.9905 -3.43922,14.61432 3.43611,13.29504 9.05881,9.85596 12.8073,8.48136 14.68154,9.17112 14.68153,11.92548 12.8073,16.74414 9.05882,23.6274 3.4361,32.57502 z"/>                
+						        <property name="view" ref="primitiveWgt"/>
+						        <property name="translate" value="-100,-166"/>
+						    </bean>          
+			            </list>
+			        </property>
+			    </bean>
+			    
+			    <ref bean="body"/>
+            </list>
+        </property>
+	</bean>    
+    
+    
+    
+    
+    <bean id="body" class="Body" singleton="true">
+        <property name="mass" value="1" />
+        <property name="translate" value="0, 30"/>
+
+        <property name="children">
+            <list class="ModelVector">
+                <ref bean="circle"/>
+            </list>
+        </property>
+    </bean>      
+
+    <bean id="circle" class="CPCircle" singleton="true">
+        <property name="view" ref="circleWgt"/>            
+        <property name="radius" value="3" />    
     </bean>
-    
-    <bean id="lineString" class="LineString" singleton="true">
-        <property name="data" value="m 13.467041,291.77376 3.436104,-32.57502 9.05882,-23.6274 12.807296,-16.74414 14.681534,-11.92548 14.681536,-9.17112 12.807296,-8.48136 9.058818,-9.85596 3.436104,-13.29504 -3.439218,-14.61432 -9.067032,-10.9905 -12.818906,-9.32076 -14.694844,-9.60492 -14.694844,-11.84316 -12.818906,-16.0353 -9.067032,-22.18146 -3.439218,-30.28158 0,0 173.210901,0 0,0 -3.43922,30.28158 -9.06703,22.18146 -12.8189,16.0353 -14.69485,11.84316 -14.69484,9.60492 -12.81891,9.32076 -9.06703,10.9905 -3.43922,14.61432 3.43611,13.29504 9.05881,9.85596 12.8073,8.48136 14.68154,9.17112 14.68153,11.92548 12.8073,16.74414 9.05882,23.6274 3.4361,32.57502 z"/>                
-        <property name="view" ref="primitiveWgt"/>
-        <property name="translate" value="-100,-166"/>
-    </bean>          
-    
-    
-    
+
     
     
     
