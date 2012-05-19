@@ -17,6 +17,9 @@
 namespace Model {
 class CPLineStringImpl;
 
+/**
+ *
+ */
 class CPLineString : public AbstractModel, public IPointArray {
 public:
 

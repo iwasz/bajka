@@ -16,7 +16,7 @@ namespace Model {
  */
 class CPRing {
 public:
-        virtual ~CPRing();
+        virtual ~CPRing() {}
 };
 
 } /* namespace Model */

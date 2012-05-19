@@ -36,7 +36,7 @@ enum MouseButton {
 class MouseEvent : public IEvent {
 public:
 
-        MouseEvent () {}
+        MouseEvent () : position (Geometry::ZERO_POINT) {}
         MouseEvent (const Geometry::Point &position) : position (position) {}
         virtual ~MouseEvent () {}
 

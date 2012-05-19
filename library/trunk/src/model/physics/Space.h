@@ -29,7 +29,7 @@ public:
 /*--------------------------------------------------------------------------*/
 
         // W środku rodzica.
-        virtual Geometry::Point computeCenter () const { return Geometry::Point (); }
+        virtual Geometry::Point computeCenter () const { return Geometry::ZERO_POINT; }
 
 /*--------------------------------------------------------------------------*/
 

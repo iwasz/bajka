@@ -36,7 +36,7 @@ protected:
 
 private:
 
-        void dispatchEventBackwards (Model::IModel *m, IEvent *e, PointerInsideIndex *pointerInsideIndex);
+        bool dispatchEventBackwards (Model::IModel *m, IEvent *e, PointerInsideIndex *pointerInsideIndex);
 
 protected:
 

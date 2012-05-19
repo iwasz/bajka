@@ -53,7 +53,7 @@ public:
 
 protected:
 
-        Body (int) {}
+        Body (int) : body (NULL) {}
         cpBody *body;
 
         E_ (Body)

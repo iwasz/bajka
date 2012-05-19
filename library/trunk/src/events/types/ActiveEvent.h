@@ -20,11 +20,12 @@ enum ActiveState {
 };
 
 /**
- *
+ * Co właściwie oznacza ten event prócz tego, ze SDL go generuje?
  */
 class ActiveEvent : public IEvent {
 public:
 
+        ActiveEvent () : active (false) {}
         virtual ~ActiveEvent () {}
 
         ActiveState getState () const { return state; }

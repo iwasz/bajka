@@ -8,6 +8,7 @@
 
 #ifdef USE_CHIPMUNK
 #include <chipmunk.h>
+#include <cstddef>
 #include "CPLineString.h"
 #include "Segment.h"
 #include "Body.h"
@@ -17,34 +18,40 @@ namespace Model {
 
 struct CPLineStringImpl {
 
-        CPLineStringImpl () : hasPoint (false) {}
+        CPLineStringImpl () : point (Geometry::ZERO_POINT), hasPoint (false) {}
 
         std::vector <cpShape *> shapes;
-        Geometry::Point startPoint;
+        Geometry::Point point;
         bool hasPoint;
 };
+
+/****************************************************************************/
 
 CPLineString::CPLineString ()
 {
         impl = new CPLineStringImpl;
 }
 
+/****************************************************************************/
+
 CPLineString::~CPLineString()
 {
         delete impl;
 }
 
+/****************************************************************************/
+
 void CPLineString::addPoint (Geometry::Point const &p)
 {
         if (!impl->hasPoint) {
-                impl->startPoint = p;
+                impl->point = p;
                 impl->hasPoint = true;
                 return;
         }
 
         // TODO Kast zalezny od macra RELEASE / DEBUG
         Body *b = dynamic_cast <Body *> (getParent ());
-        cpShape *shape = cpSegmentShapeNew (b->getBody (), cpv (impl->startPoint.x, impl->startPoint.y) , cpv (p.x, p.y), radius);
+        cpShape *shape = cpSegmentShapeNew (b->getBody (), cpv (impl->point.x, impl->point.y) , cpv (p.x, p.y), radius);
 
         impl->shapes.push_back (shape);
 
@@ -52,38 +59,55 @@ void CPLineString::addPoint (Geometry::Point const &p)
         cpShapeSetUserData (shape, this);
 
         // TODO czy to powinna być masa całego body?
-        b->addInertia (cpMomentForSegment (b->getMass (), cpv (impl->startPoint.x, impl->startPoint.y) , cpv (p.x, p.y)));
+        b->addInertia (cpMomentForSegment (b->getMass (), cpv (impl->point.x, impl->point.y) , cpv (p.x, p.y)));
 
-        impl->startPoint = p;
+        impl->point = p;
 }
+
+/****************************************************************************/
 
 void CPLineString::setData (Ptr <Geometry::LineString> d)
 {
         std::for_each (d->begin (), d->end (), boost::bind (&CPLineString::addPoint, this, _1));
 }
 
+/****************************************************************************/
+
 Geometry::Box CPLineString::getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const
 {
-
+        return Geometry::Box::ZERO_BOX;
 }
+
+/****************************************************************************/
 
 bool CPLineString::contains (Geometry::Point const &p) const
 {
-
+        return false;
 }
+
+/****************************************************************************/
 
 Geometry::Point CPLineString::computeCenter () const
 {
-
+        return Geometry::ZERO_POINT;
 }
+
+/****************************************************************************/
 
 void *CPLineString::getPointArray () const
 {
+        char *buffer = reinterpret_cast <char *> (impl->shapes[0]);
+        return buffer + offsetof (cpSegmentShape, a);
 }
+
+/****************************************************************************/
 
 size_t CPLineString::getNumberOfPoints () const
 {
+        return impl->shapes.size () + 1;
 }
+
+/****************************************************************************/
 
 } /* namespace Model */
 #endif

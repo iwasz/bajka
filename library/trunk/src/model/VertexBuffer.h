@@ -9,6 +9,8 @@
 #ifndef VERTEXBUFFER_H_
 #define VERTEXBUFFER_H_
 
+#include <cstddef>
+
 namespace Model {
 
 /**

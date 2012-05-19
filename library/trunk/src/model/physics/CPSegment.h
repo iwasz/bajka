@@ -13,7 +13,7 @@ namespace Model {
 
 class CPSegment {
 public:
-        virtual ~CPSegment();
+        virtual ~CPSegment() {}
 };
 
 } /* namespace Model */

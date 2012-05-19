@@ -10,8 +10,4 @@
 
 namespace Model {
 
-CPSegment::~CPSegment() {
-        // TODO Auto-generated destructor stub
-}
-
 } /* namespace Model */

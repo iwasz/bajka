@@ -36,7 +36,9 @@ Geometry::Point CPCircle::getOrigin () const
 
 void CPCircle::onParentSet (IModel *m)
 {
-        Body *b = static_cast <Body *> (m);
+        Body *b = dynamic_cast <Body *> (m);
+        assertThrow (b, "CPCircle::onParentSet : dynamic_cast <Body *> (m) failed");
+
         shape = cpSpaceAddShape (Space::getSpace(), cpCircleShapeNew (b->getBody (), radius, cpv (origin.x, origin.y)));
         cpShapeSetUserData (shape, this);
 

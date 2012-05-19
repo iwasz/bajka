@@ -10,8 +10,4 @@
 
 namespace Model {
 
-CPRing::~CPRing() {
-        // TODO Auto-generated destructor stub
-}
-
 } /* namespace Model */
