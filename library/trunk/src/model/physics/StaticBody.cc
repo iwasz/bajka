@@ -16,7 +16,9 @@ namespace Model {
 StaticBody::StaticBody (bool spcBdy) : Body (0), spaceBody (spcBdy)
 {
         if (spcBdy) {
-                body = cpSpaceGetStaticBody (Space::getSpace ());
+                cpSpace *space = Space::getSpace ();
+                assertThrow (space, "StaticBody::StaticBody : !space");
+                body = cpSpaceGetStaticBody (space);
         }
         else {
                 body = cpBodyNewStatic ();

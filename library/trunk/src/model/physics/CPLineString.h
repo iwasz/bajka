@@ -12,7 +12,7 @@
 
 #include "../../geometry/LineString.h"
 #include "../AbstractModel.h"
-#include "../IPointArray.h"
+#include "IVertexBufferEnabled.h"
 
 namespace Model {
 class CPLineStringImpl;
@@ -20,7 +20,7 @@ class CPLineStringImpl;
 /**
  *
  */
-class CPLineString : public AbstractModel, public IPointArray {
+class CPLineString : public AbstractModel, public IVertexBufferEnabled {
 public:
 
         C__ (void)
@@ -35,16 +35,19 @@ public:
         float getRadius () const { return radius; }
         m_ (setRadius) void setRadius (float f) { radius = f; }
 
-        //--
+/*--------------------------------------------------------------------------*/
+
+        void setParent2 (IModel *p);
+
+/*--------------------------------------------------------------------------*/
 
         Geometry::Box getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const;
         bool contains (Geometry::Point const &p) const;
         Geometry::Point computeCenter () const;
 
-        //---
+/*--------------------------------------------------------------------------*/
 
-        void *getPointArray () const;
-        size_t getNumberOfPoints () const;
+        VertexBuffer getVertexBuffer () const;
 
 private:
 

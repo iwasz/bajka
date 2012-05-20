@@ -11,11 +11,11 @@
 
 #include "../../geometry/LineString.h"
 #include "../AbstractModel.h"
-#include "../IPointArray.h"
+#include "IVertexBufferEnabled.h"
 
 namespace Model {
 
-class LineString : public AbstractModel, public IPointArray {
+class LineString : public AbstractModel, public IVertexBufferEnabled {
 public:
 
         C__ (void)
@@ -34,8 +34,7 @@ public:
 
         //---
 
-        void *getPointArray () const;
-        size_t getNumberOfPoints () const;
+        VertexBuffer getVertexBuffer () const;
 
 private:
 

@@ -129,9 +129,9 @@ void DrawUtil::drawLine (G::Point const &a, G::Point const &b, Color const &colo
 
 /****************************************************************************/
 
-void DrawUtil::drawThinSegments (void *buffer, size_t pointCnt, Color const &line, Color const &fill)
+void DrawUtil::drawThinSegments (void *buffer, size_t pointCnt, size_t stride, Color const &line, Color const &fill)
 {
-        glVertexPointer (2, GL_FLOAT, 0, buffer);
+        glVertexPointer (2, GL_FLOAT, stride, buffer);
 
         glDisableClientState(GL_NORMAL_ARRAY);
         glDisableClientState(GL_COLOR_ARRAY);
@@ -183,22 +183,22 @@ void DrawUtil::drawThickSegments (void *buffer, size_t pointCnt, Color const &li
 
 /****************************************************************************/
 
-void DrawUtil::drawSegmentsPrettyJoin (void *buffer, size_t pointCnt, Color const &lineColor, Color const &fillColor, float thickness)
+void DrawUtil::drawSegmentsPrettyJoin (void *buffer, size_t pointCnt, size_t stride, Color const &lineColor, Color const &fillColor, float thickness)
 {
         if (thickness) {
                 drawThickSegments (buffer, pointCnt, lineColor, fillColor, thickness);
         }
         else {
-                drawThinSegments (buffer, pointCnt, lineColor, fillColor);
+                drawThinSegments (buffer, pointCnt, stride, lineColor, fillColor);
         }
 }
 
 /****************************************************************************/
 
-void DrawUtil::drawSegments (void *buffer, size_t pointCnt, Color const &lineColor, Color const &fillColor, float thickness)
+void DrawUtil::drawSegments (void *buffer, size_t pointCnt, size_t stride, Color const &lineColor, Color const &fillColor, float thickness)
 {
         glLineWidth (thickness);
-        drawThinSegments (buffer, pointCnt, lineColor, fillColor);
+        drawThinSegments (buffer, pointCnt, stride, lineColor, fillColor);
 }
 
 /****************************************************************************/

@@ -23,11 +23,11 @@ public:
         static void drawRectangle (Geometry::Point const &a, Geometry::Point const &b, Color const &lineColor, Color const &fillColor);
         static void drawRectangle (Geometry::Box const &b, Color const &lineColor, Color const &fillColor);
 
-        static void drawSegments (void *buffer, size_t pointCnt, Color const &lineColor, Color const &fillColor, float thickness);
-        static void drawSegmentsPrettyJoin (void *buffer, size_t pointCnt, Color const &lineColor, Color const &fillColor, float thickness);
+        static void drawSegments (void *buffer, size_t pointCnt, size_t stride, Color const &lineColor, Color const &fillColor, float thickness);
+        static void drawSegmentsPrettyJoin (void *buffer, size_t pointCnt, size_t stride, Color const &lineColor, Color const &fillColor, float thickness);
 
         static void drawThickSegment (Geometry::Point const &a, Geometry::Point const &b, Color const &line, Color const &fill, float thickness);
-        static void drawThinSegments (void *buffer, size_t pointCnt, Color const &lineColor, Color const &fillColor);
+        static void drawThinSegments (void *buffer, size_t pointCnt, size_t stride, Color const &lineColor, Color const &fillColor);
         static void drawThickSegments (void *buffer, size_t pointCnt, Color const &lineColor, Color const &fillColor, float thickness);
 
 };
