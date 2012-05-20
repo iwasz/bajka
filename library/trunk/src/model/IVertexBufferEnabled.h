@@ -8,6 +8,7 @@
 
 #ifndef BAJKA_IPOINTARRAY_H_
 #define BAJKA_IPOINTARRAY_H_
+#include "VertexBuffer.h"
 
 namespace Model {
 
@@ -16,12 +17,10 @@ namespace Model {
  * łamane linie, odcinki, prostokąty, trójkąty, etc. Dane zwrócone przez getPointArray
  * nadają się do użcia bezpośrednio w OpenGL.
  */
-class IPointArray {
+class IVertexBufferEnabled {
 public:
-        virtual ~IPointArray() {}
-
-        virtual void *getPointArray () const = 0;
-        virtual size_t getNumberOfPoints () const = 0;
+        virtual ~IVertexBufferEnabled() {}
+        virtual VertexBuffer getVertexBuffer () const = 0;
 };
 
 } /* namespace Model */

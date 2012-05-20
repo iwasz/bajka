@@ -94,20 +94,29 @@ Geometry::Point CPLineString::computeCenter () const
 
 /****************************************************************************/
 
-void *CPLineString::getPointArray () const
+
+VertexBuffer CPLineString::getVertexBuffer () const
 {
+        VertexBuffer ret;
+
         char *buffer = reinterpret_cast <char *> (impl->shapes[0]);
-        return buffer + offsetof (cpSegmentShape, a);
+        ret.buffer = buffer + offsetof (cpSegmentShape, a);
+        ret.numVertices = impl->shapes.size () + 1;
+
+        ret.stride = sizeof (cpSegmentShape) - 2 * sizeof (float);
+
+        return ret;
 }
 
 /****************************************************************************/
 
-size_t CPLineString::getNumberOfPoints () const
+void CPLineString::setParent2 (IModel *p)
 {
-        return impl->shapes.size () + 1;
+        AbstractModel::setParent (p);
+        IGroup *group = dynamic_cast <IGroup *> (p);
+        group->addChild (this);
 }
 
-/****************************************************************************/
 
 } /* namespace Model */
 #endif
