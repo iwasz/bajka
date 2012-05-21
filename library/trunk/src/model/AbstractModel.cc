@@ -144,4 +144,13 @@ IModel *AbstractModel::findContains (Geometry::Point const &p)
         return this;
 }
 
+/****************************************************************************/
+
+void AbstractModel::setParent2 (IModel *p)
+{
+        AbstractModel::setParent (p);
+        IGroup *group = dynamic_cast <IGroup *> (p);
+        group->addChild (this);
+}
+
 } /* namespace Model1 */

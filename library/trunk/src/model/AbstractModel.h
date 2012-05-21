@@ -76,7 +76,7 @@ public:
         IModel *getParent () { return parent; }
         void setParent (IModel *m) { parent = m; }
         void onParentSet (IModel *m) {}
-        S_ (setParent2) virtual void setParent2 (IModel *p) {}
+        S_ (setParent2) virtual void setParent2 (IModel *p);
 
 /*--------------------------------------------------------------------------*/
 

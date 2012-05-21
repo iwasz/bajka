@@ -30,14 +30,9 @@ public:
         virtual ~CPLineString();
 
         m_ (setData) void setData (Ptr <Geometry::LineString> d);
-        void addPoint (Geometry::Point const &p);
 
         float getRadius () const { return radius; }
         m_ (setRadius) void setRadius (float f) { radius = f; }
-
-/*--------------------------------------------------------------------------*/
-
-        void setParent2 (IModel *p);
 
 /*--------------------------------------------------------------------------*/
 
@@ -48,6 +43,10 @@ public:
 /*--------------------------------------------------------------------------*/
 
         VertexBuffer getVertexBuffer () const;
+
+//private:
+//
+//        void addPoint (Geometry::Point const &p);
 
 private:
 
