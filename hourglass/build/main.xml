@@ -4,13 +4,13 @@
 	<!--Konfiguracja-->
     <bean id="cfg" class="Config" singleton="true">
         <property name="fullScreen" value="false"/>
-        <property name="windowCaption" value="MailSorter"/>
+        <property name="windowCaption" value="hourglass"/>
         <property name="showAABB" value="false"/>
         <property name="clearColor" value="858585ff"/>        
         
         <property name="showSystemCursor" value="true"/>        
-        <property name="resX" value="480"/>        
-        <property name="resY" value="800"/>        
+        <property name="resX" value="200"/>        
+        <property name="resY" value="320"/>        
     </bean>
 
     <bean id="app" class="App" singleton="true">
@@ -27,49 +27,68 @@
     </bean>
 
 
-            
-    <bean id="space" class="Space" singleton="true">
-		<property name="gravity" value="0, -100"/>
-		<property name="children">
-            <list class="ModelVector" singleton="true">
-		    	<ref bean="hourglass"/>
-			    <ref bean="body"/>
-            </list>
-        </property>
-	</bean>    
-    
 
-    <bean id="hourglass" class="StaticBody" singleton="true">
-        <constructor-arg><value type="bool">true</value></constructor-arg>
-    </bean>
- 
-	<bean id="zza" class="CPLineString" singleton="true">
-	    <property name="parent2" ref="hourglass" />
-	    <property name="data" value="m 13.467041,291.77376 3.436104,-32.57502 9.05882,-23.6274 12.807296,-16.74414 14.681534,-11.92548 14.681536,-9.17112 12.807296,-8.48136 9.058818,-9.85596 3.436104,-13.29504 -3.439218,-14.61432 -9.067032,-10.9905 -12.818906,-9.32076 -14.694844,-9.60492 -14.694844,-11.84316 -12.818906,-16.0353 -9.067032,-22.18146 -3.439218,-30.28158 0,0 173.210901,0 0,0 -3.43922,30.28158 -9.06703,22.18146 -12.8189,16.0353 -14.69485,11.84316 -14.69484,9.60492 -12.81891,9.32076 -9.06703,10.9905 -3.43922,14.61432 3.43611,13.29504 9.05881,9.85596 12.8073,8.48136 14.68154,9.17112 14.68153,11.92548 12.8073,16.74414 9.05882,23.6274 3.4361,32.57502 z"/>                
-	    <property name="view" ref="primitiveWgt"/>
-	    <property name="translate" value="-100,-166"/>
-	</bean>          
-    
-    
-    
-    <bean id="body" class="Body" singleton="true">
-        <property name="mass" value="1" />
-        <property name="translate" value="0, 30"/>
+  <bean id="space" class="Space" singleton="true">
+    <property name="gravity" value="0, -100" />
+    <property name="children">
+      <list class="ModelVector" singleton="true">
+        <ref bean="hourglass" />
+        <ref bean="body" />
+<!--         <ref bean="ground" /> -->
+      </list>
+    </property>
+  </bean>
 
-        <property name="children">
-            <list class="ModelVector">
-                <ref bean="circle"/>
-            </list>
-        </property>
-    </bean>      
 
-    <bean id="circle" class="CPCircle" singleton="true">
-        <property name="view" ref="circleWgt"/>            
-        <property name="radius" value="3" />    
-    </bean>
+  <bean id="hourglass" class="StaticBody" singleton="true">
+    <constructor-arg>
+      <value type="bool">true</value>
+    </constructor-arg>
+    <property name="translate" value="-100,-166" />
+  </bean>
 
-    
-    
+  <!-- TODO! nie działa translate w shape - jeśli ma niedziałać - to trzeba zrzucać wyjątek. -->
+  <bean id="zza" class="CPLineString" singleton="true">
+    <property name="parent2" ref="hourglass" />
+<!--     <property name="radius" value="1" /> -->
+    <property name="data" value="m 13.467041,291.77376 3.436104,-32.57502 9.05882,-23.6274 12.807296,-16.74414 14.681534,-11.92548 14.681536,-9.17112 12.807296,-8.48136 9.058818,-9.85596 3.436104,-13.29504 -3.439218,-14.61432 -9.067032,-10.9905 -12.818906,-9.32076 -14.694844,-9.60492 -14.694844,-11.84316 -12.818906,-16.0353 -9.067032,-22.18146 -3.439218,-30.28158 0,0 173.210901,0 0,0 -3.43922,30.28158 -9.06703,22.18146 -12.8189,16.0353 -14.69485,11.84316 -14.69484,9.60492 -12.81891,9.32076 -9.06703,10.9905 -3.43922,14.61432 3.43611,13.29504 9.05881,9.85596 12.8073,8.48136 14.68154,9.17112 14.68153,11.92548 12.8073,16.74414 9.05882,23.6274 3.4361,32.57502 z" />
+    <property name="view" ref="primitiveWgt" />
+  </bean>
+
+
+
+  <bean id="body" class="Body" singleton="true">
+    <property name="mass" value="1" />
+    <property name="translate" value="30, 230" />
+
+    <property name="children">
+      <list class="ModelVector">
+        <ref bean="circle" />
+      </list>
+    </property>
+  </bean>
+
+  <bean id="circle" class="CPCircle" singleton="true">
+    <property name="view" ref="circleWgt" />
+    <property name="radius" value="3" />
+  </bean>
+
+
+
+  <bean id="ground" class="StaticBody" singleton="true">
+    <constructor-arg>
+      <value type="bool">true</value>
+    </constructor-arg>
+
+    <property name="children">
+      <list class="ModelVector">
+        <bean class="CPBox" singleton="true">
+          <property name="box" value="-100, 0, 100, 10" />
+          <property name="view" ref="rectangleWgt" />
+        </bean>
+      </list>
+    </property>
+  </bean>     
     
     
     <bean id="randomColor" class="Color" singleton="false">
@@ -77,6 +96,11 @@
     </bean>
     
     <bean id="circleWgt" class="View::Circle" singleton="true">
+        <property name="foreground" value="000000FF"/>
+        <property name="background" ref="randomColor"/>
+    </bean>  
+
+    <bean id="rectangleWgt" class="Rectangle" singleton="true">
         <property name="foreground" value="000000FF"/>
         <property name="background" ref="randomColor"/>
     </bean>  
