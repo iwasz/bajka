@@ -129,9 +129,9 @@ void DrawUtil::drawLine (G::Point const &a, G::Point const &b, Color const &colo
 
 /****************************************************************************/
 
-void DrawUtil::drawThinSegments (void *buffer, size_t pointCnt, size_t stride, Color const &line, Color const &fill)
+void DrawUtil::drawThinSegments (VertexBuffer const &buffer, Color const &line, Color const &fill)
 {
-        glVertexPointer (2, GL_FLOAT, stride, buffer);
+        glVertexPointer (2, convertType (buffer.pointType), buffer.stride, buffer.buffer);
 
         glDisableClientState(GL_NORMAL_ARRAY);
         glDisableClientState(GL_COLOR_ARRAY);
@@ -139,20 +139,20 @@ void DrawUtil::drawThinSegments (void *buffer, size_t pointCnt, size_t stride, C
 
         if (fill.a > 0) {
                 glColor4f (fill.r, fill.g, fill.b, fill.a);
-                glDrawArrays (GL_TRIANGLE_FAN, 0, pointCnt);
+                glDrawArrays (GL_TRIANGLE_FAN, 0, buffer.numVertices);
         }
 
         if (line.a > 0) {
                 glColor4f (line.r, line.g, line.b, line.a);
-                glDrawArrays (GL_LINE_LOOP, 0, pointCnt);
+                glDrawArrays (GL_LINE_LOOP, 0, buffer.numVertices);
         }
 }
 
 /****************************************************************************/
 
-void DrawUtil::drawThickSegments (void *buffer, size_t pointCnt, Color const &line, Color const &fill, float thickness)
+void DrawUtil::drawThickSegments (VertexBuffer const &buffer, Color const &line, Color const &fill, float thickness)
 {
-        glVertexPointer (2, GL_FLOAT, 0, buffer);
+        glVertexPointer (2, convertType (buffer.pointType), buffer.stride, buffer.buffer);
 
         glDisableClientState(GL_NORMAL_ARRAY);
         glDisableClientState(GL_COLOR_ARRAY);
@@ -160,45 +160,45 @@ void DrawUtil::drawThickSegments (void *buffer, size_t pointCnt, Color const &li
 
         if (fill.a > 0) {
                 glColor4f (fill.r, fill.g, fill.b, fill.a);
-                glDrawArrays (GL_TRIANGLE_FAN, 0, pointCnt);
+                glDrawArrays (GL_TRIANGLE_FAN, 0, buffer.numVertices);
         }
 
-        if (line.a > 0) {
-                float *floatBuf = static_cast <float *> (buffer);
-                G::Point a;
-
-                for (size_t i = 0; i < pointCnt * 2; i += 2) {
-                        float x = *(floatBuf + i);
-                        float y = *(floatBuf + i + 1);
-                        G::Point b = Geometry::makePoint (x, y);
-
-                        if (i) {
-                                drawThickSegment (a, b, line, line, thickness);
-                        }
-
-                        a = b;
-                }
-        }
+//        if (line.a > 0) {
+//                float *floatBuf = static_cast <float *> (buffer);
+//                G::Point a;
+//
+//                for (size_t i = 0; i < pointCnt * 2; i += 2) {
+//                        float x = *(floatBuf + i);
+//                        float y = *(floatBuf + i + 1);
+//                        G::Point b = Geometry::makePoint (x, y);
+//
+//                        if (i) {
+//                                drawThickSegment (a, b, line, line, thickness);
+//                        }
+//
+//                        a = b;
+//                }
+//        }
 }
 
 /****************************************************************************/
 
-void DrawUtil::drawSegmentsPrettyJoin (void *buffer, size_t pointCnt, size_t stride, Color const &lineColor, Color const &fillColor, float thickness)
+void DrawUtil::drawSegmentsPrettyJoin (VertexBuffer const &buffer, Color const &lineColor, Color const &fillColor, float thickness)
 {
         if (thickness) {
-                drawThickSegments (buffer, pointCnt, lineColor, fillColor, thickness);
+                drawThickSegments (buffer, lineColor, fillColor, thickness);
         }
         else {
-                drawThinSegments (buffer, pointCnt, stride, lineColor, fillColor);
+                drawThinSegments (buffer, lineColor, fillColor);
         }
 }
 
 /****************************************************************************/
 
-void DrawUtil::drawSegments (void *buffer, size_t pointCnt, size_t stride, Color const &lineColor, Color const &fillColor, float thickness)
+void DrawUtil::drawSegments (VertexBuffer const &buffer, Color const &lineColor, Color const &fillColor, float thickness)
 {
         glLineWidth (thickness);
-        drawThinSegments (buffer, pointCnt, stride, lineColor, fillColor);
+        drawThinSegments (buffer, lineColor, fillColor);
 }
 
 /****************************************************************************/
@@ -267,6 +267,23 @@ void DrawUtil::drawThickSegment (G::Point const &a, G::Point const &b, Color con
                         glDrawArrays(GL_LINE_LOOP, 0, pillVAR_count);
                 }
         } glPopMatrix();
+}
+
+int DrawUtil::convertType (VertexBuffer::PointType type)
+{
+        switch (type) {
+                case VertexBuffer::FLOAT:
+                        return GL_FLOAT;
+                case VertexBuffer::DOUBLE:
+                        return GL_DOUBLE;
+                case VertexBuffer::SHORT:
+                        return GL_SHORT;
+                case VertexBuffer::INT:
+                        return GL_INT;
+                case VertexBuffer::FIXED:
+                default:
+                        return GL_FLOAT;
+        }
 }
 
 } /* namespace View */
