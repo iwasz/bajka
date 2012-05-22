@@ -164,10 +164,13 @@ VertexBuffer CPLineString::getVertexBuffer () const
         char *buffer = reinterpret_cast <char *> (&impl->shapes[0]);
         ret.buffer = buffer + offsetA;
 
-        ret.numVertices = impl->shapes.size () + 1;
+        ret.numVertices = impl->shapes.size ();
 
         ret.stride = sizeof (cpSegmentShape);
         ret.pointType = VertexBuffer::DOUBLE;
+
+        buffer = reinterpret_cast <char *> (&impl->shapes.back ());
+        ret.extraSegment = buffer + offsetA;
 
 #if 0
         {
