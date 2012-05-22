@@ -131,11 +131,11 @@ void DrawUtil::drawLine (G::Point const &a, G::Point const &b, Color const &colo
 
 void DrawUtil::drawThinSegments (VertexBuffer const &buffer, Color const &line, Color const &fill)
 {
-        glVertexPointer (2, convertType (buffer.pointType), buffer.stride, buffer.buffer);
-
         glDisableClientState(GL_NORMAL_ARRAY);
         glDisableClientState(GL_COLOR_ARRAY);
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+        glVertexPointer (2, convertType (buffer.pointType), buffer.stride, buffer.buffer);
 
         if (fill.a > 0) {
                 glColor4f (fill.r, fill.g, fill.b, fill.a);
@@ -144,7 +144,12 @@ void DrawUtil::drawThinSegments (VertexBuffer const &buffer, Color const &line, 
 
         if (line.a > 0) {
                 glColor4f (line.r, line.g, line.b, line.a);
-                glDrawArrays (GL_LINE_LOOP, 0, buffer.numVertices);
+                glDrawArrays (GL_LINE_STRIP, 0, buffer.numVertices);
+        }
+
+        if (buffer.extraSegment) {
+                glVertexPointer (2, convertType (buffer.pointType), 0, buffer.extraSegment);
+                glDrawArrays (GL_LINE_STRIP, 0, 2);
         }
 }
 
@@ -268,6 +273,8 @@ void DrawUtil::drawThickSegment (G::Point const &a, G::Point const &b, Color con
                 }
         } glPopMatrix();
 }
+
+/****************************************************************************/
 
 int DrawUtil::convertType (VertexBuffer::PointType type)
 {

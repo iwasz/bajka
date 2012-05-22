@@ -22,13 +22,14 @@ struct VertexBuffer {
         // ? takie typy?
         enum PointType { FLOAT, DOUBLE, SHORT, INT, FIXED };
 
+        VertexBuffer () : buffer (NULL), extraSegment (NULL) {}
+
         void *buffer;
         PointType pointType;
         size_t numVertices;
         size_t stride;
 
-//        Geometry::Point extrtaPoint;
-//        bool closed;
+        void *extraSegment;
 
 };
 
