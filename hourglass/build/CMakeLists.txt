@@ -76,6 +76,8 @@ if (LINUX)
     INCLUDE_DIRECTORIES (${SDLTTF_INCLUDE_DIR})
     link_directories(${SDLTTF_LIBRARY_DIRS})
 
+    INCLUDE_DIRECTORIES ("/usr/local/include/chipmunk")
+    INCLUDE_DIRECTORIES ("/home/iwasz/local/include/chipmunk")
 elseif (ANDROID)
     
 #    AUX_SOURCE_DIRECTORY ("$ENV{NDK}/sources/android/native_app_glue" SOURCES)

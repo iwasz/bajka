@@ -9,8 +9,8 @@
         <property name="clearColor" value="858585ff"/>        
         
         <property name="showSystemCursor" value="true"/>        
-        <property name="resX" value="200"/>        
-        <property name="resY" value="320"/>        
+        <property name="resX" value="480"/>        
+        <property name="resY" value="800"/>        
     </bean>
 
     <bean id="app" class="App" singleton="true">
@@ -34,7 +34,6 @@
       <list class="ModelVector" singleton="true">
         <ref bean="hourglass" />
         <ref bean="body" />
-<!--         <ref bean="ground" /> -->
       </list>
     </property>
   </bean>
@@ -59,7 +58,7 @@
 
   <bean id="body" class="Body" singleton="true">
     <property name="mass" value="1" />
-    <property name="translate" value="30, 230" />
+    <property name="translate" value="30, 100" />
 
     <property name="children">
       <list class="ModelVector">
@@ -75,20 +74,6 @@
 
 
 
-  <bean id="ground" class="StaticBody" singleton="true">
-    <constructor-arg>
-      <value type="bool">true</value>
-    </constructor-arg>
-
-    <property name="children">
-      <list class="ModelVector">
-        <bean class="CPBox" singleton="true">
-          <property name="box" value="-100, 0, 100, 10" />
-          <property name="view" ref="rectangleWgt" />
-        </bean>
-      </list>
-    </property>
-  </bean>     
     
     
     <bean id="randomColor" class="Color" singleton="false">
