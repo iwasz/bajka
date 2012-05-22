@@ -26,6 +26,8 @@ Ptr <LineString> stringToLineString (std::string const &s)
         tokenizer tok (s, boost::char_separator<char> (" "));
 
         Point pen = {0, 0};
+        Point first = {0, 0};
+        bool firstSet = false;
         std::string command;
         int pointNumber = 0;
 
@@ -34,10 +36,20 @@ Ptr <LineString> stringToLineString (std::string const &s)
                 bool firstCommand = (i == tok.begin ());
 
                 if (is_any_of ("mMlLzZcC") (token[0])) {
+                        if (token == "z" || token == "Z") {
+                                ret->push_back (first);
+                                break;
+                        }
+
                         command = token;
                 }
                 else {
                         Point p = stringToPoint (token);
+
+                        if (!firstSet) {
+                                first = p;
+                                firstSet = true;
+                        }
 
                         if (command == "m") {
                                 add_point (pen, p);

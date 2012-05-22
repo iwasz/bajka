@@ -44,10 +44,6 @@ public:
 
         VertexBuffer getVertexBuffer () const;
 
-//private:
-//
-//        void addPoint (Geometry::Point const &p);
-
 private:
 
         CPLineStringImpl *impl;

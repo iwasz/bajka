@@ -41,64 +41,9 @@ CPLineString::~CPLineString()
 
 /****************************************************************************/
 
-//void CPLineString::addPoint (Geometry::Point const &p)
-//{
-//        if (!impl->hasPoint) {
-//                impl->point = p;
-//                impl->hasPoint = true;
-//                return;
-//        }
-//
-//        assertThrow (getParent (), "CPLineString::addPoint : !parent");
-//
-//        // TODO Kast zalezny od macra RELEASE / DEBUG
-//        Body *b = dynamic_cast <Body *> (getParent ());
-//        assertThrow (b, "CPLineString::addPoint : dynamic_cast <Body *> (getParent ())")
-//
-//        cpShape *shape = cpSegmentShapeNew (b->getBody (), cpv (impl->point.x, impl->point.y), cpv (p.x, p.y), radius);
-//
-//
-//        impl->shapes.push_back (reinterpret_cast <cpSegmentShape *> (shape));
-//
-//        shape = cpSpaceAddShape (Space::getSpace(), shape);
-//        cpShapeSetUserData (shape, this);
-//
-//        // TODO czy to powinna być masa całego body?
-//        b->addInertia (cpMomentForSegment (b->getMass (), cpv (impl->point.x, impl->point.y) , cpv (p.x, p.y)));
-//
-//        impl->point = p;
-//
-//#if 0
-//        std::cerr << p.x << "," << p.y << "," << impl->point.x << "," << impl->point.y << std::endl;
-//        std::cerr << offsetof (cpSegmentShape, a) << std::endl;
-//        std::cerr << offsetof (cpSegmentShape, n) << std::endl;
-//        std::cerr << sizeof (cpSegmentShape) << ", " <<  offsetof (cpSegmentShape, n) - offsetof (cpSegmentShape, a) << ", " << sizeof (cpVect) * 2 <<  std::endl;
-//
-//        std::cerr << offsetof (cpSegmentShape, n) << std::endl;
-//
-//        cpSegmentShape sha[2];
-//        char *sA = reinterpret_cast <char *> (sha);
-//        char *sB = reinterpret_cast <char *> (sha + 1);
-//
-//        std::cerr <<  "cpShape : " << sB - sA << std::endl;
-//
-//
-//        std::cerr << impl->point.x << "," << impl->point.y << std::endl;
-//////        char *c = reinterpret_cast <char *> (shape);
-////        char *c = reinterpret_cast <char *> (impl->shapes[0]);
-////
-////        double *d = reinterpret_cast <double *> (c + offsetof (cpSegmentShape, a));
-////        std::cerr << *d << "," << *(d + 1) << std::endl;
-////        exit (0);
-//#endif
-//}
-
-/****************************************************************************/
-
 void CPLineString::setData (Ptr <Geometry::LineString> d)
 {
         impl->shapes.resize (d->size () - 1);
-//        std::for_each (d->begin (), d->end (), boost::bind (&CPLineString::addPoint, this, _1));
 
         int j = 0;
         for (Geometry::LineString::const_iterator i = d->begin (); i != d->end (); ++i) {
