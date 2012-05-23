@@ -106,6 +106,7 @@ INCLUDE_DIRECTORIES (../src)
 if (LINUX)       
     add_executable (hourglass ${SOURCES})
     TARGET_LINK_LIBRARIES (hourglass ${BAJKA_LIBRARIES})    
+    TARGET_LINK_LIBRARIES (hourglass chipmunk)    
 elseif (ANDROID)
 endif ()
 
