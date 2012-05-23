@@ -9,8 +9,8 @@
         <property name="clearColor" value="858585ff"/>        
         
         <property name="showSystemCursor" value="true"/>        
-        <property name="resX" value="200"/>        
-        <property name="resY" value="320"/>      
+        <property name="resX" value="480"/>        
+        <property name="resY" value="800"/>      
         <property name="loopDelayMs" value="17"/>  
     </bean>
 
@@ -58,29 +58,13 @@
 
 
 
-<!--   <bean id="body" class="Body" singleton="true"> -->
-<!--     <property name="mass" value="1" /> -->
-<!--     <property name="translate" value="30, 100" /> -->
-
-<!--     <property name="children"> -->
-<!--       <list class="ModelVector"> -->
-<!--         <ref bean="circle" /> -->
-<!--       </list> -->
-<!--     </property> -->
-<!--   </bean> -->
-
-<!--   <bean id="circle" class="CPCircle" singleton="true"> -->
-<!--     <property name="view" ref="circleWgt" /> -->
-<!--     <property name="radius" value="3" /> -->
-<!--   </bean> -->
-
 
     <bean id="sand" class="Sand" singleton="true" init-method="init">
         <property name="view" ref="pointsWgt" />
         <property name="ll" value="-60, 80" />
         <property name="width" value="120" />
         <property name="height" value="40" />
-        <property name="grainNo" value="1000" />
+        <property name="grainNo" value="2000" />
         <property name="radius" value="1" />
         <property name="mass" value="1" />
         <property name="elasticity" value="0" />
@@ -110,7 +94,7 @@
 
     <bean id="pointsWgt" class="Points"  singleton="true">
         <property name="color" value="C2B280FF"/>
-        <property name="size" value="2" />
+        <property name="size" value="4" />
     </bean>
         
 </beans>
