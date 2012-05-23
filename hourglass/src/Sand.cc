@@ -8,25 +8,74 @@
 
 #include <chipmunk.h>
 #include <cstddef>
+#include <physics/Space.h>
 #include "Sand.h"
-#include "Space.h"
 
-namespace Model {
+using namespace Model;
 
-struct Sand {
+struct SandImpl {
 
-        Sand () : point (Geometry::ZERO_POINT), hasPoint (false) {}
+        std::vector <cpCircleShape> shapes;
+        std::vector <cpBody> bodies;
 
-        std::vector <cpSegmentShape> shapes;
-        Geometry::Point point;
-        bool hasPoint;
 };
 
 /****************************************************************************/
 
-Sand::Sand () : radius (1)
+void Sand::addGrain (int i, int j, float densityX, float densityY, int cnt) {
+
+        cpBody* body = &impl->bodies[cnt];
+        cpSpaceAddBody (Space::getSpace(), cpBodyInit (body, mass, cpMomentForCircle (mass, 0, radius, cpvzero)));
+        cpBodySetPos (body, cpv (ll.x + i * densityX, ll.y + j * densityY));
+
+        cpCircleShape *circleShape = &impl->shapes[cnt];
+        cpCircleShapeInit (circleShape, body, radius, cpvzero);
+        cpShape* shape = cpSpaceAddShape (Space::getSpace(), reinterpret_cast <cpShape *> (circleShape));
+        cpShapeSetElasticity (shape, elasticity);
+        cpShapeSetFriction (shape, friction);
+}
+
+/****************************************************************************/
+
+void Sand::init ()
 {
-        impl = new Sand;
+        impl->shapes.resize (grainNo);
+        impl->bodies.resize (grainNo);
+
+        int a = int (sqrt (width * grainNo / height) + 0.5);
+        int b = grainNo / a;
+        int mod = grainNo % a;
+
+        float densityX = width / a;
+        float densityY = height / b;
+
+        int cnt = 0, i = 0, j = 0;
+
+        for (j = 0; j < b; ++j) {
+                for (i = 0; i < a; ++i) {
+                        addGrain (i, j, densityX, densityY, cnt);
+                        ++cnt;
+                }
+        }
+
+        for (i = 0; i < mod; ++i) {
+                addGrain (i, j, densityX, densityY, cnt);
+                ++cnt;
+        }
+}
+
+/****************************************************************************/
+
+Sand::Sand () :
+                width (0),
+                height (0),
+                grainNo (0),
+                radius (0),
+                mass (0),
+                elasticity (0),
+                friction (0)
+{
+        impl = new SandImpl;
 }
 
 /****************************************************************************/
@@ -34,43 +83,6 @@ Sand::Sand () : radius (1)
 Sand::~Sand()
 {
         delete impl;
-}
-
-/****************************************************************************/
-
-void Sand::setData (Ptr <Geometry::LineString> d)
-{
-        impl->shapes.resize (d->size () - 1);
-
-        int j = 0;
-        for (Geometry::LineString::const_iterator i = d->begin (); i != d->end (); ++i) {
-
-                if (!impl->hasPoint) {
-                        impl->point = *i;
-                        impl->hasPoint = true;
-                        continue;
-                }
-
-                assertThrow (getParent (), "Sand::addPoint : !parent");
-                // TODO Kast zalezny od macra RELEASE / DEBUG
-                Body *b = dynamic_cast <Body *> (getParent ());
-                assertThrow (b, "Sand::addPoint : dynamic_cast <Body *> (getParent ())")
-
-                cpSegmentShape *segment = &impl->shapes[j++];
-                cpSegmentShapeInit (segment, b->getBody (), cpv (impl->point.x, impl->point.y), cpv (i->x, i->y), radius);
-
-#if 0
-                std::cerr << Geometry::toString (impl->point) << ", " << Geometry::toString (*i) << std::endl;
-#endif
-
-                cpShape *shape = cpSpaceAddShape (Space::getSpace(), reinterpret_cast <cpShape *> (segment));
-                cpShapeSetUserData (shape, this);
-
-//                // TODO czy to powinna być masa całego body?
-//                b->addInertia (cpMomentForSegment (b->getMass (), cpv (impl->point.x, impl->point.y) , cpv (p.x, p.y)));
-
-                impl->point = *i;
-       }
 }
 
 /****************************************************************************/
@@ -101,45 +113,21 @@ VertexBuffer Sand::getVertexBuffer () const
 {
         VertexBuffer ret;
 
-        size_t offsetA = offsetof (cpSegmentShape, a);
+        size_t offset = offsetof (cpBody, p);
+        char *buffer = reinterpret_cast <char *> (&impl->bodies.front ());
 
-        char *buffer = reinterpret_cast <char *> (&impl->shapes[0]);
-        ret.buffer = buffer + offsetA;
-
-        ret.numVertices = impl->shapes.size ();
-
-        ret.stride = sizeof (cpSegmentShape);
+        ret.buffer = buffer + offset;
+        ret.numVertices = grainNo;
+        ret.stride = sizeof (cpBody);
         ret.pointType = VertexBuffer::DOUBLE;
 
-        buffer = reinterpret_cast <char *> (&impl->shapes.back ());
-        ret.extraSegment = buffer + offsetA;
 
 #if 0
         {
-                double *d = reinterpret_cast <double *> (buffer + offsetA);
+                double *d = reinterpret_cast <double *> (buffer + offset);
                 std::cerr << *d << "," << *(d + 1) << std::endl;
         }
-        {
-                double *d = reinterpret_cast <double *> (buffer + offsetA + sizeof (cpSegmentShape));
-                std::cerr << *d << "," << *(d + 1) << std::endl;
-        }
-        {
-                double *d = reinterpret_cast <double *> (buffer + offsetA + 2*sizeof (cpSegmentShape));
-                std::cerr << *d << "," << *(d + 1) << std::endl;
-        }
-        {
-                double *d = reinterpret_cast <double *> (buffer + offsetA + 3*sizeof (cpSegmentShape));
-                std::cerr << *d << "," << *(d + 1) << std::endl;
-        }
-        {
-                double *d = reinterpret_cast <double *> (buffer + offsetA + 4*sizeof (cpSegmentShape));
-                std::cerr << *d << "," << *(d + 1) << std::endl;
-        }
-
-        exit (0);
 #endif
 
         return ret;
 }
-
-} /* namespace Model */
