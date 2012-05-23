@@ -293,4 +293,21 @@ int DrawUtil::convertType (VertexBuffer::PointType type)
         }
 }
 
+/****************************************************************************/
+
+void DrawUtil::drawPoints (VertexBuffer const &buffer, Color const &color, float size)
+{
+        glDisableClientState(GL_NORMAL_ARRAY);
+        glDisableClientState(GL_COLOR_ARRAY);
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+        glVertexPointer (2, convertType (buffer.pointType), buffer.stride, buffer.buffer);
+        glPointSize (size);
+
+        if (color.a > 0) {
+                glColor4f (color.r, color.g, color.b, color.a);
+                glDrawArrays (GL_POINTS, 0, buffer.numVertices);
+        }
+}
+
 } /* namespace View */

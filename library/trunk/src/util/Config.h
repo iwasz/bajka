@@ -54,6 +54,9 @@ public:
         View::Color const &getClearColor () const { return clearColor; }
         m_ (setClearColor) void setClearColor (View::Color const &c) { clearColor = c; }
 
+        int getLoopDelayMs () const { return loopDelayMs; }
+        m_ (setLoopDelayMs) void setLoopDelayMs (int l) { loopDelayMs = l; }
+
 private:
 
         bool fullScreen;
@@ -63,6 +66,7 @@ private:
         bool showAABB;
         bool showSystemCursor;
         View::Color clearColor;
+        int loopDelayMs;
 
         E_ (Config)
 };
