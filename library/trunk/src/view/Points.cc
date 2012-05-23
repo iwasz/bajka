@@ -6,21 +6,21 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "Config.h"
+#include "Points.h"
+#include "OpenGl.h"
+#include "IVertexBufferEnabled.h"
+#include "IModel.h"
+#include "../util/Exceptions.h"
+#include "draw/Primitives.h"
 
-namespace Util {
+namespace View {
 
-/****************************************************************************/
-
-Config::Config () :
-                fullScreen (false),
-                resX (640),
-                resY (480),
-                showAABB (false),
-                showSystemCursor (true),
-                loopDelayMs (17)
+void Points::update (Model::IModel *model, Event::UpdateEvent *)
 {
+        Model::IVertexBufferEnabled *array = dynamic_cast <Model::IVertexBufferEnabled *>  (model);
+        assertThrow (array , "Points::update : !cB")
+
+        DrawUtil::drawPoints (array->getVertexBuffer (), color, size);
 }
 
-
-} /* namespace Util */
+} /* namespace View */

@@ -149,6 +149,7 @@ void App::loop ()
 #endif
 
         View::Color const &clearColor = impl->config->getClearColor ();
+        int loopDelayMs = impl->config->getLoopDelayMs ();
 
         while (!done) {
 
@@ -243,7 +244,7 @@ void App::loop ()
 #endif
 
                 // Tak śmiga, że damy delay
-                Util::TimeService::delayMs (17); // 60fps
+                Util::TimeService::delayMs (loopDelayMs); // 60fps
         }
 }
 
