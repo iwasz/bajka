@@ -23,11 +23,18 @@ struct CPLineStringImpl {
         std::vector <cpSegmentShape> shapes;
         Geometry::Point point;
         bool hasPoint;
+        Ptr <Geometry::LineString> data;
 };
 
 /****************************************************************************/
 
-CPLineString::CPLineString () : radius (1)
+CPLineString::CPLineString () : radius (1),
+        sensor (false),
+        elasticity (0),
+        friction (1),
+        collisionType (0),
+        group (CP_NO_GROUP),
+        layers (CP_ALL_LAYERS)
 {
         impl = new CPLineStringImpl;
 }
@@ -41,12 +48,12 @@ CPLineString::~CPLineString()
 
 /****************************************************************************/
 
-void CPLineString::setData (Ptr <Geometry::LineString> d)
+void CPLineString::init ()
 {
-        impl->shapes.resize (d->size () - 1);
+        impl->shapes.resize (impl->data->size () - 1);
 
         int j = 0;
-        for (Geometry::LineString::const_iterator i = d->begin (); i != d->end (); ++i) {
+        for (Geometry::LineString::const_iterator i = impl->data->begin (); i != impl->data->end (); ++i) {
 
                 if (!impl->hasPoint) {
                         impl->point = *i;
@@ -68,12 +75,25 @@ void CPLineString::setData (Ptr <Geometry::LineString> d)
 
                 cpShape *shape = cpSpaceAddShape (Space::getSpace(), reinterpret_cast <cpShape *> (segment));
                 cpShapeSetUserData (shape, this);
+                cpShapeSetSensor (shape, sensor);
+                cpShapeSetElasticity (shape, elasticity);
+                cpShapeSetFriction (shape, friction);
+                cpShapeSetCollisionType (shape, collisionType);
+                cpShapeSetGroup (shape, group);
+                cpShapeSetLayers (shape, layers);
 
 //                // TODO czy to powinna być masa całego body?
 //                b->addInertia (cpMomentForSegment (b->getMass (), cpv (impl->point.x, impl->point.y) , cpv (p.x, p.y)));
 
                 impl->point = *i;
        }
+}
+
+/****************************************************************************/
+
+void CPLineString::setData (Ptr <Geometry::LineString> d)
+{
+        impl->data = d;
 }
 
 /****************************************************************************/
@@ -98,7 +118,6 @@ Geometry::Point CPLineString::computeCenter () const
 }
 
 /****************************************************************************/
-
 
 VertexBuffer CPLineString::getVertexBuffer () const
 {
@@ -143,6 +162,35 @@ VertexBuffer CPLineString::getVertexBuffer () const
 #endif
 
         return ret;
+}
+
+/****************************************************************************/
+
+cpBody *CPLineString::getCPBody ()
+{
+        return dynamic_cast <Body *> (getParent ())->getBody ();
+}
+
+/****************************************************************************/
+
+Body *CPLineString::getBody ()
+{
+        return dynamic_cast <Body *> (getParent ());
+}
+
+/****************************************************************************/
+
+Geometry::Point CPLineString::getSurfaceVelocity () const
+{
+        assert (0);
+        return Geometry::ZERO_POINT;
+}
+
+/****************************************************************************/
+
+void CPLineString::setSurfaceVelocity (Geometry::Point const &)
+{
+        assert (0);
 }
 
 } /* namespace Model */
