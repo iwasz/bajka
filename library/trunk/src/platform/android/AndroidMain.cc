@@ -110,7 +110,12 @@ static int engineInitDisplay (App *bajkaApp)
 
         glMatrixMode (GL_PROJECTION);
         glLoadIdentity ();
-        glOrthof (-w / 2.0, w / 2.0, -h / 2.0, h / 2.0, -1, 1);
+
+        float aspectRatio = float (h) / w;
+        float rX = 100.0;
+        float rY = rX * aspectRatio;
+
+        glOrthof (-rX, rX, -rY, rY, -1, 1);
         androidEngine->running = true;
 
         LOGI ("RES : %d, %d", w, h);
@@ -190,12 +195,20 @@ void android_main (struct android_app* state) {
 
         std::ostringstream stream;
         LOGI ("Bajka start");
+        ContainerFactory factory;
 
         try {
 
                 app_dummy();
 
-                Ptr <BeanFactoryContainer> container = ContainerFactory::createContainer (MXmlMetaService::parseAndroidAsset (state->activity->assetManager,  "main.xml"));
+//                Ptr <BeanFactoryContainer> container = ContainerFactory::createContainer (MXmlMetaService::parseAndroidAsset (state->activity->assetManager,  "main.xml"));
+
+                Ptr <MetaContainer> metaContainer = MXmlMetaService::parseAndroidAsset (state->activity->assetManager,  "main.xml");
+                Ptr <BeanFactoryContainer> container = factory.createEmptyContainer (metaContainer, true, Ptr <BeanFactoryContainer> (), factory);
+                container->addConversion (typeid (Geometry::Point), Geometry::stringToPointVariant);
+                container->addConversion (typeid (Geometry::LineString), Geometry::stringToLineStringVariant);
+                factory.fill (container, metaContainer);
+
                 Ptr <Util::App> app = vcast <Ptr <Util::App> > (container->getBean ("app"));
                 app->setInstance (app.get ());
                 app->getAndroidEngine ()->androidApp = state;
@@ -205,70 +218,8 @@ void android_main (struct android_app* state) {
                 state->onAppCmd = engineHandleCmd;
                 state->onInputEvent = engineHandleInput;
 
-//            // Prepare to monitor accelerometer
-//            engine.accelerometerSensor = ASensorManager_getDefaultSensor(engine.sensorManager, ASENSOR_TYPE_ACCELEROMETER);
-//            engine.sensorEventQueue = ASensorManager_createEventQueue(engine.sensorManager, state->looper, LOOPER_ID_USER, NULL, NULL);
-
-//            if (state->savedState != NULL) {
-//                // We are starting with a previous saved state; restore from it.
-//                engine.state = *(struct saved_state*)state->savedState;
-//            }
-
                 app->loop ();
                 app->destroy ();
-
-//            // loop waiting for stuff to do.
-//            while (1) {
-//                // Read all pending events.
-//                int ident;
-//                int events;
-//                struct android_poll_source* source;
-//
-//                // If not animating, we will block forever waiting for events.
-//                // If animating, we loop until all events are read, then continue
-//                // to draw the next frame of animation.
-//                while ((ident=ALooper_pollAll(engine.animating ? 0 : -1, NULL, &events,
-//                        (void**)&source)) >= 0) {
-//
-//                    // Process this event.
-//                    if (source != NULL) {
-//                        source->process(state, source);
-//                    }
-//
-//                    // If a sensor has data, process it now.
-//                    if (ident == LOOPER_ID_USER) {
-//                        if (engine.accelerometerSensor != NULL) {
-//                            ASensorEvent event;
-//                            while (ASensorEventQueue_getEvents(engine.sensorEventQueue,
-//                                    &event, 1) > 0) {
-////                                LOGI("accelerometer: x=%f y=%f z=%f",
-////                                        event.acceleration.x, event.acceleration.y,
-////                                        event.acceleration.z);
-//                            }
-//                        }
-//                    }
-//
-//                    // Check if we are exiting.
-//                    if (state->destroyRequested != 0) {
-//                        engineTermDisplay(&engine);
-//                        return;
-//                    }
-//                }
-//
-//                if (engine.animating) {
-//                    // Done with events; draw next animation frame.
-//                    engine.state.angle += .01f;
-//                    if (engine.state.angle > 1) {
-//                        engine.state.angle = 0;
-//                    }
-//
-//                    // Drawing is throttled to the screen update rate, so there
-//                    // is no need to do timing here.
-////                    engine_draw_frame(&engine, model.get ());
-//                    engine_draw_frame(&engine, NULL);
-//                }
-//            }
-
         }
         catch (Core::Exception const &e) {
             stream << "Exception caught : \n" << e.getMessage () << std::endl;
