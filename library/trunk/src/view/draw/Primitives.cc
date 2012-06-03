@@ -281,13 +281,21 @@ int DrawUtil::convertType (VertexBuffer::PointType type)
         switch (type) {
                 case VertexBuffer::FLOAT:
                         return GL_FLOAT;
+#ifndef USE_OPENGLES
                 case VertexBuffer::DOUBLE:
                         return GL_DOUBLE;
-                case VertexBuffer::SHORT:
-                        return GL_SHORT;
+
                 case VertexBuffer::INT:
                         return GL_INT;
+#else
                 case VertexBuffer::FIXED:
+                        return GL_FIXED;
+
+                case VertexBuffer::BYTE:
+                        return GL_BYTE;
+#endif
+                case VertexBuffer::SHORT:
+                        return GL_SHORT;
                 default:
                         return GL_FLOAT;
         }

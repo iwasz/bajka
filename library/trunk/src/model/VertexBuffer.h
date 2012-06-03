@@ -20,7 +20,7 @@ namespace Model {
 struct VertexBuffer {
 
         // ? takie typy?
-        enum PointType { FLOAT, DOUBLE, SHORT, INT, FIXED };
+        enum PointType { FLOAT, DOUBLE, SHORT, INT, FIXED, BYTE };
 
         VertexBuffer () : buffer (NULL), extraSegment (NULL) {}
 

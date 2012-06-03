@@ -13,6 +13,7 @@
 #include "Segment.h"
 #include "Body.h"
 #include "Space.h"
+#include "Logging.h"
 
 namespace Model {
 
@@ -70,7 +71,7 @@ void CPLineString::init ()
                 cpSegmentShapeInit (segment, b->getBody (), cpv (impl->point.x, impl->point.y), cpv (i->x, i->y), radius);
 
 #if 0
-                std::cerr << Geometry::toString (impl->point) << ", " << Geometry::toString (*i) << std::endl;
+                LOGI ("%s, %s", Geometry::toString (impl->point).c_str (), Geometry::toString (*i).c_str ());
 #endif
 
                 cpShape *shape = cpSpaceAddShape (Space::getSpace(), reinterpret_cast <cpShape *> (segment));
@@ -131,28 +132,33 @@ VertexBuffer CPLineString::getVertexBuffer () const
         ret.numVertices = impl->shapes.size ();
 
         ret.stride = sizeof (cpSegmentShape);
-        ret.pointType = VertexBuffer::DOUBLE;
 
-#if 1
+#ifdef ANDROID
+        ret.pointType = VertexBuffer::FLOAT;
+#else
+        ret.pointType = VertexBuffer::DOUBLE;
+#endif
+
+#if 0
         {
                 double *d = reinterpret_cast <double *> (buffer + offsetA);
-                std::cerr << *d << "," << *(d + 1) << std::endl;
+                LOGI ("%f, %f", *d, *(d + 1));
         }
         {
                 double *d = reinterpret_cast <double *> (buffer + offsetA + sizeof (cpSegmentShape));
-                std::cerr << *d << "," << *(d + 1) << std::endl;
+                LOGI ("%f, %f", *d, *(d + 1));
         }
         {
                 double *d = reinterpret_cast <double *> (buffer + offsetA + 2*sizeof (cpSegmentShape));
-                std::cerr << *d << "," << *(d + 1) << std::endl;
+                LOGI ("%f, %f", *d, *(d + 1));
         }
         {
                 double *d = reinterpret_cast <double *> (buffer + offsetA + 3*sizeof (cpSegmentShape));
-                std::cerr << *d << "," << *(d + 1) << std::endl;
+                LOGI ("%f, %f", *d, *(d + 1));
         }
         {
                 double *d = reinterpret_cast <double *> (buffer + offsetA + 4*sizeof (cpSegmentShape));
-                std::cerr << *d << "," << *(d + 1) << std::endl;
+                LOGI ("%f, %f", *d, *(d + 1));
         }
 
         exit (0);

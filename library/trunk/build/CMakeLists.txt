@@ -22,6 +22,7 @@ elseif (TARGET_PLATFORM STREQUAL "Android")
     ADD_DEFINITIONS (-DUSE_OPENGLES)
     ADD_DEFINITIONS (-DUSE_EGL)
     ADD_DEFINITIONS (-DUSE_TOUCH_SCREEN)
+    ADD_DEFINITIONS (-DUSE_CHIPMUNK)
     SET (ANDROID True)
 elseif (TARGET_PLATFORM STREQUAL "iPhone")
     ADD_DEFINITIONS (-DIPHONE)
@@ -107,6 +108,8 @@ elseif (ANDROID)
     INCLUDE_DIRECTORIES ("$ENV{ANDROID_STANDALONE_TOOLCHAIN}/user/include/tiliae/editor")
     INCLUDE_DIRECTORIES ("$ENV{ANDROID_STANDALONE_TOOLCHAIN}/user/include/tiliae/reflection")
     
+    INCLUDE_DIRECTORIES ("/home/iwasz/local/share/android-toolchain/user/include/chipmunk")
+    
     link_directories($ENV{ANDROID_STANDALONE_TOOLCHAIN}/user/lib)    
 endif ()
 
@@ -164,15 +167,7 @@ if (LINUX)
     TARGET_LINK_LIBRARIES (bajka ${JPEG_LIBRARIES})
     TARGET_LINK_LIBRARIES (bajka ${TILIAE_LIBRARIES})
     TARGET_LINK_LIBRARIES (bajka chipmunk)
-    
-INSTALL (
-    TARGETS bajka
-    DESTINATION lib 
-    PERMISSIONS
-    OWNER_READ OWNER_WRITE OWNER_EXECUTE
-    GROUP_READ GROUP_EXECUTE
-    WORLD_READ WORLD_EXECUTE)
-    
+        
     # Executable test.
     IF (0)
         AUX_SOURCE_DIRECTORY (../test TEST_SOURCES)
@@ -196,7 +191,7 @@ INSTALL (
     
 elseif (ANDROID)
 
-    add_library (bajka SHARED ${SOURCES})
+    add_library (bajka STATIC ${SOURCES})
     # Android-specific Log Support
     TARGET_LINK_LIBRARIES (bajka log)
     
@@ -211,6 +206,15 @@ elseif (ANDROID)
     TARGET_LINK_LIBRARIES (bajka stdc++)
     TARGET_LINK_LIBRARIES (bajka tiliae)
     TARGET_LINK_LIBRARIES (bajka mxml)
+    TARGET_LINK_LIBRARIES (bajka chipmunk)
 
 endif ()
 
+INSTALL (
+    TARGETS bajka
+    DESTINATION lib 
+    PERMISSIONS
+    OWNER_READ OWNER_WRITE OWNER_EXECUTE
+    GROUP_READ GROUP_EXECUTE
+    WORLD_READ WORLD_EXECUTE)
+    
