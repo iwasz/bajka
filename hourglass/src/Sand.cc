@@ -10,6 +10,12 @@
 #include <cstddef>
 #include <physics/Space.h>
 #include "Sand.h"
+#include <android/android_native_app_glue.h>
+
+#include <Points.h>
+#include <Primitive.h>
+#include <physics/StaticBody.h>
+#include <physics/CPLineString.h>
 
 using namespace Model;
 
@@ -39,6 +45,8 @@ void Sand::addGrain (int i, int j, float densityX, float densityY, int cnt) {
 
 void Sand::init ()
 {
+        app_dummy();
+
         impl->shapes.resize (grainNo);
         impl->bodies.resize (grainNo);
 
@@ -119,7 +127,12 @@ VertexBuffer Sand::getVertexBuffer () const
         ret.buffer = buffer + offset;
         ret.numVertices = grainNo;
         ret.stride = sizeof (cpBody);
+
+#ifdef ANDROID
+        ret.pointType = VertexBuffer::FLOAT;
+#else
         ret.pointType = VertexBuffer::DOUBLE;
+#endif
 
 
 #if 0

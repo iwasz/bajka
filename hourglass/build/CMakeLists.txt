@@ -22,6 +22,7 @@ elseif (TARGET_PLATFORM STREQUAL "Android")
     ADD_DEFINITIONS (-DUSE_OPENGLES)
     ADD_DEFINITIONS (-DUSE_EGL)
     ADD_DEFINITIONS (-DUSE_TOUCH_SCREEN)
+    ADD_DEFINITIONS (-DUSE_CHIPMUNK)
     SET (ANDROID True)
 elseif (TARGET_PLATFORM STREQUAL "iPhone")
     ADD_DEFINITIONS (-DIPHONE)
@@ -39,7 +40,7 @@ ADD_DEFINITIONS (-DBAJKA_DEBUG)
 
 #SET (EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR})
 #SET (LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR})
-#SET (CMAKE_VERBOSE_MAKEFILE 0)
+SET (CMAKE_VERBOSE_MAKEFILE 0)
 
 if (LINUX)
     SET (CMAKE_PREFIX_PATH "/home/iwasz/local")
@@ -92,6 +93,18 @@ elseif (ANDROID)
     INCLUDE_DIRECTORIES ("$ENV{ANDROID_STANDALONE_TOOLCHAIN}/user/include/tiliae/factory")
     INCLUDE_DIRECTORIES ("$ENV{ANDROID_STANDALONE_TOOLCHAIN}/user/include/tiliae/editor")
     INCLUDE_DIRECTORIES ("$ENV{ANDROID_STANDALONE_TOOLCHAIN}/user/include/tiliae/reflection")
+
+    INCLUDE_DIRECTORIES ("$ENV{ANDROID_STANDALONE_TOOLCHAIN}/user/include/bajka/")
+    INCLUDE_DIRECTORIES ("$ENV{ANDROID_STANDALONE_TOOLCHAIN}/user/include/bajka/controller")
+    INCLUDE_DIRECTORIES ("$ENV{ANDROID_STANDALONE_TOOLCHAIN}/user/include/bajka/events")
+    INCLUDE_DIRECTORIES ("$ENV{ANDROID_STANDALONE_TOOLCHAIN}/user/include/bajka/geometry")
+    INCLUDE_DIRECTORIES ("$ENV{ANDROID_STANDALONE_TOOLCHAIN}/user/include/bajka/model")
+    INCLUDE_DIRECTORIES ("$ENV{ANDROID_STANDALONE_TOOLCHAIN}/user/include/bajka/platform")
+    INCLUDE_DIRECTORIES ("$ENV{ANDROID_STANDALONE_TOOLCHAIN}/user/include/bajka/tween")
+    INCLUDE_DIRECTORIES ("$ENV{ANDROID_STANDALONE_TOOLCHAIN}/user/include/bajka/util")
+    INCLUDE_DIRECTORIES ("$ENV{ANDROID_STANDALONE_TOOLCHAIN}/user/include/bajka/view")
+
+    INCLUDE_DIRECTORIES ("/home/iwasz/local/share/android-toolchain/user/include/chipmunk")
     
     link_directories($ENV{ANDROID_STANDALONE_TOOLCHAIN}/user/lib)    
 endif ()
@@ -99,8 +112,6 @@ endif ()
 # Sources
 AUX_SOURCE_DIRECTORY (../src SOURCES)
 
-# Local includes (inside project).
-INCLUDE_DIRECTORIES (/usr/local/include/chipmunk)
 INCLUDE_DIRECTORIES (../src)
 
 if (LINUX)       
@@ -108,5 +119,24 @@ if (LINUX)
     TARGET_LINK_LIBRARIES (hourglass ${BAJKA_LIBRARIES})    
     TARGET_LINK_LIBRARIES (hourglass chipmunk)    
 elseif (ANDROID)
+    add_library (hourglass SHARED ${SOURCES})
+    
+    # Android-specific Log Support
+    TARGET_LINK_LIBRARIES (hourglass log)
+    
+    # The EGL graphics library
+    TARGET_LINK_LIBRARIES (hourglass EGL)
+    
+    # The Android native application APIs
+    TARGET_LINK_LIBRARIES (hourglass android)
+    
+    # The OpenGL ES 1.x Library
+    TARGET_LINK_LIBRARIES (hourglass GLESv1_CM)
+    TARGET_LINK_LIBRARIES (hourglass stdc++)
+    TARGET_LINK_LIBRARIES (hourglass bajka)    
+    TARGET_LINK_LIBRARIES (hourglass tiliae)
+    TARGET_LINK_LIBRARIES (hourglass mxml)
+    TARGET_LINK_LIBRARIES (hourglass chipmunk)    
+    
 endif ()
 
