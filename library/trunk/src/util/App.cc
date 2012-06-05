@@ -64,6 +64,80 @@ namespace V = View;
 namespace C = Controller;
 namespace E = Event;
 
+struct NativeEvent {
+        int type;
+        void *data;
+};
+
+/*##########################################################################*/
+
+struct IEventSource {
+        virtual ~IEventSource () {}
+        virtual void init (App *app) = 0;
+        virtual void poll () = 0;
+        virtual void handle () = 0;
+};
+
+typedef std::vector <IEventSource *> EventSourceVector;
+
+/*##########################################################################*/
+
+class AndroidCmdEventSource : public IEventSource {
+public:
+
+};
+
+/*##########################################################################*/
+
+class AndroidAccelerometerEventSourceImpl;
+class AndroidAccelerometerEventSource : public IEventSource {
+public:
+
+        AndroidAccelerometerEventSource ();
+        virtual ~AndroidAccelerometerEventSource ();
+        virtual void init (App *app);
+        virtual void poll ();
+        virtual void handle ();
+
+private:
+
+        AndroidAccelerometerEventSourceImpl *impl;
+};
+
+struct AndroidAccelerometerEventSourceImpl {
+        ASensorManager* sensorManager;
+        const ASensor* accelerometerSensor;
+        ASensorEventQueue* sensorEventQueue;
+};
+
+AndroidAccelerometerEventSource::AndroidAccelerometerEventSource ()
+{
+        impl = new AndroidAccelerometerEventSourceImpl;
+}
+
+AndroidAccelerometerEventSource::~AndroidAccelerometerEventSource ()
+{
+        delete impl;
+}
+
+void AndroidAccelerometerEventSource::init (App *app)
+{
+        impl->sensorManager = ASensorManager_getInstance ();
+        impl->accelerometerSensor = ASensorManager_getDefaultSensor (impl->sensorManager, ASENSOR_TYPE_ACCELEROMETER);
+        impl->sensorEventQueue = ASensorManager_createEventQueue (impl->sensorManager, app->getAndroidEngine ()->androidApp->looper, LOOPER_ID_USER, NULL, NULL);
+}
+
+void AndroidAccelerometerEventSource::poll ()
+{
+        ASensorEvent event;
+
+        while (ASensorEventQueue_getEvents (impl->sensorEventQueue, &event, 1) > 0) {
+            LOGI("accelerometer: x=%f y=%f z=%f", event.acceleration.x, event.acceleration.y, event.acceleration.z);
+        }
+}
+
+/*##########################################################################*/
+
 /**
  * pimpl
  */
@@ -82,6 +156,8 @@ struct Impl {
 
         bool dropIteration_;
         Event::UpdateEvent updateEvent;
+
+        EventSourceVector eventSources;
 
 #ifdef ANDROID
         AndroidEngine androidEngine;
@@ -107,9 +183,9 @@ App *App::instance ()
 
 void App::init ()
 {
-#ifdef ANDROID
-        impl->androidEngine.sensorManager = ASensorManager_getInstance ();
-#endif
+//#ifdef ANDROID
+//        impl->androidEngine.sensorManager = ASensorManager_getInstance ();
+//#endif
 
         int requestedResX = impl->config->getResX ();
         int requestedResY = impl->config->getResY ();
@@ -125,6 +201,10 @@ void App::init ()
 
         srand (time (NULL));
         Tween::init ();
+
+        for (EventSourceVector::iterator i = impl->eventSources.begin (); i != impl->eventSources.end (); ++i) {
+                (*i)->init (this);
+        }
 }
 
 /****************************************************************************/
@@ -152,11 +232,11 @@ void App::loop ()
         View::Color const &clearColor = impl->config->getClearColor ();
         int loopDelayMs = impl->config->getLoopDelayMs ();
 
-#ifdef ANDROID
-        ASensorManager* sensorManager = ASensorManager_getInstance();
-        const ASensor* accelerometerSensor = ASensorManager_getDefaultSensor (sensorManager, ASENSOR_TYPE_ACCELEROMETER);
-        ASensorEventQueue* sensorEventQueue = ASensorManager_createEventQueue (sensorManager, impl->androidEngine.androidApp->looper, LOOPER_ID_USER, NULL, NULL);
-#endif
+//#ifdef ANDROID
+//        ASensorManager* sensorManager = ASensorManager_getInstance();
+//        const ASensor* accelerometerSensor = ASensorManager_getDefaultSensor (sensorManager, ASENSOR_TYPE_ACCELEROMETER);
+//        ASensorEventQueue* sensorEventQueue = ASensorManager_createEventQueue (sensorManager, impl->androidEngine.androidApp->looper, LOOPER_ID_USER, NULL, NULL);
+//#endif
 
         while (!done) {
 
@@ -178,15 +258,10 @@ void App::loop ()
                          source->process(impl->androidEngine.androidApp, source);
                      }
 
-                     LOGI("ident : %d, acc : %p", ident, accelerometerSensor);
-
                      // If a sensor has data, process it now.
-                     if (ident == LOOPER_ID_USER && accelerometerSensor != NULL) {
-                             ASensorEvent event;
-                             LOGI("LOOPER_ID_USER");
-
-                             while (ASensorEventQueue_getEvents (sensorEventQueue, &event, 1) > 0) {
-                                 LOGI("accelerometer: x=%f y=%f z=%f", event.acceleration.x, event.acceleration.y, event.acceleration.z);
+                     if (ident == LOOPER_ID_USER) {
+                             for (EventSourceVector::iterator i = impl->eventSources.begin (); i != impl->eventSources.end (); ++i) {
+                                     (*i)->poll ();
                              }
                      }
 

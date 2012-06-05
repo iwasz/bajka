@@ -19,14 +19,12 @@ namespace Util {
 struct AndroidEngine {
 
         AndroidEngine () : androidApp (NULL),
-                        sensorManager (NULL),
                         display (NULL),
                         surface (NULL),
                         context (NULL),
                         running (false) {}
 
         struct android_app* androidApp;
-        ASensorManager* sensorManager;
         EGLDisplay display;
         EGLSurface surface;
         EGLContext context;
