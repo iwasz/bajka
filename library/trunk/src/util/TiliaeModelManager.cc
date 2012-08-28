@@ -53,7 +53,7 @@ void TiliaeModelManager::load (std::string const &name, bool cut)
                  * (na przykład guzik). Nawet obiekt stringa zawierający nazwę modelu do
                  * załadowania może przestać istnieć po tej linii. Dlatego mamy kopię.
                  */
-                childContainer = ContainerFactory::createContainer (MXmlMetaService::parseFile (currentFile), false, mainContainer);
+                childContainer = ContainerFactory::createAndInit (MXmlMetaService::parseFile (currentFile), false, mainContainer.get ());
 
 /*--------------poniżej tej linii stary model już nie istnieje----------------------------------------------------------------------------------------------------------------------------------------------------*/
         }
