@@ -40,8 +40,6 @@ int main (int argc, char **argv)
                 fileName = "main.xml";
         }
 
-        ContainerFactory factory;
-
         try {
 
 #ifdef USE_SDL
@@ -56,11 +54,10 @@ int main (int argc, char **argv)
 #endif
 
                 Ptr <MetaContainer> metaContainer = MXmlMetaService::parseFile (fileName);
-                Ptr <BeanFactoryContainer> container = factory.createEmptyContainer (metaContainer, true, Ptr <BeanFactoryContainer> (), factory);
+                Ptr <BeanFactoryContainer> container = ContainerFactory::create (metaContainer, true);
                 container->addConversion (typeid (Geometry::Point), Geometry::stringToPointVariant);
                 container->addConversion (typeid (Geometry::LineString), Geometry::stringToLineStringVariant);
-                factory.fill (container, metaContainer);
-
+                ContainerFactory::init (container.get (), metaContainer.get ());
 
                 Ptr <Util::App> app = vcast <Ptr <Util::App> > (container->getBean ("app"));
                 app->setInstance (app.get ());
