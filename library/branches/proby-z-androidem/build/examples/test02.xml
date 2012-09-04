@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
+        "file:///home/iwasz/program/projects/tiliae/base/container/tiliae-container-1.0.dtd">
+
+<beans>
+
+    <!--Konfiguracja-->
+    <bean id="cfg" class="BajkaConfig" singleton="true">
+        <property name="fullScreen" value="false"/>
+        <property name="resX" value="800"/>
+        <property name="resY" value="800"/>
+        <property name="windowCaption" value="Chipmunk tests"/>
+        <property name="showAABB" value="true"/>
+    </bean>
+
+    <!--Obiekt app, czyli aplikacja :)-->
+    <bean id="app" class="BajkaApp" singleton="true" >
+        <property name="config" ref="cfg" />
+        <property name="model" ref="test02"/>               
+    </bean>
+
+    <bean id="test02" class="BoxGroup" singleton="true">
+        <property name="width" value="640" />
+        <property name="height" value="480" />
+        <!-- TODO Czemu tu trzeba dać 319? -->
+        <property name="translate" value="-390, -310" />       
+        
+        <property name="children">
+            <list class="ModelVector">
+
+              <bean class="Circle" singleton="true">
+                  <property name="view" ref="circleWgt"/>            
+                  <property name="radius" value="50" />    
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="50, 50" />       
+                            <property name="align" value="0x24" />       
+                        </bean>
+                    </property>
+              </bean>
+              
+            </list>
+        </property>
+    </bean>
+
+    <bean id="circleWgt" class="View::Circle" singleton="true">
+        <property name="foreground" value="000000FF"/>
+        <property name="background" ref="randomColor"/>
+    </bean>  
+
+    <bean id="randomColor" class="Color" singleton="false">
+        <constructor-arg><value type="bool">true</value></constructor-arg>
+    </bean>
+
+</beans>
