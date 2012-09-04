@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
+        "file:///home/iwasz/program/projects/tiliae/base/container/tiliae-container-1.0.dtd">
+
+<beans>
+
+    <bean id="credits" class="BoxGroup" singleton="true">
+        <property name="translate" value="-240, -320" />       
+        <property name="controller" ref="emptyCtr"/>            
+        <property name="width" value="480"/>
+        <property name="height" value="640"/>
+                                
+        <property name="children">
+            <list class="ModelVector">
+                                                
+                <bean parent="image">
+                    <property name="view.bitmap.path" value="resources/img/ui/menu-wall-with-window.png"/>
+                </bean>
+
+                <bean parent="image">
+                    <property name="view.bitmap.path" value="resources/img/ui/panel-background-307x588.png"/>
+
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="50, 50" />       
+                            <property name="align" value="0x24" />       
+                        </bean>
+                    </property>
+                </bean>
+
+                <bean parent="image">
+                    <property name="view.bitmap.path" value="resources/img/ui/button-credits.png"/>
+                    <property name="view.region" value="3, 48, 94, 88" />                    
+
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="50, 85" />       
+                            <property name="align" value="0x24" />       
+                        </bean>
+                    </property>
+                </bean>
+
+                <bean parent="header">
+                    <property name="view.text" value="design / graphics"/>
+                    <property name="layout.translateRel" value="50, 75"/>
+                </bean>
+                
+                <bean parent="info">
+                    <property name="view.text" value="Adrian Kulasek"/>
+                    <property name="layout.translateRel" value="50, 71" />       
+                </bean>
+                <bean parent="url">
+                    <property name="view.text" value="http://about.me/goshki"/>
+                    <property name="layout.translateRel" value="50, 68" />       
+                </bean>
+
+                <bean parent="header">
+                    <property name="view.text" value="programming"/>
+                    <property name="layout.translateRel" value="50, 64"/>
+                </bean>
+                <bean parent="info">
+                    <property name="view.text" value="Lukasz Iwaszkiewicz"/>
+                    <property name="layout.translateRel" value="50, 60" />       
+                </bean>
+                <bean parent="url">
+                    <property name="view.text" value="http://iwasz.pl/soft"/>
+                    <property name="layout.translateRel" value="50, 57" />       
+                </bean>
+
+                <bean parent="header">
+                    <property name="view.text" value="music"/>
+                    <property name="layout.translateRel" value="50, 53"/>
+                </bean>
+                <bean parent="info">
+                    <property name="view.text" value="Tomasz Marciniak"/>
+                    <property name="layout.translateRel" value="50, 49" />       
+                </bean>
+                <bean parent="url">
+                    <property name="view.text" value="http://soundcloud.com/tomaszmarciniak"/>
+                    <property name="layout.translateRel" value="50, 46" />       
+                </bean>
+
+                <bean parent="header">
+                    <property name="view.text" value="MailSorter is powered by:"/>
+                    <property name="layout.translateRel" value="50, 35"/>
+                </bean>
+                <bean parent="info">
+                    <property name="view.multiline" value="true"/>                        
+                    <property name="view.align" value="2"/>                        
+                    <property name="view.text">                        
+<value><![CDATA[libbajka
+libtiliae
+Boost]]></value>
+                    </property>
+                    <property name="layout.translateRel" value="50, 26" />       
+                </bean>
+                
+                <bean parent="buttonWgt">
+                    <property name="view.widgets.0.bitmap" ref="buttonCloseBmp"/>
+                    <property name="view.widgets.0.region" value="3, 3, 77, 43"/>
+                    <property name="view.widgets.1.bitmap" ref="buttonCloseBmp"/>
+                    <property name="view.widgets.1.region" value="3, 48, 77, 88"/>
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="50, 10" />       
+                        </bean>
+                    </property>
+                    <property name="controller">
+                      <bean class="LoadButtonController" singleton="true">
+                           TODO, tylko mouse.
+                           <property name="eventMask" value="0xffff"/>
+                           <property name="name" value="menu"/>          
+                      </bean>
+                    </property>      
+                </bean>
+                
+            </list>
+        </property>
+    </bean>
+
+<!-- ====================================================================================== -->
+<!-- Bitmapy, obrazki -->
+<!-- ====================================================================================== -->
+
+    <bean id="mailStackBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/menu-mail-stack-loop.png" />
+    </bean>
+
+    <bean id="buttonCloseBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/button-close.png" />
+    </bean>
+    
+<!--     <Animation bitmap="@mailStackBmp" region="0, 0, 10, 10"> -->
+<!--         <FrameSet add="frameSets" name="default" fps="2" frames="0, 1, 2, 3"/> -->
+<!--     </Animation> -->
+    
+</beans>

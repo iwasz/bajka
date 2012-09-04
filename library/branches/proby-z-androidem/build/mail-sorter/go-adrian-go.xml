@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
+        "file:///home/iwasz/program/projects/tiliae/base/container/tiliae-container-1.0.dtd">
+
+<beans>
+
+    <bean id="goAdrian" class="BoxGroup" singleton="true" >
+        <property name="translate" value="-240, -320" />       
+        <property name="controller" ref="emptyCtr"/>            
+        <property name="width" value="480"/>
+        <property name="height" value="640"/>
+                                
+        <property name="children">
+            <list class="ModelVector">
+                <bean parent="label">
+                    <property name="view.text">
+                        <value><![CDATA[GO
+Adrian,
+GO!]]></value>
+                    </property>                        
+                    <property name="view.multiline" value="true"/>                        
+                    <property name="view.font" ref="accidentBig" />
+                    <property name="view.foreground" value="ff0000ff"/>        
+                    <property name="view.align" value="2"/>
+                                            
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="align" value="0x24" />       
+                            <property name="translateRel" value="50, 50" />       
+                        </bean>
+                    </property>
+                </bean>
+                
+                <bean parent="buttonWgt">
+                    <property name="view.widgets.0.bitmap" ref="buttonCloseBmp"/>
+                    <property name="view.widgets.0.region" value="3, 3, 77, 43"/>
+                    <property name="view.widgets.1.bitmap" ref="buttonCloseBmp"/>
+                    <property name="view.widgets.1.region" value="3, 48, 77, 88"/>
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="50, 12" />       
+                        </bean>
+                    </property>
+                    <property name="controller">
+                      <bean class="LoadButtonController" singleton="true">
+                           TODO, tylko mouse.
+                           <property name="eventMask" value="0xffff"/>
+                           <property name="name" value="menu"/>          
+                      </bean>
+                    </property>      
+                </bean>
+                
+            </list>
+        </property>
+    </bean>
+
+    <bean id="accidentBig" class="TTFFont" singleton="true">
+        <constructor-arg><value type="text">resources/fonts/AccidentalPresident.ttf</value></constructor-arg>    
+        <constructor-arg><value type="int">88</value></constructor-arg>
+        <property name="type" value="2"/>
+        <property name="hinting" value="3"/>        
+    </bean>
+
+    <bean id="buttonCloseBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/button-close.png" />
+    </bean>
+
+</beans>

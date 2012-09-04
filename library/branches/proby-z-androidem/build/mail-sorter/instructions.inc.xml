@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
+        "file:///home/iwasz/program/projects/tiliae/base/container/tiliae-container-1.0.dtd">
+
+<beans>
+
+    <bean id="instructionsBase" class="BoxGroup" singleton="true" abstract="true">
+        <property name="translate" value="-240, -320" />       
+        <property name="controller" ref="emptyCtr"/>            
+        <property name="width" value="480"/>
+        <property name="height" value="640"/>
+                                
+        <property name="children">
+            <list class="ModelVector">
+                                                
+                <bean parent="image">
+                    <property name="view.bitmap.path" value="resources/img/ui/menu-wall-with-window.png"/>
+                </bean>
+
+                <bean parent="image">
+                    <property name="view.bitmap.path" value="resources/img/ui/panel-background-307x588.png"/>
+
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="50, 50" />       
+                            <property name="align" value="0x24" />       
+                        </bean>
+                    </property>
+                </bean>
+
+                <bean parent="image">
+                    <property name="view.bitmap.path" value="resources/img/ui/button-instructions.png"/>
+                    <property name="view.region" value="3, 48, 145, 88" />                    
+
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="50, 85" />       
+                            <property name="align" value="0x24" />       
+                        </bean>
+                    </property>
+                </bean>
+
+                <!-- To dodajemy instrukcje obrazkowe -->
+                <bean class="BoxGroup" singleton="true">
+                    <property name="translate" value="110, 300" />       
+                    <property name="width" value="250"/>
+                    <property name="height" value="200"/>
+                </bean>
+
+                <bean parent="header">
+                    <property name="layout.translateRel" value="50, 42"/>
+                </bean>
+                <bean parent="infoSmall">
+                    <property name="layout.translateRel" value="50, 40" />       
+                </bean>
+
+                <bean parent="buttonWgt">
+                    <property name="view.widgets.0.bitmap" ref="buttonCloseBmp"/>
+                    <property name="view.widgets.0.region" value="3, 3, 77, 43"/>
+                    <property name="view.widgets.1.bitmap" ref="buttonCloseBmp"/>
+                    <property name="view.widgets.1.region" value="3, 48, 77, 88"/>
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="35, 12" />       
+                        </bean>
+                    </property>
+                    <property name="controller">
+                      <bean class="LoadButtonController" singleton="true">
+                           TODO, tylko mouse.
+                           <property name="eventMask" value="0xffff"/>
+                           <property name="name" value="menu"/>          
+                      </bean>
+                    </property>      
+                </bean>
+                
+                <bean parent="buttonWgt">
+                    <property name="view.widgets.0.bitmap" ref="buttonNextBmp"/>
+                    <property name="view.widgets.0.region" value="3, 3, 65, 43"/>
+                    <property name="view.widgets.1.bitmap" ref="buttonNextBmp"/>
+                    <property name="view.widgets.1.region" value="3, 48, 65, 88"/>
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="65, 12" />       
+                        </bean>
+                    </property>
+                    <property name="controller">
+                      <bean class="LoadButtonController" singleton="true">
+<!--                            TODO, tylko mouse. -->
+                           <property name="eventMask" value="0xffff"/>
+                           <property name="name" value="override"/>          
+                      </bean>
+                    </property>      
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+<!-- ====================================================================================== -->
+<!-- Powtarzające się widgety. -->
+<!-- ====================================================================================== -->
+
+    <bean id="player" class="Box" singleton="true" init-method="updateToViewSize">
+        <property name="layout">
+            <bean class="Layout" singleton="true">
+                <property name="translateRel" value="50, 25" />
+            </bean>
+        </property>
+
+        <property name="view">
+            <bean class="Animation" singleton="true">
+                <property name="bitmap" ref="playerBmp" />
+                <property name="region" value="0, 0, 30, 50" />
+                <property name="count" value="5" />
+                <property name="frames.default">
+                    <bean class="FrameSet" singleton="true">
+                        <property name="fps" value="2" />
+                        <property name="loop" value="true" />
+                        <property name="frames">
+                            <list class="IntVector" singleton="true">
+                                <value>0</value>
+                                <value>1</value>
+                            </list>
+                        </property>
+                    </bean>
+                </property>
+                <property name="default" value="default" />
+            </bean>
+        </property>
+    </bean>
+                
+    <bean id="key" abstract="true" class="Box" singleton="true" init-method="updateToViewSize">
+        <property name="view">
+            <bean class="StatefulWidget" singleton="true">
+                <property name="widgets">
+                    <list class="WidgetVector" singleton="true">
+                        <bean id="s1" class="Image" singleton="true">
+                            <property name="bitmap" ref="keysBmp"/>
+                            <property name="region" value="0, 0, 50, 50" />
+                        </bean>
+                        <bean class="Image" singleton="true">
+                            <property name="bitmap" ref="keysBmp"/>
+                            <property name="region" value="50, 0, 100, 50" />
+                        </bean>
+                    </list>
+                </property>
+                <property name="state" value="0" />
+            </bean>
+        </property>
+        
+        <property name="controller" ref="buttonCtr"/>            
+
+        <property name="layout">
+            <bean class="Layout" singleton="true">
+                <property name="translateRel" value="20, 0" />       
+            </bean>
+        </property>
+    </bean>
+    
+    <bean id="envelope" parent="image">
+        <property name="view.bitmap" ref="mailBmp" />
+        <property name="view.region" value="0, 0, 30, 24" />
+        <property name="layout">
+            <bean class="Layout" singleton="true">
+                <property name="translateRel" value="80, 50" />       
+            </bean>
+        </property>
+    </bean>
+    
+<!-- ====================================================================================== -->
+<!-- Bitmapy, obrazki -->
+<!-- ====================================================================================== -->
+
+    <bean id="buttonCloseBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/button-close.png" />
+    </bean>
+
+    <bean id="buttonNextBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/button-next.png" />
+    </bean>
+
+    <bean id="playerBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/instructions-player.png" />
+    </bean>
+    
+    <bean id="keysBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/instructions-arrow-keys.png" />
+    </bean>
+
+    <bean id="mailBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/instructions-mail.png" />
+    </bean>
+    
+</beans>

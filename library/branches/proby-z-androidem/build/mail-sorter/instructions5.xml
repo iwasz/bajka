@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
+        "file:///home/iwasz/program/projects/tiliae/base/container/tiliae-container-1.0.dtd">
+
+<beans>
+
+    <import resource="mail-sorter/instructions.inc.xml"/>
+
+    <bean id="instructions5" parent="instructionsBase">
+        <property name="children.4.view.text" value="5 / 5"/>
+        <property name="children.5.view.text">
+            <value><![CDATA[Oh, and there are some types of mail (like
+BOMB mail or ANTHRAX infected mail) that
+you MUST NOT collect. If you do, you'll
+loose a life.]]></value>
+        </property>
+        <property name="children.7.view.visible" value="false"/>
+        
+        <!-- Box z animacjami -->
+        <property name="children.3.children">
+            <list class="ModelVector">
+                <bean parent="image">
+                    <property name="view.bitmap.path" value="resources/img/ui/instructions-principal.png"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+    
+</beans>

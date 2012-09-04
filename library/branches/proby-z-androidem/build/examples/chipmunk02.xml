@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
+        "file:///home/iwasz/program/projects/tiliae/base/container/tiliae-container-1.0.dtd">
+
+<!--Ogólny schemat nazw : Ctr - kontroler, Wgt - widget, Mdl - model.-->
+<beans>
+
+    <bean id="buttonCtr" class="ButtonController" singleton="true">
+         <!-- TODO, tylko mouse. -->
+         <property name="eventMask" value="0xffff"/> 
+    </bean>      
+
+    <bean id="testButtonCtr" class="TestButtonController" singleton="true">
+         <!-- TODO, tylko mouse. -->
+         <property name="eventMask" value="0xffff"/> 
+    </bean>      
+
+    <bean id="space2" class="BoxGroup" singleton="true">
+        <property name="width" value="640" />
+        <property name="height" value="480" />
+        <!-- TODO Czemu tu trzeba dać 319? -->
+        <property name="translate" value="-390, -310" />       
+        <property name="controller" ref="emptyCtr"/>            
+        
+        <property name="children">
+            <list class="ModelVector">
+
+                <bean parent="image">
+                    <property name="view.bitmap.path" value="resources/img/ui/menu-wall-with-window.png"/>
+                </bean>
+            
+                <bean parent="image">
+                    <property name="view.bitmap.path" value="resources/img/ui/title.png"/>
+                    <property name="translate" value="60, 420" />
+                </bean>
+
+                <bean class="Box" singleton="true">
+                    <property name="view" ref="2state" />
+                    <property name="translate" value="590, 0" />       
+                    <property name="controller" ref="buttonCtr"/>            
+                </bean>
+
+                <bean parent="buttonWgt">
+                    <property name="view.widgets.0.bitmap" ref="buttonStartBmp"/>
+                    <property name="view.widgets.0.region" value="3, 3, 77, 43"/>
+                    <property name="view.widgets.1.bitmap" ref="buttonStartBmp"/>
+                    <property name="view.widgets.1.region" value="3, 48, 77, 88"/>
+                    <property name="translate" value="300, 350" />       
+                    <property name="controller">
+                        <bean parent="testButtonCtr">
+                            <property name="testModel" ref="testBox" />
+                        </bean>
+                    </property>            
+                </bean>
+                
+                <bean parent="buttonWgt">
+                    <property name="view.widgets.0.bitmap" ref="buttonInstructionsBmp"/>
+                    <property name="view.widgets.0.region" value="3, 3, 145, 43"/>
+                    <property name="view.widgets.1.bitmap" ref="buttonInstructionsBmp"/>
+                    <property name="view.widgets.1.region" value="3, 48, 145, 88"/>
+                    <property name="translate" value="300, 300" />       
+                    <property name="controller">
+                      <bean class="LoadButtonController" singleton="true">
+                           <!-- TODO, tylko mouse. -->
+                           <property name="eventMask" value="0xffff"/>
+                           <property name="name" value="test01"/>          
+                      </bean>
+                    </property>      
+                </bean>
+
+                <bean parent="buttonWgt">
+                    <property name="view.widgets.0.bitmap" ref="buttonCreditsBmp"/>
+                    <property name="view.widgets.0.region" value="3, 3, 94, 43"/>
+                    <property name="view.widgets.1.bitmap" ref="buttonCreditsBmp"/>
+                    <property name="view.widgets.1.region" value="3, 48, 94, 88"/>
+                    <property name="translate" value="300, 250" />       
+                </bean>
+
+                <bean parent="buttonWgt">
+                    <property name="view.widgets.0.bitmap" ref="buttonMoreBmp"/>
+                    <property name="view.widgets.0.region" value="3, 3, 136, 43"/>
+                    <property name="view.widgets.1.bitmap" ref="buttonMoreBmp"/>
+                    <property name="view.widgets.1.region" value="3, 48, 136, 88"/>
+                    <property name="translate" value="300, 200" />       
+                </bean>                
+                               
+                <bean parent="buttonWgt">
+                    <property name="view.widgets.0.bitmap" ref="vigeoBmp"/>
+                    <property name="view.widgets.0.region" value="0, 0, 84, 10"/>
+                    <property name="view.widgets.1.bitmap" ref="vigeoBmp"/>
+                    <property name="view.widgets.1.region" value="0, 10, 84, 20"/>
+                    <property name="translate" value="200, 50" />       
+                </bean>                
+                
+<!--                 <bean class="BoxGroup" singleton="true"> -->
+<!--                     <property name="relW" value="90"/> -->
+<!--                     <property name="relH" value="90"/>                     -->
+<!--                     <property name="relX" value="5"/> -->
+<!--                     <property name="relY" value="5"/>                     -->
+<!--                 </bean> -->
+                
+			    <bean id="testBox" class="Box" singleton="true">
+			        <property name="box" value="100, 100, 150, 150"/>
+			        <property name="angle" value="30"/>
+			        <property name="scale" value="2"/>
+			        <property name="view" ref="rectangleWgt"/>
+			        <property name="controller" ref="emptyCtr"/>    
+			    </bean>
+			
+			    <bean class="Circle" singleton="true">
+			        <property name="view" ref="circleWgt"/>            
+			        <property name="radius" value="20" />    
+			        <property name="translate" value="10, -10"/>        
+                    <property name="origin" value="50, 50"/>        
+			        <property name="angle" value="90"/>
+			        <property name="scale" value="2"/>
+			    </bean>
+            </list>
+        </property>
+    </bean>
+
+<!-- ====================================================================================== -->
+<!-- Bitmapy, obrazki -->
+<!-- ====================================================================================== -->
+
+    <!-- Statyczny obrazek -->
+    <bean id="image" class="Box" singleton="true" abstract="true">
+        <property name="view">
+            <bean class="Image" singleton="true">
+                <property name="bitmap">
+                    <bean class="Bitmap" singleton="true"/>
+                </property>
+            </bean>
+        </property>
+    </bean>
+    
+    <!-- 2 stanowy guzik - ma tylko 2 obrazki - clicked jest taki sam jak hover -->
+    <bean id="buttonWgt" class="Box" singleton="true" abstract="true">
+        <property name="view">
+            <bean id="buttonStartWgt" class="StatefulWidget" singleton="true">
+                <property name="widgets">
+                    <list class="WidgetVector">
+                        <bean class="Image" singleton="true"/>
+                        <bean id="state1" class="Image" singleton="true"/>
+                        <ref bean="state1"/>
+                    </list>
+                </property>
+                <property name="state" value="0" />
+            </bean>
+        </property>
+        
+        <property name="translate" value="300, 50" />       
+        <property name="controller" ref="buttonCtr"/>            
+    </bean>
+    
+<!-- ====================================================================================== -->
+    
+    <bean id="2state" class="StatefulWidget" singleton="true">
+        <property name="widgets">
+            <list class="WidgetVector">
+                <ref bean="depressedWgt"/>
+                <ref bean="pressedWgt"/>
+                <ref bean="pressedWgt"/>
+            </list>
+        </property>
+        <property name="state" value="0" />
+        
+<!--         <add name="widgets" ref="pressedWgt"/> -->
+<!--         <add name="widgets" ref="depressedWgt"/> -->
+<!--         <set name="state" value="0" /> -->
+    </bean>
+
+    <bean id="depressedWgt" class="Image" singleton="true">
+        <property name="bitmap" ref="arrowKeysBmp" />
+        <property name="region" value="1, 1, 48, 48" />       
+    </bean>
+
+    <bean id="pressedWgt" class="Image" singleton="true">
+        <property name="bitmap" ref="arrowKeysBmp" />
+        <property name="region" value="51, 1, 98, 48" />       
+    </bean>
+    
+<!-- ====================================================================================== -->
+
+    <bean id="arrowKeysBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/instructions-arrow-keys.png" />
+    </bean>
+    
+    <bean id="buttonStartBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/button-start.png" />
+    </bean>
+    
+    <bean id="buttonInstructionsBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/button-instructions.png" />
+    </bean>
+    
+    <bean id="buttonCreditsBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/button-credits.png" />
+    </bean>
+    
+    <bean id="buttonMoreBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/button-more-games.png" />
+    </bean>
+    
+    <bean id="vigeoBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/button-vigeo-games-2011.png" />
+    </bean>
+
+</beans>

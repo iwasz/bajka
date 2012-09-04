@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
+        "file:///home/iwasz/program/projects/tiliae/base/container/tiliae-container-1.0.dtd">
+
+<!--Ogólny schemat nazw : Ctr - kontroler, Wgt - widget, Mdl - model.-->
+<beans>
+
+    <!--Konfiguracja-->
+    <bean id="cfg" class="BajkaConfig" singleton="true">
+        <property name="fullScreen" value="false"/>
+        <property name="resX" value="800"/>
+        <property name="resY" value="800"/>
+        <property name="windowCaption" value="Chipmunk tests"/>
+        <property name="showAABB" value="false"/>
+    </bean>
+
+    <!--Obiekt app, czyli aplikacja :)-->
+    <bean id="app" class="BajkaApp" singleton="true" >
+        <property name="config" ref="cfg" />
+        
+        <property name="dispatchers">
+            <list class="DispatcherList">
+                <bean class="EventDispatcher" singleton="true"/>
+            </list>
+        </property>
+        
+        <property name="manager" ref="modelManager" />        
+    </bean>
+
+    <!-- Manager modeli -->          
+    <bean id="modelManager" class="TiliaeModelManager" singleton="true">
+        <property name="mapping">
+          <map class="StringMap">
+                <entry key="test01" value="examples/test01.xml"/>
+                <entry key="mainMenu" value="examples/mainMenu.xml"/>
+                <entry key="space" value="examples/chipmunk01.xml"/>                
+                <entry key="space2" value="examples/chipmunk02.xml"/>                
+          </map>
+        </property>
+    </bean>
+      
+      
+    <bean id="emptyCtr" class="EmptyController" singleton="true">
+         <property name="eventMask" value="0xffff"/> 
+    </bean>      
+
+    <bean id="debugCtr" class="DebugController" singleton="true">
+         <property name="eventMask" value="0xffff"/> 
+    </bean>      
+      
+    <bean id="randomColor" class="Color" singleton="false">
+        <constructor-arg><value type="bool">true</value></constructor-arg>
+    </bean>
+      
+    <bean id="circleWgt" class="View::Circle" singleton="true">
+        <property name="foreground" value="000000FF"/>
+        <property name="background" ref="randomColor"/>
+    </bean>  
+
+    <bean id="rectangleWgt" class="Rectangle" singleton="true">
+        <property name="foreground" value="000000FF"/>
+        <property name="background" ref="randomColor"/>
+    </bean>  
+      
+    <bean id="circle" class="Circle" singleton="true">
+        <property name="view" ref="circleWgt"/>            
+    </bean>      
+</beans>

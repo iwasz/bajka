@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
+        "file:///home/iwasz/program/projects/tiliae/base/container/tiliae-container-1.0.dtd">
+
+<beans>
+
+    <!--Konfiguracja-->
+    <bean id="cfg" class="Config" singleton="true">
+        <property name="fullScreen" value="false"/>
+        <property name="resX" value="480"/>
+        <property name="resY" value="640"/>
+        <property name="windowCaption" value="MailSorter"/>
+        <property name="showAABB" value="false"/>
+        <property name="showSystemCursor" value="false"/>        
+        <property name="clearColor" value="858585ff"/>        
+    </bean>
+
+    <bean id="app" class="App" singleton="true">
+        <property name="config" ref="cfg" />
+        
+        <property name="dispatchers">
+            <list class="DispatcherList">
+                <bean class="EventDispatcher" singleton="true"/>
+            </list>
+        </property>
+        
+        <property name="manager" ref="modelManager" />
+        <property name="model" ref="rootModel" />
+    </bean>
+
+    <!-- Manager modeli -->          
+    <bean id="modelManager" class="TiliaeModelManager" singleton="true">
+        <property name="mapping">
+          <map class="StringMap">
+                <entry key="menu" value="mail-sorter/menu.xml"/>                
+                <entry key="credits" value="mail-sorter/credits.xml"/>                
+                <entry key="instructions1" value="mail-sorter/instructions1.xml"/>
+                <entry key="instructions2" value="mail-sorter/instructions2.xml"/>
+                <entry key="instructions3" value="mail-sorter/instructions3.xml"/>
+                <entry key="instructions4" value="mail-sorter/instructions4.xml"/>
+                <entry key="instructions5" value="mail-sorter/instructions5.xml"/>
+                <entry key="goAdrian" value="mail-sorter/go-adrian-go.xml"/>
+          </map>
+        </property>
+        
+        <property name="mainModel" ref="mainModel"/>
+    </bean>
+
+    <!-- Tu bedą się osadzać inne modele -->
+    <bean id="mainModel" class="Group" singleton="true"/>
+    
+    <!-- Główny model, który jest podpięty do BajkaApp -->
+    <bean id="rootModel" class="Group" singleton="true">
+        <property name="children">
+            <list class="ModelVector">
+                <ref bean="mainModel"/>
+                <ref bean="pointer"/>
+            </list>
+        </property>                
+
+        <property name="controller">
+            <bean class="PointerController" singleton="true">
+                <property name="pointer" ref="pointer"/>
+                <property name="eventMask" value="0xffff"/>
+                <property name="offset" value="0, -32" />
+            </bean>
+        </property>
+    </bean>      
+      
+    <bean parent="image" id="pointer">
+        <property name="view.bitmap.path" value="gfx/cursor.png"/>
+    </bean>
+    
+<!-- ====================================================================================== -->
+<!-- Konrtrolery -->
+<!-- ====================================================================================== -->
+                
+    <bean id="emptyCtr" class="EmptyController" singleton="true">
+         <property name="eventMask" value="0xffff"/> 
+    </bean>      
+
+    <bean id="debugCtr" class="DebugController" singleton="true">
+         <property name="eventMask" value="0xffff"/> 
+    </bean>      
+      
+    <bean id="buttonCtr" class="ButtonController" singleton="true">
+         <!-- TODO, tylko mouse. -->
+         <property name="eventMask" value="0xffff"/> 
+    </bean>      
+
+    <bean id="testButtonCtr" class="TestButtonController" singleton="true">
+         <!-- TODO, tylko mouse. -->
+         <property name="eventMask" value="0xffff"/> 
+    </bean>  
+    
+<!-- ====================================================================================== -->
+<!-- Widok - modele i widgety -->
+<!-- ====================================================================================== -->
+          
+    <bean id="randomColor" class="Color" singleton="false">
+        <constructor-arg><value type="bool">true</value></constructor-arg>
+    </bean>
+      
+    <bean id="circleWgt" class="View::Circle" singleton="true">
+        <property name="foreground" value="000000FF"/>
+        <property name="background" ref="randomColor"/>
+    </bean>  
+
+    <bean id="rectangleWgt" class="Rectangle" singleton="true">
+        <property name="foreground" value="000000FF"/>
+        <property name="background" ref="randomColor"/>
+    </bean>  
+      
+    <bean id="circle" class="Circle" singleton="true">
+        <property name="view" ref="circleWgt"/>            
+    </bean>
+    
+    <!-- Statyczny obrazek -->
+    <bean id="image" class="Box" singleton="true" abstract="true" init-method="updateToViewSize">
+        <property name="view">
+            <bean class="Image" singleton="true">
+                <property name="bitmap">
+                    <bean class="Bitmap" singleton="true"/>
+                </property>
+            </bean>
+        </property>
+    </bean>
+       
+    <!-- 2 stanowy guzik - ma tylko 2 obrazki - clicked jest taki sam jak hover -->
+    <bean id="buttonWgt" class="Box" singleton="true" abstract="true"  init-method="updateToViewSize">
+        <property name="view">
+            <bean id="buttonStartWgt" class="StatefulWidget" singleton="true">
+                <property name="widgets">
+                    <list class="WidgetVector">
+                        <bean class="Image" singleton="true"/>
+                        <bean id="state1" class="Image" singleton="true"/>
+                        <ref bean="state1"/>
+                    </list>
+                </property>
+                <property name="state" value="0" />
+            </bean>
+        </property>
+        
+        <property name="translate" value="300, 50" />       
+        <property name="controller" ref="buttonCtr"/>            
+    </bean>
+
+<!-- ====================================================================================== -->
+
+    <!-- Statyczny label -->
+    <bean id="label" class="Box" singleton="true" abstract="true">
+        <property name="autoUpdateToViewSize" value="true"/>
+        <property name="view">
+                <bean class="Text" singleton="true"/>
+        </property>
+    </bean>
+
+    <bean id="header" parent="label">
+        <property name="view.font" ref="accident14" />
+        <property name="view.foreground" value="A8A16Cff"/>
+        <property name="layout">
+            <bean class="Layout" singleton="true">
+                <property name="align" value="0x24" />       
+            </bean>
+        </property>
+    </bean>
+        
+    <bean id="info" parent="label">
+        <property name="view.font" ref="accident24" />
+        <property name="view.foreground" value="423F2Aff"/>        
+        <property name="layout">
+            <bean class="Layout" singleton="true">
+                <property name="align" value="0x24" />
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="infoSmall" parent="label">
+        <property name="view.multiline" value="true"/>
+        <property name="view.font" ref="accident16" />
+        <property name="view.foreground" value="423F2Aff"/>        
+        <property name="layout">
+            <bean class="Layout" singleton="true">
+                <property name="align" value="0x22" />       
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="url" parent="label">
+        <property name="view.font" ref="accident16" />
+        <property name="view.foreground" value="7E1F12ff"/>        
+        <property name="layout">
+            <bean class="Layout" singleton="true">
+                <property name="align" value="0x24" />       
+            </bean>
+        </property>
+    </bean>
+
+<!-- ====================================================================================== -->
+<!-- Fonty                                                                                  -->
+<!-- ====================================================================================== -->
+
+    <bean id="accident24" class="TTFFont" singleton="true">
+        <constructor-arg><value type="text">resources/fonts/AccidentalPresident.ttf</value></constructor-arg>    
+        <constructor-arg><value type="int">24</value></constructor-arg>
+        <property name="type" value="2"/>
+        <property name="hinting" value="3"/>        
+    </bean>
+
+    <bean id="accident14" class="TTFFont" singleton="true">
+        <constructor-arg><value type="text">resources/fonts/AccidentalPresident.ttf</value></constructor-arg>    
+        <constructor-arg><value type="int">14</value></constructor-arg>
+        <property name="type" value="2"/>
+        <property name="hinting" value="3"/>        
+    </bean>
+
+    <bean id="accident16" class="TTFFont" singleton="true">
+        <constructor-arg><value type="text">resources/fonts/AccidentalPresident.ttf</value></constructor-arg>    
+        <constructor-arg><value type="int">16</value></constructor-arg>
+        <property name="type" value="2"/>
+        <property name="hinting" value="3"/>        
+    </bean>
+
+</beans>
