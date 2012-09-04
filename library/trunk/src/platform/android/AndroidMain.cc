@@ -167,22 +167,6 @@ static int32_t engineHandleInput (struct android_app* androidApp, AInputEvent* a
 static void engineHandleCmd (struct android_app* androidApp, int32_t cmd)
 {
         App *bajkaApp = static_cast <App *> (androidApp->userData);
-
-        switch (cmd) {
-        case APP_CMD_INIT_WINDOW:
-                // The window is being shown, get it ready.
-                if (androidApp->window != NULL) {
-                        engineInitDisplay (bajkaApp);
-                }
-
-                break;
-
-        case APP_CMD_TERM_WINDOW:
-                // The window is being hidden or closed, clean it up.
-                engineTermDisplay (bajkaApp);
-                break;
-        }
-
         bajkaApp->engineHandleCmd (cmd);
 }
 
@@ -198,7 +182,6 @@ void android_main (struct android_app* state) {
         ContainerFactory factory;
 
         try {
-
                 app_dummy();
 
 //                Ptr <BeanFactoryContainer> container = ContainerFactory::createContainer (MXmlMetaService::parseAndroidAsset (state->activity->assetManager,  "main.xml"));
@@ -211,15 +194,22 @@ void android_main (struct android_app* state) {
 
                 Ptr <Util::App> app = vcast <Ptr <Util::App> > (container->getBean ("app"));
                 app->setInstance (app.get ());
+
+#ifndef ANDROID
                 app->getAndroidEngine ()->androidApp = state;
                 app->init ();
 
                 state->userData = app.get ();
                 state->onAppCmd = engineHandleCmd;
                 state->onInputEvent = engineHandleInput;
+#endif
 
                 app->loop ();
+
+#ifndef ANDROID
                 app->destroy ();
+#endif
+
         }
         catch (Core::Exception const &e) {
             stream << "Exception caught : \n" << e.getMessage () << std::endl;

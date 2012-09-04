@@ -11,8 +11,8 @@
 #include <android/sensor.h>
 #include <EGL/egl.h>
 #include "android_native_app_glue.h"
-#include "AndroidCmdDispatcher.h"
-#include "AndroidInputDispatcher.h"
+//#include "AndroidCmdDispatcher.h"
+//#include "AndroidInputDispatcher.h"
 
 namespace Util {
 
@@ -29,8 +29,8 @@ struct AndroidEngine {
         EGLSurface surface;
         EGLContext context;
         bool running;
-        Event::AndroidCmdDispatcher cmdDispatcher;
-        Event::AndroidInputDispatcher inputDispatcher;
+//        Event::AndroidCmdDispatcher cmdDispatcher;
+//        Event::AndroidInputDispatcher inputDispatcher;
 
 };
 

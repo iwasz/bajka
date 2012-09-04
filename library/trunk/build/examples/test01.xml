@@ -159,20 +159,20 @@
 	    </bean>
 	</bean>
 
-        <!-- Składnia 3 : brak taga bean, parametry jako rgumenty taga -->
-        <BoxGroup id="debugButton3" expand="true">
-                <Box add="children">
-                        <Text set="view" text="Hello world" font="@volterFont"/>
-                </Box>
-                
-                <StatefulWidget set="view" state="0">
-                        <Rectangle add="widgets" foreground="000000FF" background="ff000077" />
-                        <Rectangle add="widgets" id="state1" foreground="000000FF" background="ff0000ff" />
-                        <ref bean="state1" add="widgets"/>
-                </StatefulWidget>
-
-                <LoadButtonController set="controller" eventMask="0xffff" name="space2"/>
-        </BoxGroup>
+	<!-- Składnia 3 : brak taga bean, parametry jako rgumenty taga -->
+	<BoxGroup id="debugButton3" expand="true">
+		<Box add-as="children">
+			<Text set-as="view" text="Hello world" font="@volterFont"/>
+		</Box>
+		
+		<StatefulWidget set-as="view" state="0">
+			<Rectangle add-to="widgets" foreground="000000FF" background="ff000077" />
+			<Rectangle add-to="widgets" id="state1" foreground="000000FF" background="ff0000ff" />
+			<ref bean="state1" add-to="widgets"/>
+		</StatefulWidget>
+		
+		<LoadButtonController set-as="controller" eventMask="0xffff" name="space2"/>
+	</BoxGroup>
 
 
     <bean id="volterFont" class="TTFFont" singleton="true">
