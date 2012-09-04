@@ -75,7 +75,8 @@ struct IEventSource {
         virtual ~IEventSource () {}
         virtual void init (App *app) = 0;
         virtual void poll () = 0;
-        virtual void handle () = 0;
+        virtual void handle (App *bajkaApp, NativeEvent *e) = 0;
+        virtual void setActive (bool b) = 0;
 };
 
 typedef std::vector <IEventSource *> EventSourceVector;
@@ -85,6 +86,47 @@ typedef std::vector <IEventSource *> EventSourceVector;
 class AndroidCmdEventSource : public IEventSource {
 public:
 
+        virtual ~AndroidCmdEventSource () {}
+        void init (App *app) {}
+        void poll () {}
+        void handle (App *bajkaApp, NativeEvent *e);
+        void setActive (bool b) {}
+
+};
+
+void AndroidCmdEventSource::handle (App *bajkaApp, NativeEvent *e)
+{
+        int32_t *cmd = static_cast <int32_t *> (e->data);
+        android_app *androidApp = bajkaApp->getAndroidEngine ()->androidApp;
+
+        switch (*cmd) {
+        case APP_CMD_INIT_WINDOW:
+                // The window is being shown, get it ready.
+                if (androidApp->window != NULL) {
+//                        engineInitDisplay (bajkaApp);
+                        bajkaApp->init ();
+                }
+
+                break;
+
+        case APP_CMD_TERM_WINDOW:
+                // The window is being hidden or closed, clean it up.
+//                engineTermDisplay (bajkaApp);
+                bajkaApp->destroy ();
+                break;
+        }
+}
+
+/*##########################################################################*/
+
+class AndroidInputEventSource : public IEventSource {
+public:
+
+        virtual ~AndroidInputEventSource () {}
+        void init (App *app) {}
+        void poll () {}
+        void handle (App *app, NativeEvent *e) {}
+        void setActive (bool b) {}
 };
 
 /*##########################################################################*/
@@ -95,9 +137,10 @@ public:
 
         AndroidAccelerometerEventSource ();
         virtual ~AndroidAccelerometerEventSource ();
-        virtual void init (App *app);
-        virtual void poll ();
-        virtual void handle ();
+        void init (App *app);
+        void poll ();
+        void handle (App *app, NativeEvent *e);
+        void setActive (bool b);
 
 private:
 
@@ -105,9 +148,13 @@ private:
 };
 
 struct AndroidAccelerometerEventSourceImpl {
+
+        AndroidAccelerometerEventSourceImpl () : sensorManager (NULL), accelerometerSensor (NULL), sensorEventQueue (NULL), active (true) {}
+
         ASensorManager* sensorManager;
         const ASensor* accelerometerSensor;
         ASensorEventQueue* sensorEventQueue;
+        bool active;
 };
 
 AndroidAccelerometerEventSource::AndroidAccelerometerEventSource ()
@@ -125,7 +172,13 @@ void AndroidAccelerometerEventSource::init (App *app)
         impl->sensorManager = ASensorManager_getInstance ();
         impl->accelerometerSensor = ASensorManager_getDefaultSensor (impl->sensorManager, ASENSOR_TYPE_ACCELEROMETER);
         impl->sensorEventQueue = ASensorManager_createEventQueue (impl->sensorManager, app->getAndroidEngine ()->androidApp->looper, LOOPER_ID_USER, NULL, NULL);
+
+        ASensorEventQueue_enableSensor (impl->sensorEventQueue, impl->accelerometerSensor);
+        // We'd like to get 60 events per second.
+        ASensorEventQueue_setEventRate (impl->sensorEventQueue, impl->accelerometerSensor, (1000L / 60) * 1000);
 }
+
+/****************************************************************************/
 
 void AndroidAccelerometerEventSource::poll ()
 {
@@ -161,6 +214,8 @@ struct Impl {
 
 #ifdef ANDROID
         AndroidEngine androidEngine;
+        AndroidCmdEventSource cmdEventSource;
+        AndroidInputEventSource inputEventSource;
 #endif
 };
 
@@ -181,33 +236,6 @@ App *App::instance ()
 
 /****************************************************************************/
 
-void App::init ()
-{
-//#ifdef ANDROID
-//        impl->androidEngine.sensorManager = ASensorManager_getInstance ();
-//#endif
-
-        int requestedResX = impl->config->getResX ();
-        int requestedResY = impl->config->getResY ();
-
-        View::GraphicsService::init (impl->config->getFullScreen (),
-                                       &requestedResX,
-                                       &requestedResY,
-                                       impl->config->getWindowCaption (),
-                                       impl->config->getShowSystemCursor ());
-
-
-        View::OpenGlService::init (requestedResX, requestedResY);
-
-        srand (time (NULL));
-        Tween::init ();
-
-        for (EventSourceVector::iterator i = impl->eventSources.begin (); i != impl->eventSources.end (); ++i) {
-                (*i)->init (this);
-        }
-}
-
-/****************************************************************************/
 #define checkBreak() { if (impl->dropIteration_) { break; } }
 #define checkContinue() { if (impl->dropIteration_) { continue; } }
 
@@ -232,12 +260,6 @@ void App::loop ()
         View::Color const &clearColor = impl->config->getClearColor ();
         int loopDelayMs = impl->config->getLoopDelayMs ();
 
-//#ifdef ANDROID
-//        ASensorManager* sensorManager = ASensorManager_getInstance();
-//        const ASensor* accelerometerSensor = ASensorManager_getDefaultSensor (sensorManager, ASENSOR_TYPE_ACCELEROMETER);
-//        ASensorEventQueue* sensorEventQueue = ASensorManager_createEventQueue (sensorManager, impl->androidEngine.androidApp->looper, LOOPER_ID_USER, NULL, NULL);
-//#endif
-
         while (!done) {
 
 // TODO!!!
@@ -247,10 +269,6 @@ void App::loop ()
                  int events;
                  struct android_poll_source* source;
 
-                 // If not animating, we will block forever waiting for events.
-                 // If animating, we loop until all events are read, then continue
-                 // to draw the next frame of animation.
-//                 while ((ident = ALooper_pollAll(engine.animating ? 0 : -1, NULL, &events, (void**)&source)) >= 0) {
                  while ((ident = ALooper_pollAll (0, NULL, &events, (void**)&source)) >= 0) {
 
                      // Process this event.
@@ -330,21 +348,29 @@ void App::loop ()
 }
 
 /****************************************************************************/
-#ifdef ANDROID
 
-void App::engineHandleCmd (int32_t cmd)
+void App::init ()
 {
-        impl->androidEngine.cmdDispatcher.dispatch (impl->model, impl->eventIndex, &impl->pointerInsideIndex, &cmd);
+        int requestedResX = impl->config->getResX ();
+        int requestedResY = impl->config->getResY ();
+
+        View::GraphicsService::init (impl->config->getFullScreen (),
+                                       &requestedResX,
+                                       &requestedResY,
+                                       impl->config->getWindowCaption (),
+                                       impl->config->getShowSystemCursor ());
+
+
+        View::OpenGlService::init (requestedResX, requestedResY);
+
+        srand (time (NULL));
+        Tween::init ();
+
+        for (EventSourceVector::iterator i = impl->eventSources.begin (); i != impl->eventSources.end (); ++i) {
+                (*i)->init (this);
+        }
 }
 
-/****************************************************************************/
-
-int32_t App::engineHandleInput (AInputEvent* androidEvent)
-{
-        return impl->androidEngine.inputDispatcher.dispatch (impl->model, impl->eventIndex, &impl->pointerInsideIndex, androidEvent);
-}
-
-#endif
 /****************************************************************************/
 
 void App::destroy ()
@@ -451,6 +477,24 @@ bool App::getDropIteration () const
 
 /****************************************************************************/
 #ifdef ANDROID
+
+void App::engineHandleCmd (int32_t cmd)
+{
+        NativeEvent native;
+        native.data = &cmd;
+//        impl->androidEngine.cmdDispatcher.dispatch (impl->model, impl->eventIndex, &impl->pointerInsideIndex, &cmd);
+        impl->cmdEventSource.handle (this, &native);
+}
+
+/****************************************************************************/
+
+int32_t App::engineHandleInput (AInputEvent* androidEvent)
+{
+//        return impl->androidEngine.inputDispatcher.dispatch (impl->model, impl->eventIndex, &impl->pointerInsideIndex, androidEvent);
+}
+
+/****************************************************************************/
+
 Util::AndroidEngine const *App::getAndroidEngine () const
 {
         return &impl->androidEngine;
