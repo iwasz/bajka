@@ -50,8 +50,8 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-       Ptr <Config> getConfig () const;
-       m_ (setConfig) void setConfig (Ptr <Config> b);
+       Config *getConfig () const;
+       m_ (setConfig) void setConfig (Config *b);
 
        /// Głowny model.
        Model::IModel *getModel () const;
@@ -69,11 +69,11 @@ public:
         */
        void reset ();
 
-       Ptr <Event::DispatcherList> getDispatchers () const;
-       m_ (setDispatchers) void setDispatchers (Ptr <Event::DispatcherList> d);
+       Event::DispatcherList *getDispatchers () const;
+       m_ (setDispatchers) void setDispatchers (Event::DispatcherList *d);
 
-       Ptr <ModelManager> getManager ();
-       S_ (setManager) void setManager (Ptr <ModelManager> m);
+       ModelManager *getManager ();
+       S_ (setManager) void setManager (ModelManager *m);
 
        static App *instance ();
        static void setInstance (App *i) { instance_ = i; }

@@ -12,10 +12,10 @@
 
 namespace Demo {
 
-bool PointerController::onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
+Controller::IController::HandlingType PointerController::onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
 {
-        pointer->setTranslate (e->getPosition () + offset);
-        return true;
+        pointer->setTranslate (Geometry::makePoint (e->getPosition ().x + offset.x, e->getPosition ().y + offset.y));
+        return Controller::IController::HANDLED;
 }
 
 } /* namespace Demo */

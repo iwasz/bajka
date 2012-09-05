@@ -59,8 +59,8 @@ int main (int argc, char **argv)
                 container->addConversion (typeid (Geometry::LineString), Geometry::stringToLineStringVariant);
                 ContainerFactory::init (container.get (), metaContainer.get ());
 
-                Ptr <Util::App> app = vcast <Ptr <Util::App> > (container->getBean ("app"));
-                app->setInstance (app.get ());
+                Util::App *app = vcast <Util::App *> (container->getBean ("app"));
+                Util::App::setInstance (app);
 
 //                Util::TiliaeModelManager *manager = vcast <Util::TiliaeModelManager *> (container->getBean ("modelManager"));
 //                // TODO to się powinno samo ustawiać w XML.
