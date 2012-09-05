@@ -13,7 +13,7 @@
 namespace Demo {
 using namespace Tween;
 
-bool Instructions1Controller::onManagerLoad (Event::ManagerEvent *e, Model::IModel *m, View::IView *v)
+Controller::IController::HandlingType Instructions1Controller::onManagerLoad (Event::ManagerEvent *e, Model::IModel *m, View::IView *v)
 {
         std::cerr << "Instructions1Controller::onManagerLoad" << std::endl;
 
@@ -53,15 +53,15 @@ bool Instructions1Controller::onManagerLoad (Event::ManagerEvent *e, Model::IMod
 //                rel (Y, 50)->
 //                start ();
 
-        return true;
+        return Controller::IController::HANDLED;
 }
 
 /****************************************************************************/
 
-bool Instructions1Controller::onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v)
+Controller::IController::HandlingType Instructions1Controller::onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v)
 {
         std::cerr << "Instructions1Controller::onManagerUnload" << std::endl;
-        return true;
+        return Controller::IController::HANDLED;
 }
 
 } /* namespace Demo */

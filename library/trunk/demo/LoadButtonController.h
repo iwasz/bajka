@@ -19,10 +19,10 @@ public:
 	b_ ("ButtonController")
 
         virtual ~LoadButtonController() {}
-        virtual bool onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v)
+        virtual HandlingType onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v)
         {
                 manager ()->play (name);
-                return false;
+                return HANDLED;
         }
 
         m_ (setName) void setName (std::string const &s) { name = s; }
