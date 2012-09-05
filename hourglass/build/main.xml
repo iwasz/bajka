@@ -46,6 +46,7 @@
       <value type="bool">true</value>
     </constructor-arg>
     <property name="translate" value="-100,-166" />
+    <property name="mass" value="1000000" />
   </bean>
 
   <!-- TODO! nie działa translate w shape - jeśli ma nie działać - to trzeba zrzucać wyjątek. -->
