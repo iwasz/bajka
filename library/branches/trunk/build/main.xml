@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
+        "file:///home/iwasz/program/projects/tiliae/base/container/tiliae-container-1.0.dtd">
+
+<beans>
+
+    <!--Konfiguracja-->
+    <bean id="cfg" class="Config" singleton="true">
+        <property name="fullScreen" value="false"/>
+        <property name="resX" value="320"/>
+        <property name="resY" value="200"/>
+        <property name="windowCaption" value="Chipmunk tests"/>
+        <property name="showAABB" value="false"/>
+        <property name="clearColor" value="ffffffff" />
+    </bean>
+
+    <!--Obiekt app, czyli aplikacja :)-->
+    <bean id="app" class="App" singleton="true" >
+        <property name="config" ref="cfg" />
+        <property name="model" ref="lineString"/>               
+    </bean>
+
+    <bean id="test02" class="Circle" singleton="true">
+        <property name="origin" value="0, 0"/>
+        <property name="radius" value="30"/>
+        <property name="view" ref="circleWgt"/>
+    </bean>
+
+    <bean id="lineString" class="LineString" singleton="true">
+        <property name="data" value="1,2, 3, 4, 56, 6,567 ,567 567,6,5 7,5"/>
+        <property name="view" ref="primitiveWgt"/>
+    </bean>      
+
+    <bean id="circleWgt" class="View::Circle" singleton="true">
+        <property name="foreground" value="000000FF"/>
+        <property name="background" ref="randomColor"/>
+    </bean>  
+
+    <bean id="primitiveWgt" class="Primitive"  singleton="true">
+        <property name="foreground" value="000000FF"/>
+        <property name="background" value="00ffffFF"/>
+    </bean>
+
+    <bean id="randomColor" class="Color" singleton="false">
+        <constructor-arg><value type="bool">true</value></constructor-arg>
+    </bean>
+
+</beans>

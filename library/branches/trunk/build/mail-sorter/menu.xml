@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
+        "file:///home/iwasz/program/projects/tiliae/base/container/tiliae-container-1.0.dtd">
+
+<beans>
+
+    <bean id="buttonCtr" class="ButtonController" singleton="true">
+         <!-- TODO, tylko mouse. -->
+         <property name="eventMask" value="0xffff"/> 
+    </bean>      
+
+    <bean id="testButtonCtr" class="TestButtonController" singleton="true">
+         <!-- TODO, tylko mouse. -->
+         <property name="eventMask" value="0xffff"/> 
+    </bean>      
+
+    <bean id="stack" class="Box" singleton="true">
+            <property name="translate" value="90, 70"/>
+            <property name="box" value="0, 0, 300, 99"/>
+            <property name="view">
+                    <bean id="image" class="LoopImage" singleton="true">
+                            <property name="bitmap" ref="mailStackBmp"/>
+                            <property name="offsetX" value="20"/>
+                    </bean>
+            </property>
+            <property name="controller">
+                <bean class="MailStackController" singleton="true">
+                    <property name="eventMask" value="0x1000"/>
+                    <property name="image" ref="image"/> 
+                </bean>
+            </property>
+    </bean>
+
+
+    <bean id="menu" class="BoxGroup" singleton="true">
+        <property name="translate" value="-240, -320" />       
+        <property name="controller" ref="emptyCtr"/>            
+<!--         <property name="expand" value="true"/>-->
+        <property name="width" value="480"/>
+        <property name="height" value="640"/>
+                                
+        <property name="children">
+            <list class="ModelVector">
+                
+                <bean parent="stack">
+                        <property name="translate" value="90, 120"/>
+                </bean>
+
+                <ref bean="stack"/>
+                
+                <!-- Czemu to kurwa nie działa, jeśli bean stack jest zdefiniowany w liscie? -->
+                <bean parent="stack">
+                        <property name="translate" value="90, 20"/>
+                </bean>
+                                
+                <bean parent="image">
+                    <property name="view.bitmap.path" value="resources/img/ui/menu-wall-with-window.png"/>
+                </bean>
+                                
+                <bean parent="image">
+                    <property name="view.bitmap.path" value="resources/img/ui/title.png"/>
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="50, 65" />       
+                        </bean>
+                    </property>
+                </bean>
+
+                <bean parent="buttonWgt">
+                    <property name="view.widgets.0.bitmap" ref="buttonStartBmp"/>
+                    <property name="view.widgets.0.region" value="3, 3, 77, 43"/>
+                    <property name="view.widgets.1.bitmap" ref="buttonStartBmp"/>
+                    <property name="view.widgets.1.region" value="3, 48, 77, 88"/>
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="50, 50" />       
+                        </bean>
+                    </property>
+                    <property name="controller">
+                      <bean class="LoadButtonController" singleton="true">
+                           <!-- TODO, tylko mouse. -->
+                           <property name="eventMask" value="0xffff"/>
+                           <property name="name" value="goAdrian"/>          
+                      </bean>
+                    </property>      
+                </bean>
+                
+                <bean parent="buttonWgt">
+                    <property name="view.widgets.0.bitmap" ref="buttonInstructionsBmp"/>
+                    <property name="view.widgets.0.region" value="3, 3, 145, 43"/>
+                    <property name="view.widgets.1.bitmap" ref="buttonInstructionsBmp"/>
+                    <property name="view.widgets.1.region" value="3, 48, 145, 88"/>
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="50, 43" />       
+                        </bean>
+                    </property>
+                    <property name="controller">
+                      <bean class="LoadButtonController" singleton="true">
+                           <!-- TODO, tylko mouse. -->
+                           <property name="eventMask" value="0xffff"/>
+                           <property name="name" value="instructions1"/>          
+                      </bean>
+                    </property>      
+                </bean>
+
+                <bean parent="buttonWgt">
+                    <property name="view.widgets.0.bitmap" ref="buttonCreditsBmp"/>
+                    <property name="view.widgets.0.region" value="3, 3, 94, 43"/>
+                    <property name="view.widgets.1.bitmap" ref="buttonCreditsBmp"/>
+                    <property name="view.widgets.1.region" value="3, 48, 94, 88"/>
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="50, 36" />       
+                        </bean>
+                    </property>
+                    <property name="controller">
+                      <bean class="LoadButtonController" singleton="true">
+                           <!-- TODO, tylko mouse. -->
+                           <property name="eventMask" value="0xffff"/>
+                           <property name="name" value="credits"/>          
+                      </bean>
+                    </property>      
+                </bean>
+
+                <bean parent="buttonWgt">
+                    <property name="view.widgets.0.bitmap" ref="buttonMoreBmp"/>
+                    <property name="view.widgets.0.region" value="3, 3, 136, 43"/>
+                    <property name="view.widgets.1.bitmap" ref="buttonMoreBmp"/>
+                    <property name="view.widgets.1.region" value="3, 48, 136, 88"/>
+                    <property name="layout">
+                        <bean class="Layout" singleton="true">
+                            <property name="translateRel" value="50, 29" />       
+                        </bean>
+                    </property>
+                </bean>                
+                               
+                <bean parent="buttonWgt">
+                    <property name="view.widgets.0.bitmap" ref="vigeoBmp"/>
+                    <property name="view.widgets.0.region" value="0, 0, 84, 10"/>
+                    <property name="view.widgets.1.bitmap" ref="vigeoBmp"/>
+                    <property name="view.widgets.1.region" value="0, 10, 84, 20"/>
+<!--                     <property name="translate" value="200, 50" />        -->
+                </bean>
+                
+            </list>
+        </property>
+    </bean>
+
+<!-- ====================================================================================== -->
+<!-- Bitmapy, obrazki -->
+<!-- ====================================================================================== -->
+        
+    <bean id="buttonStartBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/button-start.png" />
+    </bean>
+    
+    <bean id="buttonInstructionsBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/button-instructions.png" />
+    </bean>
+    
+    <bean id="buttonCreditsBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/button-credits.png" />
+    </bean>
+    
+    <bean id="buttonMoreBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/button-more-games.png" />
+    </bean>
+    
+    <bean id="vigeoBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/button-vigeo-games-2011.png" />
+    </bean>
+
+    <bean id="mailStackBmp" class="Bitmap" singleton="true">
+        <property name="path" value="resources/img/ui/menu-mail-stack-loop.png" />
+    </bean>
+
+</beans>

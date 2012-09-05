@@ -1,0 +1,21 @@
+prefix=/home/iwasz/local
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: bajka
+Description: Bajka library.
+Requires: tiliae
+Version: 0.1
+Libs: -L${libdir} -lbajka
+
+Cflags: \
+-I${includedir}/bajka/controller \
+-I${includedir}/bajka/events \
+-I${includedir}/bajka/geometry \
+-I${includedir}/bajka/model \
+-I${includedir}/bajka/platform \
+-I${includedir}/bajka/tween \
+-I${includedir}/bajka/util \
+-I${includedir}/bajka/view
+

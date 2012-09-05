@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
+        "file:///home/iwasz/program/projects/tiliae/base/container/tiliae-container-1.0.dtd">
+
+<!--Ogólny schemat nazw : Ctr - kontroler, Wgt - widget, Mdl - model.-->
+<beans>
+
+<!-- +===================================================================================+ -->
+<!-- | Biblioteka beanów Bajki                                                           | -->
+<!-- +===================================================================================+ -->
+
+    <!-- Widget obrazka od razu z modelem. -->
+    <bean id="imageWgt" class="View::Image" abstract="true">
+        <property name="model">
+            <bean id="model" class="Model::Image" scope="bean"/>
+        </property>
+    </bean>
+
+    <!--Definicja obrazka. Jest tu M, V i C, gotowe do użycia. Z tej-->
+    <!--definicji należy dziedziczyć (parent) i ustawiać model.path i-->
+    <!--na przykłąd model.translatePont.-->
+    <bean id="imageCtr" class="SimpleController" init-method="init" abstract="true">
+        <!--Model ustawia się z imageWgt -->
+        <property name="model">
+            <bean id="model" class="Model::Image" scope="bean"/>
+        </property>
+
+        <!--View-->
+        <property name="widget">
+            <bean class="View::Image"/>
+        </property>
+        
+        <!-- Domyślnie obrazek nie przyjmuje żadnych eventów -->
+        <property name="bitMask"><value type="unsigned int">0</value></property>
+    </bean>
+
+<!-- ===================================================================================== -->
+
+    <!-- Widget prostokąta z modelem. -->
+    <bean id="rectWgt" class="Rectangle" abstract="true">
+        <property name="model">
+            <bean id="model" class="Model::Box" scope="bean"/>
+        </property>
+    </bean>
+    
+    <!-- Kontroler prostokąta z modelem. -->
+    <bean id="rectCtr" class="SimpleController" init-method="init" abstract="true">
+        <!--Model ustawia się z imageWgt -->
+        <!--View-->
+        <property name="widget" ref="rectWgt"/>
+        
+        <!-- Domyślnie obrazek nie przyjmuje żadnych eventów -->
+        <property name="bitMask"><value type="unsigned int">0</value></property>
+    </bean>
+
+<!-- ===================================================================================== -->
+
+    <bean id="tableWgt" class="EmptyWidget" abstract="true">
+        <property name="model">
+            <bean id="model" scope="bean" class="Table"/>
+        </property>
+    </bean>
+
+    <bean id="tableCtr" class="SimpleController" abstract="true" init-method="init">
+        <property name="model">
+            <bean class="Table"/>
+        </property>
+
+        <property name="widget">
+            <!-- Dzięki temu widać obrys tabeli, z tym drugim nie. -->
+<!--            <bean class="Rectangle"/>-->
+            <bean class="EmptyWidget"/>
+        </property>        
+    </bean>
+
+<!-- ===================================================================================== -->
+
+    <bean id="buttonWgt" class="StatefulWidget" abstract="true">
+        <property name="widgets">
+            <map class="StringWidgetMap">
+                <entry key="normal">
+                    <bean parent="imageWgt"/>
+                </entry>
+
+                <entry key="hover">
+                    <bean parent="imageWgt"/>
+                </entry>
+
+                <entry key="clicked">
+                    <bean parent="imageWgt"/>
+                </entry>
+            </map>
+        </property>
+
+        <property name="model">
+<!--            <bean id="model" class="Model::Box" scope="bean"/>-->
+            <bean class="Model::Box" />
+        </property>
+
+        <property name="currentWidget" value="normal" />  
+    </bean>
+
+
+
+    <bean id="buttonCtr" class="ButtonController" init-method="init" abstract="true">
+<!--        <property name="model">-->
+<!--            <bean class="Model::Box" />-->
+<!--        </property>-->
+
+        <property name="widget">
+            <bean parent="buttonWgt"/>
+        </property>
+
+        <property name="sender">
+            <bean class="Sender"/>
+        </property>
+
+        <!-- Model pobiera się sam z widgeta jeśliw widgecie już jest. -->
+        <property name="bitMask"><value type="unsigned int">255</value></property>        
+    </bean>
+
+<!-- ===================================================================================== -->
+
+    <bean id="layerCtr" class="SimpleController" init-method="init" abstract="true">
+        <property name="model">
+            <bean class="Shapeless"/>
+        </property>
+    
+        <property name="widget">
+            <bean class="EmptyWidget"/>
+        </property>
+    </bean>
+  
+</beans>
