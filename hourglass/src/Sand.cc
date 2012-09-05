@@ -31,7 +31,9 @@ struct SandImpl {
 void Sand::addGrain (int i, int j, float densityX, float densityY, int cnt) {
 
         cpBody* body = &impl->bodies[cnt];
-        cpSpaceAddBody (Space::getSpace(), cpBodyInit (body, mass, cpMomentForCircle (mass, 0, radius, cpvzero)));
+//        cpFloat inertia = cpMomentForCircle (mass, 0, radius, cpvzero);
+        cpFloat inertia = 0.1;
+        cpSpaceAddBody (Space::getSpace(), cpBodyInit (body, mass, inertia));
         cpBodySetPos (body, cpv (ll.x + i * densityX, ll.y + j * densityY));
 
         cpCircleShape *circleShape = &impl->shapes[cnt];
