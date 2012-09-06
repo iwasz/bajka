@@ -131,6 +131,12 @@ AUX_SOURCE_DIRECTORY (../src/model/physics SOURCES)
 AUX_SOURCE_DIRECTORY (../src/geometry SOURCES)
 AUX_SOURCE_DIRECTORY (../src/util SOURCES)
 
+AUX_SOURCE_DIRECTORY (../src/controller SOURCES)
+
+AUX_SOURCE_DIRECTORY (../src/tween SOURCES)
+AUX_SOURCE_DIRECTORY (../src/tween/ease SOURCES)
+AUX_SOURCE_DIRECTORY (../src/tween/accessor SOURCES)
+
 AUX_SOURCE_DIRECTORY (../src/platform/openGl SOURCES)
 AUX_SOURCE_DIRECTORY (../src/platform/openGlEs SOURCES)
 AUX_SOURCE_DIRECTORY (../src/platform/openGlCommon SOURCES)
@@ -139,12 +145,6 @@ AUX_SOURCE_DIRECTORY (../src/platform/sdl/events SOURCES)
 AUX_SOURCE_DIRECTORY (../src/platform/androidEgl SOURCES)
 AUX_SOURCE_DIRECTORY (../src/platform/android SOURCES)
 AUX_SOURCE_DIRECTORY (../src/platform/linux SOURCES)
-
-AUX_SOURCE_DIRECTORY (../src/controller SOURCES)
-
-AUX_SOURCE_DIRECTORY (../src/tween SOURCES)
-AUX_SOURCE_DIRECTORY (../src/tween/ease SOURCES)
-AUX_SOURCE_DIRECTORY (../src/tween/accessor SOURCES)
 
 # Local includes (inside project).
 INCLUDE_DIRECTORIES (../src/view)

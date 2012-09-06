@@ -20,7 +20,7 @@ public:
         b_ ("EmptyController")
 
         virtual ~PointerController () {}
-        virtual bool onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v);
+        virtual HandlingType onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v);
 
         S_ (setPointer)
         void setPointer (Model::IModel *p) { pointer = p; }

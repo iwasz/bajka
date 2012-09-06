@@ -17,7 +17,7 @@
     <!--Obiekt app, czyli aplikacja :)-->
     <bean id="app" class="App" singleton="true" >
         <property name="config" ref="cfg" />
-        <property name="model" ref="lineString"/>               
+        <property name="model" ref="test02"/>               
     </bean>
 
     <bean id="test02" class="Circle" singleton="true">
@@ -26,10 +26,10 @@
         <property name="view" ref="circleWgt"/>
     </bean>
 
-    <bean id="lineString" class="LineString" singleton="true">
-        <property name="data" value="1,2, 3, 4, 56, 6,567 ,567 567,6,5 7,5"/>
-        <property name="view" ref="primitiveWgt"/>
-    </bean>      
+<!--     <bean id="lineString" class="LineString" singleton="true"> -->
+<!--         <property name="data" value="1,2, 3, 4, 56, 6,567 ,567 567,6,5 7,5"/> -->
+<!--         <property name="view" ref="primitiveWgt"/> -->
+<!--     </bean>       -->
 
     <bean id="circleWgt" class="View::Circle" singleton="true">
         <property name="foreground" value="000000FF"/>
