@@ -25,48 +25,20 @@ namespace Util {
  * - App run.
  * INICJUJE OpenGL!
  */
-class Config {
-public:
+struct Config {
+
         C__ (void)
 
         Config ();
 
-/*------access methods------------------------------------------------------*/
-
-        bool getFullScreen () const { return fullScreen; }
-        m_ (setFullScreen) void setFullScreen (bool fullScreen) { this->fullScreen = fullScreen; }
-
-        int getResX () const { return resX; }
-        m_ (setResX) void setResX (int resX) { this->resX = resX; }
-
-        int getResY () const { return resY; }
-        m_ (setResY)  void setResY (int resY) { this->resY = resY; }
-
-        const std::string &getWindowCaption () const { return windowCaption; }
-        m_ (setWindowCaption) void setWindowCaption (const std::string &windowCaption) { this->windowCaption = windowCaption; }
-
-        bool getShowAABB () const { return showAABB; }
-        m_ (setShowAABB) void setShowAABB (bool b) { showAABB = b; }
-
-        bool getShowSystemCursor () const { return showSystemCursor; }
-        m_ (setShowSystemCursor) void setShowSystemCursor (bool b) { showSystemCursor = b; }
-
-        View::Color const &getClearColor () const { return clearColor; }
-        m_ (setClearColor) void setClearColor (View::Color const &c) { clearColor = c; }
-
-        int getLoopDelayMs () const { return loopDelayMs; }
-        m_ (setLoopDelayMs) void setLoopDelayMs (int l) { loopDelayMs = l; }
-
-private:
-
-        bool fullScreen;
-        int resX;
-        int resY;
-        std::string windowCaption;
-        bool showAABB;
-        bool showSystemCursor;
-        View::Color clearColor;
-        int loopDelayMs;
+        bool            p_ (fullScreen);
+        int             p_ (resX);
+        int             p_ (resY);
+        std::string     p_ (windowCaption);
+        bool            p_ (showAABB);
+        bool            p_ (showSystemCursor);
+        View::Color     P_ (clearColor);
+        int             p_ (loopDelayMs);
 
         E_ (Config)
 };

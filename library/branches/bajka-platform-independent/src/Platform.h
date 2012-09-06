@@ -6,20 +6,19 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#if defined (USE_OPENGL) || defined (USE_OPENGLES)
-#include "OpenGlCommonService.h"
-#include "OpenGl.h"
+#ifndef BAJKA_SHELL_PLATFORM_H_
+#define BAJKA_SHELL_PLATFORM_H_
 
-namespace View {
+#include <stdint.h>
 
-void OpenGlCommonService::clear (View::Color const &c)
-{
-        glMatrixMode (GL_MODELVIEW);
-        glLoadIdentity ();
-        glClearColor (c.r, c.g, c.b, c.a);
-        glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
+// Time
+extern uint32_t getCurrentMs ();
+extern void delayMs (uint32_t);
 
-} /* namespace View */
+// Graphics
+extern void swapBuffers ();
 
-#endif
+// Logging
+extern int log (const char *format, ...);
+
+#endif /* SHELL_H_ */

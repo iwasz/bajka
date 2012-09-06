@@ -10,7 +10,6 @@
 #include <SDL.h>
 #include "Bitmap.h"
 #include "../../util/Exceptions.h"
-#include "GraphicsService.h"
 
 namespace View {
 

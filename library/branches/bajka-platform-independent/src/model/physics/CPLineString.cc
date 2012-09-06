@@ -13,7 +13,7 @@
 #include "Segment.h"
 #include "Body.h"
 #include "Space.h"
-#include "Logging.h"
+#include "Platform.h"
 
 namespace Model {
 

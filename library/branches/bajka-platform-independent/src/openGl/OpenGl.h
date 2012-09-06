@@ -14,9 +14,17 @@
  */
 
 #if defined (LINUX)
-#include <SDL_opengl.h>
+#include <GL/gl.h>
 #elif defined (ANDROID)
 #include <GLES/gl.h>
 #endif
+
+#include "../view/draw/Color.h"
+
+namespace View {
+
+extern void clear (View::Color const &c);
+
+} /* namespace View */
 
 #	endif /* OPENGL_H_ */

@@ -9,10 +9,6 @@
 #ifndef BAJKAAPP_H_
 #define BAJKAAPP_H_
 
-#ifdef USE_CHIPMUNK
-#include <chipmunk.h>
-#endif
-
 #include "Geometry.h"
 #include "Model.h"
 #include "IDispatcher.h"
