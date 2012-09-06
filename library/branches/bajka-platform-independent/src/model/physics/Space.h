@@ -13,6 +13,8 @@
 #include "../util/Exceptions.h"
 #include "../Group.h"
 
+struct cpSpace;
+
 namespace Model {
 
 class Space : public Group {

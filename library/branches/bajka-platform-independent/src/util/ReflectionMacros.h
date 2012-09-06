@@ -32,6 +32,8 @@
 #undef tb_
 #undef t_
 #undef te_
+#undef p_
+#undef P_
 
 #define b_      REFLECTION_BASE_CLASS
 #define b__     REFLECTION_BASE_CLASS_
@@ -54,5 +56,8 @@
 #define tb_     REFLECTION_TEMPLATE_BEGIN
 #define t__     REFLECTION_TEMPLATE
 #define te_     REFLECTION_TEMPLATE_END
+#define p_      REFLECTION_FIELD_VALUE_INPLACE
+#define P_      REFLECTION_FIELD_REFERENCE_INPLACE
+
 
 #	endif /* DEFAULTANNOTATIONMACROS_H_ */

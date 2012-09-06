@@ -93,7 +93,7 @@ void AbstractModel::update (Event::UpdateEvent *e)
         }
 
 #ifndef ANDROID // TODO wyrzucić.
-        if (config ()->getShowAABB ()) {
+        if (config ()->showAABB) {
                 Geometry::Box aabb= getBoundingBox();
 
                 if (aabb.getHeight() && aabb.getHeight()) {

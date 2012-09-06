@@ -13,6 +13,8 @@
 #include "../../util/Exceptions.h"
 #include "../Group.h"
 
+struct cpBody;
+
 namespace Model {
 
 class Body : public Group {

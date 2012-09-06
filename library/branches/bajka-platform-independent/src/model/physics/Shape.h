@@ -10,9 +10,10 @@
 #ifndef BAJKA_MODEL_SHAPE_H_
 #define BAJKA_MODEL_SHAPE_H_
 
-#include <chipmunk.h>
 #include "../../util/ReflectionMacros.h"
 #include "../IModel.h"
+
+struct cpShape;
 
 namespace Model {
 

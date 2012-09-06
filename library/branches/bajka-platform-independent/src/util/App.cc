@@ -16,6 +16,8 @@
 
 #include "Events.h"
 #include "App.h"
+#include "Platform.h"
+#include "OpenGl.h"
 #include "../view/draw/Primitives.h"
 #include "../model/IGroup.h"
 #include "../tween/Manager.h"
@@ -24,11 +26,9 @@
 #include "../events/PointerInsideIndex.h"
 #include "../events/IDispatcher.h"
 
-#include "GraphicsService.h"
-#include "TimeService.h"
-#include "OpenGlService.h"
-#include "OpenGlCommonService.h"
-#include "Logging.h"
+#ifdef USE_CHIPMUNK
+#include <chipmunk.h>
+#endif
 
 #ifdef ANDROID
 #include "android/AndroidEngine.h"
@@ -128,7 +128,7 @@ void App::loop ()
         	throw InitException ("App has no model.");
         }
 
-        uint32_t lastMs = Util::TimeService::getCurrentMs ();
+        uint32_t lastMs = getCurrentMs ();
 
         if (!impl->dispatchers) {
                 impl->dispatchers = new Event::DispatcherList ();
@@ -138,47 +138,13 @@ void App::loop ()
         int second = 0, frames = 0;
 #endif
 
-        View::Color const &clearColor = impl->config->getClearColor ();
-        int loopDelayMs = impl->config->getLoopDelayMs ();
+        View::Color const &clearColor = impl->config->clearColor;
+        int loopDelayMs = impl->config->loopDelayMs;
 
         while (!done) {
 
-// TODO!!!
-#ifdef ANDROID
-                // Read all pending events.
-                 int ident;
-                 int events;
-                 struct android_poll_source* source;
-
-                 while ((ident = ALooper_pollAll (0, NULL, &events, (void**)&source)) >= 0) {
-
-                     // Process this event.
-                     if (source != NULL) {
-                         source->process(impl->androidEngine.androidApp, source);
-                     }
-
-                     // If a sensor has data, process it now.
-                     if (ident == LOOPER_ID_USER) {
-                             for (EventSourceVector::iterator i = impl->eventSources.begin (); i != impl->eventSources.end (); ++i) {
-                                     (*i)->poll ();
-                             }
-                     }
-
-                     // Check if we are exiting.
-                     if (impl->androidEngine.androidApp->destroyRequested != 0) {
-//                         engine_term_display(&engine);
-                         break;
-                     }
-                 }
-
-                if (!impl->androidEngine.running) {
-                        Util::TimeService::delayMs (17); // 60fps
-                        continue;
-                }
-#endif
-
                 impl->dropIteration_ = false;
-                uint32_t currentMs = Util::TimeService::getCurrentMs ();
+                uint32_t currentMs = getCurrentMs ();
                 int deltaMs = currentMs - lastMs;
                 lastMs = currentMs;
 
@@ -192,7 +158,7 @@ void App::loop ()
                 }
 #endif
 
-                View::OpenGlCommonService::clear (clearColor);
+                View::clear (clearColor);
 
                 // Run models, views and controllers.
                 // Generuj eventy.
@@ -217,14 +183,10 @@ void App::loop ()
 //                checkContinue ();
 
                 // swap buffers to display, since we're double buffered.
-                View::GraphicsService::swapBuffers ();
-// TODO
-#ifdef ANDROID
-                eglSwapBuffers (impl->androidEngine.display, impl->androidEngine.surface);
-#endif
+                swapBuffers ();
 
                 // Tak śmiga, że damy delay
-                Util::TimeService::delayMs (loopDelayMs); // 60fps
+                delayMs (loopDelayMs); // 60fps
         }
 }
 
@@ -232,17 +194,17 @@ void App::loop ()
 
 void App::init ()
 {
-        int requestedResX = impl->config->getResX ();
-        int requestedResY = impl->config->getResY ();
+        int requestedResX = impl->config->resX;
+        int requestedResY = impl->config->resY;
 
-        View::GraphicsService::init (impl->config->getFullScreen (),
-                                       &requestedResX,
-                                       &requestedResY,
-                                       impl->config->getWindowCaption (),
-                                       impl->config->getShowSystemCursor ());
-
-
-        View::OpenGlService::init (requestedResX, requestedResY);
+//        View::GraphicsService::init (impl->config->getFullScreen (),
+//                                       &requestedResX,
+//                                       &requestedResY,
+//                                       impl->config->getWindowCaption (),
+//                                       impl->config->getShowSystemCursor ());
+//
+//
+//        View::OpenGlService::init (requestedResX, requestedResY);
 
         srand (time (NULL));
         Tween::init ();

@@ -10,6 +10,7 @@
 #include "../geometry/AffineMatrix.h"
 #include "Space.h"
 #include "../util/Exceptions.h"
+#include <chipmunk.h>
 
 namespace Model {
 

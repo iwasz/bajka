@@ -25,5 +25,6 @@
 #include "ResizeEvent.h"
 #include "ActiveEvent.h"
 #include "ManagerEvent.h"
+#include "UpdateEvent.h"
 
 #	endif /* TYPES_H_ */

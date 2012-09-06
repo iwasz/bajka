@@ -8,7 +8,6 @@
 
 #ifndef ANDROID
 #include "Animation.h"
-#include "GraphicsService.h"
 #include "Math.h"
 #include "../../model/IModel.h"
 #include "../../model/IBox.h"

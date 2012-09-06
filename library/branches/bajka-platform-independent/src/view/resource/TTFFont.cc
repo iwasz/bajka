@@ -9,8 +9,7 @@
 #ifdef USE_SDL
 #include <boost/algorithm/string.hpp>
 #include "TTFFont.h"
-#include "../../util/Exceptions.h"
-#include "GraphicsService.h"
+#include "../util/Exceptions.h"
 #include "Bitmap.h"
 
 namespace View {
