@@ -6,13 +6,10 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef IMPL_LOGGING_H_
-#define IMPL_LOGGING_H_
+#ifndef BAJKA_SHELL_H_
+#define BAJKA_SHELL_H_
 
-#if defined (LINUX)
-#include "linux/Logging.h"
-#elif defined (ANDROID)
-#include "android/Logging.h"
-#endif
 
-#	endif /* GRAPHICSINTERFACE_H_ */
+
+
+#endif /* SHELL_H_ */
