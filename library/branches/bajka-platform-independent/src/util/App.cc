@@ -46,14 +46,14 @@ Util::App *app ()
 
 Util::Config *config ()
 {
-        return Util::App::instance ()->getConfig ().get ();
+        return Util::App::instance ()->getConfig ();
 }
 
 /****************************************************************************/
 
 Util::ModelManager *manager ()
 {
-        return Util::App::instance ()->getManager ().get ();
+        return Util::App::instance ()->getManager ();
 }
 
 /****************************************************************************/
@@ -71,137 +71,20 @@ struct NativeEvent {
 
 /*##########################################################################*/
 
-struct IEventSource {
-        virtual ~IEventSource () {}
-        virtual void init (App *app) = 0;
-        virtual void poll () = 0;
-        virtual void handle (App *bajkaApp, NativeEvent *e) = 0;
-        virtual void setActive (bool b) = 0;
-};
-
-typedef std::vector <IEventSource *> EventSourceVector;
-
-/*##########################################################################*/
-
-class AndroidCmdEventSource : public IEventSource {
-public:
-
-        virtual ~AndroidCmdEventSource () {}
-        void init (App *app) {}
-        void poll () {}
-        void handle (App *bajkaApp, NativeEvent *e);
-        void setActive (bool b) {}
-
-};
-
-void AndroidCmdEventSource::handle (App *bajkaApp, NativeEvent *e)
-{
-        int32_t *cmd = static_cast <int32_t *> (e->data);
-        android_app *androidApp = bajkaApp->getAndroidEngine ()->androidApp;
-
-        switch (*cmd) {
-        case APP_CMD_INIT_WINDOW:
-                // The window is being shown, get it ready.
-                if (androidApp->window != NULL) {
-//                        engineInitDisplay (bajkaApp);
-                        bajkaApp->init ();
-                }
-
-                break;
-
-        case APP_CMD_TERM_WINDOW:
-                // The window is being hidden or closed, clean it up.
-//                engineTermDisplay (bajkaApp);
-                bajkaApp->destroy ();
-                break;
-        }
-}
-
-/*##########################################################################*/
-
-class AndroidInputEventSource : public IEventSource {
-public:
-
-        virtual ~AndroidInputEventSource () {}
-        void init (App *app) {}
-        void poll () {}
-        void handle (App *app, NativeEvent *e) {}
-        void setActive (bool b) {}
-};
-
-/*##########################################################################*/
-
-class AndroidAccelerometerEventSourceImpl;
-class AndroidAccelerometerEventSource : public IEventSource {
-public:
-
-        AndroidAccelerometerEventSource ();
-        virtual ~AndroidAccelerometerEventSource ();
-        void init (App *app);
-        void poll ();
-        void handle (App *app, NativeEvent *e);
-        void setActive (bool b);
-
-private:
-
-        AndroidAccelerometerEventSourceImpl *impl;
-};
-
-struct AndroidAccelerometerEventSourceImpl {
-
-        AndroidAccelerometerEventSourceImpl () : sensorManager (NULL), accelerometerSensor (NULL), sensorEventQueue (NULL), active (true) {}
-
-        ASensorManager* sensorManager;
-        const ASensor* accelerometerSensor;
-        ASensorEventQueue* sensorEventQueue;
-        bool active;
-};
-
-AndroidAccelerometerEventSource::AndroidAccelerometerEventSource ()
-{
-        impl = new AndroidAccelerometerEventSourceImpl;
-}
-
-AndroidAccelerometerEventSource::~AndroidAccelerometerEventSource ()
-{
-        delete impl;
-}
-
-void AndroidAccelerometerEventSource::init (App *app)
-{
-        impl->sensorManager = ASensorManager_getInstance ();
-        impl->accelerometerSensor = ASensorManager_getDefaultSensor (impl->sensorManager, ASENSOR_TYPE_ACCELEROMETER);
-        impl->sensorEventQueue = ASensorManager_createEventQueue (impl->sensorManager, app->getAndroidEngine ()->androidApp->looper, LOOPER_ID_USER, NULL, NULL);
-
-        ASensorEventQueue_enableSensor (impl->sensorEventQueue, impl->accelerometerSensor);
-        // We'd like to get 60 events per second.
-        ASensorEventQueue_setEventRate (impl->sensorEventQueue, impl->accelerometerSensor, (1000L / 60) * 1000);
-}
-
-/****************************************************************************/
-
-void AndroidAccelerometerEventSource::poll ()
-{
-        ASensorEvent event;
-
-        while (ASensorEventQueue_getEvents (impl->sensorEventQueue, &event, 1) > 0) {
-            LOGI("accelerometer: x=%f y=%f z=%f", event.acceleration.x, event.acceleration.y, event.acceleration.z);
-        }
-}
-
-/*##########################################################################*/
-
 /**
  * pimpl
  */
 struct Impl {
 
-        Impl () : model (NULL),
+        Impl () : config (NULL),
+                dispatchers (NULL),
+                manager (NULL),
+                model (NULL),
 		dropIteration_ (false) {}
 
-        Ptr <Config> config;
-        Ptr <Event::DispatcherList> dispatchers;
-        Ptr <ModelManager> manager;
+        Config *config;
+        Event::DispatcherList *dispatchers;
+        ModelManager *manager;
 
         Model::IModel *model;
         Event::EventIndex eventIndex;
@@ -209,8 +92,6 @@ struct Impl {
 
         bool dropIteration_;
         Event::UpdateEvent updateEvent;
-
-        EventSourceVector eventSources;
 
 #ifdef ANDROID
         AndroidEngine androidEngine;
@@ -250,7 +131,7 @@ void App::loop ()
         uint32_t lastMs = Util::TimeService::getCurrentMs ();
 
         if (!impl->dispatchers) {
-                impl->dispatchers = boost::make_shared <Event::DispatcherList> ();
+                impl->dispatchers = new Event::DispatcherList ();
         }
 
 #if 0
@@ -366,9 +247,9 @@ void App::init ()
         srand (time (NULL));
         Tween::init ();
 
-        for (EventSourceVector::iterator i = impl->eventSources.begin (); i != impl->eventSources.end (); ++i) {
-                (*i)->init (this);
-        }
+//        for (EventSourceVector::iterator i = impl->eventSources.begin (); i != impl->eventSources.end (); ++i) {
+//                (*i)->init (this);
+//        }
 }
 
 /****************************************************************************/
@@ -380,14 +261,14 @@ void App::destroy ()
 
 /****************************************************************************/
 
-Ptr <Config> App::getConfig () const
+Config *App::getConfig () const
 {
         return impl->config;
 }
 
 /****************************************************************************/
 
-void App::setConfig (Ptr <Config> b)
+void App::setConfig (Config *b)
 {
         impl->config = b;
 }
@@ -416,14 +297,14 @@ void App::setModel (Model::IModel *m)
 
 /****************************************************************************/
 
-Ptr <ModelManager> App::getManager ()
+ModelManager *App::getManager ()
 {
         return impl->manager;
 }
 
 /****************************************************************************/
 
-void App::setManager (Ptr <ModelManager> m)
+void App::setManager (ModelManager *m)
 {
         impl->manager = m;
         impl->manager->setApp (this);
@@ -431,14 +312,14 @@ void App::setManager (Ptr <ModelManager> m)
 
 /****************************************************************************/
 
-Ptr <Event::DispatcherList> App::getDispatchers () const
+Event::DispatcherList *App::getDispatchers () const
 {
         return impl->dispatchers;
 }
 
 /****************************************************************************/
 
-void App::setDispatchers (Ptr <Event::DispatcherList> d)
+void App::setDispatchers (Event::DispatcherList *d)
 {
         impl->dispatchers = d;
 

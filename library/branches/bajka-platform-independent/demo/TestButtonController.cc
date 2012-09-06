@@ -13,7 +13,7 @@
 
 using namespace Tween;
 
-bool TestButtonController::onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v)
+Controller::IController::HandlingType TestButtonController::onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v)
 {
 	std::cerr << "TestButtonController::onButtonPress" << std::endl;
 
