@@ -27,7 +27,7 @@
 #include "Events.h"
 #include "Config.h"
 #include "PointerInsideIndex.h"
-#include "Exceptions.h"
+#include "util/Exceptions.h"
 #include "Time.h"
 
 using namespace Container;
@@ -105,7 +105,7 @@ void Shell::loop ()
         bool done = false;
 
         if (!impl->model) {
-                throw InitException ("App has no model.");
+                throw U::InitException ("App has no model.");
         }
 
         uint32_t lastMs = getCurrentMs ();
