@@ -9,10 +9,10 @@
  *                                                                          *
  ****************************************************************************/
 
-#include "OpenGl.h"
+#include "openGl/OpenGl.h"
 #include <chipmunk.h>
 #include "Primitives.h"
-#include "../../geometry/LineString.h"
+#include "geometry/LineString.h"
 #include <boost/geometry/geometry.hpp>
 #include <boost/geometry/arithmetic/arithmetic.hpp>
 

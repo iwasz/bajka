@@ -11,11 +11,10 @@
 
 #include <string>
 #include <Object.h>
-#include "../model/IGroup.h"
+#include "model/IGroup.h"
 #include "ReflectionMacros.h"
 
 namespace Util {
-class App;
 
 /**
  * Przyporządkowuje nazwy modelom i ułatwia ich tworzenie i wyświetlanie.
@@ -24,7 +23,7 @@ class ModelManager : public Core::Object {
 public:
 
         d__
-        ModelManager () : mainModel (NULL), app (NULL) {}
+        ModelManager () : mainModel (NULL) {}
         virtual ~ModelManager () {}
 
         m_ (play) virtual void play (std::string const &name) = 0;
@@ -45,14 +44,10 @@ public:
         m_ (getMainModel) Model::IGroup *getMainModel () { return mainModel; }
         S_ (setMainModel) void setMainModel (Model::IGroup *g) { mainModel = g; }
 
-        App *getApp () { return app; }
-        void setApp (App *a) { app = a; }
-
 protected:
 
         Model::ModelMap models;
         Model::IGroup *mainModel;
-        App *app;
 
         E_ (ModelManager)
 };

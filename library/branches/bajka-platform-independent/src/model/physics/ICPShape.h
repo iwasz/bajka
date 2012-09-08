@@ -11,8 +11,8 @@
 #define BAJKA_MODEL_CP_ISHAPE_H_
 
 #include <chipmunk.h>
-#include "../../util/ReflectionMacros.h"
-#include "../IModel.h"
+#include "util/ReflectionMacros.h"
+#include "model/IModel.h"
 
 namespace Model {
 class Body;

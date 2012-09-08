@@ -10,9 +10,9 @@
 #include <boost/pool/object_pool.hpp>
 #include "Manager.h"
 #include "Timeline.h"
-#include "../tween/ease/Ease.h"
-#include "../tween/accessor/AffineAccessor.h"
-#include "../view/LoopImage.h"
+#include "tween/ease/Ease.h"
+#include "tween/accessor/AffineAccessor.h"
+#include "view/LoopImage.h"
 #include "MultiTween.h"
 #include "SetTween.h"
 

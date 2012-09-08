@@ -13,7 +13,7 @@
 #include <boost/tokenizer.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include "Point.h"
-#include "../util/Exceptions.h"
+#include "util/Exceptions.h"
 
 /****************************************************************************/
 

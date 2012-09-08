@@ -9,7 +9,7 @@
 #ifndef BAJKA_VIEW_CIRCLE_H_
 #define BAJKA_VIEW_CIRCLE_H_
 
-#include "ReflectionMacros.h"
+#include "util/ReflectionMacros.h"
 #include "Primitive.h"
 
 namespace View {

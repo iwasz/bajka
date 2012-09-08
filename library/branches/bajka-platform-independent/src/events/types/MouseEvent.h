@@ -9,9 +9,8 @@
 #ifndef MOUSE_BAJKA_EVENT_H_
 #define MOUSE_BAJKA_EVENT_H_
 
-#include "Common.h"
 #include "IEvent.h"
-#include "Point.h"
+#include "geometry/Point.h"
 
 namespace Event {
 

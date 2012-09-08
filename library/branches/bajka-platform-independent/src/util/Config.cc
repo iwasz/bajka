@@ -18,7 +18,8 @@ Config::Config () :
                 resY (480),
                 showAABB (false),
                 showSystemCursor (true),
-                loopDelayMs (17)
+                loopDelayMs (17),
+                model (NULL)
 {
 }
 

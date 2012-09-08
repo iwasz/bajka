@@ -8,9 +8,9 @@
 
 #include "Rectangle.h"
 #include "draw/Primitives.h"
-#include "../model/static/Box.h"
-#include "../model/physics/CPBox.h"
-#include "../util/Exceptions.h"
+#include "model/static/Box.h"
+#include "model/physics/CPBox.h"
+#include "util/Exceptions.h"
 
 namespace View {
 using namespace Geometry;

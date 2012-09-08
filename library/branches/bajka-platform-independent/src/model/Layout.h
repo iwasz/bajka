@@ -9,8 +9,8 @@
 #ifndef BAJKA_MODEL_LAYOUT_H_
 #define BAJKA_MODEL_LAYOUT_H_
 
-#include "../geometry/Point.h"
-#include "../util/ReflectionMacros.h"
+#include "geometry/Point.h"
+#include "util/ReflectionMacros.h"
 
 namespace Model {
 struct IModel;

@@ -9,10 +9,10 @@
 #ifndef BAJKA_MODEDL_BOXB_H_
 #define BAJKA_MODEDL_BOXB_H_
 
-#include "../AbstractModel.h"
-#include "../../geometry/Box.h"
-#include "../IBox.h"
-#include "IView.h"
+#include "model/AbstractModel.h"
+#include "geometry/Box.h"
+#include "model/IBox.h"
+#include "view/IView.h"
 
 namespace Model {
 

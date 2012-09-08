@@ -12,11 +12,11 @@
 #include <vector>
 #include <map>
 #include <Object.h>
-#include "../util/ReflectionMacros.h"
-#include "../view/IView.h"
-#include "../controller/IController.h"
-#include "../geometry/Box.h"
-#include "../geometry/AffineMatrix.h"
+#include "util/ReflectionMacros.h"
+#include "view/IView.h"
+#include "controller/IController.h"
+#include "geometry/Box.h"
+#include "geometry/AffineMatrix.h"
 #include "Layout.h"
 
 namespace Event {

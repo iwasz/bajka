@@ -9,8 +9,8 @@
 #ifndef T_ABSTRACTCONTROLLER_H_
 #define T_ABSTRACTCONTROLLER_H_
 
-#include "../../controller/AbstractController.h"
-#include "../../events2/AbstractObserver.h"
+#include "controller/AbstractController.h"
+#include "events2/AbstractObserver.h"
 
 /**
  *

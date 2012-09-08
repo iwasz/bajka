@@ -10,8 +10,8 @@
 #ifndef BAJKA_SPACE_H_
 #define BAJKA_SPACE_H_
 
-#include "../util/Exceptions.h"
-#include "../Group.h"
+#include "util/Exceptions.h"
+#include "model/Group.h"
 
 struct cpSpace;
 
@@ -32,6 +32,7 @@ public:
 
         // W środku rodzica.
         virtual Geometry::Point computeCenter () const { return Geometry::ZERO_POINT; }
+        virtual void update (Event::UpdateEvent *e);
 
 /*--------------------------------------------------------------------------*/
 

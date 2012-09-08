@@ -10,10 +10,10 @@
 #ifndef BAJKA_PHYS_CIRCLE_H_
 #define BAJKA_PHYS_CIRCLE_H_
 
-#include "../geometry/Point.h"
-#include "../static/Circle.h"
+#include "geometry/Point.h"
+#include "model/static/Circle.h"
 #include "Shape.h"
-#include "../../util/Exceptions.h"
+#include "util/Exceptions.h"
 
 namespace Model {
 

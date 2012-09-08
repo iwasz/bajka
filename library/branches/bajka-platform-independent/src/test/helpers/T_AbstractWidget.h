@@ -9,7 +9,7 @@
 #ifndef T_ABSTRACTWIDGET_H_
 #define T_ABSTRACTWIDGET_H_
 
-#include "../../view/AbstractWidget.h"
+#include "view/AbstractWidget.h"
 
 /**
  *

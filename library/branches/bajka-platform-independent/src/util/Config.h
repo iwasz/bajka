@@ -9,8 +9,9 @@
 #ifndef BAJKA_CONFIG_H_
 #define BAJKA_CONFIG_H_
 
-#include "ReflectionMacros.h"
-#include "draw/Color.h"
+#include "util/ReflectionMacros.h"
+#include "view/draw/Color.h"
+#include "model/IModel.h"
 
 namespace Util {
 
@@ -39,6 +40,7 @@ struct Config {
         bool            p_ (showSystemCursor);
         View::Color     P_ (clearColor);
         int             p_ (loopDelayMs);
+        Model::IModel * p_ (model);
 
         E_ (Config)
 };

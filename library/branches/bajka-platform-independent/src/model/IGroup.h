@@ -10,7 +10,7 @@
 #define BAJKA_IGROUP_H_
 
 #include <Object.h>
-#include "IModel.h"
+#include "model/IModel.h"
 
 namespace Event {
 class EventIndex;

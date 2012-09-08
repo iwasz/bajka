@@ -9,7 +9,8 @@
 #ifndef RESOURCE_H_
 #define RESOURCE_H_
 
-#include "Font.h"
 #include "TTFFont.h"
+#include "Bitmap.h"
+#include "IResourceManager.h"
 
 #	endif /* RESOURCE_H_ */

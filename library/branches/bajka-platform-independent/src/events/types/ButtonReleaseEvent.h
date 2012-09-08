@@ -9,7 +9,7 @@
 #ifndef BUTTONRELEASEEVENT_H_
 #define BUTTONRELEASEEVENT_H_
 
-#include "types/MouseButtonEvent.h"
+#include "MouseButtonEvent.h"
 
 namespace Event {
 

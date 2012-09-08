@@ -10,8 +10,8 @@
 #ifndef BAJKA_BODY_H_
 #define BAJKA_BODY_H_
 
-#include "../../util/Exceptions.h"
-#include "../Group.h"
+#include "util/Exceptions.h"
+#include "model/Group.h"
 
 struct cpBody;
 

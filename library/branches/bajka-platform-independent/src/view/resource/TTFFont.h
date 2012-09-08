@@ -6,13 +6,16 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#if 0
 #ifdef USE_SDL
 #ifndef BAJKA_TTFFONT_H_
 #define BAJKA_TTFFONT_H_
 
-#include <SDL/SDL_ttf.h>
-#include "ReflectionMacros.h"
+#include "util/ReflectionMacros.h"
 #include "IFont.h"
+
+struct _TTF_Font;
+typedef struct _TTF_Font TTF_Font;
 
 namespace View {
 
@@ -90,4 +93,5 @@ private:
 } /* namespace View */
 
 #endif /* TTFFONT_H_ */
+#endif
 #endif

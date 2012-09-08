@@ -8,10 +8,10 @@
 
 #ifdef USE_CHIPMUNK
 #include <chipmunk.h>
-#include "../geometry/AffineMatrix.h"
+#include "geometry/AffineMatrix.h"
 #include "Body.h"
 #include "Space.h"
-#include "../../util/Exceptions.h"
+#include "util/Exceptions.h"
 
 namespace Model {
 

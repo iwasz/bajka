@@ -6,10 +6,11 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#if 0
 #ifdef USE_SDL
 #include <SDL.h>
 #include "Bitmap.h"
-#include "../../util/Exceptions.h"
+#include "util/Exceptions.h"
 
 namespace View {
 
@@ -167,4 +168,5 @@ Ptr <IBitmap> Bitmap::blit (Geometry::Box const *region, int width, int height)
 
 
 } /* namespace View */
+#endif
 #endif

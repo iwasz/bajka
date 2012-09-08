@@ -11,7 +11,7 @@
 
 #include <Object.h>
 #include "IBitmap.h"
-#include "../draw/Color.h"
+#include "view/draw/Color.h"
 
 namespace View {
 

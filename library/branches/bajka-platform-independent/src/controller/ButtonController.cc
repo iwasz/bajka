@@ -8,9 +8,9 @@
 
 #include <iostream>
 #include "ButtonController.h"
-#include "types/Types.h"
-#include "../view/StatefulWidget.h"
-#include "../util/Exceptions.h"
+#include "events/types/Types.h"
+#include "view/StatefulWidget.h"
+#include "util/Exceptions.h"
 
 using View::StatefulWidget;
 

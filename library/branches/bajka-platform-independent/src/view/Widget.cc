@@ -6,9 +6,9 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "OpenGl.h"
-#include "Widget.h"
-#include "../model/IModel.h"
+#include "openGl/OpenGl.h"
+#include "view/Widget.h"
+#include "model/IModel.h"
 
 namespace View {
 

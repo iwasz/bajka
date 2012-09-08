@@ -8,8 +8,8 @@
 
 #include <iostream>
 #include "IController.h"
-#include "../events/PointerInsideIndex.h"
-#include "../events/types/IEvent.h"
+#include "events/PointerInsideIndex.h"
+#include "events/types/IEvent.h"
 
 namespace Controller {
 

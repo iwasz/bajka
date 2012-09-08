@@ -6,10 +6,12 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#if 0
 #ifdef USE_SDL
 #include <boost/algorithm/string.hpp>
+#include <SDL/SDL_ttf.h>
 #include "TTFFont.h"
-#include "../util/Exceptions.h"
+#include "util/Exceptions.h"
 #include "Bitmap.h"
 
 namespace View {
@@ -231,4 +233,5 @@ void TTFFont::setKerning (bool b)
 }
 
 } /* namespace View */
+#endif
 #endif

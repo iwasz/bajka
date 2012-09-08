@@ -10,7 +10,7 @@
 #define AFFINEACCESSOR_H_
 
 #include "IAccessor.h"
-#include "../../model/IModel.h"
+#include "model/IModel.h"
 
 namespace Tween {
 

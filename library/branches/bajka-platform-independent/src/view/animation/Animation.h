@@ -10,12 +10,12 @@
 #ifndef BAJKA_ANIMATION_H_
 #define BAJKA_ANIMATION_H_
 
-#include "OpenGl.h"
+#include "openGl/OpenGl.h"
 #include "FrameSet.h"
-#include "../Widget.h"
-#include "../resource/IBitmap.h"
-#include "../../util/ReflectionMacros.h"
-#include "../../geometry/Box.h"
+#include "view/Widget.h"
+#include "view/resource/IBitmap.h"
+#include "util/ReflectionMacros.h"
+#include "geometry/Box.h"
 
 namespace View {
 

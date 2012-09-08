@@ -9,7 +9,7 @@
 #include <boost/geometry/geometry.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
 #include "Box.h"
-#include "../../geometry/Ring.h"
+#include "geometry/Ring.h"
 
 namespace Model {
 using namespace boost::geometry;

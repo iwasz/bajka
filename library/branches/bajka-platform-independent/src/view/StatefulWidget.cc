@@ -8,7 +8,7 @@
 
 #include <algorithm>
 #include "StatefulWidget.h"
-#include "../util/Exceptions.h"
+#include "util/Exceptions.h"
 
 namespace View {
 using namespace std;

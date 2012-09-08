@@ -21,5 +21,6 @@
 #include "Ring.h"
 #include "Polygon.h"
 #include "LineString.h"
+#include "Segment.h"
 
 #	endif /* PRIMITIVE_H_ */

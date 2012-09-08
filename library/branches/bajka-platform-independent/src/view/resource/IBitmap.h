@@ -10,7 +10,7 @@
 #define BAJKA_BITMAP_INTERFACE_H_
 
 #include <Object.h>
-#include "../../geometry/Box.h"
+#include "geometry/Box.h"
 
 namespace View {
 

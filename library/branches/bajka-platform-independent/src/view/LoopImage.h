@@ -11,7 +11,7 @@
 #define BAJKA_LOOPIMAGE_H_
 
 #include "Image.h"
-#include "../tween/accessor/IAccessor.h"
+#include "tween/accessor/IAccessor.h"
 
 namespace View {
 

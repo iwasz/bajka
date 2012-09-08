@@ -7,11 +7,11 @@
  ****************************************************************************/
 
 #include "Primitive.h"
-#include "OpenGl.h"
-#include "IVertexBufferEnabled.h"
-#include "IModel.h"
-#include "../util/Exceptions.h"
-#include "draw/Primitives.h"
+#include "openGl/OpenGl.h"
+#include "model/IVertexBufferEnabled.h"
+#include "model/IModel.h"
+#include "util/Exceptions.h"
+#include "view/draw/Primitives.h"
 
 namespace View {
 

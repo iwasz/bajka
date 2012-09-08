@@ -2,18 +2,16 @@
  *                                                                          *
  *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 18, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef COMMON_H_
-#define COMMON_H_
+#ifndef CONTROLLER_H_
+#define CONTROLLER_H_
 
-namespace Event {
+#include "ButtonController.h"
+#include "DebugController.h"
+#include "EmptyController.h"
+#include "IController.h"
 
-
-} // nam
-
-#	endif /* COMMON_H_ */
+#endif /* CONTROLLER_H_ */

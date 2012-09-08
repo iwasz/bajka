@@ -7,10 +7,10 @@
  ****************************************************************************/
 
 #include "Layout.h"
-#include "IModel.h"
+#include "model/IModel.h"
 #include "BoxGroup.h"
-#include "../geometry/Box.h"
-#include "../geometry/Point.h"
+#include "geometry/Box.h"
+#include "geometry/Point.h"
 
 namespace Model {
 namespace G = Geometry;

@@ -2,7 +2,7 @@
 //#include <iostream>
 //#include <cassert>
 //
-//#include "../geometry/AffineMatrix.h"
+//#include "geometry/AffineMatrix.h"
 //
 //BOOST_AUTO_TEST_SUITE (AffineMatrixTest);
 //using namespace Geometry;

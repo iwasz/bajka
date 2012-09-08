@@ -7,11 +7,11 @@
  ****************************************************************************/
 
 #include "BoxGroup.h"
-#include "../util/Exceptions.h"
-#include "../geometry/Ring.h"
-#include "../geometry/AffineMatrix.h"
-#include "../model/static/Box.h"
-#include "../model/static/Circle.h"
+#include "util/Exceptions.h"
+#include "geometry/Ring.h"
+#include "geometry/AffineMatrix.h"
+#include "model/static/Box.h"
+#include "model/static/Circle.h"
 
 namespace Model {
 using namespace boost::geometry;

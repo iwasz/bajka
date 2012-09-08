@@ -12,8 +12,7 @@
 #define MOUSEBUTTONEVENT_H_
 
 #include "MouseEvent.h"
-#include "Common.h"
-#include "Point.h"
+#include "geometry/Point.h"
 
 namespace Event {
 

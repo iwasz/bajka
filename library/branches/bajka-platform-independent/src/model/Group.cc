@@ -8,10 +8,10 @@
 
 #include <boost/geometry/geometry.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
-#include "Group.h"
-#include "../geometry/Ring.h"
-#include "../events/EventIdex.h"
-#include "../events/PointerInsideIndex.h"
+#include "model/Group.h"
+#include "geometry/Ring.h"
+#include "events/EventIdex.h"
+#include "events/PointerInsideIndex.h"
 
 namespace Model {
 using namespace Geometry;

@@ -10,7 +10,7 @@
 #include "Math.h"
 #include "Model.h"
 #include "Text.h"
-#include "../util/Exceptions.h"
+#include "util/Exceptions.h"
 #include <boost/functional/hash.hpp>
 #include "GraphicsService.h"
 
