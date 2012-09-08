@@ -9,19 +9,13 @@
 #include "GraphicsService.h"
 #include "util/Exceptions.h"
 #include "util/Math.h"
-#include "util/App.h"
+#include "util/Config.h"
 #include "view/resource/Bitmap.h"
 
-namespace View {
-
-void GraphicsService::init (bool fullScreen,
-                              int *resX,
-                              int *resY,
-                              std::string const &caption,
-                              bool showSystemCursor)
+void GraphicsService::init (Util::Config *config)
 {
         int flags;
-        if (fullScreen) {
+        if (config->fullScreen) {
                 flags = SDL_OPENGL | SDL_FULLSCREEN;
         }
         else {
@@ -34,20 +28,19 @@ void GraphicsService::init (bool fullScreen,
         SDL_GL_SetAttribute (SDL_GL_ALPHA_SIZE,  8);
         SDL_GL_SetAttribute (SDL_GL_DEPTH_SIZE, 16);
 
-        if (!resX || !resY) {
+        if (!config->resX || !config->resY) {
                 throw Util::InitException ("GraphicsService::init : !resX || !resY");
         }
 
         /* Create a OpenGL screen */
-        if (SDL_SetVideoMode (*resX, *resY, 0, flags) == NULL) {
+        if (SDL_SetVideoMode (config->resX, config->resY, 0, flags) == NULL) {
                 SDL_Quit ();
                 throw Util::InitException (std::string ("GraphicsService::init : Unable to create OpenGL screen : ") + SDL_GetError ());
         }
 
         /* Set the title bar in environments that support it */
-        SDL_WM_SetCaption (caption.c_str (), NULL);
-
-        SDL_ShowCursor (showSystemCursor);
+        SDL_WM_SetCaption (config->windowCaption.c_str (), NULL);
+        SDL_ShowCursor (config->showSystemCursor);
 }
 
 /****************************************************************************/
@@ -85,15 +78,13 @@ SDL_Surface *GraphicsService::createSurface (int w, int h)
 
 /****************************************************************************/
 
-IBitmap *GraphicsService::expandSurfacePowerOf2 (IBitmap *input, Geometry::Box const *region)
+View::IBitmap *GraphicsService::expandSurfacePowerOf2 (View::IBitmap *input, Geometry::Box const *region)
 {
 }
 
 /****************************************************************************/
 
-void GraphicsService::swapBuffers ()
+void swapBuffers ()
 {
         SDL_GL_SwapBuffers ();
 }
-
-} /* namespace View */

@@ -39,15 +39,15 @@ INCLUDE_DIRECTORIES ("/home/iwasz/local/include")
 link_directories("/home/iwasz/local/lib")
 
 # Boost, można zakomentowa, you can skip this
-find_package (Boost)
+find_package (Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
 include (FindPkgConfig)
-pkg_check_modules (TILIAE "tiliae")
+pkg_check_modules (TILIAE REQUIRED "tiliae")
 INCLUDE_DIRECTORIES (${TILIAE_INCLUDE_DIRS})
 link_directories(${TILIAE_LIBRARY_DIRS})
 
-pkg_check_modules (BAJKA "bajka")
+pkg_check_modules (BAJKA REQUIRED "bajka")
 INCLUDE_DIRECTORIES (${BAJKA_INCLUDE_DIRS})
 link_directories(${BAJKA_LIBRARY_DIRS})
 
@@ -64,7 +64,7 @@ include (FindSDL_image)
 INCLUDE_DIRECTORIES (${SDL_SDLIMAGE_INCLUDE_DIR})
 
 # SDL TTF
-pkg_check_modules (SDLTTF "SDL_ttf")    
+pkg_check_modules (SDLTTF REQUIRED "SDL_ttf")    
 INCLUDE_DIRECTORIES (${SDLTTF_INCLUDE_DIR})
 link_directories(${SDLTTF_LIBRARY_DIRS})
 
@@ -82,7 +82,7 @@ TARGET_LINK_LIBRARIES (shell-linux ${SDLIMAGE_LIBRARY})
 TARGET_LINK_LIBRARIES (shell-linux ${SDLTTF_LIBRARIES})
 TARGET_LINK_LIBRARIES (shell-linux ${JPEG_LIBRARIES})
 TARGET_LINK_LIBRARIES (shell-linux ${TILIAE_LIBRARIES})
-TARGET_LINK_LIBRARIES (shell-linux ${BAJKA_LIBRARIES})
+TARGET_LINK_LIBRARIES (shell-linux ${BAJKA_LIBRARIES}) 
     
 # Executable test.
 IF (0)
@@ -95,16 +95,6 @@ IF (0)
     TARGET_LINK_LIBRARIES (test boost_unit_test_framework)
     TARGET_LINK_LIBRARIES (test boost_prg_exec_monitor)
 ENDIF ()
-
-IF (0)
-    # Executable demo.
-    AUX_SOURCE_DIRECTORY (../demo DEMO_SOURCES)
-    #LIST(APPEND DEMO_SOURCES ${SOURCES})
-    
-    add_executable (demo ${DEMO_SOURCES})
-    TARGET_LINK_LIBRARIES (demo shell-linux)
-ENDIF ()
-
 
 INSTALL (
     TARGETS shell-linux

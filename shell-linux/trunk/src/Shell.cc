@@ -22,20 +22,36 @@
 #include <SDL_opengl.h>
 #include <SDL/SDL_ttf.h>
 #include "Shell.h"
-#include "Point.h"
+#include "geometry/Point.h"
 #include "geometry/LineString.h"
-#include "Events.h"
-#include "Config.h"
-#include "PointerInsideIndex.h"
+#include "events/Events.h"
+#include "events/PointerInsideIndex.h"
+#include "util/Config.h"
 #include "util/Exceptions.h"
-#include "Time.h"
+#include "GraphicsService.h"
+#include "OpenGlService.h"
+#include "Platform.h"
+#include "util/ReflectionMacros.h"
+#include "tween/Manager.h"
+#include "EventDispatcher.h"
+#include "model/IGroup.h"
 
 using namespace Container;
+using Reflection::Manager;
 namespace M = Model;
 namespace V = View;
 namespace C = Controller;
 namespace E = Event;
 namespace U = Util;
+
+/****************************************************************************/
+
+Shell Shell::instance_;
+
+Util::Config *config () { return shell ()->getConfig (); }
+Util::IShell *shell () { return &Shell::instance_; }
+
+/****************************************************************************/
 
 /**
  * pimpl
@@ -44,24 +60,30 @@ struct Impl {
 
         Impl () : config (NULL),
                 model (NULL),
-                dropIteration_ (false) {}
+                dropIteration_ (false),
+                loopActive (true) {}
 
         U::Config *config;
         Model::IModel *model;
         Event::EventIndex eventIndex;
         Event::PointerInsideIndex pointerInsideIndex;
+        EventDispatcher dispatcher;
 
         bool dropIteration_;
+        bool loopActive;
         Event::UpdateEvent updateEvent;
 };
+
+/****************************************************************************/
 
 Shell::Shell () : impl (new Impl) {}
 Shell::~Shell () { delete impl; }
 
-int Shell::run (const char *file)
+/****************************************************************************/
+
+int Shell::run (Util::ShellConfig const &cfg)
 {
         try {
-
                 /* Initialize SDL for video output */
                 if (SDL_Init (SDL_INIT_VIDEO) < 0) {
                         throw U::InitException ("Unable to initialize SDL : " + std::string (SDL_GetError ()));
@@ -71,12 +93,14 @@ int Shell::run (const char *file)
                         throw U::InitException ("TTF_Init failed");
                 }
 
-                Ptr <MetaContainer> metaContainer = CompactMetaService::parseFile (file);
+                Ptr <MetaContainer> metaContainer = CompactMetaService::parseFile (cfg.definitionFile);
                 Ptr <BeanFactoryContainer> container = ContainerFactory::create (metaContainer, true);
                 container->addConversion (typeid (Geometry::Point), Geometry::stringToPointVariant);
                 container->addConversion (typeid (Geometry::LineString), Geometry::stringToLineStringVariant);
                 ContainerFactory::init (container.get (), metaContainer.get ());
                 impl->config = vcast <U::Config *> (container->getBean ("config"));
+                overrideConfig (cfg);
+                setModel (impl->config->model);
 
                 init ();
                 loop ();
@@ -87,12 +111,15 @@ int Shell::run (const char *file)
         }
         catch (Core::Exception const &e) {
                 std::cerr << "Exception caught : \n" << e.getMessage () << std::endl;
+                return EXIT_FAILURE;
         }
         catch (std::exception const &e) {
                 std::cerr << "exception caught : " << e.what () << std::endl;
+                return EXIT_FAILURE;
         }
         catch (...) {
                 std::cerr << "Unknown exception." << std::endl;
+                return EXIT_FAILURE;
         }
 
         return EXIT_SUCCESS;
@@ -100,10 +127,12 @@ int Shell::run (const char *file)
 
 /****************************************************************************/
 
+#define checkBreak() { if (impl->dropIteration_) { break; } }
+#define checkContinue() { if (impl->dropIteration_) { continue; } }
+
+/****************************************************************************/
 void Shell::loop ()
 {
-        bool done = false;
-
         if (!impl->model) {
                 throw U::InitException ("App has no model.");
         }
@@ -114,10 +143,9 @@ void Shell::loop ()
         int second = 0, frames = 0;
 #endif
 
-        View::Color const &clearColor = impl->config->clearColor;
         int loopDelayMs = impl->config->loopDelayMs;
 
-        while (!done) {
+        while (impl->loopActive) {
 
                 impl->dropIteration_ = false;
                 uint32_t currentMs = getCurrentMs ();
@@ -135,28 +163,15 @@ void Shell::loop ()
 #endif
 
 
-//                TODO to będzie widok/widget
-//                View::clear (clearColor);
-
                 // Run models, views and controllers.
                 // Generuj eventy.
-                for (Event::DispatcherList::const_iterator i = impl->dispatchers->begin (); i != impl->dispatchers->end (); i++) {
-                        (*i)->pollAndDispatch (impl->model, impl->eventIndex, &impl->pointerInsideIndex);
-                        checkBreak ();
-                }
+                impl->dispatcher.pollAndDispatch (impl->model, impl->eventIndex, &impl->pointerInsideIndex);
+                checkContinue ();
 
 //                checkContinue ();
                 impl->updateEvent.setDeltaMs (deltaMs);
                 impl->model->update (&impl->updateEvent);
 //                checkContinue ();
-
-                // TODO a to też może być w jakimś kontrolerze, czy czymś, byle by nie było tu.
-#ifdef USE_CHIPMUNK
-                // Run chipmunk
-                if (Model::Space::getSpace ()) {
-                        cpSpaceStep (Model::Space::getSpace (), 1.0 / 60.0);
-                }
-#endif
 
                 Tween::Manager::getMain ()->update (deltaMs);
 //                checkContinue ();
@@ -169,3 +184,114 @@ void Shell::loop ()
         }
 }
 
+/****************************************************************************/
+
+void Shell::init ()
+{
+        GraphicsService::init (impl->config);
+        initOpenGl (impl->config);
+        srand (time (NULL));
+        Tween::init ();
+}
+
+/****************************************************************************/
+
+void Shell::destroy ()
+{
+        Tween::free ();
+}
+
+/****************************************************************************/
+
+void Shell::quit ()
+{
+        impl->loopActive = false;
+}
+
+/****************************************************************************/
+
+void Shell::overrideConfig (Util::ShellConfig const &cfg)
+{
+        if (cfg.fullScreen) {
+                impl->config->fullScreen = true;
+        }
+
+        if (cfg.showAABB) {
+                impl->config->showAABB = true;
+        }
+
+        if (cfg.resX > 0) {
+                impl->config->resX = cfg.resX;
+        }
+
+        if (cfg.resY > 0) {
+                impl->config->resY = cfg.resY;
+        }
+
+        if (cfg.loopDelayMs > 0) {
+                impl->config->loopDelayMs = cfg.resY;
+        }
+}
+
+/****************************************************************************/
+
+Model::IModel *Shell::getModel ()
+{
+        return impl->model;
+}
+
+/****************************************************************************/
+
+void Shell::setModel (Model::IModel *m)
+{
+        impl->model = m;
+        impl->eventIndex.clear ();
+        impl->pointerInsideIndex.clear ();
+        impl->eventIndex.add (0xFFFFu & ~Event::MOUSE_EVENTS, m);
+
+        if (m->isGroup ()) {
+                Model::IGroup *g = dynamic_cast <Model::IGroup *> (m);
+                g->setIndices (&impl->eventIndex, &impl->pointerInsideIndex);
+        }
+}
+
+//ModelManager *Shell::getManager ()
+//{
+//        return impl->manager;
+//}
+//
+///****************************************************************************/
+//
+//void Shell::setManager (ModelManager *m)
+//{
+//        impl->manager = m;
+//        impl->manager->setApp (this);
+//}
+
+void Shell::reset ()
+{
+        dropIteration ();
+
+        impl->eventIndex.clear ();
+        impl->pointerInsideIndex.clear ();
+        impl->dispatcher.reset ();
+}
+
+/****************************************************************************/
+
+void Shell::dropIteration ()
+{
+        impl->dropIteration_ = true;
+}
+
+/****************************************************************************/
+
+bool Shell::getDropIteration () const
+{
+        return impl->dropIteration_;
+}
+
+Util::Config *Shell::getConfig ()
+{
+        return impl->config;
+}
