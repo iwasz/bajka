@@ -9,10 +9,9 @@
 #include <GL/gl.h>
 #include <GL/glut.h>
 #include "OpenGlService.h"
+#include "util/Config.h"
 
-namespace View {
-
-void OpenGlService::init (int resX, int resY)
+void initOpenGl (Util::Config *config)
 {
         glShadeModel(GL_FLAT);
         glDisable (GL_DEPTH_TEST);
@@ -30,7 +29,7 @@ void OpenGlService::init (int resX, int resY)
 //        glLoadIdentity ();
 //        gluOrtho2D (0, 0, resX, resY);
 
-        float aspectRatio = double (resY) / resX;
+        float aspectRatio = double (config->resY) / config->resX;
         float rX = 100.0;
         float rY = rX * aspectRatio;
 
@@ -62,14 +61,14 @@ void OpenGlService::init (int resX, int resY)
 
 /****************************************************************************/
 
-void OpenGlService::free ()
+void freeOpenGl ()
 {
 
 }
 
 /****************************************************************************/
 
-void OpenGlService::mouseToDisplay (int x, int y, int windowWidth, int windowHeight, float *nx, float *ny)
+void mouseToDisplay (int x, int y, int windowWidth, int windowHeight, float *nx, float *ny)
 {
         GLdouble model[16];
         glGetDoublev (GL_MODELVIEW_MATRIX, model);
@@ -85,5 +84,3 @@ void OpenGlService::mouseToDisplay (int x, int y, int windowWidth, int windowHei
         *nx = mx;
         *ny = my;
 }
-
-} /* namespace View */

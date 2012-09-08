@@ -9,25 +9,46 @@
 #ifndef BAJKA_SHELL_H_
 #define BAJKA_SHELL_H_
 
+#include "util/IShell.h"
+
 class Impl;
 
-class Shell {
+namespace Model {
+class IModel;
+}
+
+class Shell : public Util::IShell {
 public:
 
-        Shell ();
-        ~Shell ();
+        virtual ~Shell ();
 
-        int run (const char *file);
+        static Shell *instance () { return &instance_; }
+
+        int run (Util::ShellConfig const &cfg);
+        void quit ();
+
+        virtual void dropIteration ();
+        virtual bool getDropIteration () const;
+        void reset ();
+
+        Model::IModel *getModel ();
+        virtual void setModel (Model::IModel *model);
+
+        Util::Config *getConfig ();
 
 private:
 
+        Shell ();
         void init ();
         void loop ();
         void destroy ();
+        void overrideConfig (Util::ShellConfig const &cfg);
+        friend Util::IShell *shell ();
 
 private:
 
         Impl *impl;
+        static Shell instance_;
 
 };
 

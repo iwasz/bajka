@@ -10,10 +10,15 @@
 #define SDL_GRAPHICSINTERFACE_H_
 
 #include <SDL.h>
-#include "Box.h"
+#include "geometry/Box.h"
+
+namespace Util {
+class Config;
+}
 
 namespace View {
 class IBitmap;
+}
 
 struct GraphicsService {
 
@@ -24,11 +29,7 @@ struct GraphicsService {
          * @param resY
          * @param caption
          */
-        static void init (bool fullScreen,
-                          int *resX,
-                          int *resY,
-                          std::string const &caption,
-                          bool showSystemCursor);
+        static void init (Util::Config *config);
 
         /**
          * Wyłącza SDL.
@@ -44,12 +45,9 @@ struct GraphicsService {
          * Rozszerza surface takj, żeby jego wys i szer były potęgami 2. Za skasowanie
          * zwróconego surface jest odpowiedzialny user.
          */
-        static IBitmap *expandSurfacePowerOf2 (IBitmap *, Geometry::Box const *region = NULL);
+        static View::IBitmap *expandSurfacePowerOf2 (View::IBitmap *, Geometry::Box const *region = NULL);
 
-        static void swapBuffers ();
 
 };
-
-} /* namespace View */
 
 #endif /* GRAPHICSINTERFACE_H_ */
