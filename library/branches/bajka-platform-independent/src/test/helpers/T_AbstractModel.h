@@ -9,7 +9,7 @@
 #ifndef T_ABSTRACTMODEL_H_
 #define T_ABSTRACTMODEL_H_
 
-#include "../../model/Box.h"
+#include "model/Box.h"
 
 /**
  *

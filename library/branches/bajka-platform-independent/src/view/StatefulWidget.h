@@ -10,7 +10,7 @@
 #define STATEFULWIDGET_H_
 
 #include "Widget.h"
-#include "../util/Exceptions.h"
+#include "util/Exceptions.h"
 
 namespace View {
 

@@ -21,4 +21,12 @@ extern void swapBuffers ();
 // Logging
 extern int log (const char *format, ...);
 
+namespace Util {
+class Config;
+class IShell;
+}
+
+extern Util::Config *config ();
+extern Util::IShell *shell ();
+
 #endif /* SHELL_H_ */

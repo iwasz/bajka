@@ -11,7 +11,7 @@
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
 #include <boost/geometry/arithmetic/arithmetic.hpp>
-#include "../util/Exceptions.h"
+#include "util/Exceptions.h"
 
 namespace Geometry {
 using namespace boost::geometry;

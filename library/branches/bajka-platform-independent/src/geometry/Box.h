@@ -13,7 +13,7 @@
 #include <boost/geometry/geometries/register/box.hpp>
 #include <Object.h>
 #include "Point.h"
-#include "ReflectionMacros.h"
+#include "util/ReflectionMacros.h"
 
 namespace Geometry {
 

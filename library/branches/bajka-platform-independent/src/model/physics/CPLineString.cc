@@ -10,7 +10,7 @@
 #include <chipmunk.h>
 #include <cstddef>
 #include "CPLineString.h"
-#include "Segment.h"
+#include "geometry/Segment.h"
 #include "Body.h"
 #include "Space.h"
 #include "Platform.h"

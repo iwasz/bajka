@@ -9,8 +9,8 @@
 #ifndef BAJKA_EVENTIDEX_H_
 #define BAJKA_EVENTIDEX_H_
 
-#include "types/IEvent.h"
-#include "IModel.h"
+#include "events/types/IEvent.h"
+#include "model/IModel.h"
 #include <map>
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/ordered_index.hpp>

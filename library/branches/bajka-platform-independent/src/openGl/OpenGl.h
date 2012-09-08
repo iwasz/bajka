@@ -19,7 +19,7 @@
 #include <GLES/gl.h>
 #endif
 
-#include "../view/draw/Color.h"
+#include "view/draw/Color.h"
 
 namespace View {
 

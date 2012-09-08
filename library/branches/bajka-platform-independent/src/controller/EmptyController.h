@@ -9,7 +9,7 @@
 #ifndef EMPTYCONTROLLER_H_
 #define EMPTYCONTROLLER_H_
 
-#include "ReflectionMacros.h"
+#include "util/ReflectionMacros.h"
 #include "IController.h"
 
 namespace Controller {

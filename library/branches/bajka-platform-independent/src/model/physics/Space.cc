@@ -7,9 +7,9 @@
  ****************************************************************************/
 
 #ifdef USE_CHIPMUNK
-#include "../geometry/AffineMatrix.h"
+#include "geometry/AffineMatrix.h"
 #include "Space.h"
-#include "../util/Exceptions.h"
+#include "util/Exceptions.h"
 #include <chipmunk.h>
 
 namespace Model {
@@ -85,6 +85,18 @@ IModel *Space::findContains (Geometry::Point const &point)
 
         // Space się rozciąga na cały obszar, więc jesli nie ma dzieci, to zwróć space.
         return this;
+}
+
+/****************************************************************************/
+
+void Space::update (Event::UpdateEvent *e)
+{
+        // Run chipmunk
+        if (space) {
+                cpSpaceStep (space, 1.0 / 60.0);
+        }
+
+        Group::update (e);
 }
 
 } /* namespace Model */

@@ -10,7 +10,7 @@ ADD_DEFINITIONS (-DUSE_OPENGL)
 ADD_DEFINITIONS (-DUSE_CHIPMUNK)
 ADD_DEFINITIONS (-O0)
 #ADD_DEFINITIONS (-g -fvisibility=hidden)
-ADD_DEFINITIONS (-g)
+ADD_DEFINITIONS (-g -fPIC)
 ADD_DEFINITIONS (-Winvalid-pch)
 #ADD_DEFINITIONS (-H)
 ADD_DEFINITIONS (-Wall)
@@ -36,12 +36,12 @@ INCLUDE_DIRECTORIES ("/home/iwasz/local/include")
 link_directories("/home/iwasz/local/lib")
 
 #Boost
-find_package (Boost)
+find_package (Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
 # Tiliae
 include (FindPkgConfig)
-pkg_check_modules (TILIAE "tiliae")
+pkg_check_modules (TILIAE REQUIRED "tiliae")
 INCLUDE_DIRECTORIES (${TILIAE_INCLUDE_DIRS})
 link_directories(${TILIAE_LIBRARY_DIRS})
 
@@ -98,14 +98,14 @@ AUX_SOURCE_DIRECTORY (../src/openGl SOURCES)
 
 # Local includes (inside project).
 INCLUDE_DIRECTORIES (../src)
-INCLUDE_DIRECTORIES (../src/view)
-INCLUDE_DIRECTORIES (../src/model)
-INCLUDE_DIRECTORIES (../src/geometry)
-INCLUDE_DIRECTORIES (../src/util)
-INCLUDE_DIRECTORIES (../src/events)
-INCLUDE_DIRECTORIES (../src/controller)
-INCLUDE_DIRECTORIES (../src/openGl)
-INCLUDE_DIRECTORIES (../src/tween)
+#INCLUDE_DIRECTORIES (../src/view)
+#INCLUDE_DIRECTORIES (../src/model)
+#INCLUDE_DIRECTORIES (../src/geometry)
+#INCLUDE_DIRECTORIES (../src/util)
+#INCLUDE_DIRECTORIES (../src/events)
+#INCLUDE_DIRECTORIES (../src/controller)
+#INCLUDE_DIRECTORIES (../src/openGl)
+#INCLUDE_DIRECTORIES (../src/tween)
 
 # Biblioteka z silnikiem bajka.
 add_library (bajka STATIC ${SOURCES})

@@ -9,8 +9,8 @@
 #ifndef DEBUGCONTROLLER_H_
 #define DEBUGCONTROLLER_H_
 
-#include "../controller/IController.h"
-#include "ReflectionMacros.h"
+#include "IController.h"
+#include "util/ReflectionMacros.h"
 
 namespace Controller {
 

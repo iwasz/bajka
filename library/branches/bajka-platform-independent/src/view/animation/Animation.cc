@@ -8,11 +8,11 @@
 
 #ifndef ANDROID
 #include "Animation.h"
-#include "Math.h"
-#include "../../model/IModel.h"
-#include "../../model/IBox.h"
-#include "../../util/Exceptions.h"
-#include "../../events/types/UpdateEvent.h"
+#include "util/Math.h"
+#include "model/IModel.h"
+#include "model/IBox.h"
+#include "util/Exceptions.h"
+#include "events/types/UpdateEvent.h"
 
 namespace View {
 

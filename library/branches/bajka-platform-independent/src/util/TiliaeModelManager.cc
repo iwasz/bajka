@@ -7,10 +7,11 @@
  ****************************************************************************/
 
 #include "TiliaeModelManager.h"
-#include "App.h"
-#include "../util/Exceptions.h"
+#include "util/Exceptions.h"
 #include <ContainerFactory.h>
 #include <inputFormat/mxml/MXmlMetaService.h>
+#include "Platform.h"
+#include "util/IShell.h"
 
 namespace Util {
 using namespace Model;
@@ -19,7 +20,7 @@ using namespace Container;
 void TiliaeModelManager::load (std::string const &name, bool cut)
 {
         bool isCut = cut;
-        app->dropIteration ();
+        shell ()->dropIteration ();
 
         /*
          * Kopię tworzymy, ponieważ podana w argumencie referencja do stringa (nazwa) może
@@ -61,7 +62,7 @@ void TiliaeModelManager::load (std::string const &name, bool cut)
         IModel *m = ocast <IModel *> (childContainer->getBean (nameCopy));
 
         if (!mainModel) {
-                app->setModel (m);
+                shell ()->setModel (m);
         }
         else {
                 if (isCut) {

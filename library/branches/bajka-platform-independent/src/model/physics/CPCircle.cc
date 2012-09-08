@@ -9,7 +9,7 @@
 #ifdef USE_CHIPMUNK
 #include <chipmunk.h>
 #include "CPCircle.h"
-#include "../util/Exceptions.h"
+#include "util/Exceptions.h"
 #include "Body.h"
 #include "Space.h"
 

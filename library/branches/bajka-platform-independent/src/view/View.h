@@ -20,7 +20,6 @@
 #include "Circle.h"
 #include "Image.h"
 #include "IView.h"
-#include "Polygon.h"
 #include "Primitive.h"
 #include "Rectangle.h"
 #include "Text.h"

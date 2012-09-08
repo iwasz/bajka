@@ -10,7 +10,7 @@
 #define BAJKA_TWEEN_MANAGER_H_
 
 #include <map>
-#include "../util/Exceptions.h"
+#include "util/Exceptions.h"
 #include "ITween.h"
 #include "ease/IEquation.h"
 #include "accessor/IAccessor.h"

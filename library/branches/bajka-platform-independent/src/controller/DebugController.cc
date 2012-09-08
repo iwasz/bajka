@@ -8,7 +8,7 @@
 
 #include "Platform.h"
 #include "DebugController.h"
-#include "types/Types.h"
+#include "events/types/Types.h"
 
 namespace Controller {
 

@@ -5,7 +5,7 @@
 #include <list>
 #include <boost/type_traits.hpp>
 #include <boost/lambda/lambda.hpp>
-#include "../util/Math.h"
+#include "util/Math.h"
 
 BOOST_AUTO_TEST_SUITE (UtilTest);
  

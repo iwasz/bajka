@@ -7,11 +7,11 @@
  ****************************************************************************/
 
 #ifndef ANDROID
-#include "OpenGl.h"
+#include "openGl/OpenGl.h"
 #include "LoopImage.h"
-#include "../model/IModel.h"
-#include "../model/IBox.h"
-#include "../util/Exceptions.h"
+#include "model/IModel.h"
+#include "model/IBox.h"
+#include "util/Exceptions.h"
 
 namespace View {
 

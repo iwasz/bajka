@@ -9,10 +9,10 @@
 #ifndef BAJKA_MODEL_GROUP_H_
 #define BAJKA_MODEL_GROUP_H_
 
-#include "AbstractModel.h"
+#include "model/AbstractModel.h"
 #include "IGroup.h"
-#include "../geometry/Point.h"
-#include "../util/ReflectionMacros.h"
+#include "geometry/Point.h"
+#include "util/ReflectionMacros.h"
 
 namespace Model {
 

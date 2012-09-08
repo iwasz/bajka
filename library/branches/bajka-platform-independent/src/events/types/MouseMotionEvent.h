@@ -11,8 +11,7 @@
 #ifndef MOUSEMOTIONEVENT_H_
 #define MOUSEMOTIONEVENT_H_
 
-#include "Point.h"
-#include "Common.h"
+#include "geometry/Point.h"
 #include "MouseEvent.h"
 
 namespace Event {

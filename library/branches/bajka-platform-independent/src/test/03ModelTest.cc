@@ -4,8 +4,8 @@
 //#include <sstream>
 //#include <Pointer.h>
 //
-//#include "IModel.h"
-//#include "../model/Box.h"
+//#include "model/IModel.h"
+//#include "model/Box.h"
 //
 //// Procentowy dopuszcalny błąd w porównaniach doubli.
 //#define CLOSE 0.0000001

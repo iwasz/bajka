@@ -10,7 +10,7 @@
 #define BAJKA_IEVENT_H_
 
 #include <cstddef>
-#include "../controller/IController.h"
+#include "controller/IController.h"
 #include <IToStringEnabled.h>
 #include <map>
 

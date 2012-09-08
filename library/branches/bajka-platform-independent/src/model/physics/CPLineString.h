@@ -10,9 +10,9 @@
 #ifndef PHYSICS_MODEL_LINESTRING_H_
 #define PHYSICS_MODEL_LINESTRING_H_
 
-#include "../../geometry/LineString.h"
-#include "../AbstractModel.h"
-#include "IVertexBufferEnabled.h"
+#include "geometry/LineString.h"
+#include "model/AbstractModel.h"
+#include "model/IVertexBufferEnabled.h"
 #include "ICPShape.h"
 
 namespace Model {

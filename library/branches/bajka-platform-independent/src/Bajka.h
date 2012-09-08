@@ -10,9 +10,12 @@
 #define BAJKA_H_
 
 #include "controller/Controller.h"
-#include "model/Model.h"
-#include "view/View.h"
+#include "events/Events.h"
 #include "geometry/Geometry.h"
+#include "model/Model.h"
+#include "openGl/OpenGl.h"
+#include "tween/Tween.h"
+#include "view/View.h"
 #include "util/Util.h"
 
 #	endif /* BAJKA_H_ */

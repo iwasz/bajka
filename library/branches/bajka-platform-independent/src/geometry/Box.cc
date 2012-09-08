@@ -13,7 +13,7 @@
 #include <boost/tokenizer.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include "Box.h"
-#include "../util/Exceptions.h"
+#include "util/Exceptions.h"
 
 namespace Geometry {
 using namespace boost::geometry;

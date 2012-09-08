@@ -8,13 +8,14 @@
 
 #include <algorithm>
 #include <boost/bind.hpp>
-#include "AbstractModel.h"
-#include "Group.h"
+#include "model/AbstractModel.h"
+#include "model/Group.h"
 #include "BoxGroup.h"
-#include "../view/Widget.h"
-#include "../view/draw/Primitives.h"
-#include "../events/types/UpdateEvent.h"
-#include "../util/App.h"
+#include "view/Widget.h"
+#include "view/draw/Primitives.h"
+#include "events/types/UpdateEvent.h"
+#include "Platform.h"
+#include "util/Config.h"
 
 namespace Model {
 using View::DrawUtil;

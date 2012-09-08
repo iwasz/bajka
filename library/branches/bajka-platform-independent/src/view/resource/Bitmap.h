@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#if 0
 #ifdef USE_SDL
 #ifndef BAJKA_BITMAP_H_
 #define BAJKA_BITMAP_H_
@@ -13,7 +14,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <string>
-#include "../../util/ReflectionMacros.h"
+#include "util/ReflectionMacros.h"
 #include "IBitmap.h"
 
 namespace View {
@@ -51,4 +52,5 @@ private:
 } /* namespace View */
 
 #endif /* BITMAP_H_ */
+#endif
 #endif

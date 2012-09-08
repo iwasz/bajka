@@ -11,9 +11,9 @@
 
 #include "static/Static.h"
 #include "physics/Physics.h"
-#include "IModel.h"
-#include "AbstractModel.h"
-#include "Group.h"
+#include "model/IModel.h"
+#include "model/AbstractModel.h"
+#include "model/Group.h"
 #include "BoxGroup.h"
 
 #	endif /* MODEL_H_ */

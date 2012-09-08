@@ -9,7 +9,7 @@
 #ifndef BAJKA_POLYGON_H_
 #define BAJKA_POLYGON_H_
 
-#include "../AbstractModel.h"
+#include "model/AbstractModel.h"
 
 namespace Model {
 

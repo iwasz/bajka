@@ -10,8 +10,8 @@
 #ifndef BAJKA_MODEL_SHAPE_H_
 #define BAJKA_MODEL_SHAPE_H_
 
-#include "../../util/ReflectionMacros.h"
-#include "../IModel.h"
+#include "util/ReflectionMacros.h"
+#include "model/IModel.h"
 
 struct cpShape;
 

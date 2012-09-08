@@ -10,10 +10,10 @@
 #ifndef BAJKA_VIEW_IMAGE_H_
 #define BAJKA_VIEW_IMAGE_H_
 
-#include "OpenGl.h"
-#include "Widget.h"
+#include "openGl/OpenGl.h"
+#include "view/Widget.h"
 #include "resource/IBitmap.h"
-#include "../geometry/Box.h"
+#include "geometry/Box.h"
 
 namespace View {
 

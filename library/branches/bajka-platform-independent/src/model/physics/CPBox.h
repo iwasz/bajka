@@ -10,11 +10,11 @@
 #ifndef BAJKA_PHYS_BOX_H_
 #define BAJKA_PHYS_BOX_H_
 
-#include "../geometry/AffineMatrix.h"
-#include "../geometry/Point.h"
+#include "geometry/AffineMatrix.h"
+#include "geometry/Point.h"
 #include "Shape.h"
-#include "../static/Box.h"
-#include "../../util/Exceptions.h"
+#include "model/static/Box.h"
+#include "util/Exceptions.h"
 
 namespace Model {
 

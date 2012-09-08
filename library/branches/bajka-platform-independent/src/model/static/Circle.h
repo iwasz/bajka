@@ -9,7 +9,7 @@
 #ifndef BAJKA_MODEDL_CIRCLE_STATIC_H_
 #define BAJKA_MODEDL_CIRCLE_STATIC_H_
 
-#include "../AbstractModel.h"
+#include "model/AbstractModel.h"
 
 namespace Model {
 

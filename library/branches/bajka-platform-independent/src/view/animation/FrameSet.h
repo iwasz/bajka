@@ -10,8 +10,8 @@
 #define BAJKA_FRAMESET_H_
 
 #include <map>
-#include "../../util/ReflectionMacros.h"
-#include "../../util/Commons.h"
+#include "util/ReflectionMacros.h"
+#include "util/Commons.h"
 
 namespace View {
 

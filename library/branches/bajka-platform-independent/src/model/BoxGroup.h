@@ -9,9 +9,9 @@
 #ifndef BAJKA_MODEL_BOX_GROUP2_H_
 #define BAJKA_MODEL_BOX_GROUP2_H_
 
-#include "../util/ReflectionMacros.h"
+#include "util/ReflectionMacros.h"
 #include "IBox.h"
-#include "Group.h"
+#include "model/Group.h"
 
 namespace Model {
 

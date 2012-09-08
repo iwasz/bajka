@@ -10,9 +10,9 @@
 
 #ifndef ANDROID
 #include "Image.h"
-#include "Math.h"
-#include "Model.h"
-#include "../util/Exceptions.h"
+#include "util/Math.h"
+#include "model/Model.h"
+#include "util/Exceptions.h"
 
 namespace View {
 

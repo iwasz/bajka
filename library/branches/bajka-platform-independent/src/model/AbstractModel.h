@@ -9,8 +9,8 @@
 #ifndef BAJKA_ABSTRACTMODEL_H_
 #define BAJKA_ABSTRACTMODEL_H_
 
-#include "IModel.h"
-#include "../util/ReflectionMacros.h"
+#include "model/IModel.h"
+#include "util/ReflectionMacros.h"
 #include "IBox.h"
 #include "IGroup.h"
 

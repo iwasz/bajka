@@ -10,7 +10,7 @@
 #define BAJKA_WIDGET_H_
 
 #include "IView.h"
-#include "ReflectionMacros.h"
+#include "util/ReflectionMacros.h"
 #include <map>
 #include <string>
 

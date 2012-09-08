@@ -7,7 +7,7 @@
  ****************************************************************************/
 
 #include "EventIdex.h"
-#include "../model/IGroup.h"
+#include "model/IGroup.h"
 
 namespace Event {
 

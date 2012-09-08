@@ -7,8 +7,8 @@
  ****************************************************************************/
 
 #include "PointerInsideIndex.h"
-#include "../model/IModel.h"
-#include "../model/IGroup.h"
+#include "model/IModel.h"
+#include "model/IGroup.h"
 
 namespace Event {
 

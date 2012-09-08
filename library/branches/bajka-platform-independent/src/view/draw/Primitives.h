@@ -10,9 +10,9 @@
 #define BAJKA_DRAWUTIL_H_
 
 #include "Color.h"
-#include "../../geometry/Point.h"
-#include "../../geometry/Box.h"
-#include "../../model/VertexBuffer.h"
+#include "geometry/Point.h"
+#include "geometry/Box.h"
+#include "model/VertexBuffer.h"
 
 using Model::VertexBuffer;
 
