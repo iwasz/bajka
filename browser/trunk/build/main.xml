@@ -1,15 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+* Guzik z napisem.
+** Czcionki TTF.
+* Przełączanie widoków (link podłaczony do tego guzika).
+* Obsługa F5 i Esc.
+* Obsługa eventów z klawiatury w ogóle.
+* Bitmapa.
+ -->
+
 <beans>
-  <Config id="config" resX="800" resY="600" windowCaption="Bajka browser" model="@test02"/>
+  <Config id="config" resX="800" resY="600" windowCaption="Bajka browser, F5 to refresh" model="@test02"/>
   
   <Circle id="test02" origin="0, 0" radius="30" view="@circleWgt" />
   <View::Circle id="circleWgt" foreground="000000FF" background="@randomColor" />
   <Primitive id="primitiveWgt" foreground="000000FF" background="00ffffFF" />
 
+  <!-- Zawsze ten samo kolor jest -->
   <Color id="randomColor" singleton="false">
     <cargs>
       <value type="bool">true</value>
     </cargs>
   </Color>
+
+  
+
+<Box id="text">
+  <Text set-as="view" font="@volterFont" text="text" />
+</Box>  
+
+<TTFFont id="volterFont" >
+    <cargs>
+        <value type="text">gfx/volter.ttf</value>
+        <value type="int">18</value>
+    </cargs>
+</TTFFont>
 
 </beans>
