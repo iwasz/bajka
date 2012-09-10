@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+  <Circle id="circle" origin="0, 0" radius="30">
+    <View::Circle set-as="view" id="circleWgt" foreground="FFFFFFFF" background="555555ff" />
+  </Circle>
+
+  <Box id="image" abstract="true" init-method="updateToViewSize">
+    <Image set-as="view">
+        <Bitmap set-as="bitmap"/>
+    </Image>
+  </Box>
+
+  <!-- Single line text with default font and color -->
+  <Box id="label" abstract="true" autoUpdateToViewSize="true">
+    <Text set-as="view" foreground="ff0000ff" font="@defaultFont" />
+  </Box>
+
+  <!-- TODO Zawsze ten samo kolor jest -->
+  <Color id="randomColor" singleton="false">
+    <cargs>
+      <value type="bool">true</value>
+    </cargs>
+  </Color>
+  
+  <TTFFont id="defaultFont" type="2" hinting="3">
+    <cargs>
+      <value type="text">volter.ttf</value>
+      <value type="int">16</value>
+    </cargs>
+  </TTFFont>
+
+</beans>
