@@ -10,7 +10,6 @@
 #include "util/Exceptions.h"
 #include "util/Math.h"
 #include "util/Config.h"
-#include "view/resource/Bitmap.h"
 
 void GraphicsService::init (Util::Config *config)
 {
