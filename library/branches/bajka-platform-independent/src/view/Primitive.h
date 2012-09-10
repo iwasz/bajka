@@ -15,7 +15,7 @@
 namespace View {
 
 /**
- * TODO zmienić nazwę na coś z linią - to rysuje linie + wypełnienie.
+ *
  */
 class Primitive : public Widget {
 public:

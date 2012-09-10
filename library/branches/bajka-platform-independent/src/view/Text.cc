@@ -110,5 +110,4 @@ void Text::update (Model::IModel *model, Event::UpdateEvent *)
         glDisable (GL_TEXTURE_2D);
 }
 
-
 } /* namespace View */

@@ -5,6 +5,7 @@ if(COMMAND cmake_policy)
     cmake_policy(SET CMP0003 NEW)
 endif(COMMAND cmake_policy)
 
+SET (CMAKE_VERBOSE_MAKEFILE 0) 
 ADD_DEFINITIONS (-DLINUX)
 ADD_DEFINITIONS (-DUSE_OPENGL)
 ADD_DEFINITIONS (-DUSE_CHIPMUNK)
@@ -108,7 +109,7 @@ INCLUDE_DIRECTORIES (../src)
 #INCLUDE_DIRECTORIES (../src/tween)
 
 # Biblioteka z silnikiem bajka.
-add_library (bajka STATIC ${SOURCES})
+add_library (bajka SHARED ${SOURCES})
 TARGET_LINK_LIBRARIES (bajka ${OPENGL_LIBRARIES})
 TARGET_LINK_LIBRARIES (bajka ${TILIAE_LIBRARIES})
 TARGET_LINK_LIBRARIES (bajka chipmunk)
