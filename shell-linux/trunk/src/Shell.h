@@ -10,6 +10,7 @@
 #define BAJKA_SHELL_H_
 
 #include "util/IShell.h"
+#include "./resource/Resource.h"
 
 class Impl;
 
