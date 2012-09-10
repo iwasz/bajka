@@ -70,6 +70,7 @@ link_directories(${SDLTTF_LIBRARY_DIRS})
 
 # Sources
 AUX_SOURCE_DIRECTORY (../src SOURCES)
+AUX_SOURCE_DIRECTORY (../src/resource SOURCES)
 
 # Local includes (inside project).
 INCLUDE_DIRECTORIES (../src)
