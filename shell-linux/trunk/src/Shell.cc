@@ -93,18 +93,20 @@ int Shell::run (Util::ShellConfig const &cfg)
                         throw U::InitException ("TTF_Init failed");
                 }
 
-                Ptr <MetaContainer> metaContainer = CompactMetaService::parseFile (cfg.definitionFile);
-                Ptr <BeanFactoryContainer> container = ContainerFactory::create (metaContainer, true);
-                container->addConversion (typeid (Geometry::Point), Geometry::stringToPointVariant);
-                container->addConversion (typeid (Geometry::LineString), Geometry::stringToLineStringVariant);
-                ContainerFactory::init (container.get (), metaContainer.get ());
-                impl->config = vcast <U::Config *> (container->getBean ("config"));
-                overrideConfig (cfg);
-                setModel (impl->config->model);
+                {
+                        Ptr <MetaContainer> metaContainer = CompactMetaService::parseFile (cfg.definitionFile);
+                        Ptr <BeanFactoryContainer> container = ContainerFactory::create (metaContainer, true);
+                        container->addConversion (typeid (Geometry::Point), Geometry::stringToPointVariant);
+                        container->addConversion (typeid (Geometry::LineString), Geometry::stringToLineStringVariant);
+                        ContainerFactory::init (container.get (), metaContainer.get ());
+                        impl->config = vcast <U::Config *> (container->getBean ("config"));
+                        overrideConfig (cfg);
+                        setModel (impl->config->model);
 
-                init ();
-                loop ();
-                destroy ();
+                        init ();
+                        loop ();
+                        destroy ();
+                }
 
                 TTF_Quit ();
                 SDL_Quit ();
