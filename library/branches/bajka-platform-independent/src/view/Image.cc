@@ -93,18 +93,6 @@ void Image::init (Model::IModel *model)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 /*--------------------------------------------------------------------------*/
-#if 0
-        // Najpierw użyję proxy i sprawdzę czy uda się stworzyć teksturę:
-        glTexImage2D(GL_PROXY_TEXTURE_2D, 0, GL_RGBA, width,
-                     height, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                     NULL);
-
-        GLint tmpWidth;
-        glGetTexLevelParameteriv(GL_PROXY_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &tmpWidth);
-
-        assertThrow (tmpWidth == width, "Image::init : tmpWidth != width");
-#endif
-/*--------------------------------------------------------------------------*/
 
         glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, texWidth,
                      texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,

@@ -6,13 +6,11 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#if 0
-#include "Math.h"
-#include "Model.h"
+#include "util/Math.h"
+#include "model/Model.h"
 #include "Text.h"
 #include "util/Exceptions.h"
 #include <boost/functional/hash.hpp>
-#include "GraphicsService.h"
 
 namespace View {
 
@@ -36,24 +34,25 @@ double Text::getHeightHint () const
 
 void Text::init ()
 {
-        SDL_Surface *image = NULL;
+        Ptr <IBitmap> bitmap;
+        assert (font);
 
         if (multiline) {
-                image = static_cast <SDL_Surface *> (font->renderMulti (text, getForeground (), getBackground (), align));
+                bitmap = font->renderMulti (text, getForeground (), getBackground (), align);
         }
         else {
-                image = static_cast <SDL_Surface *> (font->render (text, getForeground (), getBackground ()));
+                bitmap = font->render (text, getForeground (), getBackground ());
         }
 
-        imgWidth = image->w;
-        imgHeight = image->h;
+        imgWidth = bitmap->getWidth ();
+        imgHeight = bitmap->getHeight ();
 
-        // TODO
-        SDL_Surface *texSurface ;//= GraphicsService::expandSurfacePowerOf2 (image);
-        SDL_FreeSurface (image);
+        // Rozmiar bitmapy na texturę podniesiony do następnej potęgi
+        texWidth = Util::Math::nextSqr (imgWidth);
+        texHeight = Util::Math::nextSqr (imgHeight);
 
-        int width = texSurface->w;
-        int height = texSurface->h;
+        // Kopia o rozmiarach własciwych dla textury. TODO może da się wyelminować ten krok, tak, żeby font sam tworzył bitmapę o odpowiednim rozmiarze?
+        Ptr <IBitmap> texBitmap = bitmap->blit (NULL, texWidth, texHeight);
 
 /*--------------------------------------------------------------------------*/
 
@@ -73,28 +72,9 @@ void Text::init ()
 
 /*--------------------------------------------------------------------------*/
 
-        // Najpierw użyję proxy i sprawdzę czy uda się stworzyć teksturę:
-        glTexImage2D(GL_PROXY_TEXTURE_2D, 0, GL_RGBA, width,
-                     height, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                     NULL);
-
-        GLint tmpWidth;
-        glGetTexLevelParameteriv(GL_PROXY_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &tmpWidth);
-
-        if (tmpWidth != width) {
-                throw Util::RuntimeException ("Text::update : tmpWidth != width");
-        }
-
-/*--------------------------------------------------------------------------*/
-
-        glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, width,
-                     height, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                     texSurface->pixels);
-
-        texWidth = width;
-        texHeight = height;
-
-        SDL_FreeSurface (texSurface);
+        glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, texWidth,
+                     texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                     texBitmap->getData ());
 }
 
 /****************************************************************************/
@@ -132,4 +112,3 @@ void Text::update (Model::IModel *model, Event::UpdateEvent *)
 
 
 } /* namespace View */
-#endif

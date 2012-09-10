@@ -50,8 +50,9 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        m_ (getChildren) ModelVector &getChildren () { return children; }
-        m_ (setChildren) void setChildren (ModelVector const &c);
+        ModelVector &getChildren () { return children; }
+        void setChildren (ModelVector const &c);
+
         void addChild (IModel *m);
         void popChild ();
         IModel *getTop ();
@@ -62,7 +63,7 @@ public:
 
 protected:
 
-        ModelVector children;
+        ModelVector P_ (children);
 
         /**
          * Ustawiane przez App (mogło by być prywatne + friend, ale mi się nie chce kombinować).
