@@ -2,11 +2,11 @@
 
 <!-- 
 * Guzik z napisem.
-** Czcionki TTF.
+** -Czcionki TTF.
 * Przełączanie widoków (link podłaczony do tego guzika).
 * Obsługa F5 i Esc.
 * Obsługa eventów z klawiatury w ogóle.
-* Bitmapa.
+* -Bitmapa.
  -->
 
 <beans>
