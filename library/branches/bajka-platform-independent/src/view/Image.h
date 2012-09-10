@@ -26,14 +26,14 @@ public:
         C__ (void)
         b_ ("Widget")
 
-        Image () : texName (0), texWidth (0), texHeight (0), imgWidth (0), imgHeight (0), initialized (false) {}
+        Image () : texName (0), texWidth (0), texHeight (0), imgWidth (0), imgHeight (0), initialized (false), bitmap (NULL) {}
         virtual ~Image ();
 
         /// Do the drawing.
         virtual void update (Model::IModel *model, Event::UpdateEvent *e);
 
-        m_ (getBitmap) Ptr <IBitmap> getBitmap () { return bitmap; }
-        S_ (setBitmap) void setBitmap (Ptr <IBitmap> b) { bitmap = b; }
+        m_ (getBitmap) IBitmap *getBitmap () { return bitmap; }
+        S_ (setBitmap) void setBitmap (IBitmap *b) { bitmap = b; }
 
         Geometry::Box const &getRegion () const { return (region.get ()) ? (*region) : (Geometry::Box::ZERO_BOX); }
         m_ (setRegion) void setRegion (Geometry::Box const &r) { region = std::auto_ptr <Geometry::Box> (new Geometry::Box (r)); }
@@ -53,7 +53,7 @@ protected:
         // Faktyczne rozmiary bitmapy (równe rozmiarom regionu, lub rozmiarom obrazka, jeśli region pusty).
         int imgWidth, imgHeight;
         bool initialized;
-        Ptr <IBitmap> bitmap;
+        IBitmap *bitmap;
         std::auto_ptr <Geometry::Box> region;
 
         E_ (Image)

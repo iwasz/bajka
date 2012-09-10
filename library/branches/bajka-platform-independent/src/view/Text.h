@@ -6,12 +6,11 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#if 0
 #ifndef BAJKA_VIEW_TEXT_H_
 #define BAJKA_VIEW_TEXT_H_
 
-#include <SDL_opengl.h>
-#include "ReflectionMacros.h"
+#include "openGl/OpenGl.h"
+#include "util/ReflectionMacros.h"
 #include "resource/IFont.h"
 #include "Primitive.h"
 
@@ -22,20 +21,28 @@ public:
         C__ (void)
         b_ ("Primitive")
 
-        Text () : hash (0), texWidth (0), texHeight (0), imgWidth (0), imgHeight (0), multiline (false), align (IFont::LEFT) {}
+        Text () : font (NULL),
+                hash (0),
+                texWidth (0),
+                texHeight (0),
+                imgWidth (0),
+                imgHeight (0),
+                multiline (false),
+                align (IFont::LEFT) {}
+
         virtual ~Text () {}
 
         /// Do the drawing.
         virtual void update (Model::IModel *model, Event::UpdateEvent *e);
 
-        Ptr <IFont> getFont () const { return font; }
-        S_ (setFont) void setFont (Ptr <IFont> f) { font = f; }
+        IFont *getFont () const { return font; }
+        void setFont (IFont *f) { font = f; }
 
         std::string getText () const { return text; }
-        m_ (setText) void setText (std::string const &s) { text = s; }
+        void setText (std::string const &s) { text = s; }
 
         bool getMultiline () const { return multiline; }
-        m_ (setMultiline) void setMultiline (bool b) { multiline = b; }
+        void setMultiline (bool b) { multiline = b; }
 
         IFont::TextAlign getAlign () const { return align; }
         m_ (setAlign) void setAlign (int a) { align = (IFont::TextAlign)a; } // TODO typ na Align
@@ -50,15 +57,15 @@ private:
 
 private:
 
-        Ptr <IFont> font;
-        std::string text;
+        IFont *p_ (font);
+        std::string p_ (text);
         std::size_t hash;
         GLuint texName;
         // Rozmiary textury (potęga 2jki)
         int texWidth, texHeight;
         // Faktyczne rozmiary bitmapy (równe rozmiarom regionu, lub rozmiarom obrazka, jeśli region pusty).
         int imgWidth, imgHeight;
-        bool multiline;
+        bool p_ (multiline);
         IFont::TextAlign align;
 
         E_ (Text)
@@ -67,4 +74,3 @@ private:
 } /* namespace View */
 
 #endif /* TEXT_H_ */
-#endif
