@@ -25,8 +25,6 @@ void Rectangle::update (Model::IModel *model, Event::UpdateEvent *)
                                  b.ur,
                                  getForeground (),
                                  getBackground ());
-
-
 }
 
 } /* namespace View */
