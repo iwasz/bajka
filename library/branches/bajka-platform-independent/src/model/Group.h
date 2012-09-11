@@ -17,13 +17,10 @@
 namespace Model {
 
 /**
- * Podstawowa grupa modeli, czyli coś, co się rozciąga w nieskończoność (nie ma
- * swojego rozmiaru).
- *
- * Bounding box takiej grupy jest zawsze rozciągnięty żeby miściły się w nim wszystkie
- * dzieci.
- *
- * Środek transformacji (obrotu i skali) domyślnie jest w punkcie 0,0 (nie jest
+ * Podstawowe grupowanie modeli, layer.
+ * To jest grupa, którasię rozciąga w nieskończoność (nie ma swojego rozmiaru).
+ * Bounding box takiej grupy jest zawsze rozciągnięty żeby mieściły się w nim wszystkie
+ * dzieci. Środek transformacji (obrotu i skali) domyślnie jest w punkcie 0,0 (nie jest
  * wyliczany na podstawie rozmieszczenia dzieci).
  */
 class Group : public AbstractModel, public IGroup {
@@ -65,14 +62,14 @@ protected:
 
         ModelVector P_ (children);
 
-        /**
+        /*
          * Ustawiane przez App (mogło by być prywatne + friend, ale mi się nie chce kombinować).
          * Jest to indeks modeli, w którym można szybko wyszukać Event::Type -> IModel. Dzieki temu
          * dispatchery wiedzą gdzie kierować eventy;
          */
         Event::EventIndex *eventIndex;
 
-        /**
+        /*
          * Ustawiane przez App. To jest indeks, który zawiera informację o modelach, nad którymi
          * aktualnie znajduje się kursor myszy. Ten indeks ułatwia generowanie eventów onMouseOut.
          * Grupy mają do niego wskaźnik, żeby mogły usuwać z niego na berząco modele, gdy user usunie

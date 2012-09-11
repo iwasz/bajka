@@ -6,19 +6,33 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#if defined (USE_OPENGL) || defined (USE_OPENGLES)
-#include "OpenGl.h"
+#ifndef CLEARSCREEN_H_
+#define CLEARSCREEN_H_
+
+#include "util/ReflectionMacros.h"
+#include "Widget.h"
+#include "draw/Color.h"
 
 namespace View {
 
-//void clear (View::Color const &c)
-//{
-//        glMatrixMode (GL_MODELVIEW);
-//        glLoadIdentity ();
-//        glClearColor (c.r, c.g, c.b, c.a);
-//        glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//}
+/**
+ * Czyści cały ekran. Czyli tak jakby całą możliwą przestrzeń (widoczną i niewidoczną)
+ * przykryła płaszczyzna o jednolitym kolorze.
+ */
+class ClearScreen : public Widget {
+public:
+
+        C__ (void)
+
+        virtual ~ClearScreen () {}
+        void update (Model::IModel *, Event::UpdateEvent *e);
+
+private:
+
+        View::Color P_ (color);
+
+        E_ (ClearScreen)
+};
 
 } /* namespace View */
-
-#endif
+#endif /* CLEARSCREEN_H_ */

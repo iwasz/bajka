@@ -27,5 +27,6 @@
 #include "Widget.h"
 #include "resource/Resource.h"
 #include "draw/Draw.h"
+#include "ClearScreen.h"
 
 #	endif /* VIEW_H_ */
