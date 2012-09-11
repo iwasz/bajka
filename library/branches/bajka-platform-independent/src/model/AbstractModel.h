@@ -17,6 +17,11 @@
 namespace Model {
 class BoxGroup;
 
+/**
+ * Wspólna implemntacja modeli. To jest klasa zbierająca do kupy wspólny kod, który powtarzał by się
+ * we wszystkich modelach. Czyli tu dziedziczenie zostało użyte nie do grupowania pojęć, a do reużywalności
+ * kodu.
+ */
 class AbstractModel : public IModel {
 public:
 
@@ -70,7 +75,7 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        /**
+        /*
          * TODO Może wszędzie gdzie tu jest IModel dać IGroup?
          */
         IModel *getParent () { return parent; }

@@ -6,25 +6,17 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_IMPL_OPENGL_H_
-#define BAJKA_IMPL_OPENGL_H_
-
-/**
- * Inkluduje nagłówki OpenGL zależne od platformy.
- */
-
-#if defined (LINUX)
-#include <GL/gl.h>
-#elif defined (ANDROID)
-#include <GLES/gl.h>
-#endif
-
-#include "view/draw/Color.h"
+#include "ClearScreen.h"
+#include "openGl/OpenGl.h"
 
 namespace View {
 
-//extern void clear (View::Color const &c);
+void ClearScreen::update (Model::IModel *, Event::UpdateEvent *e)
+{
+//        glMatrixMode (GL_MODELVIEW);
+//        glLoadIdentity ();
+        glClearColor (color.r, color.g, color.b, color.a);
+        glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
 
 } /* namespace View */
-
-#	endif /* OPENGL_H_ */

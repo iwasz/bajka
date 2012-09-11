@@ -28,7 +28,14 @@ struct IGroup : public virtual Core::Object {
 
         virtual ~IGroup () {}
 
+        /**
+         * Konwersja współrzędnych.
+         */
         virtual void screenToGroup (Geometry::Point *p) const = 0;
+
+        /**
+         * Konwersja współrzędnych.
+         */
         virtual void groupToScreen (Geometry::Point *p) const = 0;
 
         /**
@@ -69,7 +76,14 @@ struct IGroup : public virtual Core::Object {
          */
         virtual ModelVector::iterator end () = 0;
 
+        /**
+         * Iterator.
+         */
         virtual ModelVector::const_iterator begin () const = 0;
+
+        /**
+         * Iterator.
+         */
         virtual ModelVector::const_iterator end () const = 0;
 
         /**

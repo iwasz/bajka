@@ -24,11 +24,15 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
+        /// Szerokość.
         virtual double getWidth () const = 0;
+        /// Szerokość.
         virtual void setWidth (double w)  = 0;
+        /// Wysokość.
         virtual double getHeight () const = 0;
+        /// Wysokość.
         virtual void setHeight (double h) = 0;
-
+        /// Metoda pomocnicza zwracająca pudełko o rozmiarach width i height i ll = 0.
         virtual Geometry::Box getBox () const = 0;
 
 };

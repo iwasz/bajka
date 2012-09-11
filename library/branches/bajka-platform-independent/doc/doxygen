@@ -5,7 +5,7 @@
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = Bajka
-PROJECT_NUMBER         =
+PROJECT_NUMBER         = 1
 OUTPUT_DIRECTORY       = 
 CREATE_SUBDIRS         = YES
 OUTPUT_LANGUAGE        = English
@@ -21,7 +21,7 @@ SHORT_NAMES            = NO
 JAVADOC_AUTOBRIEF      = YES
 QT_AUTOBRIEF           = NO
 MULTILINE_CPP_IS_BRIEF = NO
-INHERIT_DOCS           = YES
+INHERIT_DOCS           = NO
 SEPARATE_MEMBER_PAGES  = NO
 TAB_SIZE               = 8
 ALIASES                =
@@ -47,7 +47,7 @@ EXTRACT_STATIC         = NO
 EXTRACT_LOCAL_CLASSES  = YES
 EXTRACT_LOCAL_METHODS  = NO
 EXTRACT_ANON_NSPACES   = NO
-HIDE_UNDOC_MEMBERS     = NO
+HIDE_UNDOC_MEMBERS     = YES
 HIDE_UNDOC_CLASSES     = YES
 HIDE_FRIEND_COMPOUNDS  = NO
 HIDE_IN_BODY_DOCS      = NO
@@ -87,11 +87,11 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = ../controller ../events2 ../model ../openGl ../services ../util ../view ../base
+INPUT                  = ../src
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *cc *.h
 RECURSIVE              = YES
-EXCLUDE                =
+EXCLUDE                = ../src/test
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       =
 EXCLUDE_SYMBOLS        = _*
