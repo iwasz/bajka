@@ -15,7 +15,7 @@
 #include "model/Model.h"
 #include "openGl/OpenGl.h"
 #include "tween/Tween.h"
-#include "view/View.h"
 #include "util/Util.h"
+#include "view/View.h"
 
 #	endif /* BAJKA_H_ */
