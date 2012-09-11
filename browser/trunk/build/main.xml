@@ -18,7 +18,6 @@
     <circle add-to="children" origin="50, 0" />
     <image add-to="children" view.bitmap.path="cursor.png" />
     <label add-to="children" view.text="Hello world" translate="-50, -50"/>
+    <ClearScreen set-as="view" color="858585ff" />
   </Group>
-
-    
 </beans>
