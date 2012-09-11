@@ -16,8 +16,12 @@
  * Klasy pomocnicze. Matematyka, geometria, struktury drzewiaste. Rożne klasy pomocnicze.
  */
 
-#include "Math.h"
-#include "App.h"
 #include "Commons.h"
+#include "Config.h"
+#include "IShell.h"
+#include "Math.h"
+#include "ModelManager.h"
+#include "ReflectionMacros.h"
+#include "TiliaeModelManager.h"
 
 #	endif /* UTIL_H_ */
