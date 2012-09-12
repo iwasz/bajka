@@ -6,18 +6,31 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_MODEL_H_
-#define BAJKA_MODEL_H_
+#ifndef BAJKA_LAYOUT_PADDING_H_
+#define BAJKA_LAYOUT_PADDING_H_
 
-#include "static/Static.h"
-#include "physics/Physics.h"
-#include "layout/Layout.h"
-#include "IModel.h"
-#include "AbstractModel.h"
-#include "Group.h"
-#include "IBox.h"
-#include "IGroup.h"
-#include "IVertexBufferEnabled.h"
-#include "VertexBuffer.h"
+#include <string>
+#include "util/ReflectionMacros.h"
 
-#	endif /* MODEL_H_ */
+namespace Model {
+
+/**
+ * Definicja paddingu.
+ */
+struct Padding {
+
+        Padding () : top (0), right (0), bottom (0), left (0) {}
+
+        C__ (std::string const &);
+        Padding (std::string const &s);
+
+        float top;
+        float right;
+        float bottom;
+        float left;
+
+        E_ (Padding)
+};
+
+} /* namespace Model */
+#endif /* PADDING_H_ */

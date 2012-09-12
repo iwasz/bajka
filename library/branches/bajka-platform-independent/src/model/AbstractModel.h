@@ -33,7 +33,7 @@ public:
                 scale (1),
                 view (0),
                 controller (0),
-                layout (NULL) {}
+                groupProps (NULL) {}
 
         virtual ~AbstractModel () {}
 
@@ -56,8 +56,8 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        m_ (getLayout) Layout *getLayout () { return layout; }
-        m_ (setLayout) void setLayout (Layout *l) { layout = l; }
+        IGroupProperties *getGroupProps () { return groupProps; }
+        void setGroupProps (IGroupProperties *l) { groupProps = l; }
 
 /*--------------------------------------------------------------------------*/
 
@@ -81,15 +81,14 @@ public:
         IModel *getParent () { return parent; }
         void setParent (IModel *m) { parent = m; }
         void onParentSet (IModel *m) {}
-        S_ (setParent2) virtual void setParent2 (IModel *p);
 
 /*--------------------------------------------------------------------------*/
 
-        m_ (getView) virtual View::IView *getView () { return view; }
-        S_ (setView) void setView (View::IView *v) { view = v; }
+        virtual View::IView *getView () { return view; }
+        void setView (View::IView *v) { view = v; }
 
-        m_ (getController) Controller::IController *getController () { return controller; }
-        S_ (setController) void setController (Controller::IController *c) { controller = c; }
+        Controller::IController *getController () { return controller; }
+        void setController (Controller::IController *c) { controller = c; }
 
 protected:
 
@@ -101,9 +100,9 @@ protected:
 private:
 
         std::auto_ptr <Geometry::Point> center;
-        View::IView *view;
-        Controller::IController *controller;
-        Layout *layout;
+        View::IView *                   p_ (view);
+        Controller::IController *       p_ (controller);
+        IGroupProperties *              p_ (groupProps);
 
         E_ (AbstractModel)
 };

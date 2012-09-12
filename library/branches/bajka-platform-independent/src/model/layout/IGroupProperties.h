@@ -6,18 +6,15 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_MODEL_H_
-#define BAJKA_MODEL_H_
+#ifndef IGROUPPROPERTIES_H_
+#define IGROUPPROPERTIES_H_
 
-#include "static/Static.h"
-#include "physics/Physics.h"
-#include "layout/Layout.h"
-#include "IModel.h"
-#include "AbstractModel.h"
-#include "Group.h"
-#include "IBox.h"
-#include "IGroup.h"
-#include "IVertexBufferEnabled.h"
-#include "VertexBuffer.h"
+namespace Model {
 
-#	endif /* MODEL_H_ */
+class IGroupProperties {
+public:
+        virtual ~IGroupProperties() {}
+};
+
+} /* namespace View */
+#endif /* IGROUPPROPERTIES_H_ */

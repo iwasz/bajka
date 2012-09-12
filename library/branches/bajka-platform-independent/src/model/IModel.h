@@ -17,7 +17,7 @@
 #include "controller/IController.h"
 #include "geometry/Box.h"
 #include "geometry/AffineMatrix.h"
-#include "Layout.h"
+#include "layout/IGroupProperties.h"
 
 namespace Event {
 class UpdateEvent;
@@ -147,8 +147,8 @@ struct IModel : public virtual Core::Object {
 
 /*------layout--------------------------------------------------------------*/
 
-        virtual Layout *getLayout () = 0;
-        virtual void setLayout (Layout *) = 0;
+        virtual IGroupProperties *getGroupProps () = 0;
+        virtual void setGroupProps (IGroupProperties *l) = 0;
 
 /*------runtime type information--------------------------------------------*/
 

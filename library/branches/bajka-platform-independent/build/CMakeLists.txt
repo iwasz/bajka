@@ -85,6 +85,7 @@ AUX_SOURCE_DIRECTORY (../src/events/types SOURCES)
 AUX_SOURCE_DIRECTORY (../src/model SOURCES)
 AUX_SOURCE_DIRECTORY (../src/model/static SOURCES)
 AUX_SOURCE_DIRECTORY (../src/model/physics SOURCES)
+AUX_SOURCE_DIRECTORY (../src/model/layout SOURCES)
 
 AUX_SOURCE_DIRECTORY (../src/geometry SOURCES)
 AUX_SOURCE_DIRECTORY (../src/util SOURCES)
