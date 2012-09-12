@@ -32,13 +32,60 @@ struct Config {
 
         Config ();
 
+        /**
+         * Pełny ekran. Jeśli ustawione na truem to wartości viewportWidth i viewportHeight
+         * są zamazywane szerokością i wysokością pełnego ekranu. Ich ustawianie nie ma wówczas
+         * rezultatu.
+         */
         bool            p_ (fullScreen);
-        int             p_ (resX);
-        int             p_ (resY);
+
+        /**
+         * Szerokość okna w pikselach. Jeśli fullScreen jest na false, to tu podajemy szerokość
+         * ekranu (fizycznego okna) w pikselach.
+         */
+        int             p_ (viewportWidth);
+
+        /**
+         * Wysokość okna w pikselach. Jeśli fullScreen jest na false, to tu podajemy wysokość
+         * ekranu (fizycznego okna) w pikselach.
+         */
+        int             p_ (viewportHeight);
+
+        /**
+         * Auto projekcja. To jest konfiguracja układu współrzędnych w przestrzeni gry. Jeśli autoProjection
+         * kest na true, to projectionWidth i projectionHeight zostaną ustawione tak, żeby jeden punkt w układzie
+         * współrzędnych gry odpowiadał dokładnie jednemu pikselowi na ekranie. Jest to przydatne do robienia
+         * grafiki pixel-perfect, czyli na przykład pixelart. Jeśli autoProjection jest true, to ustawianie
+         * projectionWidth i projectionHeight nie ma rezultatu.
+         */
+        bool            p_ (autoProjection);
+
+        /**
+         * Szerokość układu współrzędnych (w punktach) widocznego w oknie gry. Czyli na przykład ustawiamy viewportWidth
+         * na 640, a projectionWidth na 160 - wówczas jedne punkt w układzie współrzędnych gry będzie miał 4 pixele.
+         */
+        float           p_ (projectionWidth);
+
+        /**
+         * Szerokość układu współrzędnych (w punktach) widocznego w oknie gry.
+         * \see projectionWidth
+         */
+        float           p_ (projectionHeight);
+
+        /**
+         * Napis na belce okna (jeśli jest belka).
+         */
         std::string     p_ (windowCaption);
+
+        /**
+         * Pokazuj bounding boxy.
+         */
         bool            p_ (showAABB);
+
+        /**
+         * Ukryj / pokaż kursor systemowy.
+         */
         bool            p_ (showSystemCursor);
-        View::Color     P_ (clearColor);
         int             p_ (loopDelayMs);
         Model::IModel * p_ (model);
 

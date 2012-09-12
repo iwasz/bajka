@@ -14,8 +14,8 @@ namespace Util {
 
 Config::Config () :
                 fullScreen (false),
-                resX (640),
-                resY (480),
+                viewportWidth (640),
+                viewportHeight (480),
                 showAABB (false),
                 showSystemCursor (true),
                 loopDelayMs (17),

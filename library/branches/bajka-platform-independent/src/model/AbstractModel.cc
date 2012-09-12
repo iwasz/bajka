@@ -10,7 +10,6 @@
 #include <boost/bind.hpp>
 #include "model/AbstractModel.h"
 #include "model/Group.h"
-#include "BoxGroup.h"
 #include "view/Widget.h"
 #include "view/draw/Primitives.h"
 #include "events/types/UpdateEvent.h"
@@ -23,24 +22,24 @@ using namespace Geometry;
 
 Geometry::Point AbstractModel::getTranslate () const
 {
-        if (!layout) {
+//        if (!groupProps) {
                 return translate;
-        }
-        else {
-                Point const &p = layout->getTranslateRel ();
-
-                if (p.x < 0 || p.y < 0) {
-                        return translate;
-                }
-
-                /*
-                 * TODO Tu możnaby kiedyś zrobić optymalizację, że IModel ma metody getWidth i getHeight, które
-                 * działają czybciej niż getBoundingBox. Tylko nie wiem, czy da się szybciej niż transformując
-                 * punkty obiektu przez macierz?
-                 */
-                Geometry::Box aabb = getBoundingBoxImpl (AffineMatrix (Geometry::ZERO_POINT, getAngle (), getScale (), getCenter ()));
-                return layout->calculateTranslation (this, translate, aabb.getWidth (), aabb.getHeight ());
-        }
+//        }
+//        else {
+//                Point const &p = groupProps->getTranslateRel ();
+//
+//                if (p.x < 0 || p.y < 0) {
+//                        return translate;
+//                }
+//
+//                /*
+//                 * TODO Tu możnaby kiedyś zrobić optymalizację, że IModel ma metody getWidth i getHeight, które
+//                 * działają czybciej niż getBoundingBox. Tylko nie wiem, czy da się szybciej niż transformując
+//                 * punkty obiektu przez macierz?
+//                 */
+//                Geometry::Box aabb = getBoundingBoxImpl (AffineMatrix (Geometry::ZERO_POINT, getAngle (), getScale (), getCenter ()));
+//                return layout->calculateTranslation (this, translate, aabb.getWidth (), aabb.getHeight ());
+//        }
 }
 
 /****************************************************************************/
@@ -48,10 +47,10 @@ Geometry::Point AbstractModel::getTranslate () const
 void AbstractModel::setTranslate (Geometry::Point const &p)
 {
         translate = p;
-
-        if (layout) {
-                layout->resetTranslateRel ();
-        }
+//
+//        if (groupProps) {
+//                groupProps->resetTranslateRel ();
+//        }
 }
 
 /****************************************************************************/
@@ -143,15 +142,6 @@ IModel *AbstractModel::findContains (Geometry::Point const &p)
         }
 
         return this;
-}
-
-/****************************************************************************/
-
-void AbstractModel::setParent2 (IModel *p)
-{
-        AbstractModel::setParent (p);
-        IGroup *group = dynamic_cast <IGroup *> (p);
-        group->addChild (this);
 }
 
 } /* namespace Model1 */

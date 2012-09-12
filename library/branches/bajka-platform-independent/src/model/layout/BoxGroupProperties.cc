@@ -6,7 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "Layout.h"
+#include "BoxGroupProperties.h"
 #include "model/IModel.h"
 #include "BoxGroup.h"
 #include "geometry/Box.h"
@@ -15,7 +15,7 @@
 namespace Model {
 namespace G = Geometry;
 
-G::Point Layout::calculateTranslation (IModel const *m, Geometry::Point const &currentTranslate, double aabbW, double aabbH) const
+G::Point BoxGroupProperties::calculateTranslation (IModel const *m, Geometry::Point const &currentTranslate, double aabbW, double aabbH) const
 {
         BoxGroup const *parGroup = BoxGroup::getParGroup (m);
 
@@ -25,10 +25,10 @@ G::Point Layout::calculateTranslation (IModel const *m, Geometry::Point const &c
 
         // Przypadek domyślny - nie pobieramy aabb
         if (align == (TOP | RIGHT)) {
-                return G::makePoint (parGroup->getWidth() * translateRel.x / 100.0, parGroup->getHeight () * translateRel.y / 100.0);
+                return G::makePoint (parGroup->getWidth() * translate.x / 100.0, parGroup->getHeight () * translate.y / 100.0);
         }
         else {
-                G::Point ct = G::makePoint (parGroup->getWidth() * translateRel.x / 100.0, parGroup->getHeight () * translateRel.y / 100.0);
+                G::Point ct = G::makePoint (parGroup->getWidth() * translate.x / 100.0, parGroup->getHeight () * translate.y / 100.0);
 
                 if (align & HCENTER) {
                         ct.x -= aabbW / 2.0;

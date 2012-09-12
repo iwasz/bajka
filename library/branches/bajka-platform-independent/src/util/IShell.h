@@ -22,14 +22,14 @@ struct ShellConfig {
 
         ShellConfig () :
                 fullScreen (false),
-                resX (-1),
-                resY (-1),
+                viewportWidth (-1),
+                viewportHeight (-1),
                 showAABB (false),
                 loopDelayMs (-1) {}
 
         bool             fullScreen;
-        int             resX;
-        int             resY;
+        int             viewportWidth;
+        int             viewportHeight;
         bool             showAABB;
         int             loopDelayMs;
         std::string     definitionFile;
