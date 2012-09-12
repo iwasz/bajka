@@ -11,6 +11,24 @@
 #include "util/Math.h"
 #include "util/Config.h"
 
+/****************************************************************************/
+
+void GraphicsService::updateConfig (Util::Config *config)
+{
+        if (config->autoViewport) {
+                SDL_VideoInfo const *info = SDL_GetVideoInfo ();
+                config->viewportWidth = info->current_w;
+                config->viewportHeight = info->current_h;
+        }
+
+        if (config->autoProjection) {
+                config->projectionWidth = config->viewportWidth;
+                config->projectionHeight = config->viewportHeight;
+        }
+}
+
+/****************************************************************************/
+
 void GraphicsService::init (Util::Config *config)
 {
         int flags;

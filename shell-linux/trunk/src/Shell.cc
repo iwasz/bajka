@@ -190,6 +190,7 @@ void Shell::loop ()
 
 void Shell::init ()
 {
+        GraphicsService::updateConfig (impl->config);
         GraphicsService::init (impl->config);
         initOpenGl (impl->config);
         srand (time (NULL));

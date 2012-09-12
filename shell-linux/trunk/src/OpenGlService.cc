@@ -30,8 +30,15 @@ void initOpenGl (Util::Config *config)
 //        gluOrtho2D (0, 0, viewportWidth, viewportHeight);
 
         float aspectRatio = double (config->viewportHeight) / config->viewportWidth;
-        float rX = 100.0;
-        float rY = rX * aspectRatio;
+        float rX = config->projectionWidth / 2;
+        float rY;
+
+        if (config->projectionHeight == 0) {
+                config->projectionHeight = rY = rX * aspectRatio;
+        }
+        else {
+                rY = config->projectionHeight / 2;
+        }
 
         glMatrixMode (GL_PROJECTION);
         glLoadIdentity ();
