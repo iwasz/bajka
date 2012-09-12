@@ -22,6 +22,8 @@ class IBitmap;
 
 struct GraphicsService {
 
+        static void updateConfig (Util::Config *config);
+
         /**
          * Inicjuje SDL.
          * @param fullScreen
