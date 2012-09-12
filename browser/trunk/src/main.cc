@@ -26,8 +26,8 @@ int main (int argc, char **argv)
                 ("help,h", "produce help message")
                 ("fullscreen,f", "run in full screen mode")
                 ("showaabb,a", "show AABBs around objects")
-                ("resX,x", po::value<int>(&config.resX), "set horizontal resolution in pixels")
-                ("resY,y", po::value<int>(&config.resY), "set vertical resolution in pixels")
+                ("viewportWidth,x", po::value<int>(&config.viewportWidth), "set horizontal resolution in pixels")
+                ("viewportHeight,y", po::value<int>(&config.viewportHeight), "set vertical resolution in pixels")
                 ("loopdelay,l", po::value<int>(&config.loopDelayMs), "set game loop delay in ms")
                 ("definition,d", po::value <std::string>(&config.definitionFile)->default_value ("main.xml"), "input file with XML definitions");
 

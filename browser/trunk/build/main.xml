@@ -12,12 +12,18 @@
 <beans>
   <import resource="standard.xml"/>
 
-  <Config id="config" resX="800" resY="600" windowCaption="Bajka browser, F5 to refresh" model="@scene"/>
+  <Config id="config" viewportWidth="800" viewportHeight="600" windowCaption="Bajka browser, F5 to refresh" model="@scene"/>
 
-  <Group id="scene">
-    <circle add-to="children" origin="50, 0" />
+<!--   <Group id="scene"> -->
+<!--     <circle add-to="children" origin="50, 0" /> -->
+<!--     <image add-to="children" view.bitmap.path="cursor.png" /> -->
+<!--     <label add-to="children" view.text="Hello world" translate="-50, -50"/> -->
+<!--     <ClearScreen set-as="view" color="858585ff" />     -->
+<!--   </Group> -->
+
+  <BoxGroup id="scene" width="50" height="50">
     <image add-to="children" view.bitmap.path="cursor.png" />
-    <label add-to="children" view.text="Hello world" translate="-50, -50"/>
-    <ClearScreen set-as="view" color="858585ff" />
-  </Group>
+    <ClearScreen set-as="view" color="858585ff" />    
+  </BoxGroup>
+  
 </beans>
