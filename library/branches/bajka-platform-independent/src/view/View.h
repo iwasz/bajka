@@ -28,5 +28,6 @@
 #include "resource/Resource.h"
 #include "draw/Draw.h"
 #include "ClearScreen.h"
+#include "ClearScreenGrid.h"
 
 #	endif /* VIEW_H_ */

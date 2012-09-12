@@ -15,16 +15,8 @@
 
 namespace Util {
 
-/*
- * Ta klasa jest tylko po to, żeby ułatwoć stosowanie bajki z kontenerem.
- * Otóż kolejność pracy programu musi być następująca:
- * - Utworzenie Config.
- * - Ustawienie jej pól.
- * - Uruchomienie init ().
- * Treaz OpenGL i SDL są zainicjowane, można dodawać obiekty. I dopero teraz
- * można uruchomić pętlę programu:
- * - App run.
- * INICJUJE OpenGL!
+/**
+ * Konfiguracja gry.
  */
 struct Config {
 
@@ -33,11 +25,18 @@ struct Config {
         Config ();
 
         /**
-         * Pełny ekran. Jeśli ustawione na truem to wartości viewportWidth i viewportHeight
-         * są zamazywane szerokością i wysokością pełnego ekranu. Ich ustawianie nie ma wówczas
-         * rezultatu.
+         * Pełny ekran. Gra wyświetli się nie w okienku z belką, ale na pełnym ekranie o rozdzielczości
+         * viewportWidth / viewportHeight lub o rozdzielczości ekranu jaką miał system przed uruchomieniem
+         * gry jeśli autoViewport == true;
          */
         bool            p_ (fullScreen);
+
+        /**
+         * Auto-rozdzielczość. Jeśli ustawione na true to wartości viewportWidth i viewportHeight
+         * są zamazywane szerokością i wysokością ekranu w pikselach. Ich ustawianie nie ma wówczas
+         * rezultatu.
+         */
+        bool            p_ (autoViewport);
 
         /**
          * Szerokość okna w pikselach. Jeśli fullScreen jest na false, to tu podajemy szerokość
@@ -67,7 +66,9 @@ struct Config {
         float           p_ (projectionWidth);
 
         /**
-         * Szerokość układu współrzędnych (w punktach) widocznego w oknie gry.
+         * Wysokość układu współrzędnych (w punktach) widocznego w oknie gry. Jeśli nie ustawisz tego pola, a ustawisz
+         * projectionWidth, to to pole zostanie wyliczone na podstawie rozdzielczości viewportu (czyli zostanie
+         * zachowane aspect-ratio).
          * \see projectionWidth
          */
         float           p_ (projectionHeight);
