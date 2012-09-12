@@ -219,11 +219,11 @@ MouseMotionEvent *EventDispatcher::updateMouseMotionEvent (SDL_Event *event)
 {
         mouseMotionEvent.setButtons ((unsigned int)event->motion.state);
 
-        int resX2 = config ()->resX;
-        int resY2 = config ()->resY;
+        int viewportWidth2 = config ()->viewportWidth;
+        int viewportHeight2 = config ()->viewportHeight;
 
         G::Point p;
-        mouseToDisplay (event->button.x, event->button.y, resX2, resY2, &p.x, &p.y);
+        mouseToDisplay (event->button.x, event->button.y, viewportWidth2, viewportHeight2, &p.x, &p.y);
         mouseMotionEvent.setPosition (p);
 
 #if 0
@@ -251,11 +251,11 @@ MouseButtonEvent *EventDispatcher::updateMouseButtonEventImpl (MouseButtonEvent 
 {
         output->setButton (translateMouseButton (event));
 
-        int resX2 = config ()->resX;
-        int resY2 = config ()->resY;
+        int viewportWidth2 = config ()->viewportWidth;
+        int viewportHeight2 = config ()->viewportHeight;
 
         G::Point p;
-        mouseToDisplay (event->button.x, event->button.y, resX2, resY2, &p.x, &p.y);
+        mouseToDisplay (event->button.x, event->button.y, viewportWidth2, viewportHeight2, &p.x, &p.y);
         output->setPosition (p);
         return output;
 }

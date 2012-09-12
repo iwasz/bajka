@@ -222,16 +222,16 @@ void Shell::overrideConfig (Util::ShellConfig const &cfg)
                 impl->config->showAABB = true;
         }
 
-        if (cfg.resX > 0) {
-                impl->config->resX = cfg.resX;
+        if (cfg.viewportWidth > 0) {
+                impl->config->viewportWidth = cfg.viewportWidth;
         }
 
-        if (cfg.resY > 0) {
-                impl->config->resY = cfg.resY;
+        if (cfg.viewportHeight > 0) {
+                impl->config->viewportHeight = cfg.viewportHeight;
         }
 
         if (cfg.loopDelayMs > 0) {
-                impl->config->loopDelayMs = cfg.resY;
+                impl->config->loopDelayMs = cfg.viewportHeight;
         }
 }
 

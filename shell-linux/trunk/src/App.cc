@@ -194,8 +194,8 @@ void App::loop ()
 
 void App::init ()
 {
-        int requestedResX = impl->config->resX;
-        int requestedResY = impl->config->resY;
+        int requestedResX = impl->config->viewportWidth;
+        int requestedResY = impl->config->viewportHeight;
 
 //        View::GraphicsService::init (impl->config->getFullScreen (),
 //                                       &requestedResX,

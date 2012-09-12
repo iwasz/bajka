@@ -27,15 +27,15 @@ void initOpenGl (Util::Config *config)
         // Transformacje.
 //        glMatrixMode (GL_MODELVIEW);
 //        glLoadIdentity ();
-//        gluOrtho2D (0, 0, resX, resY);
+//        gluOrtho2D (0, 0, viewportWidth, viewportHeight);
 
-        float aspectRatio = double (config->resY) / config->resX;
+        float aspectRatio = double (config->viewportHeight) / config->viewportWidth;
         float rX = 100.0;
         float rY = rX * aspectRatio;
 
         glMatrixMode (GL_PROJECTION);
         glLoadIdentity ();
-//        gluOrtho2D (-resX / 2.0, resX / 2.0, -resY / 2.0, resY / 2.0);
+//        gluOrtho2D (-viewportWidth / 2.0, viewportWidth / 2.0, -viewportHeight / 2.0, viewportHeight / 2.0);
         gluOrtho2D (-rX, rX, -rY, rY);
 
 //        glEnable(GL_LINE_SMOOTH);

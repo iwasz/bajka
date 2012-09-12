@@ -27,12 +27,12 @@ void GraphicsService::init (Util::Config *config)
         SDL_GL_SetAttribute (SDL_GL_ALPHA_SIZE,  8);
         SDL_GL_SetAttribute (SDL_GL_DEPTH_SIZE, 16);
 
-        if (!config->resX || !config->resY) {
-                throw Util::InitException ("GraphicsService::init : !resX || !resY");
+        if (!config->viewportWidth || !config->viewportHeight) {
+                throw Util::InitException ("GraphicsService::init : !viewportWidth || !viewportHeight");
         }
 
         /* Create a OpenGL screen */
-        if (SDL_SetVideoMode (config->resX, config->resY, 0, flags) == NULL) {
+        if (SDL_SetVideoMode (config->viewportWidth, config->viewportHeight, 0, flags) == NULL) {
                 SDL_Quit ();
                 throw Util::InitException (std::string ("GraphicsService::init : Unable to create OpenGL screen : ") + SDL_GetError ());
         }

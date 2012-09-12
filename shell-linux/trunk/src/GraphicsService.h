@@ -25,8 +25,8 @@ struct GraphicsService {
         /**
          * Inicjuje SDL.
          * @param fullScreen
-         * @param resX
-         * @param resY
+         * @param viewportWidth
+         * @param viewportHeight
          * @param caption
          */
         static void init (Util::Config *config);
