@@ -15,21 +15,21 @@
 
 namespace View {
 
-TTFFont::TTFFont (std::string const &path) : type (SOLID), utf8 (false)
+TTFFont::TTFFont (std::string const &path) : renderType (SOLID), utf8 (false)
 {
         open (path);
 }
 
 /****************************************************************************/
 
-TTFFont::TTFFont (std::string const &path, int ptSize) : type (SOLID), utf8 (false)
+TTFFont::TTFFont (std::string const &path, int ptSize) : renderType (SOLID), utf8 (false)
 {
         open (path, ptSize);
 }
 
 /****************************************************************************/
 
-TTFFont::TTFFont (std::string const &path, int ptSize, long int index) : type (SOLID), utf8 (false)
+TTFFont::TTFFont (std::string const &path, int ptSize, long int index) : renderType (SOLID), utf8 (false)
 {
         open (path, ptSize, index);
 }
@@ -67,7 +67,7 @@ Ptr <IBitmap> TTFFont::render (std::string const &text, View::Color const &fgCol
         SDL_Color fg = { fgColor.r * 255, fgColor.g * 255, fgColor.b * 255 };
         SDL_Surface *ret = NULL;
 
-        switch (type) {
+        switch (renderType) {
         case SOLID:
                 ret = (utf8) ? (TTF_RenderUTF8_Solid (font, text.c_str (), fg)) : (TTF_RenderText_Solid (font, text.c_str (), fg));
                 break;
