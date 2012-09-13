@@ -22,10 +22,10 @@
     </cargs>
   </Color>
   
-  <TTFFont id="defaultFont" type="2" hinting="3">
+  <TTFFont id="defaultFont" renderType="0" hinting="0">
     <cargs>
       <value type="text">volter.ttf</value>
-      <value type="int">16</value>
+      <value type="int">18</value>
     </cargs>
   </TTFFont>
 

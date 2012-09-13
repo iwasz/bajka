@@ -7,22 +7,31 @@
 * Obsługa F5 i Esc.
 * Obsługa eventów z klawiatury w ogóle.
 * -Bitmapa.
+
+Dodatkowe:
+~~~~~~~~~~
+* Layouty
+** -Poprawne AABB.
+** -Poprawne wyświetlanie AABB.
  -->
 
 <beans>
-  <import resource="standard.xml"/>
+  <import resource="standard.xml" />
 
-  <Config id="config" viewportWidth="800" viewportHeight="600" autoProjection="true" windowCaption="Bajka browser, F5 to refresh" model="@scene"/>
+  <Config id="config" viewportWidth="800" viewportHeight="600" autoProjection="true" windowCaption="Bajka browser, F5 to refresh" model="@scene" />
 
   <Group id="scene">
-    <circle add-to="children" origin="50, 0" />
-<!--     <image add-to="children" view.bitmap.path="cursor.png" /> -->
-    <label add-to="children" view.text="Hello world" translate="-50, -50"/>
-    <ClearScreenGrid set-as="view" color="6b6b6bff" gridColor="616161ff" density="20"/>
+    <ClearScreenGrid set-as="view" color="6b6b6bff" gridColor="616161ff" density="20" />
 
-	<BoxGroup add-to="children" width="50" height="50" translate="-50, -50">
-		<image add-to="children" view.bitmap.path="cursor.png" />
-	</BoxGroup>
+    <Group add-to="children" translate="300, 200">
+      <circle add-to="children" origin="50, 0" />
+      <label add-to="children" view.text="Hello world" translate="-50, -50" />
+      <image add-to="children" view.bitmap.path="cursor.png" />
+    </Group>
+
+    <BoxGroup add-to="children" width="50" height="50" translate="-50, -50">
+      <image add-to="children" view.bitmap.path="cursor.png" />
+    </BoxGroup>
   </Group>
-  
+
 </beans>
