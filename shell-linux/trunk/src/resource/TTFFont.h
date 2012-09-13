@@ -61,8 +61,8 @@ public:
         int getHinting () const;
         m_ (setHinting) void setHinting (int hint);
 
-        int getType () const { return type; }
-        m_ (setType) void setType (int t) { type = t; }
+        int getRenderType () const { return renderType; }
+        m_ (setRenderType) void setRenderType (int t) { renderType = t; }
 
         bool getUtf8 () const { return utf8; }
         m_ (setUtf8) void setUtf8 (bool b) { utf8 = b; }
@@ -83,7 +83,7 @@ private:
 private:
 
         TTF_Font *font;
-        int type; // TODO to powinno być typu Type
+        int renderType; // TODO to powinno być typu Type
         bool utf8;
 
         E_ (TTFFont)
