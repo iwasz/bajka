@@ -40,15 +40,6 @@ public:
 	BoxGroup () : w (0), h(0), relW (-1), relH (-1), relX (-1), relY (-1), expand (false) {}
 	virtual ~BoxGroup() {}
 
-/*--IBox--------------------------------------------------------------------*/
-
-        double getWidth () const;
-        m_ (setWidth) void setWidth (double w) { this->w = w; }
-        double getHeight () const;
-        m_ (setHeight) void setHeight (double h) { this->h = h; }
-
-        Geometry::Box getBox () const;
-
 /*--layout------------------------------------------------------------------*/
 
 	m_ (setRelW) void setRelW (double w);
@@ -61,6 +52,15 @@ public:
 	 */
 	               bool getExpand () const { return expand; }
 	m_ (setExpand) void setExpand (bool e) { expand = e; }
+
+/*--IBox--------------------------------------------------------------------*/
+
+        double getWidth () const;
+        m_ (setWidth) void setWidth (double w) { this->w = w; }
+        double getHeight () const;
+        m_ (setHeight) void setHeight (double h) { this->h = h; }
+
+        Geometry::Box getBox () const;
 
 /*--------------------------------------------------------------------------*/
 

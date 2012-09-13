@@ -85,7 +85,7 @@ void DrawUtil::drawRectangle (G::Box const &b, Color const &lineColor, Color con
 
 void DrawUtil::drawRectangle (G::Point const &a, G::Point const &b, Color const &lineColor, Color const &fillColor)
 {
-        static GLfloat verts[] = {
+        GLfloat verts[] = {
                 a.x, a.y,
                 a.x, b.y,
                 b.x, b.y,

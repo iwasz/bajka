@@ -92,15 +92,7 @@ void AbstractModel::update (Event::UpdateEvent *e)
                 controller->onUpdate (e, this, view);
         }
 
-#ifndef ANDROID // TODO wyrzucić.
-        if (config ()->showAABB) {
-                Geometry::Box aabb= getBoundingBox();
-
-                if (aabb.getHeight() && aabb.getHeight()) {
-                        DrawUtil::drawRectangle (aabb, View::Color::RED, View::Color::TRANSPARENT);
-                }
-        }
-#endif
+        View::Widget::drawAABB (this);
 
         if (view) {
                 view->preUpdate (this, e);

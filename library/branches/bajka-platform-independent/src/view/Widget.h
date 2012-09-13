@@ -16,6 +16,9 @@
 
 namespace View {
 
+/**
+ * Widget.
+ */
 class Widget : public IView {
 public:
 
@@ -39,8 +42,11 @@ public:
         virtual double getWidthHint () const { return 0; }
         virtual double getHeightHint () const { return 0; }
 
+/*--------------------------------------------------------------------------*/
+
         static void defaultPreUpdate (Model::IModel *m);
         static void defaultPostUpdate (Model::IModel *m);
+        static void drawAABB (Model::IModel *model);
 
 private:
 

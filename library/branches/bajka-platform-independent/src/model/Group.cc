@@ -20,36 +20,24 @@ namespace trans = boost::geometry::strategy::transform;
 
 Box Group::getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const
 {
-	Box ret;
+	Box aabb;
 
 	for (ModelVector::const_iterator i = children.begin (); i != children.end (); ++i) {
 		if (i == children.begin ()) {
-			ret = (*i)->getBoundingBox ();
+		        aabb = (*i)->getBoundingBox ();
 		}
 		else {
-			ret.merge ((*i)->getBoundingBox ());
+		        aabb.merge ((*i)->getBoundingBox ());
 		}
 	}
 
-//    Ring ring;
-//    convert (ret, ring);
-//
-//    double aRad = angle * M_PI / 180.0;
-//    double s = scale * sin (aRad);
-//    double c = scale * cos (aRad);
-//    Point ct = getCenter ();
-//
-//    trans::ublas_transformer <Point, Point, 2, 2> matrix (
-//		c, -s, -c * ct.x + s * ct.y + ct.x + translate.x,
-//		s,  c, -s * ct.x - c * ct.y + ct.y + translate.y,
-//		0,  0,  1
-//    );
-//
-//    Ring output;
-//    boost::geometry::transform (ring, output, matrix);
-//    envelope (output, ret);
-
-	return ret;
+        Ring ring;
+        Ring output;
+        convert (aabb, ring);
+        AffineMatrixTransformer matrix (transformation);
+        transform (ring, output, matrix);
+        envelope (output, aabb);
+        return aabb;
 }
 
 /****************************************************************************/
