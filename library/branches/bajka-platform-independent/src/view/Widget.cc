@@ -9,6 +9,9 @@
 #include "openGl/OpenGl.h"
 #include "view/Widget.h"
 #include "model/IModel.h"
+#include "Platform.h"
+#include "util/Config.h"
+#include "draw/Primitives.h"
 
 namespace View {
 
@@ -36,12 +39,15 @@ void Widget::postUpdate (Model::IModel *model, Event::UpdateEvent *)
 
 void Widget::defaultPreUpdate (Model::IModel *model)
 {
-
         if (model) {
+                glMatrixMode (GL_MODELVIEW);
                 glPushMatrix ();
-//                glMultMatrixd (model->getMatrix ().data ().begin ());
                 Geometry::Point c = model->getCenter ();
                 Geometry::Point p = model->getTranslate ();
+
+#if 0
+                std::cerr << typeid (*model).name () << " : tran=" << p << ", cent=" << c << std::endl;
+#endif
 
                 glTranslatef (c.x + p.x, c.y + p.y, 0.0);
                 glRotatef (model->getAngle(), 0.0, 0.0, 1.0); // angle * 180.0f / M_PI
@@ -55,7 +61,25 @@ void Widget::defaultPreUpdate (Model::IModel *model)
 void Widget::defaultPostUpdate (Model::IModel *model)
 {
         if (model) {
+                glMatrixMode (GL_MODELVIEW);
                 glPopMatrix ();
+        }
+}
+
+/****************************************************************************/
+
+void Widget::drawAABB (Model::IModel *model)
+{
+        if (model && config ()->showAABB) {
+                Geometry::Box aabb = model->getBoundingBox();
+
+#if 0
+                std::cerr << typeid (*model).name () << " : aabb=" << aabb << std::endl;
+#endif
+
+                if (aabb.getWidth () && aabb.getHeight ()) {
+                        DrawUtil::drawRectangle (aabb, View::Color::RED, View::Color::TRANSPARENT);
+                }
         }
 }
 

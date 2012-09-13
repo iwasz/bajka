@@ -65,6 +65,7 @@ public:
 };
 
 extern std::string toString (Box const &b);
+extern std::ostream &operator<< (std::ostream &o, Geometry::Box const &b);
 
 }
 

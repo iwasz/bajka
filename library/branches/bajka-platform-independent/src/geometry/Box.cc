@@ -62,4 +62,12 @@ std::string toString (Box const &b)
         return o.str ();
 }
 
+/****************************************************************************/
+
+std::ostream &operator<< (std::ostream &o, Geometry::Box const &b)
+{
+        o << "Box (" << b.ll << ", " << b.ur << ")";
+        return o;
+}
+
 } // names
