@@ -14,6 +14,7 @@
 #include "model/Group.h"
 
 namespace Model {
+class BoxGroupProperties;
 
 /**
  * Grupa, która jednocześnie jest grupą i pudełkiem Box (ma wymiary w przeciwieństwie do zwykłej grupy).
@@ -37,30 +38,22 @@ public:
 	C__ (void)
 	b_ ("Group")
 
-	BoxGroup () : w (0), h(0), relW (-1), relH (-1), relX (-1), relY (-1), expand (false) {}
+	BoxGroup () : w (0), h(0)/*, relW (-1), relH (-1), relX (-1), relY (-1), expand (false)*/ {}
 	virtual ~BoxGroup() {}
 
 /*--layout------------------------------------------------------------------*/
 
-	m_ (setRelW) void setRelW (double w);
-	m_ (setRelH) void setRelH (double w);
-//	m_ (setRelX) void setRelX (double x);
-//	m_ (setRelY) void setRelY (double y);
-
-	/**
-	 * Czy grupa rozciąga się pod wpływem zawieranych modli, czy nie.
-	 */
-	               bool getExpand () const { return expand; }
-	m_ (setExpand) void setExpand (bool e) { expand = e; }
+	void updateLayout ();
+        virtual void update (Event::UpdateEvent *e);
 
 /*--IBox--------------------------------------------------------------------*/
 
-        double getWidth () const;
+        double getWidth () const { return w; }
         m_ (setWidth) void setWidth (double w) { this->w = w; }
-        double getHeight () const;
+        double getHeight () const { return h; }
         m_ (setHeight) void setHeight (double h) { this->h = h; }
 
-        Geometry::Box getBox () const;
+        Geometry::Box getBox () const { return Geometry::Box (0, 0, w - 1, h - 1); }
 
 /*--------------------------------------------------------------------------*/
 
@@ -82,10 +75,27 @@ public:
 
 private:
 
-        double w, h;
-        // Cache uzywany do inicjowania. Po inicjacji już nie używany.
-        double relW, relH, relX, relY;
-        bool expand;
+        /*
+         * @param w Aktualna wysokość boundingBoxa modelu dla którego
+         * @param h Aktualna szerokość boundingBoxa modelu m
+         */
+        Geometry::Point calculateTranslation (IModel *child, BoxGroupProperties *props) const;
+
+        /*
+         * Ustawienia szerokość i wysokość obieku wewnątrz tego BoxGroup na podstawie
+         * width i height w skojarzonym z tym obiektem BoxGroupProperties. Działa tylko
+         * dla obiektów implementujących IBox i bez transformacji angle i scale.
+         */
+        void adjustChildrenDimensions (IBox *child, BoxGroupProperties *props, float *w, float *h);
+
+        /*
+         *
+         */
+        void adjustMyDimensions (float *w, float *h);
+
+private:
+
+        float w, h;
 
         E_ (BoxGroup)
 };

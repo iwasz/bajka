@@ -39,8 +39,8 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        virtual Geometry::Point getTranslate () const;
-        m_ (setTranslate) virtual void setTranslate (Geometry::Point const &p);
+        virtual Geometry::Point getTranslate () const { return translate; }
+        m_ (setTranslate) virtual void setTranslate (Geometry::Point const &p) { translate = p; }
 
         virtual Geometry::Point getCenter () const;
         m_ (setCenter) virtual void setCenter (Geometry::Point const &p);

@@ -70,8 +70,8 @@ Geometry::Box Box::getBoundingBoxImpl (Geometry::AffineMatrix const &transformat
         updateToViewSizeIf ();
 
         G::Box aabb;
-        Ring ring;
-        Ring output;
+        G::Ring ring;
+        G::Ring output;
         convert (box, ring);
         AffineMatrixTransformer matrix (transformation);
         transform (ring, output, matrix);
