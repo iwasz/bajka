@@ -12,12 +12,133 @@
 #include "geometry/AffineMatrix.h"
 #include "model/static/Box.h"
 #include "model/static/Circle.h"
+#include "BoxGroupProperties.h"
 
 namespace Model {
 using namespace boost::geometry;
-//using namespace Geometry;
 namespace G = Geometry;
 namespace trans = boost::geometry::strategy::transform;
+
+/****************************************************************************/
+
+void BoxGroup::update (Event::UpdateEvent *e)
+{
+        // TODO to nie powino się updejtować przy każdym odświerzeniu. Do wywalenia jest ta metoda.
+        updateLayout ();
+        Group::update (e);
+
+}
+
+void BoxGroup::updateLayout ()
+{
+        // W tym miejscu szerokość i wysokość samej grupy musi być już dobrze skorygowana na podstawie GroupProperies samej grupy.
+        adjustMyDimensions (&w, &h);
+
+        // Rozmieść i rozszerz dzieci.
+        for (ModelVector::iterator i = children.begin (); i != children.end (); ++i) {
+                IModel *child = *i;
+                BoxGroupProperties *props = ((child->getGroupProps ()) ? (dynamic_cast <BoxGroupProperties *> (child->getGroupProps ())) : (NULL));
+
+                if (!props) {
+                        continue;
+                }
+
+                // Rozmiar dziecu AABB - tak zmienia rozmiar obiektu, żeby jego AABB stanowiło dany procent wysokości / szerokości tego BoxGroup:
+                IBox *box = NULL;
+                if ((props->getWidth () > 0 || props->getHeight () > 0) && (box = dynamic_cast <IBox *> (child))) {
+                        if (child->getAngle () || child->getScale () != 1) {
+                                throw Util::RuntimeException ("BoxGroup::updateLayout : width or height of an object was requested, but angle or scale is set. I don't know how to adjust AABB of objects with transformations applied.");
+                        }
+
+                        float w = 0, h = 0;
+                        adjustChildrenDimensions (box, props, &w, &h);
+                        box->setWidth (w);
+                        box->setHeight (h);
+                }
+
+                // Pozycja dzieci :
+                child->setTranslate (calculateTranslation (child, props));
+        }
+}
+
+/****************************************************************************/
+
+G::Point BoxGroup::calculateTranslation (IModel *child, BoxGroupProperties *props) const
+{
+        G::Box aabb = child->getBoundingBox ();
+        float aabbW = aabb.getWidth ();
+        float aabbH = aabb.getHeight ();
+
+        G::Point tReq = props->getTranslate ();
+        G::Point tAct = child->getTranslate ();
+        G::Point ct;
+
+        ct.x = ((tReq.x >= 0) ? (getWidth() * tReq.x / 100.0) : (tAct.x));
+        ct.y = ((tReq.y >= 0) ? (getHeight () * tReq.y / 100.0) : (tAct.y));
+
+        if (props->getAlign () == (BoxGroupProperties::TOP | BoxGroupProperties::RIGHT)) {
+                return ct;
+        }
+        else {
+                if (tReq.x >= 0) {
+                        if (props->getAlign () & BoxGroupProperties::HCENTER) {
+                                ct.x -= aabbW / 2.0;
+                        }
+                        else if (props->getAlign () & BoxGroupProperties::LEFT) {
+                                ct.x -= aabbW;
+                        }
+                }
+
+                if (tReq.y >= 0) {
+                        if (props->getAlign () & BoxGroupProperties::VCENTER) {
+                                ct.y -= aabbH / 2.0;
+                        }
+                        else if (props->getAlign () & BoxGroupProperties::BOTTOM) {
+                                ct.y -= aabbH;
+                        }
+                }
+
+                return ct;
+        }
+}
+
+/****************************************************************************/
+
+void BoxGroup::adjustMyDimensions (float *w, float *h)
+{
+        if (!getGroupProps () || )
+
+        G::Box aabb;
+
+        for (ModelVector::const_iterator i = children.begin (); i != children.end (); ++i) {
+                if (i == children.begin ()) {
+                        aabb = (*i)->getBoundingBox ();
+                }
+                else {
+                        aabb.merge ((*i)->getBoundingBox ());
+                }
+        }
+
+        G::Ring ring;
+        G::Ring output;
+        convert (aabb, ring);
+        G::AffineMatrixTransformer matrix (getMatrix ());
+        transform (ring, output, matrix);
+        envelope (output, aabb);
+        *w = aabb.getWidth ();
+        *h = aabb.getHeight ();
+}
+
+/****************************************************************************/
+
+void BoxGroup::adjustChildrenDimensions (IBox *child, BoxGroupProperties *props, float *w, float *h)
+{
+        float reqW = props->getWidth ();
+        float reqH = props->getHeight ();
+
+        *w = ((reqW >= 0) ? (getWidth () * reqW / 100.0) : (child->getWidth ()));
+        *h = ((reqH >= 0) ? (getHeight () * reqH / 100.0) : (child->getHeight ()));
+}
 
 /****************************************************************************/
 
@@ -38,64 +159,11 @@ G::Box BoxGroup::getBoundingBoxImpl (Geometry::AffineMatrix const &transformatio
         G::Box aabb;
         G::Ring ring;
         G::Ring output;
-
-        if (!expand) {
-                convert (getBox (), ring);
-                G::AffineMatrixTransformer matrix (transformation);
-                transform (ring, output, matrix);
-                envelope (output, aabb);
-                return aabb;
-        }
-        else {
-                G::Box envel;
-
-                for (ModelVector::const_iterator i = children.begin (); i != children.end (); ++i) {
-                        if (i == children.begin ()) {
-                                envel = (*i)->getBoundingBox ();
-                        }
-                        else {
-                                envel.merge ((*i)->getBoundingBox ());
-                        }
-                }
-
-                return envel;
-        }
-}
-
-/****************************************************************************/
-
-double BoxGroup::getWidth () const
-{
-        if (!expand) {
-                return w;
-        }
-        else {
-                return getBoundingBox ().getWidth ();
-        }
-}
-
-/****************************************************************************/
-
-double BoxGroup::getHeight () const
-{
-        if (!expand) {
-                return h;
-        }
-        else {
-                return getBoundingBox ().getHeight ();
-        }
-}
-
-/****************************************************************************/
-
-Geometry::Box BoxGroup::getBox () const
-{
-        if (!expand) {
-                return Geometry::Box (0, 0, w - 1, h - 1);
-        }
-        else {
-                return getBoundingBox ();
-        }
+        convert (getBox (), ring);
+        G::AffineMatrixTransformer matrix (transformation);
+        transform (ring, output, matrix);
+        envelope (output, aabb);
+        return aabb;
 }
 
 /****************************************************************************/
@@ -147,31 +215,31 @@ IModel *BoxGroup::findContains (G::Point const &p)
 
 /****************************************************************************/
 
-void BoxGroup::setRelW (double w)
-{
-	BoxGroup *parGroup = getParGroup (this);
-
-	if (!parGroup) {
-		relW = w;
-		return;
-	}
-
-	setWidth (parGroup->getWidth () * w / 100.0);
-}
-
-/****************************************************************************/
-
-void BoxGroup::setRelH (double h)
-{
-	BoxGroup *parGroup = getParGroup (this);
-
-	if (!parGroup) {
-		relH = h;
-		return;
-	}
-
-	setHeight (parGroup->getHeight () * h / 100.0);
-}
+//void BoxGroup::setRelW (double w)
+//{
+//	BoxGroup *parGroup = getParGroup (this);
+//
+//	if (!parGroup) {
+//		relW = w;
+//		return;
+//	}
+//
+//	setWidth (parGroup->getWidth () * w / 100.0);
+//}
+//
+///****************************************************************************/
+//
+//void BoxGroup::setRelH (double h)
+//{
+//	BoxGroup *parGroup = getParGroup (this);
+//
+//	if (!parGroup) {
+//		relH = h;
+//		return;
+//	}
+//
+//	setHeight (parGroup->getHeight () * h / 100.0);
+//}
 
 /****************************************************************************/
 

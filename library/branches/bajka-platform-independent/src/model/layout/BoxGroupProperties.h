@@ -28,10 +28,12 @@ struct BoxGroupProperties : public IGroupProperties {
         C__ (void)
         BoxGroupProperties () :
                 align ((HCENTER | TOP)),
-                translate (Geometry::makePoint (0, 0)),
+                width (-1),
+                height (-1),
+                translate (Geometry::makePoint (-1, -1)),
                 padding (NULL),
-                expand (false),
-                shrink (false) {}
+                wrapContentsW (false),
+                wrapContentsH (false) {}
 
         virtual ~BoxGroupProperties () {}
 
@@ -46,26 +48,25 @@ struct BoxGroupProperties : public IGroupProperties {
 
         /**
          * Przesunięcie względem rozmiarów rodzica. Działa tylko w gdy rodzic jest
-         * typu BoxGroup. Ujemne oznacza nieustawione. Jednostką jest procent.
+         * typu BoxGroup. Jednostką jest procent. Wartość ujemna któregoś z koordynatów
+         * oznacza wartość nieustaloną i nie brana pod uwagę.
          */
         void setTranslate (Geometry::Point const &t) { translate = t; }
 
-
-//        void resetTranslate () { translateRel.x = -1; }
-
         /**
          * Przesunięcie względem rozmiarów rodzica. Działa tylko w gdy rodzic jest
-         * typu BoxGroup. Ujemne oznacza nieustawione. Jednostką jest procent.
+         * typu BoxGroup. Jednostką jest procent. Wartość ujemna któregoś z koordynatów
+         * oznacza wartość nieustaloną i nie brana pod uwagę.
          */
         Geometry::Point const &getTranslate () const { return translate; }
 
         /**
-         * Justowanie.
+         * Justowanie. Justowanie działa tylko gdy ustawiono translate.
          */
         int getAlign () const { return align; }
 
         /**
-         * Justowanie.
+         * Justowanie. Justowanie działa tylko gdy ustawiono translate.
          */
         void setAlign (int a) { align = a; }
 
@@ -79,35 +80,39 @@ struct BoxGroupProperties : public IGroupProperties {
          */
         void setPadding (Padding *p) { padding = p; }
 
-        /**
-         * Rozszerz ten obiekt do rozmiarów rodzica.
-         */
-        bool getExpand () const { return expand; }
+        bool getWrapContentsW () const { return wrapContentsW; }
+        void setWrapContentsW (bool b) { wrapContentsW = b; }
+
+        bool getWrapContentsH () const { return wrapContentsH; }
+        void setWrapContentsH (bool b) { wrapContentsH = b; }
 
         /**
-         * Rozszerz ten obiekt do rozmiarów rodzica.
+         * Szerokość w procentach. To pole jest brane pod uwagę tylko w przypadku, gdy model, któremu je usawimy
+         * implementuje Model::IBox i nie są nałożone na niego trasformacje obrotu i skali. Czyli jednym słowem
+         * pudełko równoległe do osi i bez skalowania. Wartość ujemna nie jest brana pod uwagę.
          */
-        void setExpand (bool b) { expand = b; }
+        float getWidth () const { return width; }
 
         /**
-         * Zmniejsz ten obiekto do rozmiarów jego zawartości (do rozmiarów AABB jego zawartości).
+         * Szerokość w procentach. To pole jest brane pod uwagę tylko w przypadku, gdy model, któremu je usawimy
+         * implementuje Model::IBox i nie są nałożone na niego trasformacje obrotu i skali. Czyli jednym słowem
+         * pudełko równoległe do osi i bez skalowania. Wartość ujemna nie jest brana pod uwagę.
          */
-        bool getShrink () const { return shrink; }
+        void setWidth (float f) { width = f; }
 
         /**
-         * Zmniejsz ten obiekto do rozmiarów jego zawartości (do rozmiarów AABB jego zawartości).
+         * Wysokość w procentach. To pole jest brane pod uwagę tylko w przypadku, gdy model, któremu je usawimy
+         * implementuje Model::IBox i nie są nałożone na niego trasformacje obrotu i skali. Czyli jednym słowem
+         * pudełko równoległe do osi i bez skalowania.  Wartość ujemna nie jest brana pod uwagę.
          */
-        void setShrink (bool b) { shrink = b; }
+        float getHeight () const { return height; }
 
-/*--------------------------------------------------------------------------*/
-
-        /*
-         * @param m Model którego dotyczy request
-         * @param origTranslate Aktualne przesunięcie tego modelu.
-         * @param w Aktualna wysokość boundingBoxa modelu m
-         * @param h Aktualna szerokość boundingBoxa modelu m
+        /**
+         * Wysokość w procentach. To pole jest brane pod uwagę tylko w przypadku, gdy model, któremu je usawimy
+         * implementuje Model::IBox i nie są nałożone na niego trasformacje obrotu i skali. Czyli jednym słowem
+         * pudełko równoległe do osi i bez skalowania. Wartość ujemna nie jest brana pod uwagę.
          */
-        Geometry::Point calculateTranslation (IModel const *m, Geometry::Point const &currentTranslate, double aabbW, double aabbH) const;
+        void setHeight (float f) { height = f; }
 
 private:
 
@@ -116,8 +121,8 @@ private:
         float           p_ (height);
         Geometry::Point P_ (translate);
         Padding *       p_ (padding);
-        bool            p_ (expand);
-        bool            p_ (shrink);
+        bool            p_ (wrapContentsW);
+        bool            p_ (wrapContentsH);
 
         E_ (BoxGroupProperties)
 };

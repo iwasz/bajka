@@ -20,39 +20,6 @@ namespace Model {
 using View::DrawUtil;
 using namespace Geometry;
 
-Geometry::Point AbstractModel::getTranslate () const
-{
-//        if (!groupProps) {
-                return translate;
-//        }
-//        else {
-//                Point const &p = groupProps->getTranslateRel ();
-//
-//                if (p.x < 0 || p.y < 0) {
-//                        return translate;
-//                }
-//
-//                /*
-//                 * TODO Tu możnaby kiedyś zrobić optymalizację, że IModel ma metody getWidth i getHeight, które
-//                 * działają czybciej niż getBoundingBox. Tylko nie wiem, czy da się szybciej niż transformując
-//                 * punkty obiektu przez macierz?
-//                 */
-//                Geometry::Box aabb = getBoundingBoxImpl (AffineMatrix (Geometry::ZERO_POINT, getAngle (), getScale (), getCenter ()));
-//                return layout->calculateTranslation (this, translate, aabb.getWidth (), aabb.getHeight ());
-//        }
-}
-
-/****************************************************************************/
-
-void AbstractModel::setTranslate (Geometry::Point const &p)
-{
-        translate = p;
-//
-//        if (groupProps) {
-//                groupProps->resetTranslateRel ();
-//        }
-}
-
 /****************************************************************************/
 
 AffineMatrix AbstractModel::getMatrix () const
