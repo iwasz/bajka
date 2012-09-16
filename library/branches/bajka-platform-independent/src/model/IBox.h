@@ -15,7 +15,7 @@
 namespace Model {
 
 /**
- * Interfejs modeli Boxowych (w momencie pisania Box, CPBox i BoxGroup).
+ * Interfejs modeli Boxowych (w momencie pisania Box, CPBox i RelativeGroup).
  */
 class IBox : public virtual Core::Object {
 public:

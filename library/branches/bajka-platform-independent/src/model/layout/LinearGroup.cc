@@ -29,13 +29,59 @@ void LinearGroup::update (Event::UpdateEvent *e)
 
 }
 
+/****************************************************************************/
+
 void LinearGroup::updateLayout ()
 {
-        // Szerokość i wysokość samej grupy jest tu korygowana na podstawie GroupProperies tej grupy.
-        adjustMyDimensions ();
+        float childW = 0, childH = 0;
+        getChildrenDimensions (&childW, &childH);
 
-        float actualX = margin;
-        float actualY = margin;
+        // Szerokość i wysokość samej grupy jest tu korygowana na podstawie GroupProperies tej grupy.
+        adjustMyDimensions (childW, childH);
+
+        float actualX = 0;
+        float actualY = 0;
+        // Odległość między środkami obiektów jesli mamy gravity na CENTER.
+        float equalSpace = 0;
+
+        if (type == HORIZONTAL) {
+                if (hGravity == HA_LEFT) {
+                        actualX = margin;
+                }
+                else if (hGravity == HA_RIGHT) {
+                        actualX = w - childW - margin;
+                }
+                else if (hGravity == HA_CENTER) {
+                        actualX = margin;
+
+                        if (children.size () > 1) {
+                                IModel *first = children.front ();
+                                IModel *last = children.back ();
+                                float firstW = first->getBoundingBox ().getWidth ();
+                                float lastW = last->getBoundingBox ().getWidth ();
+                                equalSpace = (w - 2 * margin - firstW / 2 - lastW / 2) / (children.size () - 1);
+                        }
+                }
+        }
+        else {
+                if (vGravity == VG_BOTTOM) {
+                        actualY = margin;
+                }
+                else if (vGravity == VG_TOP) {
+                        actualY = h - childH - margin;
+                }
+                else if (vGravity == VG_CENTER) {
+                        actualY = margin;
+
+                        if (children.size () > 1) {
+                                IModel *first = children.front ();
+                                IModel *last = children.back ();
+                                float firstH = first->getBoundingBox ().getHeight ();
+                                float lastH = last->getBoundingBox ().getHeight ();
+                                equalSpace = (h - 2 * margin - firstH / 2 - lastH / 2) / (children.size () - 1);
+                        }
+                }
+        }
 
         // Rozmieść dzieci.
         for (ModelVector::iterator i = children.begin (); i != children.end (); ++i) {
@@ -49,13 +95,59 @@ void LinearGroup::updateLayout ()
 
                 if (type == HORIZONTAL) {
                         t.x = actualX;
-                        t.y = margin;
-                        actualX += aabbW + spacing;
+
+                        if (props) {
+                                if (props->vAlign == VA_BOTTOM) {
+                                        t.y = margin;
+                                }
+                                else if (props->vAlign == VA_TOP) {
+                                        t.y = h - aabbH - margin;
+                                }
+                                else if (props->vAlign == VA_CENTER) {
+                                        t.y = (h - aabbH) / 2;
+                                }
+                        }
+                        else {
+                                t.y = (h - aabbH) / 2;
+                        }
+
+                        if (hGravity == HA_LEFT || hGravity == HA_RIGHT) {
+                                actualX += aabbW + spacing;
+                        }
+                        else if (hGravity == HA_CENTER) {
+                                if (i + 1 != children.end ()) {
+                                        IModel *nextChild = *(i + 1);
+                                        actualX += equalSpace + (aabbW / 2) - (nextChild->getBoundingBox ().getWidth () / 2);
+                                }
+                        }
                 }
                 else {
-                        t.x = margin;
                         t.y = actualY;
-                        actualY += aabbH + spacing;
+
+                        if (props) {
+                                if (props->hAlign == HA_LEFT) {
+                                        t.x = margin;
+                                }
+                                else if (props->hAlign == HA_RIGHT) {
+                                        t.x = w - aabbW - margin;
+                                }
+                                else if (props->hAlign == HA_CENTER) {
+                                        t.x = (w - aabbW) / 2;
+                                }
+                        }
+                        else {
+                                t.x = (w - aabbW) / 2;
+                        }
+
+                        if (vGravity == VG_BOTTOM || vGravity == VG_TOP) {
+                                actualY += aabbH + spacing;
+                        }
+                        else if (vGravity == VA_CENTER) {
+                                if (i + 1 != children.end ()) {
+                                        IModel *nextChild = *(i + 1);
+                                        actualY += equalSpace + (aabbH / 2) - (nextChild->getBoundingBox ().getHeight () / 2);
+                                }
+                        }
                 }
 
                 child->setTranslate (t);
@@ -64,12 +156,8 @@ void LinearGroup::updateLayout ()
 
 /****************************************************************************/
 
-void LinearGroup::adjustMyDimensions ()
+void LinearGroup::getChildrenDimensions (float *w, float *h)
 {
-        if (!getWrapContentsW () && !getWrapContentsH ()) {
-                return;
-        }
-
         G::Box aabb;
         float width = 0;
         float height = 0;
@@ -82,25 +170,34 @@ void LinearGroup::adjustMyDimensions ()
                         height = std::max (height, aabb.getHeight ());
                 }
                 else {
-                        width = std::max (height, aabb.getWidth ());
+                        width = std::max (width, aabb.getWidth ());
                         height += aabb.getHeight ();
                 }
         }
 
-        if (getWrapContentsW ()) {
-                w = width + 2 * margin;
+        *w = width;
 
-                if (type == HORIZONTAL) {
-                        w += spacing * (children.size () - 1);
-                }
+        if (type == HORIZONTAL) {
+                *w += spacing * (children.size () - 1);
+        }
+
+        *h = height;
+
+        if (type == VERTICAL) {
+                *h += spacing * (children.size () - 1);
+        }
+}
+
+/****************************************************************************/
+
+void LinearGroup::adjustMyDimensions (float w, float h)
+{
+        if (getWrapContentsW ()) {
+                this->w = w + 2 * margin;
         }
 
         if (getWrapContentsH ()) {
-                h = height + 2 * margin;
-
-                if (type == VERTICAL) {
-                        h += spacing * (children.size () - 1);
-                }
+                this->h = h + 2 * margin;
         }
 }
 

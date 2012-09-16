@@ -26,16 +26,15 @@ struct LinearGroupProperties : public IGroupProperties {
         C__ (void)
         LinearGroupProperties () :
                 hAlign (HA_CENTER),
-                vAlign (VA_CENTER),
-                hGravity (HG_CENTER),
-                vGravity (VG_CENTER) {}
+                vAlign (VA_CENTER) {}
 
         virtual ~LinearGroupProperties () {}
 
-        HAlign          p_ (hAlign);
-        VAlign          p_ (vAlign);
-        HGravity        p_ (hGravity);
-        VGravity        p_ (vGravity);
+        // TODO
+//        HAlign          p_ (hAlign);
+//        VAlign          p_ (vAlign);
+        int          p_ (hAlign);
+        int          p_ (vAlign);
 
         E_ (LinearGroupProperties)
 };
