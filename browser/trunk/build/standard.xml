@@ -12,8 +12,16 @@
 
   <!-- Single line text with default font and color -->
   <Box id="label" abstract="true" autoUpdateToViewSize="true">
-    <Text set-as="view" foreground="ff0000ff" font="@defaultFont" />
+    <ref set-as="view" bean="textWidget" />
   </Box>
+  
+  <Text id="textWidget" foreground="ff0000ff" font="@defaultFont" />
+
+  <Box id="rect" abstract="true">
+    <ref bean="rectWidget" set-as="view"/>
+  </Box>
+
+  <Rectangle id="rectWidget" foreground="0000ffff" background="00000000"/>
 
   <!-- TODO Zawsze ten samo kolor jest -->
   <Color id="randomColor" singleton="false">

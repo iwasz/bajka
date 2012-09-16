@@ -29,11 +29,37 @@ Dodatkowe:
       <image add-to="children" view.bitmap.path="cursor.png" />
     </Group>
 
-    <BoxGroup add-to="children" width="100" height="100" translate="-50, -50">
+    <BoxGroup add-to="children" translate="-50, -50" width="50" height="50">
       <image add-to="children" view.bitmap.path="cursor.png">
-        <BoxGroupProperties set-as="groupProps" translate="50, 50" width="75" height="75" align="0x24" />
+        <BoxGroupProperties set-as="groupProps" translate="50, 50" align="0x24" />
       </image>
     </BoxGroup>
+    
+<!--     <BoxGroup add-to="children" translate="-50, 10"> -->
+<!--       <rect add-to="children"> -->
+<!--         <BoxGroupProperties set-as="groupProps" width="100" height="100" /> -->
+<!--       </rect> -->
+      
+<!--       <label add-to="children" view.text="Hello world"> -->
+<!--         <BoxGroupProperties set-as="groupProps" translate="50, 50" align="0x24" /> -->
+<!--       </label> -->
+      
+<!--       <BoxGroupProperties set-as="groupProps" wrapContentsW="true" wrapContentsH="true" /> -->
+<!--     </BoxGroup> -->
+
+    <LinearGroup add-to="children" translate="-395, 265" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true">
+      <label add-to="children" view.text="A1" />
+      <label add-to="children" view.text="B2" />
+      <label add-to="children" view.text="C3" />
+      <ref bean="rectWidget" set-as="view" />
+    </LinearGroup>
+
+    <LinearGroup add-to="children" translate="-395, 230" spacing="5" margin="5" width="200" wrapContentsH="true">
+      <label add-to="children" view.text="A1" />
+      <label add-to="children" view.text="B2" />
+      <label add-to="children" view.text="C3" />
+      <ref bean="rectWidget" set-as="view" />
+    </LinearGroup>
   </Group>
 
 </beans>
