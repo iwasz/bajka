@@ -42,7 +42,7 @@ Box Group::getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) con
 
 /****************************************************************************/
 
-//TODO to jest kopia z BoxGroup - wydzielić ten wspólny kod gdzieś.
+//TODO to jest kopia z RelativeGroup - wydzielić ten wspólny kod gdzieś.
 IModel *Group::findContains (Point const &p)
 {
         // - Punkt p jest we współrzędnych rodzica.

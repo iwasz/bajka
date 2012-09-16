@@ -9,9 +9,9 @@
 #ifndef BAJKA_GROUP_LAYOUT_H_
 #define BAJKA_GROUP_LAYOUT_H_
 
-#include "BoxGroup.h"
+#include "RelativeGroup.h"
 #include "IGroupProperties.h"
-#include "BoxGroupProperties.h"
+#include "RelativeGroupProperties.h"
 #include "Padding.h"
 #include "LinearGroup.h"
 #include "LinearGroupProperties.h"
