@@ -31,13 +31,10 @@ void BoxGroup::update (Event::UpdateEvent *e)
 
 void BoxGroup::updateLayout ()
 {
-        // W tym miejscu szerokość i wysokość samej grupy musi być już dobrze skorygowana na podstawie GroupProperies samej grupy.
-        adjustMyDimensions (&w, &h);
-
         // Rozmieść i rozszerz dzieci.
         for (ModelVector::iterator i = children.begin (); i != children.end (); ++i) {
                 IModel *child = *i;
-                BoxGroupProperties *props = ((child->getGroupProps ()) ? (dynamic_cast <BoxGroupProperties *> (child->getGroupProps ())) : (NULL));
+                BoxGroupProperties const *props = ((child->getGroupProps ()) ? (dynamic_cast <BoxGroupProperties const *> (child->getGroupProps ())) : (NULL));
 
                 if (!props) {
                         continue;
@@ -63,7 +60,7 @@ void BoxGroup::updateLayout ()
 
 /****************************************************************************/
 
-G::Point BoxGroup::calculateTranslation (IModel *child, BoxGroupProperties *props) const
+G::Point BoxGroup::calculateTranslation (IModel *child, BoxGroupProperties const *props) const
 {
         G::Box aabb = child->getBoundingBox ();
         float aabbW = aabb.getWidth ();
@@ -77,7 +74,7 @@ G::Point BoxGroup::calculateTranslation (IModel *child, BoxGroupProperties *prop
         ct.y = ((tReq.y >= 0) ? (getHeight () * tReq.y / 100.0) : (tAct.y));
 
         if (props->getAlign () == (BoxGroupProperties::TOP | BoxGroupProperties::RIGHT)) {
-                return ct;
+                // zwróć ct, ct jest gotowe.
         }
         else {
                 if (tReq.x >= 0) {
@@ -98,40 +95,14 @@ G::Point BoxGroup::calculateTranslation (IModel *child, BoxGroupProperties *prop
                         }
                 }
 
-                return ct;
         }
+
+        return ct;
 }
 
 /****************************************************************************/
 
-void BoxGroup::adjustMyDimensions (float *w, float *h)
-{
-        if (!getGroupProps () || )
-
-        G::Box aabb;
-
-        for (ModelVector::const_iterator i = children.begin (); i != children.end (); ++i) {
-                if (i == children.begin ()) {
-                        aabb = (*i)->getBoundingBox ();
-                }
-                else {
-                        aabb.merge ((*i)->getBoundingBox ());
-                }
-        }
-
-        G::Ring ring;
-        G::Ring output;
-        convert (aabb, ring);
-        G::AffineMatrixTransformer matrix (getMatrix ());
-        transform (ring, output, matrix);
-        envelope (output, aabb);
-        *w = aabb.getWidth ();
-        *h = aabb.getHeight ();
-}
-
-/****************************************************************************/
-
-void BoxGroup::adjustChildrenDimensions (IBox *child, BoxGroupProperties *props, float *w, float *h)
+void BoxGroup::adjustChildrenDimensions (IBox *child, BoxGroupProperties const *props, float *w, float *h)
 {
         float reqW = props->getWidth ();
         float reqH = props->getHeight ();
@@ -215,58 +186,17 @@ IModel *BoxGroup::findContains (G::Point const &p)
 
 /****************************************************************************/
 
-//void BoxGroup::setRelW (double w)
+//void BoxGroup::addChild (IModel *m)
 //{
-//	BoxGroup *parGroup = getParGroup (this);
-//
-//	if (!parGroup) {
-//		relW = w;
-//		return;
-//	}
-//
-//	setWidth (parGroup->getWidth () * w / 100.0);
+//        Group::addChild (m);
+//        ChildInfo c;
+//        G::Point t = m->getTranslate ();
+//        c.x = t.x;
+//        c.y = t.y;
+//        G::Box aabb = m->getBoundingBox ();
+//        c.w = aabb.getWidth ();
+//        c.h = aabb.getHeight ();
+//        childInfo[m] = c;
 //}
-//
-///****************************************************************************/
-//
-//void BoxGroup::setRelH (double h)
-//{
-//	BoxGroup *parGroup = getParGroup (this);
-//
-//	if (!parGroup) {
-//		relH = h;
-//		return;
-//	}
-//
-//	setHeight (parGroup->getHeight () * h / 100.0);
-//}
-
-/****************************************************************************/
-
-BoxGroup *BoxGroup::getParGroup (IModel *m)
-{
-        IModel *parent = m->getParent();
-
-        if (!parent) {
-                return NULL;
-        }
-
-        if (!parent->isBox()) {
-                throw Util::RuntimeException("BoxGroup : !parent->isBox ()");
-        }
-
-        if (!parent->isGroup()) {
-                throw Util::RuntimeException("BoxGroup : !parent->isGroup()");
-        }
-
-        return static_cast<BoxGroup *>(parent);
-}
-
-/****************************************************************************/
-
-BoxGroup const *BoxGroup::getParGroup (IModel const *m)
-{
-        return getParGroup (const_cast <IModel *> (m));
-}
 
 } /* namespace Model */

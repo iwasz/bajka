@@ -147,7 +147,7 @@ struct IModel : public virtual Core::Object {
 
 /*------layout--------------------------------------------------------------*/
 
-        virtual IGroupProperties *getGroupProps () = 0;
+        virtual IGroupProperties const *getGroupProps () const = 0;
         virtual void setGroupProps (IGroupProperties *l) = 0;
 
 /*------runtime type information--------------------------------------------*/

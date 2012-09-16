@@ -12,6 +12,7 @@
 #include <Object.h>
 
 namespace Model {
+//struct Padding;
 
 /**
  * Klasa bazowa dla własciwości grup (własciwości layoutowych).
@@ -20,17 +21,22 @@ class IGroupProperties : public Core::Object {
 public:
         virtual ~IGroupProperties() {}
 
-        /**
-         * Zmniejsz ten obiekt do rozmiarów jaki zajmują jego dzieci. Ma to sens chyba tylko dla
-         * grup.
-         */
-        virtual bool getWrapContentsW () const = 0;
-
-        /**
-         * Zmniejsz ten obiekt do rozmiarów jaki zajmują jego dzieci. Ma to sens chyba tylko dla
-         * grup.
-         */
-        virtual bool getWrapContentsH () const = 0;
+//        /**
+//         * Zmniejsz ten obiekt do rozmiarów jaki zajmują jego dzieci. Ma to sens chyba tylko dla
+//         * grup.
+//         */
+//        virtual bool getWrapContentsW () const = 0;
+//
+//        /**
+//         * Zmniejsz ten obiekt do rozmiarów jaki zajmują jego dzieci. Ma to sens chyba tylko dla
+//         * grup.
+//         */
+//        virtual bool getWrapContentsH () const = 0;
+//
+//        /**
+//         * Padding.
+//         */
+//        virtual Padding const *getPadding () const = 0;
 
 };
 

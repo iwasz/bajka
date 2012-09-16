@@ -6,8 +6,8 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_MODEL_BOX_GROUP2_H_
-#define BAJKA_MODEL_BOX_GROUP2_H_
+#ifndef BAJKA_MODEL_LINEAR_GROUP_H_
+#define BAJKA_MODEL_LINEAR_GROUP_H_
 
 #include "util/ReflectionMacros.h"
 #include "model/IBox.h"
@@ -33,14 +33,29 @@ class BoxGroupProperties;
  * ustalaja swój rozmiar.
  *
  */
-class BoxGroup : public IBox, public Group  {
+class LinearGroup : public IBox, public Group  {
 public:
+
+        enum Type { HORIZONTAL, VERTICAL };
 
 	C__ (void)
 	b_ ("Group")
 
-	BoxGroup () : w (0), h(0)/*, relW (-1), relH (-1), relX (-1), relY (-1), expand (false)*/ {}
-	virtual ~BoxGroup() {}
+	LinearGroup () : w (0),
+	        h(0),
+	        type (HORIZONTAL),
+                spacing (0),
+                margin (0),
+	        wrapContentsW (false),
+	        wrapContentsH (false) {}
+
+	virtual ~LinearGroup() {}
+
+        bool getWrapContentsW () const { return wrapContentsW; }
+        void setWrapContentsW (bool b) { wrapContentsW = b; }
+
+        bool getWrapContentsH () const { return wrapContentsH; }
+        void setWrapContentsH (bool b) { wrapContentsH = b; }
 
 /*--layout------------------------------------------------------------------*/
 
@@ -74,7 +89,7 @@ private:
         Geometry::Point calculateTranslation (IModel *child, BoxGroupProperties const *props) const;
 
         /*
-         * Ustawienia szerokość i wysokość obieku wewnątrz tego BoxGroup na podstawie
+         * Ustawienia szerokość i wysokość obieku wewnątrz tego LinearGroup na podstawie
          * width i height w skojarzonym z tym obiektem BoxGroupProperties. Działa tylko
          * dla obiektów implementujących IBox i bez transformacji angle i scale.
          */
@@ -86,11 +101,21 @@ private:
          */
         void adjustMyDimensions ();
 
+        /*
+         * Zwraca AABB z uwzględnieniem ewentualnego paddingu.
+         */
+        Geometry::Box getAABBWPadding (Model::IModel *model) const;
+
 private:
 
         float w, h;
+        Type            p_ (type);
+        float           p_ (spacing);
+        float           p_ (margin);
+        bool            p_ (wrapContentsW);
+        bool            p_ (wrapContentsH);
 
-        E_ (BoxGroup)
+        E_ (LinearGroup)
 };
 
 } /* namespace Model */
