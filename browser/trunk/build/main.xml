@@ -45,7 +45,7 @@ Dodatkowe:
 <!--       </rect> -->
       
 <!--       <label add-to="children" view.text="Hello world"> -->
-<!--         <RelativeGroupProperties set-as="groupProps" translate="50, 50" align="0x24" /> -->
+<!--         <RelativeGroupProperties set-as="groupProps" translate="50, 50" hAlign="2" vAlign="2" /> -->
 <!--       </label> -->
       
 <!--       <RelativeGroupProperties set-as="groupProps" wrapContentsW="true" wrapContentsH="true" /> -->
