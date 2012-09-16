@@ -50,7 +50,7 @@ public:
         ModelVector &getChildren () { return children; }
         void setChildren (ModelVector const &c);
 
-        void addChild (IModel *m);
+        virtual void addChild (IModel *m);
         void popChild ();
         IModel *getTop ();
         ModelVector::iterator begin () { return children.begin (); }

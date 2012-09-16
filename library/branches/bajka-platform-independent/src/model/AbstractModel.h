@@ -15,7 +15,6 @@
 #include "IGroup.h"
 
 namespace Model {
-class BoxGroup;
 
 /**
  * Wspólna implemntacja modeli. To jest klasa zbierająca do kupy wspólny kod, który powtarzał by się
@@ -56,7 +55,7 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        IGroupProperties *getGroupProps () { return groupProps; }
+        IGroupProperties const *getGroupProps () const { return groupProps; }
         void setGroupProps (IGroupProperties *l) { groupProps = l; }
 
 /*--------------------------------------------------------------------------*/
@@ -75,9 +74,6 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        /*
-         * TODO Może wszędzie gdzie tu jest IModel dać IGroup?
-         */
         IModel *getParent () { return parent; }
         void setParent (IModel *m) { parent = m; }
         void onParentSet (IModel *m) {}

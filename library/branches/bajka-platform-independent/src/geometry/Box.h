@@ -31,7 +31,7 @@ public:
         C__ (void)
         Box () : ll (Geometry::ZERO_POINT), ur (Geometry::ZERO_POINT) {}
         Box (const Point &ll, const Point &ur) : ll (ll), ur (ur) {}
-        Box (double a, double b, double c, double d) { ll.x = a; ll.y = b; ur.x = c; ur.y = d; }
+        Box (float a, float b, float c, float d) { ll.x = a; ll.y = b; ur.x = c; ur.y = d; }
         C_ (std::string const &)
         Box (std::string const &s);
         virtual ~Box () {}
@@ -39,13 +39,13 @@ public:
 /*------access-methods------------------------------------------------------*/
 
         /// Zwraca różnicę miedzy ur a ll
-        double getWidth () const { return ur.x - ll.x; }
+        float getWidth () const { return ur.x - ll.x; }
         // Zmienia szerokość nie ruszając ll.
-        void setWidth (double w) { ur.x = ll.x + w; }
+        void setWidth (float w) { ur.x = ll.x + w; }
         /// Zwraca różnicę miedzy ur a ll
-        double getHeight () const { return ur.y - ll.y; }
+        float getHeight () const { return ur.y - ll.y; }
         // Zmienia wysokość nie ruszając ll.
-        void setHeight (double h) { ur.y = ll.y + h; }
+        void setHeight (float h) { ur.y = ll.y + h; }
 
 /*--------------------------------------------------------------------------*/
 

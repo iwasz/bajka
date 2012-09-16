@@ -30,10 +30,10 @@ struct BoxGroupProperties : public IGroupProperties {
                 align ((HCENTER | TOP)),
                 width (-1),
                 height (-1),
-                translate (Geometry::makePoint (-1, -1)),
+                translate (Geometry::makePoint (-1, -1))/*,
                 padding (NULL),
                 wrapContentsW (false),
-                wrapContentsH (false) {}
+                wrapContentsH (false)*/ {}
 
         virtual ~BoxGroupProperties () {}
 
@@ -70,21 +70,14 @@ struct BoxGroupProperties : public IGroupProperties {
          */
         void setAlign (int a) { align = a; }
 
-        /**
-         * Padding.
-         */
-        Padding *getPadding () { return padding; }
-
-        /**
-         * Padding.
-         */
-        void setPadding (Padding *p) { padding = p; }
-
-        bool getWrapContentsW () const { return wrapContentsW; }
-        void setWrapContentsW (bool b) { wrapContentsW = b; }
-
-        bool getWrapContentsH () const { return wrapContentsH; }
-        void setWrapContentsH (bool b) { wrapContentsH = b; }
+//        Padding const *getPadding () const { return padding; }
+//        void setPadding (Padding *p) { padding = p; }
+//
+//        bool getWrapContentsW () const { return wrapContentsW; }
+//        void setWrapContentsW (bool b) { wrapContentsW = b; }
+//
+//        bool getWrapContentsH () const { return wrapContentsH; }
+//        void setWrapContentsH (bool b) { wrapContentsH = b; }
 
         /**
          * Szerokość w procentach. To pole jest brane pod uwagę tylko w przypadku, gdy model, któremu je usawimy
@@ -120,9 +113,9 @@ private:
         float           p_ (width);
         float           p_ (height);
         Geometry::Point P_ (translate);
-        Padding *       p_ (padding);
-        bool            p_ (wrapContentsW);
-        bool            p_ (wrapContentsH);
+//        Padding *       p_ (padding);
+//        bool            p_ (wrapContentsW);
+//        bool            p_ (wrapContentsH);
 
         E_ (BoxGroupProperties)
 };
