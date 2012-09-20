@@ -12,10 +12,11 @@
 
   <!-- Single line text with default font and color -->
   <Box id="label" abstract="true" autoUpdateToViewSize="true">
-    <ref set-as="view" bean="textWidget" />
+    <Text set-as="view" foreground="ff0000ff" font="@defaultFont" />
+    <!-- Tak się wywala. -->
+<!--     <Text set-as="view" foreground="ff0000ff" font="@defaultFont" scope="bean" /> -->
   </Box>
   
-  <Text id="textWidget" foreground="ff0000ff" font="@defaultFont" />
 
   <Box id="rect" abstract="true">
     <ref bean="rectWidget" set-as="view"/>
