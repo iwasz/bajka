@@ -14,9 +14,9 @@
 #include <cstdio>
 #include <boost/bind.hpp>
 #include <cstdlib>
-#include <Container.h>
-#include <ContainerFactory.h>
-#include <inputFormat/compact/CompactMetaService.h>
+#include <container/Container.h>
+#include <container/ContainerFactory.h>
+#include <container/inputFormat/compact/CompactMetaService.h>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_opengl.h>
