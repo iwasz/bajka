@@ -10,7 +10,7 @@
 #define BAJKA1_SCENEMANAGER_H_
 
 #include <string>
-#include <Object.h>
+#include <core/Object.h>
 #include "model/IGroup.h"
 #include "ReflectionMacros.h"
 

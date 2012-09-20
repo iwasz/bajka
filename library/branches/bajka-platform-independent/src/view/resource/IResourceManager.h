@@ -10,7 +10,7 @@
 #define IRESOURCEMANAGER_H_
 
 #include <string>
-#include <Pointer.h>
+#include <core/Pointer.h>
 
 namespace View {
 

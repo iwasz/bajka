@@ -11,7 +11,7 @@
 
 #include <cstddef>
 #include "controller/IController.h"
-#include <IToStringEnabled.h>
+#include <core/IToStringEnabled.h>
 #include <map>
 
 namespace Model {

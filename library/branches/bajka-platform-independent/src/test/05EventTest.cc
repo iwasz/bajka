@@ -3,7 +3,7 @@
  
 #include <boost/test/unit_test.hpp>
 #include <iostream>
-#include <Pointer.h>
+#include <core/Pointer.h>
 
 #include "Events.h"
 

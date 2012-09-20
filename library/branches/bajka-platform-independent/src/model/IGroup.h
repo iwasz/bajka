@@ -9,7 +9,7 @@
 #ifndef BAJKA_IGROUP_H_
 #define BAJKA_IGROUP_H_
 
-#include <Object.h>
+#include <core/Object.h>
 #include "model/IModel.h"
 
 namespace Event {

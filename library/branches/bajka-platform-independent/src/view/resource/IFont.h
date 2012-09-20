@@ -9,7 +9,7 @@
 #ifndef BAJKA_FONT_H_
 #define BAJKA_FONT_H_
 
-#include <Object.h>
+#include <core/Object.h>
 #include "IBitmap.h"
 #include "view/draw/Color.h"
 

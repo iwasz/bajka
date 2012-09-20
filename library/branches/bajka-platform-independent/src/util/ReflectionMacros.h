@@ -6,7 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include <Reflection.h>
+#include <reflection/Reflection.h>
 
 #ifndef BAJKA_DEFAULTANNOTATIONMACROS_H_
 #define BAJKA_DEFAULTANNOTATIONMACROS_H_
@@ -33,6 +33,7 @@
 #undef t_
 #undef te_
 #undef p_
+#undef pe_
 #undef P_
 
 #define b_      REFLECTION_BASE_CLASS
@@ -57,6 +58,7 @@
 #define t__     REFLECTION_TEMPLATE
 #define te_     REFLECTION_TEMPLATE_END
 #define p_      REFLECTION_FIELD_VALUE_INPLACE
+#define pe_     REFLECTION_FIELD_ENUM_INPLACE
 #define P_      REFLECTION_FIELD_REFERENCE_INPLACE
 
 

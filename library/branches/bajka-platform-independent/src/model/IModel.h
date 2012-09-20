@@ -11,7 +11,7 @@
 
 #include <vector>
 #include <map>
-#include <Object.h>
+#include <core/Object.h>
 #include "util/ReflectionMacros.h"
 #include "view/IView.h"
 #include "controller/IController.h"

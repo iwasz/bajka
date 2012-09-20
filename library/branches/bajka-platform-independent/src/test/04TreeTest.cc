@@ -1,6 +1,6 @@
 //#include <boost/test/unit_test.hpp>
 //#include <sstream>
-//#include <Pointer.h>
+//#include <core/Pointer.h>
 //#include <string>
 //#include <iostream>
 //

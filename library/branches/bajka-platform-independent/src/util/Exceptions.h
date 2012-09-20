@@ -9,7 +9,7 @@
 #ifndef BAJKA_EXCEPTIONS_H_
 #define BAJKA_EXCEPTIONS_H_
 
-#include <Exception.h>
+#include <core/Exception.h>
 
 namespace Util {
 

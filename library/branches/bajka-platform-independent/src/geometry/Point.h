@@ -12,7 +12,7 @@
 #include <boost/geometry/geometries/register/point.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
 #include <string>
-#include <variant/Variant.h>
+#include <core/variant/Variant.h>
 
 /**
  * Prymitywy geometryczne.

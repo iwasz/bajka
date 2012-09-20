@@ -9,7 +9,7 @@
 #ifndef TILIAEMODELMANAGER_H_
 #define TILIAEMODELMANAGER_H_
 
-#include <Container.h>
+#include <container/Container.h>
 #include "util/ModelManager.h"
 #include "util/ReflectionMacros.h"
 #include "events/types/ManagerEvent.h"

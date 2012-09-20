@@ -9,7 +9,7 @@
 #ifndef IVIEW_H_
 #define IVIEW_H_
 
-#include <Object.h>
+#include <core/Object.h>
 
 namespace Event {
 class UpdateEvent;

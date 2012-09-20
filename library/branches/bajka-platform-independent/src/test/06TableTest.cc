@@ -1,7 +1,7 @@
 //#include <boost/test/unit_test.hpp>
 //#include <boost/geometry/geometry.hpp>
 //#include <sstream>
-//#include <Pointer.h>
+//#include <core/Pointer.h>
 //#include <limits>
 //
 //#include "model/IModel.h"

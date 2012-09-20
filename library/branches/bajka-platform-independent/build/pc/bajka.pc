@@ -11,12 +11,5 @@ Libs: -L${libdir} -lbajka
 
 Cflags: \
 -I${includedir}/bajka 
-#-I${includedir}/bajka/controller \
-#-I${includedir}/bajka/events \
-#-I${includedir}/bajka/geometry \
-#-I${includedir}/bajka/model \
-#-I${includedir}/bajka/openGl \
-#-I${includedir}/bajka/tween \
-#-I${includedir}/bajka/util \
-#-I${includedir}/bajka/view
+
 
