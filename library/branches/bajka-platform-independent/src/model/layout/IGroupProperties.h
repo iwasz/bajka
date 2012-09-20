@@ -9,7 +9,7 @@
 #ifndef IGROUPPROPERTIES_H_
 #define IGROUPPROPERTIES_H_
 
-#include <Object.h>
+#include <core/Object.h>
 
 namespace Model {
 //struct Padding;

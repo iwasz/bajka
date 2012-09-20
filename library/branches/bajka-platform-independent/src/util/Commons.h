@@ -9,7 +9,7 @@
 #ifndef BAJKA_UTILS_COMMONS_H_
 #define BAJKA_UTILS_COMMONS_H_
 
-#include <Pointer.h>
+#include <core/Pointer.h>
 #include "ReflectionMacros.h"
 #include <vector>
 #include <list>

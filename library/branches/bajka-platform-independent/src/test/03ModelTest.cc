@@ -2,7 +2,7 @@
 //#include <boost/test/unit_test.hpp>
 //#include <boost/geometry/geometry.hpp>
 //#include <sstream>
-//#include <Pointer.h>
+//#include <core/Pointer.h>
 //
 //#include "model/IModel.h"
 //#include "model/Box.h"

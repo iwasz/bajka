@@ -9,7 +9,7 @@
 #ifndef BAJKA_MODEDL_INTERFACE_BOX_H_
 #define BAJKA_MODEDL_INTERFACE_BOX_H_
 
-#include <Object.h>
+#include <core/Object.h>
 #include "geometry/Box.h"
 
 namespace Model {

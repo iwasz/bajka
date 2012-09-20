@@ -11,7 +11,7 @@
 
 #include <boost/geometry/geometry.hpp>
 #include <boost/geometry/geometries/register/box.hpp>
-#include <Object.h>
+#include <core/Object.h>
 #include "Point.h"
 #include "util/ReflectionMacros.h"
 

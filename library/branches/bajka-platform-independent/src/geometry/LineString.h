@@ -11,8 +11,8 @@
 
 #include <boost/geometry/geometries/linestring.hpp>
 #include <boost/geometry/geometries/register/linestring.hpp>
-#include <variant/Variant.h>
-#include <Pointer.h>
+#include <core/variant/Variant.h>
+#include <core/Pointer.h>
 #include <string>
 #include "Point.h"
 

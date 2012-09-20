@@ -8,8 +8,8 @@
 
 #include "TiliaeModelManager.h"
 #include "util/Exceptions.h"
-#include <ContainerFactory.h>
-#include <inputFormat/mxml/MXmlMetaService.h>
+#include <container/ContainerFactory.h>
+#include <container/inputFormat/mxml/MXmlMetaService.h>
 #include "Platform.h"
 #include "util/IShell.h"
 

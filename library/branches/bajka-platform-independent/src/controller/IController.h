@@ -9,7 +9,7 @@
 #ifndef BAJKA_ICONTROLLER_H_
 #define BAJKA_ICONTROLLER_H_
 
-#include <Object.h>
+#include <core/Object.h>
 
 namespace Model {
 class IModel;
