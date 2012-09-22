@@ -8,13 +8,13 @@
     <Image set-as="view">
         <Bitmap set-as="bitmap"/>
     </Image>
+    <prop-alias name="path" value="view.bitmap.path"/>
   </Box>
 
   <!-- Single line text with default font and color -->
   <Box id="label" abstract="true" autoUpdateToViewSize="true">
     <Text set-as="view" foreground="ff0000ff" font="@defaultFont" />
-    <!-- Tak się wywala. -->
-<!--     <Text set-as="view" foreground="ff0000ff" font="@defaultFont" scope="bean" /> -->
+    <prop-alias name="text" value="view.text"/>
   </Box>
   
 
@@ -31,7 +31,7 @@
     </cargs>
   </Color>
   
-  <TTFFont id="defaultFont" renderType="0" hinting="0">
+  <TTFFont id="defaultFont" renderType="0" hinting="1">
     <cargs>
       <value type="text">volter.ttf</value>
       <value type="int">18</value>
