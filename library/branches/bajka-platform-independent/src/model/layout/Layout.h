@@ -15,5 +15,6 @@
 #include "Padding.h"
 #include "LinearGroup.h"
 #include "LinearGroupProperties.h"
+#include "Align.h"
 
 #endif /* LAYOUT_H_ */

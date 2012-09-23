@@ -45,13 +45,13 @@ void LinearGroup::updateLayout ()
         float equalSpace = 0;
 
         if (type == HORIZONTAL) {
-                if (hGravity == HA_LEFT) {
+                if (hGravity == HG_LEFT) {
                         actualX = margin;
                 }
-                else if (hGravity == HA_RIGHT) {
+                else if (hGravity == HG_RIGHT) {
                         actualX = w - childW - margin;
                 }
-                else if (hGravity == HA_CENTER) {
+                else if (hGravity == HG_CENTER) {
                         actualX = margin;
 
                         if (children.size () > 1) {
@@ -111,10 +111,10 @@ void LinearGroup::updateLayout ()
                                 t.y = (h - aabbH) / 2;
                         }
 
-                        if (hGravity == HA_LEFT || hGravity == HA_RIGHT) {
+                        if (hGravity == HG_LEFT || hGravity == HG_RIGHT) {
                                 actualX += aabbW + spacing;
                         }
-                        else if (hGravity == HA_CENTER) {
+                        else if (hGravity == HG_CENTER) {
                                 if (i + 1 != children.end ()) {
                                         IModel *nextChild = *(i + 1);
                                         actualX += equalSpace + (aabbW / 2) - (nextChild->getBoundingBox ().getWidth () / 2);
@@ -142,7 +142,7 @@ void LinearGroup::updateLayout ()
                         if (vGravity == VG_BOTTOM || vGravity == VG_TOP) {
                                 actualY += aabbH + spacing;
                         }
-                        else if (vGravity == VA_CENTER) {
+                        else if (vGravity == VG_CENTER) {
                                 if (i + 1 != children.end ()) {
                                         IModel *nextChild = *(i + 1);
                                         actualY += equalSpace + (aabbH / 2) - (nextChild->getBoundingBox ().getHeight () / 2);
@@ -272,6 +272,20 @@ IModel *LinearGroup::findContains (G::Point const &p)
         }
 
         return this;
+}
+
+/*--------------------------------------------------------------------------*/
+
+Core::Variant stringToLinearGroupType (std::string const &p)
+{
+        if (p == "horizontal") {
+                return Core::Variant (static_cast <unsigned int> (LinearGroup::HORIZONTAL));
+        }
+        else if (p == "vertical") {
+                return Core::Variant (static_cast <unsigned int> (LinearGroup::VERTICAL));
+        }
+
+        throw Util::InitException ("stringToLinearGroupType () : worng string literal for LinearGroup::Type : [" + p + "]");
 }
 
 } /* namespace Model */

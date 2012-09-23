@@ -30,11 +30,8 @@ struct LinearGroupProperties : public IGroupProperties {
 
         virtual ~LinearGroupProperties () {}
 
-        // TODO
-//        HAlign          p_ (hAlign);
-//        VAlign          p_ (vAlign);
-        int          p_ (hAlign);
-        int          p_ (vAlign);
+        HAlign pe_ (hAlign);
+        VAlign pe_ (vAlign);
 
         E_ (LinearGroupProperties)
 };
