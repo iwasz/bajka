@@ -14,83 +14,83 @@
       <ref bean="rectWidget" set-as="view" />
     </LinearGroup>
 
-    <LinearGroup add-to="children" translate="-395, 230" spacing="5" margin="5" width="200" wrapContentsH="true" hGravity="0">
+    <LinearGroup add-to="children" translate="-395, 230" spacing="5" margin="5" width="200" wrapContentsH="true" hGravity="left">
       <label add-to="children" text="A1" />
       <label add-to="children" text="B2" />
       <label add-to="children" text="C3" />
       <ref bean="rectWidget" set-as="view" />
     </LinearGroup>
 
-    <LinearGroup add-to="children" translate="-395, 195" spacing="5" margin="5" width="200" wrapContentsH="true" hGravity="1">
+    <LinearGroup add-to="children" translate="-395, 195" spacing="5" margin="5" width="200" wrapContentsH="true" hGravity="right">
       <label add-to="children" text="A1" />
       <label add-to="children" text="B2" />
       <label add-to="children" text="C3" />
       <ref bean="rectWidget" set-as="view" />
     </LinearGroup>
 
-    <LinearGroup add-to="children" translate="-395, 160" spacing="5" margin="5" width="200" wrapContentsH="true" hGravity="2">
+    <LinearGroup add-to="children" translate="-395, 160" spacing="5" margin="5" width="200" wrapContentsH="true" hGravity="center">
       <label add-to="children" text="A1" />
       <label add-to="children" text="B2" />
       <label add-to="children" text="C3" />
       <ref bean="rectWidget" set-as="view" />
     </LinearGroup>
 
-    <LinearGroup add-to="children" translate="-395, 95" spacing="5" margin="5" width="200" height="60" hGravity="2">
+    <LinearGroup add-to="children" translate="-395, 95" spacing="5" margin="5" width="200" height="60" hGravity="center">
       <label add-to="children" text="A1">
-        <LinearGroupProperties set-as="groupProps" vAlign="0"/>
+        <LinearGroupProperties set-as="groupProps" vAlign="top"/>
       </label>
       
       <label add-to="children" text="B2">
-        <LinearGroupProperties set-as="groupProps" vAlign="1"/>
+        <LinearGroupProperties set-as="groupProps" vAlign="bottom"/>
       </label>
         
       <label add-to="children" text="C3">
-        <LinearGroupProperties set-as="groupProps" vAlign="2"/>
+        <LinearGroupProperties set-as="groupProps" vAlign="center"/>
       </label>
 
       <ref bean="rectWidget" set-as="view" />
     </LinearGroup>
 
     <!-- Wertykalne -->
-    <LinearGroup add-to="children" translate="-185, 95" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true" type="1">
+    <LinearGroup add-to="children" translate="-185, 95" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true" type="vertical">
       <label add-to="children" text="A1" />
       <label add-to="children" text="B2" />
       <label add-to="children" text="C3" />
       <ref bean="rectWidget" set-as="view" />
     </LinearGroup>
 
-    <LinearGroup add-to="children" translate="-145, 95" spacing="5" margin="5" wrapContentsW="true" height="200" type="1" vGravity="0">
+    <LinearGroup add-to="children" translate="-145, 95" spacing="5" margin="5" wrapContentsW="true" height="200" type="vertical" vGravity="top">
       <label add-to="children" text="A1" />
       <label add-to="children" text="B2" />
       <label add-to="children" text="C3" />
       <ref bean="rectWidget" set-as="view" />
     </LinearGroup>
 
-    <LinearGroup add-to="children" translate="-105, 95" spacing="5" margin="5" wrapContentsW="true" height="200" type="1" vGravity="1">
+    <LinearGroup add-to="children" translate="-105, 95" spacing="5" margin="5" wrapContentsW="true" height="200" type="vertical" vGravity="bottom">
       <label add-to="children" text="A1" />
       <label add-to="children" text="B2" />
       <label add-to="children" text="C3" />
       <ref bean="rectWidget" set-as="view" />
     </LinearGroup>
     
-    <LinearGroup add-to="children" translate="-65, 95" spacing="5" margin="5" wrapContentsW="true" height="200" type="1" vGravity="2">
+    <LinearGroup add-to="children" translate="-65, 95" spacing="5" margin="5" wrapContentsW="true" height="200" type="vertical" vGravity="center">
       <label add-to="children" text="A1" />
       <label add-to="children" text="B2" />
       <label add-to="children" text="C3" />
       <ref bean="rectWidget" set-as="view" />
     </LinearGroup>
 
-    <LinearGroup add-to="children" translate="-20, 95" spacing="5" margin="5" width="60" height="200" type="1" vGravity="2">
+    <LinearGroup add-to="children" translate="-20, 95" spacing="5" margin="5" width="60" height="200" type="vertical" vGravity="center">
       <label add-to="children" text="A1">
-        <LinearGroupProperties set-as="groupProps" hAlign="0"/>
+        <LinearGroupProperties set-as="groupProps" hAlign="left"/>
       </label>
       
       <label add-to="children" text="B2">
-        <LinearGroupProperties set-as="groupProps" hAlign="1"/>
+        <LinearGroupProperties set-as="groupProps" hAlign="right"/>
       </label>
 
       <label add-to="children" text="C3">
-        <LinearGroupProperties set-as="groupProps" hAlign="2"/>
+        <LinearGroupProperties set-as="groupProps" hAlign="center"/>
       </label>
 
       <ref bean="rectWidget" set-as="view" />

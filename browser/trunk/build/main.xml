@@ -13,9 +13,9 @@ Dodatkowe:
 * Layouty
 ** -Poprawne AABB.
 ** -Poprawne wyświetlanie AABB.
-** RelativeGroup
-** RelativeGroup - H
-** RelativeGroup - W
+** -RelativeGroup
+** -LinearGroup - H
+** -LinearGroup - W
 ** TableGroup
  -->
 
