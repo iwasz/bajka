@@ -96,6 +96,19 @@
       <ref bean="rectWidget" set-as="view" />
     </LinearGroup>
 
+    <TableGroup add-to="children" translate="35, 95" cols="3">
+      <label add-to="children" text="Ala" />
+      <label add-to="children" text="ma" />
+      <label add-to="children" text="kota," />
+      <label add-to="children" text="kot" />
+      <label add-to="children" text="lubi" />
+      <label add-to="children" text="psa," />
+      <label add-to="children" text="a" />
+      <label add-to="children" text="pies" />
+      <label add-to="children" text="kostki" />
+      <ref bean="rectWidget" set-as="view" />
+    </TableGroup>
+
   </Group>
 
 </beans>
