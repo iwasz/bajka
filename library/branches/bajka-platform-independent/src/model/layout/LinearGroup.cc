@@ -23,10 +23,9 @@ namespace trans = boost::geometry::strategy::transform;
 
 void LinearGroup::update (Event::UpdateEvent *e)
 {
-        // TODO to nie powino się updejtować przy każdym odświerzeniu. Do wywalenia jest ta metoda.
+        // TODO to nie powino się updejtować przy każdym odświerzeniu.
         updateLayout ();
         Group::update (e);
-
 }
 
 /****************************************************************************/
