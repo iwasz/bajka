@@ -6,17 +6,16 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_GROUP_LAYOUT_H_
-#define BAJKA_GROUP_LAYOUT_H_
+#ifndef TABLEGROUPPROPERTIES_H_
+#define TABLEGROUPPROPERTIES_H_
 
-#include "RelativeGroup.h"
-#include "IGroupProperties.h"
-#include "RelativeGroupProperties.h"
-#include "Padding.h"
-#include "LinearGroup.h"
-#include "LinearGroupProperties.h"
-#include "Align.h"
-#include "TableGroup.h"
-#include "TableGroupProperties.h"
+namespace Model {
 
-#endif /* LAYOUT_H_ */
+class TableGroupProperties {
+public:
+        TableGroupProperties ();
+        virtual ~TableGroupProperties ();
+};
+
+} /* namespace Model */
+#endif /* TABLEGROUPPROPERTIES_H_ */

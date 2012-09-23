@@ -6,17 +6,19 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_GROUP_LAYOUT_H_
-#define BAJKA_GROUP_LAYOUT_H_
-
-#include "RelativeGroup.h"
-#include "IGroupProperties.h"
-#include "RelativeGroupProperties.h"
-#include "Padding.h"
-#include "LinearGroup.h"
-#include "LinearGroupProperties.h"
-#include "Align.h"
-#include "TableGroup.h"
 #include "TableGroupProperties.h"
 
-#endif /* LAYOUT_H_ */
+namespace Model {
+
+TableGroupProperties::TableGroupProperties ()
+{
+        // TODO Auto-generated constructor stub
+
+}
+
+TableGroupProperties::~TableGroupProperties ()
+{
+        // TODO Auto-generated destructor stub
+}
+
+} /* namespace Model */

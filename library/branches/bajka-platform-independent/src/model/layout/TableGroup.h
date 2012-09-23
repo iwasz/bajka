@@ -6,40 +6,25 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_MODEL_LINEAR_GROUP_H_
-#define BAJKA_MODEL_LINEAR_GROUP_H_
+#ifndef BAJKA_LAYOUTS_TABLEGROUP_H_
+#define BAJKA_LAYOUTS_TABLEGROUP_H_
 
 #include "util/ReflectionMacros.h"
 #include "model/IBox.h"
 #include "model/Group.h"
-#include "Align.h"
 
 namespace Model {
-class RelativeGroupProperties;
 
-/**
- * Grupa.
- */
-class LinearGroup : public IBox, public Group  {
+class TableGroup : public IBox, public Group {
 public:
 
-        enum Type { HORIZONTAL, VERTICAL };
+        C__ (void)
+        b_ ("Group")
 
-	C__ (void)
-	b_ ("Group")
+        TableGroup ();
+        virtual ~TableGroup () {}
 
-	LinearGroup () : w (0),
-	        h(0),
-	        type (HORIZONTAL),
-                spacing (0),
-                margin (0),
-	        wrapContentsW (false),
-	        wrapContentsH (false),
-	        hGravity (HG_LEFT),
-                vGravity (VG_BOTTOM) {}
-
-	virtual ~LinearGroup() {}
-
+//        TODO większość metod wspólna z LinearGroup - zrobić nadklasę
         bool getWrapContentsW () const { return wrapContentsW; }
         void setWrapContentsW (bool b) { wrapContentsW = b; }
 
@@ -48,7 +33,7 @@ public:
 
 /*--layout------------------------------------------------------------------*/
 
-	void updateLayout ();
+        void updateLayout ();
         virtual void update (Event::UpdateEvent *e);
 
 /*--IBox--------------------------------------------------------------------*/
@@ -71,48 +56,20 @@ public:
 
 private:
 
-        /*
-         * @param w Aktualna wysokość boundingBoxa modelu dla którego
-         * @param h Aktualna szerokość boundingBoxa modelu m
-         */
-        Geometry::Point calculateTranslation (IModel *child, RelativeGroupProperties const *props) const;
-
-        /*
-         * Ustawienia szerokość i wysokość obieku wewnątrz tego LinearGroup na podstawie
-         * width i height w skojarzonym z tym obiektem RelativeGroupProperties. Działa tylko
-         * dla obiektów implementujących IBox i bez transformacji angle i scale.
-         */
-        void adjustChildrenDimensions (IBox *child, RelativeGroupProperties const *props, float *w, float *h);
-
-        /*
-         * Ustala rozmiar tej grupy. Działa tylko gdy ustawione wrapContents. Ustala rozmiar tej
-         * grupy na rozmiar największego z dzieci.
-         */
         void adjustMyDimensions (float w, float h);
-
-        /*
-         *
-         */
         void getChildrenDimensions (float *w, float *h);
 
 private:
 
         float w, h;
-        Type            pe_ (type);
+        int             p_ (cols)
         float           p_ (spacing);
         float           p_ (margin);
         bool            p_ (wrapContentsW);
         bool            p_ (wrapContentsH);
-        HGravity        pe_ (hGravity);
-        VGravity        pe_ (vGravity);
 
-        E_ (LinearGroup)
+        E_ (TableGroup)
 };
 
-/*--------------------------------------------------------------------------*/
-
-extern Core::Variant stringToLinearGroupType (std::string const &p);
-
 } /* namespace Model */
-
-#endif /* GROUP_H_ */
+#endif /* TABLEGROUP_H_ */
