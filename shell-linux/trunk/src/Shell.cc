@@ -35,6 +35,8 @@
 #include "tween/Manager.h"
 #include "EventDispatcher.h"
 #include "model/IGroup.h"
+#include "model/layout/Align.h"
+#include "model/layout/LinearGroup.h"
 
 using namespace Container;
 using Reflection::Manager;
@@ -96,8 +98,15 @@ int Shell::run (Util::ShellConfig const &cfg)
                 {
                         Ptr <MetaContainer> metaContainer = CompactMetaService::parseFile (cfg.definitionFile);
                         Ptr <BeanFactoryContainer> container = ContainerFactory::create (metaContainer, true);
+
                         container->addConversion (typeid (Geometry::Point), Geometry::stringToPointVariant);
                         container->addConversion (typeid (Geometry::LineString), Geometry::stringToLineStringVariant);
+                        container->addConversion (typeid (Model::HAlign), Model::stringToHAlign);
+                        container->addConversion (typeid (Model::VAlign), Model::stringToVAlign);
+                        container->addConversion (typeid (Model::HGravity), Model::stringToHGravity);
+                        container->addConversion (typeid (Model::VGravity), Model::stringToVGravity);
+                        container->addConversion (typeid (Model::LinearGroup::Type), Model::stringToLinearGroupType);
+
                         ContainerFactory::init (container.get (), metaContainer.get ());
                         impl->config = vcast <U::Config *> (container->getBean ("config"));
                         overrideConfig (cfg);
