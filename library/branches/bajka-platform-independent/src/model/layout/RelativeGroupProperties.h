@@ -35,19 +35,15 @@ struct RelativeGroupProperties : public IGroupProperties {
 
         virtual ~RelativeGroupProperties () {}
 
-        // TODO
-//        HAlign          p_ (hAlign);
-//        VAlign          p_ (vAlign);
-
         /**
          * Wyrównanie w poziomie.
          */
-        int p_ (hAlign);
+        HAlign pe_ (hAlign);
 
         /**
          * Wyrównanie w pionie.
          */
-        int p_ (vAlign);
+        VAlign pe_ (vAlign);
 
         /**
          * Szerokość w procentach. To pole jest brane pod uwagę tylko w przypadku, gdy model, któremu je usawimy

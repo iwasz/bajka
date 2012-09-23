@@ -99,21 +99,20 @@ private:
 private:
 
         float w, h;
-//        TODO
-//        Type            p_ (type);
-        int             p_ (type);
+        Type            pe_ (type);
         float           p_ (spacing);
         float           p_ (margin);
         bool            p_ (wrapContentsW);
         bool            p_ (wrapContentsH);
+        HGravity        pe_ (hGravity);
+        VGravity        pe_ (vGravity);
 
-//        TODO Zamienic na własciwy typ kiedy IoC będzie umiał
-//        HGravity        p_ (hGravity);
-//        VGravity        p_ (vGravity);
-        int        p_ (hGravity);
-        int        p_ (vGravity);
         E_ (LinearGroup)
 };
+
+/*--------------------------------------------------------------------------*/
+
+extern Core::Variant stringToLinearGroupType (std::string const &p);
 
 } /* namespace Model */
 
