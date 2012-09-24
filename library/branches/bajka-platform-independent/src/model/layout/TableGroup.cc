@@ -102,30 +102,35 @@ void TableGroup::getChildrenDimensions (float *w, float *h)
         float width = 0;
         float height = 0;
 
-        for (ModelVector::const_iterator i = children.begin (); i != children.end (); ++i) {
-                aabb = (*i)->getBoundingBox ();
+        int remainder = children.size () % cols;
+        int rows = children.size () / cols + bool (remainder);
 
-                if (type == HORIZONTAL) {
-                        width += aabb.getWidth ();
-                        height = std::max (height, aabb.getHeight ());
+        unsigned int i = 0;
+        for (int c = 0; c < cols; ++c) {
+                float rowWidth = 0;
+                float rowHeight = 0;
+
+                for (int r = 0; r < rows; ++r, ++i) {
+
+                        if (i >= children.size ()) {
+                                goto breakAllLoops;
+                        }
+
+                        Model::IModel *model = children[i];
+                        aabb = model->getBoundingBox ();
+
+                        rowWidth += aabb.getWidth ();
+                        rowHeight = std::max (height, aabb.getHeight ());
                 }
-                else {
-                        width = std::max (width, aabb.getWidth ());
-                        height += aabb.getHeight ();
-                }
+
+                width = std::max (width, rowWidth);
+                height += rowHeight;
         }
 
-        *w = width;
+        breakAllLoops:
 
-        if (type == HORIZONTAL) {
-                *w += spacing * (children.size () - 1);
-        }
-
-        *h = height;
-
-        if (type == VERTICAL) {
-                *h += spacing * (children.size () - 1);
-        }
+        *w = width + spacing * (children.size () - 1);
+        *h = height + spacing * (children.size () - 1);
 }
 
 /****************************************************************************/

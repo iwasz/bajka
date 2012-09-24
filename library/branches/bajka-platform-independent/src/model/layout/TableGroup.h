@@ -21,7 +21,13 @@ public:
         C__ (void)
         b_ ("Group")
 
-        TableGroup ();
+        TableGroup () :
+                cols (0),
+                spacing (0),
+                margin (0),
+                wrapContentsW (false),
+                wrapContentsH (false) {}
+
         virtual ~TableGroup () {}
 
 //        TODO większość metod wspólna z LinearGroup - zrobić nadklasę
@@ -62,7 +68,7 @@ private:
 private:
 
         float w, h;
-        int             p_ (cols)
+        int             p_ (cols);
         float           p_ (spacing);
         float           p_ (margin);
         bool            p_ (wrapContentsW);
