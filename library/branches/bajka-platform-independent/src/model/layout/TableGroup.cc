@@ -32,35 +32,61 @@ void TableGroup::update (Event::UpdateEvent *e)
 void TableGroup::updateLayout ()
 {
         float childW = 0, childH = 0;
-        getChildrenDimensions (&childW, &childH);
+        float widthFirstChildInLongestRow = 0;;
+        float widthLastChildInLongestRow = 0;
+        float heightTallestInFirstRow = 0;
+        float heightTallestInLastRow = 0;
 
-        // Szerokość i wysokość samej grupy jest tu korygowana na podstawie GroupProperies tej grupy.
+        getChildrenDimensions (&childW, &childH, &widthFirstChildInLongestRow, &widthLastChildInLongestRow, &heightTallestInFirstRow, &heightTallestInLastRow);
         adjustMyDimensions (childW, childH);
 
-        float actualX = 0;
-        float actualY = 0;
-        // Odległość między środkami obiektów jesli mamy gravity na CENTER.
-        float equalSpace = 0;
+        float actualX = margin;
+        float actualY = margin;
 
-        actualX = margin;
+        float equalSpaceW = 0;
+        float equalSpaceH = 0;
 
-        if (children.size () > 1) {
-                IModel *first = children.front ();
-                IModel *last = children.back ();
-                float firstW = first->getBoundingBox ().getWidth ();
-                float lastW = last->getBoundingBox ().getWidth ();
-                equalSpace = (w - 2 * margin - firstW / 2 - lastW / 2) / (children.size () - 1);
-        }
-
-        actualY = margin;
 
         if (children.size () > 1) {
-                IModel *first = children.front ();
-                IModel *last = children.back ();
-                float firstH = first->getBoundingBox ().getHeight ();
-                float lastH = last->getBoundingBox ().getHeight ();
-                equalSpace = (h - 2 * margin - firstH / 2 - lastH / 2) / (children.size () - 1);
+                equalSpaceW = (w - 2 * margin - widthFirstChildInLongestRow / 2 - widthLastChildInLongestRow / 2) / (children.size () - 1);
+                equalSpaceH = (h - 2 * margin - heightTallestInFirstRow / 2 - heightTallestInLastRow / 2) / (children.size () - 1);
         }
+
+        int remainder = children.size () % cols;
+        int rows = children.size () / cols + bool (remainder);
+
+        unsigned int i = 0;
+        for (int c = 0; c < cols; ++c) {
+                float rowWidth = 0;
+                float rowHeight = 0;
+
+                actualX = margin;
+
+                for (int r = 0; r < rows; ++r, ++i) {
+
+                        if (i >= children.size ()) {
+                                goto breakAllLoops;
+                        }
+
+                        Model::IModel *child = children[i];
+                        G::Box aabb = child->getBoundingBox ();
+                        float aabbW = aabb.getWidth ();
+                        float aabbH = aabb.getHeight ();
+                        G::Point t;
+
+                        t.x = actualX;
+                        t.y = (h - aabbH) / 2;
+
+                        if (i < children.size ()) {
+                                IModel *nextChild = children[i + 1];
+                                actualX += equalSpaceW + (aabbW / 2) - (nextChild->getBoundingBox ().getWidth () / 2);
+                        }
+
+                        child->setTranslate (t);
+                }
+        }
+
+        breakAllLoops:
 
         // Rozmieść dzieci.
         for (ModelVector::iterator i = children.begin (); i != children.end (); ++i) {
@@ -96,7 +122,12 @@ void TableGroup::updateLayout ()
 
 /****************************************************************************/
 
-void TableGroup::getChildrenDimensions (float *w, float *h)
+void TableGroup::getChildrenDimensions (float *w,
+                                        float *h,
+                                        float *widthFirstChildInLongestRow,
+                                        float *widthLastChildInLongestRow,
+                                        float *heightTallestInFirstRow,
+                                        float *heightTallestInLastRow)
 {
         G::Box aabb;
         float width = 0;
@@ -104,13 +135,15 @@ void TableGroup::getChildrenDimensions (float *w, float *h)
 
         int remainder = children.size () % cols;
         int rows = children.size () / cols + bool (remainder);
-
         unsigned int i = 0;
-        for (int c = 0; c < cols; ++c) {
+
+        for (int r = 0; r < rows; ++r) {
                 float rowWidth = 0;
                 float rowHeight = 0;
+                float widthFirstChild = 0;
+                float widthLastChild = 0;
 
-                for (int r = 0; r < rows; ++r, ++i) {
+                for (int c = 0; c < cols; ++c, ++i) {
 
                         if (i >= children.size ()) {
                                 goto breakAllLoops;
@@ -119,12 +152,32 @@ void TableGroup::getChildrenDimensions (float *w, float *h)
                         Model::IModel *model = children[i];
                         aabb = model->getBoundingBox ();
 
-                        rowWidth += aabb.getWidth ();
+                        float aabbW = aabb.getWidth ();
+                        rowWidth += aabbW;
                         rowHeight = std::max (height, aabb.getHeight ());
+
+                        if (c == 0) {
+                                widthFirstChild = aabbW;
+                        }
+                        else if (c == cols - 1) {
+                                widthLastChild = aabbW;
+                        }
                 }
 
-                width = std::max (width, rowWidth);
+                if (rowWidth > width) {
+                        width = rowWidth;
+                        *widthFirstChildInLongestRow = widthFirstChild;
+                        *widthLastChildInLongestRow = widthLastChild;
+                }
+
                 height += rowHeight;
+
+                if (r == 0) {
+                        *heightTallestInFirstRow = rowHeight;
+                }
+                else if (r == rows - 1) {
+                        *heightTallestInLastRow = rowHeight;
+                }
         }
 
         breakAllLoops:
