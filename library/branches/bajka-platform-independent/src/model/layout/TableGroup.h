@@ -63,7 +63,12 @@ public:
 private:
 
         void adjustMyDimensions (float w, float h);
-        void getChildrenDimensions (float *w, float *h);
+        void getChildrenDimensions (float *w,
+                                    float *h,
+                                    float *widthFirstChildInLongestRow,
+                                    float *widthLastChildInLongestRow,
+                                    float *heightTallestInFirstRow,
+                                    float *heightTallestInLastRow);
 
 private:
 
