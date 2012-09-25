@@ -26,7 +26,8 @@ public:
                 spacing (0),
                 margin (0),
                 wrapContentsW (false),
-                wrapContentsH (false) {}
+                wrapContentsH (false),
+                heterogeneous (true) {}
 
         virtual ~TableGroup () {}
 
@@ -63,12 +64,13 @@ public:
 private:
 
         void adjustMyDimensions (float w, float h);
+
         void getChildrenDimensions (float *w,
                                     float *h,
-                                    float *widthFirstChildInLongestRow,
-                                    float *widthLastChildInLongestRow,
-                                    float *heightTallestInFirstRow,
-                                    float *heightTallestInLastRow);
+                                    float colsW[],
+                                    float rowsH[],
+                                    int cols,
+                                    int rows);
 
 private:
 
@@ -78,6 +80,7 @@ private:
         float           p_ (margin);
         bool            p_ (wrapContentsW);
         bool            p_ (wrapContentsH);
+        bool            p_ (heterogeneous);
 
         E_ (TableGroup)
 };
