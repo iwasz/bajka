@@ -24,7 +24,6 @@ namespace Geometry {
  * \ingroup Geometry
  */
 struct Point {
-
         float x;
         float y;
 

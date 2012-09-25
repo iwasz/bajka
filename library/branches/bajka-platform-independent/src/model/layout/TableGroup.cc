@@ -29,8 +29,6 @@ void TableGroup::update (Event::UpdateEvent *e)
 
 /****************************************************************************/
 
-void f (float a[]) {}
-
 void TableGroup::updateLayout ()
 {
         int remainder = children.size () % cols;
@@ -38,6 +36,14 @@ void TableGroup::updateLayout ()
         float colsW[cols];
         float rowsH[rows];
         float childW = 0, childH = 0;
+
+        for (int r = 0; r < rows; ++r) {
+                rowsH[r] = 0;
+        }
+
+        for (int c = 0; c < cols; ++c) {
+                colsW[c] = 0;
+        }
 
         getChildrenDimensions (&childW, &childH, colsW, rowsH, cols, rows);
         adjustMyDimensions (childW, childH);

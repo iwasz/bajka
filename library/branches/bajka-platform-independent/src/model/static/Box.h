@@ -27,12 +27,12 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        double getWidth () const;/* { return box.getWidth (); }*/
+        double getWidth () const;
         void setWidth (double w) { box.setWidth (w); }
-        double getHeight () const;/* { return box.getHeight (); }*/
+        double getHeight () const;
         void setHeight (double h) { box.setHeight (h); }
 
-        Geometry::Box getBox () const;/* { return box; }*/
+        Geometry::Box getBox () const;
         m_ (setBox) void setBox (Geometry::Box const &b) { box = b; }
 
         bool isBox () const { return true; }

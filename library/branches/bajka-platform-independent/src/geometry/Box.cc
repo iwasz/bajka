@@ -31,16 +31,16 @@ Box::Box (std::string const &s)
         tokenizer::iterator i = tok.begin ();
 
         assertThrow (i != tok.end (), "Box::Box : problem parsing string : [" + s + "]");
-        ll.x = lexical_cast <double> (trim_copy (*i++));
+        ll.x = lexical_cast <float> (trim_copy (*i++));
 
         assertThrow (i != tok.end (), "Box::Box : problem parsing string : [" + s + "]");
-        ll.y = lexical_cast <double> (trim_copy (*i++));
+        ll.y = lexical_cast <float> (trim_copy (*i++));
 
         assertThrow (i != tok.end (), "Box::Box : problem parsing string : [" + s + "]");
-        ur.x = lexical_cast <double> (trim_copy (*i++));
+        ur.x = lexical_cast <float> (trim_copy (*i++));
 
         assertThrow (i != tok.end (), "Box::Box : problem parsing string : [" + s + "]");
-        ur.y = lexical_cast <double> (trim_copy (*i));
+        ur.y = lexical_cast <float> (trim_copy (*i));
 }
 
 /****************************************************************************/
