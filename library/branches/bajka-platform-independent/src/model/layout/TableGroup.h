@@ -22,6 +22,8 @@ public:
         b_ ("Group")
 
         TableGroup () :
+                w (0),
+                h (0),
                 cols (0),
                 spacing (0),
                 margin (0),

@@ -26,7 +26,7 @@ public:
 	C__ (void)
 	b_ ("Group")
 
-	RelativeGroup () : w (0), h(0) {}
+	RelativeGroup () : w (0), h (0) {}
 	virtual ~RelativeGroup() {}
 
 /*--layout------------------------------------------------------------------*/
