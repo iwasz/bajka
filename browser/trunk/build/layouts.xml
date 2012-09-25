@@ -96,7 +96,7 @@
       <ref bean="rectWidget" set-as="view" />
     </LinearGroup>
 
-    <TableGroup add-to="children" translate="45, 95" cols="3" wrapContentsW="true" wrapContentsH="true">
+    <TableGroup add-to="children" translate="45, 95" cols="3" wrapContentsW="true" wrapContentsH="true" heterogeneous="false" margin="10" spacing="10">
       <label add-to="children" text="Ala" />
       <label add-to="children" text="ma" />
       <label add-to="children" text="kota," />
