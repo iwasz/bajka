@@ -21,7 +21,7 @@ void Circle::update (Model::IModel *model, Event::UpdateEvent *)
         }
 
         // Obrót jest w preUpdate.
-        DrawUtil::drawCircle (c->getOrigin (), 0, c->getRadius (), getForeground (), getBackground ());
+        DrawUtil::drawCircle (c->getOrigin (), 0, c->getRadius (), getForeground (), getBackground (), getThickness ());
 }
 
 } /* namespace View */

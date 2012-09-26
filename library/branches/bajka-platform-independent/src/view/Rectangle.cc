@@ -24,7 +24,8 @@ void Rectangle::update (Model::IModel *model, Event::UpdateEvent *)
         DrawUtil::drawRectangle (b.ll,
                                  b.ur,
                                  getForeground (),
-                                 getBackground ());
+                                 getBackground (),
+                                 getThickness ());
 }
 
 } /* namespace View */

@@ -12,6 +12,7 @@
 #include "geometry/AffineMatrix.h"
 #include "model/static/Box.h"
 #include "model/static/Circle.h"
+#include "TableGroupProperties.h"
 
 namespace Model {
 using namespace boost::geometry;
@@ -68,9 +69,36 @@ void TableGroup::updateLayout ()
                         float cellW = colsW[c];
                         float cellH = rowsH[r];
 
-                        // CENTER TODO inne opcje.
-                        float cellX = (cellW - aabbW) / 2;
-                        float cellY = (cellH - aabbH) / 2;
+                        TableGroupProperties const *props = ((child->getGroupProps ()) ? (dynamic_cast <TableGroupProperties const *> (child->getGroupProps ())) : (NULL));
+
+                        float cellX = 0;
+                        float cellY = 0;
+
+                        if (props) {
+                                if (props->hAlign == HA_LEFT) {
+                                        cellX = 0;
+                                }
+                                else if (props->hAlign == HA_RIGHT) {
+                                        cellX = cellW - aabbW;
+                                }
+                                else {
+                                        cellX = (cellW - aabbW) / 2;
+                                }
+
+                                if (props->vAlign == VA_BOTTOM) {
+                                        cellY = 0;
+                                }
+                                else if (props->vAlign == VA_TOP) {
+                                        cellY = cellH - aabbH;
+                                }
+                                else {
+                                        cellY = (cellH - aabbH) / 2;
+                                }
+                        }
+                        else {
+                                cellX = (cellW - aabbW) / 2;
+                                cellY = (cellH - aabbH) / 2;
+                        }
 
                         t.x = cellX + actualX;
                         actualX += cellW;
@@ -102,6 +130,26 @@ void TableGroup::getChildrenDimensions (float *w,
                                         int cols,
                                         int rows)
 {
+        if (!wrapContentsW) {
+                float maxW = (this->w - (cols - 1) * spacing - 2 * margin) / double (cols);
+
+                for (int c = 0; c < cols; ++c) {
+                        colsW[c] = maxW;
+                }
+        }
+
+        if (!wrapContentsH) {
+                float maxH = (this->h - (rows - 1) * spacing - 2 * margin) / double (rows);
+
+                for (int r = 0; r < rows; ++r) {
+                        rowsH[r] = maxH;
+                }
+        }
+
+        if (!wrapContentsW && !wrapContentsH) {
+                return;
+        }
+
         if (heterogeneous) {
                 float maxW = 0, maxH = 0;
 
@@ -112,16 +160,21 @@ void TableGroup::getChildrenDimensions (float *w,
                         maxH = std::max (maxH, aabb.getHeight ());
                 }
 
-                for (int r = 0; r < rows; ++r) {
-                        rowsH[r] = maxH;
+                if (wrapContentsH) {
+                        for (int r = 0; r < rows; ++r) {
+                                rowsH[r] = maxH;
+                        }
+
+                        *h = rows * maxH + (rows - 1) * spacing;
                 }
 
-                for (int c = 0; c < cols; ++c) {
-                        colsW[c] = maxW;
-                }
+                if (wrapContentsW) {
+                        for (int c = 0; c < cols; ++c) {
+                                colsW[c] = maxW;
+                        }
 
-                *w = cols * maxW + (cols - 1) * spacing;
-                *h = rows * maxH + (rows - 1) * spacing;
+                        *w = cols * maxW + (cols - 1) * spacing;
+                }
 
                 return;
         }
@@ -139,23 +192,33 @@ void TableGroup::getChildrenDimensions (float *w,
                         float aabbW = aabb.getWidth ();
                         float aabbH = aabb.getHeight ();
 
-                        rowsH[r] = std::max (rowsH[r], aabbH);
-                        colsW[c] = std::max (colsW[c], aabbW);
+                        if (wrapContentsH) {
+                                rowsH[r] = std::max (rowsH[r], aabbH);
+                        }
+
+                        if (wrapContentsW) {
+                                colsW[c] = std::max (colsW[c], aabbW);
+                        }
                 }
         }
 
         breakAllLoops:
 
-        for (int r = 0; r < rows; ++r) {
-                *h += rowsH[r];
+        if (wrapContentsH) {
+                for (int r = 0; r < rows; ++r) {
+                        *h += rowsH[r];
+                }
+
+                *h += (rows - 1) * spacing;
         }
 
-        for (int c = 0; c < cols; ++c) {
-                *w += colsW[c];
-        }
+        if (wrapContentsW) {
+                for (int c = 0; c < cols; ++c) {
+                        *w += colsW[c];
+                }
 
-        *w += (cols - 1) * spacing;
-        *h += (rows - 1) * spacing;
+                *w += (cols - 1) * spacing;
+        }
 
         return;
 }

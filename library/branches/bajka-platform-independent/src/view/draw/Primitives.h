@@ -21,10 +21,10 @@ namespace View {
 struct DrawUtil {
 public:
 
-        static void drawCircle (Geometry::Point const &center, double angle, double radius, Color const &lineColor, Color const &fillColor);
-        static void drawLine (Geometry::Point const &a, Geometry::Point const &b, Color const &color);
-        static void drawRectangle (Geometry::Point const &a, Geometry::Point const &b, Color const &lineColor, Color const &fillColor);
-        static void drawRectangle (Geometry::Box const &b, Color const &lineColor, Color const &fillColor);
+        static void drawCircle (Geometry::Point const &center, double angle, double radius, Color const &lineColor, Color const &fillColor, float thickness = 1);
+        static void drawLine (Geometry::Point const &a, Geometry::Point const &b, Color const &color, float thickness = 1);
+        static void drawRectangle (Geometry::Point const &a, Geometry::Point const &b, Color const &lineColor, Color const &fillColor, float thickness = 1);
+        static void drawRectangle (Geometry::Box const &b, Color const &lineColor, Color const &fillColor, float thickness = 1);
 
         static void drawSegments (VertexBuffer const &buffer, Color const &lineColor, Color const &fillColor, float thickness);
         static void drawSegmentsPrettyJoin (VertexBuffer const &buffer, Color const &lineColor, Color const &fillColor, float thickness);
