@@ -50,7 +50,7 @@ static const GLfloat circleVAR[] = {
 };
 static const int circleVAR_count = sizeof(circleVAR)/sizeof(GLfloat)/2;
 
-void DrawUtil::drawCircle (G::Point const &center, double angle, double radius, Color const &lineColor, Color const &fillColor)
+void DrawUtil::drawCircle (G::Point const &center, double angle, double radius, Color const &lineColor, Color const &fillColor, float thickness)
 {
         glVertexPointer(2, GL_FLOAT, 0, circleVAR);
         glDisableClientState(GL_NORMAL_ARRAY);
@@ -61,6 +61,7 @@ void DrawUtil::drawCircle (G::Point const &center, double angle, double radius, 
                 glTranslatef(center.x, center.y, 0.0f);
                 glRotatef(angle, 0.0f, 0.0f, 1.0f);
                 glScalef(radius, radius, 1.0f);
+                glLineWidth(thickness);
 
                 if (fillColor.getA () > 0){
                         glColor4f (fillColor.getR (), fillColor.getG (), fillColor.getB (), fillColor.getA ());
@@ -76,14 +77,14 @@ void DrawUtil::drawCircle (G::Point const &center, double angle, double radius, 
 
 /****************************************************************************/
 
-void DrawUtil::drawRectangle (G::Box const &b, Color const &lineColor, Color const &fillColor)
+void DrawUtil::drawRectangle (G::Box const &b, Color const &lineColor, Color const &fillColor, float thickness)
 {
-        drawRectangle (b.ll, b.ur, lineColor, fillColor);
+        drawRectangle (b.ll, b.ur, lineColor, fillColor, thickness);
 }
 
 /****************************************************************************/
 
-void DrawUtil::drawRectangle (G::Point const &a, G::Point const &b, Color const &lineColor, Color const &fillColor)
+void DrawUtil::drawRectangle (G::Point const &a, G::Point const &b, Color const &lineColor, Color const &fillColor, float thickness)
 {
         GLfloat verts[] = {
                 a.x, a.y,
@@ -96,6 +97,7 @@ void DrawUtil::drawRectangle (G::Point const &a, G::Point const &b, Color const 
         glDisableClientState(GL_NORMAL_ARRAY);
         glDisableClientState(GL_COLOR_ARRAY);
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+        glLineWidth (thickness);
 
         if (fillColor.getA () > 0) {
                 glColor4f (fillColor.getR (), fillColor.getG (), fillColor.getB (), fillColor.getA ());
@@ -110,7 +112,7 @@ void DrawUtil::drawRectangle (G::Point const &a, G::Point const &b, Color const 
 
 /****************************************************************************/
 
-void DrawUtil::drawLine (G::Point const &a, G::Point const &b, Color const &color)
+void DrawUtil::drawLine (G::Point const &a, G::Point const &b, Color const &color, float thickness)
 {
         if (color.getA () > 0) {
                 GLfloat verts[] = {
@@ -123,6 +125,7 @@ void DrawUtil::drawLine (G::Point const &a, G::Point const &b, Color const &colo
                 glDisableClientState(GL_COLOR_ARRAY);
                 glDisableClientState(GL_TEXTURE_COORD_ARRAY);
                 glColor4f (color.getR (), color.getG (), color.getB (), color.getA ());
+                glLineWidth(thickness);
                 glDrawArrays (GL_LINES, 0, 2);
         }
 }

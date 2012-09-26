@@ -54,6 +54,7 @@ void ClearScreenGrid::update (Model::IModel *, Event::UpdateEvent *e)
         glDisableClientState(GL_COLOR_ARRAY);
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glColor4f (gridColor.getR (), gridColor.getG (), gridColor.getB (), gridColor.getA ());
+        glLineWidth (1);
         glDrawArrays (GL_LINES, 0, verts.size () / 2u);
 
         // Osie ukladu wsp.

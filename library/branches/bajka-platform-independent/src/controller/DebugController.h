@@ -40,7 +40,6 @@ struct DebugController : public IController {
         HandlingType onManagerLoad (Event::ManagerEvent *e, Model::IModel *m, View::IView *v);
         HandlingType onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v);
 
-        // linia do dołu
         m_ (setEventMask)
         E_ (DebugController)
 };

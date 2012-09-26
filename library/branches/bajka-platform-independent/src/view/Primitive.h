@@ -22,7 +22,7 @@ public:
         C__ (void)
         b_ ("Widget")
 
-        Primitive () : thickness (0), prettyJoin (false) {}
+        Primitive () : thickness (1), prettyJoin (false) {}
         virtual ~Primitive () {}
         virtual void update (Model::IModel *model, Event::UpdateEvent *e);
 

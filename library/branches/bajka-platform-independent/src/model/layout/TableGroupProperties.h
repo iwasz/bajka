@@ -9,12 +9,19 @@
 #ifndef TABLEGROUPPROPERTIES_H_
 #define TABLEGROUPPROPERTIES_H_
 
+#include "LinearGroupProperties.h"
+
 namespace Model {
 
-class TableGroupProperties {
+class TableGroupProperties : public LinearGroupProperties {
 public:
-        TableGroupProperties ();
-        virtual ~TableGroupProperties ();
+        C__ (void)
+        b_ ("LinearGroupProperties")
+
+        virtual ~TableGroupProperties () {}
+
+        E_ (TableGroupProperties)
+
 };
 
 } /* namespace Model */

@@ -6,11 +6,11 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef CONTROLLER_H_
-#define CONTROLLER_H_
+#ifndef TILIAE_BAJKA_CONTROLLER_H_
+#define TILIAE_BAJKA_CONTROLLER_H_
 
-#include "ButtonController.h"
 #include "DebugController.h"
+#include "ButtonController.h"
 #include "EmptyController.h"
 #include "IController.h"
 

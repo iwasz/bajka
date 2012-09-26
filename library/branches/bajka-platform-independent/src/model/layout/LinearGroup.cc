@@ -82,17 +82,17 @@ void LinearGroup::updateLayout ()
                 }
         }
 
-        // Rozmieść dzieci.
-        for (ModelVector::iterator i = children.begin (); i != children.end (); ++i) {
-                IModel *child = *i;
-                LinearGroupProperties const *props = ((child->getGroupProps ()) ? (dynamic_cast <LinearGroupProperties const *> (child->getGroupProps ())) : (NULL));
+        if (type == HORIZONTAL) {
 
-                G::Box aabb = child->getBoundingBox ();
-                float aabbW = aabb.getWidth ();
-                float aabbH = aabb.getHeight ();
-                G::Point t = child->getTranslate ();
+                for (ModelVector::iterator i = children.begin (); i != children.end (); ++i) {
+                        IModel *child = *i;
+                        LinearGroupProperties const *props = ((child->getGroupProps ()) ? (dynamic_cast <LinearGroupProperties const *> (child->getGroupProps ())) : (NULL));
 
-                if (type == HORIZONTAL) {
+                        G::Box aabb = child->getBoundingBox ();
+                        float aabbW = aabb.getWidth ();
+                        float aabbH = aabb.getHeight ();
+                        G::Point t = child->getTranslate ();
+
                         t.x = actualX;
 
                         if (props) {
@@ -119,8 +119,21 @@ void LinearGroup::updateLayout ()
                                         actualX += equalSpace + (aabbW / 2) - (nextChild->getBoundingBox ().getWidth () / 2);
                                 }
                         }
+
+                        child->setTranslate (t);
                 }
-                else {
+        }
+        // VERTICAL
+        else {
+                for (ModelVector::reverse_iterator i = children.rbegin (); i != children.rend (); ++i) {
+
+                        IModel *child = *i;
+                        LinearGroupProperties const *props = ((child->getGroupProps ()) ? (dynamic_cast <LinearGroupProperties const *> (child->getGroupProps ())) : (NULL));
+
+                        G::Box aabb = child->getBoundingBox ();
+                        float aabbW = aabb.getWidth ();
+                        float aabbH = aabb.getHeight ();
+                        G::Point t = child->getTranslate ();
                         t.y = actualY;
 
                         if (props) {
@@ -142,14 +155,15 @@ void LinearGroup::updateLayout ()
                                 actualY += aabbH + spacing;
                         }
                         else if (vGravity == VG_CENTER) {
-                                if (i + 1 != children.end ()) {
+                                if (i + 1 != children.rend ()) {
                                         IModel *nextChild = *(i + 1);
                                         actualY += equalSpace + (aabbH / 2) - (nextChild->getBoundingBox ().getHeight () / 2);
                                 }
                         }
+
+                        child->setTranslate (t);
                 }
 
-                child->setTranslate (t);
         }
 }
 
@@ -209,6 +223,13 @@ bool LinearGroup::contains (G::Point const &p) const
         convert (getBox (), ring);
         G::AffineMatrixTransformer matrix (getMatrix ());
         transform (ring, output, matrix);
+
+//        for (G::Ring::const_iterator i = output.begin (); i != output.end (); ++i) {
+//                G::Point const &p = *i;
+//                std::cerr << p << ",";
+//        }
+//        std::cerr << " p=" << p << ", " << within (p, output) << std::endl;
+
         return within (p, output);
 }
 

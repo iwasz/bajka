@@ -6,8 +6,8 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef DEBUGCONTROLLER_H_
-#define DEBUGCONTROLLER_H_
+#ifndef BUTTON_DO_DIASKA_CONTROLLER_H_
+#define BUTTON_DO_DIASKA_CONTROLLER_H_
 
 #include "util/ReflectionMacros.h"
 #include "EmptyController.h"
