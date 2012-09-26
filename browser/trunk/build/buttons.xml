@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+  <import resource="standard.xml" />
+
+  <Config id="config" viewportWidth="800" viewportHeight="600" autoProjection="true" windowCaption="Bajka browser, F5 to refresh" model="@scene" />
+
+  <Group id="scene">
+    <ClearScreenGrid set-as="view" color="6b6b6bff" gridColor="616161ff" density="20" />
+
+    <LinearGroup add-to="children" translate="0, 0" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true" type="vertical">
+      <label add-to="children" text="Button">
+        <DebugController set-as="controller" eventMask="0xffff"/>
+      </label>
+      <Rectangle set-as="view" foreground="0000ffff" background="00000000" thickness="3"/>
+    </LinearGroup>
+  </Group>
+
+</beans>

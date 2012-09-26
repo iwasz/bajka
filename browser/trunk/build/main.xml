@@ -16,7 +16,7 @@ Dodatkowe:
 ** -RelativeGroup
 ** -LinearGroup - H
 ** -LinearGroup - W
-** TableGroup
+** -TableGroup
  -->
 
 <beans>
