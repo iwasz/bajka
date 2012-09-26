@@ -142,6 +142,7 @@ int Shell::run (Util::ShellConfig const &cfg)
 #define checkContinue() { if (impl->dropIteration_) { continue; } }
 
 /****************************************************************************/
+
 void Shell::loop ()
 {
         if (!impl->model) {
