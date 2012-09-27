@@ -28,14 +28,17 @@ public:
         int run (Util::ShellConfig const &cfg);
         void quit ();
 
-        virtual void dropIteration ();
-        virtual bool getDropIteration () const;
+//        virtual void dropIteration ();
+//        virtual bool getDropIteration () const;
         void reset ();
 
         Model::IModel *getModel ();
         virtual void setModel (Model::IModel *model);
 
         Util::Config *getConfig ();
+
+        void notifyLoadModel ();
+        void notifyUnloadModel ();
 
 private:
 
