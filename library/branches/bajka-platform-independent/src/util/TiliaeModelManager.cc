@@ -20,7 +20,7 @@ using namespace Container;
 void TiliaeModelManager::load (std::string const &name, bool cut)
 {
         bool isCut = cut;
-        shell ()->dropIteration ();
+//        shell ()->dropIteration ();
 
         /*
          * Kopię tworzymy, ponieważ podana w argumencie referencja do stringa (nazwa) może

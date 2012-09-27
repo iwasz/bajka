@@ -12,6 +12,7 @@
 #include "util/ReflectionMacros.h"
 #include "view/draw/Color.h"
 #include "model/IModel.h"
+#include "model/manager/IModelManager.h"
 
 namespace Util {
 
@@ -89,6 +90,12 @@ struct Config {
         bool            p_ (showSystemCursor);
         int             p_ (loopDelayMs);
         Model::IModel * p_ (model);
+
+        /**
+         * Model manager można ustawić zamiast modelu i to on ładuje model (strategia) i
+         * ustawia do shella.
+         */
+        Model::IModelManager *p_ (modelManager);
 
         E_ (Config)
 };
