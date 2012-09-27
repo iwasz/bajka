@@ -18,6 +18,9 @@ class IModel;
 namespace Util {
 class Config;
 
+/**
+ * Config.
+ */
 struct ShellConfig {
 
         ShellConfig () :
@@ -35,6 +38,9 @@ struct ShellConfig {
         std::string     definitionFile;
 };
 
+/**
+ * Abstrakcja bebechów TODO napisać coś mądrego.
+ */
 class IShell {
 public:
         virtual ~IShell() {}
@@ -42,12 +48,15 @@ public:
         virtual int run (Util::ShellConfig const &cfg) = 0;
         virtual void quit () = 0;
 
-        /**
-         * Powoduje zawieszenie wykonywania aktualnej iteracji i rozpoczęcie następnej.
-         * Wszystkie czekające eventy zostają odrzucone etc.
-         */
-        virtual void dropIteration () = 0;
-        virtual bool getDropIteration () const = 0;
+//        /**
+//         * Powoduje zawieszenie wykonywania aktualnej iteracji i rozpoczęcie następnej.
+//         * Wszystkie czekające eventy zostają odrzucone etc.
+//         */
+//        virtual void dropIteration () = 0;
+//        virtual bool getDropIteration () const = 0;
+
+        virtual void notifyLoadModel () = 0;
+        virtual void notifyUnloadModel () = 0;
 
         virtual void setModel (Model::IModel *model) = 0;
         virtual Util::Config *getConfig () = 0;

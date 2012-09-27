@@ -23,7 +23,8 @@ Config::Config () :
                 showAABB (false),
                 showSystemCursor (true),
                 loopDelayMs (17),
-                model (NULL)
+                model (NULL),
+                modelManager (NULL)
 {
 }
 
