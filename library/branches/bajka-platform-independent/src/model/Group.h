@@ -32,6 +32,8 @@ public:
 	Group () : eventIndex (NULL), pointerInsideIndex (NULL) {}
 	virtual ~Group() {}
 
+	m_ (init) void init ();
+
         virtual Geometry::Point computeCenter () const { return Geometry::ZERO_POINT; }
         virtual Geometry::Box getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const;
         virtual bool contains (Geometry::Point const &p) const { return true; }
@@ -47,8 +49,8 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        ModelVector &getChildren () { return children; }
-        void setChildren (ModelVector const &c);
+        /*m_ (getChildren)*/ ModelVector &getChildren () { return children; }
+        /*m_ (setChildren)*/ void setChildren (ModelVector const &c);
 
         virtual void addChild (IModel *m);
         void popChild ();
@@ -57,6 +59,10 @@ public:
         ModelVector::iterator end () { return children.end (); }
         ModelVector::const_iterator begin () const { return children.begin (); }
         ModelVector::const_iterator end () const { return children.end (); }
+
+protected:
+
+        void manageChild (IModel *m);
 
 protected:
 
