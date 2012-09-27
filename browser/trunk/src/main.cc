@@ -13,6 +13,7 @@
 #include <boost/program_options/cmdline.hpp>
 #include <boost/program_options/parsers.hpp>
 #include <string>
+#include "DebugButtonController.h"
 
 namespace po = boost::program_options;
 
