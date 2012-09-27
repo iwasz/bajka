@@ -17,6 +17,11 @@ IController::HandlingType DebugButtonController::onButtonPress (Event::ButtonPre
 {
         View::Primitive *primitive = static_cast <View::Primitive *> (v);
         primitive->setForeground (clicked);
+
+        if (modelManager) {
+                modelManager->load (file, name);
+        }
+
         return HANDLED;
 }
 

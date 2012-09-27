@@ -33,7 +33,7 @@
   
   <TTFFont id="defaultFont" renderType="0" hinting="1">
     <cargs>
-      <value type="text">gohufont-uni-14.pcf.gz</value>
+      <value type="text">volter.ttf</value>
       <value type="int">18</value>
     </cargs>
   </TTFFont>

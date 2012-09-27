@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+  <import resource="standard.xml" />
+
+  <Config id="config" viewportWidth="800" viewportHeight="600" autoProjection="true" windowCaption="Bajka browser, F5 to refresh">
+    <ref set-as="modelManager" bean="modelManager" />
+  </Config>
+  
+  <XmlModelManager id="modelManager" file="buttons.xml" name="scene">
+    <ref set-as="mainContainer" bean="#container" />
+  </XmlModelManager>
+</beans>
