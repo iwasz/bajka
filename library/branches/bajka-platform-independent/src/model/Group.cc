@@ -101,6 +101,13 @@ void Group::setChildren (ModelVector const &c)
 void Group::addChild (IModel *m)
 {
         children.push_back (m);
+        manageChild (m);
+}
+
+/****************************************************************************/
+
+void Group::manageChild (IModel *m)
+{
         m->setParent (this);
         m->onParentSet (this);
 
@@ -111,6 +118,15 @@ void Group::addChild (IModel *m)
                         Model::IGroup *g = dynamic_cast <Model::IGroup *> (m);
                         g->setIndices (eventIndex, pointerInsideIndex);
                 }
+        }
+}
+
+/****************************************************************************/
+
+void Group::init ()
+{
+        for (ModelVector::iterator i = children.begin (); i != children.end (); ++i) {
+                manageChild (*i);
         }
 }
 
