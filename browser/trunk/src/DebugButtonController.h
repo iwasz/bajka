@@ -12,6 +12,7 @@
 #include <util/ReflectionMacros.h>
 #include <controller/EmptyController.h>
 #include <view/draw/Color.h>
+#include <model/manager/IModelManager.h>
 
 /**
  *
@@ -34,6 +35,9 @@ private:
         View::Color P_ (clicked);
         View::Color P_ (hover);
         View::Color P_ (normal);
+        Model::IModelManager *p_ (modelManager);
+        std::string p_ (file);
+        std::string p_ (name);
 
         E_ (DebugButtonController)
 };

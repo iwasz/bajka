@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
-  <import resource="standard.xml" />
+<!--   <import resource="standard.xml" /> -->
 
-  <Config id="config" viewportWidth="800" viewportHeight="600" autoProjection="true" windowCaption="Bajka browser, F5 to refresh" model="@scene" />
+<!--   <Config id="config" viewportWidth="800" viewportHeight="600" autoProjection="true" windowCaption="Bajka browser, F5 to refresh" model="@scene" /> -->
 
   <Group id="scene">
     <ClearScreenGrid set-as="view" color="6b6b6bff" gridColor="616161ff" density="20" />
