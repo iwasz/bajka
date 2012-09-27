@@ -137,6 +137,10 @@ bool EventDispatcher::dispatchEventBackwards (Model::IModel *m, IEvent *e, Event
                 }
         }
 
+#if 0
+        std::cerr << typeid (*m).name() << ", parent=" << bool (m->getParent ()) << std::endl;
+#endif
+
         if ((m = m->getParent ())) {
                 eventHandled |= dispatchEventBackwards (m, e, pointerInsideIndex);
         }
