@@ -4,14 +4,13 @@
 
   <Config id="config" viewportWidth="800" viewportHeight="600" autoProjection="true" windowCaption="Bajka browser, F5 to refresh" model="@scene" />
 
-  <Group id="scene">
+  <Group id="scene" init-method="init">
     <ClearScreenGrid set-as="view" color="6b6b6bff" gridColor="616161ff" density="20" />
 
-    <LinearGroup add-to="children" translate="0, 0" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true" type="vertical">
-      <label add-to="children" text="Button">
-        <DebugController set-as="controller" eventMask="0xffff"/>
-      </label>
-      <Rectangle set-as="view" foreground="0000ffff" background="00000000" thickness="3"/>
+    <LinearGroup add-to="children" translate="0, 0" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true" type="vertical" init-method="init">
+      <label add-to="children" text="Button"/>
+      <Rectangle set-as="view" foreground="ff0000ff" background="00000000" thickness="3"/>
+      <DebugButtonController set-as="controller" eventMask="0xffff" clicked="ffff00ff"  normal="ff0000ff"  hover="ff00ffff"/>
     </LinearGroup>
   </Group>
 
