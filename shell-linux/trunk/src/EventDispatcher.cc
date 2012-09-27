@@ -88,9 +88,9 @@ bool EventDispatcher::dispatch (Model::IModel *m, Event::EventIndex const &model
                         }
                 }
 
-                if (shell ()->getDropIteration ()) {
-                        return eventHandled;
-                }
+//                if (shell ()->getDropIteration ()) {
+//                        return eventHandled;
+//                }
 #endif
 
                 M::IModel *model = m->findContains (p);
@@ -108,9 +108,9 @@ bool EventDispatcher::dispatch (Model::IModel *m, Event::EventIndex const &model
                 for (Iterator i = pair.first; i != pair.second; ++i) {
                         eventHandled |= dispatchEventBackwards (i->second, e, pointerInsideIndex);
 
-                        if (shell ()->getDropIteration ()) {
-                                break;
-                        }
+//                        if (shell ()->getDropIteration ()) {
+//                                break;
+//                        }
                 }
 
                 if (type & Event::QUIT_EVENT /*&& !eventHandled == HANDLED_BREAK*/) {
@@ -132,9 +132,9 @@ bool EventDispatcher::dispatchEventBackwards (Model::IModel *m, IEvent *e, Event
         if (controller && controller->getEventMask () & e->getType ()) {
                 eventHandled |= e->runCallback (m, m->getView (), controller, pointerInsideIndex);
 
-                if (shell ()->getDropIteration ()) {
-                        return eventHandled;
-                }
+//                if (shell ()->getDropIteration ()) {
+//                        return eventHandled;
+//                }
         }
 
 #if 0

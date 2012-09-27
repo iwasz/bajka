@@ -62,7 +62,7 @@ struct Impl {
 
         Impl () : config (NULL),
                 model (NULL),
-                dropIteration_ (false),
+//                dropIteration_ (false),
                 loopActive (true) {}
 
         U::Config *config;
@@ -71,7 +71,7 @@ struct Impl {
         Event::PointerInsideIndex pointerInsideIndex;
         EventDispatcher dispatcher;
 
-        bool dropIteration_;
+//        bool dropIteration_;
         bool loopActive;
         Event::UpdateEvent updateEvent;
 };
@@ -110,7 +110,10 @@ int Shell::run (Util::ShellConfig const &cfg)
                         ContainerFactory::init (container.get (), metaContainer.get ());
                         impl->config = vcast <U::Config *> (container->getBean ("config"));
                         overrideConfig (cfg);
-                        setModel (impl->config->model);
+
+                        if (impl->config->model) {
+                                setModel (impl->config->model);
+                        }
 
                         init ();
                         loop ();
@@ -145,10 +148,6 @@ int Shell::run (Util::ShellConfig const &cfg)
 
 void Shell::loop ()
 {
-        if (!impl->model) {
-                throw U::InitException ("App has no model.");
-        }
-
         uint32_t lastMs = getCurrentMs ();
 
 #if 0
@@ -159,7 +158,11 @@ void Shell::loop ()
 
         while (impl->loopActive) {
 
-                impl->dropIteration_ = false;
+                if (impl->config->modelManager) {
+                        impl->config->modelManager->run (this);
+                }
+
+//                impl->dropIteration_ = false;
                 uint32_t currentMs = getCurrentMs ();
                 int deltaMs = currentMs - lastMs;
                 lastMs = currentMs;
@@ -178,7 +181,7 @@ void Shell::loop ()
                 // Run models, views and controllers.
                 // Generuj eventy.
                 impl->dispatcher.pollAndDispatch (impl->model, impl->eventIndex, &impl->pointerInsideIndex);
-                checkContinue ();
+//                checkContinue ();
 
 //                checkContinue ();
                 impl->updateEvent.setDeltaMs (deltaMs);
@@ -268,22 +271,11 @@ void Shell::setModel (Model::IModel *m)
         }
 }
 
-//ModelManager *Shell::getManager ()
-//{
-//        return impl->manager;
-//}
-//
-///****************************************************************************/
-//
-//void Shell::setManager (ModelManager *m)
-//{
-//        impl->manager = m;
-//        impl->manager->setApp (this);
-//}
+/****************************************************************************/
 
 void Shell::reset ()
 {
-        dropIteration ();
+//        dropIteration ();
 
         impl->eventIndex.clear ();
         impl->pointerInsideIndex.clear ();
@@ -292,19 +284,47 @@ void Shell::reset ()
 
 /****************************************************************************/
 
-void Shell::dropIteration ()
-{
-        impl->dropIteration_ = true;
-}
+//void Shell::dropIteration ()
+//{
+//        impl->dropIteration_ = true;
+//}
+//
+///****************************************************************************/
+//
+//bool Shell::getDropIteration () const
+//{
+//        return impl->dropIteration_;
+//}
 
 /****************************************************************************/
-
-bool Shell::getDropIteration () const
-{
-        return impl->dropIteration_;
-}
 
 Util::Config *Shell::getConfig ()
 {
         return impl->config;
 }
+
+/****************************************************************************/
+
+void Shell::notifyLoadModel ()
+{
+        M::IModel *m = impl->model;
+        Event::ManagerEvent event;
+
+        if (m && m->getController () && m->getController ()->getEventMask () & Event::MANAGER_EVENT) {
+                m->getController ()->onManagerLoad (&event, m, m->getView ());
+        }
+}
+
+/****************************************************************************/
+
+void Shell::notifyUnloadModel ()
+{
+        M::IModel *m = impl->model;
+        Event::ManagerEvent event;
+
+        if (m && m->getController () && m->getController ()->getEventMask () & Event::MANAGER_EVENT) {
+                m->getController ()->onManagerUnload (&event, m, m->getView ());
+        }
+
+}
+
