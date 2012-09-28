@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- 
-* Guzik z napisem.
+* -Guzik z napisem.
 ** -Czcionki TTF.
-* Przełączanie widoków (link podłaczony do tego guzika).
+* -Przełączanie widoków (link podłaczony do tego guzika).
 * Obsługa F5 i Esc.
 * Obsługa eventów z klawiatury w ogóle.
 * -Bitmapa.
@@ -22,34 +22,12 @@ Dodatkowe:
 <beans>
   <import resource="standard.xml" />
 
-  <Config id="config" viewportWidth="800" viewportHeight="600" autoProjection="true" windowCaption="Bajka browser, F5 to refresh" model="@scene" />
-
-  <Group id="scene">
-    <ClearScreenGrid set-as="view" color="6b6b6bff" gridColor="616161ff" density="20" />
-
-    <Group add-to="children" translate="300, 200">
-      <circle add-to="children" origin="50, 0" />
-      <label add-to="children" view.text="Hello world" translate="-50, -50" />
-      <image add-to="children" path="cursor.png" />
-    </Group>
-
-    <RelativeGroup add-to="children" translate="-50, -50" width="50" height="50">
-      <image add-to="children" view.bitmap.path="cursor.png">
-        <RelativeGroupProperties set-as="groupProps" translate="50, 50" hAlign="2" vAlign="2" />
-      </image>
-    </RelativeGroup>
-    
-<!--     <RelativeGroup add-to="children" translate="-50, 10"> -->
-<!--       <rect add-to="children"> -->
-<!--         <RelativeGroupProperties set-as="groupProps" width="100" height="100" /> -->
-<!--       </rect> -->
-      
-<!--       <label add-to="children" view.text="Hello world"> -->
-<!--         <RelativeGroupProperties set-as="groupProps" translate="50, 50" hAlign="2" vAlign="2" /> -->
-<!--       </label> -->
-      
-<!--       <RelativeGroupProperties set-as="groupProps" wrapContentsW="true" wrapContentsH="true" /> -->
-<!--     </RelativeGroup> -->
-  </Group>
-
+  <Config id="config" viewportWidth="800" viewportHeight="600" autoProjection="true" windowCaption="Bajka browser, F5 to refresh">
+    <ref set-as="modelManager" bean="modelManager" />
+  </Config>
+  
+  <XmlModelManager id="modelManager" file="menu.xml" name="scene">
+    <ref set-as="mainContainer" bean="#container" />
+  </XmlModelManager>
 </beans>
+

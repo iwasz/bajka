@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+  <Group id="scene" init-method="init">
+    <ClearScreenGrid set-as="view" color="6b6b6bff" gridColor="616161ff" density="20" />
+    <button add-to="children" file="layouts.xml" name="scene" />
+  </Group>
+</beans>

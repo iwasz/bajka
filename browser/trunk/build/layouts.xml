@@ -110,11 +110,7 @@
       <ref bean="rectWidget" set-as="view" />
     </TableGroup>
 
-    <LinearGroup add-to="children" translate="0, 0" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true" type="vertical">
-      <label add-to="children" text="Button" />
-      <Rectangle set-as="view" foreground="0000ffff" background="00000000" thickness="3"/>
-      <DebugController set-as="controller" />
-    </LinearGroup>
+    <button add-to="children" file="menu.xml" name="scene" />
     
   </Group>
 
