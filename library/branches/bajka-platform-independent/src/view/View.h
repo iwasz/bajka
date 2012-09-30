@@ -29,5 +29,6 @@
 #include "draw/Draw.h"
 #include "ClearScreen.h"
 #include "ClearScreenGrid.h"
+#include "LoopImage.h"
 
 #	endif /* VIEW_H_ */

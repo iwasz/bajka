@@ -9,6 +9,7 @@
 #include "XmlModelManager.h"
 #include "util/IShell.h"
 #include <container/ContainerFactory.h>
+#include <iostream>
 
 namespace Model {
 
@@ -23,10 +24,10 @@ void XmlModelManager::load (std::string const &param1, std::string const &param2
 
 IModel *XmlModelManager::get (std::string const &param1, std::string const &param2)
 {
-        childContainer.reset ();
-        childContainer = Container::ContainerFactory::createAndInit (Container::CompactMetaService::parseFile (requestedFile), false, mainContainer);
-        IModel *m = ocast <IModel *> (childContainer->getBean (requestedName));
-        return m;
+                childContainer.reset ();
+                childContainer = Container::ContainerFactory::createAndInit (Container::CompactMetaService::parseFile (param1), false, mainContainer);
+                IModel *m = ocast <IModel *> (childContainer->getBean (param2));
+                return m;
 }
 
 /****************************************************************************/
@@ -46,8 +47,11 @@ bool XmlModelManager::run (Util::IShell *shell)
 
         shell->notifyUnloadModel ();
         IModel *m = get (requestedFile, requestedName);
-        shell->setModel (m);
-        shell->notifyLoadModel ();
+
+        if (m) {
+                shell->setModel (m);
+                shell->notifyLoadModel ();
+        }
 
         return true;
 }

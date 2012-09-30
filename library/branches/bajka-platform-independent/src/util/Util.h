@@ -8,8 +8,8 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef UTIL_H_
-#define UTIL_H_
+#ifndef BAJKA_UTIL_H_
+#define BAJKA_UTIL_H_
 
 /**
  * \defgroup Util
@@ -20,8 +20,6 @@
 #include "Config.h"
 #include "IShell.h"
 #include "Math.h"
-#include "ModelManager.h"
 #include "ReflectionMacros.h"
-#include "TiliaeModelManager.h"
 
 #	endif /* UTIL_H_ */
