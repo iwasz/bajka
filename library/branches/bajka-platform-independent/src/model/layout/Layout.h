@@ -18,5 +18,6 @@
 #include "Align.h"
 #include "TableGroup.h"
 #include "TableGroupProperties.h"
+#include "ScreenGroupProperties.h"
 
 #endif /* LAYOUT_H_ */

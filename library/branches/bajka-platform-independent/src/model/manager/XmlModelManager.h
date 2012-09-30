@@ -18,14 +18,14 @@ class XmlModelManager : public IModelManager {
 public:
 
         C__ (void)
-
         XmlModelManager () : dirty (true), mainContainer (NULL) {}
         virtual ~XmlModelManager () {}
+
         virtual void load (std::string const &file, std::string const &name);
         virtual Model::IModel *get (std::string const &file, std::string const &name);
         virtual bool run (Util::IShell *shell);
 
-private:
+protected:
 
         // Wartość początkowa
         std::string p_ (file);

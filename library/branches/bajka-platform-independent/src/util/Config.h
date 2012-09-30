@@ -34,8 +34,7 @@ struct Config {
 
         /**
          * Auto-rozdzielczość. Jeśli ustawione na true to wartości viewportWidth i viewportHeight
-         * są zamazywane szerokością i wysokością ekranu w pikselach. Ich ustawianie nie ma wówczas
-         * rezultatu.
+         * są zamazywane szerokością i wysokością ekranu (rozdzielczością desktopu) w pikselach.
          */
         bool            p_ (autoViewport);
 
