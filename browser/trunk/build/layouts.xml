@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
-<!--   <import resource="standard.xml" /> -->
-
-<!--   <Config id="config" viewportWidth="800" viewportHeight="600" autoProjection="true" windowCaption="Bajka browser, F5 to refresh" model="@scene" /> -->
-
   <Group id="scene">
     <ClearScreenGrid set-as="view" color="6b6b6bff" gridColor="616161ff" density="20" />
 
@@ -56,7 +52,7 @@
       <label add-to="children" text="A1" />
       <label add-to="children" text="B2" />
       <label add-to="children" text="C3" />
-      <ref bean="rectWidget" set-as="view" />
+<!--       <ref bean="rectWidget" set-as="view" /> -->
     </LinearGroup>
 
     <LinearGroup add-to="children" translate="-145, 95" spacing="5" margin="5" wrapContentsW="true" height="200" type="vertical" vGravity="top">
@@ -97,8 +93,8 @@
     </LinearGroup>
 
 <!--     <TableGroup add-to="children" translate="45, 95" cols="3" wrapContentsW="true" wrapContentsH="true" heterogeneous="false" margin="10" spacing="10"> -->
-    <TableGroup add-to="children" translate="45, 95" cols="3" width="300" height="200" margin="10" spacing="10">
-      <label add-to="children" text="Ala" />
+    <TableGroup add-to="children" translate="45, 95" cols="3" width="300" height="200" margin="10" spacing="0">
+      <label add-to="children" text="Asia" />
       <label add-to="children" text="ma" />
       <label add-to="children" text="kota," />
       <label add-to="children" text="kot" />
@@ -110,7 +106,14 @@
       <ref bean="rectWidget" set-as="view" />
     </TableGroup>
 
-    <button add-to="children" file="menu.xml" name="scene" />
+    <LinearGroup add-to="children" type="vertical" spacing="10" translate="0, -200" wrapContentsW="true" height="200" init-method="init">
+      <button add-to="children" file="menu.xml" name="scene" text="Menu" />
+      <button add-to="children" file="menu.xml" name="scene" text="Akumulator" />
+      <button add-to="children" file="menu.xml" name="scene" text="Pierdzirator" />
+      <button add-to="children" file="menu.xml" name="scene" text="Zembator" />
+    </LinearGroup>
+
+    <button add-to="children" file="menu.xml" name="scene" text="Back" />
     
   </Group>
 

@@ -2,6 +2,10 @@
 <beans>
   <Group id="scene" init-method="init">
     <ClearScreenGrid set-as="view" color="6b6b6bff" gridColor="616161ff" density="20" />
-    <button add-to="children" file="layouts.xml" name="scene" />
+    
+    <LinearGroup add-to="children" type="vertical" spacing="10" wrapContentsW="true" wrapContentsH="true" init-method="init">
+      <button add-to="children" file="layouts.xml" name="scene" text="Layouts" />
+      <button add-to="children" file="swinia.xml" name="scene" text="Swinia" />
+    </LinearGroup>    
   </Group>
 </beans>

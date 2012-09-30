@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+  <RelativeGroup id="scene">
+    <ScreenGroupProperties set-as="groupProps" fillW="true" fillH="true" />
+    <ClearScreen set-as="view" color="5aa3fcff" />
+
+    <image add-to="children" path="swinia.png">
+      <RelativeGroupProperties set-as="groupProps" translate="50, 40" hAlign="center" vAlign="center"/>
+    </image>    
+        
+    <imgButton add-to="children" path="left.png" file="menu.xml" name="scene">
+      <RelativeGroupProperties set-as="groupProps" translate="5, 50" hAlign="center" vAlign="center"/>
+    </imgButton>
+
+    <imgButton add-to="children" path="right.png" file="menu.xml" name="scene">
+      <RelativeGroupProperties set-as="groupProps" translate="95, 50" hAlign="center" vAlign="center"/>
+    </imgButton>
+    
+    <loopImage add-to="children" path="grass.png" width="1300" height="300">
+      <RelativeGroupProperties set-as="groupProps" translate="-10, -10" hAlign="right" vAlign="top"/>
+    </loopImage>
+
+  </RelativeGroup>
+</beans>
+
+<!-- 
+Ikony : http://www.pixel-mixer.com/
+ -->

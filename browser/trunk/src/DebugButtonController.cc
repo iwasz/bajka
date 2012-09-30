@@ -15,8 +15,11 @@ using namespace Controller;
 
 IController::HandlingType DebugButtonController::onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v)
 {
-        View::Primitive *primitive = static_cast <View::Primitive *> (v);
-        primitive->setForeground (clicked);
+        View::Primitive *primitive = dynamic_cast <View::Primitive *> (v);
+
+        if (primitive) {
+                primitive->setForeground (clicked);
+        }
 
         if (modelManager) {
                 modelManager->load (file, name);
@@ -29,8 +32,10 @@ IController::HandlingType DebugButtonController::onButtonPress (Event::ButtonPre
 
 IController::HandlingType DebugButtonController::onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v)
 {
-        View::Primitive *primitive = static_cast <View::Primitive *> (v);
-        primitive->setForeground (normal);
+        View::Primitive *primitive = dynamic_cast <View::Primitive *> (v);
+        if (primitive) {
+                primitive->setForeground (normal);
+        }
         return HANDLED;
 }
 
@@ -38,8 +43,10 @@ IController::HandlingType DebugButtonController::onButtonRelease (Event::ButtonR
 
 IController::HandlingType DebugButtonController::onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
 {
-        View::Primitive *primitive = static_cast <View::Primitive *> (v);
-        primitive->setForeground (hover);
+        View::Primitive *primitive = dynamic_cast <View::Primitive *> (v);
+        if (primitive) {
+                primitive->setForeground (hover);
+        }
         return HANDLED;
 }
 
@@ -47,7 +54,9 @@ IController::HandlingType DebugButtonController::onMouseOver (Event::MouseMotion
 
 IController::HandlingType DebugButtonController::onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
 {
-        View::Primitive *primitive = static_cast <View::Primitive *> (v);
-        primitive->setForeground (normal);
+        View::Primitive *primitive = dynamic_cast <View::Primitive *> (v);
+        if (primitive) {
+                primitive->setForeground (normal);
+        }
         return HANDLED;
 }
