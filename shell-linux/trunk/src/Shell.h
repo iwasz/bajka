@@ -18,6 +18,9 @@ namespace Model {
 class IModel;
 }
 
+/*
+ * TODO Ta klasa ma wiele metod, ktore nie muszą być w shelu, tylko powinny być w kodzie wspólny, czyli w bajce.
+ */
 class Shell : public Util::IShell {
 public:
 
@@ -47,6 +50,7 @@ private:
         void loop ();
         void destroy ();
         void overrideConfig (Util::ShellConfig const &cfg);
+        void updateLayout (Model::IModel *root);
         friend Util::IShell *shell ();
 
 private:
