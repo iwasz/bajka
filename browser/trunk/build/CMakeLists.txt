@@ -29,6 +29,7 @@ link_directories("/home/iwasz/local/lib")
 # Boost, można zakomentowa, you can skip this
 find_package (Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
+link_directories(${Boost_LIBRARY_DIRS})
 
 include (FindPkgConfig)
 pkg_check_modules (TILIAE REQUIRED "tiliae")
@@ -55,3 +56,5 @@ TARGET_LINK_LIBRARIES (browser ${TILIAE_LIBRARIES})
 TARGET_LINK_LIBRARIES (browser ${BAJKA_LIBRARIES})
 TARGET_LINK_LIBRARIES (browser ${SHELL_LIBRARIES})
 TARGET_LINK_LIBRARIES (browser chipmunk)
+TARGET_LINK_LIBRARIES (browser boost_filesystem)
+TARGET_LINK_LIBRARIES (browser boost_system)
