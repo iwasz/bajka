@@ -34,7 +34,8 @@ void initOpenGl (Util::Config *config)
         float rY;
 
         if (config->projectionHeight == 0) {
-                config->projectionHeight = rY = rX * aspectRatio;
+                rY = rX * aspectRatio;
+                config->projectionHeight = rY * 2;
         }
         else {
                 rY = config->projectionHeight / 2;

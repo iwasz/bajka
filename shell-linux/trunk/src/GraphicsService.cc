@@ -97,6 +97,7 @@ SDL_Surface *GraphicsService::createSurface (int w, int h)
 
 View::IBitmap *GraphicsService::expandSurfacePowerOf2 (View::IBitmap *input, Geometry::Box const *region)
 {
+        return NULL;
 }
 
 /****************************************************************************/

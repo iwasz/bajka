@@ -37,6 +37,7 @@
 #include "model/IGroup.h"
 #include "model/layout/Align.h"
 #include "model/layout/LinearGroup.h"
+#include "model/layout/ScreenGroupProperties.h"
 
 using namespace Container;
 using Reflection::Manager;
@@ -62,7 +63,6 @@ struct Impl {
 
         Impl () : config (NULL),
                 model (NULL),
-//                dropIteration_ (false),
                 loopActive (true) {}
 
         U::Config *config;
@@ -70,8 +70,6 @@ struct Impl {
         Event::EventIndex eventIndex;
         Event::PointerInsideIndex pointerInsideIndex;
         EventDispatcher dispatcher;
-
-//        bool dropIteration_;
         bool loopActive;
         Event::UpdateEvent updateEvent;
 };
@@ -156,13 +154,20 @@ void Shell::loop ()
 
         int loopDelayMs = impl->config->loopDelayMs;
 
+        if (impl->model && !impl->config->modelManager) {
+                updateLayout (impl->model);
+        }
+
         while (impl->loopActive) {
 
                 if (impl->config->modelManager) {
-                        impl->config->modelManager->run (this);
+                        bool newModelLoaded = impl->config->modelManager->run (this);
+
+                        if (newModelLoaded) {
+                                updateLayout (impl->model);
+                        }
                 }
 
-//                impl->dropIteration_ = false;
                 uint32_t currentMs = getCurrentMs ();
                 int deltaMs = currentMs - lastMs;
                 lastMs = currentMs;
@@ -181,15 +186,10 @@ void Shell::loop ()
                 // Run models, views and controllers.
                 // Generuj eventy.
                 impl->dispatcher.pollAndDispatch (impl->model, impl->eventIndex, &impl->pointerInsideIndex);
-//                checkContinue ();
-
-//                checkContinue ();
                 impl->updateEvent.setDeltaMs (deltaMs);
                 impl->model->update (&impl->updateEvent);
-//                checkContinue ();
 
                 Tween::Manager::getMain ()->update (deltaMs);
-//                checkContinue ();
 
                 // swap buffers to display, since we're double buffered.
                 swapBuffers ();
@@ -275,26 +275,10 @@ void Shell::setModel (Model::IModel *m)
 
 void Shell::reset ()
 {
-//        dropIteration ();
-
         impl->eventIndex.clear ();
         impl->pointerInsideIndex.clear ();
         impl->dispatcher.reset ();
 }
-
-/****************************************************************************/
-
-//void Shell::dropIteration ()
-//{
-//        impl->dropIteration_ = true;
-//}
-//
-///****************************************************************************/
-//
-//bool Shell::getDropIteration () const
-//{
-//        return impl->dropIteration_;
-//}
 
 /****************************************************************************/
 
@@ -326,5 +310,38 @@ void Shell::notifyUnloadModel ()
                 m->getController ()->onManagerUnload (&event, m, m->getView ());
         }
 
+}
+
+/****************************************************************************/
+
+void Shell::updateLayout (Model::IModel *root)
+{
+        M::IGroupProperties const *props = root->getGroupProps ();
+
+        if (!props) {
+                return;
+        }
+
+        M::ScreenGroupProperties const *scrProps = dynamic_cast <M::ScreenGroupProperties const *> (props);
+        M::IBox *box = dynamic_cast <M::IBox *> (root);
+        Geometry::Point currentT = root->getTranslate ();
+
+        if (scrProps->fillW) {
+                currentT.x = -impl->config->projectionWidth / 2.0;
+
+                if (box) {
+                        box->setWidth (impl->config->projectionWidth);
+                }
+        }
+
+        if (scrProps->fillH) {
+                currentT.y = -impl->config->projectionHeight / 2.0;
+
+                if (box) {
+                        box->setHeight (impl->config->projectionHeight);
+                }
+        }
+
+        root->setTranslate (currentT);
 }
 
