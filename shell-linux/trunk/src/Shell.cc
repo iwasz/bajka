@@ -164,6 +164,7 @@ void Shell::loop ()
                         bool newModelLoaded = impl->config->modelManager->run (this);
 
                         if (newModelLoaded) {
+                                assert (impl->model);
                                 updateLayout (impl->model);
                         }
                 }
