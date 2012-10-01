@@ -70,11 +70,14 @@ G::Point RelativeGroup::calculateTranslation (IModel *child, RelativeGroupProper
         float aabbH = aabb.getHeight ();
 
         G::Point tReq = props->translate;
-        G::Point tAct = child->getTranslate ();
+//        G::Point tAct = child->getTranslate ();
         G::Point ct;
 
-        ct.x = ((tReq.x >= 0) ? (getWidth() * tReq.x / 100.0) : (tAct.x));
-        ct.y = ((tReq.y >= 0) ? (getHeight () * tReq.y / 100.0) : (tAct.y));
+//        Narazie robię tak, że translate jest zawsze brane pod uwagę, nawet jak jest nieustawione.
+//        ct.x = ((tReq.x >= 0) ? (getWidth() * tReq.x / 100.0) : (tAct.x));
+//        ct.y = ((tReq.y >= 0) ? (getHeight () * tReq.y / 100.0) : (tAct.y));
+        ct.x = getWidth() * tReq.x / 100.0;
+        ct.y = getHeight () * tReq.y / 100.0;
 
         if (props->hAlign == HA_RIGHT && props->vAlign == VA_TOP) {
                 // zwróć ct, ct jest gotowe.

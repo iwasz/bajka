@@ -23,8 +23,8 @@ public:
 
         C__ (void)
         Color ();
-        C_ (bool)
-        Color (bool random);
+//        C_ (bool)
+//        Color (bool random);
         Color (double r, double g, double b, double a = 1.0) : r (r), g (g), b (b), a (a) {}
         Color (unsigned int color);
         C_ (std::string const &)

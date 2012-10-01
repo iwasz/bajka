@@ -17,21 +17,21 @@ Color::Color () : r (0.0), g (0.0), b (0.0), a (1.0) {}
 
 /****************************************************************************/
 
-Color::Color (bool random)
-{
-        if (random) {
-                r = rand () / double (RAND_MAX);
-                g = rand () / double (RAND_MAX);
-                b = rand () / double (RAND_MAX);
-                a = 1;
-        }
-        else {
-                r = 0;
-                g = 0;
-                b = 0;
-                a = 1;
-        }
-}
+//Color::Color (bool random)
+//{
+//        if (random) {
+//                r = rand () / double (RAND_MAX);
+//                g = rand () / double (RAND_MAX);
+//                b = rand () / double (RAND_MAX);
+//                a = 1;
+//        }
+//        else {
+//                r = 0;
+//                g = 0;
+//                b = 0;
+//                a = 1;
+//        }
+//}
 
 /****************************************************************************/
 
