@@ -25,11 +25,11 @@
   <Rectangle id="rectWidget" foreground="0000ffff" background="00000000"/>
 
   <!-- TODO Zawsze ten samo kolor jest -->
-  <Color id="randomColor" singleton="false">
-    <cargs>
-      <value type="bool">true</value>
-    </cargs>
-  </Color>
+<!--   <Color id="randomColor" singleton="false"> -->
+<!--     <cargs> -->
+<!--       <value type="bool">true</value> -->
+<!--     </cargs> -->
+<!--   </Color> -->
   
   <TTFFont id="defaultFont" renderType="0" hinting="1">
     <cargs>
@@ -38,10 +38,35 @@
     </cargs>
   </TTFFont>
 
-  <LinearGroup id="button" translate="0, 0" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true" type="vertical" init-method="init">
-    <label add-to="children" text="Button"/>
-    <Rectangle set-as="view" foreground="ff0000ff" background="00000000" thickness="3"/>
-    <DebugButtonController set-as="controller" eventMask="0xffff" clicked="ffff00ff"  normal="ff0000ff"  hover="ff00ffff" modelManager="@modelManager" />
+  <TTFFont id="volter48" renderType="0" hinting="1">
+    <cargs>
+      <value type="text">volter.ttf</value>
+      <value type="int">48</value>
+    </cargs>
+  </TTFFont>  
+
+  <Color id="orange">
+    <cargs>
+      <value>ff4411ff</value>
+    </cargs>
+  </Color> 
+
+  <Color id="crimson">
+    <cargs>
+      <value>d44015ff</value>
+    </cargs>
+  </Color> 
+
+  <Color id="siusiu">
+    <cargs>
+      <value>fafac6ff</value>
+    </cargs>
+  </Color> 
+
+  <LinearGroup id="button" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true" type="vertical" init-method="init">
+    <label add-to="children" text="Button" view.foreground="@orange" />
+    <Rectangle set-as="view" foreground="@orange" background="00000000" thickness="3"/>
+    <DebugButtonController set-as="controller" eventMask="0xffff" clicked="@siusiu"  normal="@orange"  hover="@crimson" modelManager="@modelManager" />
     <prop-alias name="file" value="controller.file" />
     <prop-alias name="name" value="controller.name" />
     <prop-alias name="text" value="children.0.view.text" />

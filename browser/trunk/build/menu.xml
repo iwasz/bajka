@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
-  <Group id="scene" init-method="init">
-    <ClearScreenGrid set-as="view" color="6b6b6bff" gridColor="616161ff" density="20" />
-    
+  <RelativeGroup id="scene" init-method="init">
+    <ScreenGroupProperties set-as="groupProps" fillW="true" fillH="true" />
+    <ClearScreen set-as="view" color="6b6b6bff" />
+
+    <label add-to="children" text="Demka" view.font="@volter48">
+      <RelativeGroupProperties set-as="groupProps" vAlign="center" hAlign="center" translate="50, 90"/>
+    </label>
+
     <LinearGroup add-to="children" type="vertical" spacing="10" wrapContentsW="true" wrapContentsH="true" init-method="init">
       <button add-to="children" file="layouts.xml" name="scene" text="Layouts" />
       <button add-to="children" file="swinia.xml" name="scene" text="Swinia" />
-    </LinearGroup>    
-  </Group>
+      <button add-to="children" file="tweens.xml" name="scene" text="Tween test" />
+      <RelativeGroupProperties set-as="groupProps" vAlign="center" hAlign="center" translate="50, 50"/>
+    </LinearGroup>
+  </RelativeGroup>
 </beans>
