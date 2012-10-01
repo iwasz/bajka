@@ -27,11 +27,11 @@ struct RelativeGroupProperties : public IGroupProperties {
 
         C__ (void)
         RelativeGroupProperties () :
-                hAlign (HA_LEFT),
-                vAlign (VA_BOTTOM),
+                hAlign (HA_CENTER),
+                vAlign (VA_CENTER),
                 width (-1),
                 height (-1),
-                translate (Geometry::makePoint (-1, -1)) {}
+                translate (Geometry::makePoint (0, 0)) {}
 
         virtual ~RelativeGroupProperties () {}
 
@@ -61,8 +61,8 @@ struct RelativeGroupProperties : public IGroupProperties {
 
         /**
          * Przesunięcie względem rozmiarów rodzica. Działa tylko w gdy rodzic jest
-         * typu RelativeGroup. Jednostką jest procent. Wartość ujemna któregoś z koordynatów
-         * oznacza wartość nieustaloną i nie brana pod uwagę.
+         * typu RelativeGroup. Jednostką jest procent. <del>Wartość ujemna któregoś z koordynatów
+         * oznacza wartość nieustaloną i nie brana pod uwagę.</del>
          */
         Geometry::Point P_ (translate);
 
