@@ -1,3 +1,18 @@
+<!--
+timeline
+setTween
+multiTween
+atomicTween
+ to
+ from (target, duration, ease).
+  rel
+  abs
+ repeat (num)
+ repeat (yoyo)
+ delay (ms)
+  
+-->
+
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
   <Group id="scene" init-method="init">
