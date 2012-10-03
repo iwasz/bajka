@@ -51,12 +51,28 @@ Controller::IController::HandlingType TweenButtonController::onButtonPress (Even
 
 
 
-        from (testModel, 2000, SINE_INOUT)->
-                abs (X, 100)->
-                abs (Y, 100)->
-//                repeat (2, false)->
-                start ();
+//        from (testModel, 2000, SINE_INOUT)->
+//                abs (X, 100)->
+//                abs (Y, 100)->
+//                repeat (2, true)->
+//                delay (200)->
+//                start ();
 
+
+//        to (testModel, 1000, CUBIC_INOUT)->
+//                rel (SCALE, 4)->
+//                rel (ANGLE, 90)->
+//                rel (X, 100)->
+//                rel (Y, 100)->
+//                delay (200)->
+//                repeat (1, true)->
+//                start ();
+
+
+        static char const *input = "{\"type\":\"to\", \"obj\":\"@testModel\", \"t\":1000, \"ease\":\"CUBIC_INOUT\", \"delay\":100, \"repeat\":3, \"targets\":{\"X\":100, \"Y\":\"100\"}}";
+
+        Tween::Parser p;
+        p.parse (input);
 
 	return Controller::ButtonController::onButtonPress (e, m, v);
 }
