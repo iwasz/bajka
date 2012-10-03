@@ -48,8 +48,7 @@ public:
 
         friend AtomicTween *to (void *targetObject, unsigned int durationMs, Ease ease);
         friend AtomicTween *from (void *targetObject, unsigned int durationMs, Ease ease);
-
-//        friend void Manager::freeAtomicTween (AtomicTween *a);
+        friend class Parser;
 
         enum Type { TO, FROM };
 
