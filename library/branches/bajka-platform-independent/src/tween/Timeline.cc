@@ -54,12 +54,12 @@ void Timeline::updateRun (int deltaMs, bool direction)
 
 bool Timeline::checkEnd (bool direction)
 {
-//        return (direction && (*current)->getState () == FINISHED && ++current == tweens.end ()) ||
-//               (!direction && (*currentr)->getState () == INIT && ++currentr == tweens.rend ());
+        return (direction && (*current)->getState () == FINISHED && ++current == tweens.end ()) ||
+               (!direction && (*currentr)->getState () == INIT && ++currentr == tweens.rend ());
 
-        ++current;
-        ++currentr;
-        return ((*current)->getState () == END && current == tweens.end ());
+//        ++current;
+//        ++currentr;
+//        return ((*current)->getState () == END && current == tweens.end ());
 }
 
 /****************************************************************************/

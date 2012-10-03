@@ -14,5 +14,6 @@
 #include "Timeline.h"
 #include "MultiTween.h"
 #include "SetTween.h"
+#include "Parser.h"
 
 #	endif /* TWEEN_H_ */
