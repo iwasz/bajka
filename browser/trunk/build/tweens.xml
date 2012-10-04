@@ -21,10 +21,17 @@ atomicTween
     <ref bean="myRect" add-to="children" />
   </Group>
 
-  <LinearGroup id="tweenButton" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true" type="vertical" init-method="init">
+  <LinearGroup id="tweenButton" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true" type="vertical" init-method="init" abstract="true">
     <label add-to="children" text="Button" view.foreground="@orange" />
     <Rectangle set-as="view" foreground="@orange" background="00000000" thickness="3" />
-    <TweenButtonController set-as="controller" eventMask="0xffff" />
+    <TweenButtonController set-as="controller"
+      eventMask="0xffff">
+      <TweenFactory set-as="tweenFactory" container="@#container">
+        <value set-as="source"><![CDATA[
+          {"type":"to", "obj":"myRect", "t":500, "ease":"CUBIC_INOUT", "delay":100, "repeat":3, "targets":[{"X":500}]}
+        ]]></value>
+      </TweenFactory>
+    </TweenButtonController>
     <prop-alias name="text" value="children.0.view.text" />
     <prop-alias name="testModel" value="controller.testModel" />
   </LinearGroup>
