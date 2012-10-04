@@ -22,15 +22,11 @@ Dodatkowe:
 <beans>
   <import resource="standard.xml" />
 
-<!--   <Config id="config" viewportWidth="1280" viewportHeight="720" autoProjection="true" windowCaption="Bajka browser"> -->
-  <Config id="config" viewportWidth="160" viewportHeight="100" projectionWidth="1280" projectionHeight="720" windowCaption="Bajka browser">
+  <Config id="config" viewportWidth="1280" viewportHeight="720" autoProjection="true" windowCaption="Bajka browser">
+<!--   <Config id="config" viewportWidth="160" viewportHeight="100" projectionWidth="1280" projectionHeight="720" windowCaption="Bajka browser"> -->
     <ref set-as="modelManager" bean="modelManager" />
   </Config>
   
-<!--   <ReloadableXmlModelManager id="modelManager" file="menu.xml" name="scene"> -->
-<!--     <ref set-as="mainContainer" bean="#container" /> -->
-<!--   </ReloadableXmlModelManager> -->
-
   <ReloadableXmlModelManager id="modelManager" file="menu.xml" name="scene" mainContainer="@#container"/>
 
 </beans>
