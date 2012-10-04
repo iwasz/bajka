@@ -69,7 +69,7 @@ protected:
         void updateRun (int deltaMs, bool direction);
         bool checkEnd (bool direction);
 
-private:
+public:
 
         IEquation const *equation;
         int durationMs;

@@ -130,15 +130,15 @@ Tween::AtomicTween *ParserImpl::parseTo (json_t *data)
                         throw TweenParserException ("tweenParseTo () : target is not an object");
                 }
 
-                const char *key;
+//                const char *key;
                 json_t *value;
 
                 void *iter = json_object_iter (target);
                 while (iter) {
-                    key = json_object_iter_key (iter);
+//                    key = json_object_iter_key (iter);
                     value = json_object_iter_value (iter);
 
-                    tween->abs(X, json_integer_value (value));
+                    tween->abs(Y, json_integer_value (value));
 
 
                     iter = json_object_iter_next (target, iter);
