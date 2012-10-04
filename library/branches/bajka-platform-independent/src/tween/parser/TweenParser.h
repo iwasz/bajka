@@ -9,34 +9,29 @@
 #ifndef TWEENPARSER_H_
 #define TWEENPARSER_H_
 
-#include "core/variant/Variant.h"
-
-namespace Container {
-class BeanFactoryContainer;
-}
+#include <core/variant/Variant.h>
+#include <core/Object.h>
+#include <core/Exception.h>
+#include "ITargetResolver.h"
 
 namespace Tween {
-class AtomicTween;
-class ITween;
 class ParserImpl;
+class ITween;
 
 /**
  * Fabryka tweenów z reprezentacji JSON.
  */
-class Parser {
+class TweenParser {
 public:
 
-        Parser (Container::BeanFactoryContainer *c = NULL) : container (c) {}
+        TweenParser (ITargetResolver *resolver);
+        virtual ~TweenParser ();
+
         Tween::ITween *parse (const char *input);
 
 private:
 
-        Tween::AtomicTween *parseTo (json_t *data);
-        Core::Variant resolveObject (const char *input);
-
-private:
-
-        Container::BeanFactoryContainer *container;
+        ParserImpl *impl;
 };
 
 /**
@@ -47,6 +42,6 @@ struct TweenParserException : public Core::Exception {
         virtual ~TweenParserException () throw () {}
 };
 
-} //
+} // nam
 
 #endif /* TWEENPARSER_H_ */

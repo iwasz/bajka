@@ -6,15 +6,24 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_TWEEN_H_
-#define BAJKA_TWEEN_H_
+#ifndef TWEEN_FACTORY_H_
+#define TWEEN_FACTORY_H_
 
-#include "accessor/Accessor.h"
-#include "ease/Ease.h"
-#include "parser/Parser.h"
-#include "Timeline.h"
-#include "MultiTween.h"
-#include "SetTween.h"
-#include "AtomicTween.h"
+#include "ITargetResolver.h"
 
-#	endif /* TWEEN_H_ */
+namespace Tween {
+class ITween;
+
+/**
+ * Interfejs fabryki tweenów. Definicję podajemy (raczej) JSONem, a tatget objecty
+ * są resolvowane w metodzie resolve i to ona definiuje jak podajemy referencję
+ * do targetów.
+ */
+struct ITweenFactory : public ITargetResolver, public Core::Object {
+        virtual ~ITweenFactory () {}
+        virtual Tween::ITween *create () = 0;
+};
+
+} // nam
+
+#endif /* TWEENPARSER_H_ */

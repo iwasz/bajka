@@ -6,15 +6,23 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_TWEEN_H_
-#define BAJKA_TWEEN_H_
+#include "TweenFactory.h"
+#include <cassert>
+#include <core/StrUtil.h>
 
-#include "accessor/Accessor.h"
-#include "ease/Ease.h"
-#include "parser/Parser.h"
-#include "Timeline.h"
-#include "MultiTween.h"
-#include "SetTween.h"
-#include "AtomicTween.h"
+namespace Tween {
 
-#	endif /* TWEEN_H_ */
+Tween::ITween *TweenFactory::create ()
+{
+        return parser.parse (source.c_str ());
+}
+
+/****************************************************************************/
+
+Core::Variant TweenFactory::resolve (const char *input)
+{
+        assert (container);
+        return container->getBean (toStr (input));
+}
+
+} /* namespace Tween */
