@@ -38,6 +38,8 @@
 #include "model/layout/Align.h"
 #include "model/layout/LinearGroup.h"
 #include "model/layout/ScreenGroupProperties.h"
+//#include <tween/Parser.h>
+//#include <tween/ITween.h>
 
 using namespace Container;
 using Reflection::Manager;
@@ -104,6 +106,9 @@ int Shell::run (Util::ShellConfig const &cfg)
                         container->addConversion (typeid (Model::HGravity), Model::stringToHGravity);
                         container->addConversion (typeid (Model::VGravity), Model::stringToVGravity);
                         container->addConversion (typeid (Model::LinearGroup::Type), Model::stringToLinearGroupType);
+
+//                        Tween::Parser parser (container.get ());
+//                        container->addConversion (typeid (Tween::ITween), &parser);
 
                         ContainerFactory::init (container.get (), metaContainer.get ());
                         impl->config = vcast <U::Config *> (container->getBean ("config"));
