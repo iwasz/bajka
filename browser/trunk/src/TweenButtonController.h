@@ -10,6 +10,7 @@
 #define TWEEN_BUTTONCONTROLLER_H_
 
 #include "controller/ButtonController.h"
+#include "tween/parser/ITweenFactory.h"
 
 class TweenButtonController : public Controller::ButtonController {
 public:
@@ -23,7 +24,8 @@ public:
 
 private:
 
-        Model::IModel *p_ (testModel);
+        Model::IModel           *p_ (testModel);
+        Tween::ITweenFactory    *p_ (tweenFactory);
 
 	E_ (TweenButtonController)
 

@@ -69,11 +69,8 @@ Controller::IController::HandlingType TweenButtonController::onButtonPress (Even
 //                start ();
 
 
-        static char const *input = "{\"type\":\"to\", \"obj\":\"@testModel\", \"t\":1000, \"ease\":\"CUBIC_INOUT\", \"delay\":100, \"repeat\":3, \"targets\":{\"X\":100, \"Y\":\"100\"}}";
-
-        Tween::Parser p;
-        p.parse (input);
-
+        assert (tweenFactory);
+        tweenFactory->create()->start ();
 	return Controller::ButtonController::onButtonPress (e, m, v);
 }
 
