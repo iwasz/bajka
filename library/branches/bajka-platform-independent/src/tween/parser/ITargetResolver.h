@@ -6,15 +6,19 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_TWEEN_H_
-#define BAJKA_TWEEN_H_
+#ifndef ITARGETRESOLVER_H_
+#define ITARGETRESOLVER_H_
 
-#include "accessor/Accessor.h"
-#include "ease/Ease.h"
-#include "parser/Parser.h"
-#include "Timeline.h"
-#include "MultiTween.h"
-#include "SetTween.h"
-#include "AtomicTween.h"
+namespace Tween {
 
-#	endif /* TWEEN_H_ */
+/**
+ *
+ */
+class ITargetResolver {
+public:
+        virtual ~ITargetResolver() {}
+        virtual Core::Variant resolve (const char *input) = 0;
+};
+
+} /* namespace Tween */
+#endif /* ITARGETRESOLVER_H_ */

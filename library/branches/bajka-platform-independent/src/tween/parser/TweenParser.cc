@@ -8,16 +8,40 @@
 
 #include <cstring>
 #include <jansson.h>
-#include "core/Exception.h"
 #include <sstream>
-#include "AtomicTween.h"
-#include "Parser.h"
-#include "Manager.h"
-#include "core/variant/Cast.h"
+#include "tween/AtomicTween.h"
+#include "tween/Manager.h"
+#include "tween/accessor/AffineAccessor.h"
+#include "TweenParser.h"
+#include <core/variant/Cast.h>
+#include <core/StrUtil.h>
 
 namespace Tween {
 
-Tween::ITween *Parser::parse (const char *input)
+struct ParserImpl {
+        Tween::AtomicTween *parseTo (json_t *data);
+
+        ITargetResolver *resolver;
+};
+
+/****************************************************************************/
+
+TweenParser::TweenParser (ITargetResolver *resolver)
+{
+        impl = new ParserImpl;
+        impl->resolver = resolver;
+}
+
+/****************************************************************************/
+
+TweenParser::~TweenParser ()
+{
+        delete impl;
+}
+
+/****************************************************************************/
+
+Tween::ITween *TweenParser::parse (const char *input)
 {
         json_t *root = NULL;
         json_error_t error;
@@ -44,7 +68,7 @@ Tween::ITween *Parser::parse (const char *input)
         const char *typeStr = json_string_value (type);
 
         if (strcmp (typeStr, "to") == 0) {
-                return parseTo (root);
+                return impl->parseTo (root);
         }
         else if (strcmp (typeStr, "from") == 0) {
 
@@ -62,7 +86,7 @@ Tween::ITween *Parser::parse (const char *input)
 
 /****************************************************************************/
 
-Tween::AtomicTween *Parser::parseTo (json_t *data)
+Tween::AtomicTween *ParserImpl::parseTo (json_t *data)
 {
         AtomicTween *tween = Manager::getMain ()->newAtomicTween ();
         tween->type = AtomicTween::TO;
@@ -73,7 +97,8 @@ Tween::AtomicTween *Parser::parseTo (json_t *data)
         // Opcjonalny;
         if (field && json_is_string (field)) {
                 fieldStr = json_string_value (field);
-                Core::Variant obj = resolveObject (fieldStr);
+                assert (resolver);
+                Core::Variant obj = resolver->resolve (fieldStr);
                 tween->object = vcast <void *> (obj);
         }
 
@@ -87,14 +112,40 @@ Tween::AtomicTween *Parser::parseTo (json_t *data)
 
         tween->durationMs = json_integer_value (field);
 
+//        LINEAR_INOUT
+        tween->equation = Manager::getMain ()->getEase (LINEAR_INOUT);
+
+
+        field = json_object_get (data, "targets");
+        if (!field || !json_is_array (field)) {
+                throw TweenParserException ("tweenParseTo () : targets are not an array instance, or are empty");
+        }
+
+
+        for (size_t i = 0; i < json_array_size (field); ++i) {
+
+                json_t *target = json_array_get (field, i);
+
+                if (!json_is_object(target)) {
+                        throw TweenParserException ("tweenParseTo () : target is not an object");
+                }
+
+                const char *key;
+                json_t *value;
+
+                void *iter = json_object_iter (target);
+                while (iter) {
+                    key = json_object_iter_key (iter);
+                    value = json_object_iter_value (iter);
+
+                    tween->abs(X, json_integer_value (value));
+
+
+                    iter = json_object_iter_next (target, iter);
+                }
+        }
+
         return tween;
-}
-
-/****************************************************************************/
-
-Core::Variant Parser::resolveObject (const char *input)
-{
-        return Core::Variant ();
 }
 
 } // namespace

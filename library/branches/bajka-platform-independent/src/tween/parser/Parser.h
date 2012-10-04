@@ -6,15 +6,12 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_TWEEN_H_
-#define BAJKA_TWEEN_H_
+#ifndef BAJKA_TWEEN_PARSER_H_
+#define BAJKA_TWEEN_PARSER_H_
 
-#include "accessor/Accessor.h"
-#include "ease/Ease.h"
-#include "parser/Parser.h"
-#include "Timeline.h"
-#include "MultiTween.h"
-#include "SetTween.h"
-#include "AtomicTween.h"
+#include "ITargetResolver.h"
+#include "ITweenFactory.h"
+#include "TweenParser.h"
+#include "TweenFactory.h"
 
-#	endif /* TWEEN_H_ */
+#endif /* PARSER_H_ */
