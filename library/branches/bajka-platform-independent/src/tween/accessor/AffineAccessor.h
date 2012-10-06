@@ -14,15 +14,22 @@
 
 namespace Tween {
 
+namespace {
+inline Model::IModel *castVoid (void *obj)
+{
+        return dynamic_cast <Model::IModel *> (static_cast <Core::Object *> (obj));
+}
+}
+
 /**
  *
  */
 struct TranslateXAccessor : public IAccessor {
         ~TranslateXAccessor () {}
-        double getValue (void *obj) const { return static_cast <Model::IModel *> (obj)->getTranslate ().x; }
+        double getValue (void *obj) const { return castVoid (obj)->getTranslate ().x; }
         void setValue (void *obj, double value) const
         {
-        	Model::IModel *m = static_cast <Model::IModel *> (obj);
+        	Model::IModel *m = castVoid (obj);
         	Geometry::Point p = m->getTranslate ();
         	p.x = value;
         	m->setTranslate (p);
@@ -36,10 +43,10 @@ unsigned int const X = 0;
  */
 struct TranslateYAccessor : public IAccessor {
         ~TranslateYAccessor () {}
-        double getValue (void *obj) const { return static_cast <Model::IModel *> (obj)->getTranslate ().y; }
+        double getValue (void *obj) const { return castVoid (obj)->getTranslate ().y; }
         void setValue (void *obj, double value) const
         {
-        	Model::IModel *m = static_cast <Model::IModel *> (obj);
+        	Model::IModel *m = castVoid (obj);
         	Geometry::Point p = m->getTranslate ();
         	p.y = value;
         	m->setTranslate (p);
@@ -53,8 +60,8 @@ unsigned int const Y = 1;
  */
 struct ScaleAccessor : public IAccessor {
         ~ScaleAccessor () {}
-        double getValue (void *obj) const { return static_cast <Model::IModel *> (obj)->getScale (); }
-        void setValue (void *obj, double value) const { static_cast <Model::IModel *> (obj)->setScale (value); }
+        double getValue (void *obj) const { return castVoid (obj)->getScale (); }
+        void setValue (void *obj, double value) const { castVoid (obj)->setScale (value); }
 };
 
 unsigned int const SCALE = 2;
@@ -64,8 +71,8 @@ unsigned int const SCALE = 2;
  */
 struct AngleAccessor : public IAccessor {
         ~AngleAccessor () {}
-        double getValue (void *obj) const { return static_cast <Model::IModel *> (obj)->getAngle (); }
-        void setValue (void *obj, double value) const { static_cast <Model::IModel *> (obj)->setAngle (value); }
+        double getValue (void *obj) const { return castVoid (obj)->getAngle (); }
+        void setValue (void *obj, double value) const { castVoid (obj)->setAngle (value); }
 };
 
 unsigned int const ANGLE = 3;

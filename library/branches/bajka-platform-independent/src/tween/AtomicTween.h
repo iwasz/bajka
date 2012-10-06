@@ -43,8 +43,10 @@ public:
         AtomicTween () : AbstractTween (), equation (NULL), durationMs (0), object (NULL), type (TO) {}
         virtual ~AtomicTween () {}
 
-        AtomicTween *abs (unsigned int property, double value) { return target (property, value, true); }
-        AtomicTween *rel (unsigned int property, double value) { return target (property, value, false); }
+        AtomicTween *abs (unsigned int property, double value);
+        AtomicTween *abs (std::string const &property, double value);
+        AtomicTween *rel (unsigned int property, double value);
+        AtomicTween *rel (std::string const &property, double value);
 
         friend AtomicTween *to (void *targetObject, unsigned int durationMs, Ease ease);
         friend AtomicTween *from (void *targetObject, unsigned int durationMs, Ease ease);
@@ -54,7 +56,7 @@ public:
 
 protected:
 
-        AtomicTween *target (unsigned int property, double value, bool abs);
+        AtomicTween *target (IAccessor const *accessor, double value, bool abs);
 
         // Uruchamia się jeden raz na poczatku działania tweena (lub po repeat).
         void initEntry (bool reverse);
