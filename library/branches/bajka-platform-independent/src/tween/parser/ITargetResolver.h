@@ -9,6 +9,8 @@
 #ifndef ITARGETRESOLVER_H_
 #define ITARGETRESOLVER_H_
 
+#include <core/variant/Variant.h>
+
 namespace Tween {
 
 /**
