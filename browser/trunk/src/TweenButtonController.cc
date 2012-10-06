@@ -72,13 +72,14 @@ Controller::IController::HandlingType TweenButtonController::onButtonPress (Even
 
 
 //        assert (tweenFactory);
-        Tween::ITween *t = tweenFactory->create();
-        Tween::AtomicTween *a = dynamic_cast <Tween::AtomicTween *> (t);
-        a->object = testModel;
-        a->start ();
+//        Tween::ITween *t = tweenFactory->create();
+//        Tween::AtomicTween *a = dynamic_cast <Tween::AtomicTween *> (t);
+//        a->object = testModel;
+//        a->start ();
+//
 
-
-//	tweenFactory->create()->start ();
+	std::cerr << "testModel : " << std::hex << testModel << std::endl;
+	tweenFactory->create()->start ();
 	return Controller::ButtonController::onButtonPress (e, m, v);
 }
 
