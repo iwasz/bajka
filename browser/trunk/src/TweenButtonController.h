@@ -9,14 +9,14 @@
 #ifndef TWEEN_BUTTONCONTROLLER_H_
 #define TWEEN_BUTTONCONTROLLER_H_
 
-#include "controller/ButtonController.h"
 #include "tween/parser/ITweenFactory.h"
+#include "DebugButtonController.h"
 
-class TweenButtonController : public Controller::ButtonController {
+class TweenButtonController : public DebugButtonController {
 public:
 
 	C__ (void)
-	b_ ("ButtonController")
+	b_ ("DebugButtonController")
 
 	TweenButtonController () : testModel (NULL) {}
         virtual ~TweenButtonController() {}
