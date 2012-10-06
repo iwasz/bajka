@@ -12,7 +12,7 @@
     <TweenButtonController set-as="controller" eventMask="0xffff">
       <TweenFactory set-as="tweenFactory" container="@#container">
         <value set-as="source"><![CDATA[
-          {"type":"to", "obj":"myRect", "t":2000, "ease":"CUBIC_INOUT", "delay":100, "repeat":3, "targets":[{"X":300}]}
+          {"type":"to", "obj":"myRect", "t":2000, "ease":"QUAD_INOUT", "delay":100, "repeat":3, "targets":[{"X":300}, {"Y":300}, {"ANGLE":180}, {"SCALE":2}]} 
         ]]></value>
       </TweenFactory>
     </TweenButtonController>
