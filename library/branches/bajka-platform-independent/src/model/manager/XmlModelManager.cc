@@ -24,10 +24,10 @@ void XmlModelManager::load (std::string const &param1, std::string const &param2
 
 IModel *XmlModelManager::get (std::string const &param1, std::string const &param2)
 {
-                childContainer.reset ();
-                childContainer = Container::ContainerFactory::createAndInit (Container::CompactMetaService::parseFile (param1), false, mainContainer);
-                IModel *m = ocast <IModel *> (childContainer->getBean (param2));
-                return m;
+        childContainer.reset ();
+        childContainer = Container::ContainerFactory::createAndInit (Container::CompactMetaService::parseFile (param1), false, mainContainer);
+        IModel *m = ocast <IModel *> (childContainer->getBean (param2));
+        return m;
 }
 
 /****************************************************************************/

@@ -42,10 +42,13 @@ public:
         // TODO tymczasowe
         void setTween (ITween *t) { tween = t; }
 
-        void registerAccessor (unsigned int id, IAccessor *a);
+        void registerAccessor (unsigned int id, std::string const &s, IAccessor *a);
 
         IEquation const *getEase (Ease e) const;
+        IEquation const *getEase (std::string const &s) const;
+
         IAccessor const *getAccessor (unsigned int id) const;
+        IAccessor const *getAccessor (std::string const &s) const;
 
 /*--------------------------------------------------------------------------*/
 
@@ -77,11 +80,16 @@ public:
 private:
 
         typedef std::map <Ease, IEquation *> EquationMap;
+        typedef std::map <std::string, IEquation *> EquationMapStr;
+
         typedef std::map <unsigned int, IAccessor *> AccessorMap;
+        typedef std::map <std::string, IAccessor *> AccessorMapStr;
 
         static Manager *main;
         EquationMap equations;
+        EquationMapStr equationsStr;
         AccessorMap accessors;
+        AccessorMapStr accessorsStr;
         ITween *tween;
         std::auto_ptr <Pool> pool;
 };

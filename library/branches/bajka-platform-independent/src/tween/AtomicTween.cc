@@ -121,10 +121,39 @@ bool AtomicTween::checkEnd (bool direction)
 
 /****************************************************************************/
 
-AtomicTween *AtomicTween::target (unsigned int property, double value, bool abs)
+AtomicTween *AtomicTween::abs (unsigned int property, double value)
+{
+        return target (Manager::getMain ()->getAccessor (property), value, true);
+}
+
+/****************************************************************************/
+
+AtomicTween *AtomicTween::abs (std::string const &property, double value)
+{
+        return target (Manager::getMain ()->getAccessor (property), value, true);
+}
+
+/****************************************************************************/
+
+AtomicTween *AtomicTween::rel (unsigned int property, double value)
+{
+        return target (Manager::getMain ()->getAccessor (property), value, false);
+}
+
+/****************************************************************************/
+
+AtomicTween *AtomicTween::rel (std::string const &property, double value)
+{
+        return target (Manager::getMain ()->getAccessor (property), value, false);
+}
+
+/****************************************************************************/
+
+AtomicTween *AtomicTween::target (IAccessor const *accessor, double value, bool abs)
 {
         Target *target = Manager::getMain ()->newTarget ();
-        target->accessor = Manager::getMain ()->getAccessor (property);
+//        target->accessor = Manager::getMain ()->getAccessor (property);
+        target->accessor = accessor;
 
         if (type == TO) {
                 target->endValue = value;
