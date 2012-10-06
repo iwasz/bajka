@@ -10,6 +10,7 @@
 #define TWEEN_FACTORY_H_
 
 #include "ITargetResolver.h"
+#include <core/Object.h>
 
 namespace Tween {
 class ITween;
