@@ -1,21 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
-  <RelativeGroup id="scene">
-    <ScreenGroupProperties set-as="groupProps" fillW="true" fillH="true" />
-        
+
+  <Layer id="scene" init-method="init">
+    <ClearScreenGrid set-as="view" color="6b6b6bff" gridColor="616161ff" density="20" />
+    <LayerProperties set-as="groupProps" />
+
     <Group add-to="children" init-method="init">
-      <ClearScreenGrid set-as="view" color="6b6b6bff" gridColor="616161ff" density="20" />
-      <RelativeGroupProperties set-as="groupProps" translate="50, 50"/>
       <ref bean="myRect" add-to="children" />
-    </Group> 
+    </Group>
 
-    <tweenButton add-to="children" testModel="@myRect">
-      <RelativeGroupProperties set-as="groupProps" translate="50, 50"/>
-    </tweenButton>
+    <RelativeGroup add-to="children" init-method="init">
+      <LayerProperties set-as="groupProps" />
+      <tweenButton add-to="children" testModel="@myRect">
+        <RelativeGroupProperties set-as="groupProps" translate="0, 95" hAlign="right"/>
+      </tweenButton>
+    </RelativeGroup>
+  </Layer>
+       
 
-  </RelativeGroup>
   
   <rect id="myRect" width="50" height="50" translate="-25, -25"/>  
+<!--           {"type":"to", "obj":"myRect", "t":2000, "ease":"QUAD_INOUT", "delay":100, "repeat":3, "targets":[{"X":300}, {"Y":300}, {"ANGLE":180}, {"SCALE":2}]}  -->
 
   <LinearGroup id="tweenButton" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true" type="vertical" init-method="init" abstract="true">
     <label add-to="children" text="Button" view.foreground="@orange" />
@@ -23,7 +28,7 @@
     <TweenButtonController set-as="controller" eventMask="0xffff" clicked="@siusiu"  normal="@orange"  hover="@crimson">
       <TweenFactory set-as="tweenFactory" container="@#container">
         <value set-as="source"><![CDATA[
-          {"type":"to", "obj":"myRect", "t":2000, "ease":"QUAD_INOUT", "delay":100, "repeat":3, "targets":[{"X":300}, {"Y":300}, {"ANGLE":180}, {"SCALE":2}]} 
+          {"type":"to", "obj":"myRect", "t":2000, "ease":"QUAD_INOUT", "delay":100, "repeat":3, "targets":[{"ANGLE":180}]} 
         ]]></value>
       </TweenFactory>
     </TweenButtonController>

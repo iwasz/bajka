@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
-  <Circle id="circle" origin="0, 0" radius="30">
-    <View::Circle set-as="view" id="circleWgt" foreground="FFFFFFFF" background="555555ff" />
-  </Circle>
+<!--   <Circle id="circle" origin="0, 0" radius="30"> -->
+<!--     <View::Circle set-as="view" id="circleWgt" foreground="FFFFFFFF" background="555555ff" /> -->
+<!--   </Circle> -->
 
   <Box id="image" abstract="true" init-method="updateToViewSize">
     <Image set-as="view">

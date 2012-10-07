@@ -11,6 +11,7 @@
 
 #include <model/manager/XmlModelManager.h>
 #include <container/Container.h>
+#include "util/ReflectionMacros.h"
 
 class ReloadableXmlModelManager : public Model::XmlModelManager {
 public:

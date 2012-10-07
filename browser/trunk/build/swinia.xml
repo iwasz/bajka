@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
   <RelativeGroup id="scene">
-    <ScreenGroupProperties set-as="groupProps" fillW="true" fillH="true" />
+    <LayerProperties set-as="groupProps" fillW="true" fillH="true" />
     <ClearScreen set-as="view" color="5aa3fcff" />
 
     <image add-to="children" path="swinia.png">
