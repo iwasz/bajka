@@ -12,12 +12,11 @@
 #include "RelativeGroup.h"
 #include "IGroupProperties.h"
 #include "RelativeGroupProperties.h"
-#include "Padding.h"
 #include "LinearGroup.h"
 #include "LinearGroupProperties.h"
 #include "Align.h"
 #include "TableGroup.h"
 #include "TableGroupProperties.h"
-#include "ScreenGroupProperties.h"
+#include "LayerProperties.h"
 
 #endif /* LAYOUT_H_ */

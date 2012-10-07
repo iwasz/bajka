@@ -90,10 +90,10 @@ struct IModel : public virtual Core::Object {
         virtual void setScale (double a) = 0;
 
         /**
-         * Punkt względem którego wykonywane są obroty i skalowanie.
+         * Punkt względem którego wykonywane są obroty i skalowanie. W moim układzie współrzędnych.
          */
-        virtual Geometry::Point getCenter () const = 0;
-        virtual void setCenter (Geometry::Point const &p) = 0;
+        virtual Geometry::Point getRotationCenter () const = 0;
+        virtual void setRotationCenter (Geometry::Point const &p) = 0;
 
         /**
          * Macierz przekształceń.

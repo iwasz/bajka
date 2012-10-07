@@ -33,8 +33,8 @@ public:
         Geometry::Point getTranslate () const;
         void setTranslate (Geometry::Point const &p) { throw Util::OperationNotSupportedException (); }
 
-        Geometry::Point getCenter () const;
-        void setCenter (Geometry::Point const &p) { throw Util::OperationNotSupportedException (); }
+        Geometry::Point getRotationCenter () const;
+        void setRotationCenter (Geometry::Point const &p) { throw Util::OperationNotSupportedException (); }
 
         double getAngle () const { return 0; }
         virtual void setAngle (double a) { throw Util::OperationNotSupportedException (); }

@@ -90,6 +90,17 @@ struct IGroup : public virtual Core::Object {
          * Ustawiane przez bajkaApp. Bardziej szczegółowa dokumentacja w klasie Group.
          */
         virtual void setIndices (Event::EventIndex *e1, Event::PointerInsideIndex *e2) = 0;
+
+        enum CoordinateSystemOrigin { CENTER, BOTTOM_LEFT };
+
+        /**
+         * Zwraca jedną z 2 wartości opisujących gdzie znajduje się środek układu współrzędnych
+         * tej grupy. Ta wartość ma znaczenie tylko dla grup, ktgóre mają szerokość i wysokość.
+         * Wartość CENTER oznacza, że środek układu współrzędncyh tej gurpy znajduje się pośrodku
+         * prostokąta wyznaczonego przez wysokość i szerokośc tej grupy, BOTTOM_LEFT oznacza, ze
+         * srodek jest w dolnym lewym rogu.
+         */
+        virtual CoordinateSystemOrigin getCoordinateSystemOrigin () const = 0;
 };
 
 }

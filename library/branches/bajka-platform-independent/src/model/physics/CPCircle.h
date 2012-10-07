@@ -40,7 +40,7 @@ public:
         Geometry::Point getTranslate () const { return Geometry::ZERO_POINT; }
         void setTranslate (Geometry::Point const &p) { throw Util::OperationNotSupportedException (); }
 
-        void setCenter (Geometry::Point const &p) { throw Util::OperationNotSupportedException (); }
+        void setRotationCenter (Geometry::Point const &p) { throw Util::OperationNotSupportedException (); }
 
         double getAngle () const { return 0; }
         virtual void setAngle (double a) { throw Util::OperationNotSupportedException (); }

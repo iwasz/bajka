@@ -42,7 +42,7 @@ void Widget::defaultPreUpdate (Model::IModel *model)
         if (model) {
                 glMatrixMode (GL_MODELVIEW);
                 glPushMatrix ();
-                Geometry::Point c = model->getCenter ();
+                Geometry::Point c = model->getRotationCenter ();
                 Geometry::Point p = model->getTranslate ();
 
 #if 0

@@ -12,7 +12,6 @@
 #include "geometry/Point.h"
 #include "util/ReflectionMacros.h"
 #include "IGroupProperties.h"
-#include "Padding.h"
 #include "Align.h"
 
 namespace Model {

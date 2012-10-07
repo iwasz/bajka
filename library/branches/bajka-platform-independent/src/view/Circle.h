@@ -21,13 +21,14 @@ namespace View {
 class Circle : public Primitive {
 public:
 
-        C__ (void)
-        b_ ("Primitive")
+        // TODO zakomentowałem bop BOOST__PP_DEC działało tylko do 256
+//        C__ (void)
+//        b_ ("Primitive")
 
         virtual ~Circle () {}
         virtual void update (Model::IModel *model, Event::UpdateEvent *e);
 
-        E_ (View::Circle)
+//        E_ (View::Circle)
 };
 
 } /* namespace View */
