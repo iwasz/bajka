@@ -37,7 +37,7 @@
 #include "model/IGroup.h"
 #include "model/layout/Align.h"
 #include "model/layout/LinearGroup.h"
-#include "model/layout/ScreenGroupProperties.h"
+#include "model/layout/LayerProperties.h"
 //#include <tween/Parser.h>
 //#include <tween/ITween.h>
 
@@ -328,26 +328,37 @@ void Shell::updateLayout (Model::IModel *root)
                 return;
         }
 
-        M::ScreenGroupProperties const *scrProps = dynamic_cast <M::ScreenGroupProperties const *> (props);
         M::IBox *box = dynamic_cast <M::IBox *> (root);
-        Geometry::Point currentT = root->getTranslate ();
+
+        if (!box) {
+                return;
+        }
+
+        M::LayerProperties const *scrProps = dynamic_cast <M::LayerProperties const *> (props);
 
         if (scrProps->fillW) {
-                currentT.x = -impl->config->projectionWidth / 2.0;
-
-                if (box) {
-                        box->setWidth (impl->config->projectionWidth);
-                }
+                box->setWidth (impl->config->projectionWidth);
         }
 
         if (scrProps->fillH) {
-                currentT.y = -impl->config->projectionHeight / 2.0;
+                box->setHeight (impl->config->projectionHeight);
 
-                if (box) {
-                        box->setHeight (impl->config->projectionHeight);
-                }
         }
 
-        root->setTranslate (currentT);
+        if (!scrProps->centerGroup || !root->isGroup ()) {
+                return;
+        }
+
+        M::IGroup *group = dynamic_cast <M::IGroup *> (root);
+
+        if (group->getCoordinateSystemOrigin () == M::IGroup::BOTTOM_LEFT) {
+                Geometry::Point t;
+                t.x = -box->getWidth () / 2.0;
+                t.y = -box->getHeight () / 2.0;
+                root->setTranslate (t);
+        }
+        else {
+                root->setTranslate (Geometry::ZERO_POINT);
+        }
 }
 
