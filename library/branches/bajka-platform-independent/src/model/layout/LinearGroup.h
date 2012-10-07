@@ -64,7 +64,7 @@ public:
 
         bool isBox () const { return true; }
 
-        virtual Geometry::Point computeCenter () const { return Geometry::makePoint (w / 2, h / 2); }
+        virtual CoordinateSystemOrigin getCoordinateSystemOrigin () const { return CENTER; }
         virtual Geometry::Box getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const;
         virtual bool contains (Geometry::Point const &p) const;
         virtual IModel *findContains (Geometry::Point const &p);

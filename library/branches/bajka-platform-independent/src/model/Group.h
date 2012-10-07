@@ -17,7 +17,7 @@
 namespace Model {
 
 /**
- * Podstawowe grupowanie modeli, layer.
+ * Podstawowe grupowanie modeli.
  * To jest grupa, którasię rozciąga w nieskończoność (nie ma swojego rozmiaru).
  * Bounding box takiej grupy jest zawsze rozciągnięty żeby mieściły się w nim wszystkie
  * dzieci. Środek transformacji (obrotu i skali) domyślnie jest w punkcie 0,0 (nie jest
@@ -42,6 +42,9 @@ public:
 
         void screenToGroup (Geometry::Point *p) const;
         void groupToScreen (Geometry::Point *p) const;
+
+        virtual CoordinateSystemOrigin getCoordinateSystemOrigin () const { return CENTER; }
+        virtual Geometry::Point getRotationCenter () const { return Geometry::ZERO_POINT; }
 
 /*--------------------------------------------------------------------------*/
 

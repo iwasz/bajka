@@ -21,7 +21,7 @@ Geometry::Point CPBox::getTranslate () const
 
 /****************************************************************************/
 
-Geometry::Point CPBox::getCenter () const
+Geometry::Point CPBox::getRotationCenter () const
 {
         // Zwracamy pusty, bo i tak Angle zawsze jest 0, a scale 1;
         return Geometry::ZERO_POINT;

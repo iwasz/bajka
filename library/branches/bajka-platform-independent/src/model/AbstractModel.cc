@@ -24,12 +24,12 @@ using namespace Geometry;
 
 AffineMatrix AbstractModel::getMatrix () const
 {
-        return AffineMatrix (getTranslate (), getAngle (), getScale (), getCenter ());
+        return AffineMatrix (getTranslate (), getAngle (), getScale (), getRotationCenter ());
 }
 
 /****************************************************************************/
 
-Geometry::Point AbstractModel::getCenter () const
+Geometry::Point AbstractModel::getRotationCenter () const
 {
         if (center.get ()) {
                 return *center;
@@ -40,7 +40,7 @@ Geometry::Point AbstractModel::getCenter () const
 
 /****************************************************************************/
 
-void AbstractModel::setCenter (Geometry::Point const &p)
+void AbstractModel::setRotationCenter (Geometry::Point const &p)
 {
         if (!center.get ()) {
                 center = std::auto_ptr <Geometry::Point> (new Geometry::Point (p));

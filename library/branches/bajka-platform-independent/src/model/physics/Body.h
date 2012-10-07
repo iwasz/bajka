@@ -39,7 +39,7 @@ public:
         double getScale () const { return 1; }
         void setScale (double s) { throw Util::OperationNotSupportedException (); }
 
-        void setCenter (Geometry::Point const &p) { throw Util::OperationNotSupportedException (); }
+        void setRotationCenter (Geometry::Point const &p) { throw Util::OperationNotSupportedException (); }
 
 /*--------------------------------------------------------------------------*/
 

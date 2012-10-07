@@ -6,39 +6,41 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef SCREEN_GROUP_PROPERTIES_MODEL_LAYOUT_H_
-#define SCREEN_GROUP_PROPERTIES_MODEL_LAYOUT_H_
+#ifndef GROUP_PROPERTIES_MODEL_LAYOUT_H_
+#define GROUP_PROPERTIES_MODEL_LAYOUT_H_
 
-#include "geometry/Point.h"
 #include "util/ReflectionMacros.h"
 #include "IGroupProperties.h"
-#include "Align.h"
 
 namespace Model {
 struct IModel;
 
 /**
- * Wałaściwości obiektu, który jest zawarty bezpośrednio w ekranie, czyli jest ROOTem scene-grafu.
+ * Wałaściwości obiektu, który jest zawarty bezpośrednio w Grupie.
  */
-struct ScreenGroupProperties : public IGroupProperties {
+struct LayerProperties : public IGroupProperties {
 
         C__ (void)
-        ScreenGroupProperties () : fillW (true), fillH (true) {}
+        LayerProperties () : fillW (true), fillH (true), centerGroup (true) {}
 
-        virtual ~ScreenGroupProperties () {}
+        virtual ~LayerProperties () {}
 
         /**
-         * Wypełnij widoczną cześć ekranu w całej szerokości.
+         * Rozciągnij się do rozmiarów grupy w której jesteś.
          */
         bool p_ (fillW)
 
         /**
-         * Wypełnij widoczną cześć ekranu w całej wysokości.
+         * Rozciągnij się do rozmiarów grupy w której jesteś.
          */
         bool p_ (fillH)
 
+        /**
+         * Wycentruj na środku rodzica (działa tylko dla grup).
+         */
+        bool p_ (centerGroup)
 
-        E_ (ScreenGroupProperties)
+        E_ (LayerProperties)
 };
 
 } /* namespace Model */
