@@ -93,12 +93,12 @@ IModel *Group::findContains (Point const &p)
 
 void Group::setChildren (ModelVector const &c)
 {
-        std::for_each (c.begin (), c.end (), boost::bind (&Group::addChild, this, _1));
+        std::for_each (c.begin (), c.end (), boost::bind (&Group::setChild, this, _1));
 }
 
 /****************************************************************************/
 
-void Group::addChild (IModel *m)
+void Group::setChild (IModel *m)
 {
         children.push_back (m);
         manageChild (m);
@@ -123,12 +123,12 @@ void Group::manageChild (IModel *m)
 
 /****************************************************************************/
 
-void Group::init ()
-{
-        for (ModelVector::iterator i = children.begin (); i != children.end (); ++i) {
-                manageChild (*i);
-        }
-}
+//void Group::init ()
+//{
+//        for (ModelVector::iterator i = children.begin (); i != children.end (); ++i) {
+//                manageChild (*i);
+//        }
+//}
 
 /****************************************************************************/
 

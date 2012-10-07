@@ -18,11 +18,14 @@
 #include <cstdlib>
 #include <boost/pool/object_pool.hpp>
 #include <cerrno>
+#include "tween/Timeline.h"
 
 namespace Tween {
 
 struct ParserImpl {
-        Tween::AtomicTween *parseTo (json_t *data);
+        Tween::ITween *parse (json_t *data);
+        Tween::AtomicTween *parseAtomic (json_t *data, AtomicTween::Type type);
+        Tween::Timeline *parseTimeline (json_t *data);
 
         void setEase (AtomicTween *tween, json_t *field);
         void setTargetObject (AtomicTween *tween, json_t *field);
@@ -60,16 +63,22 @@ Tween::ITween *TweenParser::parse (const char *input)
 
         if (!root) {
                 std::ostringstream s;
-                s << "tweenParse () : error on line " << error.line << ", message : " << error.text;
+                s << "TweenParser::parse () : error on line " << error.line << ", message : " << error.text;
                 throw TweenParserException (s.str ());
         }
 
-        if (!json_is_object (root)) {
+        return impl->parse (root);
+}
+/****************************************************************************/
+
+Tween::ITween *ParserImpl::parse (json_t *data)
+{
+        if (!json_is_object (data)) {
                 throw TweenParserException ("tweenParse () : root is not an object");
         }
 
         // Type musi być
-        json_t *type = json_object_get (root, "type");
+        json_t *type = json_object_get (data, "type");
 
         if (!type || !json_is_string (type)) {
                 throw TweenParserException ("tweenParse () : type is not a string");
@@ -78,28 +87,28 @@ Tween::ITween *TweenParser::parse (const char *input)
         const char *typeStr = json_string_value (type);
 
         if (strcmp (typeStr, "to") == 0) {
-                return impl->parseTo (root);
+                return parseAtomic (data, AtomicTween::TO);
         }
         else if (strcmp (typeStr, "from") == 0) {
-
+                return parseAtomic (data, AtomicTween::FROM);
         }
         else if (strcmp (typeStr, "timeline") == 0) {
-
+                return parseTimeline (data);
         }
         else if (strcmp (typeStr, "multi") == 0) {
 
         }
 
-        json_decref (root);
+        json_decref (data);
         return NULL;
 }
 
 /****************************************************************************/
 
-Tween::AtomicTween *ParserImpl::parseTo (json_t *data)
+Tween::AtomicTween *ParserImpl::parseAtomic (json_t *data, AtomicTween::Type type)
 {
         AtomicTween *tween = Manager::getMain ()->newAtomicTween ();
-        tween->type = AtomicTween::TO;
+        tween->type = type;
 
         setTargetObject (tween, data);
         tween->durationMs = getInteger (data, "t", true);
@@ -117,7 +126,7 @@ Tween::AtomicTween *ParserImpl::parseTo (json_t *data)
                 json_t *target = json_array_get (field, i);
 
                 if (!json_is_object(target)) {
-                        throw TweenParserException ("tweenParseTo () : target is not an object");
+                        throw TweenParserException ("parseAtomic () : target is not an object");
                 }
 
                 const char *key;
@@ -136,19 +145,43 @@ Tween::AtomicTween *ParserImpl::parseTo (json_t *data)
                             long int valInt = strtol (strValInt, NULL, 10);
 
                             if ((errno == ERANGE && (valInt == LONG_MAX || valInt == LONG_MIN)) || (errno != 0 && valInt == 0)) {
-                                    throw TweenParserException ("tweenParseTo () : relative value must be of an integer value.");
+                                    throw TweenParserException ("parseAtomic () : relative value must be of an integer value.");
                             }
 
                             tween->rel (key, valInt);
                     }
-
-
 
                     iter = json_object_iter_next (target, iter);
                 }
         }
 
         return tween;
+}
+
+/****************************************************************************/
+
+Tween::Timeline *ParserImpl::parseTimeline (json_t *data)
+{
+        Tween::Timeline *timeline = Manager::getMain ()->newTimeline ();
+
+        json_t *field = json_object_get (data, "tweens");
+
+        if (!field || !json_is_array (field)) {
+                throw TweenParserException ("parseTimeline () : tweens are not an array instance, or are empty");
+        }
+
+        for (size_t i = 0; i < json_array_size (field); ++i) {
+
+                json_t *tween = json_array_get (field, i);
+
+                if (!json_is_object (tween)) {
+                        throw TweenParserException ("parseTimeline () : tween is not an object");
+                }
+
+                timeline->add (parse (tween));
+        }
+
+        return timeline;
 }
 
 /****************************************************************************/

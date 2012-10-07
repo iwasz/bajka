@@ -115,4 +115,30 @@ void RelativeGroup::calculateTranslation (IModel *child, RelativeGroupProperties
         child->setTranslate (ct);
 }
 
+/****************************************************************************/
+
+bool RelativeGroup::contains (G::Point const &p) const
+{
+        G::Ring ring;
+        G::Ring output;
+        convert (getBox (), ring);
+        G::AffineMatrixTransformer matrix (getMatrix ());
+        transform (ring, output, matrix);
+        return within (p, output);
+}
+
+/****************************************************************************/
+
+G::Box RelativeGroup::getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const
+{
+        G::Ring ring;
+        G::Ring output;
+        G::Box box;
+        convert (getBox (), ring);
+        G::AffineMatrixTransformer matrix (transformation);
+        transform (ring, output, matrix);
+        envelope (output, box);
+        return box;
+}
+
 } /* namespace Model */

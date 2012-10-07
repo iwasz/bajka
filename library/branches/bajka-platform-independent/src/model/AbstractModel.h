@@ -81,7 +81,7 @@ public:
 /*--------------------------------------------------------------------------*/
 
         virtual View::IView *getView () { return view; }
-        void setView (View::IView *v) { view = v; }
+        virtual void setView (View::IView *v) { view = v; }
 
         Controller::IController *getController () { return controller; }
         void setController (Controller::IController *c) { controller = c; }

@@ -237,6 +237,11 @@ bool LinearGroup::contains (G::Point const &p) const
 
 G::Box LinearGroup::getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const
 {
+        // TODO to nie powino się updejtować przy każdym odświerzeniu.
+        // TODO To super działa, ale wydajnościowo to jest zabójstwo - trzeba pomyśleć 1) z tymi hashami 2) z keszowaniem bounding boxów (też zależne od hashy).
+        // TODO co z tym const_cast?
+        const_cast <LinearGroup *> (this)->updateLayout ();
+
         G::Box aabb;
         G::Ring ring;
         G::Ring output;
