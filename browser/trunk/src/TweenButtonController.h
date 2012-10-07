@@ -18,13 +18,12 @@ public:
 	C__ (void)
 	b_ ("DebugButtonController")
 
-	TweenButtonController () : testModel (NULL) {}
+	TweenButtonController () : tweenFactory (NULL) {}
         virtual ~TweenButtonController() {}
         virtual HandlingType onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v);
 
 private:
 
-        Model::IModel           *p_ (testModel);
         Tween::ITweenFactory    *p_ (tweenFactory);
 
 	E_ (TweenButtonController)

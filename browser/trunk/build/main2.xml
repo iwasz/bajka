@@ -7,24 +7,24 @@
   <Group id="scene">
     <ClearScreenGrid set-as="view" color="6b6b6bff" gridColor="616161ff" density="20" />
 
-    <Group add-to="children" translate="300, 200">
-      <circle add-to="children" origin="50, 0" />
-      <label add-to="children" view.text="Hello world" translate="-50, -50" />
-      <image add-to="children" path="cursor.png" />
+    <Group set-as="child" translate="300, 200">
+      <circle set-as="child" origin="50, 0" />
+      <label set-as="child" view.text="Hello world" translate="-50, -50" />
+      <image set-as="child" path="cursor.png" />
     </Group>
 
-    <RelativeGroup add-to="children" translate="-50, -50" width="50" height="50">
-      <image add-to="children" view.bitmap.path="cursor.png">
+    <RelativeGroup set-as="child" translate="-50, -50" width="50" height="50">
+      <image set-as="child" view.bitmap.path="cursor.png">
         <RelativeGroupProperties set-as="groupProps" translate="50, 50" hAlign="2" vAlign="2" />
       </image>
     </RelativeGroup>
     
-<!--     <RelativeGroup add-to="children" translate="-50, 10"> -->
-<!--       <rect add-to="children"> -->
+<!--     <RelativeGroup set-as="child" translate="-50, 10"> -->
+<!--       <rect set-as="child"> -->
 <!--         <RelativeGroupProperties set-as="groupProps" width="100" height="100" /> -->
 <!--       </rect> -->
       
-<!--       <label add-to="children" view.text="Hello world"> -->
+<!--       <label set-as="child" view.text="Hello world"> -->
 <!--         <RelativeGroupProperties set-as="groupProps" translate="50, 50" hAlign="2" vAlign="2" /> -->
 <!--       </label> -->
       

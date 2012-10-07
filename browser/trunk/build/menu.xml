@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
-  <RelativeGroup id="scene" init-method="init">
-    <LayerProperties set-as="groupProps" fillW="true" fillH="true" />
+  <RelativeGroup id="scene">
+    <LayerProperties set-as="groupProps" />
     <ClearScreen set-as="view" color="6b6b6bff" />
 
-    <label add-to="children" text="Demka" view.font="@volter48">
+    <label set-as="child" text="Demka" view.font="@volter48">
       <RelativeGroupProperties set-as="groupProps" vAlign="center" hAlign="center" translate="50, 90"/>
     </label>
 
-    <LinearGroup add-to="children" type="vertical" spacing="10" wrapContentsW="true" wrapContentsH="true" init-method="init">
-      <button add-to="children" file="layouts.xml" name="scene" text="Layouts" />
-      <button add-to="children" file="swinia.xml" name="scene" text="Swinia" />
-      <button add-to="children" file="tweens.xml" name="scene" text="Tween test" />
+    <LinearGroup set-as="child" type="vertical" spacing="10" wrapContentsW="true" wrapContentsH="true">
+      <button set-as="child" file="layouts.xml" name="scene" text="Layouts" />
+      <button set-as="child" file="swinia.xml" name="scene" text="Swinia" />
+      <button set-as="child" file="tweens.xml" name="scene" text="Tween test" />
       <RelativeGroupProperties set-as="groupProps" vAlign="center" hAlign="center" translate="50, 50"/>
     </LinearGroup>
   </RelativeGroup>
