@@ -78,7 +78,6 @@ Controller::IController::HandlingType TweenButtonController::onButtonPress (Even
 //        a->start ();
 //
 
-	std::cerr << "testModel : " << std::hex << testModel << std::endl;
 	tweenFactory->create()->start ();
 	return DebugButtonController::onButtonPress (e, m, v);
 }

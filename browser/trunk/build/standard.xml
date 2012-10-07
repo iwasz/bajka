@@ -63,8 +63,8 @@
     </cargs>
   </Color> 
 
-  <LinearGroup id="button" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true" type="vertical" init-method="init">
-    <label add-to="children" text="Button" view.foreground="@orange" />
+  <LinearGroup id="button" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true" type="vertical">
+    <label set-as="child" text="Button" view.foreground="@orange" />
     <Rectangle set-as="view" foreground="@orange" background="00000000" thickness="3"/>
     <DebugButtonController set-as="controller" eventMask="0xffff" clicked="@siusiu"  normal="@orange"  hover="@crimson" modelManager="@modelManager" />
     <prop-alias name="file" value="controller.file" />

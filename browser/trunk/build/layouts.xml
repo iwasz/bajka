@@ -3,44 +3,44 @@
   <Group id="scene">
     <ClearScreenGrid set-as="view" color="6b6b6bff" gridColor="616161ff" density="20" />
 
-    <LinearGroup add-to="children" translate="-395, 265" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true">
-      <label add-to="children" text="Iwasz" />
-      <label add-to="children" text="Asia" />
-      <label add-to="children" text="Franek" />
+    <LinearGroup set-as="child" translate="-395, 265" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true">
+      <label set-as="child" text="Iwasz" />
+      <label set-as="child" text="Asia" />
+      <label set-as="child" text="Franek" />
       <ref bean="rectWidget" set-as="view" />
     </LinearGroup>
 
-    <LinearGroup add-to="children" translate="-395, 230" spacing="5" margin="5" width="200" wrapContentsH="true" hGravity="left">
-      <label add-to="children" text="A1" />
-      <label add-to="children" text="B2" />
-      <label add-to="children" text="C3" />
+    <LinearGroup set-as="child" translate="-395, 230" spacing="5" margin="5" width="200" wrapContentsH="true" hGravity="left">
+      <label set-as="child" text="A1" />
+      <label set-as="child" text="B2" />
+      <label set-as="child" text="C3" />
       <ref bean="rectWidget" set-as="view" />
     </LinearGroup>
 
-    <LinearGroup add-to="children" translate="-395, 195" spacing="5" margin="5" width="200" wrapContentsH="true" hGravity="right">
-      <label add-to="children" text="A1" />
-      <label add-to="children" text="B2" />
-      <label add-to="children" text="C3" />
+    <LinearGroup set-as="child" translate="-395, 195" spacing="5" margin="5" width="200" wrapContentsH="true" hGravity="right">
+      <label set-as="child" text="A1" />
+      <label set-as="child" text="B2" />
+      <label set-as="child" text="C3" />
       <ref bean="rectWidget" set-as="view" />
     </LinearGroup>
 
-    <LinearGroup add-to="children" translate="-395, 160" spacing="5" margin="5" width="200" wrapContentsH="true" hGravity="center">
-      <label add-to="children" text="A1" />
-      <label add-to="children" text="B2" />
-      <label add-to="children" text="C3" />
+    <LinearGroup set-as="child" translate="-395, 160" spacing="5" margin="5" width="200" wrapContentsH="true" hGravity="center">
+      <label set-as="child" text="A1" />
+      <label set-as="child" text="B2" />
+      <label set-as="child" text="C3" />
       <ref bean="rectWidget" set-as="view" />
     </LinearGroup>
 
-    <LinearGroup add-to="children" translate="-395, 95" spacing="5" margin="5" width="200" height="60" hGravity="center">
-      <label add-to="children" text="A1">
+    <LinearGroup set-as="child" translate="-395, 95" spacing="5" margin="5" width="200" height="60" hGravity="center">
+      <label set-as="child" text="A1">
         <LinearGroupProperties set-as="groupProps" vAlign="top"/>
       </label>
       
-      <label add-to="children" text="B2">
+      <label set-as="child" text="B2">
         <LinearGroupProperties set-as="groupProps" vAlign="bottom"/>
       </label>
         
-      <label add-to="children" text="C3">
+      <label set-as="child" text="C3">
         <LinearGroupProperties set-as="groupProps" vAlign="center"/>
       </label>
 
@@ -48,72 +48,65 @@
     </LinearGroup>
 
     <!-- Wertykalne -->
-    <LinearGroup add-to="children" translate="-185, 95" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true" type="vertical">
-      <label add-to="children" text="A1" />
-      <label add-to="children" text="B2" />
-      <label add-to="children" text="C3" />
+    <LinearGroup set-as="child" translate="-185, 95" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true" type="vertical">
+      <label set-as="child" text="A1" />
+      <label set-as="child" text="B2" />
+      <label set-as="child" text="C3" />
 <!--       <ref bean="rectWidget" set-as="view" /> -->
     </LinearGroup>
 
-    <LinearGroup add-to="children" translate="-145, 95" spacing="5" margin="5" wrapContentsW="true" height="200" type="vertical" vGravity="top">
-      <label add-to="children" text="A1" />
-      <label add-to="children" text="B2" />
-      <label add-to="children" text="C3" />
+    <LinearGroup set-as="child" translate="-145, 95" spacing="5" margin="5" wrapContentsW="true" height="200" type="vertical" vGravity="top">
+      <label set-as="child" text="A1" />
+      <label set-as="child" text="B2" />
+      <label set-as="child" text="C3" />
       <ref bean="rectWidget" set-as="view" />
     </LinearGroup>
 
-    <LinearGroup add-to="children" translate="-105, 95" spacing="5" margin="5" wrapContentsW="true" height="200" type="vertical" vGravity="bottom">
-      <label add-to="children" text="A1" />
-      <label add-to="children" text="B2" />
-      <label add-to="children" text="C3" />
+    <LinearGroup set-as="child" translate="-105, 95" spacing="5" margin="5" wrapContentsW="true" height="200" type="vertical" vGravity="bottom">
+      <label set-as="child" text="A1" />
+      <label set-as="child" text="B2" />
+      <label set-as="child" text="C3" />
       <ref bean="rectWidget" set-as="view" />
     </LinearGroup>
     
-    <LinearGroup add-to="children" translate="-65, 95" spacing="5" margin="5" wrapContentsW="true" height="200" type="vertical" vGravity="center">
-      <label add-to="children" text="A1" />
-      <label add-to="children" text="B2" />
-      <label add-to="children" text="C3" />
+    <LinearGroup set-as="child" translate="-65, 95" spacing="5" margin="5" wrapContentsW="true" height="200" type="vertical" vGravity="center">
+      <label set-as="child" text="A1" />
+      <label set-as="child" text="B2" />
+      <label set-as="child" text="C3" />
       <ref bean="rectWidget" set-as="view" />
     </LinearGroup>
 
-    <LinearGroup add-to="children" translate="-20, 95" spacing="5" margin="5" width="60" height="200" type="vertical" vGravity="center">
-      <label add-to="children" text="A1">
+    <LinearGroup set-as="child" translate="-20, 95" spacing="5" margin="5" width="60" height="200" type="vertical" vGravity="center">
+      <label set-as="child" text="A1">
         <LinearGroupProperties set-as="groupProps" hAlign="left"/>
       </label>
       
-      <label add-to="children" text="B2">
+      <label set-as="child" text="B2">
         <LinearGroupProperties set-as="groupProps" hAlign="right"/>
       </label>
 
-      <label add-to="children" text="C3">
+      <label set-as="child" text="C3">
         <LinearGroupProperties set-as="groupProps" hAlign="center"/>
       </label>
 
       <ref bean="rectWidget" set-as="view" />
     </LinearGroup>
 
-<!--     <TableGroup add-to="children" translate="45, 95" cols="3" wrapContentsW="true" wrapContentsH="true" heterogeneous="false" margin="10" spacing="10"> -->
-    <TableGroup add-to="children" translate="45, 95" cols="3" width="300" height="200" margin="10" spacing="0">
-      <label add-to="children" text="Asia" />
-      <label add-to="children" text="ma" />
-      <label add-to="children" text="kota," />
-      <label add-to="children" text="kot" />
-      <label add-to="children" text="lubi" />
-      <label add-to="children" text="psa," />
-      <label add-to="children" text="a" />
-      <label add-to="children" text="pies" />
-      <label add-to="children" text="kostki" />
+<!--     <TableGroup set-as="child" translate="45, 95" cols="3" wrapContentsW="true" wrapContentsH="true" heterogeneous="false" margin="10" spacing="10"> -->
+    <TableGroup set-as="child" translate="45, 95" cols="3" width="300" height="200" margin="10" spacing="0">
+      <label set-as="child" text="Asia" />
+      <label set-as="child" text="ma" />
+      <label set-as="child" text="kota," />
+      <label set-as="child" text="kot" />
+      <label set-as="child" text="lubi" />
+      <label set-as="child" text="psa," />
+      <label set-as="child" text="a" />
+      <label set-as="child" text="pies" />
+      <label set-as="child" text="kostki" />
       <ref bean="rectWidget" set-as="view" />
     </TableGroup>
 
-    <LinearGroup add-to="children" type="vertical" spacing="10" translate="0, -200" wrapContentsW="true" height="200" init-method="init">
-      <button add-to="children" file="menu.xml" name="scene" text="Menu" />
-      <button add-to="children" file="menu.xml" name="scene" text="Akumulator" />
-      <button add-to="children" file="menu.xml" name="scene" text="Pierdzirator" />
-      <button add-to="children" file="menu.xml" name="scene" text="Zembator" />
-    </LinearGroup>
-
-    <button add-to="children" file="menu.xml" name="scene" text="Back" />
+    <button set-as="child" file="menu.xml" name="scene" text="Back" />
     
   </Group>
 
