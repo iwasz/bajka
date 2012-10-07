@@ -328,13 +328,17 @@ void Shell::updateLayout (Model::IModel *root)
                 return;
         }
 
+        M::LayerProperties const *scrProps = dynamic_cast <M::LayerProperties const *> (props);
+
+        if (!scrProps) {
+                return;
+        }
+
         M::IBox *box = dynamic_cast <M::IBox *> (root);
 
         if (!box) {
                 return;
         }
-
-        M::LayerProperties const *scrProps = dynamic_cast <M::LayerProperties const *> (props);
 
         if (scrProps->fillW) {
                 box->setWidth (impl->config->projectionWidth);
