@@ -33,7 +33,6 @@ struct TranslateXAccessor : public IAccessor {
         	Geometry::Point p = m->getTranslate ();
         	p.x = value;
         	m->setTranslate (p);
-        	std::cerr << typeid (m).name () << ", m : "<< m << ", translate : " << p << std::endl;
         }
 };
 

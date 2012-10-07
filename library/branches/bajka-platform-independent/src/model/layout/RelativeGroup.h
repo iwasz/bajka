@@ -33,7 +33,9 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        virtual CoordinateSystemOrigin getCoordinateSystemOrigin () const { return BOTTOM_LEFT; }
+        CoordinateSystemOrigin getCoordinateSystemOrigin () const { return BOTTOM_LEFT; }
+        bool contains (Geometry::Point const &p) const;
+        Geometry::Box getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const;
 
 private:
 

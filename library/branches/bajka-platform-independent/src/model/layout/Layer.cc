@@ -38,21 +38,28 @@ void Layer::updateLayout ()
                 IModel *child = *i;
                 LayerProperties const *props = ((child->getGroupProps ()) ? (dynamic_cast <LayerProperties const *> (child->getGroupProps ())) : (NULL));
 
-                if (!props || !child->isBox ()) {
+                if (!props) {
                         continue;
                 }
 
-                IBox *box = dynamic_cast <IBox *> (child);
+                IBox *box = NULL;
 
-                adjustChildrenDimensions (child, box, props);
+                if (child->isBox ()) {
+                        box = dynamic_cast <IBox *> (child);
+                        adjustChildrenDimensions (child, box, props);
+                }
 
-                if (!props->centerGroup || !child->isGroup ()) {
+                if (!props->centerGroup) {
                         continue;
                 }
 
-                IGroup *group = dynamic_cast <IGroup *> (child);
+                IGroup *group = NULL;
 
-                if (group->getCoordinateSystemOrigin () == IGroup::BOTTOM_LEFT) {
+                if ((child->isGroup () &&
+                    (group = dynamic_cast <IGroup *> (child)) &&
+                    group->getCoordinateSystemOrigin () == IGroup::BOTTOM_LEFT) ||
+                    child->isBox ()) {
+
                         Geometry::Point t;
                         t.x = -box->getWidth () / 2.0;
                         t.y = -box->getHeight () / 2.0;
@@ -91,7 +98,13 @@ bool Layer::contains (G::Point const &p) const
 {
         G::Ring ring;
         G::Ring output;
-        convert (getBox (), ring);
+        G::Box box;
+        float w2 = w / 2, h2 = h / 2;
+        box.ll.x = -w2;
+        box.ll.y = -h2;
+        box.ur.x = w2;
+        box.ur.y = h2;
+        convert (box, ring);
         G::AffineMatrixTransformer matrix (getMatrix ());
         transform (ring, output, matrix);
         return within (p, output);
@@ -101,14 +114,19 @@ bool Layer::contains (G::Point const &p) const
 
 G::Box Layer::getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const
 {
-        G::Box aabb;
         G::Ring ring;
         G::Ring output;
-        convert (getBox (), ring);
+        G::Box box;
+        float w2 = w / 2, h2 = h / 2;
+        box.ll.x = -w2;
+        box.ll.y = -h2;
+        box.ur.x = w2;
+        box.ur.y = h2;
+        convert (box, ring);
         G::AffineMatrixTransformer matrix (transformation);
         transform (ring, output, matrix);
-        envelope (output, aabb);
-        return aabb;
+        envelope (output, box);
+        return box;
 }
 
 /****************************************************************************/

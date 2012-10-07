@@ -53,6 +53,7 @@ public:
         Geometry::Point computeCenter () const;
         virtual Geometry::Box getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const;
         virtual bool contains (Geometry::Point const &p) const;
+        void setView (View::IView *v) { AbstractModel::setView (v); updateToViewSizeIf (); }
 
 protected:
 

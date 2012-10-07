@@ -54,7 +54,7 @@ struct IGroup : public virtual Core::Object {
          * w kolekcji modeli i przez to wyświetli się jako ostatni, zasłaniając (to zalezy oczywiście
          * też od jego rozmiarów) poprzednie modele.
          */
-        virtual void addChild (IModel *m) = 0;
+        virtual void setChild (IModel *m) = 0;
 
         /**
          * Usuwa model. Usuwa ostatnio dodany model (czyli ostatni z kolekcji).
