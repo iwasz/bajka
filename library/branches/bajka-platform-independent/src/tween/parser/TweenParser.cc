@@ -19,6 +19,7 @@
 #include <boost/pool/object_pool.hpp>
 #include <cerrno>
 #include "tween/Timeline.h"
+#include "tween/MultiTween.h"
 
 namespace Tween {
 
@@ -26,6 +27,7 @@ struct ParserImpl {
         Tween::ITween *parse (json_t *data);
         Tween::AtomicTween *parseAtomic (json_t *data, AtomicTween::Type type);
         Tween::Timeline *parseTimeline (json_t *data);
+        Tween::MultiTween *parseMulti (json_t *data);
 
         void setEase (AtomicTween *tween, json_t *field);
         void setTargetObject (AtomicTween *tween, json_t *field);
@@ -96,7 +98,7 @@ Tween::ITween *ParserImpl::parse (json_t *data)
                 return parseTimeline (data);
         }
         else if (strcmp (typeStr, "multi") == 0) {
-
+                return parseMulti (data);
         }
 
         json_decref (data);
@@ -182,6 +184,32 @@ Tween::Timeline *ParserImpl::parseTimeline (json_t *data)
         }
 
         return timeline;
+}
+
+/****************************************************************************/
+
+Tween::MultiTween *ParserImpl::parseMulti (json_t *data)
+{
+        Tween::MultiTween *multi = Manager::getMain ()->newMultiTween ();
+
+        json_t *field = json_object_get (data, "tweens");
+
+        if (!field || !json_is_array (field)) {
+                throw TweenParserException ("parseTimeline () : tweens are not an array instance, or are empty");
+        }
+
+        for (size_t i = 0; i < json_array_size (field); ++i) {
+
+                json_t *tween = json_array_get (field, i);
+
+                if (!json_is_object (tween)) {
+                        throw TweenParserException ("parseMulti () : tween is not an object");
+                }
+
+                multi->add (parse (tween));
+        }
+
+        return multi;
 }
 
 /****************************************************************************/
