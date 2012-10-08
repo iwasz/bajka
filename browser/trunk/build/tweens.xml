@@ -7,6 +7,7 @@
 
     <Group set-as="child">
       <ref bean="myRect" set-as="child" />
+      <ref bean="r2" set-as="child" />
     </Group>
 
     <RelativeGroup set-as="child">
@@ -39,12 +40,22 @@
             ]}
           </value>
         </tweenButton>
+        
+        <tweenButton set-as="child" text="multi">
+          <value set-as="source">
+            {"type":"multi", "tweens":[
+              {"type":"to", "obj":"myRect", "t":2000, "targets":[{"ANGLE":180}]},
+              {"type":"to", "obj":"r2", "t":2000, "targets":[{"SCALE":2}]}            
+            ]}
+          </value>
+        </tweenButton>        
       </LinearGroup>
       
     </RelativeGroup>
   </Layer>
   
   <rect id="myRect" width="50" height="50" translate="-25, -25"/>  
+  <rect set-as="child" id="r2" width="50" height="50" translate="50, -25"/>  
 
   <LinearGroup id="tweenButton" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true" type="vertical" abstract="true">
     <label set-as="child" text="Button" view.foreground="@orange" />
