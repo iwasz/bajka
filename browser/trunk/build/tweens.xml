@@ -8,6 +8,7 @@
     <Group set-as="child">
       <ref bean="myRect" set-as="child" />
       <ref bean="r2" set-as="child" />
+      <ref bean="sun" set-as="child" />
     </Group>
 
     <RelativeGroup set-as="child">
@@ -48,14 +49,21 @@
               {"type":"to", "obj":"r2", "t":2000, "targets":[{"SCALE":2}]}            
             ]}
           </value>
-        </tweenButton>        
-      </LinearGroup>
-      
+        </tweenButton>
+        
+        <tweenButton set-as="child" text="sun">
+          <value set-as="source">
+            {"type":"to", "obj":"sun", "t":5000, "targets":[{"ANGLE":"360"}]}
+          </value>
+        </tweenButton>
+
+      </LinearGroup>      
     </RelativeGroup>
   </Layer>
   
   <rect id="myRect" width="50" height="50" translate="-25, -25"/>  
-  <rect set-as="child" id="r2" width="50" height="50" translate="50, -25"/>  
+  <rect id="r2" width="50" height="50" translate="50, -25"/>  
+  <image id="sun"  path="sunny.png" translate="100, -350" />
 
   <LinearGroup id="tweenButton" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true" type="vertical" abstract="true">
     <label set-as="child" text="Button" view.foreground="@orange" />
