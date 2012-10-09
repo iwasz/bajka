@@ -39,6 +39,7 @@ public:
         };
 
         typedef std::vector <Target *> TargetVector;
+        enum Overwrite { NONE, ALL_IMMEDIATE, AUTO, CONCURRENT, ALL_ONSTART };
 
         AtomicTween () : AbstractTween (), equation (NULL), durationMs (0), object (NULL), type (TO) {}
         virtual ~AtomicTween () {}

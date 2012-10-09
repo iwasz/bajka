@@ -36,7 +36,6 @@ public:
 };
 
 typedef std::vector <ITween *> TweenVector;
-typedef std::list <ITween *> TweenList;
 
 } /* namespace Tween */
 
