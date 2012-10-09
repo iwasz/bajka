@@ -5,8 +5,15 @@
     <ClearScreen set-as="view" color="5aa3fcff" />
 
     <image set-as="child" path="swinia.png">
-      <RelativeGroupProperties set-as="groupProps" translate="50, 40" hAlign="center" vAlign="center"/>
+      <RelativeGroupProperties set-as="groupProps" translate="50, 35" hAlign="center" vAlign="center"/>
     </image>    
+
+    <image set-as="child" path="sunny.png">
+      <RelativeGroupProperties set-as="groupProps" translate="90, 85" hAlign="center" vAlign="center"/>
+    </image>    
+
+    <image set-as="child" view.bitmap="@cloud" translate="50, 500"/>
+    <image set-as="child" view.bitmap="@cloud" translate="550, 550" scale="0.7"/>
         
     <imgButton set-as="child" path="left.png" file="menu.xml" name="scene">
       <RelativeGroupProperties set-as="groupProps" translate="5, 50" hAlign="center" vAlign="center"/>
@@ -21,6 +28,9 @@
     </loopImage>
 
   </RelativeGroup>
+  
+  <Bitmap id="cloud" path="cloud.png"/>
+  
 </beans>
 
 <!-- 
