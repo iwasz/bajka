@@ -41,7 +41,7 @@ void MultiTween::runEntry (bool reverse)
 
 void MultiTween::updateRun (int deltaMs, bool direction)
 {
-        for (TweenVector::iterator i = tweens.begin (); i != tweens.end (); ++i) {
+        for (TweenList::iterator i = tweens.begin (); i != tweens.end (); ++i) {
                 (*i)->update (deltaMs, !direction);
         }
 }
@@ -52,7 +52,7 @@ bool MultiTween::checkEnd (bool direction)
 {
         bool end = true;
 
-        for (TweenVector::iterator i = tweens.begin (); i != tweens.end (); ++i) {
+        for (TweenList::iterator i = tweens.begin (); i != tweens.end (); ++i) {
                 if ((*i)->getState () != END) {
                         end = false;
                         break;

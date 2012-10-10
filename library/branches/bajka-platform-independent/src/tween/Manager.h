@@ -22,6 +22,7 @@ class Pool;
 class Timeline;
 class MultiTween;
 class SetTween;
+class TweeningProperty;
 
 /**
  * - Overwrite : co ma się dzieć, kiedy dodamy 2 tweeny do tego samego obiektu na ten
@@ -65,8 +66,8 @@ public:
         AtomicTween *newAtomicTween ();
         void freeAtomicTween (AtomicTween *);
 
-        AtomicTween::Target *newTarget ();
-        void freeTarget (AtomicTween::Target *);
+        TweeningProperty *newProperty ();
+        void freeProperty (TweeningProperty *);
 
         Timeline *newTimeline ();
         void freeTimeline (Timeline *);

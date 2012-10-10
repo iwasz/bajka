@@ -9,7 +9,9 @@
 #ifndef BAJKA_MULTITWEEN_H_
 #define BAJKA_MULTITWEEN_H_
 
+#include "util/Exceptions.h"
 #include "AbstractTween.h"
+#include "IMultiTween.h"
 
 namespace Tween {
 
@@ -19,7 +21,7 @@ namespace Tween {
  * szeregowo, a MultiTween równolegle.
  * \ingroup Tween
  */
-class MultiTween : public AbstractTween {
+class MultiTween : public AbstractTween, public IMultiTween {
 public:
 
         virtual ~MultiTween () {}
@@ -29,6 +31,9 @@ public:
                 tweens.push_back (tween);
                 return this;
         }
+
+        int getDurationMs () const { return -1; }
+        void setDurationMs (int ms) { throw Util::OperationNotSupportedException (); }
 
 private:
 
@@ -40,7 +45,7 @@ private:
 
 private:
 
-        TweenVector tweens;
+        TweenList tweens;
 
 };
 

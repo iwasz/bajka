@@ -9,7 +9,9 @@
 #ifndef BAJKA_TWEEN_TIMELINE_H_
 #define BAJKA_TWEEN_TIMELINE_H_
 
+#include "util/Exceptions.h"
 #include "AbstractTween.h"
+#include "IMultiTween.h"
 
 namespace Tween {
 
@@ -17,13 +19,16 @@ namespace Tween {
  * Zawiera kolekcję tweenów i uruchamia je po kolei.
  * \ingroup Tween
  */
-class Timeline : public AbstractTween {
+class Timeline : public AbstractTween, public IMultiTween {
 public:
 
         Timeline () {}
         virtual ~Timeline () {}
 
         Timeline *add (ITween *tween);
+
+        int getDurationMs () const { return -1; }
+        void setDurationMs (int ms) { throw Util::OperationNotSupportedException (); }
 
 private:
 
@@ -35,9 +40,9 @@ private:
 
 private:
 
-        TweenVector tweens;
-        TweenVector::iterator current;
-        TweenVector::reverse_iterator currentr;
+        TweenList tweens;
+        TweenList::iterator current;
+        TweenList::reverse_iterator currentr;
 
 };
 

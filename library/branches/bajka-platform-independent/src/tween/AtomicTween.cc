@@ -11,29 +11,6 @@
 
 namespace Tween {
 
-void AtomicTween::Target::init ()
-{
-	assertThrow (accessor, "AtomicTween::init : !accessor");
-
-	if (tween->type == AtomicTween::TO) {
-	        startValue = accessor->getValue (tween->object);
-	}
-	else {
-                endValue = accessor->getValue (tween->object);
-	}
-}
-
-/****************************************************************************/
-
-void AtomicTween::Target::update ()
-{
-        double deltaValue = endValue - ((absolute) ? (startValue) : (0));
-        double comuted = tween->equation->compute (tween->currentMs, startValue, deltaValue, tween->durationMs);
-        accessor->setValue (tween->object, comuted);
-}
-
-/*##########################################################################*/
-
 AtomicTween *to (void *targetObject, unsigned int durationMs, Ease ease)
 {
         AtomicTween *tween = Manager::getMain ()->newAtomicTween ();
@@ -64,8 +41,17 @@ void AtomicTween::initExit (bool reverse)
 	currentRepetition = repetitions;
 //        currentMs = ((forward) ? (0) : (durationMs));
 
-	for (TargetVector::iterator i = targets.begin (); i != targets.end (); ++i) {
-		(*i)->init ();
+	for (TweeningPropertyList::iterator i = properties.begin (); i != properties.end (); ++i) {
+	        TweeningProperty *tp = *i;
+
+                assertThrow (tp->accessor, "AtomicTween::init : !accessor");
+
+                if (type == AtomicTween::TO) {
+                        tp->startValue = tp->accessor->getValue (object);
+                }
+                else {
+                        tp->endValue = tp->accessor->getValue (object);
+                }
 	}
 }
 void AtomicTween::delayEntry (bool reverse)
@@ -107,8 +93,12 @@ void AtomicTween::updateRun (int deltaMs, bool direction)
         }
 
         // Tweenuj
-        for (TargetVector::iterator i = targets.begin(); i != targets.end(); ++i) {
-                (*i)->update ();
+        for (TweeningPropertyList::iterator i = properties.begin (); i != properties.end (); ++i) {
+                TweeningProperty *tp = *i;
+
+                double deltaValue = tp->endValue - ((tp->absolute) ? (tp->startValue) : (0));
+                double computed = equation->compute (currentMs, tp->startValue, deltaValue, durationMs);
+                tp->accessor->setValue (object, computed);
         }
 }
 
@@ -121,50 +111,48 @@ bool AtomicTween::checkEnd (bool direction)
 
 /****************************************************************************/
 
-AtomicTween *AtomicTween::abs (unsigned int property, double value)
+AtomicTween *AtomicTween::abs (unsigned int prop, double value)
 {
-        return target (Manager::getMain ()->getAccessor (property), value, true);
+        return property (Manager::getMain ()->getAccessor (prop), value, true);
 }
 
 /****************************************************************************/
 
-AtomicTween *AtomicTween::abs (std::string const &property, double value)
+AtomicTween *AtomicTween::abs (std::string const &prop, double value)
 {
-        return target (Manager::getMain ()->getAccessor (property), value, true);
+        return property (Manager::getMain ()->getAccessor (prop), value, true);
 }
 
 /****************************************************************************/
 
-AtomicTween *AtomicTween::rel (unsigned int property, double value)
+AtomicTween *AtomicTween::rel (unsigned int prop, double value)
 {
-        return target (Manager::getMain ()->getAccessor (property), value, false);
+        return property (Manager::getMain ()->getAccessor (prop), value, false);
 }
 
 /****************************************************************************/
 
-AtomicTween *AtomicTween::rel (std::string const &property, double value)
+AtomicTween *AtomicTween::rel (std::string const &prop, double value)
 {
-        return target (Manager::getMain ()->getAccessor (property), value, false);
+        return property (Manager::getMain ()->getAccessor (prop), value, false);
 }
 
 /****************************************************************************/
 
-AtomicTween *AtomicTween::target (IAccessor const *accessor, double value, bool abs)
+AtomicTween *AtomicTween::property (IAccessor const *accessor, double value, bool abs)
 {
-        Target *target = Manager::getMain ()->newTarget ();
-//        target->accessor = Manager::getMain ()->getAccessor (property);
-        target->accessor = accessor;
+        TweeningProperty *property = Manager::getMain ()->newProperty ();
+        property->accessor = accessor;
 
         if (type == TO) {
-                target->endValue = value;
+                property->endValue = value;
         }
         else if (type == FROM) {
-                target->startValue = value;
+                property->startValue = value;
         }
 
-        target->absolute = abs;
-        target->tween = this;
-        targets.push_back (target);
+        property->absolute = abs;
+        properties.push_back (property);
         return this;
 }
 
