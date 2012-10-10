@@ -4,9 +4,17 @@
     <LayerProperties set-as="groupProps" fillW="true" fillH="true" />
     <ClearScreen set-as="view" color="5aa3fcff" />
 
+    <loopImage set-as="child" view.bitmap="@grass" width="1300" height="300">
+      <RelativeGroupProperties set-as="groupProps" translate="0, 0" hAlign="right" vAlign="top"/>
+    </loopImage>
+
     <image set-as="child" path="swinia.png">
       <RelativeGroupProperties set-as="groupProps" translate="50, 35" hAlign="center" vAlign="center"/>
     </image>    
+
+    <loopImage set-as="child" view.bitmap="@grass" width="1300" height="300">
+      <RelativeGroupProperties set-as="groupProps" translate="-10, -10" hAlign="right" vAlign="top"/>
+    </loopImage>
 
     <image set-as="child" path="sunny.png">
       <RelativeGroupProperties set-as="groupProps" translate="90, 85" hAlign="center" vAlign="center"/>
@@ -23,13 +31,10 @@
       <RelativeGroupProperties set-as="groupProps" translate="95, 50" hAlign="center" vAlign="center"/>
     </imgButton>
     
-    <loopImage set-as="child" path="grass.png" width="1300" height="300">
-      <RelativeGroupProperties set-as="groupProps" translate="-10, -10" hAlign="right" vAlign="top"/>
-    </loopImage>
-
   </RelativeGroup>
   
   <Bitmap id="cloud" path="cloud.png"/>
+  <Bitmap id="grass" path="grass.png"/>
   
 </beans>
 
