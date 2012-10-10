@@ -23,12 +23,12 @@ void AbstractTween::start (Manager *m)
 
 /****************************************************************************/
 
-void AbstractTween::clear ()
-{
-        state = INIT;
-        yoyo = false;
-        currentMs = repetitions = delayMs = 0;
-}
+//void AbstractTween::clear ()
+//{
+//        state = INIT;
+//        yoyo = false;
+//        currentMs = repetitions = delayMs = 0;
+//}
 
 /****************************************************************************/
 

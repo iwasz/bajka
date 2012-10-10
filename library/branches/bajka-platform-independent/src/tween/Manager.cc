@@ -15,6 +15,7 @@
 #include "view/LoopImage.h"
 #include "MultiTween.h"
 #include "SetTween.h"
+#include "TweeningProperty.h"
 
 namespace Tween {
 
@@ -23,7 +24,7 @@ Manager *Manager::main = NULL;
 struct Pool {
 
         boost::object_pool <AtomicTween> atomicTweens;
-        boost::object_pool <AtomicTween::Target> targets;
+        boost::object_pool <TweeningProperty> properties;
         boost::object_pool <Timeline> timelines;
         boost::object_pool <MultiTween> multiTweens;
         boost::object_pool <SetTween> setTweens;
@@ -59,18 +60,18 @@ void Manager::freeAtomicTween (AtomicTween *a)
 
 /****************************************************************************/
 
-AtomicTween::Target *Manager::newTarget ()
+TweeningProperty *Manager::newProperty ()
 {
-        AtomicTween::Target *ret = new (pool->targets.malloc ()) AtomicTween::Target;
+        TweeningProperty *ret = new (pool->properties.malloc ()) TweeningProperty;
         assertThrow (ret, "Manager::newTarget: failed to create object.")
         return ret;
 }
 
 /****************************************************************************/
 
-void Manager::freeTarget (AtomicTween::Target *t)
+void Manager::freeProperty (TweeningProperty *t)
 {
-        pool->targets.free (t);
+        pool->properties.free (t);
 }
 
 /****************************************************************************/

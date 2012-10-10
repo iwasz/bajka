@@ -15,49 +15,45 @@
 #include "ease/IEquation.h"
 #include "accessor/IAccessor.h"
 #include "AbstractTween.h"
+#include "TweeningProperty.h"
+#include "ITargetable.h"
 
 namespace Tween {
 
 /**
  * Tween dla pojedynczej wartości (na przykład współrzędnej X w punkcie).
  */
-class AtomicTween : public AbstractTween {
+class AtomicTween : public AbstractTween, public ITargetable {
 public:
 
-        struct Target {
+        enum Type { TO, FROM };
 
-                Target () : accessor (NULL), tween (NULL), startValue (0), endValue (0), absolute (true) {}
-
-                void init ();
-                void update ();
-
-                IAccessor const *accessor;
-                AtomicTween *tween;
-                double startValue;
-                double endValue;
-                bool absolute;
-        };
-
-        typedef std::vector <Target *> TargetVector;
-        enum Overwrite { NONE, ALL_IMMEDIATE, AUTO, CONCURRENT, ALL_ONSTART };
-
-        AtomicTween () : AbstractTween (), equation (NULL), durationMs (0), object (NULL), type (TO) {}
+        AtomicTween () : AbstractTween (), equation (NULL), durationMs (0), object (NULL), type (TO), overwrite (NONE) {}
         virtual ~AtomicTween () {}
+
+        void *getTarget () { return object; }
+        void setTarget (void *o) { object = o; }
 
         AtomicTween *abs (unsigned int property, double value);
         AtomicTween *abs (std::string const &property, double value);
         AtomicTween *rel (unsigned int property, double value);
         AtomicTween *rel (std::string const &property, double value);
 
+        Overwrite getOverwrite () const { return overwrite; }
+        void setOverwrite (Overwrite o) { overwrite = o; }
+
+        void addProperty (TweeningProperty *p) { properties.push_back (p); }
+
         friend AtomicTween *to (void *targetObject, unsigned int durationMs, Ease ease);
         friend AtomicTween *from (void *targetObject, unsigned int durationMs, Ease ease);
         friend class ParserImpl;
 
-        enum Type { TO, FROM };
+        int getDurationMs () const { return durationMs; }
+        void setDurationMs (int ms) { durationMs = ms; }
 
 protected:
 
-        AtomicTween *target (IAccessor const *accessor, double value, bool abs);
+        AtomicTween *property (IAccessor const *accessor, double value, bool abs);
 
         // Uruchamia się jeden raz na poczatku działania tweena (lub po repeat).
         void initEntry (bool reverse);
@@ -77,8 +73,9 @@ public:
         IEquation const *equation;
         int durationMs;
         void *object;
-        TargetVector targets;
+        TweeningPropertyList properties;
         Type type;
+        Overwrite overwrite;
 };
 
 /**

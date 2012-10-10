@@ -9,7 +9,6 @@
 #ifndef BAJKA_TWEEN_ITWEEN_H_
 #define BAJKA_TWEEN_ITWEEN_H_
 
-#include <vector>
 #include <list>
 #include <cstddef>
 
@@ -29,13 +28,11 @@ public:
         virtual ITween *repeat (unsigned int num, bool yoyo = false) = 0;
         virtual ITween *delay (unsigned int duration) = 0;
 
-        /**
-         * Czyści, tak, żeby można było użyc tego tweena ponownie z innymi parametrami.
-         */
-        virtual void clear () = 0;
+        virtual int getDurationMs () const = 0;
+        virtual void setDurationMs (int ms) = 0;
 };
 
-typedef std::vector <ITween *> TweenVector;
+typedef std::list <ITween *> TweenList;
 
 } /* namespace Tween */
 

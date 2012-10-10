@@ -30,8 +30,6 @@ public:
         virtual ITween *repeat (unsigned int num, bool y = false) { repetitions = num; yoyo = y; return this; }
         virtual ITween *delay (unsigned int d) { delayMs = d; return this; }
 
-        virtual void clear ();
-
 protected:
 
         State transition (State s, bool reverse);
