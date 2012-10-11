@@ -18,27 +18,6 @@ MultiTween *multi ()
 
 /*##########################################################################*/
 
-void MultiTween::initExit (bool reverse)
-{
-
-}
-
-/****************************************************************************/
-
-void MultiTween::finishedExit (bool reverse)
-{
-
-}
-
-/****************************************************************************/
-
-void MultiTween::runEntry (bool reverse)
-{
-
-}
-
-/****************************************************************************/
-
 void MultiTween::updateRun (int deltaMs, bool direction)
 {
         for (TweenList::iterator i = tweens.begin (); i != tweens.end (); ++i) {
@@ -91,7 +70,9 @@ void MultiTween::remove (void const *target, bool onlyActive)
 
 void MultiTween::remove (void const *target, TweeningProperty *property, bool onlyActive)
 {
-
+        for (TweenList::iterator i = tweens.begin (); i != tweens.end (); ++i) {
+                (*i)->remove (target, property, onlyActive);
+        }
 }
 
 } /* namespace Tween */

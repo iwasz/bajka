@@ -141,18 +141,23 @@ Tween::AtomicTween *ParserImpl::parseAtomic (json_t *data, AtomicTween::Type typ
                     key = json_object_iter_key (iter);
                     value = json_object_iter_value (iter);
 
+                    if (json_is_real (value)) {
+                            tween->abs (key, json_real_value (value));
+                    }
                     if (json_is_integer (value)) {
                             tween->abs (key, json_integer_value (value));
                     }
                     else if (json_is_string (value)) {
                             const char *strValInt = json_string_value (value);
-                            long int valInt = strtol (strValInt, NULL, 10);
 
-                            if ((errno == ERANGE && (valInt == LONG_MAX || valInt == LONG_MIN)) || (errno != 0 && valInt == 0)) {
+                            errno = 0;
+                            double valReal = strtod (strValInt, NULL);
+
+                            if (errno != 0) {
                                     throw TweenParserException ("parseAtomic () : relative value must be of an integer value.");
                             }
 
-                            tween->rel (key, valInt);
+                            tween->rel (key, valReal);
                     }
 
                     iter = json_object_iter_next (target, iter);
