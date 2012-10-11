@@ -15,6 +15,9 @@
 namespace Tween {
 class Manager;
 
+/**
+ * Wspólna implenentacja.
+ */
 class AbstractTween : public ITween {
 public:
 

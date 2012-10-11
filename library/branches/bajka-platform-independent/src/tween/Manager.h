@@ -29,7 +29,7 @@ class ITargetable;
 /**
  *
  */
-class Manager : public IMultiTween {
+class Manager : public virtual IMultiTween {
 public:
 
         Manager ();
@@ -50,6 +50,8 @@ public:
         void registerAccessor (unsigned int id, std::string const &s, IAccessor *a);
         IAccessor const *getAccessor (unsigned int id) const;
         IAccessor const *getAccessor (std::string const &s) const;
+
+/*--------------------------------------------------------------------------*/
 
         AtomicTween *newAtomicTween ();
         void freeAtomicTween (AtomicTween *);

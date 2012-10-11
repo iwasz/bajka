@@ -38,9 +38,9 @@ public:
 
 private:
 
-        void initExit (bool reverse);
-        void finishedExit (bool reverse);
-        void runEntry (bool reverse);
+//        void initExit (bool reverse);
+//        void finishedExit (bool reverse);
+//        void runEntry (bool reverse);
         void updateRun (int deltaMs, bool direction);
         bool checkEnd (bool direction);
 

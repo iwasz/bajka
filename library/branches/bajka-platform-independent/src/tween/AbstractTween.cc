@@ -18,15 +18,6 @@ void AbstractTween::start ()
 
 /****************************************************************************/
 
-//void AbstractTween::clear ()
-//{
-//        state = INIT;
-//        yoyo = false;
-//        currentMs = repetitions = delayMs = 0;
-//}
-
-/****************************************************************************/
-
 void AbstractTween::update (int deltaMs, bool reverse)
 {
         if (state == END) {
@@ -74,7 +65,9 @@ void AbstractTween::update (int deltaMs, bool reverse)
                                 transition (((reverse) ? (DELAY) : (FINISHED)), reverse);
                         }
                         else {
-                                --currentRepetition;
+                                if (repetitions >= 0) {
+                                        --currentRepetition;
+                                }
 
                                 if (yoyo) {
                                         forward = !forward;

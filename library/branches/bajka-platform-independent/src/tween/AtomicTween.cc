@@ -54,7 +54,7 @@ AtomicTween::AtomicTween () :
         durationMs (0),
         object (NULL),
         type (TO),
-        overwrite (NONE),
+        overwrite (ALL_IMMEDIATE),
         parent (NULL)
 {
 }
