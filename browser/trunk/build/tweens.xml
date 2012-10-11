@@ -53,7 +53,10 @@
         
         <tweenButton set-as="child" text="sun">
           <value set-as="source">
-            {"type":"to", "obj":"sun", "t":5000, "targets":[{"ANGLE":"360"}]}
+            {"type":"multi", "tweens":[
+              {"type":"to", "obj":"sun", "t":15000, "ease":"LINEAR_INOUT", "repeat":-1, "targets":[{"ANGLE":360}]},
+              {"type":"to", "obj":"sun", "t":500, "repeat":-1, "yoyo":true, "overwrite":"NONE", "targets":[{"SCALE":1.1}]}
+            ]}            
           </value>
         </tweenButton>
 
