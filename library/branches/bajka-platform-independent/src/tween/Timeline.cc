@@ -64,11 +64,36 @@ bool Timeline::checkEnd (bool direction)
 
 /****************************************************************************/
 
-Timeline *Timeline::add (ITween *tween)
+IMultiTween *Timeline::add (ITween *tween)
 {
+        tween->setParent (this);
         tweens.push_back (tween);
         current = tweens.begin ();
         return this;
+}
+
+/****************************************************************************/
+
+void Timeline::remove (ITween *tween)
+{
+        tweens.remove (tween);
+        Manager::getMain ()->free (tween);
+}
+
+/****************************************************************************/
+
+void Timeline::remove (void const *target, bool onlyActive)
+{
+        for (TweenList::iterator i = tweens.begin (); i != tweens.end (); ++i) {
+                (*i)->remove (target, onlyActive);
+        }
+}
+
+/****************************************************************************/
+
+void Timeline::remove (void const *target, TweeningProperty *property, bool onlyActive)
+{
+
 }
 
 } /* namespace Tween */

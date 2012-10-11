@@ -25,7 +25,7 @@ public:
 
         State getState () const { return state; }
 
-        void start (Manager *m = NULL);
+        void start ();
 
         virtual ITween *repeat (unsigned int num, bool y = false) { repetitions = num; yoyo = y; return this; }
         virtual ITween *delay (unsigned int d) { delayMs = d; return this; }

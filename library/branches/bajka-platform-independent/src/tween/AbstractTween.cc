@@ -11,14 +11,9 @@
 
 namespace Tween {
 
-void AbstractTween::start (Manager *m)
+void AbstractTween::start ()
 {
-        if (m) {
-                m->setTween (this);
-        }
-        else {
-                Manager::getMain ()->setTween (this);
-        }
+        Manager::getMain ()->add (this);
 }
 
 /****************************************************************************/

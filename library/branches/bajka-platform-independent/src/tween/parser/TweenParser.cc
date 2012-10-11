@@ -31,6 +31,7 @@ struct ParserImpl {
 
         void setEase (AtomicTween *tween, json_t *field);
         void setTargetObject (AtomicTween *tween, json_t *field);
+        void setOverwrite (AtomicTween *tween, json_t *field);
 
         const char *getString (json_t *data, const char *key, bool required, const char *defaultValue = NULL);
         json_int_t getInteger (json_t *data, const char *key, bool required, json_int_t defaultValue = 0);
@@ -117,6 +118,7 @@ Tween::AtomicTween *ParserImpl::parseAtomic (json_t *data, AtomicTween::Type typ
         setEase (tween, data);
         tween->delay (getInteger (data, "delay", false));
         tween->repeat (getInteger (data, "repeat", false, 0), getBoolean (data, "yoyo", false, false));
+        setOverwrite (tween, data);
 
         json_t *field = json_object_get (data, "targets");
         if (!field || !json_is_array (field)) {
@@ -155,6 +157,10 @@ Tween::AtomicTween *ParserImpl::parseAtomic (json_t *data, AtomicTween::Type typ
 
                     iter = json_object_iter_next (target, iter);
                 }
+        }
+
+        if (tween->getOverwrite () == ITargetable::ALL_IMMEDIATE) {
+                Manager::getMain ()->overwrite (tween);
         }
 
         return tween;
@@ -289,6 +295,32 @@ void ParserImpl::setEase (AtomicTween *tween, json_t *field)
 
         if (!tween->equation) {
                 throw TweenParserException (std::string ("tweenParseTo () : ease is invalid : [") + json_string_value (field) + "]");
+        }
+}
+
+/****************************************************************************/
+
+void ParserImpl::setOverwrite (AtomicTween *tween, json_t *field)
+{
+        const char *fieldStr = getString (field, "overwrite", false, "NONE");
+
+        if (strcmp (fieldStr, "NONE") == 0) {
+                tween->setOverwrite (ITargetable::NONE);
+        }
+        else if (strcmp (fieldStr, "ALL_IMMEDIATE") == 0) {
+                tween->setOverwrite (ITargetable::ALL_IMMEDIATE);
+        }
+        else if (strcmp (fieldStr, "AUTO") == 0) {
+                tween->setOverwrite (ITargetable::AUTO);
+        }
+        else if (strcmp (fieldStr, "CONCURRENT") == 0) {
+                tween->setOverwrite (ITargetable::CONCURRENT);
+        }
+        else if (strcmp (fieldStr, "ALL_ONSTART") == 0) {
+                tween->setOverwrite (ITargetable::ALL_ONSTART);
+        }
+        else {
+                throw TweenParserException (std::string ("setOverwrite () : overwrite is invalid : [") + fieldStr + "]");
         }
 }
 

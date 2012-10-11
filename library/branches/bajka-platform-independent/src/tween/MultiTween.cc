@@ -61,5 +61,37 @@ bool MultiTween::checkEnd (bool direction)
 
         return end;
 }
+/****************************************************************************/
+
+IMultiTween *MultiTween::add (ITween *tween)
+{
+        tween->setParent (this);
+        tweens.push_back (tween);
+        return this;
+}
+
+/****************************************************************************/
+
+void MultiTween::remove (ITween *tween)
+{
+        tweens.remove (tween);
+        Manager::getMain ()->free (tween);
+}
+
+/****************************************************************************/
+
+void MultiTween::remove (void const *target, bool onlyActive)
+{
+        for (TweenList::iterator i = tweens.begin (); i != tweens.end (); ++i) {
+                (*i)->remove (target, onlyActive);
+        }
+}
+
+/****************************************************************************/
+
+void MultiTween::remove (void const *target, TweeningProperty *property, bool onlyActive)
+{
+
+}
 
 } /* namespace Tween */
