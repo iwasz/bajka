@@ -19,6 +19,7 @@ public:
         virtual ~ITargetable () {}
 
         virtual void *getTarget () = 0;
+        virtual void const *getTarget () const = 0;
         virtual void setTarget (void *) = 0;
 
         virtual ITween *abs (unsigned int property, double value) = 0;
@@ -32,6 +33,7 @@ public:
         virtual void setOverwrite (Overwrite o) = 0;
 
         virtual void addProperty (TweeningProperty *p) = 0;
+        virtual void removeProperty (IAccessor *a) = 0;
 };
 
 } /* namespace Tween */

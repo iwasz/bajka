@@ -123,6 +123,24 @@ void Manager::freeSetTween (SetTween *t)
         pool->setTweens.free (t);
 }
 
+/****************************************************************************/
+
+void Manager::free (ITween *t)
+{
+        if (typeid (*t) == typeid (AtomicTween)) {
+                freeAtomicTween (dynamic_cast <AtomicTween *> (t));
+        }
+        else if (typeid (*t) == typeid (Timeline)) {
+                freeTimeline (dynamic_cast <Timeline *> (t));
+        }
+        else if (typeid (*t) == typeid (MultiTween)) {
+                freeMultiTween (dynamic_cast <MultiTween *> (t));
+        }
+        else if (typeid (*t) == typeid (SetTween)) {
+                freeSetTween (dynamic_cast <SetTween *> (t));
+        }
+}
+
 /**
  * Tworzy główny manager (singleton).
  */
@@ -133,9 +151,9 @@ void init ()
 
 /****************************************************************************/
 
-void free ()
+void destroy ()
 {
-        Manager::free ();
+        Manager::destroy ();
 }
 
 /****************************************************************************/
@@ -158,7 +176,7 @@ void free ()
 
 /****************************************************************************/
 
-Manager::Manager () : tween (NULL)
+Manager::Manager ()
 {
         registerEquationPrv (LINEAR_INOUT , new Linear);
         registerEquationPrv (QUAD_IN      , new QuadIn);
@@ -216,7 +234,7 @@ void Manager::init ()
 
 /****************************************************************************/
 
-void Manager::free ()
+void Manager::destroy ()
 {
         delete main;
 }
@@ -225,11 +243,9 @@ void Manager::free ()
 
 void Manager::update (int deltaMs)
 {
-//	assertThrow (tween, "Manager::update : !tween");
-
-	if (tween) {
-		tween->update (deltaMs, false);
-	}
+        for (TweenList::iterator i = tweens.begin (); i != tweens.end (); ++i) {
+                (*i)->update (deltaMs, false);
+        }
 }
 
 /****************************************************************************/
@@ -272,5 +288,62 @@ IAccessor const *Manager::getAccessor (std::string const &s) const
         return (i != accessorsStr.end ()) ? (i->second) : NULL;
 }
 
+/****************************************************************************/
+
+IMultiTween *Manager::add (ITween *tween)
+{
+        tween->setParent (this);
+        tweens.push_back (tween);
+        return this;
+}
+
+/****************************************************************************/
+
+void Manager::remove (ITween *tween)
+{
+        tweens.remove (tween);
+        free (tween);
+}
+
+/****************************************************************************/
+
+void Manager::remove (void const *target, bool onlyActive)
+{
+        for (TweenList::iterator i = tweens.begin (); i != tweens.end (); ++i) {
+                (*i)->remove (target, onlyActive);
+        }
+}
+
+/****************************************************************************/
+
+void Manager::remove (void const *target, TweeningProperty *property, bool onlyActive)
+{
+
+}
+
+/****************************************************************************/
+
+void Manager::overwrite (ITargetable const *tween)
+{
+        switch (tween->getOverwrite ()) {
+        case ITargetable::ALL_IMMEDIATE:
+        case ITargetable::ALL_ONSTART:
+                remove (tween->getTarget (), false);
+                break;
+
+        case ITargetable::AUTO:
+//                remove (tween->getTarget (), );
+                break;
+
+        case ITargetable::CONCURRENT:
+                remove (tween->getTarget (), true);
+                break;
+
+        case ITargetable::NONE:
+        default:
+                break;
+        }
+
+}
 
 } /* namespace Tween */

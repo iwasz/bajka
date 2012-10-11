@@ -17,11 +17,7 @@ public:
         virtual ~IMultiTween () {}
 
         virtual IMultiTween *add (ITween *tween) = 0;
-
-        virtual void remove (void *target) = 0;
-        virtual void remove (void *target, TweeningProperty *property) = 0;
-
-        virtual ITween *find (void *target) = 0;
+        virtual void remove (ITween *tween) = 0;
 };
 
 } /* namespace Tween */

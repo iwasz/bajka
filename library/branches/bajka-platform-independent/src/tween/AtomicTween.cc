@@ -8,29 +8,55 @@
 
 #include "AtomicTween.h"
 #include "Manager.h"
+#include "IMultiTween.h"
 
 namespace Tween {
 
-AtomicTween *to (void *targetObject, unsigned int durationMs, Ease ease)
+AtomicTween *to (void *targetObject, unsigned int durationMs, Ease ease, ITargetable::Overwrite o)
 {
         AtomicTween *tween = Manager::getMain ()->newAtomicTween ();
         tween->equation = Manager::getMain ()->getEase (ease);
         tween->durationMs = durationMs;
         tween->object = targetObject;
         tween->type = AtomicTween::TO;
+        tween->setOverwrite (o);
+
+        if (o == ITargetable::ALL_IMMEDIATE) {
+                Manager::getMain ()->overwrite (tween);
+        }
+
         return tween;
 }
 
 /****************************************************************************/
 
-AtomicTween *from (void *targetObject, unsigned int durationMs, Ease ease)
+AtomicTween *from (void *targetObject, unsigned int durationMs, Ease ease, ITargetable::Overwrite o)
 {
         AtomicTween *tween = Manager::getMain ()->newAtomicTween ();
         tween->equation = Manager::getMain ()->getEase (ease);
         tween->durationMs = durationMs;
         tween->object = targetObject;
         tween->type = AtomicTween::FROM;
+        tween->setOverwrite (o);
+
+        if (o == ITargetable::ALL_IMMEDIATE) {
+                Manager::getMain ()->overwrite (tween);
+        }
+
         return tween;
+}
+
+/****************************************************************************/
+
+AtomicTween::AtomicTween () :
+        AbstractTween (),
+        equation (NULL),
+        durationMs (0),
+        object (NULL),
+        type (TO),
+        overwrite (NONE),
+        parent (NULL)
+{
 }
 
 /****************************************************************************/
@@ -63,6 +89,10 @@ void AtomicTween::delayExit (bool reverse)
 }
 void AtomicTween::runEntry (bool reverse)
 {
+        if (overwrite == ITargetable::ALL_ONSTART) {
+                Manager::getMain ()->overwrite (this);
+        }
+
         currentMs = ((forward ^ reverse) ? (0) : (durationMs));
 }
 void AtomicTween::runExit (bool reverse) {}
@@ -155,5 +185,38 @@ AtomicTween *AtomicTween::property (IAccessor const *accessor, double value, boo
         properties.push_back (property);
         return this;
 }
+
+/****************************************************************************/
+
+void AtomicTween::removeProperty (IAccessor *a)
+{
+        throw 1;
+}
+
+/****************************************************************************/
+
+void AtomicTween::remove (void const *target, bool onlyActive)
+{
+        if (target != this->object) {
+                return;
+        }
+
+        if (onlyActive && (getState () != DELAY && getState () != RUN)) {
+                return;
+        }
+
+        parent->remove (this);
+}
+
+/****************************************************************************/
+
+void AtomicTween::remove (void const *target, TweeningProperty *property, bool onlyActive)
+{
+        if (target != this->object) {
+                return;
+        }
+
+}
+
 
 } /* namespace Tween */

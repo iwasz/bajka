@@ -26,14 +26,15 @@ public:
 
         virtual ~MultiTween () {}
 
-        MultiTween *add (ITween *tween)
-        {
-                tweens.push_back (tween);
-                return this;
-        }
+        IMultiTween *add (ITween *tween);
+        void remove (ITween *tween);
+        void remove (void const *target, bool onlyActive = false);
+        void remove (void const *target, TweeningProperty *property, bool onlyActive = false);
 
         int getDurationMs () const { return -1; }
         void setDurationMs (int ms) { throw Util::OperationNotSupportedException (); }
+
+        void setParent (IMultiTween *p) {}
 
 private:
 
