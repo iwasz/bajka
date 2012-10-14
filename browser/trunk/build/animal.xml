@@ -22,6 +22,10 @@
     <imgButton set-as="child" path="right.png" file="menu.xml" name="scene">
       <RelativeGroupProperties set-as="groupProps" translate="95, 50" hAlign="center" vAlign="center"/>
     </imgButton>
+
+    <imgButton set-as="child" path="close.png" file="menu.xml" name="scene">
+      <RelativeGroupProperties set-as="groupProps" translate="5, 95" hAlign="center" vAlign="center"/>
+    </imgButton>
     
     <SceneController set-as="controller" init-method="init">
       <TweenFactory set-as="tweenFactory" container="@#container">
