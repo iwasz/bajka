@@ -22,9 +22,12 @@ public:
         virtual ~SceneController () {}
         m_ (init) void init ();
 
+        HandlingType onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v);
+
 private:
 
-        Tween::ITweenFactory *p_ (tweenFactory);
+        Tween::ITweenFactory *p_ (tweenFactory)
+
         E_ (SceneController)
 };
 
