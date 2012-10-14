@@ -12,6 +12,7 @@
 #include <util/IShell.h>
 #include <model/IModel.h>
 #include <Platform.h>
+#include <tween/Manager.h>
 
 /****************************************************************************/
 
@@ -68,6 +69,7 @@ bool ReloadableXmlModelManager::run (Util::IShell *shell)
         lastFileTime = boost::filesystem::last_write_time (requestedFile);
 
         shell->notifyUnloadModel ();
+        Tween::Manager::getMain ()->killAll ();
         Model::IModel *m = get (requestedFile, requestedName);
 
         if (m) {
