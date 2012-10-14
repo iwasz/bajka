@@ -309,8 +309,11 @@ void Manager::remove (ITween *tween)
 
 void Manager::remove (void const *target, bool onlyActive)
 {
-        for (TweenList::iterator i = tweens.begin (); i != tweens.end (); ++i) {
+        for (TweenList::iterator i = tweens.begin (); i != tweens.end (); ) {
+                TweenList::iterator j = i;
+                ++j;
                 (*i)->remove (target, onlyActive);
+                i = j;
         }
 }
 
@@ -318,8 +321,11 @@ void Manager::remove (void const *target, bool onlyActive)
 
 void Manager::remove (void const *target, TweeningProperty *property, bool onlyActive)
 {
-        for (TweenList::iterator i = tweens.begin (); i != tweens.end (); ++i) {
+        for (TweenList::iterator i = tweens.begin (); i != tweens.end ();) {
+                TweenList::iterator j = i;
+                ++j;
                 (*i)->remove (target, property, onlyActive);
+                i = j;
         }
 }
 

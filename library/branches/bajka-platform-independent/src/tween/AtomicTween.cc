@@ -197,7 +197,7 @@ void AtomicTween::removeProperty (IAccessor *a)
 
 void AtomicTween::remove (void const *target, bool onlyActive)
 {
-        if (target != this->object) {
+        if (target && target != this->object) {
                 return;
         }
 
