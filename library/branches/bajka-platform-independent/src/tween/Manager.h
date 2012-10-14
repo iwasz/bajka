@@ -41,6 +41,7 @@ public:
         void remove (ITween *tween);
         void remove (void const *target, bool onlyActive);
         void remove (void const *target, TweeningProperty *property, bool onlyActive = false);
+        void killAll () { remove (NULL, false); }
 
         void overwrite (ITargetable const *tween);
 
