@@ -68,13 +68,12 @@ bool ReloadableXmlModelManager::run (Util::IShell *shell)
         dirty = false;
         lastFileTime = boost::filesystem::last_write_time (requestedFile);
 
-        shell->notifyUnloadModel ();
-        Tween::Manager::getMain ()->killAll ();
+        shell->onManagerUnloadModel ();
         Model::IModel *m = get (requestedFile, requestedName);
 
         if (m) {
                 shell->setModel (m);
-                shell->notifyLoadModel ();
+                shell->onManagerLoadModel ();
         }
 
         return true;
