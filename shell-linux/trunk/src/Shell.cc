@@ -38,6 +38,7 @@
 #include "model/layout/Align.h"
 #include "model/layout/LinearGroup.h"
 #include "model/layout/LayerProperties.h"
+#include "sound/Sound.h"
 
 using namespace Container;
 using Reflection::Manager;
@@ -204,6 +205,9 @@ void Shell::init ()
         initOpenGl (impl->config);
         srand (time (NULL));
         Tween::init ();
+
+        Device device;
+        device.init ();
 }
 
 /****************************************************************************/
