@@ -45,12 +45,12 @@ bool XmlModelManager::run (Util::IShell *shell)
                 requestedName = this->name;
         }
 
-        shell->notifyUnloadModel ();
+        shell->onManagerUnloadModel ();
         IModel *m = get (requestedFile, requestedName);
 
         if (m) {
                 shell->setModel (m);
-                shell->notifyLoadModel ();
+                shell->onManagerLoadModel ();
         }
 
         return true;
