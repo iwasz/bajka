@@ -68,9 +68,18 @@ pkg_check_modules (SDLTTF REQUIRED "SDL_ttf")
 INCLUDE_DIRECTORIES (${SDLTTF_INCLUDE_DIR})
 link_directories(${SDLTTF_LIBRARY_DIRS})
 
+pkg_check_modules (OPENAL REQUIRED "openal")    
+INCLUDE_DIRECTORIES (${OPENAL_INCLUDE_DIR})
+link_directories(${OPENAL_LIBRARY_DIRS})
+
+pkg_check_modules (ALUT REQUIRED "freealut")    
+INCLUDE_DIRECTORIES (${ALUT_INCLUDE_DIR})
+link_directories(${ALUT_LIBRARY_DIRS})
+
 # Sources
 AUX_SOURCE_DIRECTORY (../src SOURCES)
 AUX_SOURCE_DIRECTORY (../src/resource SOURCES)
+AUX_SOURCE_DIRECTORY (../src/sound SOURCES)
 
 # Local includes (inside project).
 INCLUDE_DIRECTORIES (../src)
@@ -84,6 +93,8 @@ TARGET_LINK_LIBRARIES (shell-linux ${SDLTTF_LIBRARIES})
 TARGET_LINK_LIBRARIES (shell-linux ${JPEG_LIBRARIES})
 TARGET_LINK_LIBRARIES (shell-linux ${TILIAE_LIBRARIES})
 TARGET_LINK_LIBRARIES (shell-linux ${BAJKA_LIBRARIES}) 
+TARGET_LINK_LIBRARIES (shell-linux ${OPENAL_LIBRARIES}) 
+TARGET_LINK_LIBRARIES (shell-linux ${ALUT_LIBRARIES}) 
     
 # Executable test.
 IF (0)
