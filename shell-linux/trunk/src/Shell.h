@@ -31,8 +31,6 @@ public:
         int run (Util::ShellConfig const &cfg);
         void quit ();
 
-//        virtual void dropIteration ();
-//        virtual bool getDropIteration () const;
         void reset ();
 
         Model::IModel *getModel ();
@@ -40,8 +38,8 @@ public:
 
         Util::Config *getConfig ();
 
-        void notifyLoadModel ();
-        void notifyUnloadModel ();
+        void onManagerLoadModel ();
+        void onManagerUnloadModel ();
 
 private:
 
