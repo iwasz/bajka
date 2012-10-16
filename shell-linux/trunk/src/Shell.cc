@@ -38,8 +38,6 @@
 #include "model/layout/Align.h"
 #include "model/layout/LinearGroup.h"
 #include "model/layout/LayerProperties.h"
-//#include <tween/Parser.h>
-//#include <tween/ITween.h>
 
 using namespace Container;
 using Reflection::Manager;
@@ -107,9 +105,6 @@ int Shell::run (Util::ShellConfig const &cfg)
                         container->addConversion (typeid (Model::VGravity), Model::stringToVGravity);
                         container->addConversion (typeid (Model::LinearGroup::Type), Model::stringToLinearGroupType);
 
-//                        Tween::Parser parser (container.get ());
-//                        container->addConversion (typeid (Tween::ITween), &parser);
-
                         ContainerFactory::init (container.get (), metaContainer.get ());
                         impl->config = vcast <U::Config *> (container->getBean ("config"));
                         overrideConfig (cfg);
@@ -141,11 +136,6 @@ int Shell::run (Util::ShellConfig const &cfg)
 
         return EXIT_SUCCESS;
 }
-
-/****************************************************************************/
-
-#define checkBreak() { if (impl->dropIteration_) { break; } }
-#define checkContinue() { if (impl->dropIteration_) { continue; } }
 
 /****************************************************************************/
 
@@ -295,7 +285,7 @@ Util::Config *Shell::getConfig ()
 
 /****************************************************************************/
 
-void Shell::notifyLoadModel ()
+void Shell::onManagerLoadModel ()
 {
         M::IModel *m = impl->model;
         Event::ManagerEvent event;
@@ -307,15 +297,16 @@ void Shell::notifyLoadModel ()
 
 /****************************************************************************/
 
-void Shell::notifyUnloadModel ()
+void Shell::onManagerUnloadModel ()
 {
+        Tween::Manager::getMain ()->killAll ();
+
         M::IModel *m = impl->model;
         Event::ManagerEvent event;
 
         if (m && m->getController () && m->getController ()->getEventMask () & Event::MANAGER_EVENT) {
                 m->getController ()->onManagerUnload (&event, m, m->getView ());
         }
-
 }
 
 /****************************************************************************/
