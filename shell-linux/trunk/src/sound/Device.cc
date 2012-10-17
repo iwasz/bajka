@@ -8,15 +8,44 @@
 
 #include "Device.h"
 #include <iostream>
-#include <AL/al.h>
-#include <AL/alc.h>
+#include <AL/alut.h>
 #include <vector>
 #include <string>
+#include "SoundException.h"
+#include "Buffer.h"
+
+/****************************************************************************/
+
+struct Device::Impl {
+        BufferMap buffers;
+};
+
+/****************************************************************************/
+
+Device::Device () : buffersNum (7), impl (new Impl) {}
+
+/****************************************************************************/
+
+Device::~Device ()
+{
+        assert (alutExit ());
+
+#if 0
+        ALCcontext *context = alcGetCurrentContext ();
+        ALCdevice *device = alcGetContextsDevice (context);
+        alcMakeContextCurrent (NULL);
+        alcDestroyContext (context);
+        alcCloseDevice (device);
+#endif
+
+        delete impl;
+}
 
 /****************************************************************************/
 
 void Device::init ()
 {
+#if 0
         // Initialization
         ALCdevice *device = alcOpenDevice (NULL); // select the "preferred device"
 
@@ -27,24 +56,11 @@ void Device::init ()
                         alcMakeContextCurrent (context);
                 }
         }
+#endif
 
-        alGetError(); // clear error code
-
-        ALuint *buffers = new ALuint[buffersNum];
-        alGenBuffers (buffersNum, buffers);
-        ALenum error;
-
-        if ((error = alGetError()) != AL_NO_ERROR) {
-                printf ("%s : %s", "alGenBuffers", alGetString (error));
-                return;
+        if (!alutInit (NULL, NULL)) {
+                throw Sound::SoundException ("Device::init () : alutInit : " + std::string (alutGetErrorString (alutGetError ())));
         }
-}
-
-/****************************************************************************/
-
-void Device::destroy ()
-{
-
 }
 
 /****************************************************************************/
@@ -93,4 +109,26 @@ void Device::printInfo ()
 
                 std::cout << std::endl;
         }
+}
+
+/****************************************************************************/
+
+void Device::registerBuffer (std::string const &name, Buffer *b)
+{
+        impl->buffers[name] = b;
+}
+
+/****************************************************************************/
+
+void Device::unregisterBuffer (std::string const &name)
+{
+        impl->buffers.erase (name);
+}
+
+/****************************************************************************/
+
+Buffer *Device::getBuffer (std::string const &name)
+{
+        BufferMap::iterator i = impl->buffers.find (name);
+        return ((i != impl->buffers.end ()) ? (i->second) : (NULL));
 }
