@@ -21,6 +21,10 @@ IController::HandlingType DebugButtonController::onButtonPress (Event::ButtonPre
                 primitive->setForeground (clicked);
         }
 
+        if (sound) {
+                sound->play ();
+        }
+
         if (modelManager) {
                 modelManager->load (file, name);
         }
