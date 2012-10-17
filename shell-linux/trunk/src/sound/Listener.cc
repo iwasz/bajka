@@ -8,14 +8,3 @@
 
 #include "Listener.h"
 
-Listener::Listener ()
-{
-        // TODO Auto-generated constructor stub
-
-}
-
-Listener::~Listener ()
-{
-        // TODO Auto-generated destructor stub
-}
-
