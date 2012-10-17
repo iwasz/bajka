@@ -10,7 +10,8 @@
 #define BAJKA_SHELL_H_
 
 #include "util/IShell.h"
-#include "./resource/Resource.h"
+#include "resource/Resource.h"
+#include "sound/Sound.h"
 
 class Impl;
 

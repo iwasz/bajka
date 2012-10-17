@@ -6,26 +6,37 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef DEVICE_H_
-#define DEVICE_H_
+#ifndef BAJKA_SHELL_DEVICE_H_
+#define BAJKA_SHELL_DEVICE_H_
 
 #include <util/ReflectionMacros.h>
 
+class Buffer;
+
+/**
+ * Inicjuje / zamyka OpenAl i jest managerem buforów.
+ */
 class Device {
 public:
 
         C__ (void)
 
-        Device () : buffersNum (10) {}
-        virtual ~Device () {}
+        Device ();
+        virtual ~Device ();
 
         m_ (init) void init ();
-        void destroy ();
         void printInfo ();
 
 private:
 
+        class Impl;
+        friend class Buffer;
+        void registerBuffer (std::string const &name, Buffer *);
+        void unregisterBuffer (std::string const &name);
+        Buffer *getBuffer (std::string const &name);
+
         int p_ (buffersNum)
+        Impl *impl;
 
         E_ (Device)
 };
