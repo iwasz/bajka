@@ -13,6 +13,7 @@
 #include <controller/EmptyController.h>
 #include <view/draw/Color.h>
 #include <model/manager/IModelManager.h>
+#include <sound/Source.h>
 
 /**
  *
@@ -38,6 +39,7 @@ private:
         Model::IModelManager *p_ (modelManager);
         std::string p_ (file);
         std::string p_ (name);
+        Source *p_ (sound);
 
         E_ (DebugButtonController)
 };

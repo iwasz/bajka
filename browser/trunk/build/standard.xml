@@ -66,7 +66,7 @@
   <LinearGroup id="button" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true" type="vertical">
     <label set-as="child" text="Button" view.foreground="@orange" />
     <Rectangle set-as="view" foreground="@orange" background="00000000" thickness="3"/>
-    <DebugButtonController set-as="controller" eventMask="0xffff" clicked="@siusiu"  normal="@orange"  hover="@crimson" modelManager="@modelManager" />
+    <DebugButtonController set-as="controller" eventMask="0xffff" clicked="@siusiu"  normal="@orange"  hover="@crimson" modelManager="@modelManager" sound="@source" />
     <prop-alias name="file" value="controller.file" />
     <prop-alias name="name" value="controller.name" />
     <prop-alias name="text" value="children.0.view.text" />
@@ -85,4 +85,8 @@
     <prop-alias name="path" value="view.bitmap.path"/>
   </Box>
   
+  
+  <Device id="device" init-method="init"/>
+  <Buffer id="buffer" device="@device" load="test.wav" />
+  <Source id="source" device="@device" buffer="@buffer" />
 </beans>
