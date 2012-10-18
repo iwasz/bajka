@@ -12,6 +12,7 @@
       <button set-as="child" file="layouts.xml" name="scene" text="Layouts" />
       <button set-as="child" file="swinia.xml" name="scene" text="Swinia" />
       <button set-as="child" file="tweens.xml" name="scene" text="Tween test" />
+      <button set-as="child" file="sound.xml" name="scene" text="Sound test" />
       <RelativeGroupProperties set-as="groupProps" vAlign="center" hAlign="center" translate="50, 50"/>
     </LinearGroup>
   </RelativeGroup>
