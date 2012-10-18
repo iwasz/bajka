@@ -48,6 +48,11 @@ public:
         virtual int run (Util::ShellConfig const &cfg) = 0;
         virtual void quit () = 0;
 
+        virtual void init () = 0;
+        virtual void preInit () = 0;
+        virtual void loop () = 0;
+        virtual void destroy () = 0;
+
         virtual void onManagerLoadModel () = 0;
         virtual void onManagerUnloadModel () = 0;
 
