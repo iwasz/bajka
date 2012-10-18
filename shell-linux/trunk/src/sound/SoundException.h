@@ -6,8 +6,8 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_SOUNDEXCEPTION_H_
-#define BAJKA_SOUNDEXCEPTION_H_
+#ifndef BAJKA1_SOUNDEXCEPTION_H_
+#define BAJKA1_SOUNDEXCEPTION_H_
 
 #include <core/Exception.h>
 
@@ -20,5 +20,10 @@ struct SoundException : public Core::Exception {
 };
 
 }
+
+/**
+ *
+ */
+extern void soundThrow (std::string const &msg);
 
 #endif /* SOUNDEXCEPTION_H_ */

@@ -23,6 +23,7 @@
 #include <SDL/SDL_ttf.h>
 #include "Shell.h"
 #include "geometry/Point.h"
+#include "geometry/Point3.h"
 #include "geometry/LineString.h"
 #include "events/Events.h"
 #include "events/PointerInsideIndex.h"
@@ -98,6 +99,7 @@ int Shell::run (Util::ShellConfig const &cfg)
                         Ptr <BeanFactoryContainer> container = ContainerFactory::create (metaContainer, true);
 
                         container->addConversion (typeid (Geometry::Point), Geometry::stringToPointVariant);
+                        container->addConversion (typeid (Geometry::Point3), Geometry::stringToPoint3Variant);
                         container->addConversion (typeid (Geometry::LineString), Geometry::stringToLineStringVariant);
                         container->addConversion (typeid (Model::HAlign), Model::stringToHAlign);
                         container->addConversion (typeid (Model::VAlign), Model::stringToVAlign);
