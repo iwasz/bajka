@@ -25,7 +25,7 @@ IController::HandlingType DebugButtonController::onButtonPress (Event::ButtonPre
                 sound->play ();
         }
 
-        if (modelManager) {
+        if (modelManager && !file.empty () && !name.empty ()) {
                 modelManager->load (file, name);
         }
 
