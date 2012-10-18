@@ -20,36 +20,35 @@ namespace View {
 class IBitmap;
 }
 
-struct GraphicsService {
+extern void updateConfigViewport (Util::Config *config);
 
-        static void updateConfig (Util::Config *config);
+/**
+ * Inicjuje SDL.
+ * @param fullScreen
+ * @param viewportWidth
+ * @param viewportHeight
+ * @param caption
+ */
+extern void initSdl (Util::Config *config);
 
-        /**
-         * Inicjuje SDL.
-         * @param fullScreen
-         * @param viewportWidth
-         * @param viewportHeight
-         * @param caption
-         */
-        static void init (Util::Config *config);
+/**
+ * Wyłącza SDL.
+ */
+extern void freeSdl ();
 
-        /**
-         * Wyłącza SDL.
-         */
-        static void free ();
+/**
+ * Tworzy SDL surface z domyślnymi dla bajki parametrami.
+ */
+extern SDL_Surface *createSurface (int w, int h);
 
-        /**
-         * Tworzy SDL surface z domyślnymi dla bajki parametrami.
-         */
-        static SDL_Surface *createSurface (int w, int h);
+/**
+ * Rozszerza surface takj, żeby jego wys i szer były potęgami 2. Za skasowanie
+ * zwróconego surface jest odpowiedzialny user.
+ */
+extern View::IBitmap *expandSurfacePowerOf2 (View::IBitmap *, Geometry::Box const *region = NULL);
 
-        /**
-         * Rozszerza surface takj, żeby jego wys i szer były potęgami 2. Za skasowanie
-         * zwróconego surface jest odpowiedzialny user.
-         */
-        static View::IBitmap *expandSurfacePowerOf2 (View::IBitmap *, Geometry::Box const *region = NULL);
-
-
-};
+extern void initOpenGl (Util::Config *config);
+extern void freeOpenGl ();
+extern void mouseToDisplay (int x, int y, int windowWidth, int windowHeight, float *nx, float *ny);
 
 #endif /* GRAPHICSINTERFACE_H_ */

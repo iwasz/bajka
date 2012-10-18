@@ -34,6 +34,9 @@ Source::Source () : impl (new Impl)
 
 Source::~Source ()
 {
+        stop ();
+        alDeleteSources (1, &impl->source);
+        assert (alGetError () == AL_NO_ERROR);
         delete impl;
 }
 
@@ -70,6 +73,30 @@ void Source::play (Buffer *buf)
         soundThrow ("Source::play () : alSourcei (AL_BUFFER) : ");
         alSourcePlay (impl->source);
         soundThrow ("Source::play () : alSourcePlay () : ");
+}
+
+/****************************************************************************/
+
+void Source::pause ()
+{
+        alSourcePause (impl->source);
+        soundThrow ("Source::pause () : alSourcePause () : ");
+}
+
+/****************************************************************************/
+
+void Source::stop ()
+{
+        alSourceStop (impl->source);
+        soundThrow ("Source::stop () : alSourceStop () : ");
+}
+
+/****************************************************************************/
+
+void Source::rewind ()
+{
+        alSourceRewind (impl->source);
+        soundThrow ("Source::rewind () : alSourceRewind () : ");
 }
 
 /****************************************************************************/

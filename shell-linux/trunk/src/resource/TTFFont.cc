@@ -130,7 +130,7 @@ Ptr <IBitmap> TTFFont::renderMulti (std::string const &text, View::Color const &
         height = (tokens.size () - 1) * lineSkip + height;
 
         // Stwórz surface zdolne pomiescić cały tekst (wszytskie linijki).
-        SDL_Surface *surface = GraphicsService::createSurface (width, height);
+        SDL_Surface *surface = createSurface (width, height);
 
         // Renderuj
         int cnt = 0;

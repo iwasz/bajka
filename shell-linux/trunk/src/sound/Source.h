@@ -25,6 +25,7 @@ public:
         void play ();
         void pause ();
         void stop ();
+        void rewind ();
 
         float getGain () const;
         m_ (setGain) void setGain (float f);
