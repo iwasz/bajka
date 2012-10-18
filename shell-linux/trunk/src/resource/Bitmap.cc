@@ -14,7 +14,7 @@
 
 Bitmap::Bitmap (int width, int height)
 {
-        image = GraphicsService::createSurface (width, height);
+        image = createSurface (width, height);
 }
 
 /****************************************************************************/
@@ -127,7 +127,7 @@ Ptr <View::IBitmap> Bitmap::blit (Geometry::Box const *region, int width, int he
         width = (width < 0) ? origW : width;
         height = (height < 0) ? origH : height;
 
-        SDL_Surface *surface = GraphicsService::createSurface (width, height);
+        SDL_Surface *surface = createSurface (width, height);
 
         Uint32 saved_flags = image->flags & (SDL_SRCALPHA | SDL_RLEACCELOK);
 

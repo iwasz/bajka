@@ -12,7 +12,7 @@
 #include "events/PointerInsideIndex.h"
 #include "events/EventIdex.h"
 #include "events/types/IEvent.h"
-#include "OpenGlService.h"
+#include "GraphicsService.h"
 #include "model/IGroup.h"
 #include "Platform.h"
 #include "util/IShell.h"
