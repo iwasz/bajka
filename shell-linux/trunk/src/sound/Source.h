@@ -12,6 +12,7 @@
 #include <util/ReflectionMacros.h>
 #include "Device.h"
 #include "Buffer.h"
+#include <geometry/Point3.h>
 
 class Source {
 public:
@@ -22,6 +23,33 @@ public:
 
         void play (std::string const &bufferName);
         void play ();
+        void pause ();
+        void stop ();
+
+        float getGain () const;
+        m_ (setGain) void setGain (float f);
+
+        float getPitch () const;
+        m_ (setPitch) void setPitch (float f);
+
+        float getOffset () const;
+        m_ (setOffset) void setOffset (float f);
+
+        Geometry::Point3 getPosition () const;
+        m_ (setPosition) void setPosition (Geometry::Point3 &p);
+
+        Geometry::Point3 getVelocity () const;
+        m_ (setVelocity) void setVelocity (Geometry::Point3 &p);
+
+        Geometry::Point3 getDirection () const;
+        m_ (setVelocity) void setDirection (Geometry::Point3 &p);
+
+        bool getLooping () const;
+        m_ (setLooping) void setLooping (bool b);
+
+private:
+
+        void play (Buffer *buf);
 
 private:
 

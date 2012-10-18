@@ -31,9 +31,12 @@ private:
 
         class Impl;
         friend class Buffer;
+        friend class Source;
         void registerBuffer (std::string const &name, Buffer *);
         void unregisterBuffer (std::string const &name);
         Buffer *getBuffer (std::string const &name);
+
+private:
 
         int p_ (buffersNum)
         Impl *impl;
