@@ -33,7 +33,7 @@ struct EmptyController : public IController {
         virtual HandlingType onKeyDown (Event::KeyDownEvent *e, Model::IModel *m, View::IView *v) { return IGNORED; }
         virtual HandlingType onKeyUp (Event::KeyUpEvent *e, Model::IModel *m, View::IView *v) { return IGNORED; }
         virtual HandlingType onTimer (Event::TimerEvent *e, Model::IModel *m, View::IView *v) { return IGNORED; }
-        virtual HandlingType onQuit (Event::QuitEvent *e, Model::IModel *m, View::IView *v);
+        virtual HandlingType onQuit (Event::QuitEvent *e, Model::IModel *m, View::IView *v) { return IGNORED; }
         virtual HandlingType onActive (Event::ActiveEvent *e, Model::IModel *m, View::IView *v) { return IGNORED; }
         virtual HandlingType onExpose (Event::ExposeEvent *e, Model::IModel *m, View::IView *v) { return IGNORED; }
         virtual HandlingType onResize (Event::ResizeEvent *e, Model::IModel *m, View::IView *v) { return IGNORED; }
