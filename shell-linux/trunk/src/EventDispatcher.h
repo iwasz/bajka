@@ -10,7 +10,8 @@
 #define EVENTDISPATCHER_H_
 
 #include <SDL.h>
-#include "events/types/Types.h"
+#include <events/types/Types.h>
+#include <events/AbstractEventDispatcher.h>
 
 namespace Model {
 class IModel;
@@ -25,7 +26,7 @@ class EventIndex;
  * Generuje eventy używając do tego SDL.
  * \ingroup Events
  */
-class EventDispatcher {
+class EventDispatcher : public Event::AbstractEventDispatcher {
 public:
         virtual ~EventDispatcher () {}
 
@@ -34,17 +35,12 @@ public:
          */
         bool pollAndDispatch (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex);
 
-        /**
-         * Zwraca true, kiedy event został obsłużony przez grę i nie powinien zostać przekazany do
-         * systemu. Ma to znaczenie w androidzie, gdzie aplikacja i system współdzielą eventy.
-         */
-        virtual bool dispatch (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex, SDL_Event *event);
-
         void reset ();
 
 private:
 
         Event::IEvent *translate (SDL_Event *event);
+        Event::MouseButton translateMouseButton (SDL_Event *event);
 
         Event::KeyboardEvent *updateKeyboardUpEvent (SDL_Event *event);
         Event::KeyboardEvent *updateKeyboardDownEvent (SDL_Event *event);
@@ -53,9 +49,6 @@ private:
         Event::MouseButtonEvent *updateMouseButtonEventImpl (Event::MouseButtonEvent *output, SDL_Event *event);
         Event::ActiveEvent *updateActiveEvent (SDL_Event *event);
         Event::ResizeEvent *updateResizeEvent (SDL_Event *event);
-
-        Event::MouseButton translateMouseButton (SDL_Event *event);
-        bool dispatchEventBackwards (Model::IModel *m, Event::IEvent *e, Event::PointerInsideIndex *pointerInsideIndex);
 
 private:
 

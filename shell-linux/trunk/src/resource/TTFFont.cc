@@ -39,6 +39,7 @@ TTFFont::TTFFont (std::string const &path, int ptSize, long int index) : renderT
 TTFFont::~TTFFont ()
 {
         TTF_CloseFont (font);
+        font = NULL;
 }
 
 /****************************************************************************/
