@@ -11,6 +11,7 @@
 
 #include "tween/parser/ITweenFactory.h"
 #include <controller/EmptyController.h>
+#include <util/ReflectionMacros.h>
 
 namespace Tween {
 
@@ -18,7 +19,6 @@ class SceneController : public Controller::EmptyController {
 public:
         C__ (void)
         b_ ("EmptyController")
-
         virtual ~SceneController () {}
         m_ (init) void init ();
 

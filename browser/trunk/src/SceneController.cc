@@ -18,7 +18,7 @@ void SceneController::init ()
 
 SceneController::HandlingType SceneController::onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v)
 {
-
+        return IGNORED;
 }
 
 } /* namespace Tween */
