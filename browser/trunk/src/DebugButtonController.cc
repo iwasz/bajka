@@ -10,6 +10,8 @@
 #include <DebugButtonController.h>
 #include <events/types/Types.h>
 #include <view/Primitive.h>
+#include <Platform.h>
+#include <util/IShell.h>
 
 using namespace Controller;
 
@@ -23,6 +25,10 @@ IController::HandlingType DebugButtonController::onButtonPress (Event::ButtonPre
 
         if (sound) {
                 sound->play ();
+        }
+
+        if (quit) {
+                shell ()->quit ();
         }
 
         if (modelManager && !file.empty () && !name.empty ()) {

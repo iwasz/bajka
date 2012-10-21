@@ -22,6 +22,7 @@ class DebugButtonController : public Controller::EmptyController {
 public:
         C__ (void)
         b_ ("EmptyController")
+        DebugButtonController () : quit (false) {}
         virtual ~DebugButtonController () {}
 
 /*--------------------------------------------------------------------------*/
@@ -40,6 +41,7 @@ private:
         std::string p_ (file);
         std::string p_ (name);
         Source *p_ (sound);
+        bool p_ (quit)
 
         E_ (DebugButtonController)
 };
