@@ -21,7 +21,6 @@ public:
 
         C__ (void)
         b_ ("EmptyController")
-
         Instructions1Controller () :
                 player      (NULL),
                 buttonLeft  (NULL),

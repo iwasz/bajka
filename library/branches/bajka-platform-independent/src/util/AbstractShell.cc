@@ -67,8 +67,9 @@ int AbstractShell::run (Util::ShellConfig const &cfg)
 
                         init ();
                         loop ();
-                        destroy ();
                 }
+
+                destroy ();
         }
         catch (Core::Exception const &e) {
                 std::cerr << "Exception caught : \n" << e.getMessage () << std::endl;

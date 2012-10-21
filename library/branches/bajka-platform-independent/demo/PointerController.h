@@ -18,7 +18,6 @@ class PointerController : public Controller::EmptyController {
 public:
         C__ (void)
         b_ ("EmptyController")
-
         virtual ~PointerController () {}
         virtual HandlingType onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v);
 
