@@ -1,22 +1,42 @@
 # Wymagaj tej wersji - dopier w niej jest nowe makro FindPkgConfig
 CMAKE_MINIMUM_REQUIRED (VERSION 2.4.7 FATAL_ERROR)
 
+project (bajka)
+
 if(COMMAND cmake_policy)
     cmake_policy(SET CMP0003 NEW)
 endif(COMMAND cmake_policy)
 
-SET (CMAKE_VERBOSE_MAKEFILE 0) 
-ADD_DEFINITIONS (-DLINUX)
-ADD_DEFINITIONS (-DUSE_OPENGL)
+if (CMAKE_BUILD_TYPE)
+    if (NOT ${CMAKE_BUILD_TYPE} STREQUAL "Release")
+        message(FATAL_ERROR "CMAKE_BUILD_TYPE must be one of '' (None) or 'Release'")
+    endif()
+    
+    SET (RELEASE true)
+elseif()
+    SET (RELEASE false)        
+endif() 
+
+SET (CMAKE_C_FLAGS "-g -fPIC -Wall -O0 -Winvalid-pch -ffunction-sections -fdata-sections")
+SET (CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
+
+SET (CMAKE_C_FLAGS_RELEASE "-g0 -fPIC -Wall -O3 -Winvalid-pch -ffunction-sections -fdata-sections -DNDEBUG")
+SET (CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
+
+if (ANDROID)
+    ADD_DEFINITIONS (-DANDROID)
+    ADD_DEFINITIONS (-DUSE_OPENGLES)    
+    ADD_DEFINITIONS (-DUSE_TOUCH_SCREEN)
+else()
+    ADD_DEFINITIONS (-DLINUX)
+    ADD_DEFINITIONS (-DUSE_OPENGL)    
+endif()
+
 ADD_DEFINITIONS (-DUSE_CHIPMUNK)
-ADD_DEFINITIONS (-O0)
-#ADD_DEFINITIONS (-g -fvisibility=hidden)
-ADD_DEFINITIONS (-g -fPIC)
-ADD_DEFINITIONS (-Winvalid-pch)
-#ADD_DEFINITIONS (-H)
-ADD_DEFINITIONS (-Wall)
-ADD_DEFINITIONS (-DBAJKA_DEBUG)
-#ADD_DEFINITIONS (-fsyntax-only)
+
+SET (CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
+SET (CMAKE_EXE_LINKER_FLAGS "-Wl,--no-undefined")
+SET (CMAKE_VERBOSE_MAKEFILE 0)
 
 INSTALL (
     DIRECTORY "${PROJECT_SOURCE_DIR}/../src/"
@@ -30,27 +50,28 @@ INSTALL (
     DESTINATION "lib/pkgconfig"
     FILES_MATCHING PATTERN "*.pc"
     PATTERN "*.svn*" EXCLUDE)
-     
-SET (CMAKE_INSTALL_PREFIX "/home/iwasz/local") 
-SET (CMAKE_PREFIX_PATH "/home/iwasz/local")
-INCLUDE_DIRECTORIES ("/home/iwasz/local/include")
-link_directories("/home/iwasz/local/lib")
+
+if (NOT ANDROID)     
+    SET (CMAKE_INSTALL_PREFIX "/home/iwasz/local") 
+    SET (CMAKE_PREFIX_PATH "/home/iwasz/local")
+    INCLUDE_DIRECTORIES ("/home/iwasz/local/include")
+    link_directories("/home/iwasz/local/lib")
+endif()
 
 #Boost
 find_package (Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
-#IF(NOT ANDROID)
-    # Tiliae
-    include (FindPkgConfig)
-    pkg_check_modules (TILIAE REQUIRED "tiliae")
-    INCLUDE_DIRECTORIES (${TILIAE_INCLUDE_DIRS})
-    link_directories(${TILIAE_LIBRARY_DIRS})
-    
-    pkg_check_modules (JANSSON REQUIRED "jansson")
-    INCLUDE_DIRECTORIES (${JANSSON_INCLUDE_DIRS})
-    link_directories(${JANSSON_LIBRARY_DIRS})
-    
+include (FindPkgConfig)
+pkg_check_modules (TILIAE REQUIRED "tiliae")
+INCLUDE_DIRECTORIES (${TILIAE_INCLUDE_DIRS})
+link_directories(${TILIAE_LIBRARY_DIRS})
+
+pkg_check_modules (JANSSON REQUIRED "jansson")
+INCLUDE_DIRECTORIES (${JANSSON_INCLUDE_DIRS})
+link_directories(${JANSSON_LIBRARY_DIRS})
+
+IF(NOT ANDROID)
     # Find GL
     include (FindOpenGL)
     INCLUDE_DIRECTORIES (${OPENGL_INCLUDE_DIR})
@@ -58,13 +79,13 @@ include_directories(${Boost_INCLUDE_DIRS})
     # Chipmunk
     INCLUDE_DIRECTORIES ("/usr/local/include/chipmunk")
     INCLUDE_DIRECTORIES ("/home/iwasz/local/include/chipmunk")
-#ELSE()    
-#    AUX_SOURCE_DIRECTORY ("$ENV{NDK}/sources/android/native_app_glue" SOURCES)
-#    INCLUDE_DIRECTORIES ("$ENV{NDK}/sources/android/native_app_glue")
-#    
-#    INCLUDE_DIRECTORIES ("/home/iwasz/local/share/android-toolchain/user/include/chipmunk")
-#    link_directories($ENV{ANDROID_STANDALONE_TOOLCHAIN}/user/lib)    
-#ENDIF()
+ELSE()    
+    AUX_SOURCE_DIRECTORY ("$ENV{NDK}/sources/android/native_app_glue" SOURCES)
+    INCLUDE_DIRECTORIES ("$ENV{NDK}/sources/android/native_app_glue")
+    
+    INCLUDE_DIRECTORIES ("/home/iwasz/local/share/android-toolchain/user/include/chipmunk")
+    link_directories($ENV{ANDROID_STANDALONE_TOOLCHAIN}/user/lib)    
+ENDIF()
 
 # Sources
 AUX_SOURCE_DIRECTORY (../src/view SOURCES)
@@ -101,6 +122,22 @@ INCLUDE_DIRECTORIES (../src)
 # Biblioteka z silnikiem bajka.
 if (ANDROID)
     add_library (bajka STATIC ${SOURCES})
+    
+    # Android-specific Log Support
+#    TARGET_LINK_LIBRARIES (bajka log)
+    
+    # The EGL graphics library
+#    TARGET_LINK_LIBRARIES (bajka EGL)
+    
+    # The Android native application APIs
+#    TARGET_LINK_LIBRARIES (bajka android)
+    
+    # The OpenGL ES 1.x Library
+    TARGET_LINK_LIBRARIES (bajka GLESv1_CM)
+#    TARGET_LINK_LIBRARIES (bajka stdc++)
+#    TARGET_LINK_LIBRARIES (bajka tiliae)
+#    TARGET_LINK_LIBRARIES (bajka mxml)
+#    TARGET_LINK_LIBRARIES (bajka chipmunk)    
 else ()
     add_library (bajka SHARED ${SOURCES})
 endif ()

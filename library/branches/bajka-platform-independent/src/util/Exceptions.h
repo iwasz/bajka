@@ -39,7 +39,7 @@ struct AssertionException : public Core::Exception {
 
 } // namespace
 
-#ifdef BAJKA_DEBUG
+#ifndef NDEBUG
 #define assertThrow(b,msg)                                              \
 		if (!(b)) {                                             \
 			throw Util::AssertionException ((msg));         \
