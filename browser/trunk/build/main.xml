@@ -27,7 +27,7 @@ Dodatkowe:
     <ref set-as="modelManager" bean="modelManager" />
   </Config>
   
-  <ReloadableXmlModelManager id="modelManager" file="menu.xml" name="scene" mainContainer="@#container"/>
+  <ReloadableXmlModelManager id="modelManager" file="gles-test.xml" name="scene" mainContainer="@#container"/>
 
 </beans>
 
