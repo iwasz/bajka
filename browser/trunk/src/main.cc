@@ -16,6 +16,7 @@
 #include "DebugButtonController.h"
 #include "ReloadableXmlModelManager.h"
 #include "SceneController.h"
+#include "GLESWidget.h"
 
 namespace po = boost::program_options;
 
