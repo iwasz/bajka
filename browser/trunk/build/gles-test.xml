@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+  <Group id="scene">
+    <GLESWidget set-as="view" init-method="init" />
+  </Group>
+</beans>

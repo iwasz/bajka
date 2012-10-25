@@ -16,10 +16,15 @@ public:
         C__ (void)
         b_ ("Primitive")
 
-        virtual ~GLESWidget () {}
+        GLESWidget ();
+        virtual ~GLESWidget ();
+
         m_ (init) void init ();
         void update (Model::IModel *model, Event::UpdateEvent *e);
+private:
 
+        class Impl;
+        Impl *impl;
         E_ (GLESWidget)
 
 };
