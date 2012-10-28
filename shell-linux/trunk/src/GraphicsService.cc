@@ -6,8 +6,6 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include <GL/gl.h>
-#include <GL/glut.h>
 #include "GraphicsService.h"
 #include "util/Exceptions.h"
 #include "util/Math.h"
@@ -113,6 +111,12 @@ void swapBuffers ()
 
 void initOpenGl (Util::Config *config)
 {
+        glewInit();
+
+        if (!GLEW_VERSION_2_0) {
+                throw Util::InitException ("OpenGL 2.0 not available");
+        }
+
         glShadeModel(GL_FLAT);
         glDisable (GL_DEPTH_TEST);
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
