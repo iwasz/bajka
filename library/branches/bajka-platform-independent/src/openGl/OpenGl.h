@@ -14,17 +14,11 @@
  */
 
 #if defined (LINUX)
-#include <GL/gl.h>
+#include <GL/glew.h>
 #elif defined (ANDROID)
 #include <GLES/gl.h>
 #endif
 
-#include "view/draw/Color.h"
-
-namespace View {
-
-//extern void clear (View::Color const &c);
-
-} /* namespace View */
+extern GLuint loadShader (GLenum type, const char *shaderSrc);
 
 #	endif /* OPENGL_H_ */

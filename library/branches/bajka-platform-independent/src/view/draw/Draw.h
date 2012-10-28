@@ -9,6 +9,7 @@
 #ifndef BAJKA_VIEW_PRIMITIVES_H_
 #define BAJKA_VIEW_PRIMITIVES_H_
 
-#include "Draw.h"
+#include "Color.h"
+#include "Primitives.h"
 
 #	endif /* PRIMITIVES_H_ */
