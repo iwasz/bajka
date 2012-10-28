@@ -8,17 +8,49 @@
 
 #if defined (USE_OPENGL) || defined (USE_OPENGLES)
 #include "OpenGl.h"
+#include "util/Exceptions.h"
 
-namespace View {
+/****************************************************************************/
 
-//void clear (View::Color const &c)
-//{
-//        glMatrixMode (GL_MODELVIEW);
-//        glLoadIdentity ();
-//        glClearColor (c.r, c.g, c.b, c.a);
-//        glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//}
+GLuint loadShader (GLenum type, const char *shaderSrc)
+{
+        GLuint shader;
+        GLint compiled;
 
-} /* namespace View */
+        // Create the shader object
+        shader = glCreateShader (type);
+
+        if (shader == 0) {
+                throw Util::InitException ("loadShader : error loading shader.");
+        }
+
+        // Load the shader source
+        glShaderSource (shader, 1, &shaderSrc, NULL);
+
+        // Compile the shader
+        glCompileShader (shader);
+
+        // Check the compile status
+        glGetShaderiv (shader, GL_COMPILE_STATUS, &compiled);
+
+        if (!compiled) {
+                GLint infoLen = 0;
+
+                glGetShaderiv (shader, GL_INFO_LOG_LENGTH, &infoLen);
+
+                if (infoLen > 1) {
+                        char* infoLog = new char [infoLen];
+                        glGetShaderInfoLog (shader, infoLen, NULL, infoLog);
+                        std::string infoLogStr = infoLog;
+                        delete [] infoLog;
+                        throw Util::InitException (std::string ("loadShader : error compiling shader. Message : ") + infoLogStr);
+                }
+
+                glDeleteShader (shader);
+                return 0;
+        }
+
+        return shader;
+}
 
 #endif
