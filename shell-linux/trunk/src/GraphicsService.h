@@ -10,6 +10,7 @@
 #define SDL_GRAPHICSINTERFACE_H_
 
 #include <SDL.h>
+#include "openGl/OpenGl.h"
 #include "geometry/Box.h"
 
 namespace Util {
