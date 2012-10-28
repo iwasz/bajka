@@ -45,9 +45,9 @@ INCLUDE_DIRECTORIES (${SHELL_INCLUDE_DIRS})
 link_directories(${SHELL_LIBRARY_DIRS})
 
 # Testowo
-#pkg_check_modules (GLES2 REQUIRED "glesv2")
-#INCLUDE_DIRECTORIES (${GLES2_INCLUDE_DIRS})
-#link_directories(${GLES2_LIBRARY_DIRS})
+pkg_check_modules (GLEW REQUIRED "glew")
+INCLUDE_DIRECTORIES (${GLEW_INCLUDE_DIRS})
+link_directories(${GLEW_LIBRARY_DIRS})
 
 # Sources
 AUX_SOURCE_DIRECTORY (../src SOURCES)
@@ -63,5 +63,5 @@ TARGET_LINK_LIBRARIES (browser ${SHELL_LIBRARIES})
 TARGET_LINK_LIBRARIES (browser chipmunk)
 TARGET_LINK_LIBRARIES (browser boost_filesystem)
 TARGET_LINK_LIBRARIES (browser boost_system)
-TARGET_LINK_LIBRARIES (browser ${GLES2_LIBRARIES})
+TARGET_LINK_LIBRARIES (browser ${GLEW_LIBRARIES})
 
