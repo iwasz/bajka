@@ -25,6 +25,8 @@ private:
 
         class Impl;
         Impl *impl;
+        std::string P_ (vertex);
+        std::string P_ (fragment);
         E_ (GLESWidget)
 
 };
