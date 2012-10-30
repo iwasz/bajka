@@ -6,7 +6,7 @@
 
     <ref bean="grass1" set-as="child" />
 
-    <image set-as="child" path="swinia.png">
+    <image set-as="child" path="swinia.png" scale="1.1">
       <RelativeGroupProperties set-as="groupProps" translate="50, 35" hAlign="center" vAlign="center"/>
     </image>    
 
