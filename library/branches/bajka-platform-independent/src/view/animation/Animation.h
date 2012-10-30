@@ -10,7 +10,7 @@
 #ifndef BAJKA_ANIMATION_H_
 #define BAJKA_ANIMATION_H_
 
-#include "openGl/OpenGl.h"
+#include "view/openGl/OpenGl.h"
 #include "FrameSet.h"
 #include "view/Widget.h"
 #include "view/resource/IBitmap.h"

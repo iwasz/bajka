@@ -90,8 +90,8 @@ void Image::init (Model::IModel *model)
          * Te dwie poniższe komendy ustawiają filtrowanie dla przybliżania i
          * oddalania. GL_NEAREST - kolor z 1 teksela najbliższego pixelowi.
          */
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 /*--------------------------------------------------------------------------*/
 
