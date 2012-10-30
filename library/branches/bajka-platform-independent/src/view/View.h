@@ -25,10 +25,11 @@
 #include "Text.h"
 #include "View.h"
 #include "Widget.h"
-#include "resource/Resource.h"
 #include "draw/Draw.h"
 #include "ClearScreen.h"
 #include "ClearScreenGrid.h"
 #include "LoopImage.h"
+#include "resource/Resource.h"
+#include "openGl/OpenGl.h"
 
 #	endif /* VIEW_H_ */

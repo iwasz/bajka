@@ -9,7 +9,7 @@
  *                                                                          *
  ****************************************************************************/
 
-#include "openGl/OpenGl.h"
+#include "view/openGl/OpenGl.h"
 #include "Primitives.h"
 #include "geometry/LineString.h"
 #include <boost/geometry/geometry.hpp>

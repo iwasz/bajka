@@ -6,7 +6,6 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#if 0
 #include "util/Math.h"
 #include "model/Model.h"
 #include "Text.h"
@@ -112,4 +111,3 @@ void Text::update (Model::IModel *model, Event::UpdateEvent *)
 }
 
 } /* namespace View */
-#endif
