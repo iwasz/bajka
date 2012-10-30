@@ -13,6 +13,7 @@
       <button set-as="child" file="swinia.xml" name="scene" text="Swinia" />
       <button set-as="child" file="tweens.xml" name="scene" text="Tween test" />
       <button set-as="child" file="sound.xml" name="scene" text="Sound test" />
+      <button set-as="child" file="gles-test.xml" name="scene" text="GLES/GL20" />
       <button set-as="child" controller.quit="true" text="Quit" />
       <RelativeGroupProperties set-as="groupProps" vAlign="center" hAlign="center" translate="50, 50"/>
     </LinearGroup>

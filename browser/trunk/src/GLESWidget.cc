@@ -7,7 +7,8 @@
  ****************************************************************************/
 
 #include "GLESWidget.h"
-#include <openGl/OpenGl.h>
+#include <view/openGl/OpenGl.h>
+#include <util/Exceptions.h>
 
 struct GLESWidget::Impl {
 
@@ -62,8 +63,9 @@ void GLESWidget::init ()
                 if (infoLen > 1) {
                         char* infoLog = new char [infoLen];
                         glGetProgramInfoLog (programObject, infoLen, NULL, infoLog);
-                        std::cerr << "Error linking program:" << infoLog << std::endl;
+                        std::string infoLogStr = infoLog;
                         delete [] infoLog;
+                        throw Util::InitException (std::string ("loadShader : error linking program. Message : ") + infoLogStr);
                 }
 
                 glDeleteProgram (programObject);
