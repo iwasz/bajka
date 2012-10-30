@@ -16,7 +16,7 @@
 #if defined (LINUX)
 #include <GL/glew.h>
 #elif defined (ANDROID)
-#include <GLES/gl.h>
+#include <GLES2/gl2.h>
 #endif
 
 extern GLuint loadShader (GLenum type, const char *shaderSrc);
