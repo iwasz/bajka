@@ -10,7 +10,6 @@
  ****************************************************************************/
 
 #include "openGl/OpenGl.h"
-#include <chipmunk.h>
 #include "Primitives.h"
 #include "geometry/LineString.h"
 #include <boost/geometry/geometry.hpp>

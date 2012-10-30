@@ -18,7 +18,6 @@ using namespace Geometry;
 
 void Rectangle::update (Model::IModel *model, Event::UpdateEvent *)
 {
-        // TODO CAst zależny od makra DEBUG
         Model::IBox *cB = dynamic_cast <Model::IBox *>  (model);
         assertThrow (cB, "Rectangle::update : !cB")
         Geometry::Box const &b = cB->getBox ();
