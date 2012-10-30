@@ -10,7 +10,7 @@
 #define SDL_GRAPHICSINTERFACE_H_
 
 #include <SDL.h>
-#include "openGl/OpenGl.h"
+#include <view/openGl/OpenGl.h>
 #include "geometry/Box.h"
 
 namespace Util {
@@ -47,9 +47,5 @@ extern SDL_Surface *createSurface (int w, int h);
  * zwróconego surface jest odpowiedzialny user.
  */
 extern View::IBitmap *expandSurfacePowerOf2 (View::IBitmap *, Geometry::Box const *region = NULL);
-
-extern void initOpenGl (Util::Config *config);
-extern void freeOpenGl ();
-extern void mouseToDisplay (int x, int y, int windowWidth, int windowHeight, float *nx, float *ny);
 
 #endif /* GRAPHICSINTERFACE_H_ */

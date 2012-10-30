@@ -83,8 +83,8 @@ void Shell::init ()
 void Shell::destroy ()
 {
         AbstractShell::destroy ();
-        TTF_Quit ();
-        SDL_Quit ();
+        freeOpenGl ();
+        freeSdl ();
 }
 
 /****************************************************************************/
