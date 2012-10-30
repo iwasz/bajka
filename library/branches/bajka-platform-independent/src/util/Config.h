@@ -76,7 +76,7 @@ struct Config {
         /**
          * Napis na belce okna (jeśli jest belka).
          */
-        std::string     p_ (windowCaption);
+        std::string     P_ (windowCaption);
 
         /**
          * Pokazuj bounding boxy.

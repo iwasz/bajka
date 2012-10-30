@@ -14,6 +14,7 @@
 #include "events/EventIdex.h"
 #include "events/PointerInsideIndex.h"
 #include "events/types/UpdateEvent.h"
+//#include <view/openGl/OpenGl.h>
 
 namespace Util {
 
@@ -24,7 +25,8 @@ struct AbstractShellImpl {
 
         AbstractShellImpl () : config (NULL),
                 model (NULL),
-                loopActive (true) {}
+                loopActive (true)/*,
+                mainProgramObject (0)*/ {}
 
         Util::Config *config;
         Model::IModel *model;
@@ -32,6 +34,7 @@ struct AbstractShellImpl {
         Event::PointerInsideIndex pointerInsideIndex;
         bool loopActive;
         Event::UpdateEvent updateEvent;
+//        GLuint mainProgramObject;
 };
 
 }
