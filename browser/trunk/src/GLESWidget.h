@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#if 0
 #ifndef GLESWIDGET_H_
 #define GLESWIDGET_H_
 
@@ -32,3 +33,4 @@ private:
 };
 
 #endif /* GLESWIDGET_H_ */
+#endif

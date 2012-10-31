@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#if 0
 #include "GLESWidget.h"
 #include <view/openGl/OpenGl.h>
 #include <util/Exceptions.h>
@@ -96,4 +97,4 @@ void GLESWidget::update (Model::IModel *model, Event::UpdateEvent *e)
         glDrawArrays (GL_TRIANGLES, 0, 3);
 }
 
-
+#endif
