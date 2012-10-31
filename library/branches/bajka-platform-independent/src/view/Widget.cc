@@ -6,7 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "openGl/OpenGl.h"
+#include "view/openGl/OpenGl.h"
 #include "view/Widget.h"
 #include "model/IModel.h"
 #include "Platform.h"

@@ -7,7 +7,7 @@
  ****************************************************************************/
 
 #include "ClearScreenGrid.h"
-#include "openGl/OpenGl.h"
+#include "view/openGl/OpenGl.h"
 #include "Platform.h"
 #include "util/Config.h"
 #include <vector>

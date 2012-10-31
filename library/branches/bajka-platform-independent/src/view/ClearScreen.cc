@@ -7,7 +7,7 @@
  ****************************************************************************/
 
 #include "ClearScreen.h"
-#include "openGl/OpenGl.h"
+#include "view/openGl/OpenGl.h"
 
 namespace View {
 

@@ -12,7 +12,7 @@
 #include "util/Config.h"
 
 /****************************************************************************/
-
+/*
 GLuint loadShader (GLenum type, const char *shaderSrc)
 {
         GLuint shader;
@@ -53,19 +53,21 @@ GLuint loadShader (GLenum type, const char *shaderSrc)
 
         return shader;
 }
-
+*/
 
 /****************************************************************************/
 
 void initOpenGl (Util::Config *config)
 {
+#ifndef ANDROID
         glewInit();
 
         if (!GLEW_VERSION_2_0) {
                 throw Util::InitException ("OpenGL 2.0 not available");
         }
+#endif
 
-//        glShadeModel(GL_FLAT);
+        glShadeModel(GL_FLAT);
         glDisable (GL_DEPTH_TEST);
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -88,58 +90,13 @@ void initOpenGl (Util::Config *config)
                 rY = config->projectionHeight / 2;
         }
 
-//        glMatrixMode (GL_PROJECTION);
-//        glLoadIdentity ();
-//        gluOrtho2D (-rX, rX, -rY, rY);
-//        glPointSize (3);
-//        glEnableClientState(GL_VERTEX_ARRAY);
+        glMatrixMode (GL_PROJECTION);
+        glLoadIdentity ();
+        gluOrtho2D (-rX, rX, -rY, rY);
+        glPointSize (3);
 
-        GLuint vertexShader;
-        GLuint fragmentShader;
-        GLuint programObject;
-        GLint linked;
-
-        GLchar const *vertexShaderSource = "";
-        GLchar const *fragmentShaderSource = "";
-
-        // Load the vertex/fragment shaders
-        vertexShader = loadShader (GL_VERTEX_SHADER, vertexShaderSource);
-        fragmentShader = loadShader (GL_FRAGMENT_SHADER, fragmentShaderSource);
-
-        // Create the program object
-        programObject = glCreateProgram ();
-
-        if (programObject == 0)
-                return;
-
-        glAttachShader (programObject, vertexShader);
-        glAttachShader (programObject, fragmentShader);
-
-        // Bind vPosition to attribute 0
-        glBindAttribLocation (programObject, 0, "vPosition");
-
-        // Link the program
-        glLinkProgram (programObject);
-
-        // Check the link status
-        glGetProgramiv (programObject, GL_LINK_STATUS, &linked);
-
-        if (!linked) {
-                GLint infoLen = 0;
-
-                glGetProgramiv (programObject, GL_INFO_LOG_LENGTH, &infoLen);
-
-                if (infoLen > 1) {
-                        char* infoLog = new char [infoLen];
-                        glGetProgramInfoLog (programObject, infoLen, NULL, infoLog);
-                        std::string infoLogStr = infoLog;
-                        delete [] infoLog;
-                        throw Util::InitException (std::string ("loadShader : error linking program. Message : ") + infoLogStr);
-                }
-
-                glDeleteProgram (programObject);
-                throw 1;
-        }
+        // glDrawArrays
+        glEnableClientState(GL_VERTEX_ARRAY);
 }
 
 /****************************************************************************/
