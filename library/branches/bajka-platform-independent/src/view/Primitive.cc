@@ -7,7 +7,7 @@
  ****************************************************************************/
 
 #include "Primitive.h"
-#include "openGl/OpenGl.h"
+#include "view/openGl/OpenGl.h"
 #include "model/IVertexBufferEnabled.h"
 #include "model/IModel.h"
 #include "util/Exceptions.h"

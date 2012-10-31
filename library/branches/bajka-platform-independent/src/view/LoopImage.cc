@@ -7,7 +7,7 @@
  ****************************************************************************/
 
 #ifndef ANDROID
-#include "openGl/OpenGl.h"
+#include "view/openGl/OpenGl.h"
 #include "LoopImage.h"
 #include "model/IModel.h"
 #include "model/IBox.h"

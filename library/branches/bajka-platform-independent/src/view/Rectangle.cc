@@ -11,7 +11,7 @@
 #include "model/static/Box.h"
 #include "model/physics/CPBox.h"
 #include "util/Exceptions.h"
-#include "openGl/OpenGl.h"
+#include "view/openGl/OpenGl.h"
 
 namespace View {
 using namespace Geometry;

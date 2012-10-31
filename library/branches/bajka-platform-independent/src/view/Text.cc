@@ -6,11 +6,13 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifndef ANDROID
 #include "util/Math.h"
 #include "model/Model.h"
 #include "Text.h"
 #include "util/Exceptions.h"
 #include <boost/functional/hash.hpp>
+#include "view/openGl/OpenGl.h"
 
 namespace View {
 
@@ -111,3 +113,4 @@ void Text::update (Model::IModel *model, Event::UpdateEvent *)
 }
 
 } /* namespace View */
+#endif
