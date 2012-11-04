@@ -78,8 +78,17 @@ void Image::init (Model::IModel *model)
         texWidth = bitmap->getWidth ();
         texHeight = bitmap->getHeight ();
 
-        glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, texWidth,
-                     texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+        int format = -1;
+
+        if (bitmap->getColorSpace () == RGBA) {
+                format = GL_RGBA;
+        }
+        else if (bitmap->getColorSpace () == RGB) {
+                format = GL_RGB;
+        }
+
+        glTexImage2D (GL_TEXTURE_2D, 0, format, texWidth,
+                     texHeight, 0, format, GL_UNSIGNED_BYTE,
                      bitmap->getData ());
 }
 

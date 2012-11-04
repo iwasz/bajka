@@ -7,25 +7,8 @@
  ****************************************************************************/
 
 #include "Bitmap.h"
-#include "util/Exceptions.h"
-#include "view/graphicFile/GraphicFile.h"
 
 namespace View {
-
-/****************************************************************************/
-
-void Bitmap::setPath (std::string const &p)
-{
-        path = p;
-        load (p.c_str (), &data, &width, &height, &visibleWidth, &visibleHeight, true);
-}
-
-/****************************************************************************/
-
-Bitmap::~Bitmap ()
-{
-        free (data);
-}
 
 /****************************************************************************/
 //

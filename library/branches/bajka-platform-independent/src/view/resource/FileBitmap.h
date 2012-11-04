@@ -6,13 +6,35 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_RESOURCE_H_
-#define BAJKA_RESOURCE_H_
+#ifndef BAJKA_RESOURCE_FILEBITMAP_H_
+#define BAJKA_RESOURCE_FILEBITMAP_H_
 
-#include "IBitmap.h"
-#include "IFont.h"
-#include "IResourceManager.h"
+#include <string>
 #include "Bitmap.h"
-#include "FileBitmap.h"
+#include "util/ReflectionMacros.h"
 
-#	endif /* RESOURCE_H_ */
+namespace View {
+
+/**
+ * Bitmapa, ktora sama ładuje się z pliku.
+ */
+class FileBitmap : public Bitmap {
+public:
+
+        C__ (void)
+
+        FileBitmap () {}
+        virtual ~FileBitmap ();
+
+        std::string const &getPath () const { return path; }
+        m_ (setPath) void setPath (std::string const &p);
+
+private:
+
+        std::string path;
+
+        E_ (FileBitmap)
+};
+
+} /* namespace View */
+#endif /* FILEBITMAP_H_ */

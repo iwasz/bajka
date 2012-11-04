@@ -11,10 +11,19 @@
 
 #include "Png.h"
 #include "Jpeg.h"
+#include "ColorSpace.h"
 
 namespace View {
 
-extern void load (const char *path, void **data, int *width, int *height, int *visibleWidthOut, int *visibleHeightOut, bool expandDimensions2);
+extern void load (const char *path,
+                  void **data,
+                  int *width,
+                  int *height,
+                  int *visibleWidthOut,
+                  int *visibleHeightOut,
+                  ColorSpace *colorSpace,
+                  int *bitDepth,
+                  bool expandDimensions2);
 
 } /* namespace View */
 

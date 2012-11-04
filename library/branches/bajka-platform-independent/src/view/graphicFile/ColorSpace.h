@@ -6,13 +6,13 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_RESOURCE_H_
-#define BAJKA_RESOURCE_H_
+#ifndef BAJKA_RES_COLORSPACE_H_
+#define BAJKA_RES_COLORSPACE_H_
 
-#include "IBitmap.h"
-#include "IFont.h"
-#include "IResourceManager.h"
-#include "Bitmap.h"
-#include "FileBitmap.h"
+namespace View {
 
-#	endif /* RESOURCE_H_ */
+enum ColorSpace { RGB, RGBA };
+
+}
+
+#endif /* COLORSPACE_H_ */

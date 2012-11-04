@@ -56,7 +56,15 @@ METHODDEF(void) myOutputMessage (j_common_ptr cinfo)
 
 /****************************************************************************/
 
-void jpegLoad (void *source, void **data, int *widthOut, int *heightOut, int *visibleWidthOut, int *visibleHeightOut, bool expandDimensions2)
+void jpegLoad (void *source,
+               void **data,
+               int *widthOut,
+               int *heightOut,
+               int *visibleWidthOut,
+               int *visibleHeightOut,
+               ColorSpace *colorSpace,
+               int *bitDepth,
+               bool expandDimensions2)
 {
         /* This struct contains the JPEG decompression parameters and pointers to
          * working space (which is allocated as needed by the JPEG library).
@@ -98,8 +106,14 @@ void jpegLoad (void *source, void **data, int *widthOut, int *heightOut, int *vi
 
         (void) jpeg_read_header (&cinfo, TRUE);
 
-//        TODO To tylko narazie - zamieinć na zwykłe RGB.
-        cinfo.out_color_space = JCS_EXT_RGBA;
+        if (expandDimensions2) {
+                cinfo.out_color_space = JCS_EXT_RGBA;
+                *colorSpace = RGBA;
+        }
+        else {
+                cinfo.out_color_space = JCS_EXT_RGB;
+                *colorSpace = RGB;
+        }
 
         /* Step 5: Start decompressor */
 
@@ -119,6 +133,7 @@ void jpegLoad (void *source, void **data, int *widthOut, int *heightOut, int *vi
 
         *visibleWidthOut = cinfo.output_width;
         *visibleHeightOut = cinfo.output_height;
+        *bitDepth = BITS_IN_JSAMPLE;
 
         // BITS_IN_JSAMPLE musi być równe 8
         *data = malloc (*widthOut * *heightOut * (BITS_IN_JSAMPLE / 8) * cinfo.output_components);

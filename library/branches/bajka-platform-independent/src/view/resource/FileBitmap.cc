@@ -6,13 +6,22 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_RESOURCE_H_
-#define BAJKA_RESOURCE_H_
-
-#include "IBitmap.h"
-#include "IFont.h"
-#include "IResourceManager.h"
-#include "Bitmap.h"
 #include "FileBitmap.h"
+#include "view/graphicFile/GraphicFile.h"
 
-#	endif /* RESOURCE_H_ */
+namespace View {
+
+void FileBitmap::setPath (std::string const &p)
+{
+        path = p;
+        load (p.c_str (), &data, &width, &height, &visibleWidth, &visibleHeight, &colorSpace, &bitDepth, true);
+}
+
+/****************************************************************************/
+
+FileBitmap::~FileBitmap ()
+{
+        free (data);
+}
+
+} /* namespace View */

@@ -25,7 +25,15 @@ static void pngtestError (png_structp png_ptr, png_const_charp message);
 
 /****************************************************************************/
 
-void pngLoad (void *source, void **data, int *widthOut, int *heightOut, int *visibleWidthOut, int *visibleHeightOut, bool expandDimensions2)
+void pngLoad (void *source,
+              void **data,
+              int *widthOut,
+              int *heightOut,
+              int *visibleWidthOut,
+              int *visibleHeightOut,
+              ColorSpace *colorSpace,
+              int *bitDepth,
+              bool expandDimensions2)
 {
         png_structp png_ptr;
         png_infop info_ptr;
@@ -117,6 +125,8 @@ void pngLoad (void *source, void **data, int *widthOut, int *heightOut, int *vis
 
         *visibleWidthOut = width;
         *visibleHeightOut = height;
+        *colorSpace = RGBA;
+        *bitDepth = bit_depth;
 
         *data = malloc (*widthOut * *heightOut * (bit_depth / 8) * num_channels);
 
