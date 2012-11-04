@@ -72,7 +72,7 @@
     <prop-alias name="text" value="children.0.view.text" />
   </LinearGroup>
 
-  <image id="imgButton" path="left.png">
+  <image id="imgButton" abstract="true">
     <DebugButtonController set-as="controller" eventMask="0xffff" modelManager="@modelManager" />
     <prop-alias name="file" value="controller.file" />
     <prop-alias name="name" value="controller.name" />
