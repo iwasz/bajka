@@ -10,7 +10,7 @@
 #include <SDL/SDL_ttf.h>
 #include "TTFFont.h"
 #include "util/Exceptions.h"
-#include "Bitmap.h"
+#include "view/resource/Bitmap.h"
 #include "GraphicsService.h"
 
 namespace View {
@@ -97,7 +97,7 @@ Ptr <IBitmap> TTFFont::render (std::string const &text, View::Color const &fgCol
                 SDL_SetAlpha (ret, 0, 0);
         }
 
-        return boost::make_shared <Bitmap> (ret);
+        return boost::make_shared <Bitmap> (/*ret*/);
 }
 
 /****************************************************************************/
@@ -165,7 +165,7 @@ Ptr <IBitmap> TTFFont::renderMulti (std::string const &text, View::Color const &
                 //SDL_FreeSurface(sTemp);
         }
 
-        return boost::make_shared <Bitmap> (surface);
+        return boost::make_shared <Bitmap> (/*surface*/);
 }
 
 /****************************************************************************/
