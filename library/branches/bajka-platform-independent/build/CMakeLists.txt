@@ -109,8 +109,6 @@ AUX_SOURCE_DIRECTORY (../src/view/openGl SOURCES)
 AUX_SOURCE_DIRECTORY (../src/view/graphicFile SOURCES)
 
 AUX_SOURCE_DIRECTORY (../src/events SOURCES)
-AUX_SOURCE_DIRECTORY (../src/events/filter SOURCES)
-AUX_SOURCE_DIRECTORY (../src/events/sdl SOURCES)
 AUX_SOURCE_DIRECTORY (../src/events/types SOURCES)
 
 AUX_SOURCE_DIRECTORY (../src/model SOURCES)

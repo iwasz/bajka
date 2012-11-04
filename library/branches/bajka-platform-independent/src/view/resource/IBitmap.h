@@ -11,6 +11,7 @@
 
 #include <core/Object.h>
 #include "geometry/Box.h"
+#include "view/graphicFile/ColorSpace.h"
 
 namespace View {
 
@@ -46,6 +47,16 @@ public:
          * Fizyczny rozmiar bitmapy.
          */
         virtual int getHeight () const = 0;
+
+        /**
+         * Bitów na kolor.
+         */
+        virtual int getBitDepth () const = 0;
+
+        /**
+         * W formacie OpenGL. Teraz tylko GL_RGBA lub GL_RGB.
+         */
+        virtual ColorSpace getColorSpace () const = 0;
 
         /**
          * Tworzy nową, pustą bitmapę o rozmiarach destW x destH. Następnie kopiuje do niej

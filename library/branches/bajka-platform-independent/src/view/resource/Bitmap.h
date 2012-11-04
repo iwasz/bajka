@@ -9,8 +9,6 @@
 #ifndef _BAJKA_BITMAP_H_
 #define _BAJKA_BITMAP_H_
 
-#include <string>
-#include "util/ReflectionMacros.h"
 #include "view/resource/IBitmap.h"
 
 namespace View {
@@ -21,29 +19,39 @@ namespace View {
 class Bitmap : public View::IBitmap {
 public:
 
-        C__ (void)
-        Bitmap () : data (NULL), width (0), height (0), visibleWidth (0), visibleHeight (0)  {}
-        virtual ~Bitmap ();
-
-        std::string const &getPath () const { return path; }
-        m_ (setPath) void setPath (std::string const &p);
+        Bitmap () : data (NULL), width (0), height (0), visibleWidth (0), visibleHeight (0), bitDepth (0), colorSpace (RGBA)  {}
+        virtual ~Bitmap () {}
 
         void *getData () { return data; }
+        void setData (void *d) { data = d; }
+
         int getVisibleWidth () const { return visibleWidth; }
+        void setVisibleWidth (int i) { visibleWidth = i; }
+
         int getVisibleHeight () const { return visibleHeight; }
+        void setVisibleHeight (int i) { visibleHeight = i; }
+
         int getWidth () const { return width; }
+        void setWidth (int i) { width = i; }
+
         int getHeight () const { return height; }
+        void setHeight (int i) { height = i; }
 
-private:
+        int getBitDepth () const { return bitDepth; }
+        void setBitDepth (int i) { bitDepth = i; }
 
-        std::string path;
+        ColorSpace getColorSpace () const { return colorSpace; }
+        void setColorSpace (ColorSpace i) { colorSpace = i; }
+
+protected:
+
         void *data;
         int width;
         int height;
         int visibleWidth;
         int visibleHeight;
-
-        E_ (Bitmap)
+        int bitDepth;
+        ColorSpace colorSpace;
 };
 
 } // namespace

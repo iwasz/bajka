@@ -12,7 +12,15 @@
 
 namespace View {
 
-void load (const char *path, void **data, int *width, int *height, int *visibleWidthOut, int *visibleHeightOut, bool expandDimensions2)
+void load (const char *path,
+           void **data,
+           int *width,
+           int *height,
+           int *visibleWidthOut,
+           int *visibleHeightOut,
+           ColorSpace *colorSpace,
+           int *bitDepth,
+           bool expandDimensions2)
 {
         FILE *fp;
 
@@ -22,7 +30,7 @@ void load (const char *path, void **data, int *width, int *height, int *visibleW
 
         if (checkIfPng (fp)) {
                 rewind (fp);
-                pngLoad (fp, data, width, height, visibleWidthOut, visibleHeightOut, expandDimensions2);
+                pngLoad (fp, data, width, height, visibleWidthOut, visibleHeightOut, colorSpace, bitDepth, expandDimensions2);
                 return;
         }
 
@@ -30,7 +38,7 @@ void load (const char *path, void **data, int *width, int *height, int *visibleW
 
         if (checkIfJpeg (fp)) {
                 rewind (fp);
-                jpegLoad (fp, data, width, height, visibleWidthOut, visibleHeightOut, expandDimensions2);
+                jpegLoad (fp, data, width, height, visibleWidthOut, visibleHeightOut, colorSpace, bitDepth, expandDimensions2);
                 return;
         }
 
