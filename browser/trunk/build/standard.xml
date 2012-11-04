@@ -6,7 +6,7 @@
 
   <Box id="image" abstract="true" init-method="updateToViewSize">
     <Image set-as="view">
-        <Bitmap set-as="bitmap"/>
+        <FileBitmap set-as="bitmap"/>
     </Image>
     <prop-alias name="path" value="view.bitmap.path"/>
   </Box>
@@ -80,7 +80,7 @@
 
   <Box id="loopImage" abstract="true">
     <LoopImage set-as="view">
-        <Bitmap set-as="bitmap"/>
+        <FileBitmap set-as="bitmap"/>
     </LoopImage>
     <prop-alias name="path" value="view.bitmap.path"/>
   </Box>

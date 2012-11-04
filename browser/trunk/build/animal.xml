@@ -53,8 +53,8 @@
   <loopImage id="grass1" set-as="child" view.bitmap="@grass" width="1300" height="300" />
   <loopImage id="grass2" set-as="child" view.bitmap="@grass" width="1300" height="300" translate="-100, -70"/>
      
-  <Bitmap id="cloud" path="cloud.png"/>
-  <Bitmap id="grass" path="grass.png"/>
+  <FileBitmap id="cloud" path="cloud.png"/>
+  <FileBitmap id="grass" path="grass.png"/>
   
 </beans>
 
