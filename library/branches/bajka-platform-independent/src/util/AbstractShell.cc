@@ -22,7 +22,6 @@
 #include "events/types/ManagerEvent.h"
 #include "tween/Manager.h"
 #include "Platform.h"
-#include "../view/png/Png.h"
 
 namespace Util {
 using namespace Container;
@@ -44,8 +43,6 @@ int AbstractShell::run (Util::ShellConfig const &cfg)
 {
         try {
                 {
-                        pngLoad ("/home/iwasz/Desktop/bobas.png");
-
                         preInit ();
 
                         Ptr <MetaContainer> metaContainer = CompactMetaService::parseFile (cfg.definitionFile);

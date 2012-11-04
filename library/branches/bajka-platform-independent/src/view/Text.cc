@@ -36,47 +36,47 @@ double Text::getHeightHint () const
 
 void Text::init ()
 {
-        Ptr <IBitmap> bitmap;
-        assert (font);
-
-        if (multiline) {
-                bitmap = font->renderMulti (text, getForeground (), getBackground (), align);
-        }
-        else {
-                bitmap = font->render (text, getForeground (), getBackground ());
-        }
-
-        imgWidth = bitmap->getWidth ();
-        imgHeight = bitmap->getHeight ();
-
-        // Rozmiar bitmapy na texturę podniesiony do następnej potęgi
-        texWidth = Util::Math::nextSqr (imgWidth);
-        texHeight = Util::Math::nextSqr (imgHeight);
-
-        // Kopia o rozmiarach własciwych dla textury. TODO może da się wyelminować ten krok, tak, żeby font sam tworzył bitmapę o odpowiednim rozmiarze?
-        Ptr <IBitmap> texBitmap = bitmap->blit (NULL, texWidth, texHeight);
-
-/*--------------------------------------------------------------------------*/
-
-        // TODO może nie trzeba za każdym razem tworzyć nowej tekstury, poza tym nie wiem, czy nie wycieka pamięć w karcie tu.
-        glGenTextures(1, &texName);
-        glBindTexture(GL_TEXTURE_2D, texName);
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
-        /*
-         * Te dwie poniższe komendy ustawiają filtrowanie dla przybliżania i
-         * oddalania. GL_NEAREST - kolor z 1 teksela najbliższego pixelowi.
-         */
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-/*--------------------------------------------------------------------------*/
-
-        glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, texWidth,
-                     texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                     texBitmap->getData ());
+//        Ptr <IBitmap> bitmap;
+//        assert (font);
+//
+//        if (multiline) {
+//                bitmap = font->renderMulti (text, getForeground (), getBackground (), align);
+//        }
+//        else {
+//                bitmap = font->render (text, getForeground (), getBackground ());
+//        }
+//
+//        imgWidth = bitmap->getWidth ();
+//        imgHeight = bitmap->getHeight ();
+//
+//        // Rozmiar bitmapy na texturę podniesiony do następnej potęgi
+//        texWidth = Util::Math::nextSqr (imgWidth);
+//        texHeight = Util::Math::nextSqr (imgHeight);
+//
+//        // Kopia o rozmiarach własciwych dla textury. TODO może da się wyelminować ten krok, tak, żeby font sam tworzył bitmapę o odpowiednim rozmiarze?
+//        Ptr <IBitmap> texBitmap = bitmap->blit (NULL, texWidth, texHeight);
+//
+///*--------------------------------------------------------------------------*/
+//
+//        // TODO może nie trzeba za każdym razem tworzyć nowej tekstury, poza tym nie wiem, czy nie wycieka pamięć w karcie tu.
+//        glGenTextures(1, &texName);
+//        glBindTexture(GL_TEXTURE_2D, texName);
+//
+//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+//
+//        /*
+//         * Te dwie poniższe komendy ustawiają filtrowanie dla przybliżania i
+//         * oddalania. GL_NEAREST - kolor z 1 teksela najbliższego pixelowi.
+//         */
+//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+//
+///*--------------------------------------------------------------------------*/
+//
+//        glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, texWidth,
+//                     texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+//                     texBitmap->getData ());
 }
 
 /****************************************************************************/

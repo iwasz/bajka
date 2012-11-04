@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#if 0
 #ifndef ANDROID
 #include "Animation.h"
 #include "util/Math.h"
@@ -140,4 +141,5 @@ void Animation::update (Model::IModel *model, Event::UpdateEvent *e)
 }
 
 } /* namespace View */
+#endif
 #endif

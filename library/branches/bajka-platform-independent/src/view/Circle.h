@@ -15,7 +15,7 @@
 namespace View {
 
 /**
- * Rysuje prostokąt.
+ * Rysuje okrąg.
  * \ingroup View
  */
 class Circle : public Primitive {

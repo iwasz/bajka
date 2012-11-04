@@ -6,12 +6,21 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_RESOURCE_H_
-#define BAJKA_RESOURCE_H_
+#ifndef BAJKA_RESOURCES_PNG_H_
+#define BAJKA_RESOURCES_PNG_H_
 
-#include "IBitmap.h"
-#include "IFont.h"
-#include "IResourceManager.h"
-#include "Bitmap.h"
+namespace View {
 
-#	endif /* RESOURCE_H_ */
+/**
+ * Ładuje obrazek z pliku PNG w formacie RGBA 8888.
+ */
+extern void pngLoad (void *source, void **data, int *width, int *height, int *visibleWidthOut, int *visibleHeightOut, bool expandDimensions2);
+
+/**
+ * Sprawdza czy plik typu PNG.
+ */
+extern bool checkIfPng (void *source);
+
+} // namespace
+
+#endif /* PNG_H_ */
