@@ -76,6 +76,10 @@ pkg_check_modules (ZLIB REQUIRED "zlib")
 INCLUDE_DIRECTORIES (${ZLIB_INCLUDE_DIRS})
 link_directories(${ZLIB_LIBRARY_DIRS})
 
+FIND_PACKAGE (JPEG)
+INCLUDE_DIRECTORIES (${JPEG_INCLUDE_DIR})
+
+
 if (USE_CHIPMUNK)
     ADD_DEFINITIONS (-DUSE_CHIPMUNK)
 endif()
@@ -102,7 +106,7 @@ AUX_SOURCE_DIRECTORY (../src/view/draw SOURCES)
 AUX_SOURCE_DIRECTORY (../src/view/resource SOURCES)
 AUX_SOURCE_DIRECTORY (../src/view/animation SOURCES)
 AUX_SOURCE_DIRECTORY (../src/view/openGl SOURCES)
-AUX_SOURCE_DIRECTORY (../src/view/png SOURCES)
+AUX_SOURCE_DIRECTORY (../src/view/graphicFile SOURCES)
 
 AUX_SOURCE_DIRECTORY (../src/events SOURCES)
 AUX_SOURCE_DIRECTORY (../src/events/filter SOURCES)
@@ -133,20 +137,17 @@ if (ANDROID)
     add_library (bajka STATIC ${SOURCES})
     
     # Android-specific Log Support
-#    TARGET_LINK_LIBRARIES (bajka log)
+    TARGET_LINK_LIBRARIES (bajka log)
     
     # The EGL graphics library
-#    TARGET_LINK_LIBRARIES (bajka EGL)
+    TARGET_LINK_LIBRARIES (bajka EGL)
     
     # The Android native application APIs
-#    TARGET_LINK_LIBRARIES (bajka android)
+    TARGET_LINK_LIBRARIES (bajka android)
     
     # The OpenGL ES 1.x Library
     TARGET_LINK_LIBRARIES (bajka GLESv1_CM)
-#    TARGET_LINK_LIBRARIES (bajka stdc++)
-#    TARGET_LINK_LIBRARIES (bajka tiliae)
-#    TARGET_LINK_LIBRARIES (bajka mxml)
-#    TARGET_LINK_LIBRARIES (bajka chipmunk)    
+    TARGET_LINK_LIBRARIES (bajka stdc++)
 else ()
     add_library (bajka SHARED ${SOURCES})
 endif ()
@@ -156,6 +157,7 @@ TARGET_LINK_LIBRARIES (bajka ${TILIAE_LIBRARIES})
 TARGET_LINK_LIBRARIES (bajka ${JANSSON_LIBRARIES})
 TARGET_LINK_LIBRARIES (bajka ${PNG_LIBRARIES})
 TARGET_LINK_LIBRARIES (bajka ${ZLIB_LIBRARIES})
+TARGET_LINK_LIBRARIES (bajka ${JPEG_LIBRARIES})
 
 if (USE_CHIPMUNK)
     TARGET_LINK_LIBRARIES (bajka chipmunk)

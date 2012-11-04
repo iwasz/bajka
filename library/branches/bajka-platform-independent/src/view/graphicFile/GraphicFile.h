@@ -6,10 +6,16 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_RESOURCES_PNG_H_
-#define BAJKA_RESOURCES_PNG_H_
+#ifndef BAJKA_RESOURCES_GRAPHICFILE_H_
+#define BAJKA_RESOURCES_GRAPHICFILE_H_
 
-extern void pngLoad (const char *path);
+#include "Png.h"
+#include "Jpeg.h"
 
+namespace View {
 
-#endif /* PNG_H_ */
+extern void load (const char *path, void **data, int *width, int *height, int *visibleWidthOut, int *visibleHeightOut, bool expandDimensions2);
+
+} /* namespace View */
+
+#endif /* GRAPHICFILE_H_ */

@@ -27,7 +27,24 @@ public:
          */
         virtual void *getData () = 0;
 
+        /**
+         * Rozmiar tego co jest widoczne, bo czasem bitmapy są rozciągnięte do potęg dwójki.
+         */
+        virtual int getVisibleWidth () const = 0;
+
+        /**
+         * Rozmiar tego co jest widoczne, bo czasem bitmapy są rozciągnięte do potęg dwójki.
+         */
+        virtual int getVisibleHeight () const = 0;
+
+        /**
+         * Fizyczny rozmiar bitmapy.
+         */
         virtual int getWidth () const = 0;
+
+        /**
+         * Fizyczny rozmiar bitmapy.
+         */
         virtual int getHeight () const = 0;
 
         /**
@@ -37,7 +54,7 @@ public:
          * - Jeśli destW jest równe -1, to domyślnie zostanie uzyta szerokość prostokąta źródłowego.
          * - Jeśli destH jest równe -1, to domyślnie zostanie uzyta wysokość prostokąta źródłowego.
          */
-        virtual Ptr <IBitmap> blit (Geometry::Box const *srcRect = NULL, int destW = -1, int destH = -1) = 0;
+//        virtual Ptr <IBitmap> blit (Geometry::Box const *srcRect = NULL, int destW = -1, int destH = -1) = 0;
 //        virtual IBitmap *blit (IBitmap *dest, Geometry::Box const *srcRect = NULL, int destW = -1, int destH = -1) = 0;
 };
 

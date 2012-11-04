@@ -34,7 +34,7 @@ double Image::getWidthHint () const
                 return region->getWidth ();
         }
 
-        return bitmap->getWidth ();
+        return bitmap->getVisibleWidth ();
 }
 
 /****************************************************************************/
@@ -49,7 +49,7 @@ double Image::getHeightHint () const
                 return region->getHeight ();
         }
 
-        return bitmap->getHeight ();
+        return bitmap->getVisibleHeight ();
 }
 
 /****************************************************************************/
@@ -57,26 +57,6 @@ double Image::getHeightHint () const
 void Image::init (Model::IModel *model)
 {
         initialized = true;
-
-/*--------------------------------------------------------------------------*/
-
-        if (region.get ()) {
-                // Image będzie wycinkiem bitmapy
-                imgWidth = region->getWidth ();
-                imgHeight = region->getHeight ();
-        }
-        else {
-                // Image będzie zawierało całą bitmapę.
-                imgWidth = bitmap->getWidth ();
-                imgHeight = bitmap->getHeight ();
-        }
-
-        // Rozmiar bitmapy na texturę podniesiony do następnej potęgi
-        texWidth = Util::Math::nextSqr (imgWidth);
-        texHeight = Util::Math::nextSqr (imgHeight);
-
-        // Kopia o rozmiarach własciwych dla textury.
-        Ptr <IBitmap> texBitmap = bitmap->blit (region.get (), texWidth, texHeight);
 
 /*--------------------------------------------------------------------------*/
 
@@ -95,9 +75,12 @@ void Image::init (Model::IModel *model)
 
 /*--------------------------------------------------------------------------*/
 
+        texWidth = bitmap->getWidth ();
+        texHeight = bitmap->getHeight ();
+
         glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, texWidth,
                      texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                     texBitmap->getData ());
+                     bitmap->getData ());
 }
 
 /****************************************************************************/

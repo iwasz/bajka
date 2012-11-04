@@ -6,12 +6,21 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_RESOURCE_H_
-#define BAJKA_RESOURCE_H_
+#ifndef BAJKA_RESOURCE_JPEG_H_
+#define BAJKA_RESOURCE_JPEG_H_
 
-#include "IBitmap.h"
-#include "IFont.h"
-#include "IResourceManager.h"
-#include "Bitmap.h"
+namespace View {
 
-#	endif /* RESOURCE_H_ */
+/**
+ * Ładuj JPEG.
+ */
+extern void jpegLoad (void *source, void **data, int *width, int *height, int *visibleWidthOut, int *visibleHeightOut, bool expandDimensions2);
+
+/**
+ * Sprawdza czy plik typu JPEG.
+ */
+extern bool checkIfJpeg (void *source);
+
+} /* namespace View */
+
+#endif /* JPEG_H_ */
