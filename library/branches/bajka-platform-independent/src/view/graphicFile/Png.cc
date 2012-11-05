@@ -68,7 +68,7 @@ void pngLoad (Common::DataSource *source,
                 png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
 
                 /* If we get here, we had a problem reading the file */
-                throw Util::InitException("pngLoad : an error occured : " + errorStringFromHandler);
+                throw Util::InitException ("pngLoad : an error occured : " + errorStringFromHandler);
         }
 
         png_set_read_fn (png_ptr, (void *)source, userReadFn);
