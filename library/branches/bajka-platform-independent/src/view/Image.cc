@@ -77,6 +77,8 @@ void Image::init (Model::IModel *model)
 
         texWidth = bitmap->getWidth ();
         texHeight = bitmap->getHeight ();
+        imgWidth = bitmap->getVisibleWidth ();
+        imgHeight = bitmap->getVisibleHeight ();
 
         int format = -1;
 
