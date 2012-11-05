@@ -10,13 +10,14 @@
 #define BAJKA_RESOURCE_JPEG_H_
 
 #include "ColorSpace.h"
+#include <common/dataSource/DataSource.h>
 
 namespace View {
 
 /**
  * Ładuj JPEG.
  */
-extern void jpegLoad (void *source,
+extern void jpegLoad (Common::DataSource *source,
                       void **data,
                       int *width,
                       int *height,
@@ -29,7 +30,7 @@ extern void jpegLoad (void *source,
 /**
  * Sprawdza czy plik typu JPEG.
  */
-extern bool checkIfJpeg (void *source);
+extern bool checkIfJpeg (Common::DataSource *source);
 
 } /* namespace View */
 

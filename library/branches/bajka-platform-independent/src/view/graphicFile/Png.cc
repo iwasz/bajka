@@ -20,12 +20,13 @@ namespace View {
 /****************************************************************************/
 
 #define PNG_BYTES_TO_CHECK 8
-static void pngtestWarning (png_structp png_ptr, png_const_charp message);
-static void pngtestError (png_structp png_ptr, png_const_charp message);
+static void userWarningFn (png_structp png_ptr, png_const_charp message);
+static void userErrorFn (png_structp png_ptr, png_const_charp message);
+static void userReadFn (png_structp png_ptr, png_bytep data, png_size_t length);
 
 /****************************************************************************/
 
-void pngLoad (void *source,
+void pngLoad (Common::DataSource *source,
               void **data,
               int *widthOut,
               int *heightOut,
@@ -39,7 +40,6 @@ void pngLoad (void *source,
         png_infop info_ptr;
         png_uint_32 width, height;
         int bit_depth, color_type, interlace_type;
-        FILE *fp = static_cast <FILE *> (source);
 
         /*
          * Create and initialize the png_struct with the desired error handler
@@ -49,10 +49,9 @@ void pngLoad (void *source,
          * was compiled with a compatible version of the library.  REQUIRED
          */
         std::string errorStringFromHandler;
-        png_ptr = png_create_read_struct (PNG_LIBPNG_VER_STRING, (png_voidp)&errorStringFromHandler, pngtestError, pngtestWarning);
+        png_ptr = png_create_read_struct (PNG_LIBPNG_VER_STRING, (png_voidp)&errorStringFromHandler, userErrorFn, userWarningFn);
 
         if (png_ptr == NULL) {
-                fclose(fp);
                 throw Util::InitException ("pngLoad : error creating png_struct with png_create_read_struct");
         }
 
@@ -60,7 +59,6 @@ void pngLoad (void *source,
         info_ptr = png_create_info_struct (png_ptr);
 
         if (info_ptr == NULL) {
-                fclose(fp);
                 png_destroy_read_struct(&png_ptr, NULL, NULL);
                 throw Util::InitException ("pngLoad : error creating png_info with png_create_info_struct");
         }
@@ -68,14 +66,12 @@ void pngLoad (void *source,
         if (setjmp (png_jmpbuf (png_ptr))) {
                 /* Free all of the memory associated with the png_ptr and info_ptr */
                 png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
-                fclose(fp);
 
                 /* If we get here, we had a problem reading the file */
                 throw Util::InitException("pngLoad : an error occured : " + errorStringFromHandler);
         }
 
-        /* Set up the input control if you are using standard C streams */
-        png_init_io (png_ptr, fp);
+        png_set_read_fn (png_ptr, (void *)source, userReadFn);
 
         /* Read PNG header info */
         png_read_info (png_ptr, info_ptr);
@@ -112,7 +108,7 @@ void pngLoad (void *source,
 
         png_read_update_info (png_ptr, info_ptr);
         png_get_IHDR (png_ptr, info_ptr, &width, &height, &bit_depth, &color_type, &interlace_type, NULL, NULL);
-        int num_channels = png_get_channels(png_ptr, info_ptr);
+        int num_channels = png_get_channels (png_ptr, info_ptr);
 
         if (expandDimensions2) {
                 *widthOut = Util::Math::nextSqr (width);
@@ -156,9 +152,6 @@ void pngLoad (void *source,
         /* Clean up after the read, and free any memory allocated - REQUIRED */
         png_destroy_read_struct (&png_ptr, &info_ptr, NULL);
 
-        /* Close the file */
-        fclose(fp);
-
 #if 0
         std::cerr << "w = " << *widthOut << ", h = " << *heightOut << ", bits = " << bit_depth << ", chan = " << num_channels << ", shiftXBytes = " << shiftXBytes << std::endl;
 #endif
@@ -166,15 +159,12 @@ void pngLoad (void *source,
 
 /****************************************************************************/
 
-bool checkIfPng (void *source)
+bool checkIfPng (Common::DataSource *source)
 {
         unsigned char buf[PNG_BYTES_TO_CHECK];
 
-        /* Open the prospective PNG file. */
-        FILE *fp = static_cast <FILE *> (source);
-
         /* Read in some of the signature bytes */
-        if (fread (buf, 1, PNG_BYTES_TO_CHECK, fp) != PNG_BYTES_TO_CHECK)
+        if (source->read (buf, 1, PNG_BYTES_TO_CHECK) != PNG_BYTES_TO_CHECK)
                 return false;
 
         /* Compare the first PNG_BYTES_TO_CHECK bytes of the signature.
@@ -187,7 +177,7 @@ bool checkIfPng (void *source)
  * here if you don't want to.  In the default configuration, png_ptr is
  * not used, but it is passed in case it may be useful.
  */
-static void pngtestWarning (png_structp png_ptr, png_const_charp message)
+static void userWarningFn (png_structp png_ptr, png_const_charp message)
 {
         std::cerr << "libpng warning:" << message << std::endl;
 }
@@ -197,10 +187,27 @@ static void pngtestWarning (png_structp png_ptr, png_const_charp message)
  * function is used by default, or if the program supplies NULL for the
  * error function pointer in png_set_error_fn().
  */
-static void pngtestError(png_structp png_ptr, png_const_charp message)
+static void userErrorFn (png_structp png_ptr, png_const_charp message)
 {
         std::string *userObject = static_cast <std::string *> (png_get_error_ptr (png_ptr));
         *userObject = std::string ("Fatal libpng error : ") + message;
+}
+
+/**
+ * Customowa do odczytywania.
+ */
+static void userReadFn (png_structp png_ptr, png_bytep data, png_size_t length)
+{
+        /* fread() returns 0 on error, so it is OK to store this in a png_size_t
+         * instead of an int, which is what fread() actually returns.
+         */
+        Common::DataSource *source = static_cast <Common::DataSource *> (png_get_io_ptr (png_ptr));
+
+        size_t check = source->read (data, 1, length);
+
+        if (check != length) {
+                png_error(png_ptr, "Read Error");
+        }
 }
 
 } // namespace

@@ -10,13 +10,14 @@
 #define BAJKA_RESOURCES_PNG_H_
 
 #include "ColorSpace.h"
+#include <common/dataSource/DataSource.h>
 
 namespace View {
 
 /**
  * Ładuje obrazek z pliku PNG w formacie RGBA 8888.
  */
-extern void pngLoad (void *source,
+extern void pngLoad (Common::DataSource *source,
                      void **data,
                      int *width,
                      int *height,
@@ -29,7 +30,7 @@ extern void pngLoad (void *source,
 /**
  * Sprawdza czy plik typu PNG.
  */
-extern bool checkIfPng (void *source);
+extern bool checkIfPng (Common::DataSource *source);
 
 } // namespace
 

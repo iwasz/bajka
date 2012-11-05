@@ -17,6 +17,8 @@
 
 namespace View {
 
+#define INPUT_BUFFER_SIZE 4096
+
 struct myErrorMgr {
         struct jpeg_error_mgr pub; /* "public" fields */
         jmp_buf setjmp_buffer; /* for return to caller */
@@ -25,38 +27,13 @@ struct myErrorMgr {
 
 typedef struct myErrorMgr *myErrorPtr;
 
-/****************************************************************************/
-
-METHODDEF(void) myErrorExit (j_common_ptr cinfo)
-{
-        /* cinfo->err really points to a my_error_mgr struct, so coerce pointer */
-        myErrorPtr myerr = (myErrorPtr) cinfo->err;
-
-        /* Always display the message. */
-        /* We could postpone this until after returning, if we chose. */
-        (*cinfo->err->output_message) (cinfo);
-
-        /* Return control to the setjmp point */
-        longjmp (myerr->setjmp_buffer, 1);
-}
+static void myErrorExit (j_common_ptr cinfo);
+static void myOutputMessage (j_common_ptr cinfo);
+static void jpegDataSourceSrc (j_decompress_ptr cinfo, Common::DataSource *source);
 
 /****************************************************************************/
 
-METHODDEF(void) myOutputMessage (j_common_ptr cinfo)
-{
-        char buffer[JMSG_LENGTH_MAX];
-
-        /* Create the message */
-        (*cinfo->err->format_message) (cinfo, buffer);
-
-        /* cinfo->err really points to a my_error_mgr struct, so coerce pointer */
-        myErrorPtr myerr = (myErrorPtr) cinfo->err;
-        myerr->errorStringFromHandler = buffer;
-}
-
-/****************************************************************************/
-
-void jpegLoad (void *source,
+void jpegLoad (Common::DataSource *source,
                void **data,
                int *widthOut,
                int *heightOut,
@@ -76,7 +53,6 @@ void jpegLoad (void *source,
          * struct, to avoid dangling-pointer problems.
          */
         struct myErrorMgr jerr;
-        FILE *infile = static_cast <FILE *> (source);
 
         /* Step 1: allocate and initialize JPEG decompression object */
 
@@ -91,7 +67,6 @@ void jpegLoad (void *source,
                 * We need to clean up the JPEG object, close the input file, and return.
                 */
                 jpeg_destroy_decompress (&cinfo);
-                fclose (infile);
                 throw Util::InitException ("jpegLoad : an error occured : " + jerr.errorStringFromHandler);
         }
 
@@ -100,7 +75,7 @@ void jpegLoad (void *source,
 
         /* Step 2: specify data source (eg, a file) */
 
-        jpeg_stdio_src (&cinfo, infile);
+        jpegDataSourceSrc (&cinfo, source);
 
         /* Step 3: read file parameters with jpeg_read_header() */
 
@@ -163,18 +138,11 @@ void jpegLoad (void *source,
 
         /* This is an important step since it will release a good deal of memory. */
         jpeg_destroy_decompress (&cinfo);
-
-        /* After finish_decompress, we can close the input file.
-         * Here we postpone it until after no more JPEG errors are possible,
-         * so as to simplify the setjmp error logic above.  (Actually, I don't
-         * think that jpeg_destroy can do an error exit, but why assume anything...)
-         */
-        fclose (infile);
 }
 
 /****************************************************************************/
 
-bool checkIfJpeg (void *source)
+bool checkIfJpeg (Common::DataSource *source)
 {
         int start;
         bool is_JPG;
@@ -185,19 +153,17 @@ bool checkIfJpeg (void *source)
                 return false;
         }
 
-        FILE *src = static_cast <FILE *> (source);
-
-        start = ftell (src);
+        start = source->tell ();
         is_JPG = false;
         in_scan = false;
 
-        if (fread (magic, 2, 1, src)) {
+        if (source->read (magic, 2, 1)) {
 
                 if ((magic[0] == 0xFF) && (magic[1] == 0xD8)) {
                         is_JPG = true;
 
                         while (is_JPG) {
-                                if (fread (magic, 1, 2, src) != 2) {
+                                if (source->read (magic, 1, 2) != 2) {
                                         is_JPG = false;
                                 }
                                 else if ((magic[0] != 0xFF) && (in_scan == false)) {
@@ -206,7 +172,7 @@ bool checkIfJpeg (void *source)
                                 else if ((magic[0] != 0xFF) || (magic[1] == 0xFF)) {
                                         /* Extra padding in JPEG (legal) */
                                         /* or this is data and we are scanning */
-                                        fseek (src, -1, SEEK_CUR);
+                                        source->seek (-1, SEEK_CUR);
                                 }
                                 else if (magic[1] == 0xD9) {
                                         /* Got to end of good JPEG */
@@ -218,7 +184,7 @@ bool checkIfJpeg (void *source)
                                 else if ((magic[1] >= 0xD0) && (magic[1] < 0xD9)) {
                                         /* These have nothing else */
                                 }
-                                else if (fread (magic + 2, 1, 2, src) != 2) {
+                                else if (source->read (magic + 2, 1, 2) != 2) {
                                         is_JPG = false;
                                 }
                                 else {
@@ -226,10 +192,9 @@ bool checkIfJpeg (void *source)
                                         unsigned int start2;
                                         unsigned int size2;
                                         unsigned int end2;
-                                        start2 = ftell (src);
+                                        start2 = source->tell ();
                                         size2 = (magic[2] << 8) + magic[3];
-                                        fseek (src, size2 - 2, SEEK_CUR);
-                                        end2 = ftell (src);
+                                        end2 = source->seek (size2 - 2, SEEK_CUR);
 
                                         if (end2 != start2 + size2 - 2)
                                                 is_JPG = false;
@@ -242,8 +207,155 @@ bool checkIfJpeg (void *source)
                 }
         }
 
-        fseek (src, start, SEEK_SET);
+        source->seek (start, SEEK_SET);
         return is_JPG;
+}
+
+/****************************************************************************/
+
+struct MySourceMgr {
+
+        MySourceMgr () : source (NULL) {}
+        struct jpeg_source_mgr pub;
+        Common::DataSource *source;
+        unsigned char buffer[INPUT_BUFFER_SIZE];
+};
+
+/*
+ * Initialize source --- called by jpeg_read_header
+ * before any data is actually read.
+ */
+static void init_source (j_decompress_ptr cinfo)
+{
+        /* We don't actually need to do anything */
+        return;
+}
+
+/*
+ * Fill the input buffer --- called whenever buffer is emptied.
+ */
+static boolean fill_input_buffer (j_decompress_ptr cinfo)
+{
+        MySourceMgr *src = (MySourceMgr *)cinfo->src;
+        Common::DataSource *source = src->source;
+        int nbytes = source->read (src->buffer, 1, INPUT_BUFFER_SIZE);
+
+        if (nbytes == 0) {
+                /* Insert a fake EOI marker */
+                src->buffer[0] = (unsigned char) 0xFF;
+                src->buffer[1] = (unsigned char) JPEG_EOI;
+                nbytes = 2;
+        }
+
+        src->pub.next_input_byte = src->buffer;
+        src->pub.bytes_in_buffer = nbytes;
+
+        return TRUE;
+}
+
+/*
+ * Skip data --- used to skip over a potentially large amount of
+ * uninteresting data (such as an APPn marker).
+ *
+ * Writers of suspendable-input applications must note that skip_input_data
+ * is not granted the right to give a suspension return.  If the skip extends
+ * beyond the data currently in the buffer, the buffer can be marked empty so
+ * that the next read will cause a fill_input_buffer call that can suspend.
+ * Arranging for additional bytes to be discarded before reloading the input
+ * buffer is the application writer's problem.
+ */
+static void skip_input_data (j_decompress_ptr cinfo, long num_bytes)
+{
+        MySourceMgr * src = (MySourceMgr *) cinfo->src;
+
+        /* Just a dumb implementation for now.  Could use fseek() except
+         * it doesn't work on pipes.  Not clear that being smart is worth
+         * any trouble anyway --- large skips are infrequent.
+         */
+        if (num_bytes > 0) {
+                while (num_bytes > (long) src->pub.bytes_in_buffer) {
+                        num_bytes -= (long) src->pub.bytes_in_buffer;
+                        (void) src->pub.fill_input_buffer(cinfo);
+                        /* note we assume that fill_input_buffer will never
+                         * return FALSE, so suspension need not be handled.
+                         */
+                }
+                src->pub.next_input_byte += (size_t) num_bytes;
+                src->pub.bytes_in_buffer -= (size_t) num_bytes;
+        }
+}
+
+/*
+ * Terminate source --- called by jpeg_finish_decompress
+ * after all data has been read.
+ */
+static void term_source (j_decompress_ptr cinfo)
+{
+        /* We don't actually need to do anything */
+        return;
+}
+
+/**
+ * Inicjująca zamiast jpeg_stdio_src
+ */
+static void jpegDataSourceSrc (j_decompress_ptr cinfo, Common::DataSource *source)
+{
+        MySourceMgr *src = NULL;
+
+        /* The source object and input buffer are made permanent so that a series
+         * of JPEG images can be read from the same file by calling jpeg_stdio_src
+         * only before the first one.  (If we discarded the buffer at the end of
+         * one image, we'd likely lose the start of the next one.)
+         * This makes it unsafe to use this manager and a different source
+         * manager serially with the same JPEG object.  Caveat programmer.
+         */
+        if (cinfo->src == NULL) { /* first time for this JPEG object? */
+                cinfo->src = (struct jpeg_source_mgr *) (*cinfo->mem->alloc_small) (
+                                (j_common_ptr) cinfo,
+                                JPOOL_PERMANENT,
+                                sizeof(MySourceMgr));
+
+                src = (MySourceMgr *) cinfo->src;
+        }
+
+        src = (MySourceMgr *) cinfo->src;
+        src->pub.init_source = init_source;
+        src->pub.fill_input_buffer = fill_input_buffer;
+        src->pub.skip_input_data = skip_input_data;
+        src->pub.resync_to_restart = jpeg_resync_to_restart; /* use default method */
+        src->pub.term_source = term_source;
+        src->source = source;
+        src->pub.bytes_in_buffer = 0; /* forces fill_input_buffer on first read */
+        src->pub.next_input_byte = NULL; /* until buffer loaded */
+}
+
+/****************************************************************************/
+
+static void myErrorExit (j_common_ptr cinfo)
+{
+        /* cinfo->err really points to a my_error_mgr struct, so coerce pointer */
+        myErrorPtr myerr = (myErrorPtr) cinfo->err;
+
+        /* Always display the message. */
+        /* We could postpone this until after returning, if we chose. */
+        (*cinfo->err->output_message) (cinfo);
+
+        /* Return control to the setjmp point */
+        longjmp (myerr->setjmp_buffer, 1);
+}
+
+/****************************************************************************/
+
+static void myOutputMessage (j_common_ptr cinfo)
+{
+        char buffer[JMSG_LENGTH_MAX];
+
+        /* Create the message */
+        (*cinfo->err->format_message) (cinfo, buffer);
+
+        /* cinfo->err really points to a my_error_mgr struct, so coerce pointer */
+        myErrorPtr myerr = (myErrorPtr) cinfo->err;
+        myerr->errorStringFromHandler = buffer;
 }
 
 } /* namespace View */
