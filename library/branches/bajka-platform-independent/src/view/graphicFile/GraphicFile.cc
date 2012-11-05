@@ -9,6 +9,7 @@
 #include "GraphicFile.h"
 #include "util/Exceptions.h"
 #include <cstdio>
+#include <common/dataSource/DataSource.h>
 
 namespace View {
 
@@ -22,23 +23,20 @@ void load (const char *path,
            int *bitDepth,
            bool expandDimensions2)
 {
-        FILE *fp;
+        Common::DataSource ds;
+        ds.open (path, Common::DataSource::MODE_UNKNOWN);
 
-        if ((fp = fopen (path, "rb")) == NULL) {
-                throw Util::InitException (std::string ("load : couldn't open grephic file : ") + path);
-        }
-
-        if (checkIfPng (fp)) {
-                rewind (fp);
-                pngLoad (fp, data, width, height, visibleWidthOut, visibleHeightOut, colorSpace, bitDepth, expandDimensions2);
+        if (checkIfPng (&ds)) {
+                ds.rewind ();
+                pngLoad (&ds, data, width, height, visibleWidthOut, visibleHeightOut, colorSpace, bitDepth, expandDimensions2);
                 return;
         }
 
-        rewind (fp);
+        ds.rewind ();
 
-        if (checkIfJpeg (fp)) {
-                rewind (fp);
-                jpegLoad (fp, data, width, height, visibleWidthOut, visibleHeightOut, colorSpace, bitDepth, expandDimensions2);
+        if (checkIfJpeg (&ds)) {
+                ds.rewind ();
+                jpegLoad (&ds, data, width, height, visibleWidthOut, visibleHeightOut, colorSpace, bitDepth, expandDimensions2);
                 return;
         }
 
