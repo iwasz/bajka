@@ -23,7 +23,7 @@
 extern void TTF_ByteSwappedUNICODE (int swapped);
 
 /* The internal structure containing font information */
-typedef struct _TTF_Font TTF_Font;
+struct TTF_Font;
 
 /* Initialize the TTF engine - returns 0 if successful, -1 on error */
 extern int TTF_Init (void);
@@ -52,6 +52,7 @@ extern void TTF_SetFontOutline (TTF_Font *font, int outline);
 #define TTF_HINTING_LIGHT     1
 #define TTF_HINTING_MONO      2
 #define TTF_HINTING_NONE      3
+
 extern int TTF_GetFontHinting (const TTF_Font *font);
 extern void TTF_SetFontHinting (TTF_Font *font, int hinting);
 
@@ -93,9 +94,7 @@ extern int TTF_GlyphIsProvided (const TTF_Font *font, uint16_t ch);
 extern int TTF_GlyphMetrics (TTF_Font *font, uint16_t ch, int *minx, int *maxx, int *miny, int *maxy, int *advance);
 
 /* Get the dimensions of a rendered string of text */
-extern int TTF_SizeText (TTF_Font *font, const char *text, int *w, int *h);
 extern int TTF_SizeUTF8 (TTF_Font *font, const char *text, int *w, int *h);
-extern int TTF_SizeUNICODE (TTF_Font *font, const uint16_t *text, int *w, int *h);
 
 /* Create an 8-bit palettized surface and render the given text at
  fast quality with the given font and color.  The 0 pixel is the
@@ -103,9 +102,7 @@ extern int TTF_SizeUNICODE (TTF_Font *font, const uint16_t *text, int *w, int *h
  to the text color.
  This function returns the new surface, or NULL if there was an error.
  */
-extern SDL_Surface * TTF_RenderText_Solid (TTF_Font *font, const char *text, SDL_Color fg);
 extern SDL_Surface * TTF_RenderUTF8_Solid (TTF_Font *font, const char *text, SDL_Color fg);
-extern SDL_Surface * TTF_RenderUNICODE_Solid (TTF_Font *font, const uint16_t *text, SDL_Color fg);
 
 /* Create an 8-bit palettized surface and render the given glyph at
  fast quality with the given font and color.  The 0 pixel is the
@@ -121,9 +118,7 @@ extern SDL_Surface * TTF_RenderGlyph_Solid (TTF_Font *font, uint16_t ch, SDL_Col
  while other pixels have varying degrees of the foreground color.
  This function returns the new surface, or NULL if there was an error.
  */
-extern SDL_Surface * TTF_RenderText_Shaded (TTF_Font *font, const char *text, SDL_Color fg, SDL_Color bg);
 extern SDL_Surface * TTF_RenderUTF8_Shaded (TTF_Font *font, const char *text, SDL_Color fg, SDL_Color bg);
-extern SDL_Surface * TTF_RenderUNICODE_Shaded (TTF_Font *font, const uint16_t *text, SDL_Color fg, SDL_Color bg);
 
 /* Create an 8-bit palettized surface and render the given glyph at
  high quality with the given font and colors.  The 0 pixel is background,
@@ -138,9 +133,7 @@ extern SDL_Surface * TTF_RenderGlyph_Shaded (TTF_Font *font, uint16_t ch, SDL_Co
  using alpha blending to dither the font with the given color.
  This function returns the new surface, or NULL if there was an error.
  */
-extern SDL_Surface * TTF_RenderText_Blended (TTF_Font *font, const char *text, SDL_Color fg);
 extern SDL_Surface * TTF_RenderUTF8_Blended (TTF_Font *font, const char *text, SDL_Color fg);
-extern SDL_Surface * TTF_RenderUNICODE_Blended (TTF_Font *font, const uint16_t *text, SDL_Color fg);
 
 /* Create a 32-bit ARGB surface and render the given glyph at high quality,
  using alpha blending to dither the font with the given color.
@@ -150,13 +143,6 @@ extern SDL_Surface * TTF_RenderUNICODE_Blended (TTF_Font *font, const uint16_t *
  */
 extern SDL_Surface * TTF_RenderGlyph_Blended (TTF_Font *font, uint16_t ch, SDL_Color fg);
 
-/* For compatibility with previous versions, here are the old functions */
-#define TTF_RenderText(font, text, fg, bg)	\
-	TTF_RenderText_Shaded(font, text, fg, bg)
-#define TTF_RenderUTF8(font, text, fg, bg)	\
-	TTF_RenderUTF8_Shaded(font, text, fg, bg)
-#define TTF_RenderUNICODE(font, text, fg, bg)	\
-	TTF_RenderUNICODE_Shaded(font, text, fg, bg)
 
 /* Close an opened font file */
 extern void TTF_CloseFont (TTF_Font *font);

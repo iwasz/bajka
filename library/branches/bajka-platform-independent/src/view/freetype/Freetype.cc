@@ -38,6 +38,12 @@
 #define CACHED_BITMAP	0x01
 #define CACHED_PIXMAP	0x02
 
+static int TTF_SizeUNICODE (TTF_Font *font, const uint16_t *text, int *w, int *h);
+static SDL_Surface * TTF_RenderUNICODE_Solid (TTF_Font *font, const uint16_t *text, SDL_Color fg);
+static SDL_Surface * TTF_RenderUNICODE_Shaded (TTF_Font *font, const uint16_t *text, SDL_Color fg, SDL_Color bg);
+static SDL_Surface * TTF_RenderUNICODE_Blended (TTF_Font *font, const uint16_t *text, SDL_Color fg);
+
+
 /* Cached glyph information */
 typedef struct cached_glyph {
         int stored;
@@ -54,7 +60,14 @@ typedef struct cached_glyph {
 } c_glyph;
 
 /* The structure used to hold internal font information */
-struct _TTF_Font {
+struct TTF_Font {
+
+        ~TTF_Font ()
+        {
+                // TODO Czy to ma się tu kasować, czy nie!
+                // delete src;
+        }
+
         /* Freetype2 maintains all sorts of useful info itself */
         FT_Face face;
 
@@ -409,11 +422,8 @@ TTF_Font* TTF_OpenFontRW (Common::DataSource *src, int freesrc, int ptsize)
 
 TTF_Font* TTF_OpenFontIndex (const char *file, int ptsize, long index)
 {
-        Common::DataSource *rw = SDL_RWFromFile (file, "rb");
-        if (rw == NULL) {
-                TTF_SetError (SDL_GetError ());
-                return NULL;
-        }
+        Common::DataSource *rw = new Common::DataSource;
+        rw->open (file);
         return TTF_OpenFontIndexRW (rw, 1, ptsize, index);
 }
 
@@ -813,18 +823,6 @@ void TTF_CloseFont (TTF_Font* font)
         }
 }
 
-static uint16_t *LATIN1_to_UNICODE (uint16_t *unicode, const char *text, int len)
-{
-        int i;
-
-        for (i = 0; i < len; ++i) {
-                unicode[i] = ((const unsigned char *) text)[i];
-        }
-        unicode[i] = 0;
-
-        return unicode;
-}
-
 static uint16_t *UTF8_to_UNICODE (uint16_t *unicode, const char *utf8, int len)
 {
         int i, j;
@@ -941,31 +939,6 @@ int TTF_GlyphMetrics (TTF_Font *font, uint16_t ch, int* minx, int* maxx, int* mi
                 }
         }
         return 0;
-}
-
-int TTF_SizeText (TTF_Font *font, const char *text, int *w, int *h)
-{
-        uint16_t *unicode_text;
-        int unicode_len;
-        int status;
-
-        /* Copy the Latin-1 text to a UNICODE text buffer */
-        unicode_len = strlen (text);
-        unicode_text = (uint16_t *) ALLOCA((1+unicode_len+1)*(sizeof *unicode_text));
-
-        if (unicode_text == NULL) {
-                throw Util::InitException ("Freetype : Out of memory");
-        }
-
-        *unicode_text = UNICODE_BOM_NATIVE;
-        LATIN1_to_UNICODE (unicode_text + 1, text, unicode_len);
-
-        /* Render the new text */
-        status = TTF_SizeUNICODE (font, unicode_text, w, h);
-
-        /* Free the text buffer and return */
-        FREEA(unicode_text);
-        return status;
 }
 
 int TTF_SizeUTF8 (TTF_Font *font, const char *text, int *w, int *h)
@@ -1120,31 +1093,6 @@ int TTF_SizeUNICODE (TTF_Font *font, const uint16_t *text, int *w, int *h)
         return status;
 }
 
-/* Convert the Latin-1 text to UNICODE and render it
- */
-SDL_Surface *TTF_RenderText_Solid (TTF_Font *font, const char *text, SDL_Color fg)
-{
-        SDL_Surface *textbuf;
-        uint16_t *unicode_text;
-        int unicode_len;
-
-        /* Copy the Latin-1 text to a UNICODE text buffer */
-        unicode_len = strlen (text);
-        unicode_text = (uint16_t *) ALLOCA((1+unicode_len+1)*(sizeof *unicode_text));
-        if (unicode_text == NULL) {
-                throw Util::InitException ("Freetype : Out of memory");
-        }
-        *unicode_text = UNICODE_BOM_NATIVE;
-        LATIN1_to_UNICODE (unicode_text + 1, text, unicode_len);
-
-        /* Render the new text */
-        textbuf = TTF_RenderUNICODE_Solid (font, unicode_text, fg);
-
-        /* Free the text buffer and return */
-        FREEA(unicode_text);
-        return (textbuf);
-}
-
 /* Convert the UTF-8 text to UNICODE and render it
  */
 SDL_Surface *TTF_RenderUTF8_Solid (TTF_Font *font, const char *text, SDL_Color fg)
@@ -1289,17 +1237,6 @@ SDL_Surface *TTF_RenderUNICODE_Solid (TTF_Font *font, const uint16_t *text, SDL_
                 prev_index = glyph->index;
         }
 
-        /* Handle the underline style */
-        if (TTF_HANDLE_STYLE_UNDERLINE(font)) {
-                row = TTF_underline_top_row (font);
-                TTF_drawLine_Solid (font, textbuf, row);
-        }
-
-        /* Handle the strikethrough style */
-        if (TTF_HANDLE_STYLE_STRIKETHROUGH(font)) {
-                row = TTF_strikethrough_top_row (font);
-                TTF_drawLine_Solid (font, textbuf, row);
-        }
         return textbuf;
 }
 
@@ -1321,13 +1258,6 @@ SDL_Surface *TTF_RenderGlyph_Solid (TTF_Font *font, uint16_t ch, SDL_Color fg)
 
         /* Create the target surface */
         row = glyph->bitmap.rows;
-        if (TTF_HANDLE_STYLE_UNDERLINE(font)) {
-                /* Update height according to the needs of the underline style */
-                int bottom_row = TTF_Glyph_underline_bottom_row (font, glyph);
-                if (row < bottom_row) {
-                        row = bottom_row;
-                }
-        }
 
         textbuf = SDL_CreateRGBSurface (SDL_SWSURFACE, glyph->bitmap.width, row, 8, 0, 0, 0, 0);
         if (!textbuf) {
@@ -1353,42 +1283,6 @@ SDL_Surface *TTF_RenderGlyph_Solid (TTF_Font *font, uint16_t ch, SDL_Color fg)
                 dst += textbuf->pitch;
         }
 
-        /* Handle the underline style */
-        if (TTF_HANDLE_STYLE_UNDERLINE(font)) {
-                row = TTF_Glyph_underline_top_row (font, glyph);
-                TTF_drawLine_Solid (font, textbuf, row);
-        }
-
-        /* Handle the strikethrough style */
-        if (TTF_HANDLE_STYLE_STRIKETHROUGH(font)) {
-                row = TTF_Glyph_strikethrough_top_row (font, glyph);
-                TTF_drawLine_Solid (font, textbuf, row);
-        }
-        return (textbuf);
-}
-
-/* Convert the Latin-1 text to UNICODE and render it
- */
-SDL_Surface *TTF_RenderText_Shaded (TTF_Font *font, const char *text, SDL_Color fg, SDL_Color bg)
-{
-        SDL_Surface *textbuf;
-        uint16_t *unicode_text;
-        int unicode_len;
-
-        /* Copy the Latin-1 text to a UNICODE text buffer */
-        unicode_len = strlen (text);
-        unicode_text = (uint16_t *) ALLOCA((1+unicode_len+1)*(sizeof *unicode_text));
-        if (unicode_text == NULL) {
-                throw Util::InitException ("Freetype : Out of memory");
-        }
-        *unicode_text = UNICODE_BOM_NATIVE;
-        LATIN1_to_UNICODE (unicode_text + 1, text, unicode_len);
-
-        /* Render the new text */
-        textbuf = TTF_RenderUNICODE_Shaded (font, unicode_text, fg, bg);
-
-        /* Free the text buffer and return */
-        FREEA(unicode_text);
         return (textbuf);
 }
 
@@ -1541,17 +1435,6 @@ SDL_Surface* TTF_RenderUNICODE_Shaded (TTF_Font* font, const uint16_t* text, SDL
                 prev_index = glyph->index;
         }
 
-        /* Handle the underline style */
-        if (TTF_HANDLE_STYLE_UNDERLINE(font)) {
-                row = TTF_underline_top_row (font);
-                TTF_drawLine_Shaded (font, textbuf, row);
-        }
-
-        /* Handle the strikethrough style */
-        if (TTF_HANDLE_STYLE_STRIKETHROUGH(font)) {
-                row = TTF_strikethrough_top_row (font);
-                TTF_drawLine_Shaded (font, textbuf, row);
-        }
         return textbuf;
 }
 
@@ -1578,15 +1461,9 @@ SDL_Surface* TTF_RenderGlyph_Shaded (TTF_Font* font, uint16_t ch, SDL_Color fg, 
 
         /* Create the target surface */
         row = glyph->pixmap.rows;
-        if (TTF_HANDLE_STYLE_UNDERLINE(font)) {
-                /* Update height according to the needs of the underline style */
-                int bottom_row = TTF_Glyph_underline_bottom_row (font, glyph);
-                if (row < bottom_row) {
-                        row = bottom_row;
-                }
-        }
 
         textbuf = SDL_CreateRGBSurface (SDL_SWSURFACE, glyph->pixmap.width, row, 8, 0, 0, 0, 0);
+
         if (!textbuf) {
                 return NULL;
         }
@@ -1611,43 +1488,7 @@ SDL_Surface* TTF_RenderGlyph_Shaded (TTF_Font* font, uint16_t ch, SDL_Color fg, 
                 dst += textbuf->pitch;
         }
 
-        /* Handle the underline style */
-        if (TTF_HANDLE_STYLE_UNDERLINE(font)) {
-                row = TTF_Glyph_underline_top_row (font, glyph);
-                TTF_drawLine_Shaded (font, textbuf, row);
-        }
-
-        /* Handle the strikethrough style */
-        if (TTF_HANDLE_STYLE_STRIKETHROUGH(font)) {
-                row = TTF_Glyph_strikethrough_top_row (font, glyph);
-                TTF_drawLine_Shaded (font, textbuf, row);
-        }
         return textbuf;
-}
-
-/* Convert the Latin-1 text to UNICODE and render it
- */
-SDL_Surface *TTF_RenderText_Blended (TTF_Font *font, const char *text, SDL_Color fg)
-{
-        SDL_Surface *textbuf;
-        uint16_t *unicode_text;
-        int unicode_len;
-
-        /* Copy the Latin-1 text to a UNICODE text buffer */
-        unicode_len = strlen (text);
-        unicode_text = (uint16_t *) ALLOCA((1+unicode_len+1)*(sizeof *unicode_text));
-        if (unicode_text == NULL) {
-                throw Util::InitException ("Freetype : Out of memory");
-        }
-        *unicode_text = UNICODE_BOM_NATIVE;
-        LATIN1_to_UNICODE (unicode_text + 1, text, unicode_len);
-
-        /* Render the new text */
-        textbuf = TTF_RenderUNICODE_Blended (font, unicode_text, fg);
-
-        /* Free the text buffer and return */
-        FREEA(unicode_text);
-        return (textbuf);
 }
 
 /* Convert the UTF-8 text to UNICODE and render it
@@ -1788,17 +1629,6 @@ SDL_Surface *TTF_RenderUNICODE_Blended (TTF_Font *font, const uint16_t *text, SD
                 prev_index = glyph->index;
         }
 
-        /* Handle the underline style */
-        if (TTF_HANDLE_STYLE_UNDERLINE(font)) {
-                row = TTF_underline_top_row (font);
-                TTF_drawLine_Blended (font, textbuf, row, pixel);
-        }
-
-        /* Handle the strikethrough style */
-        if (TTF_HANDLE_STYLE_STRIKETHROUGH(font)) {
-                row = TTF_strikethrough_top_row (font);
-                TTF_drawLine_Blended (font, textbuf, row, pixel);
-        }
         return (textbuf);
 }
 
@@ -1822,15 +1652,8 @@ SDL_Surface *TTF_RenderGlyph_Blended (TTF_Font *font, uint16_t ch, SDL_Color fg)
 
         /* Create the target surface */
         row = glyph->pixmap.rows;
-        if (TTF_HANDLE_STYLE_UNDERLINE(font)) {
-                /* Update height according to the needs of the underline style */
-                int bottom_row = TTF_Glyph_underline_bottom_row (font, glyph);
-                if (row < bottom_row) {
-                        row = bottom_row;
-                }
-        }
-
         textbuf = SDL_CreateRGBSurface (SDL_SWSURFACE, glyph->pixmap.width, row, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
+
         if (!textbuf) {
                 return (NULL);
         }
@@ -1849,23 +1672,11 @@ SDL_Surface *TTF_RenderGlyph_Blended (TTF_Font *font, uint16_t ch, SDL_Color fg)
                 }
         }
 
-        /* Handle the underline style */
-        if (TTF_HANDLE_STYLE_UNDERLINE(font)) {
-                row = TTF_Glyph_underline_top_row (font, glyph);
-                TTF_drawLine_Blended (font, textbuf, row, pixel);
-        }
-
-        /* Handle the strikethrough style */
-        if (TTF_HANDLE_STYLE_STRIKETHROUGH(font)) {
-                row = TTF_Glyph_strikethrough_top_row (font, glyph);
-                TTF_drawLine_Blended (font, textbuf, row, pixel);
-        }
         return (textbuf);
 }
 
 void TTF_SetFontStyle (TTF_Font* font, int style)
 {
-        int prev_style = font->style;
         font->style = style | font->face_style;
 }
 
