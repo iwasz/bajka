@@ -10,7 +10,7 @@
 #include "util/Exceptions.h"
 #include "util/Math.h"
 #include "util/Config.h"
-#include <SDL/SDL_ttf.h>
+#include <view/freetype/Freetype.h>
 
 /****************************************************************************/
 
