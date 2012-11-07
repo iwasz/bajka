@@ -22,6 +22,10 @@ public:
         Bitmap () : data (NULL), width (0), height (0), visibleWidth (0), visibleHeight (0), bitDepth (0), colorSpace (RGBA)  {}
         virtual ~Bitmap () {}
 
+        void paste (IBitmap *source, Geometry::Box const *srcRect = NULL, int x = 0, int y = 0);
+        void allocate (int width, int height, ColorSpace cs);
+        void clear (View::Color const &color);
+
         void *getData () { return data; }
         void setData (void *d) { data = d; }
 

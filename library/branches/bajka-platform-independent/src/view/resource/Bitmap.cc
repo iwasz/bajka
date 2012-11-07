@@ -7,10 +7,30 @@
  ****************************************************************************/
 
 #include "Bitmap.h"
+#include "geometry/Box.h"
+#include "view/draw/Color.h"
 
 namespace View {
 
+void Bitmap::paste (IBitmap *source, Geometry::Box const *srcRect, int x, int y)
+{
+
+}
+
 /****************************************************************************/
+
+void Bitmap::allocate (int width, int height, ColorSpace cs)
+{
+
+}
+
+/****************************************************************************/
+
+void Bitmap::clear (View::Color const &color)
+{
+
+}
+
 //
 //Ptr <View::IBitmap> Bitmap::blit (Geometry::Box const *region, int width, int height)
 //{

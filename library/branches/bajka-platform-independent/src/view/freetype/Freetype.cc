@@ -12,9 +12,6 @@
 #include <string.h>
 #include <string>
 
-#define ALLOCA(n) malloc(n)
-#define FREEA(p) free(p)
-
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_OUTLINE_H
@@ -24,6 +21,12 @@
 
 #include "Freetype.h"
 #include "util/Exceptions.h"
+#include <memory>
+#include <common/dataSource/DataSource.h>
+#include <boost/make_shared.hpp>
+#include "view/resource/IBitmap.h"
+#include "view/resource/Bitmap.h"
+#include "view/graphicFile/ColorSpace.h"
 
 /* FIXME: Right now we assume the gray-scale renderer Freetype is using
  supports 256 shades of gray, but we should instead key off of num_grays
@@ -38,11 +41,12 @@
 #define CACHED_BITMAP	0x01
 #define CACHED_PIXMAP	0x02
 
-static int TTF_SizeUNICODE (TTF_Font *font, const uint16_t *text, int *w, int *h);
-static SDL_Surface * TTF_RenderUNICODE_Solid (TTF_Font *font, const uint16_t *text, SDL_Color fg);
-static SDL_Surface * TTF_RenderUNICODE_Shaded (TTF_Font *font, const uint16_t *text, SDL_Color fg, SDL_Color bg);
-static SDL_Surface * TTF_RenderUNICODE_Blended (TTF_Font *font, const uint16_t *text, SDL_Color fg);
+#define ALLOCA(n) malloc(n)
+#define FREEA(p) free(p)
 
+static int TTF_SizeUNICODE (TTF_Font *font, const uint16_t *text, int *w, int *h);
+
+using namespace View;
 
 /* Cached glyph information */
 typedef struct cached_glyph {
@@ -195,37 +199,7 @@ void TTF_ByteSwappedUNICODE (int swapped)
 
 static void TTF_SetFTError (const char *msg, FT_Error error)
 {
-#ifdef USE_FREETYPE_ERRORS
-#undef FTERRORS_H
-#define FT_ERRORDEF( e, v, s )  { e, s },
-        static const struct
-        {
-                int err_code;
-                const char* err_msg;
-        }ft_errors[] = {
-#include <freetype/fterrors.h>
-#include <common/dataSource/DataSource.h>
-#include "../../util/Exceptions.h"
-        };
-        int i;
-        const char *err_msg;
-        char buffer[1024];
-
-        err_msg = NULL;
-        for ( i=0; i<((sizeof ft_errors)/(sizeof ft_errors[0])); ++i ) {
-                if ( error == ft_errors[i].err_code ) {
-                        err_msg = ft_errors[i].err_msg;
-                        break;
-                }
-        }
-        if ( ! err_msg ) {
-                err_msg = "unknown FreeType error";
-        }
-        sprintf(buffer, "%s: %s", msg, err_msg);
-        TTF_SetError(buffer);
-#else
         throw Util::InitException (std::string ("Freetype : ") + msg);
-#endif /* USE_FREETYPE_ERRORS */
 }
 
 int TTF_Init (void)
@@ -488,7 +462,9 @@ static FT_Error Load_Glyph (TTF_Font* font, uint16_t ch, c_glyph* cached, int wa
         metrics = &glyph->metrics;
         outline = &glyph->outline;
 
-        /* Get the glyph metrics if desired */
+        /**
+         * Pobiera rozmiary glifu, jesli nie są one skeszowane w cached.
+         */
         if ((want & CACHED_METRICS) && !(cached->stored & CACHED_METRICS)) {
                 if (FT_IS_SCALABLE (face)) {
                         /* Get the bounding box */
@@ -524,6 +500,9 @@ static FT_Error Load_Glyph (TTF_Font* font, uint16_t ch, c_glyph* cached, int wa
                 cached->stored |= CACHED_METRICS;
         }
 
+        /**
+         * Renderuje font, ale tylko jesli wynik renderowania nie jest skeszowany.
+         */
         if (((want & CACHED_BITMAP) && !(cached->stored & CACHED_BITMAP)) || ((want & CACHED_PIXMAP) && !(cached->stored & CACHED_PIXMAP))) {
                 int mono = (want & CACHED_BITMAP);
                 int i;
@@ -554,29 +533,45 @@ static FT_Error Load_Glyph (TTF_Font* font, uint16_t ch, c_glyph* cached, int wa
                         FT_Stroker_Set (stroker, font->outline * 64, FT_STROKER_LINECAP_ROUND, FT_STROKER_LINEJOIN_ROUND, 0);
                         FT_Glyph_Stroke (&bitmap_glyph, stroker, 1 /* delete the original glyph */);
                         FT_Stroker_Done (stroker);
-                        /* Render the glyph */
+
+                        /**
+                         * Renderuje glif, który jest skalowalny, czyli zawiera outline (informację wektorową na temat
+                         * fontu). Renderuje tylko do 2 formatów albo : FT_RENDER_MODE_MONO (1 bit per pixel ) lub
+                         * FT_RENDER_MODE_NORMAL (odcienie szarości, ale nie wiadomo ile bitów - to zależy od fontu).
+                         */
                         error = FT_Glyph_To_Bitmap (&bitmap_glyph, mono ? ft_render_mode_mono : ft_render_mode_normal, 0, 1);
+
                         if (error) {
                                 FT_Done_Glyph (bitmap_glyph);
                                 return error;
                         }
+
                         src = &((FT_BitmapGlyph) bitmap_glyph)->bitmap;
                 }
                 else {
                         /* Render the glyph */
-                        error = FT_Render_Glyph (glyph, mono ? ft_render_mode_mono : ft_render_mode_normal);
+                        error = FT_Render_Glyph (glyph, mono ? FT_RENDER_MODE_MONO : FT_RENDER_MODE_NORMAL);
                         if (error) {
                                 return error;
                         }
                         src = &glyph->bitmap;
                 }
-                /* Copy over information to cache */
+
+                /**
+                 * W zmiennej src jest dopiero co wyrenderowany glif. Kopiujemy go teraz do kesza. W keszu
+                 * są dwie zmienne (bitmap i pixmap), uzywane w zależności od tego, czy mono, czy GRAY.
+                 */
                 if (mono) {
                         dst = &cached->bitmap;
                 }
                 else {
                         dst = &cached->pixmap;
                 }
+
+                /**
+                 * Tu jest kopiowanie bajt po bajcie, ale oczywiście shallow, więc rózne inne bebechy też są
+                 * kopiowane, ale niżej (między innymi oczywiście buffer, gdzie są dane obrazu).
+                 */
                 memcpy (dst, src, sizeof(*dst));
 
                 /* FT_Render_Glyph() and .fon fonts always generate a
@@ -589,6 +584,7 @@ static FT_Error Load_Glyph (TTF_Font* font, uint16_t ch, c_glyph* cached, int wa
                  * FT_Render_Glyph() canreturn two-color bitmap or 4/16/256-
                  * color graymap according to the format of embedded bitmap/
                  * graymap. */
+
                 if (src->pixel_mode == FT_PIXEL_MODE_MONO) {
                         dst->pitch *= 8;
                 }
@@ -611,11 +607,18 @@ static FT_Error Load_Glyph (TTF_Font* font, uint16_t ch, c_glyph* cached, int wa
                         dst->width += bump;
                 }
 
+                /**
+                 * Cały poniższy kod kopiuje bufor z src do dest. W buforze (pole buffer z FT_Bitmap) zawiera dane
+                 * pixeli wyrenderowaego glifa. Formatów w src może być kilka (1, 2, 4 lub 8 bitów per pixel). Poniższy
+                 * kod konwertuje te wszystkie formaty
+                 */
                 if (dst->rows != 0) {
                         dst->buffer = (unsigned char *) malloc (dst->pitch * dst->rows);
+
                         if (!dst->buffer) {
                                 return FT_Err_Out_Of_Memory;
                         }
+
                         memset (dst->buffer, 0, dst->pitch * dst->rows);
 
                         for (i = 0; i < src->rows; i++) {
@@ -741,6 +744,12 @@ static FT_Error Load_Glyph (TTF_Font* font, uint16_t ch, c_glyph* cached, int wa
                         }
                 }
 
+                /**
+                 * W tym momencie w dst (czyli także w cached->pixmap lub jeśli mono == true, to w cached->bitmap)
+                 * jest bitmapa 8 bit per pixel. Może być monochromatyczna, ale i tak zawsze jest 8 bitów na pixel.
+                 * Ułatwia to późniejsze blitowanie.
+                 */
+
                 /* Handle the bold style */
                 if (TTF_HANDLE_STYLE_BOLD(font)) {
                         int row;
@@ -785,7 +794,6 @@ static FT_Error Load_Glyph (TTF_Font* font, uint16_t ch, c_glyph* cached, int wa
 
         /* We're done, mark this glyph cached */
         cached->cached = ch;
-
         return 0;
 }
 
@@ -850,6 +858,17 @@ static uint16_t *UTF8_to_UNICODE (uint16_t *unicode, const char *utf8, int len)
         unicode[j] = 0;
 
         return unicode;
+}
+
+/**
+ * Wynik trzeba zwolnić za pomocą delete [].
+ */
+std::auto_ptr <uint16_t> utf8ToUnicode (const char *text)
+{
+        int unicode_len = strlen (text);
+        std::auto_ptr <uint16_t> unicode_text = std::auto_ptr <uint16_t> (new uint16_t[unicode_len]);
+        UTF8_to_UNICODE (unicode_text.get () + 1, text, unicode_len);
+        return unicode_text;
 }
 
 int TTF_FontHeight (const TTF_Font *font)
@@ -941,31 +960,11 @@ int TTF_GlyphMetrics (TTF_Font *font, uint16_t ch, int* minx, int* maxx, int* mi
         return 0;
 }
 
-int TTF_SizeUTF8 (TTF_Font *font, const char *text, int *w, int *h)
+int TTF_SizeUNICODE (TTF_Font *font, const char *inputText, int *w, int *h)
 {
-        uint16_t *unicode_text;
-        int unicode_len;
-        int status;
+        std::auto_ptr <uint16_t> textAuto = utf8ToUnicode (inputText);
+        uint16_t *text = textAuto.get ();
 
-        /* Copy the UTF-8 text to a UNICODE text buffer */
-        unicode_len = strlen (text);
-        unicode_text = (uint16_t *) ALLOCA((1+unicode_len+1)*(sizeof *unicode_text));
-        if (unicode_text == NULL) {
-                throw Util::InitException ("Freetype : Out of memory");
-        }
-        *unicode_text = UNICODE_BOM_NATIVE;
-        UTF8_to_UNICODE (unicode_text + 1, text, unicode_len);
-
-        /* Render the new text */
-        status = TTF_SizeUNICODE (font, unicode_text, w, h);
-
-        /* Free the text buffer and return */
-        FREEA(unicode_text);
-        return status;
-}
-
-int TTF_SizeUNICODE (TTF_Font *font, const uint16_t *text, int *w, int *h)
-{
         int status;
         const uint16_t *ch;
         int swapped;
@@ -985,7 +984,6 @@ int TTF_SizeUNICODE (TTF_Font *font, const uint16_t *text, int *w, int *h)
         status = 0;
         minx = maxx = 0;
         miny = maxy = 0;
-        swapped = TTF_byteswapped;
 
         /* check kerning */
         use_kerning = FT_HAS_KERNING (font->face) && font->kerning;
@@ -999,23 +997,6 @@ int TTF_SizeUNICODE (TTF_Font *font, const uint16_t *text, int *w, int *h)
         x = 0;
         for (ch = text; *ch; ++ch) {
                 uint16_t c = *ch;
-                if (c == UNICODE_BOM_NATIVE) {
-                        swapped = 0;
-                        if (text == ch) {
-                                ++text;
-                        }
-                        continue;
-                }
-                if (c == UNICODE_BOM_SWAPPED) {
-                        swapped = 1;
-                        if (text == ch) {
-                                ++text;
-                        }
-                        continue;
-                }
-                if (swapped) {
-                        c = SDL_Swap16 (c);
-                }
 
                 error = Find_Glyph (font, c, CACHED_METRICS);
                 if (error) {
@@ -1093,431 +1074,106 @@ int TTF_SizeUNICODE (TTF_Font *font, const uint16_t *text, int *w, int *h)
         return status;
 }
 
-/* Convert the UTF-8 text to UNICODE and render it
- */
-SDL_Surface *TTF_RenderUTF8_Solid (TTF_Font *font, const char *text, SDL_Color fg)
+Ptr <Bitmap> TTF_RenderUTF8_Solid (TTF_Font *font, const char *inputText, View::Color const &fg)
 {
-        SDL_Surface *textbuf;
-        uint16_t *unicode_text;
-        int unicode_len;
+        std::auto_ptr <uint16_t> textAuto = utf8ToUnicode (inputText);
+        uint16_t *text = textAuto.get ();
 
-        /* Copy the UTF-8 text to a UNICODE text buffer */
-        unicode_len = strlen (text);
-        unicode_text = (uint16_t *) ALLOCA((1+unicode_len+1)*(sizeof *unicode_text));
-        if (unicode_text == NULL) {
-                throw Util::InitException ("Freetype : Out of memory");
-        }
-        *unicode_text = UNICODE_BOM_NATIVE;
-        UTF8_to_UNICODE (unicode_text + 1, text, unicode_len);
-
-        /* Render the new text */
-        textbuf = TTF_RenderUNICODE_Solid (font, unicode_text, fg);
-
-        /* Free the text buffer and return */
-        FREEA(unicode_text);
-        return (textbuf);
-}
-
-SDL_Surface *TTF_RenderUNICODE_Solid (TTF_Font *font, const uint16_t *text, SDL_Color fg)
-{
-        int xstart;
         int width;
         int height;
-        SDL_Surface* textbuf;
-        SDL_Palette* palette;
-        const uint16_t* ch;
-        uint8_t* src;
-        uint8_t* dst;
-        uint8_t *dst_check;
-        int swapped;
-        int row, col;
-        c_glyph *glyph;
-
-        FT_Bitmap *current;
-        FT_Error error;
-        FT_Long use_kerning;
-        FT_UInt prev_index = 0;
 
         /* Get the dimensions of the text surface */
         if ((TTF_SizeUNICODE (font, text, &width, &height) < 0) || !width) {
                 throw Util::InitException ("Freetype : Text has zero width");
         }
 
-        /* Create the target surface */
-        textbuf = SDL_AllocSurface (SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0);
-        if (textbuf == NULL) {
-                return NULL;
-        }
+        Ptr <Bitmap> textBuf = boost::make_shared <Bitmap> ();
+        textBuf->allocate (width, height, RGBA);
 
-        /* Adding bound checking to avoid all kinds of memory corruption errors
-         that may occur. */
-        dst_check = (uint8_t*) textbuf->pixels + textbuf->pitch * textbuf->h;
+        // Adding bound checking to avoid all kinds of memory corruption errors that may occur.
+//        uint8_t *dst_check = (uint8_t*) textbuf->pixels + textbuf->pitch * textbuf->h;
 
-        /* Fill the palette with the foreground color */
-        palette = textbuf->format->palette;
-        palette->colors[0].r = 255 - fg.r;
-        palette->colors[0].g = 255 - fg.g;
-        palette->colors[0].b = 255 - fg.b;
-        palette->colors[1].r = fg.r;
-        palette->colors[1].g = fg.g;
-        palette->colors[1].b = fg.b;
-        SDL_SetColorKey (textbuf, SDL_SRCCOLORKEY, 0);
-
-        /* check kerning */
-        use_kerning = FT_HAS_KERNING (font->face) && font->kerning;
+        // Check kerning.
+        FT_Long use_kerning = FT_HAS_KERNING (font->face) && font->kerning;
 
         /* Load and render each character */
-        xstart = 0;
-        swapped = TTF_byteswapped;
-        for (ch = text; *ch; ++ch) {
+        int xstart = 0;
+        FT_UInt prev_index = 0;
+
+        for (const uint16_t *ch = text; *ch; ++ch) {
                 uint16_t c = *ch;
-                if (c == UNICODE_BOM_NATIVE) {
-                        swapped = 0;
-                        if (text == ch) {
-                                ++text;
-                        }
-                        continue;
-                }
-                if (c == UNICODE_BOM_SWAPPED) {
-                        swapped = 1;
-                        if (text == ch) {
-                                ++text;
-                        }
-                        continue;
-                }
-                if (swapped) {
-                        c = SDL_Swap16 (c);
+
+                FT_Error error = Find_Glyph (font, c, CACHED_METRICS | CACHED_BITMAP);
+
+                if (error) {
+                        throw Util::InitException ("Freetype : Find_Glyph returned an error");
                 }
 
-                error = Find_Glyph (font, c, CACHED_METRICS | CACHED_BITMAP);
-                if (error) {
-                        SDL_FreeSurface (textbuf);
-                        return NULL;
-                }
-                glyph = font->current;
-                current = &glyph->bitmap;
-                /* Ensure the width of the pixmap is correct. On some cases,
-                 * freetype may report a larger pixmap than possible.*/
+                c_glyph *glyph = font->current;
+                FT_Bitmap *current = &glyph->bitmap;
+
+                // Ensure the width of the pixmap is correct. On some cases, freetype may report a larger pixmap than possible.
                 width = current->width;
+
                 if (font->outline <= 0 && width > glyph->maxx - glyph->minx) {
                         width = glyph->maxx - glyph->minx;
                 }
-                /* do kerning, if possible AC-Patch */
+
+                // do kerning, if possible AC-Patch
                 if (use_kerning && prev_index && glyph->index) {
                         FT_Vector delta;
                         FT_Get_Kerning (font->face, prev_index, glyph->index, ft_kerning_default, &delta);
                         xstart += delta.x >> 6;
                 }
+
                 /* Compensate for wrap around bug with negative minx's */
                 if ((ch == text) && (glyph->minx < 0)) {
                         xstart -= glyph->minx;
                 }
 
-                for (row = 0; row < current->rows; ++row) {
-                        /* Make sure we don't go either over, or under the
-                         * limit */
-                        if (row + glyph->yoffset < 0) {
+                /**
+                 *  Tu jest kopiowanie do wyjściowej bitmapy. Iteruje po wierszach bitmapy.
+                 */
+                for (int row = 0; row < current->rows; ++row) {
+                        // Make sure we don't go either over, or under the limit
+                        if (row + glyph->yoffset < 0 || row + glyph->yoffset >= textBuf->getVisibleHeight ()) {
                                 continue;
                         }
-                        if (row + glyph->yoffset >= textbuf->h) {
-                                continue;
-                        }
-                        dst = (uint8_t*) textbuf->pixels + (row + glyph->yoffset) * textbuf->pitch + xstart + glyph->minx;
-                        src = current->buffer + row * current->pitch;
 
-                        for (col = width; col > 0 && dst < dst_check; --col) {
+                        // Początek aktualnej linijki o numerze row. Linia zawiera 8-bitowe odcienie szarości (może być mono).
+                        uint8_t *src = current->buffer + row * current->pitch;
+
+                        /*
+                         * Tu kopiuje. SDL_ttf tworzy surface 8bitowe z paletą (?).
+                         * row - wiersz numerowany od 0 (od góry do dołu?)
+                         * glyph->yoffset - no to będzie jakieś przesuniecie wertykalne (przesunięcie do dołu).
+                         * xstart - aktualna pozycja pióra X - powiększana po narysowaniu glifu o jego szerokość (xstart += glyph->advance;).
+                         * glyph->minx - margines glifu.
+                         */
+                        uint8_t *dst = (uint8_t*) textbuf->pixels + (row + glyph->yoffset) * textbuf->pitch + xstart + glyph->minx;
+
+                        for (int col = width; col > 0 && dst < dst_check; --col) {
                                 *dst++ |= *src++;
                         }
                 }
 
                 xstart += glyph->advance;
-                if (TTF_HANDLE_STYLE_BOLD(font)) {
+
+                if (TTF_HANDLE_STYLE_BOLD (font)) {
                         xstart += font->glyph_overhang;
                 }
+
                 prev_index = glyph->index;
         }
 
-        return textbuf;
+        return textBuf;
 }
 
-SDL_Surface *TTF_RenderGlyph_Solid (TTF_Font *font, uint16_t ch, SDL_Color fg)
+View::IBitmap *TTF_RenderUTF8_Blended (TTF_Font *font, const char *inputText, View::Color const &fg)
 {
-        SDL_Surface *textbuf;
-        SDL_Palette *palette;
-        uint8_t *src, *dst;
-        int row;
-        FT_Error error;
-        c_glyph *glyph;
+        std::auto_ptr <uint16_t> textAuto = utf8ToUnicode (inputText);
+        uint16_t *text = textAuto.get ();
 
-        /* Get the glyph itself */
-        error = Find_Glyph (font, ch, CACHED_METRICS | CACHED_BITMAP);
-        if (error) {
-                return (NULL);
-        }
-        glyph = font->current;
-
-        /* Create the target surface */
-        row = glyph->bitmap.rows;
-
-        textbuf = SDL_CreateRGBSurface (SDL_SWSURFACE, glyph->bitmap.width, row, 8, 0, 0, 0, 0);
-        if (!textbuf) {
-                return (NULL);
-        }
-
-        /* Fill the palette with the foreground color */
-        palette = textbuf->format->palette;
-        palette->colors[0].r = 255 - fg.r;
-        palette->colors[0].g = 255 - fg.g;
-        palette->colors[0].b = 255 - fg.b;
-        palette->colors[1].r = fg.r;
-        palette->colors[1].g = fg.g;
-        palette->colors[1].b = fg.b;
-        SDL_SetColorKey (textbuf, SDL_SRCCOLORKEY, 0);
-
-        /* Copy the character from the pixmap */
-        src = glyph->bitmap.buffer;
-        dst = (uint8_t*) textbuf->pixels;
-        for (row = 0; row < glyph->bitmap.rows; ++row) {
-                memcpy (dst, src, glyph->bitmap.width);
-                src += glyph->bitmap.pitch;
-                dst += textbuf->pitch;
-        }
-
-        return (textbuf);
-}
-
-/* Convert the UTF-8 text to UNICODE and render it
- */
-SDL_Surface *TTF_RenderUTF8_Shaded (TTF_Font *font, const char *text, SDL_Color fg, SDL_Color bg)
-{
-        SDL_Surface *textbuf;
-        uint16_t *unicode_text;
-        int unicode_len;
-
-        /* Copy the UTF-8 text to a UNICODE text buffer */
-        unicode_len = strlen (text);
-        unicode_text = (uint16_t *) ALLOCA((1+unicode_len+1)*(sizeof *unicode_text));
-        if (unicode_text == NULL) {
-                throw Util::InitException ("Freetype : Out of memory");
-                return (NULL);
-        }
-        *unicode_text = UNICODE_BOM_NATIVE;
-        UTF8_to_UNICODE (unicode_text + 1, text, unicode_len);
-
-        /* Render the new text */
-        textbuf = TTF_RenderUNICODE_Shaded (font, unicode_text, fg, bg);
-
-        /* Free the text buffer and return */
-        FREEA(unicode_text);
-        return (textbuf);
-}
-
-SDL_Surface* TTF_RenderUNICODE_Shaded (TTF_Font* font, const uint16_t* text, SDL_Color fg, SDL_Color bg)
-{
-        int xstart;
-        int width;
-        int height;
-        SDL_Surface* textbuf;
-        SDL_Palette* palette;
-        int index;
-        int rdiff;
-        int gdiff;
-        int bdiff;
-        const uint16_t* ch;
-        uint8_t* src;
-        uint8_t* dst;
-        uint8_t* dst_check;
-        int swapped;
-        int row, col;
-        FT_Bitmap* current;
-        c_glyph *glyph;
-        FT_Error error;
-        FT_Long use_kerning;
-        FT_UInt prev_index = 0;
-
-        /* Get the dimensions of the text surface */
-        if ((TTF_SizeUNICODE (font, text, &width, &height) < 0) || !width) {
-                throw Util::InitException ("Freetype : Text has zero width");
-        }
-
-        /* Create the target surface */
-        textbuf = SDL_AllocSurface (SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0);
-        if (textbuf == NULL) {
-                return NULL;
-        }
-
-        /* Adding bound checking to avoid all kinds of memory corruption errors
-         that may occur. */
-        dst_check = (uint8_t*) textbuf->pixels + textbuf->pitch * textbuf->h;
-
-        /* Fill the palette with NUM_GRAYS levels of shading from bg to fg */
-        palette = textbuf->format->palette;
-        rdiff = fg.r - bg.r;
-        gdiff = fg.g - bg.g;
-        bdiff = fg.b - bg.b;
-
-        for (index = 0; index < NUM_GRAYS; ++index) {
-                palette->colors[index].r = bg.r + (index * rdiff) / (NUM_GRAYS - 1);
-                palette->colors[index].g = bg.g + (index * gdiff) / (NUM_GRAYS - 1);
-                palette->colors[index].b = bg.b + (index * bdiff) / (NUM_GRAYS - 1);
-        }
-
-        /* check kerning */
-        use_kerning = FT_HAS_KERNING (font->face) && font->kerning;
-
-        /* Load and render each character */
-        xstart = 0;
-        swapped = TTF_byteswapped;
-        for (ch = text; *ch; ++ch) {
-                uint16_t c = *ch;
-                if (c == UNICODE_BOM_NATIVE) {
-                        swapped = 0;
-                        if (text == ch) {
-                                ++text;
-                        }
-                        continue;
-                }
-                if (c == UNICODE_BOM_SWAPPED) {
-                        swapped = 1;
-                        if (text == ch) {
-                                ++text;
-                        }
-                        continue;
-                }
-                if (swapped) {
-                        c = SDL_Swap16 (c);
-                }
-
-                error = Find_Glyph (font, c, CACHED_METRICS | CACHED_PIXMAP);
-                if (error) {
-                        SDL_FreeSurface (textbuf);
-                        return NULL;
-                }
-                glyph = font->current;
-                /* Ensure the width of the pixmap is correct. On some cases,
-                 * freetype may report a larger pixmap than possible.*/
-                width = glyph->pixmap.width;
-                if (font->outline <= 0 && width > glyph->maxx - glyph->minx) {
-                        width = glyph->maxx - glyph->minx;
-                }
-                /* do kerning, if possible AC-Patch */
-                if (use_kerning && prev_index && glyph->index) {
-                        FT_Vector delta;
-                        FT_Get_Kerning (font->face, prev_index, glyph->index, ft_kerning_default, &delta);
-                        xstart += delta.x >> 6;
-                }
-                /* Compensate for the wrap around with negative minx's */
-                if ((ch == text) && (glyph->minx < 0)) {
-                        xstart -= glyph->minx;
-                }
-
-                current = &glyph->pixmap;
-                for (row = 0; row < current->rows; ++row) {
-                        /* Make sure we don't go either over, or under the
-                         * limit */
-                        if (row + glyph->yoffset < 0) {
-                                continue;
-                        }
-                        if (row + glyph->yoffset >= textbuf->h) {
-                                continue;
-                        }
-                        dst = (uint8_t*) textbuf->pixels + (row + glyph->yoffset) * textbuf->pitch + xstart + glyph->minx;
-                        src = current->buffer + row * current->pitch;
-                        for (col = width; col > 0 && dst < dst_check; --col) {
-                                *dst++ |= *src++;
-                        }
-                }
-
-                xstart += glyph->advance;
-                if (TTF_HANDLE_STYLE_BOLD(font)) {
-                        xstart += font->glyph_overhang;
-                }
-                prev_index = glyph->index;
-        }
-
-        return textbuf;
-}
-
-SDL_Surface* TTF_RenderGlyph_Shaded (TTF_Font* font, uint16_t ch, SDL_Color fg, SDL_Color bg)
-{
-        SDL_Surface* textbuf;
-        SDL_Palette* palette;
-        int index;
-        int rdiff;
-        int gdiff;
-        int bdiff;
-        uint8_t* src;
-        uint8_t* dst;
-        int row;
-        FT_Error error;
-        c_glyph* glyph;
-
-        /* Get the glyph itself */
-        error = Find_Glyph (font, ch, CACHED_METRICS | CACHED_PIXMAP);
-        if (error) {
-                return NULL;
-        }
-        glyph = font->current;
-
-        /* Create the target surface */
-        row = glyph->pixmap.rows;
-
-        textbuf = SDL_CreateRGBSurface (SDL_SWSURFACE, glyph->pixmap.width, row, 8, 0, 0, 0, 0);
-
-        if (!textbuf) {
-                return NULL;
-        }
-
-        /* Fill the palette with NUM_GRAYS levels of shading from bg to fg */
-        palette = textbuf->format->palette;
-        rdiff = fg.r - bg.r;
-        gdiff = fg.g - bg.g;
-        bdiff = fg.b - bg.b;
-        for (index = 0; index < NUM_GRAYS; ++index) {
-                palette->colors[index].r = bg.r + (index * rdiff) / (NUM_GRAYS - 1);
-                palette->colors[index].g = bg.g + (index * gdiff) / (NUM_GRAYS - 1);
-                palette->colors[index].b = bg.b + (index * bdiff) / (NUM_GRAYS - 1);
-        }
-
-        /* Copy the character from the pixmap */
-        src = glyph->pixmap.buffer;
-        dst = (uint8_t*) textbuf->pixels;
-        for (row = 0; row < glyph->bitmap.rows; ++row) {
-                memcpy (dst, src, glyph->pixmap.width);
-                src += glyph->pixmap.pitch;
-                dst += textbuf->pitch;
-        }
-
-        return textbuf;
-}
-
-/* Convert the UTF-8 text to UNICODE and render it
- */
-SDL_Surface *TTF_RenderUTF8_Blended (TTF_Font *font, const char *text, SDL_Color fg)
-{
-        SDL_Surface *textbuf;
-        uint16_t *unicode_text;
-        int unicode_len;
-
-        /* Copy the UTF-8 text to a UNICODE text buffer */
-        unicode_len = strlen (text);
-        unicode_text = (uint16_t *) ALLOCA((1+unicode_len+1)*(sizeof *unicode_text));
-        if (unicode_text == NULL) {
-                throw Util::InitException ("Freetype : Out of memory");
-        }
-        *unicode_text = UNICODE_BOM_NATIVE;
-        UTF8_to_UNICODE (unicode_text + 1, text, unicode_len);
-
-        /* Render the new text */
-        textbuf = TTF_RenderUNICODE_Blended (font, unicode_text, fg);
-
-        /* Free the text buffer and return */
-        FREEA(unicode_text);
-        return (textbuf);
-}
-
-SDL_Surface *TTF_RenderUNICODE_Blended (TTF_Font *font, const uint16_t *text, SDL_Color fg)
-{
         int xstart;
         int width, height;
         SDL_Surface *textbuf;
@@ -1627,49 +1283,6 @@ SDL_Surface *TTF_RenderUNICODE_Blended (TTF_Font *font, const uint16_t *text, SD
                         xstart += font->glyph_overhang;
                 }
                 prev_index = glyph->index;
-        }
-
-        return (textbuf);
-}
-
-SDL_Surface *TTF_RenderGlyph_Blended (TTF_Font *font, uint16_t ch, SDL_Color fg)
-{
-        SDL_Surface *textbuf;
-        uint32_t alpha;
-        uint32_t pixel;
-        uint8_t *src;
-        uint32_t *dst;
-        int row, col;
-        FT_Error error;
-        c_glyph *glyph;
-
-        /* Get the glyph itself */
-        error = Find_Glyph (font, ch, CACHED_METRICS | CACHED_PIXMAP);
-        if (error) {
-                return (NULL);
-        }
-        glyph = font->current;
-
-        /* Create the target surface */
-        row = glyph->pixmap.rows;
-        textbuf = SDL_CreateRGBSurface (SDL_SWSURFACE, glyph->pixmap.width, row, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
-
-        if (!textbuf) {
-                return (NULL);
-        }
-
-        /* Copy the character from the pixmap */
-        pixel = (fg.r << 16) | (fg.g << 8) | fg.b;
-        SDL_FillRect (textbuf, NULL, pixel); /* Initialize with fg and 0 alpha */
-
-        for (row = 0; row < glyph->pixmap.rows; ++row) {
-                /* Changed src to take pitch into account, not just width */
-                src = glyph->pixmap.buffer + row * glyph->pixmap.pitch;
-                dst = (uint32_t *) textbuf->pixels + row * textbuf->pitch / 4;
-                for (col = 0; col < glyph->pixmap.width; ++col) {
-                        alpha = *src++;
-                        *dst++ = pixel | (alpha << 24);
-                }
         }
 
         return (textbuf);

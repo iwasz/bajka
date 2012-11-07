@@ -11,16 +11,7 @@
 
 #include <stdint.h>
 #include <common/dataSource/DataSource.h>
-
-/* ZERO WIDTH NO-BREAKSPACE (Unicode byte order mark) */
-#define UNICODE_BOM_NATIVE	0xFEFF
-#define UNICODE_BOM_SWAPPED	0xFFFE
-
-/* This function tells the library whether UNICODE text is generally
- byteswapped.  A UNICODE BOM character in a string will override
- this setting for the remainder of that string.
- */
-extern void TTF_ByteSwappedUNICODE (int swapped);
+#include <core/Pointer.h>
 
 /* The internal structure containing font information */
 struct TTF_Font;
@@ -96,54 +87,6 @@ extern int TTF_GlyphMetrics (TTF_Font *font, uint16_t ch, int *minx, int *maxx, 
 /* Get the dimensions of a rendered string of text */
 extern int TTF_SizeUTF8 (TTF_Font *font, const char *text, int *w, int *h);
 
-/* Create an 8-bit palettized surface and render the given text at
- fast quality with the given font and color.  The 0 pixel is the
- colorkey, giving a transparent background, and the 1 pixel is set
- to the text color.
- This function returns the new surface, or NULL if there was an error.
- */
-extern SDL_Surface * TTF_RenderUTF8_Solid (TTF_Font *font, const char *text, SDL_Color fg);
-
-/* Create an 8-bit palettized surface and render the given glyph at
- fast quality with the given font and color.  The 0 pixel is the
- colorkey, giving a transparent background, and the 1 pixel is set
- to the text color.  The glyph is rendered without any padding or
- centering in the X direction, and aligned normally in the Y direction.
- This function returns the new surface, or NULL if there was an error.
- */
-extern SDL_Surface * TTF_RenderGlyph_Solid (TTF_Font *font, uint16_t ch, SDL_Color fg);
-
-/* Create an 8-bit palettized surface and render the given text at
- high quality with the given font and colors.  The 0 pixel is background,
- while other pixels have varying degrees of the foreground color.
- This function returns the new surface, or NULL if there was an error.
- */
-extern SDL_Surface * TTF_RenderUTF8_Shaded (TTF_Font *font, const char *text, SDL_Color fg, SDL_Color bg);
-
-/* Create an 8-bit palettized surface and render the given glyph at
- high quality with the given font and colors.  The 0 pixel is background,
- while other pixels have varying degrees of the foreground color.
- The glyph is rendered without any padding or centering in the X
- direction, and aligned normally in the Y direction.
- This function returns the new surface, or NULL if there was an error.
- */
-extern SDL_Surface * TTF_RenderGlyph_Shaded (TTF_Font *font, uint16_t ch, SDL_Color fg, SDL_Color bg);
-
-/* Create a 32-bit ARGB surface and render the given text at high quality,
- using alpha blending to dither the font with the given color.
- This function returns the new surface, or NULL if there was an error.
- */
-extern SDL_Surface * TTF_RenderUTF8_Blended (TTF_Font *font, const char *text, SDL_Color fg);
-
-/* Create a 32-bit ARGB surface and render the given glyph at high quality,
- using alpha blending to dither the font with the given color.
- The glyph is rendered without any padding or centering in the X
- direction, and aligned normally in the Y direction.
- This function returns the new surface, or NULL if there was an error.
- */
-extern SDL_Surface * TTF_RenderGlyph_Blended (TTF_Font *font, uint16_t ch, SDL_Color fg);
-
-
 /* Close an opened font file */
 extern void TTF_CloseFont (TTF_Font *font);
 
@@ -155,5 +98,21 @@ extern int TTF_WasInit (void);
 
 /* Get the kerning size of two glyphs */
 extern int TTF_GetFontKerningSize (TTF_Font *font, int prev_index, int index);
+
+/* Create an 8-bit palettized surface and render the given text at
+ fast quality with the given font and color.  The 0 pixel is the
+ colorkey, giving a transparent background, and the 1 pixel is set
+ to the text color.
+ This function returns the new surface, or NULL if there was an error.
+ */
+extern Ptr <Bitmap> TTF_RenderUTF8_Solid (TTF_Font *font, const char *text, SDL_Color fg);
+
+
+/* Create a 32-bit ARGB surface and render the given text at high quality,
+ using alpha blending to dither the font with the given color.
+ This function returns the new surface, or NULL if there was an error.
+ */
+extern Ptr <Bitmap>TTF_RenderUTF8_Blended (TTF_Font *font, const char *text, SDL_Color fg);
+
 
 #endif /* _SDL_TTF_H */
