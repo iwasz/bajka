@@ -15,14 +15,13 @@
 #include <boost/bind.hpp>
 #include <cstdlib>
 #include <SDL.h>
-#include <SDL_image.h>
-#include <SDL/SDL_ttf.h>
+#include <Platform.h>
 #include <util/AbstractShellImpl.h>
-#include "Shell.h"
-#include "util/Exceptions.h"
+#include <util/ReflectionMacros.h>
+#include <util/Exceptions.h>
+#include <view/freetype/Freetype.h>
 #include "GraphicsService.h"
-#include "Platform.h"
-#include "util/ReflectionMacros.h"
+#include "Shell.h"
 #include "EventDispatcher.h"
 
 namespace M = Model;
