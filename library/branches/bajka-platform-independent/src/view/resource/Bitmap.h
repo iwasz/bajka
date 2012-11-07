@@ -19,12 +19,15 @@ namespace View {
 class Bitmap : public View::IBitmap {
 public:
 
-        Bitmap () : data (NULL), width (0), height (0), visibleWidth (0), visibleHeight (0), bitDepth (0), colorSpace (RGBA)  {}
-        virtual ~Bitmap () {}
+        Bitmap () : data (NULL), width (0), height (0), visibleWidth (0), visibleHeight (0), colorSpace (RGBA)  {}
+        virtual ~Bitmap ();
+
+        enum { BIT_DEPTH = 8 };
 
         void paste (IBitmap *source, Geometry::Box const *srcRect = NULL, int x = 0, int y = 0);
         void allocate (int width, int height, ColorSpace cs);
         void clear (View::Color const &color);
+        void clear ();
 
         void *getData () { return data; }
         void setData (void *d) { data = d; }
@@ -41,11 +44,10 @@ public:
         int getHeight () const { return height; }
         void setHeight (int i) { height = i; }
 
-        int getBitDepth () const { return bitDepth; }
-        void setBitDepth (int i) { bitDepth = i; }
-
         ColorSpace getColorSpace () const { return colorSpace; }
         void setColorSpace (ColorSpace i) { colorSpace = i; }
+
+        size_t getPitch () const { return (colorSpace == RGB) ? (width * 3) : (width * 4); }
 
 protected:
 
@@ -54,7 +56,6 @@ protected:
         int height;
         int visibleWidth;
         int visibleHeight;
-        int bitDepth;
         ColorSpace colorSpace;
 };
 

@@ -12,6 +12,13 @@
 
 namespace View {
 
+Bitmap::~Bitmap ()
+{
+        free (data);
+}
+
+/****************************************************************************/
+
 void Bitmap::paste (IBitmap *source, Geometry::Box const *srcRect, int x, int y)
 {
 
@@ -21,15 +28,26 @@ void Bitmap::paste (IBitmap *source, Geometry::Box const *srcRect, int x, int y)
 
 void Bitmap::allocate (int width, int height, ColorSpace cs)
 {
-
+        colorSpace = cs;
+        this->visibleWidth = this->width = width;
+        this->visibleHeight = this->height = height;
+        data = malloc (getPitch () * height);
 }
 
 /****************************************************************************/
 
 void Bitmap::clear (View::Color const &color)
 {
-
 }
+
+/****************************************************************************/
+
+void Bitmap::clear ()
+{
+        memset (data, 0x00, getPitch () * visibleHeight);
+}
+
+/****************************************************************************/
 
 //
 //Ptr <View::IBitmap> Bitmap::blit (Geometry::Box const *region, int width, int height)
