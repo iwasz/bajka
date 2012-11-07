@@ -28,13 +28,13 @@ struct IFont : public Core::Object {
         /**
          * Renderuj pojedynczą linię tekstu (nie rozumie znaków nowej linii).
          */
-        virtual Ptr <IBitmap> render (std::string const &text, View::Color const &fgColor, View::Color const &bgColor) = 0;
+        virtual Ptr <IBitmap> render (std::string const &text, View::Color const &fgColor) = 0;
 
         /**
          * Renderuj tekst w wielu liniach (akceptuje znaki nowej linii, oraz
          * umie wrapować tekst).
          */
-        virtual Ptr <IBitmap> renderMulti (std::string const &text, View::Color const &fgColor, View::Color const &bgColor, TextAlign textAlign = LEFT) = 0;
+        virtual Ptr <IBitmap> renderMulti (std::string const &text, View::Color const &fgColor, TextAlign textAlign = LEFT) = 0;
 
 };
 

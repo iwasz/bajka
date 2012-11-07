@@ -26,7 +26,9 @@ class Color;
 class IBitmap : public Core::Object {
 public:
 
-        virtual ~IBitmap () {}
+        virtual ~IBitmap ()
+        {
+        }
 
         /**
          * Wkleja bitmapę source do tej (this) bitmapy. Kopiuje obszar srcRect ze źródła (lub całą, jeśli srcRect
@@ -40,9 +42,14 @@ public:
         virtual void allocate (int width, int height, ColorSpace cs) = 0;
 
         /**
-         * Wypełnia całą bitmapę kolorem.
+         * Wypełnia całą bitmapę kolorem. Wolniejsza niż clear bez parametrów.
          */
         virtual void clear (View::Color const &color) = 0;
+
+        /**
+         * Wypełnia całą bitmapę RGB na czarno, a RGBA na przezroczysto. Szybka.
+         */
+        virtual void clear () = 0;
 
         /**
          * Format danych RGBA 8888.
@@ -70,14 +77,15 @@ public:
         virtual int getHeight () const = 0;
 
         /**
-         * Bitów na kolor.
-         */
-        virtual int getBitDepth () const = 0;
-
-        /**
-         * W formacie OpenGL. Teraz tylko GL_RGBA lub GL_RGB.
+         *
          */
         virtual ColorSpace getColorSpace () const = 0;
+
+        /**
+         * Wielkość wiersza bitmapy w bajtach.
+         */
+        virtual size_t getPitch () const = 0;
+
 };
 
 } /* namespace View */

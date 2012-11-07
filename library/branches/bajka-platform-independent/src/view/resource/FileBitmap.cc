@@ -14,14 +14,15 @@ namespace View {
 void FileBitmap::setPath (std::string const &p)
 {
         path = p;
-        load (p.c_str (), &data, &width, &height, &visibleWidth, &visibleHeight, &colorSpace, &bitDepth, true);
+        int dummy;
+        load (p.c_str (), &data, &width, &height, &visibleWidth, &visibleHeight, &colorSpace, &dummy, true);
 }
 
 /****************************************************************************/
 
 FileBitmap::~FileBitmap ()
 {
-        free (data);
+        // Usunięte będzie w Bitmap
 }
 
 } /* namespace View */

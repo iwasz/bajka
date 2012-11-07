@@ -13,6 +13,11 @@
 #include <common/dataSource/DataSource.h>
 #include <core/Pointer.h>
 
+namespace View {
+class Color;
+class IBitmap;
+}
+
 /* The internal structure containing font information */
 struct TTF_Font;
 
@@ -105,14 +110,14 @@ extern int TTF_GetFontKerningSize (TTF_Font *font, int prev_index, int index);
  to the text color.
  This function returns the new surface, or NULL if there was an error.
  */
-extern Ptr <Bitmap> TTF_RenderUTF8_Solid (TTF_Font *font, const char *text, SDL_Color fg);
+extern Ptr <View::IBitmap> TTF_RenderUTF8_Solid (TTF_Font *font, const char *text, View::Color const &);
 
 
 /* Create a 32-bit ARGB surface and render the given text at high quality,
  using alpha blending to dither the font with the given color.
  This function returns the new surface, or NULL if there was an error.
  */
-extern Ptr <Bitmap>TTF_RenderUTF8_Blended (TTF_Font *font, const char *text, SDL_Color fg);
+extern Ptr <View::IBitmap> TTF_RenderUTF8_Blended (TTF_Font *font, const char *text, View::Color const &);
 
 
 #endif /* _SDL_TTF_H */

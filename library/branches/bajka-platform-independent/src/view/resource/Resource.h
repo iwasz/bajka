@@ -14,5 +14,6 @@
 #include "IResourceManager.h"
 #include "Bitmap.h"
 #include "FileBitmap.h"
+#include "TTFFont.h"
 
 #	endif /* RESOURCE_H_ */
