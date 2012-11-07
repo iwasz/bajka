@@ -15,7 +15,7 @@
       <button set-as="child" file="sound.xml" name="scene" text="Sound test" />
       <button set-as="child" file="gles-test.xml" name="scene" text="GLES/GL20" />
       <button set-as="child" controller.quit="true" text="Quit" />
-      <image set-as="child" path="franek.jpg"/>
+<!--       <image set-as="child" path="franek.jpg"/> -->
       
       <RelativeGroupProperties set-as="groupProps" vAlign="center" hAlign="center" translate="50, 50"/>
     </LinearGroup>
