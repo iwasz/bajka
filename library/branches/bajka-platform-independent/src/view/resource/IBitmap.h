@@ -10,10 +10,15 @@
 #define BAJKA_BITMAP_INTERFACE_H_
 
 #include <core/Object.h>
-#include "geometry/Box.h"
 #include "view/graphicFile/ColorSpace.h"
+#include <cstddef>
+
+namespace Geometry {
+class Box;
+}
 
 namespace View {
+class Color;
 
 /**
  * Czyste dane bitmapowe - żadnego renderowania.
@@ -22,6 +27,22 @@ class IBitmap : public Core::Object {
 public:
 
         virtual ~IBitmap () {}
+
+        /**
+         * Wkleja bitmapę source do tej (this) bitmapy. Kopiuje obszar srcRect ze źródła (lub całą, jeśli srcRect
+         * jest NULL) i wkleja do tej (this) bitmapy w miejsce (x, y), lub w (0, 0)
+         */
+        virtual void paste (IBitmap *source, Geometry::Box const *srcRect = NULL, int x = 0, int y = 0) = 0;
+
+        /**
+         * Alokuje bitmapę.
+         */
+        virtual void allocate (int width, int height, ColorSpace cs) = 0;
+
+        /**
+         * Wypełnia całą bitmapę kolorem.
+         */
+        virtual void clear (View::Color const &color) = 0;
 
         /**
          * Format danych RGBA 8888.
@@ -57,16 +78,6 @@ public:
          * W formacie OpenGL. Teraz tylko GL_RGBA lub GL_RGB.
          */
         virtual ColorSpace getColorSpace () const = 0;
-
-        /**
-         * Tworzy nową, pustą bitmapę o rozmiarach destW x destH. Następnie kopiuje do niej
-         * obszar srcRect z tej (this) bitmapy i wkleja go w górnym lewym rogu.
-         * - Jeśli srcRect jest null, to kopiowany jest cały obszar źródłowej (tej) bitmapy.
-         * - Jeśli destW jest równe -1, to domyślnie zostanie uzyta szerokość prostokąta źródłowego.
-         * - Jeśli destH jest równe -1, to domyślnie zostanie uzyta wysokość prostokąta źródłowego.
-         */
-//        virtual Ptr <IBitmap> blit (Geometry::Box const *srcRect = NULL, int destW = -1, int destH = -1) = 0;
-//        virtual IBitmap *blit (IBitmap *dest, Geometry::Box const *srcRect = NULL, int destW = -1, int destH = -1) = 0;
 };
 
 } /* namespace View */
