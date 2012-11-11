@@ -71,67 +71,71 @@ Ptr <IBitmap> TTFFont::render (std::string const &text, View::Color const &fgCol
         case BLENDED:
                 return TTF_RenderUTF8_Blended (font, text.c_str (), fgColor);
         }
+
+        throw Util::RuntimeException ("TTFFont::render : unknown renderType");
 }
 
 /****************************************************************************/
 
 Ptr <IBitmap> TTFFont::renderMulti (std::string const &text, View::Color const &fgColor, TextAlign textLaign)
 {
-//        // Bez lineWrapu.
-//        int lineSkip = TTF_FontLineSkip (font);
-//        int width = 0, height = 0;
-//
-//        Core::StringVector tokens;
-//        boost::algorithm::split (tokens, text, boost::algorithm::is_any_of ("\n"));
-//
-//        // Ustal jaka będzie szerokość w pixelach najdłuższej wyrenderowanej linijki.
-//        for (Core::StringVector::const_iterator i = tokens.begin (); i != tokens.end (); ++i) {
-//                int w = 0;
-//                TTF_SizeUTF8 (font, i->c_str (), &w, &height);
-//
-//                if (w > width) {
-//                        width = w;
-//                }
-//        }
-//
-//        // Jaka będzie wysokość bloku tekstu (wszystkich wyrenderowanych linijek
-//        height = (tokens.size () - 1) * lineSkip + height;
-//
-//        // Stwórz surface zdolne pomiescić cały tekst (wszytskie linijki).
-//        SDL_Surface *surface = createSurface (width, height);
-//
-//        // Renderuj
-//        int cnt = 0;
-//
-//        for (Core::StringVector::const_iterator i = tokens.begin (); i != tokens.end (); ++i, ++cnt) {
-//
-//                if (i->empty ()) {
-//                        continue;
-//                }
-//
-//                // The rendered text:
-//                Ptr <IBitmap> sTemp = render (*i, fgColor, bgColor);
-//
-//                // Put it on the surface (sText):
-//                SDL_Rect destRct = { 0, cnt * lineSkip, 0, 0 };
-//
-//                if (textLaign == CENTER) {
-//                        destRct.x = (surface->w - sTemp->getWidth ()) / 2;
-//                }
-//                else if (textLaign == RIGHT) {
-//                        destRct.x = (surface->w - sTemp->getWidth ());
-//                }
-//
-//                // Niemożliwe, żeby nie przeszło, ale i tak...
-//                assertThrow (destRct.x >= 0, "TTFFont::renderMulti : destRct.x < 0")
-//
-////                TODO
-////                SDL_BlitSurface (sTemp->getData (), NULL, surface, &destRct);
-//
-//                // Clean up:
-//                //SDL_FreeSurface(sTemp);
-//        }
+#if 0
+//        TODO
+        // Bez lineWrapu.
+        int lineSkip = TTF_FontLineSkip (font);
+        int width = 0, height = 0;
 
+        Core::StringVector tokens;
+        boost::algorithm::split (tokens, text, boost::algorithm::is_any_of ("\n"));
+
+        // Ustal jaka będzie szerokość w pixelach najdłuższej wyrenderowanej linijki.
+        for (Core::StringVector::const_iterator i = tokens.begin (); i != tokens.end (); ++i) {
+                int w = 0;
+                TTF_SizeUTF8 (font, i->c_str (), &w, &height);
+
+                if (w > width) {
+                        width = w;
+                }
+        }
+
+        // Jaka będzie wysokość bloku tekstu (wszystkich wyrenderowanych linijek
+        height = (tokens.size () - 1) * lineSkip + height;
+
+        // Stwórz surface zdolne pomiescić cały tekst (wszytskie linijki).
+        SDL_Surface *surface = createSurface (width, height);
+
+        // Renderuj
+        int cnt = 0;
+
+        for (Core::StringVector::const_iterator i = tokens.begin (); i != tokens.end (); ++i, ++cnt) {
+
+                if (i->empty ()) {
+                        continue;
+                }
+
+                // The rendered text:
+                Ptr <IBitmap> sTemp = render (*i, fgColor, bgColor);
+
+                // Put it on the surface (sText):
+                SDL_Rect destRct = { 0, cnt * lineSkip, 0, 0 };
+
+                if (textLaign == CENTER) {
+                        destRct.x = (surface->w - sTemp->getWidth ()) / 2;
+                }
+                else if (textLaign == RIGHT) {
+                        destRct.x = (surface->w - sTemp->getWidth ());
+                }
+
+                // Niemożliwe, żeby nie przeszło, ale i tak...
+                assertThrow (destRct.x >= 0, "TTFFont::renderMulti : destRct.x < 0")
+
+//                TODO
+//                SDL_BlitSurface (sTemp->getData (), NULL, surface, &destRct);
+
+                // Clean up:
+                //SDL_FreeSurface(sTemp);
+        }
+#endif
         return boost::make_shared <Bitmap> (/*surface*/);
 }
 

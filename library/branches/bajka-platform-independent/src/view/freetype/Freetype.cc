@@ -21,6 +21,7 @@
 
 #include "Freetype.h"
 #include "util/Exceptions.h"
+#include "util/Math.h"
 #include <memory>
 #include <common/dataSource/DataSource.h>
 #include <boost/make_shared.hpp>
@@ -1079,14 +1080,32 @@ int TTF_SizeUTF8 (TTF_Font *font, const char *inputText, int *w, int *h)
         return TTF_SizeUNICODE (font, text, w, h);
 }
 
+static inline uint8_t filterAllphaNoop (uint8_t a)
+{
+        return a;
+}
 
-Ptr <IBitmap> TTF_RenderUTF8_Solid (TTF_Font *font, const char *inputText, View::Color const &fg)
+static inline uint8_t filterAllphaMono (uint8_t a)
+{
+        return (a) ? 0xff : 0x00;
+}
+
+typedef uint8_t (*FilterAlphaFunctionPtr) (uint8_t a);
+
+static Ptr <IBitmap> TTF_RenderUTF8_Impl (TTF_Font *font,
+                                   const char *inputText,
+                                   View::Color const &fg,
+                                   int cacheType,
+                                   FilterAlphaFunctionPtr fa,
+                                   bool expandDimensions2)
 {
         std::auto_ptr <UnicodeString> textAuto = utf8ToUnicode (inputText);
         uint16_t *text = &textAuto->front ();
 
         int width;
         int height;
+        int visibleWidth;
+        int visibleHeight;
 
         /* Get the dimensions of the text surface */
         if ((TTF_SizeUNICODE (font, text, &width, &height) < 0) || !width) {
@@ -1094,8 +1113,18 @@ Ptr <IBitmap> TTF_RenderUTF8_Solid (TTF_Font *font, const char *inputText, View:
         }
 
         Ptr <Bitmap> textBuf = boost::make_shared <Bitmap> ();
+        visibleWidth = width;
+        visibleHeight = height;
+
+        if (expandDimensions2) {
+                width = Util::Math::nextSqr (width);
+                height = Util::Math::nextSqr (height);
+        }
+
         textBuf->allocate (width, height, RGBA);
         textBuf->clear ();
+        textBuf->setVisibleWidth (visibleWidth);
+        textBuf->setVisibleHeight (visibleHeight);
 
         // Check kerning.
         FT_Long use_kerning = FT_HAS_KERNING (font->face) && font->kerning;
@@ -1107,7 +1136,7 @@ Ptr <IBitmap> TTF_RenderUTF8_Solid (TTF_Font *font, const char *inputText, View:
         size_t textBufferPitch = textBuf->getPitch ();
 
         // Adding bound checking to avoid all kinds of memory corruption errors that may occur.
-        uint8_t *lastByte = (uint8_t*) textBuf->getData () + textBuf->getPitch () * textBuf->getHeight ();
+        uint8_t *lastByte = (uint8_t*) textBuf->getData () + textBuf->getPitch () * height;
 
         uint8_t r = fg.getR () * 255.0;
         uint8_t g = fg.getG () * 255.0;
@@ -1117,14 +1146,14 @@ Ptr <IBitmap> TTF_RenderUTF8_Solid (TTF_Font *font, const char *inputText, View:
         for (const uint16_t *ch = text; *ch; ++ch) {
                 uint16_t c = *ch;
 
-                FT_Error error = Find_Glyph (font, c, CACHED_METRICS | CACHED_BITMAP);
+                FT_Error error = Find_Glyph (font, c, CACHED_METRICS | cacheType);
 
                 if (error) {
                         throw Util::InitException ("Freetype : Find_Glyph returned an error");
                 }
 
                 c_glyph *glyph = font->current;
-                FT_Bitmap *current = &glyph->bitmap;
+                FT_Bitmap *current =  (cacheType == CACHED_BITMAP) ? (&glyph->bitmap) : (&glyph->pixmap);
 
                 // Ensure the width of the pixmap is correct. On some cases, freetype may report a larger pixmap than possible.
                 width = current->width;
@@ -1151,7 +1180,7 @@ Ptr <IBitmap> TTF_RenderUTF8_Solid (TTF_Font *font, const char *inputText, View:
                 for (int row = 0; row < current->rows; ++row) {
 
                         // Make sure we don't go either over, or under the limit
-                        if (row + glyph->yoffset < 0 || row + glyph->yoffset >= textBuf->getVisibleHeight ()) {
+                        if (row + glyph->yoffset < 0 || row + glyph->yoffset >= visibleHeight) {
                                 continue;
                         }
 
@@ -1172,7 +1201,7 @@ Ptr <IBitmap> TTF_RenderUTF8_Solid (TTF_Font *font, const char *inputText, View:
                                 *dst++ = r;
                                 *dst++ = g;
                                 *dst++ = b;
-                                *dst++ = (*src++) ? 0xff : 0x00;
+                                *dst++ = (*fa) (*src++);
                         }
                 }
 
@@ -1188,124 +1217,16 @@ Ptr <IBitmap> TTF_RenderUTF8_Solid (TTF_Font *font, const char *inputText, View:
         return textBuf;
 }
 
-Ptr <IBitmap> TTF_RenderUTF8_Blended (TTF_Font *font, const char *inputText, View::Color const &fg)
+Ptr <IBitmap> TTF_RenderUTF8_Solid (TTF_Font *font, const char *inputText, View::Color const &fg, bool expandDimensions2)
 {
-//        std::auto_ptr <uint16_t> textAuto = utf8ToUnicode (inputText);
-//        uint16_t *text = textAuto.get ();
-//
-//        int xstart;
-//        int width, height;
-//        SDL_Surface *textbuf;
-//        uint32_t alpha;
-//        uint32_t pixel;
-//        const uint16_t *ch;
-//        uint8_t *src;
-//        uint32_t *dst;
-//        uint32_t *dst_check;
-//        int swapped;
-//        int row, col;
-//        c_glyph *glyph;
-//        FT_Error error;
-//        FT_Long use_kerning;
-//        FT_UInt prev_index = 0;
-//
-//        /* Get the dimensions of the text surface */
-//        if ((TTF_SizeUNICODE (font, text, &width, &height) < 0) || !width) {
-//                throw Util::InitException ("Freetype : Text has zero width");
-//        }
-//
-//        /* Create the target surface */
-//        textbuf = SDL_AllocSurface (SDL_SWSURFACE, width, height, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
-//        if (textbuf == NULL) {
-//                return (NULL);
-//        }
-//
-//        /* Adding bound checking to avoid all kinds of memory corruption errors
-//         that may occur. */
-//        dst_check = (uint32_t*) textbuf->pixels + textbuf->pitch / 4 * textbuf->h;
-//
-//        /* check kerning */
-//        use_kerning = FT_HAS_KERNING (font->face) && font->kerning;
-//
-//        /* Load and render each character */
-//        xstart = 0;
-//        swapped = TTF_byteswapped;
-//        pixel = (fg.r << 16) | (fg.g << 8) | fg.b;
-//        SDL_FillRect (textbuf, NULL, pixel); /* Initialize with fg and 0 alpha */
-//
-//        for (ch = text; *ch; ++ch) {
-//                uint16_t c = *ch;
-//                if (c == UNICODE_BOM_NATIVE) {
-//                        swapped = 0;
-//                        if (text == ch) {
-//                                ++text;
-//                        }
-//                        continue;
-//                }
-//                if (c == UNICODE_BOM_SWAPPED) {
-//                        swapped = 1;
-//                        if (text == ch) {
-//                                ++text;
-//                        }
-//                        continue;
-//                }
-//                if (swapped) {
-//                        c = SDL_Swap16 (c);
-//                }
-//                error = Find_Glyph (font, c, CACHED_METRICS | CACHED_PIXMAP);
-//                if (error) {
-//                        SDL_FreeSurface (textbuf);
-//                        return NULL;
-//                }
-//                glyph = font->current;
-//                /* Ensure the width of the pixmap is correct. On some cases,
-//                 * freetype may report a larger pixmap than possible.*/
-//                width = glyph->pixmap.width;
-//                if (font->outline <= 0 && width > glyph->maxx - glyph->minx) {
-//                        width = glyph->maxx - glyph->minx;
-//                }
-//                /* do kerning, if possible AC-Patch */
-//                if (use_kerning && prev_index && glyph->index) {
-//                        FT_Vector delta;
-//                        FT_Get_Kerning (font->face, prev_index, glyph->index, ft_kerning_default, &delta);
-//                        xstart += delta.x >> 6;
-//                }
-//
-//                /* Compensate for the wrap around bug with negative minx's */
-//                if ((ch == text) && (glyph->minx < 0)) {
-//                        xstart -= glyph->minx;
-//                }
-//
-//                for (row = 0; row < glyph->pixmap.rows; ++row) {
-//                        /* Make sure we don't go either over, or under the
-//                         * limit */
-//                        if (row + glyph->yoffset < 0) {
-//                                continue;
-//                        }
-//                        if (row + glyph->yoffset >= textbuf->h) {
-//                                continue;
-//                        }
-//                        dst = (uint32_t*) textbuf->pixels + (row + glyph->yoffset) * textbuf->pitch / 4 + xstart + glyph->minx;
-//
-//                        /* Added code to adjust src pointer for pixmaps to
-//                         * account for pitch.
-//                         * */
-//                        src = (uint8_t*) (glyph->pixmap.buffer + glyph->pixmap.pitch * row);
-//                        for (col = width; col > 0 && dst < dst_check; --col) {
-//                                alpha = *src++;
-//                                *dst++ |= pixel | (alpha << 24);
-//                        }
-//                }
-//
-//                xstart += glyph->advance;
-//                if (TTF_HANDLE_STYLE_BOLD(font)) {
-//                        xstart += font->glyph_overhang;
-//                }
-//                prev_index = glyph->index;
-//        }
-//
-//        return (textbuf);
+        return TTF_RenderUTF8_Impl (font, inputText, fg, CACHED_BITMAP, filterAllphaMono, expandDimensions2);
 }
+
+Ptr <IBitmap> TTF_RenderUTF8_Blended (TTF_Font *font, const char *inputText, View::Color const &fg, bool expandDimensions2)
+{
+        return TTF_RenderUTF8_Impl (font, inputText, fg, CACHED_PIXMAP, filterAllphaNoop, expandDimensions2);
+}
+
 
 void TTF_SetFontStyle (TTF_Font* font, int style)
 {
