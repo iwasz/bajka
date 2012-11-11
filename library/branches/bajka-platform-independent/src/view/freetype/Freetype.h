@@ -110,14 +110,14 @@ extern int TTF_GetFontKerningSize (TTF_Font *font, int prev_index, int index);
  to the text color.
  This function returns the new surface, or NULL if there was an error.
  */
-extern Ptr <View::IBitmap> TTF_RenderUTF8_Solid (TTF_Font *font, const char *text, View::Color const &);
+extern Ptr <View::IBitmap> TTF_RenderUTF8_Solid (TTF_Font *font, const char *text, View::Color const &, bool expandDimensions2 = true);
 
 
 /* Create a 32-bit ARGB surface and render the given text at high quality,
  using alpha blending to dither the font with the given color.
  This function returns the new surface, or NULL if there was an error.
  */
-extern Ptr <View::IBitmap> TTF_RenderUTF8_Blended (TTF_Font *font, const char *text, View::Color const &);
+extern Ptr <View::IBitmap> TTF_RenderUTF8_Blended (TTF_Font *font, const char *text, View::Color const &, bool expandDimensions2 = true);
 
 
 #endif /* _SDL_TTF_H */
