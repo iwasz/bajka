@@ -45,6 +45,13 @@
     </cargs>
   </TTFFont>  
 
+  <TTFFont id="dekar" renderType="1" hinting="1">
+    <cargs>
+      <value type="text">Dekar.otf</value>
+      <value type="int">48</value>
+    </cargs>
+  </TTFFont>  
+
   <Color id="orange">
     <cargs>
       <value>ff4411ff</value>
