@@ -4,7 +4,7 @@
     <LayerProperties set-as="groupProps" />
     <ClearScreen set-as="view" color="6b6b6bff" />
 
-    <label set-as="child" text="Demka" view.font="@volter48">
+    <label set-as="child" text="Demka" view.font="@dekar">
       <RelativeGroupProperties set-as="groupProps" vAlign="center" hAlign="center" translate="50, 90"/>
     </label>
 
