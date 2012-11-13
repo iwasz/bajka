@@ -25,7 +25,7 @@ public:
         C__ (void)
 
         virtual ~ClearScreen () {}
-        void update (Model::IModel *, Event::UpdateEvent *e);
+        void update (Model::IModel *, Event::UpdateEvent *e, Util::IShell *shell);
 
 private:
 

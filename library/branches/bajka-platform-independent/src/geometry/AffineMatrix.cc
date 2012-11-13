@@ -144,13 +144,13 @@ std::string AffineMatrix::toString () const
         typedef AffineMatrixType::array_type::const_iterator Iterator;
         for (Iterator i = data ().begin ();;) {
 
-                s += boost::lexical_cast <double> (*i);
+                s += boost::lexical_cast <std::string> (*i);
 
                 if (++i == data ().end ()) {
                         break;
                 }
 
-                s+= ",";
+                s += ",";
         }
 
         return s + ")";

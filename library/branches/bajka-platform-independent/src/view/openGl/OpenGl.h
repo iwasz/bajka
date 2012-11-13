@@ -9,6 +9,8 @@
 #ifndef BAJKA_IMPL_OPENGL_H_
 #define BAJKA_IMPL_OPENGL_H_
 
+#include "GLContext.h"
+
 /**
  * Inkluduje nagłówki OpenGL zależne od platformy.
  */

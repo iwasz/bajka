@@ -11,6 +11,10 @@
 
 #include <string>
 
+namespace View {
+class GLContext;
+}
+
 namespace Model {
 class IModel;
 }
@@ -58,6 +62,8 @@ public:
 
         virtual void setModel (Model::IModel *model) = 0;
         virtual Util::Config *getConfig () = 0;
+        virtual View::GLContext *getGLContext () = 0;
+
 };
 
 } /* namespace Util */
