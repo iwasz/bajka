@@ -19,6 +19,10 @@
 #include "geometry/AffineMatrix.h"
 #include "layout/IGroupProperties.h"
 
+namespace Util {
+class IShell;
+}
+
 namespace Event {
 class UpdateEvent;
 }
@@ -48,7 +52,7 @@ struct IModel : public virtual Core::Object {
          * obiekt graficzny (model) z uwzględnieniem zagnieżdżonej i drzewiastej struktury
          * modeli.
          */
-        virtual void update (Event::UpdateEvent *e) = 0;
+        virtual void update (Event::UpdateEvent *e, Util::IShell *shell) = 0;
 
         /**
          * \name Transformacje.

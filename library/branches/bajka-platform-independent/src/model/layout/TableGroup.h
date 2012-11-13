@@ -43,7 +43,7 @@ public:
 /*--layout------------------------------------------------------------------*/
 
         void updateLayout ();
-        virtual void update (Event::UpdateEvent *e);
+        virtual void update (Event::UpdateEvent *e, Util::IShell *shell);
 
 /*--IBox--------------------------------------------------------------------*/
 

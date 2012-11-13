@@ -130,7 +130,7 @@ void AbstractShell::loop ()
 
                 dispatchEvents ();
                 impl->updateEvent.setDeltaMs (deltaMs);
-                impl->model->update (&impl->updateEvent);
+                impl->model->update (&impl->updateEvent, this);
 
                 Tween::Manager::getMain ()->update (deltaMs);
 

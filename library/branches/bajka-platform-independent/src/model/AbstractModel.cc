@@ -15,6 +15,7 @@
 #include "events/types/UpdateEvent.h"
 #include "Platform.h"
 #include "util/Config.h"
+#include "util/IShell.h"
 
 namespace Model {
 using View::DrawUtil;
@@ -52,7 +53,7 @@ void AbstractModel::setRotationCenter (Geometry::Point const &p)
 
 /****************************************************************************/
 
-void AbstractModel::update (Event::UpdateEvent *e)
+void AbstractModel::update (Event::UpdateEvent *e, Util::IShell *shell)
 {
         if (controller && controller->getEventMask () & Event::UPDATE_EVENT) {
                 controller->onPreUpdate (e, this, view);
@@ -71,7 +72,7 @@ void AbstractModel::update (Event::UpdateEvent *e)
 
         if (isGroup ()) {
                 IGroup *g = dynamic_cast <IGroup *> (this);
-                std::for_each (g->begin (), g->end (), boost::bind (&IModel::update, _1, e));
+                std::for_each (g->begin (), g->end (), boost::bind (&IModel::update, _1, e, shell));
         }
 
         if (view) {

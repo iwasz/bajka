@@ -12,6 +12,7 @@
 #include "Platform.h"
 #include "util/Config.h"
 #include "draw/Primitives.h"
+#include "util/IShell.h"
 
 namespace View {
 
@@ -21,7 +22,7 @@ void Widget::preUpdate (Model::IModel *model, Event::UpdateEvent *)
                 return;
         }
 
-        defaultPreUpdate (model);
+        defaultPreUpdate (model, NULL);
 }
 
 /****************************************************************************/
@@ -32,12 +33,12 @@ void Widget::postUpdate (Model::IModel *model, Event::UpdateEvent *)
                 return;
         }
 
-        defaultPostUpdate (model);
+        defaultPostUpdate (model, NULL);
 }
 
 /****************************************************************************/
 
-void Widget::defaultPreUpdate (Model::IModel *model)
+void Widget::defaultPreUpdate (Model::IModel *model, Util::IShell *shell)
 {
         if (model) {
                 glMatrixMode (GL_MODELVIEW);
@@ -58,7 +59,7 @@ void Widget::defaultPreUpdate (Model::IModel *model)
 
 /****************************************************************************/
 
-void Widget::defaultPostUpdate (Model::IModel *model)
+void Widget::defaultPostUpdate (Model::IModel *model, Util::IShell *shell)
 {
         if (model) {
                 glMatrixMode (GL_MODELVIEW);
