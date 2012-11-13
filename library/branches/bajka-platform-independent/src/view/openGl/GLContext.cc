@@ -18,7 +18,7 @@ Geometry::AffineMatrix const &GLContext::pushMatrix (Geometry::AffineMatrix cons
 {
         if (matrixStack.empty ()) {
                 matrixStack.push_back (m);
-                return m;
+                return matrixStack.back ();
         }
 
         Geometry::AffineMatrix const &top = matrixStack.back ();

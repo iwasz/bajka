@@ -41,27 +41,30 @@ void Widget::postUpdate (Model::IModel *model, Event::UpdateEvent *, Util::IShel
 void Widget::defaultPreUpdate (Model::IModel *model, Util::IShell *shell)
 {
         if (model) {
-                std::cerr << " " << model->getMatrix ().toString() << std::endl;
-                Geometry::AffineMatrix const &top = shell->getGLContext ()->pushMatrix (model->getMatrix ());
-                std::cerr << top.toString() << std::endl;
-                glMatrixMode (GL_MODELVIEW);
-                glLoadIdentity ();
-                // TODO glMultMatrixf
-                glMultMatrixd (top.data ().begin ());
-
+//                std::cerr << " " << model->getMatrix ().toString() << std::endl;
+//                Geometry::AffineMatrix const &top = shell->getGLContext ()->pushMatrix (model->getMatrix ());
+//                std::cerr << top.toString() << std::endl;
 //                glMatrixMode (GL_MODELVIEW);
-//                glPushMatrix ();
-//                Geometry::Point c = model->getRotationCenter ();
-//                Geometry::Point p = model->getTranslate ();
-//
-//#if 0
-//                std::cerr << typeid (*model).name () << " : tran=" << p << ", cent=" << c << std::endl;
-//#endif
-//
-//                glTranslatef (c.x + p.x, c.y + p.y, 0.0);
-//                glRotatef (model->getAngle(), 0.0, 0.0, 1.0); // angle * 180.0f / M_PI
-//                glScalef (model->getScale (), model->getScale (), 1.0);
-//                glTranslatef (-c.x, -c.y, 0.0);
+//                glLoadIdentity ();
+//                // TODO glMultMatrixf
+//                glMultMatrixd (top.data ().begin ());
+
+                glMatrixMode (GL_MODELVIEW);
+                glPushMatrix ();
+//                Geometry::AffineMatrix top = model->getMatrix ();
+//                glMultMatrixd (top.data ().begin ());
+
+                Geometry::Point c = model->getRotationCenter ();
+                Geometry::Point p = model->getTranslate ();
+
+#if 0
+                std::cerr << typeid (*model).name () << " : tran=" << p << ", cent=" << c << std::endl;
+#endif
+
+                glTranslatef (c.x + p.x, c.y + p.y, 0.0);
+                glRotatef (model->getAngle(), 0.0, 0.0, 1.0); // angle * 180.0f / M_PI
+                glScalef (model->getScale (), model->getScale (), 1.0);
+                glTranslatef (-c.x, -c.y, 0.0);
         }
 }
 
@@ -70,9 +73,9 @@ void Widget::defaultPreUpdate (Model::IModel *model, Util::IShell *shell)
 void Widget::defaultPostUpdate (Model::IModel *model, Util::IShell *shell)
 {
         if (model) {
-                shell->getGLContext ()->popMatrix ();
-//                glMatrixMode (GL_MODELVIEW);
-//                glPopMatrix ();
+//                shell->getGLContext ()->popMatrix ();
+                glMatrixMode (GL_MODELVIEW);
+                glPopMatrix ();
         }
 }
 
