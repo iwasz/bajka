@@ -35,6 +35,7 @@ public:
         virtual void setModel (Model::IModel *model);
 
         Util::Config *getConfig ();
+        View::GLContext *getGLContext ();
 
         void onManagerLoadModel ();
         void onManagerUnloadModel ();

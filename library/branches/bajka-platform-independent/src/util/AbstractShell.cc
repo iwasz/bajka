@@ -300,4 +300,11 @@ void AbstractShell::updateLayout (Model::IModel *root)
         }
 }
 
+/****************************************************************************/
+
+View::GLContext *AbstractShell::getGLContext ()
+{
+        return &impl->glContext;
+}
+
 } /* namespace Util */

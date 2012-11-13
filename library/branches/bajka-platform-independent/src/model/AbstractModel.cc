@@ -63,11 +63,11 @@ void AbstractModel::update (Event::UpdateEvent *e, Util::IShell *shell)
         View::Widget::drawAABB (this);
 
         if (view) {
-                view->preUpdate (this, e);
-                view->update (this, e);
+                view->preUpdate (this, e, shell);
+                view->update (this, e, shell);
         }
         else {
-        	View::Widget::defaultPreUpdate (this);
+        	View::Widget::defaultPreUpdate (this, shell);
         }
 
         if (isGroup ()) {
@@ -76,10 +76,10 @@ void AbstractModel::update (Event::UpdateEvent *e, Util::IShell *shell)
         }
 
         if (view) {
-                view->postUpdate (this, e);
+                view->postUpdate (this, e, shell);
         }
         else {
-        	View::Widget::defaultPostUpdate (this);
+        	View::Widget::defaultPostUpdate (this, shell);
         }
 
         if (controller && controller->getEventMask () & Event::UPDATE_EVENT) {

@@ -35,10 +35,10 @@ double StatefulWidget::getHeightHint () const
 
 /****************************************************************************/
 
-void StatefulWidget::update (Model::IModel *m, Event::UpdateEvent *e)
+void StatefulWidget::update (Model::IModel *m, Event::UpdateEvent *e, Util::IShell *shell)
 {
         if (current) {
-                current->update (m, e);
+                current->update (m, e, shell);
         }
 }
 

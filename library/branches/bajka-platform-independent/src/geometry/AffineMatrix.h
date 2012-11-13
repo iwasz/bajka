@@ -11,7 +11,7 @@
 
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/geometry/strategies/transform/matrix_transformers.hpp>
-#include <stack>
+#include <vector>
 #include "Point.h"
 #include "Box.h"
 
@@ -32,7 +32,7 @@ typedef boost::numeric::ublas::matrix <double, boost::numeric::ublas::column_maj
  * elementów za pomocą operatora (). Najpierw numer wiersza, potem kolumny.
  * \ingroup Geometry
  */
-class AffineMatrix : public AffineMatrixType, public Core::IToStringEnabled {
+class AffineMatrix : public AffineMatrixType {
 public:
 
         AffineMatrix ();
@@ -68,6 +68,8 @@ private:
         bool invertMatrix (const double m[16], double invOut[16]);
 
 };
+
+typedef std::vector <AffineMatrix> AffineMatrixVector;
 
 /****************************************************************************/
 
