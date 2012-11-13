@@ -21,11 +21,11 @@ namespace trans = boost::geometry::strategy::transform;
 
 /****************************************************************************/
 
-void LinearGroup::update (Event::UpdateEvent *e)
+void LinearGroup::update (Event::UpdateEvent *e, Util::IShell *shell)
 {
         // TODO to nie powino się updejtować przy każdym odświerzeniu.
         updateLayout ();
-        Group::update (e);
+        Group::update (e, shell);
 }
 
 /****************************************************************************/
