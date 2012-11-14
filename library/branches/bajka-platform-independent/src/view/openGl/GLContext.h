@@ -12,6 +12,10 @@
 #include "geometry/AffineMatrix.h"
 #include "OpenGlPriv.h"
 
+namespace Util {
+class Config;
+}
+
 namespace View {
 
 /**
@@ -26,7 +30,7 @@ public:
         /**
          * Inicjuje.
          */
-        void init ();
+        void init (Util::Config *config);
 
         /**
          * Pobiera macierz z góry stosu za pomocą getCurrentMatrix, moży ją przez m i
