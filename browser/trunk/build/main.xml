@@ -22,12 +22,53 @@ Dodatkowe:
 <beans>
   <import resource="standard.xml" />
 
-<!--   <Config id="config" viewportWidth="1280" viewportHeight="720" autoProjection="true" windowCaption="Bajka browser"> -->
-  <Config id="config" viewportWidth="160" viewportHeight="100" projectionWidth="1280" projectionHeight="720" windowCaption="Bajka browser">
+  <Config id="config" viewportWidth="1280" viewportHeight="720" autoProjection="true" windowCaption="Bajka browser">
+<!--   <Config id="config" viewportWidth="160" viewportHeight="100" projectionWidth="1280" projectionHeight="720" windowCaption="Bajka browser"> -->
     <ref set-as="modelManager" bean="modelManager" />
+    <value set-as="vertex">
+attribute vec4 position;
+varying vec2 texcoord;                             
+
+const float left = -640.0;
+const float right = 640.0;
+const float bottom = -360.0;
+const float top = 360.0;
+
+// near = -1
+// far = 1
+
+const mat4 projection = mat4 (
+        vec4 (2.0 / (right - left), 0.0,                  0.0, -(right + left) / (right - left)),
+        vec4 (0.0,                  2.0 / (top - bottom), 0.0, -(top + bottom) / (top - bottom)),
+        vec4 (0.0,                  0.0,                  -1.0, 0.0),
+        vec4 (0.0,                  0.0,                  0.0, 1.0)
+    );
+                                                       
+void main()                                        
+{                                                  
+    gl_Position = projection * position;             
+    texcoord = position.xy * vec2(0.5) + vec2(0.5);
+}                                                  
+    </value>
+    
+    <value set-as="fragment">
+uniform float fade_factor;               
+uniform sampler2D textures[2];           
+                                         
+varying vec2 texcoord;                   
+                                         
+void main()                              
+{                                        
+    gl_FragColor = mix(                  
+        texture2D(textures[0], texcoord),
+        texture2D(textures[1], texcoord),
+        fade_factor                      
+    );                                   
+}                                        
+    </value>
   </Config>
   
-  <ReloadableXmlModelManager id="modelManager" file="menu.xml" name="scene" mainContainer="@#container"/>
+  <ReloadableXmlModelManager id="modelManager" file="menu2.xml" name="scene" mainContainer="@#container"/>
 
 </beans>
 
