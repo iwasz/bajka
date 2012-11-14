@@ -12,7 +12,7 @@
 #include "util/Config.h"
 
 /****************************************************************************/
-/*
+
 GLuint loadShader (GLenum type, const char *shaderSrc)
 {
         GLuint shader;
@@ -53,7 +53,6 @@ GLuint loadShader (GLenum type, const char *shaderSrc)
 
         return shader;
 }
-*/
 
 /****************************************************************************/
 

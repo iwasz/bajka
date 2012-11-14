@@ -10,6 +10,7 @@
 #define BAJKA_VIEW_GLCONTEXT_H_
 
 #include "geometry/AffineMatrix.h"
+#include "OpenGlPriv.h"
 
 namespace View {
 
@@ -18,6 +19,14 @@ namespace View {
  */
 class GLContext {
 public:
+
+        GLContext ();
+        ~GLContext ();
+
+        /**
+         * Inicjuje.
+         */
+        void init ();
 
         /**
          * Pobiera macierz z góry stosu za pomocą getCurrentMatrix, moży ją przez m i
@@ -38,7 +47,7 @@ public:
 private:
 
         Geometry::AffineMatrixVector matrixStack;
-//        GLuint mainProgramObject;
+        GLuint mainProgramObject;
 
 };
 
