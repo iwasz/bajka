@@ -8,6 +8,7 @@
 
 #include "GLContext.h"
 #include <boost/numeric/ublas/matrix.hpp>
+#include "util/Exceptions.h"
 
 namespace View {
 using namespace boost::numeric::ublas;
@@ -30,6 +31,10 @@ Geometry::AffineMatrix const &GLContext::pushMatrix (Geometry::AffineMatrix cons
 
 void GLContext::popMatrix ()
 {
+        if (matrixStack.empty ()) {
+                throw Util::RuntimeException ("GLContext::popMatrix : matrixStack is empty!");
+        }
+
         matrixStack.pop_back ();
 }
 
@@ -37,6 +42,10 @@ void GLContext::popMatrix ()
 
 Geometry::AffineMatrix const &GLContext::getCurrentMatrix () const
 {
+        if (matrixStack.empty ()) {
+                return Geometry::AffineMatrix::UNITARY;
+        }
+
         return matrixStack.back ();
 }
 

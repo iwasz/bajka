@@ -15,7 +15,7 @@
 
 namespace View {
 
-void Primitive::update (Model::IModel *model, Event::UpdateEvent *)
+void Primitive::update (Model::IModel *model, Event::UpdateEvent *, Util::IShell *)
 {
         Model::IVertexBufferEnabled *array = dynamic_cast <Model::IVertexBufferEnabled *>  (model);
         assertThrow (array , "Primitive::update : !cB")

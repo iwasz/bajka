@@ -25,7 +25,7 @@ public:
         Points () : size (1) {}
         virtual ~Points () {}
 
-        virtual void update (Model::IModel *model, Event::UpdateEvent *e);
+        virtual void update (Model::IModel *model, Event::UpdateEvent *e, Util::IShell *shell);
 
         Color const &getColor () const { return color; }
         m_ (setColor) void setColor (Color const &c) { color = c; }

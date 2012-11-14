@@ -96,7 +96,7 @@ void Image::init (Model::IModel *model)
 
 /****************************************************************************/
 
-void Image::update (Model::IModel *model, Event::UpdateEvent *)
+void Image::update (Model::IModel *model, Event::UpdateEvent *, Util::IShell *)
 {
         if (!initialized) {
                 init (model);

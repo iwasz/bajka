@@ -27,7 +27,7 @@ void LoopImage::drawTile (double x, double y)
 
 /****************************************************************************/
 
-void LoopImage::update (Model::IModel *model, Event::UpdateEvent *)
+void LoopImage::update (Model::IModel *model, Event::UpdateEvent *, Util::IShell *)
 {
         assertThrow (model->isBox (), "LoopImage::update : only box models are supported here.");
 
