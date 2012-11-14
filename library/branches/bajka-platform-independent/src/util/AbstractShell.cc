@@ -148,6 +148,7 @@ void AbstractShell::init ()
 {
         srand (time (NULL));
         Tween::init ();
+        impl->glContext.init ();
 }
 
 /****************************************************************************/

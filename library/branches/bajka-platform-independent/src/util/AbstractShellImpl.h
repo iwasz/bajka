@@ -16,9 +16,6 @@
 #include "events/types/UpdateEvent.h"
 #include "view/openGl/GLContext.h"
 
-using View::GLContext;
-//#include <view/openGl/OpenGl.h>
-
 namespace Util {
 
 /**
@@ -36,7 +33,7 @@ struct AbstractShellImpl {
         Event::PointerInsideIndex pointerInsideIndex;
         bool loopActive;
         Event::UpdateEvent updateEvent;
-        GLContext glContext;
+        View::GLContext glContext;
 };
 
 }
