@@ -41,9 +41,7 @@ void Widget::postUpdate (Model::IModel *model, Event::UpdateEvent *, Util::IShel
 void Widget::defaultPreUpdate (Model::IModel *model, Util::IShell *shell)
 {
         if (model) {
-//                std::cerr << " " << model->getMatrix ().toString() << std::endl;
                 Geometry::AffineMatrix const &top = shell->getGLContext ()->pushMatrix (model->getMatrix ());
-//                std::cerr << top.toString() << std::endl;
                 glMatrixMode (GL_MODELVIEW);
                 glLoadIdentity ();
                 // TODO glMultMatrixf
