@@ -71,10 +71,10 @@ void Shell::preInit ()
 
 void Shell::init ()
 {
-        AbstractShell::init ();
         updateConfigViewport (impl->config);
         initSdl (impl->config);
-        initOpenGl (impl->config);
+        AbstractShell::init ();
+//        initOpenGl (impl->config);
 }
 
 /****************************************************************************/
