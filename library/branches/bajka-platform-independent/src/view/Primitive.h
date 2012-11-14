@@ -24,7 +24,7 @@ public:
 
         Primitive () : thickness (1), prettyJoin (false) {}
         virtual ~Primitive () {}
-        virtual void update (Model::IModel *model, Event::UpdateEvent *e);
+        virtual void update (Model::IModel *model, Event::UpdateEvent *e, Util::IShell *shell);
 
         Color const &getBackground () const { return background; }
         m_ (setBackground) void setBackground (Color const &background) { this->background = background; }

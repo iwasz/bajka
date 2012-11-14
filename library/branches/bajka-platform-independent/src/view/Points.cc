@@ -15,7 +15,7 @@
 
 namespace View {
 
-void Points::update (Model::IModel *model, Event::UpdateEvent *)
+void Points::update (Model::IModel *model, Event::UpdateEvent *, Util::IShell *)
 {
         Model::IVertexBufferEnabled *array = dynamic_cast <Model::IVertexBufferEnabled *>  (model);
         assertThrow (array , "Points::update : !cB")

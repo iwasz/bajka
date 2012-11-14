@@ -71,7 +71,7 @@ void Text::init ()
 
 /*--------------------------------------------------------------------------*/
 
-        glTexImage2D (GL_TEXTURE_2D, 0, GL_LUMINANCE, texWidth,
+        glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, texWidth,
                      texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
                      bitmap->getData ());
 }
@@ -91,7 +91,7 @@ void Text::initIf ()
 
 /****************************************************************************/
 
-void Text::update (Model::IModel *model, Event::UpdateEvent *)
+void Text::update (Model::IModel *model, Event::UpdateEvent *, Util::IShell *)
 {
         initIf ();
 

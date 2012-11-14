@@ -16,7 +16,7 @@
 namespace View {
 using namespace Geometry;
 
-void Rectangle::update (Model::IModel *model, Event::UpdateEvent *)
+void Rectangle::update (Model::IModel *model, Event::UpdateEvent *, Util::IShell *)
 {
         Model::IBox *cB = dynamic_cast <Model::IBox *>  (model);
         assertThrow (cB, "Rectangle::update : !cB")

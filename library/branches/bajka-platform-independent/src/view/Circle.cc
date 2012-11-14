@@ -12,7 +12,7 @@
 
 namespace View {
 
-void Circle::update (Model::IModel *model, Event::UpdateEvent *)
+void Circle::update (Model::IModel *model, Event::UpdateEvent *, Util::IShell *)
 {
         Model::Circle *c = dynamic_cast <Model::Circle *>  (model);
 
