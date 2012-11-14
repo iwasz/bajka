@@ -96,6 +96,10 @@ struct Config {
          */
         Model::IModelManager *p_ (modelManager);
 
+        // TODO tymczasowe - usunąć·
+        std::string P_ (vertex);
+        std::string P_ (fragment);
+
         E_ (Config)
 };
 

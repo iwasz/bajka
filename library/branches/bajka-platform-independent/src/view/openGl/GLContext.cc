@@ -9,6 +9,7 @@
 #include "GLContext.h"
 #include <boost/numeric/ublas/matrix.hpp>
 #include "util/Exceptions.h"
+#include "util/Config.h"
 
 namespace View {
 using namespace boost::numeric::ublas;
@@ -28,7 +29,7 @@ GLContext::~GLContext ()
 
 /****************************************************************************/
 
-void GLContext::init ()
+void GLContext::init (Util::Config *config)
 {
 #ifndef ANDROID
         glewInit();
@@ -44,14 +45,14 @@ void GLContext::init ()
         GLint linked;
 
         const char *vertex =
-"attribute vec2 position;                                "
+"attribute vec4 position;                                "
 "                                                        "
 "varying vec2 texcoord;                                  "
 "                                                        "
 "void main()                                             "
 "{                                                       "
-"    gl_Position = vec4(position, 0.0, 1.0);             "
-"    texcoord = position * vec2(0.5) + vec2(0.5);        "
+"    gl_Position = position;             "
+"    texcoord = position.xy * vec2(0.5) + vec2(0.5);        "
 "}                                                       ";
 
         const char *fragment =
@@ -70,8 +71,10 @@ void GLContext::init ()
 "}                                                       ";
 
         // Load the vertex/fragment shaders
-        vertexShader = loadShader (GL_VERTEX_SHADER, vertex);
-        fragmentShader = loadShader (GL_FRAGMENT_SHADER, fragment);
+//        vertexShader = loadShader (GL_VERTEX_SHADER, vertex);
+//        fragmentShader = loadShader (GL_FRAGMENT_SHADER, fragment);
+        vertexShader = loadShader (GL_VERTEX_SHADER, config->vertex.c_str());
+        fragmentShader = loadShader (GL_FRAGMENT_SHADER, config->fragment.c_str());
 
         // Create the program object
         programObject = glCreateProgram ();
@@ -110,6 +113,8 @@ void GLContext::init ()
 
         // Store the program object
         mainProgramObject = programObject;
+
+        glUseProgram (mainProgramObject);
 }
 
 /****************************************************************************/
