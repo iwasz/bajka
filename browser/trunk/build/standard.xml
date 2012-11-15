@@ -20,6 +20,9 @@
 
   <Box id="rect" abstract="true">
     <ref bean="rectWidget" set-as="view"/>
+    <prop-alias name="fg" value="view.foreground"/>
+    <prop-alias name="bg" value="view.background"/>
+    <prop-alias name="th" value="view.thickness"/>    
   </Box>
 
   <Rectangle id="rectWidget" foreground="0000ffff" background="00000000"/>

@@ -3,6 +3,6 @@
   <Group id="scene">
     <ClearScreen set-as="view" color="6b6b6bff" />
 <!--     <rect set-as="child" box="-0.5, -0.5, 0.5, 0.5" /> -->
-    <rect set-as="child" box="-50, -50, 50, 50" />
+    <rect set-as="child" box="-50, -50, 50, 50" fg="ff0000ff" bg="00ff00ff" th="2"/>
   </Group>
 </beans>
