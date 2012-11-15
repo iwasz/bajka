@@ -48,10 +48,15 @@ public:
          */
         Geometry::AffineMatrix const &getCurrentMatrix () const;
 
+        /**
+         * Aktualny program.
+         */
+        GLuint getCurrentProgramObject () const { return currentPogramObject; }
+
 private:
 
         Geometry::AffineMatrixVector matrixStack;
-        GLuint mainProgramObject;
+        GLuint currentPogramObject;
 
 };
 

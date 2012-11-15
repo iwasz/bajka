@@ -24,10 +24,16 @@ namespace Util {
 struct Config;
 }
 
-//extern GLuint loadShader (GLenum type, const char *shaderSrc);
-extern void initOpenGl (Util::Config *config);
-extern void freeOpenGl ();
 extern void mouseToDisplay (int x, int y, int windowWidth, int windowHeight, float *nx, float *ny);
+
+/**
+ * Ładuje kod źródłowy i kompiluje shader. Zwraca uchwyt do niego.
+ */
 extern GLuint loadShader (GLenum type, const char *shaderSrc);
+
+/**
+ * Tworzy obiekt programu, podłącza shadery, linkuje i zwraca uchwyt do programu.
+ */
+extern GLuint linkProgram (GLuint vertexShader, GLuint fragmentShader);
 
 #	endif /* OPENGL_H_ */
