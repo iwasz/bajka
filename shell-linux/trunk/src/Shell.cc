@@ -82,7 +82,7 @@ void Shell::init ()
 void Shell::destroy ()
 {
         AbstractShell::destroy ();
-        freeOpenGl ();
+//        freeOpenGl ();
         freeSdl ();
 }
 
