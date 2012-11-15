@@ -56,53 +56,47 @@ GLuint loadShader (GLenum type, const char *shaderSrc)
 
 /****************************************************************************/
 
-void initOpenGl (Util::Config *config)
+GLuint linkProgram (GLuint vertexShader, GLuint fragmentShader)
 {
-#ifndef ANDROID
-        glewInit();
+        GLuint programObject;
+        GLint linked;
 
-        if (!GLEW_VERSION_2_0) {
-                throw Util::InitException ("OpenGL 2.0 not available");
+        // Create the program object
+        programObject = glCreateProgram ();
+
+        if (programObject == 0)
+                return 0;
+
+        glAttachShader (programObject, vertexShader);
+        glAttachShader (programObject, fragmentShader);
+
+        // Bind vPosition to attribute 0
+        glBindAttribLocation (programObject, 0, "vPosition");
+
+        // Link the program
+        glLinkProgram (programObject);
+
+        // Check the link status
+        glGetProgramiv (programObject, GL_LINK_STATUS, &linked);
+
+        if (!linked) {
+                GLint infoLen = 0;
+
+                glGetProgramiv (programObject, GL_INFO_LOG_LENGTH, &infoLen);
+
+                if (infoLen > 1) {
+                        char* infoLog = new char [infoLen];
+                        glGetProgramInfoLog (programObject, infoLen, NULL, infoLog);
+                        std::string infoLogStr = infoLog;
+                        delete [] infoLog;
+                        throw Util::InitException (std::string ("loadShader : error linking program. Message : ") + infoLogStr);
+                }
+
+                glDeleteProgram (programObject);
+                throw Util::InitException ("loadShader : error linking program.");
         }
-#endif
 
-        glShadeModel(GL_FLAT);
-        glDisable (GL_DEPTH_TEST);
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-        /*
-         * Alpha blending. Niestety tekstura jest w niektorych miejscach
-         * przezroczysta, ale wystaje spodniej niebieski kolor prostokątu.
-         */
-        glEnable (GL_BLEND);
-        glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-        float aspectRatio = double (config->viewportHeight) / config->viewportWidth;
-        float rX = config->projectionWidth / 2;
-        float rY;
-
-        if (config->projectionHeight == 0) {
-                rY = rX * aspectRatio;
-                config->projectionHeight = rY * 2;
-        }
-        else {
-                rY = config->projectionHeight / 2;
-        }
-
-        glMatrixMode (GL_PROJECTION);
-        glLoadIdentity ();
-        gluOrtho2D (-rX, rX, -rY, rY);
-        glPointSize (3);
-
-        // glDrawArrays
-        glEnableClientState(GL_VERTEX_ARRAY);
-}
-
-/****************************************************************************/
-
-void freeOpenGl ()
-{
-
+        return programObject;
 }
 
 /****************************************************************************/
