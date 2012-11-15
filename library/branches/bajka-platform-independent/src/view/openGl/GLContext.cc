@@ -24,7 +24,7 @@ GLContext::GLContext () : mainProgramObject (0)
 
 GLContext::~GLContext ()
 {
-
+        glDeleteProgram (mainProgramObject);
 }
 
 /****************************************************************************/
@@ -108,12 +108,11 @@ void GLContext::init (Util::Config *config)
                 }
 
                 glDeleteProgram (programObject);
-                throw 1;
+                throw Util::InitException ("loadShader : error linking program.");
         }
 
         // Store the program object
         mainProgramObject = programObject;
-
         glUseProgram (mainProgramObject);
 }
 

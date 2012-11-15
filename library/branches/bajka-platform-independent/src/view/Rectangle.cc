@@ -18,10 +18,10 @@ using namespace Geometry;
 
 void Rectangle::update (Model::IModel *model, Event::UpdateEvent *, Util::IShell *)
 {
-#if 0
         Model::IBox *cB = dynamic_cast <Model::IBox *>  (model);
         assertThrow (cB, "Rectangle::update : !cB")
         Geometry::Box const &b = cB->getBox ();
+#if 1
         DrawUtil::drawRectangle (b.ll,
                                  b.ur,
                                  getForeground (),
@@ -29,18 +29,20 @@ void Rectangle::update (Model::IModel *model, Event::UpdateEvent *, Util::IShell
                                  getThickness ());
 #endif
 
-        GLfloat vVertices[] = { 0.0f, 50.0f, 0.0f, 1.0,
-                                -50.0f, -50.0f, 0.0f, 1.0,
-                                50.0f, -50.0f, 0.0f, 1.0 };
+        Point const &pa = b.ll;
+        Point const &pb = b.ur;
 
-        // Clear the color buffer
-        glClear (GL_COLOR_BUFFER_BIT);
+        GLfloat verts[] = {
+                pa.x, pa.y, 0.0, 1.0,
+                pa.x, pb.y, 0.0, 1.0,
+                pb.x, pb.y, 0.0, 1.0,
+                pb.x, pa.y, 0.0, 1.0
+        };
 
         // Load the vertex data
-        glVertexAttribPointer (0, 4, GL_FLOAT, GL_FALSE, 0, vVertices);
+        glVertexAttribPointer (0, 4, GL_FLOAT, GL_FALSE, 0, verts);
         glEnableVertexAttribArray (0);
-
-        glDrawArrays (GL_TRIANGLES, 0, 4);
+        glDrawArrays (GL_LINE_LOOP, 0, 4);
 }
 
 } /* namespace View */
