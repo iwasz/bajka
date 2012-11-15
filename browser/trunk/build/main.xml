@@ -1,29 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- 
-* -Guzik z napisem.
-** -Czcionki TTF.
-* -Przełączanie widoków (link podłaczony do tego guzika).
-* Obsługa F5 i Esc.
-* Obsługa eventów z klawiatury w ogóle.
-* -Bitmapa.
-
-Dodatkowe:
-~~~~~~~~~~
-* -Layouty
-** -Poprawne AABB.
-** -Poprawne wyświetlanie AABB.
-** -RelativeGroup
-** -LinearGroup - H
-** -LinearGroup - W
-** -TableGroup
- -->
-
 <beans>
   <import resource="standard.xml" />
 
-  <Config id="config" viewportWidth="1280" viewportHeight="720" autoProjection="true" windowCaption="Bajka browser">
-<!--   <Config id="config" viewportWidth="160" viewportHeight="100" projectionWidth="1280" projectionHeight="720" windowCaption="Bajka browser"> -->
+<!--   <Config id="config" viewportWidth="1280" viewportHeight="720" autoProjection="true" windowCaption="Bajka browser"> -->
+  <Config id="config" viewportWidth="160" viewportHeight="100" projectionWidth="1280" projectionHeight="720" windowCaption="Bajka browser">
     <ref set-as="modelManager" bean="modelManager" />
     <value set-as="vertex">
 attribute vec4 position;
