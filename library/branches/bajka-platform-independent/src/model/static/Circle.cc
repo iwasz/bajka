@@ -19,6 +19,13 @@ namespace trans = boost::geometry::strategy::transform;
 
 /****************************************************************************/
 
+Geometry::AffineMatrix Circle::getMatrix () const
+{
+        return AffineMatrix (translate + origin, getAngle (), scale + radius, getRotationCenter ());
+}
+
+/****************************************************************************/
+
 Geometry::Point Circle::computeCenter () const
 {
         return origin;

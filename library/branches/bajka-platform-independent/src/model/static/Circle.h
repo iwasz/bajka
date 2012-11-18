@@ -34,6 +34,8 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
+        // To jest trochę hack - patrz źródło.
+        virtual Geometry::AffineMatrix getMatrix () const;
         virtual Geometry::Box getBoundingBoxImpl (Geometry::AffineMatrix const &transformation) const;
         virtual bool contains (Geometry::Point const &p) const;
 

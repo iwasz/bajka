@@ -93,4 +93,12 @@ std::string toString (Geometry::Point const &p)
         return o.str ();
 }
 
+/****************************************************************************/
+
+Point operator+ (Point const &a, Point const &b)
+{
+        Point ret = { a.x + b.x, a.y + b.y };
+        return ret;
+}
+
 } // nam

@@ -72,6 +72,8 @@ extern Point stringToPoint (std::string const &p);
  */
 extern Core::Variant stringToPointVariant (std::string const &p);
 
+extern Point operator+ (Point const &a, Point const &b);
+
 } // namespace
 
 /*

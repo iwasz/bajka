@@ -50,7 +50,8 @@ static const GLfloat circleVAR[] = {
          0.0000f,  1.0000f, 0.0f, 1.0f,
          0.0f,     0.0f,    0.0f, 1.0f  // For an extra line to see the rotation.
 };
-static const int circleVAR_bytes = sizeof (circleVAR) * sizeof (GLfloat);
+
+static const int circleVAR_indices = sizeof (circleVAR) / (sizeof (GLfloat) * 4);
 
 void DrawUtil::drawCircle (View::GLContext *ctx, G::Point const &center, double angle, double radius, Color const &fg, Color const &bg, float thickness)
 {
@@ -59,7 +60,7 @@ void DrawUtil::drawCircle (View::GLContext *ctx, G::Point const &center, double 
         GLuint buffer;
         glGenBuffers (1, &buffer);
         glBindBuffer (GL_ARRAY_BUFFER, buffer);
-        glBufferData (GL_ARRAY_BUFFER, circleVAR_bytes, circleVAR, GL_STATIC_DRAW);
+        glBufferData (GL_ARRAY_BUFFER, sizeof (circleVAR), circleVAR, GL_STATIC_DRAW);
 
         GLint positionAttribLocation = ctx->getPositionAttribLocation ();
         glEnableVertexAttribArray (positionAttribLocation);
@@ -67,18 +68,14 @@ void DrawUtil::drawCircle (View::GLContext *ctx, G::Point const &center, double 
         glVertexAttribPointer (positionAttribLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
         GLint colorUniformLocation = ctx->getColorUniformLocation ();
 
-//        glTranslatef(center.x, center.y, 0.0f);
-//        glRotatef(angle, 0.0f, 0.0f, 1.0f);
-//        glScalef(radius, radius, 1.0f);
-
         if (bg.a > 0) {
                 glUniform4f (colorUniformLocation, bg.r, bg.g, bg.b, bg.a);
-                glDrawArrays (GL_TRIANGLE_FAN, 0, 4);
+                glDrawArrays (GL_TRIANGLE_FAN, 0, circleVAR_indices);
         }
 
         if (fg.a > 0) {
                 glUniform4f (colorUniformLocation, fg.r, fg.g, fg.b, fg.a);
-                glDrawArrays (GL_LINE_STRIP, 0, 4);
+                glDrawArrays (GL_LINE_STRIP, 0, circleVAR_indices);
         }
 }
 
@@ -104,7 +101,7 @@ void DrawUtil::drawRectangle (View::GLContext *ctx, G::Point const &a, G::Point 
 
         // Stworzenie bufora i zainicjowanie go danymi z vertex array.
         GLuint buffer;
-        glGenBuffers (1, &buffer);
+        glGenBuffers (1, &buffer); // TODO czy tego nie trzeba skasowac jakoś?
         glBindBuffer (GL_ARRAY_BUFFER, buffer);
         glBufferData (GL_ARRAY_BUFFER, 16 * sizeof (GLfloat), verts, GL_STATIC_DRAW);
 

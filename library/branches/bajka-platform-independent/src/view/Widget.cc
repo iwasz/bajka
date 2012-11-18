@@ -47,6 +47,11 @@ void Widget::defaultPreUpdate (Model::IModel *model, Util::IShell *shell)
 
         Geometry::AffineMatrix const &top = ctx->pushMatrix (model->getMatrix ());
         GLint modelViewLocation =  ctx->getModelViewLocation ();
+
+#if 0
+        std::cerr << model << ", " << top << " | " << model->getMatrix () << std::endl;
+#endif
+
         glUniformMatrix4fv (modelViewLocation, 1, GL_FALSE, top.data ().begin ());
 }
 
