@@ -9,19 +9,14 @@
 #include "draw/Primitives.h"
 #include "model/static/Circle.h"
 #include "Circle.h"
+#include "util/IShell.h"
 
 namespace View {
 
-void Circle::update (Model::IModel *model, Event::UpdateEvent *, Util::IShell *)
+void Circle::update (Model::IModel *model, Event::UpdateEvent *, Util::IShell *shell)
 {
         Model::Circle *c = dynamic_cast <Model::Circle *>  (model);
-
-        if (!c) {
-                return;
-        }
-
-        // Obrót jest w preUpdate.
-        DrawUtil::drawCircle (c->getOrigin (), 0, c->getRadius (), getForeground (), getBackground (), getThickness ());
+        DrawUtil::drawCircle (shell->getGLContext (), c->getOrigin (), 0, c->getRadius (), getForeground (), getBackground (), getThickness ());
 }
 
 } /* namespace View */

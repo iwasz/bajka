@@ -16,7 +16,12 @@ using namespace boost::numeric::ublas;
 
 /****************************************************************************/
 
-GLContext::GLContext () : currentPogramObject (0)
+GLContext::GLContext () :
+        currentProgramObject (0),
+        colorUniformLocation (0),
+        positionAttribLocation (0),
+        modelViewLocation (0),
+        projectionLocation (0)
 {
 }
 
@@ -24,7 +29,7 @@ GLContext::GLContext () : currentPogramObject (0)
 
 GLContext::~GLContext ()
 {
-        glDeleteProgram (currentPogramObject);
+        glDeleteProgram (currentProgramObject);
 }
 
 /****************************************************************************/
@@ -41,8 +46,15 @@ void GLContext::init (Util::Config *config)
 
         GLuint vertexShader = loadShader (GL_VERTEX_SHADER, config->vertex.c_str());
         GLuint fragmentShader = loadShader (GL_FRAGMENT_SHADER, config->fragment.c_str());
-        currentPogramObject = linkProgram (vertexShader, fragmentShader);
-        glUseProgram (currentPogramObject);
+        currentProgramObject = linkProgram (vertexShader, fragmentShader);
+        glUseProgram (currentProgramObject);
+
+        colorUniformLocation = glGetUniformLocation (currentProgramObject, "color");
+        modelViewLocation = glGetUniformLocation (currentProgramObject, "modelView");
+        projectionLocation = glGetUniformLocation (currentProgramObject, "projection");
+        positionAttribLocation = glGetAttribLocation (currentProgramObject, "position");
+
+        initProjectionMatrix (config);
 }
 
 /****************************************************************************/
@@ -79,6 +91,25 @@ Geometry::AffineMatrix const &GLContext::getCurrentMatrix () const
         }
 
         return matrixStack.back ();
+}
+
+/****************************************************************************/
+
+void GLContext::initProjectionMatrix (Util::Config *config)
+{
+        float aspectRatio = double (config->viewportHeight) / config->viewportWidth;
+        float rX = config->projectionWidth / 2;
+        float rY;
+
+        if (config->projectionHeight == 0) {
+                rY = rX * aspectRatio;
+                config->projectionHeight = rY * 2;
+        }
+        else {
+                rY = config->projectionHeight / 2;
+        }
+
+        projection.setViewport (-rX, rX, -rY, rY);
 }
 
 } /* namespace Common */

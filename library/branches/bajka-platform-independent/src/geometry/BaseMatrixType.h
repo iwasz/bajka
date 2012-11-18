@@ -6,30 +6,23 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_VIEW_CIRCLE_H_
-#define BAJKA_VIEW_CIRCLE_H_
+#ifndef BASEMATRIXTYPE_H_
+#define BASEMATRIXTYPE_H_
 
-#include "util/ReflectionMacros.h"
-#include "Primitive.h"
+#include <boost/numeric/ublas/matrix.hpp>
 
-namespace View {
+namespace Geometry {
 
 /**
- * Rysuje okrąg.
- * \ingroup View
+ * Matrix type optimised to use with OpenGL.
+ * \ingroup Geometry
  */
-class Circle : public Primitive {
-public:
+/*
+ * Tu jest podany parametr szablonowy column_major, który mówi o ustawieniu
+ * elementów w pamięci (kolumnami, czy wierszami).
+ */
+typedef boost::numeric::ublas::matrix <float, boost::numeric::ublas::column_major> BaseMatrixType;
 
-        C__ (void)
-        b_ ("Primitive")
+}
 
-        virtual ~Circle () {}
-        virtual void update (Model::IModel *model, Event::UpdateEvent *e, Util::IShell *shell);
-
-        E_ (View::Circle)
-};
-
-} /* namespace View */
-
-#	endif /* CIRCLE_H_ */
+#endif /* BASEMATRIXTYPE_H_ */

@@ -16,9 +16,9 @@
 #include "Platform.h"
 #include "util/Config.h"
 #include "util/IShell.h"
+#include "view/draw/Primitives.h"
 
 namespace Model {
-using View::DrawUtil;
 using namespace Geometry;
 
 /****************************************************************************/
@@ -60,7 +60,9 @@ void AbstractModel::update (Event::UpdateEvent *e, Util::IShell *shell)
                 controller->onUpdate (e, this, view);
         }
 
-        View::Widget::drawAABB (this);
+        if (config ()->showAABB) {
+                View::DrawUtil::drawAABB (shell->getGLContext (), this);
+        }
 
         if (view) {
                 view->preUpdate (this, e, shell);

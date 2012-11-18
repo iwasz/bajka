@@ -46,7 +46,6 @@ public:
 
         static void defaultPreUpdate (Model::IModel *m, Util::IShell *shell);
         static void defaultPostUpdate (Model::IModel *m, Util::IShell *shell);
-        static void drawAABB (Model::IModel *model);
 
 private:
 

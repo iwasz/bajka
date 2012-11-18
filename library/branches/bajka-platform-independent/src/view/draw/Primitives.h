@@ -12,29 +12,33 @@
 #include "Color.h"
 #include "geometry/Point.h"
 #include "geometry/Box.h"
-#include "model/VertexBuffer.h"
 
-using Model::VertexBuffer;
+namespace Model {
+class IModel;
+class VertexBuffer;
+}
 
 namespace View {
+class GLContext;
 
 struct DrawUtil {
 public:
 
-        static void drawCircle (Geometry::Point const &center, double angle, double radius, Color const &lineColor, Color const &fillColor, float thickness = 1);
-        static void drawLine (Geometry::Point const &a, Geometry::Point const &b, Color const &color, float thickness = 1);
-        static void drawRectangle (Geometry::Point const &a, Geometry::Point const &b, Color const &lineColor, Color const &fillColor, float thickness = 1);
-        static void drawRectangle (Geometry::Box const &b, Color const &lineColor, Color const &fillColor, float thickness = 1);
+        static void drawCircle          (View::GLContext *ctx, Geometry::Point const &center, double angle, double radius, Color const &lineColor, Color const &fillColor, float thickness = 1);
+//        static void drawLine            (View::GLContext *ctx, Geometry::Point const &a, Geometry::Point const &b, Color const &color, float thickness = 1);
+        static void drawRectangle       (View::GLContext *ctx, Geometry::Point const &a, Geometry::Point const &b, Color const &lineColor, Color const &fillColor, float thickness = 1);
+        static void drawRectangle       (View::GLContext *ctx, Geometry::Box const &b, Color const &lineColor, Color const &fillColor, float thickness = 1);
 
-        static void drawSegments (VertexBuffer const &buffer, Color const &lineColor, Color const &fillColor, float thickness);
-        static void drawSegmentsPrettyJoin (VertexBuffer const &buffer, Color const &lineColor, Color const &fillColor, float thickness);
+        static void drawSegments        (View::GLContext *ctx, Model::VertexBuffer const &buffer, Color const &lineColor, Color const &fillColor, float thickness);
+        static void drawSegmentsPrettyJoin (View::GLContext *ctx, Model::VertexBuffer const &buffer, Color const &lineColor, Color const &fillColor, float thickness);
 
-        static int convertType (VertexBuffer::PointType type);
-        static void drawThinSegments (VertexBuffer const &buffer, Color const &lineColor, Color const &fillColor);
-        static void drawThickSegments (VertexBuffer const &buffer, Color const &lineColor, Color const &fillColor, float thickness);
-        static void drawThickSegment (Geometry::Point const &a, Geometry::Point const &b, Color const &line, Color const &fill, float thickness);
+//        static int convertType          (Model::VertexBuffer::PointType type);
+        static void drawThinSegments    (View::GLContext *ctx, Model::VertexBuffer const &buffer, Color const &lineColor, Color const &fillColor);
+        static void drawThickSegments   (View::GLContext *ctx, Model::VertexBuffer const &buffer, Color const &lineColor, Color const &fillColor, float thickness);
+        static void drawThickSegment    (View::GLContext *ctx, Geometry::Point const &a, Geometry::Point const &b, Color const &line, Color const &fill, float thickness);
+        static void drawPoints          (View::GLContext *ctx, Model::VertexBuffer const &buffer, Color const &Color, float size);
 
-        static void drawPoints (VertexBuffer const &buffer, Color const &Color, float size);
+        static void drawAABB            (View::GLContext *ctx, Model::IModel *model);
 
 };
 

@@ -133,11 +133,11 @@ VertexBuffer CPLineString::getVertexBuffer () const
 
         ret.stride = sizeof (cpSegmentShape);
 
-#ifdef ANDROID
-        ret.pointType = VertexBuffer::FLOAT;
-#else
-        ret.pointType = VertexBuffer::DOUBLE;
-#endif
+//#ifdef ANDROID
+//        ret.pointType = VertexBuffer::FLOAT;
+//#else
+//        ret.pointType = VertexBuffer::DOUBLE;
+//#endif
 
 #if 0
         {

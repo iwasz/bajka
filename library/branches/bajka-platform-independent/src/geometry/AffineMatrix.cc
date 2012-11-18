@@ -19,18 +19,18 @@ const AffineMatrix AffineMatrix::UNITARY;
 
 /****************************************************************************/
 
-AffineMatrix::AffineMatrix () : AffineMatrixType (4, 4)
+AffineMatrix::AffineMatrix () : BaseMatrixType (4, 4)
 {
         resetIdentity ();
 }
 
 /****************************************************************************/
 
-AffineMatrix::AffineMatrix (const AffineMatrix &m) : AffineMatrixType (m) {}
+AffineMatrix::AffineMatrix (const AffineMatrix &m) : BaseMatrixType (m) {}
 
 /****************************************************************************/
 
-AffineMatrix::AffineMatrix (Geometry::Point translate, double angle, double scale, Geometry::Point ct) : AffineMatrixType (4, 4)
+AffineMatrix::AffineMatrix (Geometry::Point translate, double angle, double scale, Geometry::Point ct) : BaseMatrixType (4, 4)
 {
 	double aRad = angle * M_PI / 180.0;
 	double s = scale * sin (aRad);
@@ -53,7 +53,7 @@ void AffineMatrix::resetIdentity ()
 
 void AffineMatrix::move (const Geometry::Point &p)
 {
-        AffineMatrixType m (4, 4);
+        BaseMatrixType m (4, 4);
 
         m (0,0) = 1;   m (0,1) = 0;   m (0,2) = 0;   m (0,3) = p.x;
         m (1,0) = 0;   m (1,1) = 1;   m (1,2) = 0;   m (1,3) = p.y;
@@ -67,7 +67,7 @@ void AffineMatrix::move (const Geometry::Point &p)
 
 //void AffineMatrix::rotate (double r)
 //{
-//        //AffineMatrixType m (4, 4);
+//        //BaseMatrixType m (4, 4);
 //        AffineMatrix m;
 //
 //        double c = cos (r);
@@ -104,7 +104,7 @@ void AffineMatrix::rotate (double r, Geometry::Point const &p)
 
 void AffineMatrix::resize (double w, double h, Geometry::Point const &p)
 {
-        AffineMatrixType m (4, 4);
+        BaseMatrixType m (4, 4);
 
         m (0,0) = w;   m (0,1) = 0;   m (0,2) = 0;   m (0,3) = p.x - w * p.x;
         m (1,0) = 0;   m (1,1) = h;   m (1,2) = 0;   m (1,3) = p.y - h * p.x;
@@ -141,7 +141,7 @@ std::string AffineMatrix::toString () const
 {
         std::string s = "AffineMatrix (";
 
-        typedef AffineMatrixType::array_type::const_iterator Iterator;
+        typedef BaseMatrixType::array_type::const_iterator Iterator;
         for (Iterator i = data ().begin ();;) {
 
                 s += boost::lexical_cast <std::string> (*i);
