@@ -137,27 +137,6 @@ Point AffineMatrix::getTransformed (const Point &p) const
 
 /****************************************************************************/
 
-std::string AffineMatrix::toString () const
-{
-        std::string s = "AffineMatrix (";
-
-        typedef BaseMatrixType::array_type::const_iterator Iterator;
-        for (Iterator i = data ().begin ();;) {
-
-                s += boost::lexical_cast <std::string> (*i);
-
-                if (++i == data ().end ()) {
-                        break;
-                }
-
-                s += ",";
-        }
-
-        return s + ")";
-}
-
-/****************************************************************************/
-
 void AffineMatrix::inverse ()
 {
         invertMatrix (data ().begin (), data ().begin ());
@@ -178,7 +157,7 @@ AffineMatrix AffineMatrix::getInversed () const
  * @param invOut
  * @return
  */
-bool AffineMatrix::invertMatrix (const double m[16], double invOut[16])
+bool AffineMatrix::invertMatrix (const float m[16], float invOut[16])
 {
         double inv[16], det;
         int i;

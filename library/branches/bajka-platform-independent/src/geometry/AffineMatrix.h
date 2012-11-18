@@ -49,13 +49,11 @@ public:
 
 ///*--------------------------------------------------------------------------*/
 
-        std::string toString () const;
-
         static const AffineMatrix UNITARY;
 
 private:
 
-        bool invertMatrix (const double m[16], double invOut[16]);
+        bool invertMatrix (const float m[16], float invOut[16]);
 
 };
 
