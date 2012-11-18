@@ -11,11 +11,10 @@ varying vec2 texcoord;
 
 uniform mat4 projection;
 uniform mat4 modelView;
-                                                       
+   
 void main()                                        
 {                                                  
     gl_Position = projection * modelView * position;             
-//    gl_Position = projection * position;             
     texcoord = position.xy * vec2 (0.5) + vec2 (0.5);
 }                                                  
     </value>

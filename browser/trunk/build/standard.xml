@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
-<!--   <Circle id="circle" origin="0, 0" radius="30"> -->
-<!--     <View::Circle set-as="view" id="circleWgt" foreground="FFFFFFFF" background="555555ff" /> -->
-<!--   </Circle> -->
-
   <Box id="image" abstract="true" init-method="updateToViewSize">
     <Image set-as="view">
         <FileBitmap set-as="bitmap"/>
@@ -17,7 +13,6 @@
     <prop-alias name="text" value="view.text"/>
   </Box>
   
-
   <Box id="rect" abstract="true">
     <ref bean="rectWidget" set-as="view"/>
     <prop-alias name="fg" value="view.foreground"/>
@@ -27,12 +22,12 @@
 
   <Rectangle id="rectWidget" foreground="0000ffff" background="00000000"/>
 
-  <!-- TODO Zawsze ten samo kolor jest -->
-<!--   <Color id="randomColor" singleton="false"> -->
-<!--     <cargs> -->
-<!--       <value type="bool">true</value> -->
-<!--     </cargs> -->
-<!--   </Color> -->
+  <Circle id="circle" radius="30" abstract="true">
+    <View::Circle set-as="view" id="circleWgt" foreground="FFFFFFFF" background="555555ff" />
+    <prop-alias name="fg" value="view.foreground"/>
+    <prop-alias name="bg" value="view.background"/>
+    <prop-alias name="th" value="view.thickness"/>    
+  </Circle>
   
   <TTFFont id="defaultFont" renderType="0" hinting="1">
     <cargs>
