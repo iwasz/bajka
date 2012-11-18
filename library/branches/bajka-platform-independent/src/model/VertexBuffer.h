@@ -15,17 +15,17 @@ namespace Model {
 
 /**
  * Klasa DTO przechowująca informacje o buforze z punktami. Wykorzystana do
- * zwracania dużych ilości danych z modeli do widoków.
+ * zwracania dużych ilości danych z modeli do widoków. Typ współrzędnych to FLOAT!
  */
 struct VertexBuffer {
 
         // ? takie typy?
-        enum PointType { FLOAT, DOUBLE, SHORT, INT, FIXED, BYTE };
+//        enum PointType { FLOAT, DOUBLE, SHORT, INT, FIXED, BYTE };
 
-        VertexBuffer () : buffer (NULL), pointType (FLOAT), numVertices (0), stride (0), extraSegment (NULL) {}
+        VertexBuffer () : buffer (NULL)/*, pointType (FLOAT)*/, numVertices (0), stride (0), extraSegment (NULL) {}
 
         void *buffer;
-        PointType pointType;
+//        PointType pointType;
         size_t numVertices;
         size_t stride;
 

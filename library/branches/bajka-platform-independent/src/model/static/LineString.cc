@@ -31,7 +31,7 @@ VertexBuffer LineString::getVertexBuffer () const
         ret.buffer = &data->operator [] (0);
         ret.numVertices = data->size ();
         ret.stride = 0;
-        ret.pointType = VertexBuffer::FLOAT;
+//        ret.pointType = VertexBuffer::FLOAT;
         return ret;
 }
 

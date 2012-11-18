@@ -9,30 +9,20 @@
 #ifndef BAJKA_UTILSAFFINE_MATRIX_H_
 #define BAJKA_UTILSAFFINE_MATRIX_H_
 
-#include <boost/numeric/ublas/matrix.hpp>
 #include <boost/geometry/strategies/transform/matrix_transformers.hpp>
 #include <vector>
 #include "Point.h"
 #include "Box.h"
+#include "BaseMatrixType.h"
 
 namespace Geometry {
-
-/**
- * Affine matrix type optimised to use with OpenGL.
- * \ingroup Geometry
- */
-/*
- * Tu jest podany parametr szablonowy column_major, który mówi o ustawieniu
- * elementów w pamięci (kolumnami, czy wierszami).
- */
-typedef boost::numeric::ublas::matrix <double, boost::numeric::ublas::column_major> AffineMatrixType;
 
 /**
  * Affine matrix type optimised to use with OpenGL. Dostęp do poszczególnych
  * elementów za pomocą operatora (). Najpierw numer wiersza, potem kolumny.
  * \ingroup Geometry
  */
-class AffineMatrix : public AffineMatrixType {
+class AffineMatrix : public BaseMatrixType {
 public:
 
         AffineMatrix ();
@@ -40,7 +30,7 @@ public:
         AffineMatrix (Geometry::Point translate, double angle, double scale, Geometry::Point center);
 
         template<class AE>
-        AffineMatrix (const boost::numeric::ublas::matrix_expression<AE> &ae) : AffineMatrixType (ae) {}
+        AffineMatrix (const boost::numeric::ublas::matrix_expression<AE> &ae) : BaseMatrixType (ae) {}
 
 /*------transformations-----------------------------------------------------*/
 

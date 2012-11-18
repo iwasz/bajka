@@ -11,6 +11,7 @@
 
 #include "geometry/AffineMatrix.h"
 #include "OpenGlPriv.h"
+#include "geometry/ProjectionMatrix.h"
 
 namespace Util {
 class Config;
@@ -51,12 +52,26 @@ public:
         /**
          * Aktualny program.
          */
-        GLuint getCurrentProgramObject () const { return currentPogramObject; }
+        GLuint getCurrentProgramObject () const { return currentProgramObject; }
+        GLint getColorUniformLocation () const { return colorUniformLocation; }
+        GLint getPositionAttribLocation () const { return positionAttribLocation; }
+        GLint getModelViewLocation () const { return modelViewLocation; }
+        GLint getProjectionLocation () const { return projectionLocation; }
+        Geometry::ProjectionMatrix const &getProjectionMatrix () const { return projection; }
+
+private:
+
+        void initProjectionMatrix (Util::Config *config);
 
 private:
 
         Geometry::AffineMatrixVector matrixStack;
-        GLuint currentPogramObject;
+        GLuint currentProgramObject;
+        GLint colorUniformLocation;
+        GLint positionAttribLocation;
+        GLint modelViewLocation;
+        GLint projectionLocation;
+        Geometry::ProjectionMatrix projection;
 
 };
 

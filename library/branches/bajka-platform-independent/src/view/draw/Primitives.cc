@@ -14,130 +14,151 @@
 #include "geometry/LineString.h"
 #include <boost/geometry/geometry.hpp>
 #include <boost/geometry/arithmetic/arithmetic.hpp>
+#include "view/openGl/GLContext.h"
+#include "model/IModel.h"
+#include "model/VertexBuffer.h"
 
 namespace View {
 namespace G = Geometry;
 using namespace boost::geometry;
 
 static const GLfloat circleVAR[] = {
-         0.0000f,  1.0000f,
-         0.2588f,  0.9659f,
-         0.5000f,  0.8660f,
-         0.7071f,  0.7071f,
-         0.8660f,  0.5000f,
-         0.9659f,  0.2588f,
-         1.0000f,  0.0000f,
-         0.9659f, -0.2588f,
-         0.8660f, -0.5000f,
-         0.7071f, -0.7071f,
-         0.5000f, -0.8660f,
-         0.2588f, -0.9659f,
-         0.0000f, -1.0000f,
-        -0.2588f, -0.9659f,
-        -0.5000f, -0.8660f,
-        -0.7071f, -0.7071f,
-        -0.8660f, -0.5000f,
-        -0.9659f, -0.2588f,
-        -1.0000f, -0.0000f,
-        -0.9659f,  0.2588f,
-        -0.8660f,  0.5000f,
-        -0.7071f,  0.7071f,
-        -0.5000f,  0.8660f,
-        -0.2588f,  0.9659f,
-         0.0000f,  1.0000f,
-         0.0f, 0.0f, // For an extra line to see the rotation.
+         0.0000f,  1.0000f, 0.0f, 1.0f,
+         0.2588f,  0.9659f, 0.0f, 1.0f,
+         0.5000f,  0.8660f, 0.0f, 1.0f,
+         0.7071f,  0.7071f, 0.0f, 1.0f,
+         0.8660f,  0.5000f, 0.0f, 1.0f,
+         0.9659f,  0.2588f, 0.0f, 1.0f,
+         1.0000f,  0.0000f, 0.0f, 1.0f,
+         0.9659f, -0.2588f, 0.0f, 1.0f,
+         0.8660f, -0.5000f, 0.0f, 1.0f,
+         0.7071f, -0.7071f, 0.0f, 1.0f,
+         0.5000f, -0.8660f, 0.0f, 1.0f,
+         0.2588f, -0.9659f, 0.0f, 1.0f,
+         0.0000f, -1.0000f, 0.0f, 1.0f,
+        -0.2588f, -0.9659f, 0.0f, 1.0f,
+        -0.5000f, -0.8660f, 0.0f, 1.0f,
+        -0.7071f, -0.7071f, 0.0f, 1.0f,
+        -0.8660f, -0.5000f, 0.0f, 1.0f,
+        -0.9659f, -0.2588f, 0.0f, 1.0f,
+        -1.0000f, -0.0000f, 0.0f, 1.0f,
+        -0.9659f,  0.2588f, 0.0f, 1.0f,
+        -0.8660f,  0.5000f, 0.0f, 1.0f,
+        -0.7071f,  0.7071f, 0.0f, 1.0f,
+        -0.5000f,  0.8660f, 0.0f, 1.0f,
+        -0.2588f,  0.9659f, 0.0f, 1.0f,
+         0.0000f,  1.0000f, 0.0f, 1.0f,
+         0.0f,     0.0f,    0.0f, 1.0f  // For an extra line to see the rotation.
 };
-static const int circleVAR_count = sizeof(circleVAR)/sizeof(GLfloat)/2;
+static const int circleVAR_bytes = sizeof (circleVAR) * sizeof (GLfloat);
 
-void DrawUtil::drawCircle (G::Point const &center, double angle, double radius, Color const &lineColor, Color const &fillColor, float thickness)
+void DrawUtil::drawCircle (View::GLContext *ctx, G::Point const &center, double angle, double radius, Color const &fg, Color const &bg, float thickness)
 {
-        glVertexPointer(2, GL_FLOAT, 0, circleVAR);
-        glDisableClientState(GL_NORMAL_ARRAY);
-        glDisableClientState(GL_COLOR_ARRAY);
-        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-        glPushMatrix(); {
-                glTranslatef(center.x, center.y, 0.0f);
-                glRotatef(angle, 0.0f, 0.0f, 1.0f);
-                glScalef(radius, radius, 1.0f);
-                glLineWidth(thickness);
-
-                if (fillColor.getA () > 0){
-                        glColor4f (fillColor.getR (), fillColor.getG (), fillColor.getB (), fillColor.getA ());
-                        glDrawArrays(GL_TRIANGLE_FAN, 0, circleVAR_count - 1);
-                }
-
-                if (lineColor.getA () > 0){
-                        glColor4f (lineColor.getR (), lineColor.getG (), lineColor.getB (), lineColor.getA ());
-                        glDrawArrays(GL_LINE_STRIP, 0, circleVAR_count);
-                }
-        } glPopMatrix();
-}
-
-/****************************************************************************/
-
-void DrawUtil::drawRectangle (G::Box const &b, Color const &lineColor, Color const &fillColor, float thickness)
-{
-        drawRectangle (b.ll, b.ur, lineColor, fillColor, thickness);
-}
-
-/****************************************************************************/
-
-void DrawUtil::drawRectangle (G::Point const &a, G::Point const &b, Color const &lineColor, Color const &fillColor, float thickness)
-{
-        GLfloat verts[] = {
-                a.x, a.y,
-                a.x, b.y,
-                b.x, b.y,
-                b.x, a.y
-        };
-
-        glVertexPointer (2, GL_FLOAT, 0, verts);
-        glDisableClientState(GL_NORMAL_ARRAY);
-        glDisableClientState(GL_COLOR_ARRAY);
-        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glLineWidth (thickness);
 
-        if (fillColor.getA () > 0) {
-                glColor4f (fillColor.getR (), fillColor.getG (), fillColor.getB (), fillColor.getA ());
+        GLuint buffer;
+        glGenBuffers (1, &buffer);
+        glBindBuffer (GL_ARRAY_BUFFER, buffer);
+        glBufferData (GL_ARRAY_BUFFER, circleVAR_bytes, circleVAR, GL_STATIC_DRAW);
+
+        GLint positionAttribLocation = ctx->getPositionAttribLocation ();
+        glEnableVertexAttribArray (positionAttribLocation);
+
+        glVertexAttribPointer (positionAttribLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
+        GLint colorUniformLocation = ctx->getColorUniformLocation ();
+
+//        glTranslatef(center.x, center.y, 0.0f);
+//        glRotatef(angle, 0.0f, 0.0f, 1.0f);
+//        glScalef(radius, radius, 1.0f);
+
+        if (bg.a > 0) {
+                glUniform4f (colorUniformLocation, bg.r, bg.g, bg.b, bg.a);
                 glDrawArrays (GL_TRIANGLE_FAN, 0, 4);
         }
 
-        if (lineColor.getA () > 0) {
-                glColor4f (lineColor.getR (), lineColor.getG (), lineColor.getB (), lineColor.getA ());
+        if (fg.a > 0) {
+                glUniform4f (colorUniformLocation, fg.r, fg.g, fg.b, fg.a);
+                glDrawArrays (GL_LINE_STRIP, 0, 4);
+        }
+}
+
+/****************************************************************************/
+
+void DrawUtil::drawRectangle (View::GLContext *ctx, G::Box const &b, Color const &lineColor, Color const &fillColor, float thickness)
+{
+        drawRectangle (ctx, b.ll, b.ur, lineColor, fillColor, thickness);
+}
+
+/****************************************************************************/
+
+void DrawUtil::drawRectangle (View::GLContext *ctx, G::Point const &a, G::Point const &b, Color const &fg, Color const &bg, float thickness)
+{
+        GLfloat verts[] = {
+                a.x, a.y, 0.0, 1.0,
+                a.x, b.y, 0.0, 1.0,
+                b.x, b.y, 0.0, 1.0,
+                b.x, a.y, 0.0, 1.0
+        };
+
+        glLineWidth (thickness);
+
+        // Stworzenie bufora i zainicjowanie go danymi z vertex array.
+        GLuint buffer;
+        glGenBuffers (1, &buffer);
+        glBindBuffer (GL_ARRAY_BUFFER, buffer);
+        glBufferData (GL_ARRAY_BUFFER, 16 * sizeof (GLfloat), verts, GL_STATIC_DRAW);
+
+        // Określ indeksy atrybutów i użyj ich.
+        GLint positionAttribLocation = ctx->getPositionAttribLocation ();
+        glEnableVertexAttribArray (positionAttribLocation);
+
+        // Użyj aktualnie zbindowanego bufora
+        glVertexAttribPointer (positionAttribLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+        // Określ indeksy uniformów i ustaw je
+        GLint colorUniformLocation = ctx->getColorUniformLocation ();
+
+        if (bg.a > 0) {
+                glUniform4f (colorUniformLocation, bg.r, bg.g, bg.b, bg.a);
+                // TODO Traingle fan zrobi 4 trójkąty. A kwadrat można narysować za pomocą 2.
+                glDrawArrays (GL_TRIANGLE_FAN, 0, 4);
+        }
+
+        if (fg.a > 0) {
+                glUniform4f (colorUniformLocation, fg.r, fg.g, fg.b, fg.a);
                 glDrawArrays (GL_LINE_LOOP, 0, 4);
         }
 }
 
 /****************************************************************************/
 
-void DrawUtil::drawLine (G::Point const &a, G::Point const &b, Color const &color, float thickness)
-{
-        if (color.getA () > 0) {
-                GLfloat verts[] = {
-                        a.x, a.y,
-                        b.x, b.y
-                };
-
-                glVertexPointer(2, GL_FLOAT, 0, verts);
-                glDisableClientState(GL_NORMAL_ARRAY);
-                glDisableClientState(GL_COLOR_ARRAY);
-                glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-                glColor4f (color.getR (), color.getG (), color.getB (), color.getA ());
-                glLineWidth(thickness);
-                glDrawArrays (GL_LINES, 0, 2);
-        }
-}
+//void DrawUtil::drawLine (View::GLContext *ctx, G::Point const &a, G::Point const &b, Color const &color, float thickness)
+//{
+//        if (color.getA () > 0) {
+//                GLfloat verts[] = {
+//                        a.x, a.y,
+//                        b.x, b.y
+//                };
+//
+//                glVertexPointer(2, GL_FLOAT, 0, verts);
+//                glDisableClientState(GL_NORMAL_ARRAY);
+//                glDisableClientState(GL_COLOR_ARRAY);
+//                glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+//                glColor4f (color.getR (), color.getG (), color.getB (), color.getA ());
+//                glLineWidth(thickness);
+//                glDrawArrays (GL_LINES, 0, 2);
+//        }
+//}
 
 /****************************************************************************/
 
-void DrawUtil::drawThinSegments (VertexBuffer const &buffer, Color const &line, Color const &fill)
+void DrawUtil::drawThinSegments (View::GLContext *ctx, Model::VertexBuffer const &buffer, Color const &line, Color const &fill)
 {
         glDisableClientState(GL_NORMAL_ARRAY);
         glDisableClientState(GL_COLOR_ARRAY);
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-        glVertexPointer (2, convertType (buffer.pointType), buffer.stride, buffer.buffer);
+        glVertexPointer (2, GL_FLOAT, buffer.stride, buffer.buffer);
 
         if (fill.a > 0) {
                 glColor4f (fill.r, fill.g, fill.b, fill.a);
@@ -150,16 +171,16 @@ void DrawUtil::drawThinSegments (VertexBuffer const &buffer, Color const &line, 
         }
 
         if (buffer.extraSegment) {
-                glVertexPointer (2, convertType (buffer.pointType), 0, buffer.extraSegment);
+                glVertexPointer (2, GL_FLOAT, 0, buffer.extraSegment);
                 glDrawArrays (GL_LINE_STRIP, 0, 2);
         }
 }
 
 /****************************************************************************/
 
-void DrawUtil::drawThickSegments (VertexBuffer const &buffer, Color const &line, Color const &fill, float thickness)
+void DrawUtil::drawThickSegments (View::GLContext *ctx, Model::VertexBuffer const &buffer, Color const &line, Color const &fill, float thickness)
 {
-        glVertexPointer (2, convertType (buffer.pointType), buffer.stride, buffer.buffer);
+        glVertexPointer (2, GL_FLOAT, buffer.stride, buffer.buffer);
 
         glDisableClientState(GL_NORMAL_ARRAY);
         glDisableClientState(GL_COLOR_ARRAY);
@@ -190,22 +211,22 @@ void DrawUtil::drawThickSegments (VertexBuffer const &buffer, Color const &line,
 
 /****************************************************************************/
 
-void DrawUtil::drawSegmentsPrettyJoin (VertexBuffer const &buffer, Color const &lineColor, Color const &fillColor, float thickness)
+void DrawUtil::drawSegmentsPrettyJoin (View::GLContext *ctx, Model::VertexBuffer const &buffer, Color const &lineColor, Color const &fillColor, float thickness)
 {
         if (thickness) {
-                drawThickSegments (buffer, lineColor, fillColor, thickness);
+                drawThickSegments (ctx, buffer, lineColor, fillColor, thickness);
         }
         else {
-                drawThinSegments (buffer, lineColor, fillColor);
+                drawThinSegments (ctx, buffer, lineColor, fillColor);
         }
 }
 
 /****************************************************************************/
 
-void DrawUtil::drawSegments (VertexBuffer const &buffer, Color const &lineColor, Color const &fillColor, float thickness)
+void DrawUtil::drawSegments (View::GLContext *ctx, Model::VertexBuffer const &buffer, Color const &lineColor, Color const &fillColor, float thickness)
 {
         glLineWidth (thickness);
-        drawThinSegments (buffer, lineColor, fillColor);
+        drawThinSegments (ctx, buffer, lineColor, fillColor);
 }
 
 /****************************************************************************/
@@ -242,7 +263,7 @@ static const GLfloat pillVAR[] = {
 
 static const int pillVAR_count = sizeof(pillVAR)/sizeof(GLfloat)/3;
 
-void DrawUtil::drawThickSegment (G::Point const &a, G::Point const &b, Color const &line, Color const &fill, float thickness)
+void DrawUtil::drawThickSegment (View::GLContext *ctx, G::Point const &a, G::Point const &b, Color const &line, Color const &fill, float thickness)
 {
         glVertexPointer(3, GL_FLOAT, 0, pillVAR);
         glDisableClientState(GL_NORMAL_ARRAY);
@@ -278,45 +299,62 @@ void DrawUtil::drawThickSegment (G::Point const &a, G::Point const &b, Color con
 
 /****************************************************************************/
 
-int DrawUtil::convertType (VertexBuffer::PointType type)
-{
-        switch (type) {
-                case VertexBuffer::FLOAT:
-                        return GL_FLOAT;
-#ifndef USE_OPENGLES
-                case VertexBuffer::DOUBLE:
-                        return GL_DOUBLE;
-
-                case VertexBuffer::INT:
-                        return GL_INT;
-#else
-                case VertexBuffer::FIXED:
-                        return GL_FIXED;
-
-                case VertexBuffer::BYTE:
-                        return GL_BYTE;
-#endif
-                case VertexBuffer::SHORT:
-                        return GL_SHORT;
-                default:
-                        return GL_FLOAT;
-        }
-}
+//int DrawUtil::convertType (Model::VertexBuffer::PointType type)
+//{
+//        switch (type) {
+//                case Model::VertexBuffer::FLOAT:
+//                        return GL_FLOAT;
+//#ifndef USE_OPENGLES
+//                case Model::VertexBuffer::DOUBLE:
+//                        return GL_DOUBLE;
+//
+//                case Model::VertexBuffer::INT:
+//                        return GL_INT;
+//#else
+//                case Model::VertexBuffer::FIXED:
+//                        return GL_FIXED;
+//
+//                case Model::VertexBuffer::BYTE:
+//                        return GL_BYTE;
+//#endif
+//                case Model::VertexBuffer::SHORT:
+//                        return GL_SHORT;
+//                default:
+//                        return GL_FLOAT;
+//        }
+//}
 
 /****************************************************************************/
 
-void DrawUtil::drawPoints (VertexBuffer const &buffer, Color const &color, float size)
+void DrawUtil::drawPoints (View::GLContext *ctx, Model::VertexBuffer const &buffer, Color const &color, float size)
 {
         glDisableClientState(GL_NORMAL_ARRAY);
         glDisableClientState(GL_COLOR_ARRAY);
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-        glVertexPointer (2, convertType (buffer.pointType), buffer.stride, buffer.buffer);
+        glVertexPointer (2, GL_FLOAT, buffer.stride, buffer.buffer);
         glPointSize (size);
 
         if (color.a > 0) {
                 glColor4f (color.r, color.g, color.b, color.a);
                 glDrawArrays (GL_POINTS, 0, buffer.numVertices);
+        }
+}
+
+/****************************************************************************/
+
+void DrawUtil::drawAABB (View::GLContext *ctx, Model::IModel *model)
+{
+        if (model) {
+                Geometry::Box aabb = model->getBoundingBox();
+
+#if 0
+                std::cerr << typeid (*model).name () << " : aabb=" << aabb << std::endl;
+#endif
+
+                if (aabb.getWidth () && aabb.getHeight ()) {
+                        DrawUtil::drawRectangle (ctx, aabb, View::Color::RED, View::Color::TRANSPARENT);
+                }
         }
 }
 

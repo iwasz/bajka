@@ -12,15 +12,16 @@
 #include "model/IModel.h"
 #include "util/Exceptions.h"
 #include "draw/Primitives.h"
+#include "util/IShell.h"
 
 namespace View {
 
-void Points::update (Model::IModel *model, Event::UpdateEvent *, Util::IShell *)
+void Points::update (Model::IModel *model, Event::UpdateEvent *, Util::IShell *shell)
 {
         Model::IVertexBufferEnabled *array = dynamic_cast <Model::IVertexBufferEnabled *>  (model);
         assertThrow (array , "Points::update : !cB")
 
-        DrawUtil::drawPoints (array->getVertexBuffer (), color, size);
+        DrawUtil::drawPoints (shell->getGLContext (), array->getVertexBuffer (), color, size);
 }
 
 } /* namespace View */
