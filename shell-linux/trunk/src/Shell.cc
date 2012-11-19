@@ -74,7 +74,6 @@ void Shell::init ()
         updateConfigViewport (impl->config);
         initSdl (impl->config);
         AbstractShell::init ();
-//        initOpenGl (impl->config);
 }
 
 /****************************************************************************/
@@ -82,7 +81,6 @@ void Shell::init ()
 void Shell::destroy ()
 {
         AbstractShell::destroy ();
-//        freeOpenGl ();
         freeSdl ();
 }
 
