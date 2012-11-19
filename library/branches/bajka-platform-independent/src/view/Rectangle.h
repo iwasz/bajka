@@ -10,6 +10,7 @@
 #define BAJKA_VIEW_RECT_H_
 
 #include "Primitive.h"
+#include "view/openGl/OpenGl.h"
 
 namespace View {
 
@@ -23,8 +24,13 @@ public:
         C__ (void)
         b_ ("Primitive")
 
-        virtual ~Rectangle () {}
+        Rectangle ();
+        virtual ~Rectangle ();
         virtual void update (Model::IModel *model, Event::UpdateEvent *e, Util::IShell *shell);
+
+private:
+
+        GLuint buffer;
 
         E_ (Rectangle)
 };

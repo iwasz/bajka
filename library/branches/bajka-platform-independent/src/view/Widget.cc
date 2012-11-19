@@ -42,17 +42,15 @@ void Widget::defaultPreUpdate (Model::IModel *model, Util::IShell *shell)
 {
         GLContext *ctx = shell->getGLContext ();
 
-        GLint projectionLocation =  ctx->getProjectionLocation ();
-        glUniformMatrix4fv (projectionLocation, 1, GL_FALSE, ctx->getProjectionMatrix ().data ().begin ());
+        glUniformMatrix4fv (ctx->projectionLocation, 1, GL_FALSE, ctx->getProjectionMatrix ().data ().begin ());
 
         Geometry::AffineMatrix const &top = ctx->pushMatrix (model->getMatrix ());
-        GLint modelViewLocation =  ctx->getModelViewLocation ();
 
 #if 0
         std::cerr << model << ", " << top << " | " << model->getMatrix () << std::endl;
 #endif
 
-        glUniformMatrix4fv (modelViewLocation, 1, GL_FALSE, top.data ().begin ());
+        glUniformMatrix4fv (ctx->modelViewLocation, 1, GL_FALSE, top.data ().begin ());
 }
 
 /****************************************************************************/

@@ -21,7 +21,8 @@ GLContext::GLContext () :
         colorUniformLocation (0),
         positionAttribLocation (0),
         modelViewLocation (0),
-        projectionLocation (0)
+        projectionLocation (0),
+        texCoordInAttribLocation (0)
 {
 }
 
@@ -53,8 +54,12 @@ void GLContext::init (Util::Config *config)
         modelViewLocation = glGetUniformLocation (currentProgramObject, "modelView");
         projectionLocation = glGetUniformLocation (currentProgramObject, "projection");
         positionAttribLocation = glGetAttribLocation (currentProgramObject, "position");
+        texCoordInAttribLocation = glGetAttribLocation (currentProgramObject, "texCoordIn");
 
         initProjectionMatrix (config);
+
+        glEnable (GL_BLEND);
+        glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 /****************************************************************************/
