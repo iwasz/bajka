@@ -48,16 +48,17 @@ public:
          * Wierchołek stosu.
          */
         Geometry::AffineMatrix const &getCurrentMatrix () const;
-
-        /**
-         * Aktualny program.
-         */
-        GLuint getCurrentProgramObject () const { return currentProgramObject; }
-        GLint getColorUniformLocation () const { return colorUniformLocation; }
-        GLint getPositionAttribLocation () const { return positionAttribLocation; }
-        GLint getModelViewLocation () const { return modelViewLocation; }
-        GLint getProjectionLocation () const { return projectionLocation; }
         Geometry::ProjectionMatrix const &getProjectionMatrix () const { return projection; }
+
+public:
+
+        /// To jest tylko do odczytu - nie należy przyopisywać nic do tych pól.
+        GLuint currentProgramObject;
+        GLint colorUniformLocation;
+        GLint positionAttribLocation;
+        GLint modelViewLocation;
+        GLint projectionLocation;
+        GLint texCoordInAttribLocation;
 
 private:
 
@@ -66,11 +67,6 @@ private:
 private:
 
         Geometry::AffineMatrixVector matrixStack;
-        GLuint currentProgramObject;
-        GLint colorUniformLocation;
-        GLint positionAttribLocation;
-        GLint modelViewLocation;
-        GLint projectionLocation;
         Geometry::ProjectionMatrix projection;
 
 };

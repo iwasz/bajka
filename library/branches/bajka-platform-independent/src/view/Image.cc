@@ -14,6 +14,7 @@
 #include "model/Model.h"
 #include "util/Exceptions.h"
 #include "view/openGl/OpenGl.h"
+#include "util/IShell.h"
 
 namespace View {
 
@@ -96,24 +97,59 @@ void Image::init (Model::IModel *model)
 
 /****************************************************************************/
 
-void Image::update (Model::IModel *model, Event::UpdateEvent *, Util::IShell *)
+void Image::update (Model::IModel *model, Event::UpdateEvent *, Util::IShell *shell)
 {
         if (!initialized) {
                 init (model);
         }
 
-        glEnable (GL_TEXTURE_2D);
-        glTexEnvf (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+        GLContext *ctx = shell->getGLContext ();
+
+        GLfloat verts[] = {
+                0.0,      0.0,       0.0, 1.0,
+                imgWidth, 0.0,       0.0, 1.0,
+                0,        imgHeight, 0.0, 1.0,
+                imgWidth, imgHeight, 0.0, 1.0
+        };
+
+        // Stworzenie bufora i zainicjowanie go danymi z vertex array.
+        GLuint vertexBuffer;
+        glGenBuffers (1, &vertexBuffer);
+        glBindBuffer (GL_ARRAY_BUFFER, vertexBuffer);
+        glBufferData (GL_ARRAY_BUFFER, 16 * sizeof (GLfloat), verts, GL_STATIC_DRAW);
+        glVertexAttribPointer (ctx->positionAttribLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
+        glBindBuffer (GL_ARRAY_BUFFER, 0);
+
+        float texCoordW = double (imgWidth) / texWidth;
+        float texCoordH = double (imgHeight) / texHeight;
+
+        GLfloat texCoords[] = {
+                0.0,       1.0 - texCoordH,
+                texCoordW, 1.0 - texCoordH,
+                0.0,       1.0,
+                texCoordW, 1.0
+        };
+
+        GLuint texCoordBuffer;
+        glGenBuffers (1, &texCoordBuffer);
+        glBindBuffer (GL_ARRAY_BUFFER, texCoordBuffer);
+        glBufferData (GL_ARRAY_BUFFER, 8 * sizeof (GLfloat), texCoords, GL_STATIC_DRAW);
+        glVertexAttribPointer (ctx->texCoordInAttribLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+        glBindBuffer (GL_ARRAY_BUFFER, 0);
+
+        // Tekstura
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture (GL_TEXTURE_2D, texName);
+        // A w taki dziwny sposób się przekazuje teksturę do shadera. Zamiast nazwy uniforma podajemy uchwyt do tekstury.
+        glUniform1i (texName, 0);
 
-        glBegin (GL_QUADS);
-                glTexCoord2i (0, 1); glVertex2i (0, 0);
-                glTexCoord2i (0, 0); glVertex2i (0, texHeight);
-                glTexCoord2i (1, 0); glVertex2i (texWidth, texHeight);
-                glTexCoord2i (1, 1); glVertex2i (texWidth, 0);
-        glEnd();
+        glEnableVertexAttribArray (ctx->positionAttribLocation);
+        glEnableVertexAttribArray (ctx->texCoordInAttribLocation);
 
-        glDisable (GL_TEXTURE_2D);
+        glDrawArrays (GL_TRIANGLE_STRIP, 0, 4);
+
+        glDisableVertexAttribArray (ctx->positionAttribLocation);
+        glDisableVertexAttribArray (ctx->texCoordInAttribLocation);
 }
 
 } // nam
