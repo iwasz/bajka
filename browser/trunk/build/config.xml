@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+<!-- +=======================================================================================+ -->
+<!-- | CAUTION!                                                                              | -->
+<!-- | Do not declare OpenGL objects here. At this point no OpenGL context is created and    | -->
+<!-- | OpenGL is not initialized. Every OpenGL call invoked at this point will result in     | -->
+<!-- | undefined behaviour.                                                                  | -->
+<!-- +=======================================================================================+ -->
+
+<!--   <Config id="config" viewportWidth="1280" viewportHeight="720" autoProjection="true" windowCaption="Bajka browser"> -->
+  <Config id="config" viewportWidth="160" viewportHeight="100" projectionWidth="1280" projectionHeight="720" windowCaption="Bajka browser">
+<!--     <ref set-as="modelManager" bean="modelManager" /> -->
+    <value set-as="vertex">
+attribute vec4 position;
+attribute vec2 texCoordIn;
+
+varying vec2 texCoordOut;
+
+uniform mat4 projection;
+uniform mat4 modelView;
+   
+void main()                                        
+{                                                  
+  gl_Position = projection * modelView * position;             
+  texCoordOut = texCoordIn;
+}                                                  
+    </value>
+    
+    <value set-as="fragment">
+//uniform vec4 color = vec4 (1.0, 0.0, 0.0, 1.0);
+uniform vec4 color;
+varying vec2 texCoordOut;
+uniform sampler2D textureIn;
+
+void main()
+{
+//    gl_FragColor = color;
+    gl_FragColor = mix (texture2D (textureIn, texCoordOut), color, 0.5);    
+//    gl_FragColor = textureGrad (textureIn, texCoordOut, vec2 (0.0, 0.0), vec2 (0.0, 1.0));    
+}
+    </value>
+  </Config>
+  
+</beans>
+
