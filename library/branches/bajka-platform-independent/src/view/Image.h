@@ -30,7 +30,7 @@ public:
         virtual ~Image ();
 
         /// Do the drawing.
-        virtual void update (Model::IModel *model, Event::UpdateEvent *e, Util::IShell *shell);
+        virtual void update (Model::IModel *model, Event::UpdateEvent *e, View::GLContext *ctx);
 
         m_ (getBitmap) IBitmap *getBitmap () { return bitmap; }
         S_ (setBitmap) void setBitmap (IBitmap *b) { bitmap = b; }

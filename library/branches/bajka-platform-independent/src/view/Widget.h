@@ -26,9 +26,9 @@ public:
         Widget () : visible (true), alpha (1) {}
         virtual ~Widget () {}
 
-        virtual void preUpdate (Model::IModel *, Event::UpdateEvent *e, Util::IShell *shell);
-        virtual void update (Model::IModel *, Event::UpdateEvent *e, Util::IShell *shell) {}
-        virtual void postUpdate (Model::IModel *, Event::UpdateEvent *e, Util::IShell *shell);
+        virtual void preUpdate (Model::IModel *, Event::UpdateEvent *e, View::GLContext *ctx);
+        virtual void update (Model::IModel *, Event::UpdateEvent *e, View::GLContext *ctx) {}
+        virtual void postUpdate (Model::IModel *, Event::UpdateEvent *e, View::GLContext *ctx);
 
         bool getVisible () const { return visible; }
         m_ (setVisible) void setVisible (bool v) { visible = v; }
@@ -44,8 +44,8 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        static void defaultPreUpdate (Model::IModel *m, Util::IShell *shell);
-        static void defaultPostUpdate (Model::IModel *m, Util::IShell *shell);
+        static void defaultPreUpdate (Model::IModel *m, View::GLContext *ctx);
+        static void defaultPostUpdate (Model::IModel *m, View::GLContext *ctx);
 
 private:
 

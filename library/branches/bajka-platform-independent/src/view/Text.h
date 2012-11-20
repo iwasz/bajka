@@ -34,7 +34,7 @@ public:
         virtual ~Text () {}
 
         /// Do the drawing.
-        virtual void update (Model::IModel *model, Event::UpdateEvent *e, Util::IShell *shell);
+        virtual void update (Model::IModel *model, Event::UpdateEvent *e, View::GLContext *ctx);
 
         IFont *getFont () const { return font; }
         void setFont (IFont *f) { font = f; }

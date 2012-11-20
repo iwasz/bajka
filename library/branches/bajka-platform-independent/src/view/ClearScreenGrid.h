@@ -26,7 +26,7 @@ public:
         ClearScreenGrid () : density (20) {}
         virtual ~ClearScreenGrid () {}
 
-        void update (Model::IModel *, Event::UpdateEvent *e, Util::IShell *shell);
+        void update (Model::IModel *, Event::UpdateEvent *e, View::GLContext *ctx);
 
 private:
 

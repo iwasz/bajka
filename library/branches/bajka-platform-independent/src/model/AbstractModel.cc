@@ -65,11 +65,11 @@ void AbstractModel::update (Event::UpdateEvent *e, Util::IShell *shell)
         }
 
         if (view) {
-                view->preUpdate (this, e, shell);
-                view->update (this, e, shell);
+                view->preUpdate (this, e, shell->getGLContext ());
+                view->update (this, e, shell->getGLContext ());
         }
         else {
-        	View::Widget::defaultPreUpdate (this, shell);
+        	View::Widget::defaultPreUpdate (this, shell->getGLContext ());
         }
 
         if (isGroup ()) {
@@ -78,10 +78,10 @@ void AbstractModel::update (Event::UpdateEvent *e, Util::IShell *shell)
         }
 
         if (view) {
-                view->postUpdate (this, e, shell);
+                view->postUpdate (this, e, shell->getGLContext ());
         }
         else {
-        	View::Widget::defaultPostUpdate (this, shell);
+        	View::Widget::defaultPostUpdate (this, shell->getGLContext ());
         }
 
         if (controller && controller->getEventMask () & Event::UPDATE_EVENT) {

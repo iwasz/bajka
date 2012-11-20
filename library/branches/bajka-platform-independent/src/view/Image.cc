@@ -113,13 +113,11 @@ void Image::init (Model::IModel *model)
 
 /****************************************************************************/
 
-void Image::update (Model::IModel *model, Event::UpdateEvent *, Util::IShell *shell)
+void Image::update (Model::IModel *model, Event::UpdateEvent *, View::GLContext *ctx)
 {
         if (!initialized) {
                 init (model);
         }
-
-        GLContext *ctx = shell->getGLContext ();
 
         GLfloat verts[] = {
                 0.0,      0.0,       0.0, 1.0,

@@ -34,7 +34,7 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        virtual void update (Model::IModel *m, Event::UpdateEvent *e, Util::IShell *shell);
+        virtual void update (Model::IModel *m, Event::UpdateEvent *e, View::GLContext *ctx);
 
 /*--------------------------------------------------------------------------*/
 

@@ -16,32 +16,30 @@
 
 namespace View {
 
-void Widget::preUpdate (Model::IModel *model, Event::UpdateEvent *, Util::IShell *shell)
+void Widget::preUpdate (Model::IModel *model, Event::UpdateEvent *, View::GLContext *ctx)
 {
         if (!visible) {
                 return;
         }
 
-        defaultPreUpdate (model, shell);
+        defaultPreUpdate (model, ctx);
 }
 
 /****************************************************************************/
 
-void Widget::postUpdate (Model::IModel *model, Event::UpdateEvent *, Util::IShell *shell)
+void Widget::postUpdate (Model::IModel *model, Event::UpdateEvent *, View::GLContext *ctx)
 {
         if (!visible) {
                 return;
         }
 
-        defaultPostUpdate (model, shell);
+        defaultPostUpdate (model, ctx);
 }
 
 /****************************************************************************/
 
-void Widget::defaultPreUpdate (Model::IModel *model, Util::IShell *shell)
+void Widget::defaultPreUpdate (Model::IModel *model, View::GLContext *ctx)
 {
-        GLContext *ctx = shell->getGLContext ();
-
         glUniformMatrix4fv (ctx->projectionLocation, 1, GL_FALSE, ctx->getProjectionMatrix ().data ().begin ());
 
         Geometry::AffineMatrix const &top = ctx->pushMatrix (model->getMatrix ());
@@ -55,9 +53,9 @@ void Widget::defaultPreUpdate (Model::IModel *model, Util::IShell *shell)
 
 /****************************************************************************/
 
-void Widget::defaultPostUpdate (Model::IModel *model, Util::IShell *shell)
+void Widget::defaultPostUpdate (Model::IModel *model, View::GLContext *ctx)
 {
-        shell->getGLContext ()->popMatrix ();
+        ctx->popMatrix ();
 }
 
 } /* namespace View */

@@ -11,10 +11,6 @@
 
 #include <core/Object.h>
 
-namespace Util {
-class IShell;
-}
-
 namespace Event {
 class UpdateEvent;
 }
@@ -24,6 +20,7 @@ class IModel;
 }
 
 namespace View {
+class GLContext;
 
 /**
  * Widok.
@@ -32,9 +29,9 @@ struct IView : public Core::Object {
 
         virtual ~IView () {}
 
-        virtual void preUpdate (Model::IModel *, Event::UpdateEvent *e, Util::IShell *shell) = 0;
-        virtual void update (Model::IModel *, Event::UpdateEvent *e, Util::IShell *shell) = 0;
-        virtual void postUpdate (Model::IModel *, Event::UpdateEvent *e, Util::IShell *shell) = 0;
+        virtual void preUpdate (Model::IModel *, Event::UpdateEvent *e, View::GLContext *ctx) = 0;
+        virtual void update (Model::IModel *, Event::UpdateEvent *e, View::GLContext *ctx) = 0;
+        virtual void postUpdate (Model::IModel *, Event::UpdateEvent *e, View::GLContext *ctx) = 0;
 
         /**
          * Stany widoku - jeśli brak, to olać.

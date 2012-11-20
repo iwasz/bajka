@@ -26,7 +26,7 @@ public:
 
         Rectangle ();
         virtual ~Rectangle ();
-        virtual void update (Model::IModel *model, Event::UpdateEvent *e, Util::IShell *shell);
+        virtual void update (Model::IModel *model, Event::UpdateEvent *e, View::GLContext *ctx);
 
 private:
 
