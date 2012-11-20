@@ -11,6 +11,7 @@
   <Box id="label" abstract="true" autoUpdateToViewSize="true">
     <Text set-as="view" foreground="ff0000ff" font="@defaultFont" />
     <prop-alias name="text" value="view.text"/>
+    <prop-alias name="fg" value="view.foreground"/>
   </Box>
   
   <Box id="rect" abstract="true">
