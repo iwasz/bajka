@@ -5,6 +5,7 @@
     <rect set-as="child" box="-50, -50, 50, 50" fg="ff0000ff" bg="00ff00ff" th="2" angle="20" scale="4"/>
     <circle set-as="child" origin="0, 0" radius="100" fg="ff0000ff" bg="00ff00ff" th="2" translate="100, 100" />   
     <image set-as="child" view.bitmap="@cloud" translate="-200, -200" />
+    <label set-as="child" text="Hello world" fg="@orange" />
   </Group>
 
   <FileBitmap id="cloud" path="grass.png"/>    
