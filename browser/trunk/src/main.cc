@@ -33,6 +33,7 @@ int main (int argc, char **argv)
                 ("viewportWidth,x", po::value<int>(&config.viewportWidth), "set horizontal resolution in pixels")
                 ("viewportHeight,y", po::value<int>(&config.viewportHeight), "set vertical resolution in pixels")
                 ("loopdelay,l", po::value<int>(&config.loopDelayMs), "set game loop delay in ms")
+                ("config,c", po::value <std::string>(&config.configFile)->default_value ("config.xml"), "config file (resolution, fullscreen and various other options)")
                 ("definition,d", po::value <std::string>(&config.definitionFile)->default_value ("main.xml"), "input file with XML definitions");
 
         po::positional_options_description p;
