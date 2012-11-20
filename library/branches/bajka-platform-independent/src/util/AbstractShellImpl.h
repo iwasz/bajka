@@ -16,6 +16,10 @@
 #include "events/types/UpdateEvent.h"
 #include "view/openGl/GLContext.h"
 
+namespace Model {
+class IModelManager;
+}
+
 namespace Util {
 
 /**
@@ -25,10 +29,12 @@ struct AbstractShellImpl {
 
         AbstractShellImpl () : config (NULL),
                 model (NULL),
+                modelManager (NULL),
                 loopActive (true) {}
 
         Util::Config *config;
         Model::IModel *model;
+        Model::IModelManager *modelManager;
         Event::EventIndex eventIndex;
         Event::PointerInsideIndex pointerInsideIndex;
         bool loopActive;

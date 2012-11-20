@@ -22,63 +22,63 @@ namespace View {
 namespace G = Geometry;
 using namespace boost::geometry;
 
-static const GLfloat circleVAR[] = {
-         0.0000f,  1.0000f, 0.0f, 1.0f,
-         0.2588f,  0.9659f, 0.0f, 1.0f,
-         0.5000f,  0.8660f, 0.0f, 1.0f,
-         0.7071f,  0.7071f, 0.0f, 1.0f,
-         0.8660f,  0.5000f, 0.0f, 1.0f,
-         0.9659f,  0.2588f, 0.0f, 1.0f,
-         1.0000f,  0.0000f, 0.0f, 1.0f,
-         0.9659f, -0.2588f, 0.0f, 1.0f,
-         0.8660f, -0.5000f, 0.0f, 1.0f,
-         0.7071f, -0.7071f, 0.0f, 1.0f,
-         0.5000f, -0.8660f, 0.0f, 1.0f,
-         0.2588f, -0.9659f, 0.0f, 1.0f,
-         0.0000f, -1.0000f, 0.0f, 1.0f,
-        -0.2588f, -0.9659f, 0.0f, 1.0f,
-        -0.5000f, -0.8660f, 0.0f, 1.0f,
-        -0.7071f, -0.7071f, 0.0f, 1.0f,
-        -0.8660f, -0.5000f, 0.0f, 1.0f,
-        -0.9659f, -0.2588f, 0.0f, 1.0f,
-        -1.0000f, -0.0000f, 0.0f, 1.0f,
-        -0.9659f,  0.2588f, 0.0f, 1.0f,
-        -0.8660f,  0.5000f, 0.0f, 1.0f,
-        -0.7071f,  0.7071f, 0.0f, 1.0f,
-        -0.5000f,  0.8660f, 0.0f, 1.0f,
-        -0.2588f,  0.9659f, 0.0f, 1.0f,
-         0.0000f,  1.0000f, 0.0f, 1.0f,
-         0.0f,     0.0f,    0.0f, 1.0f  // For an extra line to see the rotation.
-};
-
-static const int circleVAR_indices = sizeof (circleVAR) / (sizeof (GLfloat) * 4);
-
-void DrawUtil::drawCircle (View::GLContext *ctx, G::Point const &center, double angle, double radius, Color const &fg, Color const &bg, float thickness)
-{
-        glLineWidth (thickness);
-
-        GLuint buffer;
-        glGenBuffers (1, &buffer);
-        glBindBuffer (GL_ARRAY_BUFFER, buffer);
-        glBufferData (GL_ARRAY_BUFFER, sizeof (circleVAR), circleVAR, GL_STATIC_DRAW);
-
-        glEnableVertexAttribArray (ctx->positionAttribLocation);
-
-        glVertexAttribPointer (ctx->positionAttribLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
-
-        if (bg.a > 0) {
-                glUniform4f (ctx->colorUniformLocation, bg.r, bg.g, bg.b, bg.a);
-                glDrawArrays (GL_TRIANGLE_FAN, 0, circleVAR_indices);
-        }
-
-        if (fg.a > 0) {
-                glUniform4f (ctx->colorUniformLocation, fg.r, fg.g, fg.b, fg.a);
-                glDrawArrays (GL_LINE_STRIP, 0, circleVAR_indices);
-        }
-}
-
-/****************************************************************************/
-
+//static const GLfloat circleVAR[] = {
+//         0.0000f,  1.0000f, 0.0f, 1.0f,
+//         0.2588f,  0.9659f, 0.0f, 1.0f,
+//         0.5000f,  0.8660f, 0.0f, 1.0f,
+//         0.7071f,  0.7071f, 0.0f, 1.0f,
+//         0.8660f,  0.5000f, 0.0f, 1.0f,
+//         0.9659f,  0.2588f, 0.0f, 1.0f,
+//         1.0000f,  0.0000f, 0.0f, 1.0f,
+//         0.9659f, -0.2588f, 0.0f, 1.0f,
+//         0.8660f, -0.5000f, 0.0f, 1.0f,
+//         0.7071f, -0.7071f, 0.0f, 1.0f,
+//         0.5000f, -0.8660f, 0.0f, 1.0f,
+//         0.2588f, -0.9659f, 0.0f, 1.0f,
+//         0.0000f, -1.0000f, 0.0f, 1.0f,
+//        -0.2588f, -0.9659f, 0.0f, 1.0f,
+//        -0.5000f, -0.8660f, 0.0f, 1.0f,
+//        -0.7071f, -0.7071f, 0.0f, 1.0f,
+//        -0.8660f, -0.5000f, 0.0f, 1.0f,
+//        -0.9659f, -0.2588f, 0.0f, 1.0f,
+//        -1.0000f, -0.0000f, 0.0f, 1.0f,
+//        -0.9659f,  0.2588f, 0.0f, 1.0f,
+//        -0.8660f,  0.5000f, 0.0f, 1.0f,
+//        -0.7071f,  0.7071f, 0.0f, 1.0f,
+//        -0.5000f,  0.8660f, 0.0f, 1.0f,
+//        -0.2588f,  0.9659f, 0.0f, 1.0f,
+//         0.0000f,  1.0000f, 0.0f, 1.0f,
+//         0.0f,     0.0f,    0.0f, 1.0f  // For an extra line to see the rotation.
+//};
+//
+//static const int circleVAR_indices = sizeof (circleVAR) / (sizeof (GLfloat) * 4);
+//
+//void DrawUtil::drawCircle (View::GLContext *ctx, G::Point const &center, double angle, double radius, Color const &fg, Color const &bg, float thickness)
+//{
+//        glLineWidth (thickness);
+//
+//        GLuint buffer;
+//        glGenBuffers (1, &buffer);
+//        glBindBuffer (GL_ARRAY_BUFFER, buffer);
+//        glBufferData (GL_ARRAY_BUFFER, sizeof (circleVAR), circleVAR, GL_STATIC_DRAW);
+//
+//        glEnableVertexAttribArray (ctx->positionAttribLocation);
+//
+//        glVertexAttribPointer (ctx->positionAttribLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
+//
+//        if (bg.a > 0) {
+//                glUniform4f (ctx->colorUniformLocation, bg.r, bg.g, bg.b, bg.a);
+//                glDrawArrays (GL_TRIANGLE_FAN, 0, circleVAR_indices);
+//        }
+//
+//        if (fg.a > 0) {
+//                glUniform4f (ctx->colorUniformLocation, fg.r, fg.g, fg.b, fg.a);
+//                glDrawArrays (GL_LINE_STRIP, 0, circleVAR_indices);
+//        }
+//}
+//
+///****************************************************************************/
+//
 void DrawUtil::drawRectangle (View::GLContext *ctx, G::Box const &b, Color const &lineColor, Color const &fillColor, float thickness)
 {
         drawRectangle (ctx, b.ll, b.ur, lineColor, fillColor, thickness);
@@ -118,6 +118,9 @@ void DrawUtil::drawRectangle (View::GLContext *ctx, G::Point const &a, G::Point 
                 glUniform4f (ctx->colorUniformLocation, fg.r, fg.g, fg.b, fg.a);
                 glDrawArrays (GL_LINE_LOOP, 0, 4);
         }
+
+        glBindBuffer (GL_ARRAY_BUFFER, 0);
+        glDeleteBuffers (1, &buffer);
 }
 
 /****************************************************************************/

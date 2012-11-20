@@ -11,6 +11,7 @@
 
 #include "util/ReflectionMacros.h"
 #include "Primitive.h"
+#include "view/openGl/OpenGl.h"
 
 namespace View {
 
@@ -24,8 +25,14 @@ public:
         C__ (void)
         b_ ("Primitive")
 
-        virtual ~Circle () {}
+        Circle ();
+        virtual ~Circle ();
+
         virtual void update (Model::IModel *model, Event::UpdateEvent *e, Util::IShell *shell);
+
+private:
+
+        GLuint buffer;
 
         E_ (View::Circle)
 };

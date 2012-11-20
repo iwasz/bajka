@@ -22,9 +22,7 @@ Config::Config () :
                 projectionHeight (0),
                 showAABB (false),
                 showSystemCursor (true),
-                loopDelayMs (17),
-                model (NULL),
-                modelManager (NULL)
+                loopDelayMs (17)
 {
 }
 
