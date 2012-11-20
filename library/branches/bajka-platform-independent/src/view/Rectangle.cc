@@ -33,9 +33,8 @@ Rectangle::~Rectangle ()
 
 /****************************************************************************/
 
-void Rectangle::update (Model::IModel *model, Event::UpdateEvent *, Util::IShell *shell)
+void Rectangle::update (Model::IModel *model, Event::UpdateEvent *, View::GLContext *ctx)
 {
-        GLContext *ctx = shell->getGLContext ();
         Model::IBox *cB = dynamic_cast <Model::IBox *>  (model);
         Geometry::Box const &b = cB->getBox ();
 

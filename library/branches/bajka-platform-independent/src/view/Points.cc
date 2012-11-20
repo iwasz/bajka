@@ -16,12 +16,12 @@
 
 namespace View {
 
-void Points::update (Model::IModel *model, Event::UpdateEvent *, Util::IShell *shell)
+void Points::update (Model::IModel *model, Event::UpdateEvent *, View::GLContext *ctx)
 {
         Model::IVertexBufferEnabled *array = dynamic_cast <Model::IVertexBufferEnabled *>  (model);
         assertThrow (array , "Points::update : !cB")
 
-        DrawUtil::drawPoints (shell->getGLContext (), array->getVertexBuffer (), color, size);
+        DrawUtil::drawPoints (ctx, array->getVertexBuffer (), color, size);
 }
 
 } /* namespace View */

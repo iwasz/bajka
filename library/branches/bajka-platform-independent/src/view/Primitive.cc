@@ -16,16 +16,16 @@
 
 namespace View {
 
-void Primitive::update (Model::IModel *model, Event::UpdateEvent *, Util::IShell *shell)
+void Primitive::update (Model::IModel *model, Event::UpdateEvent *, View::GLContext *ctx)
 {
         Model::IVertexBufferEnabled *array = dynamic_cast <Model::IVertexBufferEnabled *>  (model);
         assertThrow (array , "Primitive::update : !cB")
 
         if (prettyJoin) {
-                DrawUtil::drawSegmentsPrettyJoin (shell->getGLContext (), array->getVertexBuffer (), getForeground (), getBackground (), getThickness ());
+                DrawUtil::drawSegmentsPrettyJoin (ctx, array->getVertexBuffer (), getForeground (), getBackground (), getThickness ());
         }
         else {
-                DrawUtil::drawSegments (shell->getGLContext (), array->getVertexBuffer (), getForeground (), getBackground (), getThickness ());
+                DrawUtil::drawSegments (ctx, array->getVertexBuffer (), getForeground (), getBackground (), getThickness ());
         }
 }
 

@@ -14,7 +14,7 @@
 
 namespace View {
 
-void ClearScreenGrid::update (Model::IModel *, Event::UpdateEvent *e, Util::IShell *shell)
+void ClearScreenGrid::update (Model::IModel *, Event::UpdateEvent *e, View::GLContext *ctx)
 {
         glClearColor (color.r, color.g, color.b, color.a);
         glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

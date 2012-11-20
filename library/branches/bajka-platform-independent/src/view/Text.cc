@@ -91,7 +91,7 @@ void Text::initIf ()
 
 /****************************************************************************/
 
-void Text::update (Model::IModel *model, Event::UpdateEvent *, Util::IShell *)
+void Text::update (Model::IModel *model, Event::UpdateEvent *, View::GLContext *ctx)
 {
         initIf ();
 

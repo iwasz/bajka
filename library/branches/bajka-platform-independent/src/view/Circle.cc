@@ -60,9 +60,8 @@ static const int circleVAR_indices = sizeof (circleVAR) / (sizeof (GLfloat) * 4)
 
 /****************************************************************************/
 
-void Circle::update (Model::IModel *model, Event::UpdateEvent *, Util::IShell *shell)
+void Circle::update (Model::IModel *model, Event::UpdateEvent *, View::GLContext *ctx)
 {
-        GLContext *ctx = shell->getGLContext ();
         glLineWidth (getThickness ());
 
         glBindBuffer (GL_ARRAY_BUFFER, buffer);
