@@ -24,7 +24,7 @@ class GLContext;
 struct DrawUtil {
 public:
 
-        static void drawCircle          (View::GLContext *ctx, Geometry::Point const &center, double angle, double radius, Color const &lineColor, Color const &fillColor, float thickness = 1);
+//        static void drawCircle          (View::GLContext *ctx, Geometry::Point const &center, double angle, double radius, Color const &lineColor, Color const &fillColor, float thickness = 1);
 //        static void drawLine            (View::GLContext *ctx, Geometry::Point const &a, Geometry::Point const &b, Color const &color, float thickness = 1);
         static void drawRectangle       (View::GLContext *ctx, Geometry::Point const &a, Geometry::Point const &b, Color const &lineColor, Color const &fillColor, float thickness = 1);
         static void drawRectangle       (View::GLContext *ctx, Geometry::Box const &b, Color const &lineColor, Color const &fillColor, float thickness = 1);

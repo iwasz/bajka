@@ -26,7 +26,7 @@ public:
         C__ (void)
         b_ ("Widget")
 
-        Image () : texName (0), texWidth (0), texHeight (0), imgWidth (0), imgHeight (0), initialized (false), bitmap (NULL) {}
+        Image ();
         virtual ~Image ();
 
         /// Do the drawing.
@@ -55,6 +55,8 @@ protected:
         bool initialized;
         IBitmap *bitmap;
         std::auto_ptr <Geometry::Box> region;
+        GLuint vertexBuffer;
+        GLuint texCoordBuffer;
 
         E_ (Image)
 };

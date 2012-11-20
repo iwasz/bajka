@@ -40,6 +40,7 @@ struct ShellConfig {
         bool             showAABB;
         int             loopDelayMs;
         std::string     definitionFile;
+        std::string     configFile;
 };
 
 /**
@@ -53,7 +54,6 @@ public:
         virtual void quit () = 0;
 
         virtual void init () = 0;
-        virtual void preInit () = 0;
         virtual void loop () = 0;
         virtual void destroy () = 0;
 

@@ -22,6 +22,7 @@
 #include "events/types/ManagerEvent.h"
 #include "tween/Manager.h"
 #include "Platform.h"
+#include "model/manager/IModelManager.h"
 
 namespace Util {
 using namespace Container;
@@ -43,9 +44,7 @@ int AbstractShell::run (Util::ShellConfig const &cfg)
 {
         try {
                 {
-                        preInit ();
-
-                        Ptr <MetaContainer> metaContainer = CompactMetaService::parseFile (cfg.definitionFile);
+                        Ptr <MetaContainer> metaContainer = CompactMetaService::parseFile (cfg.configFile);
                         Ptr <BeanFactoryContainer> container = ContainerFactory::create (metaContainer, true);
 
                         container->addConversion (typeid (Geometry::Point), Geometry::stringToPointVariant);
@@ -61,11 +60,11 @@ int AbstractShell::run (Util::ShellConfig const &cfg)
                         impl->config = vcast <U::Config *> (container->getBean ("config"));
                         overrideConfig (cfg);
 
-                        if (impl->config->model) {
-                                setModel (impl->config->model);
-                        }
-
                         init ();
+
+                        Ptr <BeanFactoryContainer> container2 = Container::ContainerFactory::createAndInit (Container::CompactMetaService::parseFile (cfg.definitionFile), true, container.get ());
+                        impl->modelManager = ocast <M::IModelManager *> (container2->getBean ("modelManager"));
+
                         loop ();
                 }
 
@@ -99,19 +98,13 @@ void AbstractShell::loop ()
 
         int loopDelayMs = impl->config->loopDelayMs;
 
-        if (impl->model && !impl->config->modelManager) {
-                updateLayout (impl->model);
-        }
-
         while (impl->loopActive) {
 
-                if (impl->config->modelManager) {
-                        bool newModelLoaded = impl->config->modelManager->run (this);
+                bool newModelLoaded = impl->modelManager->run (this);
 
-                        if (newModelLoaded) {
-                                assert (impl->model);
-                                updateLayout (impl->model);
-                        }
+                if (newModelLoaded) {
+                        assert (impl->model);
+                        updateLayout (impl->model);
                 }
 
                 uint32_t currentMs = getCurrentMs ();

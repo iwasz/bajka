@@ -18,9 +18,26 @@
 
 namespace View {
 
+Image::Image () : texName (0), texWidth (0), texHeight (0), imgWidth (0), imgHeight (0), initialized (false), bitmap (NULL)
+{
+        glGenBuffers (1, &vertexBuffer);
+        glBindBuffer (GL_ARRAY_BUFFER, vertexBuffer);
+        glBufferData (GL_ARRAY_BUFFER, 16 * sizeof (GLfloat), NULL, GL_DYNAMIC_DRAW); // Alokuje pamięć
+
+        glGenBuffers (1, &texCoordBuffer);
+        glBindBuffer (GL_ARRAY_BUFFER, texCoordBuffer);
+        glBufferData (GL_ARRAY_BUFFER, 8 * sizeof (GLfloat), NULL, GL_DYNAMIC_DRAW);
+
+        glGenTextures(1, &texName);
+}
+
+/****************************************************************************/
+
 Image::~Image ()
 {
         glDeleteTextures (1, &texName);
+        glDeleteBuffers (1, &vertexBuffer);
+        glDeleteBuffers (1, &texCoordBuffer);
 }
 
 /****************************************************************************/
@@ -61,7 +78,6 @@ void Image::init (Model::IModel *model)
 
 /*--------------------------------------------------------------------------*/
 
-        glGenTextures(1, &texName);
         glBindTexture(GL_TEXTURE_2D, texName);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
@@ -113,10 +129,8 @@ void Image::update (Model::IModel *model, Event::UpdateEvent *, Util::IShell *sh
         };
 
         // Stworzenie bufora i zainicjowanie go danymi z vertex array.
-        GLuint vertexBuffer;
-        glGenBuffers (1, &vertexBuffer);
         glBindBuffer (GL_ARRAY_BUFFER, vertexBuffer);
-        glBufferData (GL_ARRAY_BUFFER, 16 * sizeof (GLfloat), verts, GL_STATIC_DRAW);
+        glBufferSubData (GL_ARRAY_BUFFER, 0, 16 * sizeof (GLfloat), verts);
         glVertexAttribPointer (ctx->positionAttribLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
         glBindBuffer (GL_ARRAY_BUFFER, 0);
 
@@ -130,10 +144,8 @@ void Image::update (Model::IModel *model, Event::UpdateEvent *, Util::IShell *sh
                 texCoordW, 1.0
         };
 
-        GLuint texCoordBuffer;
-        glGenBuffers (1, &texCoordBuffer);
         glBindBuffer (GL_ARRAY_BUFFER, texCoordBuffer);
-        glBufferData (GL_ARRAY_BUFFER, 8 * sizeof (GLfloat), texCoords, GL_STATIC_DRAW);
+        glBufferSubData (GL_ARRAY_BUFFER, 0, 8 * sizeof (GLfloat), texCoords);
         glVertexAttribPointer (ctx->texCoordInAttribLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
         glBindBuffer (GL_ARRAY_BUFFER, 0);
 
