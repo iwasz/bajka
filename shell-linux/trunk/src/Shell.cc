@@ -55,7 +55,7 @@ void Shell::dispatchEvents ()
 
 /****************************************************************************/
 
-void Shell::preInit ()
+void Shell::init ()
 {
         /* Initialize SDL for video output */
         if (SDL_Init (SDL_INIT_VIDEO) < 0) {
@@ -65,12 +65,7 @@ void Shell::preInit ()
         if (TTF_Init () < 0) {
                 throw U::InitException ("TTF_Init failed");
         }
-}
 
-/****************************************************************************/
-
-void Shell::init ()
-{
         updateConfigViewport (impl->config);
         initSdl (impl->config);
         AbstractShell::init ();
