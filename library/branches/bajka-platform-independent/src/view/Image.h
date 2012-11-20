@@ -6,7 +6,6 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ANDROID
 #ifndef BAJKA_VIEW_IMAGE_H_
 #define BAJKA_VIEW_IMAGE_H_
 
@@ -35,15 +34,12 @@ public:
         m_ (getBitmap) IBitmap *getBitmap () { return bitmap; }
         S_ (setBitmap) void setBitmap (IBitmap *b) { bitmap = b; }
 
-        Geometry::Box const &getRegion () const { return (region.get ()) ? (*region) : (Geometry::Box::ZERO_BOX); }
-        m_ (setRegion) void setRegion (Geometry::Box const &r) { region = std::auto_ptr <Geometry::Box> (new Geometry::Box (r)); }
-
-        double getWidthHint () const;
-        double getHeightHint () const;
+        virtual double getWidthHint () const;
+        virtual double getHeightHint () const;
 
 protected:
 
-        void init (Model::IModel *model);
+        virtual void check ();
 
 protected:
 
@@ -54,7 +50,6 @@ protected:
         int imgWidth, imgHeight;
         bool initialized;
         IBitmap *bitmap;
-        std::auto_ptr <Geometry::Box> region;
         GLuint vertexBuffer;
         GLuint texCoordBuffer;
 
@@ -64,4 +59,3 @@ protected:
 }
 
 #endif /* IMAGE_H_ */
-#endif

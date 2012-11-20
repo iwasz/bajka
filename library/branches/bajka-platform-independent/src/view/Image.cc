@@ -8,7 +8,6 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ANDROID
 #include "Image.h"
 #include "util/Math.h"
 #include "model/Model.h"
@@ -48,9 +47,9 @@ double Image::getWidthHint () const
                 return 0;
         }
 
-        if (region.get ()) {
-                return region->getWidth ();
-        }
+//        if (region.get ()) {
+//                return region->getWidth ();
+//        }
 
         return bitmap->getVisibleWidth ();
 }
@@ -63,18 +62,23 @@ double Image::getHeightHint () const
                 return 0;
         }
 
-        if (region.get ()) {
-                return region->getHeight ();
-        }
+//        if (region.get ()) {
+//                return region->getHeight ();
+//        }
 
         return bitmap->getVisibleHeight ();
 }
 
 /****************************************************************************/
 
-void Image::init (Model::IModel *model)
+void Image::check ()
 {
-        initialized = true;
+        if (!initialized) {
+                initialized = true;
+        }
+        else {
+                return;
+        }
 
 /*--------------------------------------------------------------------------*/
 
@@ -115,9 +119,7 @@ void Image::init (Model::IModel *model)
 
 void Image::update (Model::IModel *model, Event::UpdateEvent *, View::GLContext *ctx)
 {
-        if (!initialized) {
-                init (model);
-        }
+        check ();
 
         GLfloat verts[] = {
                 0.0,      0.0,       0.0, 1.0,
@@ -153,6 +155,8 @@ void Image::update (Model::IModel *model, Event::UpdateEvent *, View::GLContext 
         // A w taki dziwny sposób się przekazuje teksturę do shadera. Zamiast nazwy uniforma podajemy uchwyt do tekstury.
         glUniform1i (texName, 0);
 
+        glUniform4f (ctx->colorUniformLocation, 0, 0, 0, 0);
+
         glEnableVertexAttribArray (ctx->positionAttribLocation);
         glEnableVertexAttribArray (ctx->texCoordInAttribLocation);
 
@@ -163,4 +167,3 @@ void Image::update (Model::IModel *model, Event::UpdateEvent *, View::GLContext 
 }
 
 } // nam
-#endif
