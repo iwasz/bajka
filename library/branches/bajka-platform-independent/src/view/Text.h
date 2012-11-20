@@ -6,35 +6,23 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ANDROID
 #ifndef BAJKA_VIEW_TEXT_H_
 #define BAJKA_VIEW_TEXT_H_
 
 #include "openGl/OpenGl.h"
 #include "util/ReflectionMacros.h"
 #include "resource/IFont.h"
-#include "Primitive.h"
+#include "Image.h"
 
 namespace View {
 
-class Text : public Primitive {
+class Text : public Image {
 public:
         C__ (void)
         b_ ("Primitive")
 
-        Text () : font (NULL),
-                hash (0),
-                texWidth (0),
-                texHeight (0),
-                imgWidth (0),
-                imgHeight (0),
-                multiline (false),
-                align (IFont::LEFT) {}
-
-        virtual ~Text () {}
-
-        /// Do the drawing.
-        virtual void update (Model::IModel *model, Event::UpdateEvent *e, View::GLContext *ctx);
+        Text ();
+        virtual ~Text ();
 
         IFont *getFont () const { return font; }
         void setFont (IFont *f) { font = f; }
@@ -48,26 +36,24 @@ public:
         IFont::TextAlign getAlign () const { return align; }
         m_ (setAlign) void setAlign (int a) { align = (IFont::TextAlign)a; } // TODO typ na Align
 
+        Color const &getForeground () const { return foreground; }
+        m_ (setForeground) void setForeground (Color const &foreground) { this->foreground = foreground; }
+
         double getWidthHint () const;
         double getHeightHint () const;
 
-private:
+protected:
 
-        void init ();
-        void initIf ();
+        virtual void check ();
 
 private:
 
         IFont *p_ (font);
         std::string p_ (text);
         std::size_t hash;
-        GLuint texName;
-        // Rozmiary textury (potęga 2jki)
-        int texWidth, texHeight;
-        // Faktyczne rozmiary bitmapy (równe rozmiarom regionu, lub rozmiarom obrazka, jeśli region pusty).
-        int imgWidth, imgHeight;
         bool p_ (multiline);
         IFont::TextAlign align;
+        Color foreground;
 
         E_ (Text)
 };
@@ -75,4 +61,3 @@ private:
 } /* namespace View */
 
 #endif /* TEXT_H_ */
-#endif

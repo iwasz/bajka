@@ -6,7 +6,6 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ANDROID
 #ifndef BAJKA_LOOPIMAGE_H_
 #define BAJKA_LOOPIMAGE_H_
 
@@ -77,4 +76,3 @@ unsigned int const LOOP_Y = 5;
 } /* namespace Tween */
 
 #endif /* LOOPIMAGE_H_ */
-#endif

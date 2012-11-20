@@ -6,7 +6,6 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ANDROID
 #include "view/openGl/OpenGl.h"
 #include "LoopImage.h"
 #include "model/IModel.h"
@@ -31,9 +30,7 @@ void LoopImage::update (Model::IModel *model, Event::UpdateEvent *, View::GLCont
 {
         assertThrow (model->isBox (), "LoopImage::update : only box models are supported here.");
 
-        if (!initialized) {
-                init (model);
-        }
+        check ();
 
         glEnable (GL_TEXTURE_2D);
         glTexEnvf (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
@@ -60,4 +57,3 @@ void LoopImage::update (Model::IModel *model, Event::UpdateEvent *, View::GLCont
 }
 
 } /* namespace View */
-#endif

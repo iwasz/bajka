@@ -66,10 +66,11 @@ Ptr <IBitmap> TTFFont::render (std::string const &text, View::Color const &fgCol
 {
         switch (renderType) {
         case SOLID:
-                return TTF_RenderUTF8_Solid (font, text.c_str (), fgColor);
+                // TODO! kiedy expand jest na true, to obcina! Powinno być na true!
+                return TTF_RenderUTF8_Solid (font, text.c_str (), fgColor, false);
 
         case BLENDED:
-                return TTF_RenderUTF8_Blended (font, text.c_str (), fgColor);
+                return TTF_RenderUTF8_Blended (font, text.c_str (), fgColor, false);
         }
 
         throw Util::RuntimeException ("TTFFont::render : unknown renderType");

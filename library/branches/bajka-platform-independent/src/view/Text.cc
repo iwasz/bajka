@@ -6,7 +6,6 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ANDROID
 #include "util/Math.h"
 #include "model/Model.h"
 #include "Text.h"
@@ -16,11 +15,24 @@
 
 namespace View {
 
+Text::Text () : font (NULL),
+        hash (0),
+        multiline (false),
+        align (IFont::LEFT)
+{
+}
+
+/****************************************************************************/
+
+Text::~Text ()
+{
+}
+
 /****************************************************************************/
 
 double Text::getWidthHint () const
 {
-        const_cast <Text *> (this)->initIf ();
+        const_cast <Text *> (this)->check ();
         return imgWidth;
 }
 
@@ -28,14 +40,24 @@ double Text::getWidthHint () const
 
 double Text::getHeightHint () const
 {
-        const_cast <Text *> (this)->initIf ();
+        const_cast <Text *> (this)->check ();
         return imgHeight;
 }
 
 /****************************************************************************/
 
-void Text::init ()
+void Text::check ()
 {
+        static boost::hash <std::string> hf = boost::hash <std::string> ();
+        std::size_t h = hf (text);
+
+        if (h != hash) {
+                hash = h;
+        }
+        else {
+                return;
+        }
+
         Ptr <IBitmap> bitmap;
         assert (font);
 
@@ -55,8 +77,6 @@ void Text::init ()
 
 /*--------------------------------------------------------------------------*/
 
-        // TODO może nie trzeba za każdym razem tworzyć nowej tekstury, poza tym nie wiem, czy nie wycieka pamięć w karcie tu.
-        glGenTextures(1, &texName);
         glBindTexture(GL_TEXTURE_2D, texName);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
@@ -76,38 +96,4 @@ void Text::init ()
                      bitmap->getData ());
 }
 
-/****************************************************************************/
-
-void Text::initIf ()
-{
-        static boost::hash <std::string> hf = boost::hash <std::string> ();
-        std::size_t h = hf (text);
-
-        if (h != hash) {
-                init ();
-                hash = h;
-        }
-}
-
-/****************************************************************************/
-
-void Text::update (Model::IModel *model, Event::UpdateEvent *, View::GLContext *ctx)
-{
-        initIf ();
-
-        glEnable (GL_TEXTURE_2D);
-        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-        glBindTexture(GL_TEXTURE_2D, texName);
-
-        glBegin (GL_QUADS);
-                glTexCoord2i (0, 1); glVertex2i (0, 0);
-                glTexCoord2i (0, 0); glVertex2i (0, texHeight);
-                glTexCoord2i (1, 0); glVertex2i (texWidth, texHeight);
-                glTexCoord2i (1, 1); glVertex2i (texWidth, 0);
-        glEnd();
-
-        glDisable (GL_TEXTURE_2D);
-}
-
 } /* namespace View */
-#endif
