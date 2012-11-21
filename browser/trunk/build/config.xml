@@ -7,9 +7,10 @@
 <!-- | undefined behaviour.                                                                  | -->
 <!-- +=======================================================================================+ -->
 
-  <Config id="config" viewportWidth="1280" viewportHeight="720" autoProjection="true" windowCaption="Bajka browser">
+<!--   <Config id="config" viewportWidth="1280" viewportHeight="720" autoProjection="true" windowCaption="Bajka browser"> -->
 <!--   <Config id="config" viewportWidth="160" viewportHeight="100" projectionWidth="1280" projectionHeight="720" windowCaption="Bajka browser"> -->
-    <value set-as="vertex">#version 150
+  <Config id="config" viewportWidth="160" viewportHeight="100" autoProjection="true" windowCaption="Bajka browser">
+    <value set-as="vertex">#version 120
 attribute vec4 position;
 attribute vec2 texCoordIn;
 
@@ -25,7 +26,7 @@ void main()
 }                                                  
     </value>
     
-    <value set-as="fragment">#version 150
+    <value set-as="fragment">#version 120
     
 uniform vec4 color = vec4 (0.0, 0.0, 0.0, 0.0);
 varying vec2 texCoordOut;
@@ -33,7 +34,8 @@ uniform sampler2D textureIn;
 
 void main()
 {
-  gl_FragColor = color + texture (textureIn, texCoordOut);
+//  gl_FragColor = color + mix (texture2D (textureIn, texCoordOut), vec4(1.0, 0.0, 0.0, 1.0), 0.5);
+  gl_FragColor = color + texture2D (textureIn, texCoordOut);
 }
     </value>
   </Config>
