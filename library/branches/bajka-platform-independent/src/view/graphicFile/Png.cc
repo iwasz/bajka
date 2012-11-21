@@ -138,10 +138,16 @@ void pngLoad (Common::DataSource *source,
         }
 
         int scanLineLen = *widthOut * (bit_depth / 8) * num_channels;
+#ifdef BOTTOM_PLACEMENT
         int shiftYBytes = (*heightOut - height) * scanLineLen;
+#endif
 
         for (int row = 0; row < (int)height; ++row) {
-                row_pointers[row] = (png_bytep)*data + row * scanLineLen /*+ shiftXBytes*/ + shiftYBytes;
+                row_pointers[row] = (png_bytep)*data + row * scanLineLen
+#ifdef BOTTOM_PLACEMENT
+                                + shiftYBytes*
+#endif
+                                ;
         }
 
         /* Read the entire image in one go */
