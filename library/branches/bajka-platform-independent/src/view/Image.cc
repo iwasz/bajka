@@ -138,10 +138,10 @@ void Image::update (Model::IModel *model, Event::UpdateEvent *, View::GLContext 
         float texCoordH = double (imgHeight) / texHeight;
 
         GLfloat texCoords[] = {
-                0.0,       1.0 - texCoordH,
-                texCoordW, 1.0 - texCoordH,
-                0.0,       1.0,
-                texCoordW, 1.0
+                0.0,       0,
+                texCoordW, 0,
+                0.0,       texCoordH,
+                texCoordW, texCoordH
         };
 
         glBindBuffer (GL_ARRAY_BUFFER, texCoordBuffer);

@@ -119,11 +119,17 @@ void jpegLoad (Common::DataSource *source,
 
         /* JSAMPLEs per row in output buffer */
         int scanLineLen = *widthOut * (BITS_IN_JSAMPLE / 8) * cinfo.output_components;
+#ifdef BOTTOM_PLACEMENT
         int shiftYBytes = (*heightOut - *visibleHeightOut) * scanLineLen;
+#endif
         JSAMPROW rowptr;
 
         while (cinfo.output_scanline < cinfo.output_height) {
-                rowptr = ((JSAMPROW)*data) + shiftYBytes + cinfo.output_scanline * scanLineLen;
+                rowptr = ((JSAMPROW)*data) + cinfo.output_scanline * scanLineLen
+#ifdef BOTTOM_PLACEMENT
+                                + shiftYBytes
+#endif
+                                ;
                 (void) jpeg_read_scanlines (&cinfo, &rowptr, 1);
         }
 
