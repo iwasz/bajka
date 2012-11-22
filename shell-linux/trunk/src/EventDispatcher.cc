@@ -9,14 +9,15 @@
  ****************************************************************************/
 
 #include "EventDispatcher.h"
-#include "events/PointerInsideIndex.h"
-#include "events/EventIdex.h"
-#include "events/types/IEvent.h"
 #include "GraphicsService.h"
-#include "model/IGroup.h"
-#include "Platform.h"
-#include "util/IShell.h"
-#include "util/Config.h"
+#include <events/PointerInsideIndex.h>
+#include <events/EventIdex.h>
+#include <events/types/IEvent.h>
+#include <model/IGroup.h>
+#include <Platform.h>
+#include <util/IShell.h>
+#include <util/Config.h>
+#include <view/openGl/GLContext.h>
 
 namespace M = Model;
 namespace V = View;
@@ -26,13 +27,13 @@ using namespace Event;
 
 /****************************************************************************/
 
-bool EventDispatcher::pollAndDispatch (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex)
+bool EventDispatcher::pollAndDispatch (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex, View::GLContext const *ctx)
 {
         SDL_Event event;
         bool ret = false;
 
         while (SDL_PollEvent (&event)) {
-                Event::IEvent *e = translate (&event);
+                Event::IEvent *e = translate (&event, ctx);
                 ret |= dispatch (m, modeliIndex, pointerInsideIndex, e);
         }
 
@@ -41,15 +42,15 @@ bool EventDispatcher::pollAndDispatch (Model::IModel *m, Event::EventIndex const
 
 /****************************************************************************/
 
-Event::IEvent *EventDispatcher::translate (SDL_Event *event)
+Event::IEvent *EventDispatcher::translate (SDL_Event *event, View::GLContext const *ctx)
 {
         switch (event->type) {
         case SDL_MOUSEMOTION:
-                return updateMouseMotionEvent (event);
+                return updateMouseMotionEvent (event, ctx);
 
         case SDL_MOUSEBUTTONDOWN:
         case SDL_MOUSEBUTTONUP:
-                return updateMouseButtonEvent (event);
+                return updateMouseButtonEvent (event, ctx);
 
         case SDL_KEYDOWN:
                 return updateKeyboardDownEvent (event);
@@ -96,15 +97,12 @@ KeyboardEvent *EventDispatcher::updateKeyboardDownEvent (SDL_Event *event)
 
 /****************************************************************************/
 
-MouseMotionEvent *EventDispatcher::updateMouseMotionEvent (SDL_Event *event)
+MouseMotionEvent *EventDispatcher::updateMouseMotionEvent (SDL_Event *event, View::GLContext const *ctx)
 {
         mouseMotionEvent.setButtons ((unsigned int)event->motion.state);
 
-        int viewportWidth2 = config ()->viewportWidth;
-        int viewportHeight2 = config ()->viewportHeight;
-
         G::Point p;
-        mouseToDisplay (event->button.x, event->button.y, viewportWidth2, viewportHeight2, &p.x, &p.y);
+        ctx->mouseToDisplay (event->button.x, event->button.y, &p.x, &p.y);
         mouseMotionEvent.setPosition (p);
 
 #if 0
@@ -119,24 +117,21 @@ MouseMotionEvent *EventDispatcher::updateMouseMotionEvent (SDL_Event *event)
 
 /****************************************************************************/
 
-MouseButtonEvent *EventDispatcher::updateMouseButtonEvent (SDL_Event *event)
+MouseButtonEvent *EventDispatcher::updateMouseButtonEvent (SDL_Event *event, View::GLContext const *ctx)
 {
         return (event->button.type == SDL_MOUSEBUTTONDOWN) ?
-                        (updateMouseButtonEventImpl (&buttonPressEvent, event)) :
-                        (updateMouseButtonEventImpl (&buttonReleaseEvent, event));
+                        (updateMouseButtonEventImpl (&buttonPressEvent, event, ctx)) :
+                        (updateMouseButtonEventImpl (&buttonReleaseEvent, event, ctx));
 }
 
 /*--------------------------------------------------------------------------*/
 
-MouseButtonEvent *EventDispatcher::updateMouseButtonEventImpl (MouseButtonEvent *output, SDL_Event *event)
+MouseButtonEvent *EventDispatcher::updateMouseButtonEventImpl (MouseButtonEvent *output, SDL_Event *event, View::GLContext const *ctx)
 {
         output->setButton (translateMouseButton (event));
 
-        int viewportWidth2 = config ()->viewportWidth;
-        int viewportHeight2 = config ()->viewportHeight;
-
         G::Point p;
-        mouseToDisplay (event->button.x, event->button.y, viewportWidth2, viewportHeight2, &p.x, &p.y);
+        ctx->mouseToDisplay (event->button.x, event->button.y, &p.x, &p.y);
         output->setPosition (p);
         return output;
 }

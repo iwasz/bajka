@@ -40,8 +40,9 @@ struct Shell::Impl {
 
 Shell Shell::instance_;
 
-Util::Config *config () { return shell ()->getConfig (); }
 Util::IShell *shell () { return &Shell::instance_; }
+Util::Config *config () { return shell ()->getConfig (); }
+View::GLContext *glContext () { return shell ()->getGLContext (); }
 
 Shell::Shell () : myimpl (new Impl) {}
 Shell::~Shell () { delete myimpl; }
@@ -50,7 +51,7 @@ Shell::~Shell () { delete myimpl; }
 
 void Shell::dispatchEvents ()
 {
-        myimpl->dispatcher.pollAndDispatch (impl->model, impl->eventIndex, &impl->pointerInsideIndex);
+        myimpl->dispatcher.pollAndDispatch (impl->model, impl->eventIndex, &impl->pointerInsideIndex, getGLContext ());
 }
 
 /****************************************************************************/
