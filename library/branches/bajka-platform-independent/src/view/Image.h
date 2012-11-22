@@ -40,6 +40,7 @@ public:
 protected:
 
         virtual void check ();
+        void drawTile (float textureOffsetX, float textureOffsetY, View::GLContext *ctx);
 
 protected:
 

@@ -14,29 +14,11 @@
 
 namespace View {
 
-void LoopImage::drawTile (double x, double y)
-{
-        glBegin (GL_QUADS);
-                glTexCoord2i (0, 1); glVertex2i (x, y);
-                glTexCoord2i (0, 0); glVertex2i (x, texHeight + y);
-                glTexCoord2i (1, 0); glVertex2i (texWidth + x, texHeight + y);
-                glTexCoord2i (1, 1); glVertex2i (texWidth + x, y);
-        glEnd();
-}
-
-/****************************************************************************/
-
 void LoopImage::update (Model::IModel *model, Event::UpdateEvent *, View::GLContext *ctx)
 {
         assertThrow (model->isBox (), "LoopImage::update : only box models are supported here.");
-
-        check ();
-
-        glEnable (GL_TEXTURE_2D);
-        glTexEnvf (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-        glBindTexture (GL_TEXTURE_2D, texName);
-
         Model::IBox *b = dynamic_cast <Model::IBox *> (model);
+        check ();
 
         int bW = int (b->getWidth ());
         int bH = int (b->getHeight ());
@@ -49,11 +31,9 @@ void LoopImage::update (Model::IModel *model, Event::UpdateEvent *, View::GLCont
 
         for (int i = 0; i < countHoriz; ++i) {
                 for (int j = 0; j < countVert; ++j) {
-                        drawTile (i * imgWidth + oW, j * imgHeight + oH);
+                        drawTile (i * imgWidth + oW, j * imgHeight + oH, ctx);
                 }
         }
-
-        glDisable (GL_TEXTURE_2D);
 }
 
 } /* namespace View */

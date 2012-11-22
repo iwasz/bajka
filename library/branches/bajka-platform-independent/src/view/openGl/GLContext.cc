@@ -22,7 +22,8 @@ GLContext::GLContext () :
         positionAttribLocation (0),
         modelViewLocation (0),
         projectionLocation (0),
-        texCoordInAttribLocation (0)
+        texCoordInAttribLocation (0),
+        config (NULL)
 {
 }
 
@@ -44,6 +45,8 @@ void GLContext::init (Util::Config *config)
                 throw Util::InitException ("OpenGL 2.0 not available");
         }
 #endif
+
+        this->config = config;
 
         GLuint vertexShader = loadShader (GL_VERTEX_SHADER, config->vertex.c_str());
         GLuint fragmentShader = loadShader (GL_FRAGMENT_SHADER, config->fragment.c_str());
@@ -116,6 +119,28 @@ void GLContext::initProjectionMatrix (Util::Config *config)
         }
 
         projection.setViewport (-rX, rX, -rY, rY);
+
+//        projectionInverted = projection;
+//        projectionInverted.invert ();
+
+#if 0
+        std::cerr << "projection matrix : " << projection << std::endl;
+        std::cerr << "projection inverted matrix : " << projectionInverted << std::endl;
+#endif
+}
+
+/****************************************************************************/
+
+void GLContext::mouseToDisplay (int x, int y, float *nx, float *ny) const
+{
+        double projectionViewPortRatioW = config->projectionWidth / config->viewportWidth;
+        double projectionViewPortRatioH = config->projectionHeight / config->viewportHeight;
+        *nx = x * projectionViewPortRatioW - config->projectionWidth / 2.0;
+        *ny = (config->viewportHeight - y) * projectionViewPortRatioH - config->projectionHeight / 2.0;
+
+#if 0
+        std::cerr << "mouse input : (" << x << ", " << y << "), converted to : (" << *nx << ", " << *ny << ")" << std::endl;
+#endif
 }
 
 } /* namespace Common */

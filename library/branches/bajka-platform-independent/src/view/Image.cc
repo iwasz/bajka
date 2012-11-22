@@ -47,10 +47,6 @@ double Image::getWidthHint () const
                 return 0;
         }
 
-//        if (region.get ()) {
-//                return region->getWidth ();
-//        }
-
         return bitmap->getVisibleWidth ();
 }
 
@@ -61,10 +57,6 @@ double Image::getHeightHint () const
         if (!bitmap) {
                 return 0;
         }
-
-//        if (region.get ()) {
-//                return region->getHeight ();
-//        }
 
         return bitmap->getVisibleHeight ();
 }
@@ -117,15 +109,13 @@ void Image::check ()
 
 /****************************************************************************/
 
-void Image::update (Model::IModel *model, Event::UpdateEvent *, View::GLContext *ctx)
+void Image::drawTile (float textureOffsetX, float textureOffsetY, View::GLContext *ctx)
 {
-        check ();
-
         GLfloat verts[] = {
-                0.0,      0.0,       0.0, 1.0,
-                imgWidth, 0.0,       0.0, 1.0,
-                0,        imgHeight, 0.0, 1.0,
-                imgWidth, imgHeight, 0.0, 1.0
+                textureOffsetX,            textureOffsetY,             0.0, 1.0,
+                imgWidth + textureOffsetX, textureOffsetY,             0.0, 1.0,
+                textureOffsetX,            imgHeight + textureOffsetY, 0.0, 1.0,
+                imgWidth + textureOffsetX, imgHeight + textureOffsetY, 0.0, 1.0
         };
 
         // Stworzenie bufora i zainicjowanie go danymi z vertex array.
@@ -137,11 +127,16 @@ void Image::update (Model::IModel *model, Event::UpdateEvent *, View::GLContext 
         float texCoordW = double (imgWidth) / texWidth;
         float texCoordH = double (imgHeight) / texHeight;
 
+        /*
+         * Tekstura jest odwrócona chyba dlatego, że współrzędne Y tekstury rosną od dołu do góry,
+         * a współrzędne w obrazku PNG rosną od góry do do dołu. Dlatego trzeba podać współrzedne
+         * odwrotnie.
+         */
         GLfloat texCoords[] = {
-                0.0,       0,
-                texCoordW, 0,
                 0.0,       texCoordH,
-                texCoordW, texCoordH
+                texCoordW, texCoordH,
+                0.0,       0,
+                texCoordW, 0
         };
 
         glBindBuffer (GL_ARRAY_BUFFER, texCoordBuffer);
@@ -164,6 +159,14 @@ void Image::update (Model::IModel *model, Event::UpdateEvent *, View::GLContext 
 
         glDisableVertexAttribArray (ctx->positionAttribLocation);
         glDisableVertexAttribArray (ctx->texCoordInAttribLocation);
+}
+
+/****************************************************************************/
+
+void Image::update (Model::IModel *model, Event::UpdateEvent *, View::GLContext *ctx)
+{
+        check ();
+        drawTile (0, 0, ctx);
 }
 
 } // nam

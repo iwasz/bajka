@@ -19,7 +19,7 @@ const AffineMatrix AffineMatrix::UNITARY;
 
 /****************************************************************************/
 
-AffineMatrix::AffineMatrix () : BaseMatrixType (4, 4)
+AffineMatrix::AffineMatrix () : BaseMatrixType ()
 {
         resetIdentity ();
 }
@@ -30,7 +30,7 @@ AffineMatrix::AffineMatrix (const AffineMatrix &m) : BaseMatrixType (m) {}
 
 /****************************************************************************/
 
-AffineMatrix::AffineMatrix (Geometry::Point translate, double angle, double scale, Geometry::Point ct) : BaseMatrixType (4, 4)
+AffineMatrix::AffineMatrix (Geometry::Point translate, double angle, double scale, Geometry::Point ct) : BaseMatrixType ()
 {
 	double aRad = angle * M_PI / 180.0;
 	double s = scale * sin (aRad);
@@ -44,16 +44,9 @@ AffineMatrix::AffineMatrix (Geometry::Point translate, double angle, double scal
 
 /****************************************************************************/
 
-void AffineMatrix::resetIdentity ()
-{
-        *this = identity_matrix <double> (4);
-}
-
-/****************************************************************************/
-
 void AffineMatrix::move (const Geometry::Point &p)
 {
-        BaseMatrixType m (4, 4);
+        BaseMatrixType m;
 
         m (0,0) = 1;   m (0,1) = 0;   m (0,2) = 0;   m (0,3) = p.x;
         m (1,0) = 0;   m (1,1) = 1;   m (1,2) = 0;   m (1,3) = p.y;
@@ -86,7 +79,7 @@ void AffineMatrix::move (const Geometry::Point &p)
 
 void AffineMatrix::rotate (double r, Geometry::Point const &p)
 {
-        AffineMatrix m;
+        BaseMatrixType m;
 
         double c = cos (r);
         double s = sin (r);
@@ -104,7 +97,7 @@ void AffineMatrix::rotate (double r, Geometry::Point const &p)
 
 void AffineMatrix::resize (double w, double h, Geometry::Point const &p)
 {
-        BaseMatrixType m (4, 4);
+        BaseMatrixType m;
 
         m (0,0) = w;   m (0,1) = 0;   m (0,2) = 0;   m (0,3) = p.x - w * p.x;
         m (1,0) = 0;   m (1,1) = h;   m (1,2) = 0;   m (1,3) = p.y - h * p.x;
@@ -112,86 +105,6 @@ void AffineMatrix::resize (double w, double h, Geometry::Point const &p)
         m (3,0) = 0;   m (3,1) = 0;   m (3,2) = 0;   m (3,3) = 1;
 
         *this = prod (*this, m);
-}
-
-/****************************************************************************/
-
-void AffineMatrix::transform (Point *p) const
-{
-        double x = p->x;
-        double y = p->y;
-
-        // Looks odd, but it is like this_matrix (0, 0)
-        p->x = (x * operator()(0,0) + y * operator()(0,1) + operator()(0,3));
-        p->y = (x * operator()(1,0) + y * operator()(1,1) + operator()(1,3));
-}
-
-/****************************************************************************/
-
-Point AffineMatrix::getTransformed (const Point &p) const
-{
-        Point tmp (p);
-        transform (&tmp);
-        return tmp;
-}
-
-/****************************************************************************/
-
-void AffineMatrix::inverse ()
-{
-        invertMatrix (data ().begin (), data ().begin ());
-}
-
-/****************************************************************************/
-
-AffineMatrix AffineMatrix::getInversed () const
-{
-        AffineMatrix tmp = *this;
-        tmp.inverse ();
-        return tmp;
-}
-
-/**
- * Implementation teken from MESA.
- * @param m
- * @param invOut
- * @return
- */
-bool AffineMatrix::invertMatrix (const float m[16], float invOut[16])
-{
-        double inv[16], det;
-        int i;
-
-        inv[0]  =   m[5] * m[10] * m[15] - m[5] * m[11] * m [14] - m[9] * m[6] * m[15] + m[9] * m[7] * m[14] + m[13] * m[6] * m[11] - m[13] * m[7] * m[10];
-        inv[4]  =  -m[4] * m[10] * m[15] + m[4] * m[11] * m [14] + m[8] * m[6] * m[15] - m[8] * m[7] * m[14] - m[12] * m[6] * m[11] + m[12] * m[7] * m[10];
-        inv[8]  =   m[4] * m[9]  * m[15] - m[4] * m[11] * m [13] - m[8] * m[5] * m[15] + m[8] * m[7] * m[13] + m[12] * m[5] * m[11] - m[12] * m[7] * m[9];
-        inv[12] =  -m[4] * m[9]  * m[14] + m[4] * m[10] * m [13] + m[8] * m[5] * m[14] - m[8] * m[6] * m[13] - m[12] * m[5] * m[10] + m[12] * m[6] * m[9];
-        inv[1]  =  -m[1] * m[10] * m[15] + m[1] * m[11] * m [14] + m[9] * m[2] * m[15] - m[9] * m[3] * m[14] - m[13] * m[2] * m[11] + m[13] * m[3] * m[10];
-        inv[5]  =   m[0] * m[10] * m[15] - m[0] * m[11] * m [14] - m[8] * m[2] * m[15] + m[8] * m[3] * m[14] + m[12] * m[2] * m[11] - m[12] * m[3] * m[10];
-        inv[9]  =  -m[0] * m[9]  * m[15] + m[0] * m[11] * m [13] + m[8] * m[1] * m[15] - m[8] * m[3] * m[13] - m[12] * m[1] * m[11] + m[12] * m[3] * m[9];
-        inv[13] =   m[0] * m[9]  * m[14] - m[0] * m[10] * m [13] - m[8] * m[1] * m[14] + m[8] * m[2] * m[13] + m[12] * m[1] * m[10] - m[12] * m[2] * m[9];
-        inv[2]  =   m[1] * m[6]  * m[15] - m[1] * m[7]  * m [14] - m[5] * m[2] * m[15] + m[5] * m[3] * m[14] + m[13] * m[2] * m[7] -  m[13] * m[3] * m[6];
-        inv[6]  =  -m[0] * m[6]  * m[15] + m[0] * m[7]  * m [14] + m[4] * m[2] * m[15] - m[4] * m[3] * m[14] - m[12] * m[2] * m[7] +  m[12] * m[3] * m[6];
-        inv[10] =   m[0] * m[5]  * m[15] - m[0] * m[7]  * m [13] - m[4] * m[1] * m[15] + m[4] * m[3] * m[13] + m[12] * m[1] * m[7] -  m[12] * m[3] * m[5];
-        inv[14] =  -m[0] * m[5]  * m[14] + m[0] * m[6]  * m [13] + m[4] * m[1] * m[14] - m[4] * m[2] * m[13] - m[12] * m[1] * m[6] +  m[12] * m[2] * m[5];
-        inv[3]  =  -m[1] * m[6]  * m[11] + m[1] * m[7]  * m [10] + m[5] * m[2] * m[11] - m[5] * m[3] * m[10] - m[9]  * m[2] * m[7] +  m[9]  * m[3] * m[6];
-        inv[7]  =   m[0] * m[6]  * m[11] - m[0] * m[7]  * m [10] - m[4] * m[2] * m[11] + m[4] * m[3] * m[10] + m[8]  * m[2] * m[7] -  m[8]  * m[3] * m[6];
-        inv[11] =  -m[0] * m[5]  * m[11] + m[0] * m[7]  * m [9] +  m[4] * m[1] * m[11] - m[4] * m[3] * m[9] -  m[8]  * m[1] * m[7] +  m[8]  * m[3] * m[5];
-        inv[15] =   m[0] * m[5]  * m[10] - m[0] * m[6]  * m [9] -  m[4] * m[1] * m[10] + m[4] * m[2] * m[9] +  m[8]  * m[1] * m[6] -  m[8]  * m[2] * m[5];
-
-        det = m[0] * inv[0] + m[1] * inv[4] + m[2] * inv[8] + m[3] * inv[12];
-
-        if (det == 0) {
-                return false;
-        }
-
-        det = 1.0 / det;
-
-        for (i = 0; i < 16; i++) {
-                invOut[i] = inv[i] * det;
-        }
-
-        return true;
 }
 
 } // nam

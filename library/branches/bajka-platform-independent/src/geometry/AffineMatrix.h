@@ -11,8 +11,6 @@
 
 #include <boost/geometry/strategies/transform/matrix_transformers.hpp>
 #include <vector>
-#include "Point.h"
-#include "Box.h"
 #include "BaseMatrixType.h"
 
 namespace Geometry {
@@ -34,27 +32,11 @@ public:
 
 /*------transformations-----------------------------------------------------*/
 
-        void resetIdentity ();
-        void inverse ();
-        AffineMatrix getInversed () const;
-
         void move (const Geometry::Point &p);
         void rotate (double r, Geometry::Point const &p = ZERO_POINT);
         void resize (double w, double h, Geometry::Point const &p = ZERO_POINT);
 
-/*------apply-transformation------------------------------------------------*/
-
-        void transform (Point *) const;
-        Point getTransformed (const Point &) const;
-
-///*--------------------------------------------------------------------------*/
-
         static const AffineMatrix UNITARY;
-
-private:
-
-        bool invertMatrix (const float m[16], float invOut[16]);
-
 };
 
 typedef std::vector <AffineMatrix> AffineMatrixVector;

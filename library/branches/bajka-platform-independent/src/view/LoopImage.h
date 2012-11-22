@@ -33,10 +33,6 @@ public:
                         int getOffsetY () const { return offsetY; }
         m_ (setOffsetY) void setOffsetY (int o) { offsetY = o; }
 
-protected:
-
-        void drawTile (double x, double y);
-
 private:
 
         int offsetX;

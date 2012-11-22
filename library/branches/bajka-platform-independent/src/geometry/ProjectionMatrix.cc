@@ -12,7 +12,9 @@
 namespace Geometry {
 using namespace boost::numeric::ublas;
 
-void ProjectionMatrix::setViewport (float left, float right, float top, float bottom)
+const ProjectionMatrix ProjectionMatrix::UNITARY;
+
+void ProjectionMatrix::setViewport (float left, float right, float bottom, float top)
 {
         operator() (0,0) = 2.0 / (right - left);   operator() (0,1) = 0;                    operator() (0,2) = 0;    operator() (0,3) = -(right + left) / (right - left);
         operator() (1,0) = 0;                      operator() (1,1) = 2.0 / (top - bottom); operator() (1,2) = 0;    operator() (1,3) = -(top + bottom) / (top - bottom);
