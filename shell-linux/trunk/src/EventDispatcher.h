@@ -22,6 +22,10 @@ class PointerInsideIndex;
 class EventIndex;
 }
 
+namespace View {
+class GLContext;
+}
+
 /**
  * Generuje eventy używając do tego SDL.
  * \ingroup Events
@@ -33,20 +37,20 @@ public:
         /**
          * Pobiera kolejne eventy z systemu i przekazuje je do dispatch.
          */
-        bool pollAndDispatch (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex);
+        bool pollAndDispatch (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex, View::GLContext const *ctx);
 
         void reset ();
 
 private:
 
-        Event::IEvent *translate (SDL_Event *event);
+        Event::IEvent *translate (SDL_Event *event, View::GLContext const *ctx);
         Event::MouseButton translateMouseButton (SDL_Event *event);
 
         Event::KeyboardEvent *updateKeyboardUpEvent (SDL_Event *event);
         Event::KeyboardEvent *updateKeyboardDownEvent (SDL_Event *event);
-        Event::MouseMotionEvent *updateMouseMotionEvent (SDL_Event *event);
-        Event::MouseButtonEvent *updateMouseButtonEvent (SDL_Event *event);
-        Event::MouseButtonEvent *updateMouseButtonEventImpl (Event::MouseButtonEvent *output, SDL_Event *event);
+        Event::MouseMotionEvent *updateMouseMotionEvent (SDL_Event *event, View::GLContext const *ctx);
+        Event::MouseButtonEvent *updateMouseButtonEvent (SDL_Event *event, View::GLContext const *ctx);
+        Event::MouseButtonEvent *updateMouseButtonEventImpl (Event::MouseButtonEvent *output, SDL_Event *event, View::GLContext const *ctx);
         Event::ActiveEvent *updateActiveEvent (SDL_Event *event);
         Event::ResizeEvent *updateResizeEvent (SDL_Event *event);
 
