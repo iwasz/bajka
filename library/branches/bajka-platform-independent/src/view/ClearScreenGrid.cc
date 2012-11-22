@@ -61,8 +61,7 @@ ClearScreenGrid::ClearScreenGrid () : density (20), gridVertsCount (0)
 
         glBindBuffer (GL_ARRAY_BUFFER, gridBuffer);
         glBufferData (GL_ARRAY_BUFFER, verts.size () * sizeof (GLfloat), &verts.front (), GL_STATIC_DRAW);
-        glEnableVertexAttribArray (glContext ()->positionAttribLocation);
-        glVertexAttribPointer (glContext ()->positionAttribLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
+        glBindBuffer (GL_ARRAY_BUFFER, 0);
 
         GLfloat verts1[] = {
                 -w2 - 1, 0,       0, 1,
@@ -73,9 +72,6 @@ ClearScreenGrid::ClearScreenGrid () : density (20), gridVertsCount (0)
 
         glBindBuffer (GL_ARRAY_BUFFER, axesBuffer);
         glBufferData (GL_ARRAY_BUFFER, 16 * sizeof (GLfloat), verts1, GL_STATIC_DRAW);
-        glEnableVertexAttribArray (glContext ()->positionAttribLocation);
-        glVertexAttribPointer (glContext ()->positionAttribLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
-
         glBindBuffer (GL_ARRAY_BUFFER, 0);
 }
 
@@ -99,13 +95,16 @@ void ClearScreenGrid::update (Model::IModel *, Event::UpdateEvent *e, View::GLCo
         }
 
         glLineWidth (1);
-        glEnableVertexAttribArray (ctx->positionAttribLocation);
 
         glBindBuffer (GL_ARRAY_BUFFER, gridBuffer);
+        glEnableVertexAttribArray (ctx->positionAttribLocation);
+        glVertexAttribPointer (glContext ()->positionAttribLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
         glUniform4f (ctx->colorUniformLocation, gridColor.r, gridColor.g, gridColor.b, gridColor.a);
         glDrawArrays (GL_LINES, 0, gridVertsCount);
 
         glBindBuffer (GL_ARRAY_BUFFER, axesBuffer);
+        glEnableVertexAttribArray (ctx->positionAttribLocation);
+        glVertexAttribPointer (glContext ()->positionAttribLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
         glUniform4f (ctx->colorUniformLocation, gridColor.r - 0.1, gridColor.g - 0.1, gridColor.b - 0.1, gridColor.a);
         glDrawArrays (GL_LINES, 0, 4);
 
