@@ -26,7 +26,12 @@ class Config;
 class IShell;
 }
 
+namespace View {
+class GLContext;
+}
+
 extern Util::Config *config ();
 extern Util::IShell *shell ();
+extern View::GLContext *glContext ();
 
 #endif /* SHELL_H_ */

@@ -24,8 +24,6 @@ namespace Util {
 struct Config;
 }
 
-extern void mouseToDisplay (int x, int y, int windowWidth, int windowHeight, float *nx, float *ny);
-
 /**
  * Ładuje kod źródłowy i kompiluje shader. Zwraca uchwyt do niego.
  */

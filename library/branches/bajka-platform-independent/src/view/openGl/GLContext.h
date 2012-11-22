@@ -50,6 +50,11 @@ public:
         Geometry::AffineMatrix const &getCurrentMatrix () const;
         Geometry::ProjectionMatrix const &getProjectionMatrix () const { return projection; }
 
+        /**
+         * Wspołrzędne myszy na wspołrzedne projekcji (clip coordinates, czy jak one tam...)
+         */
+        void mouseToDisplay (int x, int y, float *nx, float *ny) const;
+
 public:
 
         /// To jest tylko do odczytu - nie należy przyopisywać nic do tych pól.
@@ -68,6 +73,8 @@ private:
 
         Geometry::AffineMatrixVector matrixStack;
         Geometry::ProjectionMatrix projection;
+//        Geometry::ProjectionMatrix projectionInverted;
+        Util::Config *config;
 
 };
 

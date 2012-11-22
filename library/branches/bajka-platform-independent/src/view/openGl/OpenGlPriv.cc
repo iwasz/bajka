@@ -99,23 +99,4 @@ GLuint linkProgram (GLuint vertexShader, GLuint fragmentShader)
         return programObject;
 }
 
-/****************************************************************************/
-
-void mouseToDisplay (int x, int y, int windowWidth, int windowHeight, float *nx, float *ny)
-{
-        GLdouble model[16];
-        glGetDoublev (GL_MODELVIEW_MATRIX, model);
-
-        GLdouble proj[16];
-        glGetDoublev (GL_PROJECTION_MATRIX, proj);
-
-        GLint view[4];
-        glGetIntegerv (GL_VIEWPORT, view);
-
-        GLdouble mx, my, mz;
-        gluUnProject(x, windowHeight - y, 0.0f, model, proj, view, &mx, &my, &mz);
-        *nx = mx;
-        *ny = my;
-}
-
 #endif

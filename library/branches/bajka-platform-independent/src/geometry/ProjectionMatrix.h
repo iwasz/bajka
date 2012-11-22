@@ -23,9 +23,10 @@ namespace Geometry {
 class ProjectionMatrix : public BaseMatrixType {
 public:
 
-        ProjectionMatrix () : BaseMatrixType (4, 4) {}
-        void setViewport (float left, float right, float top, float bottom);
+        ProjectionMatrix () : BaseMatrixType () {}
+        void setViewport (float left, float right, float bottom, float top);
 
+        static const ProjectionMatrix UNITARY;
 };
 
 } // namespace

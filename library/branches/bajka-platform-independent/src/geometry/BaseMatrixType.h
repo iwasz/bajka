@@ -10,6 +10,7 @@
 #define BASEMATRIXTYPE_H_
 
 #include <boost/numeric/ublas/matrix.hpp>
+#include "Point.h"
 
 namespace Geometry {
 
@@ -21,7 +22,34 @@ namespace Geometry {
  * Tu jest podany parametr szablonowy column_major, który mówi o ustawieniu
  * elementów w pamięci (kolumnami, czy wierszami).
  */
-typedef boost::numeric::ublas::matrix <float, boost::numeric::ublas::column_major> BaseMatrixType;
+namespace {
+typedef boost::numeric::ublas::matrix <float, boost::numeric::ublas::column_major> BaseMatrixType_T;
+}
+
+class BaseMatrixType : public BaseMatrixType_T {
+public:
+
+        BaseMatrixType () : BaseMatrixType_T (4, 4) { resetIdentity (); }
+        BaseMatrixType (const BaseMatrixType &m) : BaseMatrixType_T (m) {}
+
+        template<class AE>
+        BaseMatrixType (const boost::numeric::ublas::matrix_expression<AE> &ae) : BaseMatrixType_T (ae) {}
+
+/*--------------------------------------------------------------------------*/
+
+        void resetIdentity ();
+        void invert ();
+        BaseMatrixType getInversed () const;
+
+/*------apply-transformation------------------------------------------------*/
+
+        void transform (Point *) const;
+        Point getTransformed (const Point &) const;
+
+private:
+
+        bool invertMatrix (const float m[16], float invOut[16]);
+};
 
 }
 
