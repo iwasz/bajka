@@ -99,7 +99,8 @@ ELSE()
     AUX_SOURCE_DIRECTORY ("$ENV{NDK}/sources/android/native_app_glue" SOURCES)
     INCLUDE_DIRECTORIES ("$ENV{NDK}/sources/android/native_app_glue")
     
-    INCLUDE_DIRECTORIES ("/home/iwasz/local/share/android-toolchain/user/include/chipmunk")
+    # TODO - jakoś automagicznie znaleźć się nie da?
+    INCLUDE_DIRECTORIES ("/home/iwasz/local/share/android-toolchain/arm-linux-androideabi/include/chipmunk")
     link_directories($ENV{ANDROID_STANDALONE_TOOLCHAIN}/user/lib)    
 ENDIF()
 

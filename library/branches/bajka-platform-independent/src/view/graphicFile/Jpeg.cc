@@ -163,13 +163,13 @@ bool checkIfJpeg (Common::DataSource *source)
         is_JPG = false;
         in_scan = false;
 
-        if (source->read (magic, 2, 1)) {
+        if (source->read (magic, 2)) {
 
                 if ((magic[0] == 0xFF) && (magic[1] == 0xD8)) {
                         is_JPG = true;
 
                         while (is_JPG) {
-                                if (source->read (magic, 1, 2) != 2) {
+                                if (source->read (magic, 2) != 2) {
                                         is_JPG = false;
                                 }
                                 else if ((magic[0] != 0xFF) && (in_scan == false)) {
@@ -190,7 +190,7 @@ bool checkIfJpeg (Common::DataSource *source)
                                 else if ((magic[1] >= 0xD0) && (magic[1] < 0xD9)) {
                                         /* These have nothing else */
                                 }
-                                else if (source->read (magic + 2, 1, 2) != 2) {
+                                else if (source->read (magic + 2, 2) != 2) {
                                         is_JPG = false;
                                 }
                                 else {
@@ -244,7 +244,7 @@ static boolean fill_input_buffer (j_decompress_ptr cinfo)
 {
         MySourceMgr *src = (MySourceMgr *)cinfo->src;
         Common::DataSource *source = src->source;
-        int nbytes = source->read (src->buffer, 1, INPUT_BUFFER_SIZE);
+        int nbytes = source->read (src->buffer, INPUT_BUFFER_SIZE);
 
         if (nbytes == 0) {
                 /* Insert a fake EOI marker */
