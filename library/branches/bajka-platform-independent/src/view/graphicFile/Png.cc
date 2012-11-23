@@ -170,7 +170,7 @@ bool checkIfPng (Common::DataSource *source)
         unsigned char buf[PNG_BYTES_TO_CHECK];
 
         /* Read in some of the signature bytes */
-        if (source->read (buf, 1, PNG_BYTES_TO_CHECK) != PNG_BYTES_TO_CHECK)
+        if (source->read (buf, PNG_BYTES_TO_CHECK) != PNG_BYTES_TO_CHECK)
                 return false;
 
         /* Compare the first PNG_BYTES_TO_CHECK bytes of the signature.
@@ -209,7 +209,7 @@ static void userReadFn (png_structp png_ptr, png_bytep data, png_size_t length)
          */
         Common::DataSource *source = static_cast <Common::DataSource *> (png_get_io_ptr (png_ptr));
 
-        size_t check = source->read (data, 1, length);
+        size_t check = source->read (data, length);
 
         if (check != length) {
                 png_error(png_ptr, "Read Error");

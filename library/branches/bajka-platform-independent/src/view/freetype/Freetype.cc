@@ -233,7 +233,7 @@ static unsigned long RWread (FT_Stream stream, unsigned long offset, unsigned ch
                 return 0;
         }
 
-        return src->read (buffer, 1, (int) count);
+        return src->read (buffer, (int) count);
 }
 
 /****************************************************************************/

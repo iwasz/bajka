@@ -16,8 +16,7 @@
 #if defined (LINUX)
 #include <GL/glew.h>
 #elif defined (ANDROID)
-//#include <GLES2/gl2.h>
-#include <GLES/gl.h>
+#include <GLES2/gl2.h>
 #endif
 
 namespace Util {
