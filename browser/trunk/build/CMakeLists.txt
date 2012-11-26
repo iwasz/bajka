@@ -40,14 +40,20 @@ pkg_check_modules (BAJKA REQUIRED "bajka")
 INCLUDE_DIRECTORIES (${BAJKA_INCLUDE_DIRS})
 link_directories(${BAJKA_LIBRARY_DIRS})
 
-pkg_check_modules (SHELL REQUIRED "shell-linux")
+if (NOT ANDROID)
+    pkg_check_modules (SHELL REQUIRED "shell-linux")
+else ()
+    pkg_check_modules (SHELL REQUIRED "shell-android")
+endif ()
+
 INCLUDE_DIRECTORIES (${SHELL_INCLUDE_DIRS})
 link_directories(${SHELL_LIBRARY_DIRS})
 
-# Testowo
-pkg_check_modules (GLEW REQUIRED "glew")
-INCLUDE_DIRECTORIES (${GLEW_INCLUDE_DIRS})
-link_directories(${GLEW_LIBRARY_DIRS})
+if (NOT ANDROID)
+    pkg_check_modules (GLEW REQUIRED "glew")
+    INCLUDE_DIRECTORIES (${GLEW_INCLUDE_DIRS})
+    link_directories(${GLEW_LIBRARY_DIRS})
+endif ()
 
 # Sources
 AUX_SOURCE_DIRECTORY (../src SOURCES)
@@ -55,13 +61,23 @@ AUX_SOURCE_DIRECTORY (../src SOURCES)
 # Local includes (inside project).
 INCLUDE_DIRECTORIES (../src)
 
-add_executable (browser ${SOURCES})
-TARGET_LINK_LIBRARIES (browser boost_program_options)
+if (NOT ANDROID)
+    add_executable (browser ${SOURCES})
+else ()
+    add_library (browser SHARED ${SOURCES})
+endif ()
+
+if (NOT ANDROID)
+    TARGET_LINK_LIBRARIES (browser boost_program_options)
+endif ()
+
 TARGET_LINK_LIBRARIES (browser ${TILIAE_LIBRARIES})
 TARGET_LINK_LIBRARIES (browser ${BAJKA_LIBRARIES})
 TARGET_LINK_LIBRARIES (browser ${SHELL_LIBRARIES})
 TARGET_LINK_LIBRARIES (browser chipmunk)
-TARGET_LINK_LIBRARIES (browser boost_filesystem)
-TARGET_LINK_LIBRARIES (browser boost_system)
-TARGET_LINK_LIBRARIES (browser ${GLEW_LIBRARIES})
 
+if (NOT ANDROID)
+    TARGET_LINK_LIBRARIES (browser boost_filesystem)
+    TARGET_LINK_LIBRARIES (browser boost_system)
+    TARGET_LINK_LIBRARIES (browser ${GLEW_LIBRARIES})
+endif ()

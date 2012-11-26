@@ -23,9 +23,11 @@ IController::HandlingType DebugButtonController::onButtonPress (Event::ButtonPre
                 primitive->setForeground (clicked);
         }
 
+#ifndef ANDROID
         if (sound) {
                 sound->play ();
         }
+#endif
 
         if (quit) {
                 shell ()->quit ();
