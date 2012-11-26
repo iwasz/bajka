@@ -301,4 +301,25 @@ View::GLContext *AbstractShell::getGLContext ()
         return &impl->glContext;
 }
 
+/****************************************************************************/
+
+void AbstractShell::pause ()
+{
+        impl->loopPaused = true;
+}
+
+/****************************************************************************/
+
+void AbstractShell::resume ()
+{
+        impl->loopPaused = false;
+}
+
+/****************************************************************************/
+
+bool AbstractShell::isPaused () const
+{
+        return impl->loopPaused;
+}
+
 } /* namespace Util */

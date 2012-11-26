@@ -95,10 +95,7 @@ IF(NOT ANDROID)
     # Chipmunk
     INCLUDE_DIRECTORIES ("/usr/local/include/chipmunk")
     INCLUDE_DIRECTORIES ("/home/iwasz/local/include/chipmunk")
-ELSE()    
-    AUX_SOURCE_DIRECTORY ("$ENV{NDK}/sources/android/native_app_glue" SOURCES)
-    INCLUDE_DIRECTORIES ("$ENV{NDK}/sources/android/native_app_glue")
-    
+ELSE()        
     # TODO - jakoś automagicznie znaleźć się nie da?
     INCLUDE_DIRECTORIES ("/home/iwasz/local/share/android-toolchain/arm-linux-androideabi/include/chipmunk")
     link_directories($ENV{ANDROID_STANDALONE_TOOLCHAIN}/user/lib)    
@@ -140,17 +137,17 @@ if (ANDROID)
     add_library (bajka STATIC ${SOURCES})
     
     # Android-specific Log Support
-    TARGET_LINK_LIBRARIES (bajka log)
-    
+#    TARGET_LINK_LIBRARIES (bajka log)
+#    
     # The EGL graphics library
-    TARGET_LINK_LIBRARIES (bajka EGL)
-    
+#    TARGET_LINK_LIBRARIES (bajka EGL)
+#    
     # The Android native application APIs
-    TARGET_LINK_LIBRARIES (bajka android)
-    
+#    TARGET_LINK_LIBRARIES (bajka android)
+#    
     # The OpenGL ES 1.x Library
-    TARGET_LINK_LIBRARIES (bajka GLESv1_CM)
-    TARGET_LINK_LIBRARIES (bajka stdc++)
+#    TARGET_LINK_LIBRARIES (bajka GLESv1_CM)
+#    TARGET_LINK_LIBRARIES (bajka stdc++)
 else ()
     add_library (bajka SHARED ${SOURCES})
 endif ()
@@ -185,3 +182,6 @@ INSTALL (
     OWNER_READ OWNER_WRITE OWNER_EXECUTE
     GROUP_READ GROUP_EXECUTE
     WORLD_READ WORLD_EXECUTE)
+
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/pc/bajka.pc.in ${CMAKE_CURRENT_BINARY_DIR}/pc/bajka.pc @ONLY)
+    
