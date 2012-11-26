@@ -13,8 +13,9 @@
 #include <controller/EmptyController.h>
 #include <view/draw/Color.h>
 #include <model/manager/IModelManager.h>
+#ifndef ANDROID
 #include <sound/Source.h>
-
+#endif
 /**
  *
  */
@@ -40,7 +41,9 @@ private:
         Model::IModelManager *p_ (modelManager);
         std::string p_ (file);
         std::string p_ (name);
+#ifndef ANDROID
         Source *p_ (sound);
+#endif
         bool p_ (quit)
 
         E_ (DebugButtonController)

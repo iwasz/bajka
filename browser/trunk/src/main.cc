@@ -70,8 +70,7 @@ void android_main (struct android_app* state) {
     app_dummy();
 
     Shell *shell = Shell::instance ();
-    state->userData = shell;
-    return shell->run (NULL);
+    return shell->run (NULL, state);
 }
 
 #endif
