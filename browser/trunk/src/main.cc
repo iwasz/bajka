@@ -8,16 +8,18 @@
 
 #include <Shell.h>
 #include <Bajka.h>
+#ifndef ANDROID
 #include <boost/program_options/options_description.hpp>
 #include <boost/program_options/variables_map.hpp>
 #include <boost/program_options/cmdline.hpp>
 #include <boost/program_options/parsers.hpp>
+#endif
 #include <string>
 #include "DebugButtonController.h"
 #include "ReloadableXmlModelManager.h"
 #include "SceneController.h"
-#include "GLESWidget.h"
 
+#ifndef ANDROID
 namespace po = boost::program_options;
 
 int main (int argc, char **argv)
@@ -55,4 +57,21 @@ int main (int argc, char **argv)
         return shell->run (config);
 }
 
+#else // ANDROID
+/**
+ * This is the main entry point of a native application that is using
+ * android_native_app_glue.  It runs in its own thread, with its own
+ * event loop for receiving input events and doing other things.
+ */
+void android_main (struct android_app* state) {
+    struct engine engine;
 
+    // Make sure glue isn't stripped.
+    app_dummy();
+
+    Shell *shell = Shell::instance ();
+    state->userData = shell;
+    return shell->run (NULL);
+}
+
+#endif
