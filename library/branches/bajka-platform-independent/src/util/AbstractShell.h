@@ -46,6 +46,9 @@ protected:
                 void loop ();
         virtual void destroy ();
         virtual void dispatchEvents () = 0;
+                void pause ();
+                void resume ();
+                bool isPaused () const;
 
         class Impl;
         AbstractShellImpl *impl;
