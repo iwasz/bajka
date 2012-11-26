@@ -27,9 +27,12 @@ public:
         AbstractShell ();
         virtual ~AbstractShell ();
 
-        int run (Util::ShellConfig const &cfg);
+        int run (Util::ShellConfig const *cfg, void *userData = NULL);
         void quit ();
         virtual void reset ();
+        void pause ();
+        void resume ();
+        bool isPaused () const;
 
         Model::IModel *getModel ();
         virtual void setModel (Model::IModel *model);
@@ -46,16 +49,13 @@ protected:
                 void loop ();
         virtual void destroy ();
         virtual void dispatchEvents () = 0;
-                void pause ();
-                void resume ();
-                bool isPaused () const;
 
         class Impl;
         AbstractShellImpl *impl;
 
 private:
 
-        void overrideConfig (Util::ShellConfig const &cfg);
+        void overrideConfig (Util::ShellConfig const *cfg);
         void updateLayout (Model::IModel *root);
 
 };
