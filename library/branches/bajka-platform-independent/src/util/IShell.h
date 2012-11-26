@@ -50,19 +50,25 @@ class IShell {
 public:
         virtual ~IShell() {}
 
-        virtual int run (Util::ShellConfig const &cfg) = 0;
+        virtual int run (Util::ShellConfig const *cfg, void *userData) = 0;
         virtual void quit () = 0;
+        virtual  void pause () = 0;
+        virtual  void resume () = 0;
+        virtual  bool isPaused () const = 0;
 
-        virtual void init () = 0;
-        virtual void loop () = 0;
-        virtual void destroy () = 0;
+        virtual Util::Config *getConfig () = 0;
+        virtual View::GLContext *getGLContext () = 0;
 
         virtual void onManagerLoadModel () = 0;
         virtual void onManagerUnloadModel () = 0;
 
         virtual void setModel (Model::IModel *model) = 0;
-        virtual Util::Config *getConfig () = 0;
-        virtual View::GLContext *getGLContext () = 0;
+
+protected:
+
+        virtual void init () = 0;
+        virtual void loop () = 0;
+        virtual void destroy () = 0;
 
 };
 

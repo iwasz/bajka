@@ -40,11 +40,13 @@ AbstractShell::~AbstractShell () { delete impl; }
 
 /****************************************************************************/
 
-int AbstractShell::run (Util::ShellConfig const &cfg)
+int AbstractShell::run (Util::ShellConfig const *cfg, void *userData)
 {
+        impl->userData = userData;
+
         try {
                 {
-                        Ptr <MetaContainer> metaContainer = CompactMetaService::parseFile (cfg.configFile);
+                        Ptr <MetaContainer> metaContainer = CompactMetaService::parseFile (cfg->configFile);
                         Ptr <BeanFactoryContainer> container = ContainerFactory::create (metaContainer, true);
 
                         container->addConversion (typeid (Geometry::Point), Geometry::stringToPointVariant);
@@ -62,7 +64,7 @@ int AbstractShell::run (Util::ShellConfig const &cfg)
 
                         init ();
 
-                        Ptr <BeanFactoryContainer> container2 = Container::ContainerFactory::createAndInit (Container::CompactMetaService::parseFile (cfg.definitionFile), true, container.get ());
+                        Ptr <BeanFactoryContainer> container2 = Container::ContainerFactory::createAndInit (Container::CompactMetaService::parseFile (cfg->definitionFile), true, container.get ());
                         impl->modelManager = ocast <M::IModelManager *> (container2->getBean ("modelManager"));
 
                         loop ();
@@ -153,26 +155,26 @@ void AbstractShell::destroy ()
 
 /****************************************************************************/
 
-void AbstractShell::overrideConfig (Util::ShellConfig const &cfg)
+void AbstractShell::overrideConfig (Util::ShellConfig const *cfg)
 {
-        if (cfg.fullScreen) {
+        if (cfg->fullScreen) {
                 impl->config->fullScreen = true;
         }
 
-        if (cfg.showAABB) {
+        if (cfg->showAABB) {
                 impl->config->showAABB = true;
         }
 
-        if (cfg.viewportWidth > 0) {
-                impl->config->viewportWidth = cfg.viewportWidth;
+        if (cfg->viewportWidth > 0) {
+                impl->config->viewportWidth = cfg->viewportWidth;
         }
 
-        if (cfg.viewportHeight > 0) {
-                impl->config->viewportHeight = cfg.viewportHeight;
+        if (cfg->viewportHeight > 0) {
+                impl->config->viewportHeight = cfg->viewportHeight;
         }
 
-        if (cfg.loopDelayMs > 0) {
-                impl->config->loopDelayMs = cfg.viewportHeight;
+        if (cfg->loopDelayMs > 0) {
+                impl->config->loopDelayMs = cfg->viewportHeight;
         }
 }
 
