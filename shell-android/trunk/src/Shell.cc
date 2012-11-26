@@ -44,7 +44,14 @@ namespace U = Util;
 /****************************************************************************/
 
 struct Shell::Impl {
-        Impl () : state (NULL), sensorManager (NULL), accelerometerSensor (NULL), sensorEventQueue (NULL) {}
+        Impl () : state (NULL),
+                  sensorManager (NULL),
+                  accelerometerSensor (NULL),
+                  sensorEventQueue (NULL),
+                  display (NULL),
+                  surface (NULL),
+                  context (NULL)/*,
+                  savedState (NULL)*/ {}
 
         android_app *state;
         ASensorManager *sensorManager;
@@ -53,6 +60,7 @@ struct Shell::Impl {
         EGLDisplay display;
         EGLSurface surface;
         EGLContext context;
+//        struct saved_state savedState;
 };
 
 /****************************************************************************/
@@ -106,6 +114,69 @@ void Shell::dispatchEvents ()
         }
 }
 
+/**
+ * Process the next input event.
+ */
+static int32_t engine_handle_input (struct android_app* app, AInputEvent* event) {
+//    struct engine* engine = (struct engine*)app->userData;
+//    if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
+//        engine->animating = 1;
+//        engine->state.x = AMotionEvent_getX(event, 0);
+//        engine->state.y = AMotionEvent_getY(event, 0);
+//        return 1;
+//    }
+    return 0;
+}
+
+/**
+ * Process the next main command.
+ */
+static void engine_handle_cmd (struct android_app* app, int32_t cmd) {
+    Shell *shell = static_cast <Shell *> (app->userData);
+
+    switch (cmd) {
+//        case APP_CMD_SAVE_STATE:
+//            // The system has asked us to save our current state.  Do so.
+//            engine->app->savedState = malloc(sizeof(struct saved_state));
+//            *((struct saved_state*)engine->app->savedState) = engine->state;
+//            engine->app->savedStateSize = sizeof(struct saved_state);
+//            break;
+//
+//        case APP_CMD_INIT_WINDOW:
+//            // The window is being shown, get it ready.
+//            if (engine->app->window != NULL) {
+//                engine_init_display(engine);
+//                engine_draw_frame(engine);
+//            }
+//            break;
+//
+        case APP_CMD_TERM_WINDOW:
+            // The window is being hidden or closed, clean it up.
+//            engine_term_display(engine);
+                shell->quit ();
+                break;
+//
+//        case APP_CMD_GAINED_FOCUS:
+//            // When our app gains focus, we start monitoring the accelerometer.
+//            if (engine->accelerometerSensor != NULL) {
+//                ASensorEventQueue_enableSensor(engine->sensorEventQueue, engine->accelerometerSensor);
+//                // We'd like to get 60 events per second (in us).
+//                ASensorEventQueue_setEventRate(engine->sensorEventQueue, engine->accelerometerSensor, (1000L/60)*1000);
+//            }
+//            break;
+//
+//        case APP_CMD_LOST_FOCUS:
+//            // When our app loses focus, we stop monitoring the accelerometer.
+//            // This is to avoid consuming battery while not being used.
+//            if (engine->accelerometerSensor != NULL) {
+//                ASensorEventQueue_disableSensor(engine->sensorEventQueue, engine->accelerometerSensor);
+//            }
+//            // Also stop animating.
+//            engine_draw_frame (engine);
+//            break;
+    }
+}
+
 /****************************************************************************/
 
 void Shell::init ()
@@ -113,10 +184,6 @@ void Shell::init ()
         if (TTF_Init () < 0) {
                 throw U::InitException ("TTF_Init failed");
         }
-
-        updateConfigViewport (impl->config);
-
-        // initialize OpenGL ES and EGL
 
         /*
          * Here specify the attributes of the desired configuration.
@@ -131,7 +198,7 @@ void Shell::init ()
                 EGL_NONE
         };
 
-        EGLint w, h, dummy, format;
+        EGLint w, h, format;
         EGLint numConfigs;
         EGLConfig config;
         EGLSurface surface;
@@ -163,36 +230,40 @@ void Shell::init ()
         eglQuerySurface (display, surface, EGL_WIDTH, &w);
         eglQuerySurface (display, surface, EGL_HEIGHT, &h);
 
-        engine->display = display;
-        engine->context = context;
-        engine->surface = surface;
-        engine->width = w;
-        engine->height = h;
-        engine->state.angle = 0;
+        impl->config->autoViewport = true;
+        impl->config->viewportWidth = w;
+        impl->config->viewportHeight = h;
+
+        if (impl->config->autoProjection) {
+                impl->config->projectionWidth = w;
+                impl->config->projectionHeight = h;
+        }
+
+        myimpl->display = display;
+        myimpl->context = context;
+        myimpl->surface = surface;
 
         // Initialize GL state.
-        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
         glEnable(GL_CULL_FACE);
-        glShadeModel(GL_SMOOTH);
         glDisable(GL_DEPTH_TEST);
 
         AbstractShell::init ();
 
-        memset(&engine, 0, sizeof(engine));
-        state->userData = &engine;
-        state->onAppCmd = engine_handle_cmd;
-        state->onInputEvent = engine_handle_input;
-        engine.app = state;
+        myimpl->state = static_cast <android_app *> (impl->userData);
+        myimpl->state->userData = this;
+        myimpl->state->onAppCmd = engine_handle_cmd;
+        myimpl->state->onInputEvent = engine_handle_input;
 
         // Prepare to monitor accelerometer
-        engine.sensorManager = ASensorManager_getInstance();
-        engine.accelerometerSensor = ASensorManager_getDefaultSensor(engine.sensorManager, ASENSOR_TYPE_ACCELEROMETER);
-        engine.sensorEventQueue = ASensorManager_createEventQueue(engine.sensorManager, state->looper, LOOPER_ID_USER, NULL, NULL);
+        myimpl->sensorManager = ASensorManager_getInstance ();
+        myimpl->accelerometerSensor = ASensorManager_getDefaultSensor (myimpl->sensorManager, ASENSOR_TYPE_ACCELEROMETER);
+        myimpl->sensorEventQueue = ASensorManager_createEventQueue (myimpl->sensorManager, myimpl->state->looper, LOOPER_ID_USER, NULL, NULL);
 
-        if (state->savedState != NULL) {
-            // We are starting with a previous saved state; restore from it.
-            engine.state = *(struct saved_state*)state->savedState;
-        }
+//        TODO tu można jakoś zapisywac stan - saved_state to jest struktura użytkownika.
+//        if (myimpl->state->savedState != NULL) {
+//                // We are starting with a previous saved state; restore from it.
+//                myimpl->savedState = *(struct saved_state *)myimpl->state->savedState;
+//        }
 }
 
 /****************************************************************************/
@@ -201,21 +272,23 @@ void Shell::destroy ()
 {
         AbstractShell::destroy ();
 
-        if (engine->display != EGL_NO_DISPLAY) {
-            eglMakeCurrent(engine->display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-            if (engine->context != EGL_NO_CONTEXT) {
-                eglDestroyContext(engine->display, engine->context);
-            }
-            if (engine->surface != EGL_NO_SURFACE) {
-                eglDestroySurface(engine->display, engine->surface);
-            }
-            eglTerminate(engine->display);
+        if (myimpl->display != EGL_NO_DISPLAY) {
+                eglMakeCurrent (myimpl->display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+
+                if (myimpl->context != EGL_NO_CONTEXT) {
+                        eglDestroyContext (myimpl->display, myimpl->context);
+                }
+
+                if (myimpl->surface != EGL_NO_SURFACE) {
+                        eglDestroySurface (myimpl->display, myimpl->surface);
+                }
+
+                eglTerminate (myimpl->display);
         }
 
-        engine->animating = 0;
-        engine->display = EGL_NO_DISPLAY;
-        engine->context = EGL_NO_CONTEXT;
-        engine->surface = EGL_NO_SURFACE;
+        myimpl->display = EGL_NO_DISPLAY;
+        myimpl->context = EGL_NO_CONTEXT;
+        myimpl->surface = EGL_NO_SURFACE;
 }
 
 /****************************************************************************/
@@ -223,67 +296,5 @@ void Shell::destroy ()
 void Shell::reset ()
 {
         AbstractShell::reset ();
-        myimpl->dispatcher.reset ();
-}
-
-/**
- * Process the next input event.
- */
-static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) {
-    struct engine* engine = (struct engine*)app->userData;
-    if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
-        engine->animating = 1;
-        engine->state.x = AMotionEvent_getX(event, 0);
-        engine->state.y = AMotionEvent_getY(event, 0);
-        return 1;
-    }
-    return 0;
-}
-
-/**
- * Process the next main command.
- */
-static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
-    struct engine* engine = (struct engine*)app->userData;
-    switch (cmd) {
-        case APP_CMD_SAVE_STATE:
-            // The system has asked us to save our current state.  Do so.
-            engine->app->savedState = malloc(sizeof(struct saved_state));
-            *((struct saved_state*)engine->app->savedState) = engine->state;
-            engine->app->savedStateSize = sizeof(struct saved_state);
-            break;
-        case APP_CMD_INIT_WINDOW:
-            // The window is being shown, get it ready.
-            if (engine->app->window != NULL) {
-                engine_init_display(engine);
-                engine_draw_frame(engine);
-            }
-            break;
-        case APP_CMD_TERM_WINDOW:
-            // The window is being hidden or closed, clean it up.
-            engine_term_display(engine);
-            break;
-        case APP_CMD_GAINED_FOCUS:
-            // When our app gains focus, we start monitoring the accelerometer.
-            if (engine->accelerometerSensor != NULL) {
-                ASensorEventQueue_enableSensor(engine->sensorEventQueue,
-                        engine->accelerometerSensor);
-                // We'd like to get 60 events per second (in us).
-                ASensorEventQueue_setEventRate(engine->sensorEventQueue,
-                        engine->accelerometerSensor, (1000L/60)*1000);
-            }
-            break;
-        case APP_CMD_LOST_FOCUS:
-            // When our app loses focus, we stop monitoring the accelerometer.
-            // This is to avoid consuming battery while not being used.
-            if (engine->accelerometerSensor != NULL) {
-                ASensorEventQueue_disableSensor(engine->sensorEventQueue,
-                        engine->accelerometerSensor);
-            }
-            // Also stop animating.
-            engine->animating = 0;
-            engine_draw_frame(engine);
-            break;
-    }
 }
 

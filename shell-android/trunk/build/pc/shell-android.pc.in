@@ -1,0 +1,15 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: shell-android
+Description: Shell android, Bajka companion library.
+Requires: bajka
+Version: 0.1
+Libs: -L${libdir} -lshell-android
+
+Cflags: \
+-I${includedir}/shell-android 
+
+
