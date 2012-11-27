@@ -18,6 +18,8 @@ ADD_DEFINITIONS (-Wall)
 ADD_DEFINITIONS (-DBAJKA_DEBUG)
 ADD_DEFINITIONS (-DREFLECTION_ENABLED)
 #ADD_DEFINITIONS (-fsyntax-only)
+ 
+SET (CMAKE_VERBOSE_MAKEFILE 0)
 
 if (ANDROID)
     ADD_DEFINITIONS (-static)
@@ -68,6 +70,8 @@ else ()
     add_library (browser SHARED ${SOURCES})
 endif ()
 
+set (CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
+
 if (NOT ANDROID)
     TARGET_LINK_LIBRARIES (browser boost_program_options)
 endif ()
@@ -91,20 +95,23 @@ if (ANDROID)
     INCLUDE_DIRECTORIES (${PNG_INCLUDE_DIRS})
     link_directories(${PNG_LIBRARY_DIRS})
     TARGET_LINK_LIBRARIES (browser ${PNG_LIBRARIES})
-    
-    pkg_check_modules (ZLIB REQUIRED "zlib")
-    INCLUDE_DIRECTORIES (${ZLIB_INCLUDE_DIRS})
-    link_directories(${ZLIB_LIBRARY_DIRS})
-    TARGET_LINK_LIBRARIES (browser ${ZLIB_LIBRARIES})
-    
-    FIND_PACKAGE (JPEG)
-    INCLUDE_DIRECTORIES (${JPEG_INCLUDE_DIR})
-    TARGET_LINK_LIBRARIES (browser ${JPEG_LIBRARIES})
+        
+#    FIND_PACKAGE (JPEG)
+#    INCLUDE_DIRECTORIES (${JPEG_INCLUDE_DIR})
+#    TARGET_LINK_LIBRARIES (browser ${JPEG_LIBRARIES})
+    TARGET_LINK_LIBRARIES (browser jpeg)
     
     pkg_check_modules (FREETYPE REQUIRED "freetype2")
     INCLUDE_DIRECTORIES (${FREETYPE_INCLUDE_DIRS})
     link_directories(${FREETYPE_LIBRARY_DIRS})    
     TARGET_LINK_LIBRARIES (browser ${FREETYPE_LIBRARIES})
+
+#    set (CMAKE_SHARED_LINKER_FLAGS "-static -Wl,--no-undefined")
+    
+    pkg_check_modules (ZLIB REQUIRED "zlib")
+    INCLUDE_DIRECTORIES (${ZLIB_INCLUDE_DIRS})
+    link_directories(${ZLIB_LIBRARY_DIRS})
+    TARGET_LINK_LIBRARIES (browser ${ZLIB_LIBRARIES})
     
     # Android-specific Log Support
     TARGET_LINK_LIBRARIES (browser log)
