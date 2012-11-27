@@ -14,6 +14,7 @@
 #include "util/Exceptions.h"
 #include <cstdlib>
 #include "util/Math.h"
+#include "Platform.h"
 
 namespace View {
 
@@ -185,7 +186,7 @@ bool checkIfPng (Common::DataSource *source)
  */
 static void userWarningFn (png_structp png_ptr, png_const_charp message)
 {
-        std::cerr << "libpng warning:" << message << std::endl;
+        printlog ("libpng warning:%s\n", message);
 }
 
 /* This is the default error handling function.  Note that replacements for

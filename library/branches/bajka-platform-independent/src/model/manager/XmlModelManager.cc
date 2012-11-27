@@ -10,6 +10,7 @@
 #include "util/IShell.h"
 #include <container/ContainerFactory.h>
 #include <iostream>
+#include "Platform.h"
 
 namespace Model {
 
@@ -33,13 +34,13 @@ IModel *XmlModelManager::get (std::string const &param1, std::string const &para
                 return m;
         }
         catch (Core::Exception const &e) {
-                std::cerr << "Exception caught : \n" << e.getMessage () << std::endl;
+                printlog ("Core::Exception caught : %s\n", e.getMessage ().c_str ());
         }
         catch (std::exception const &e) {
-                std::cerr << "exception caught : " << e.what () << std::endl;
+                printlog ("std::exception caught : %s\n", e.what ());
         }
         catch (...) {
-                std::cerr << "Unknown exception." << std::endl;
+                printlog ("Unknown exception caught");
         }
 
         return NULL;

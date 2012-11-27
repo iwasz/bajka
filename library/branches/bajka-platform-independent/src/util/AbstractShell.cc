@@ -40,13 +40,13 @@ AbstractShell::~AbstractShell () { delete impl; }
 
 /****************************************************************************/
 
-int AbstractShell::run (Util::ShellConfig const *cfg, void *userData)
+int AbstractShell::run (Util::ShellConfig const &cfg, void *userData)
 {
         impl->userData = userData;
 
         try {
                 {
-                        Ptr <MetaContainer> metaContainer = CompactMetaService::parseFile (cfg->configFile);
+                        Ptr <MetaContainer> metaContainer = CompactMetaService::parseFile (cfg.configFile);
                         Ptr <BeanFactoryContainer> container = ContainerFactory::create (metaContainer, true);
 
                         container->addConversion (typeid (Geometry::Point), Geometry::stringToPointVariant);
@@ -64,7 +64,7 @@ int AbstractShell::run (Util::ShellConfig const *cfg, void *userData)
 
                         init ();
 
-                        Ptr <BeanFactoryContainer> container2 = Container::ContainerFactory::createAndInit (Container::CompactMetaService::parseFile (cfg->definitionFile), true, container.get ());
+                        Ptr <BeanFactoryContainer> container2 = Container::ContainerFactory::createAndInit (Container::CompactMetaService::parseFile (cfg.definitionFile), true, container.get ());
                         impl->modelManager = ocast <M::IModelManager *> (container2->getBean ("modelManager"));
 
                         loop ();
@@ -73,16 +73,13 @@ int AbstractShell::run (Util::ShellConfig const *cfg, void *userData)
                 destroy ();
         }
         catch (Core::Exception const &e) {
-                std::cerr << "Exception caught : \n" << e.getMessage () << std::endl;
-                return EXIT_FAILURE;
+                printlog ("Core::Exception caught : %s\n", e.getMessage ().c_str ());
         }
         catch (std::exception const &e) {
-                std::cerr << "exception caught : " << e.what () << std::endl;
-                return EXIT_FAILURE;
+                printlog ("std::exception caught : %s\n", e.what ());
         }
         catch (...) {
-                std::cerr << "Unknown exception." << std::endl;
-                return EXIT_FAILURE;
+                printlog ("Unknown exception caught");
         }
 
         return EXIT_SUCCESS;
@@ -155,26 +152,26 @@ void AbstractShell::destroy ()
 
 /****************************************************************************/
 
-void AbstractShell::overrideConfig (Util::ShellConfig const *cfg)
+void AbstractShell::overrideConfig (Util::ShellConfig const &cfg)
 {
-        if (cfg->fullScreen) {
+        if (cfg.fullScreen) {
                 impl->config->fullScreen = true;
         }
 
-        if (cfg->showAABB) {
+        if (cfg.showAABB) {
                 impl->config->showAABB = true;
         }
 
-        if (cfg->viewportWidth > 0) {
-                impl->config->viewportWidth = cfg->viewportWidth;
+        if (cfg.viewportWidth > 0) {
+                impl->config->viewportWidth = cfg.viewportWidth;
         }
 
-        if (cfg->viewportHeight > 0) {
-                impl->config->viewportHeight = cfg->viewportHeight;
+        if (cfg.viewportHeight > 0) {
+                impl->config->viewportHeight = cfg.viewportHeight;
         }
 
-        if (cfg->loopDelayMs > 0) {
-                impl->config->loopDelayMs = cfg->viewportHeight;
+        if (cfg.loopDelayMs > 0) {
+                impl->config->loopDelayMs = cfg.viewportHeight;
         }
 }
 

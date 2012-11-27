@@ -9,13 +9,14 @@
 #include "Instructions1Controller.h"
 #include "../model/IModel.h"
 #include "../tween/Tween.h"
+#include "../src/Platform.h"
 
 namespace Demo {
 using namespace Tween;
 
 Controller::IController::HandlingType Instructions1Controller::onManagerLoad (Event::ManagerEvent *e, Model::IModel *m, View::IView *v)
 {
-        std::cerr << "Instructions1Controller::onManagerLoad" << std::endl;
+        printlog ("Instructions1Controller::onManagerLoad");
 
 //        timeline ()->add (
 //                to (testModel, 1000, BACK_OUT)->
