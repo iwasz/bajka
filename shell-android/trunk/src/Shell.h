@@ -35,6 +35,7 @@ private:
         void preInit ();
         void destroy ();
         void dispatchEvents ();
+        void swapBuffers ();
 
         friend Util::IShell *shell ();
 
