@@ -55,6 +55,8 @@ uint32_t getCurrentMs ()
         return ts.tv_sec * 1000 + ts.tv_nsec / 1000.0;
 }
 
+/****************************************************************************/
+
 void delayMs (uint32_t ms)
 {
         timespec req, res;
@@ -67,7 +69,9 @@ void delayMs (uint32_t ms)
         }
 }
 
-int log (const char *format, ...)
+/****************************************************************************/
+
+int printlog (const char *format, ...)
 {
         va_list args;
         va_start(args, format);
