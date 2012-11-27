@@ -68,10 +68,11 @@ int main (int argc, char **argv)
  */
 void android_main (struct android_app* state) {
     // Make sure glue isn't stripped.
-    app_dummy();
+//    app_dummy();
 
     Shell *shell = Shell::instance ();
-    shell->run (NULL, state);
+    Util::ShellConfig config;
+    shell->run (config, state);
 }
 
 #endif
