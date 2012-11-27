@@ -7,40 +7,19 @@
  ****************************************************************************/
 
 #include "ReloadableXmlModelManager.h"
+#ifndef ANDROID
 #include <boost/filesystem.hpp>
+#endif
 #include <iostream>
 #include <util/IShell.h>
 #include <model/IModel.h>
 #include <Platform.h>
 #include <tween/Manager.h>
+#include <container/Container.h>
 
 /****************************************************************************/
 
-Model::IModel *ReloadableXmlModelManager::get (std::string const &param1, std::string const &param2)
-{
-        try {
-                Ptr <Container::BeanFactoryContainer> newContainer = Container::ContainerFactory::createAndInit (Container::CompactMetaService::parseFile (param1), false, mainContainer);
-                Model::IModel *m = ocast <Model::IModel *> (newContainer->getBean (param2));
-
-                // Tu następuje skasowanie starego modelu.
-                childContainer = newContainer;
-                return m;
-        }
-        catch (Core::Exception const &e) {
-                std::cerr << "Exception caught : \n" << e.getMessage () << std::endl;
-        }
-        catch (std::exception const &e) {
-                std::cerr << "exception caught : " << e.what () << std::endl;
-        }
-        catch (...) {
-                std::cerr << "Unknown exception." << std::endl;
-        }
-
-        return NULL;
-}
-
-/****************************************************************************/
-
+#ifndef ANDROID
 bool ReloadableXmlModelManager::run (Util::IShell *shell)
 {
         uint32_t currentMs = getCurrentMs ();
@@ -78,4 +57,5 @@ bool ReloadableXmlModelManager::run (Util::IShell *shell)
 
         return true;
 }
+#endif
 
