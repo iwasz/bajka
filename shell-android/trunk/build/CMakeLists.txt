@@ -46,28 +46,10 @@ pkg_check_modules (BAJKA REQUIRED "bajka")
 INCLUDE_DIRECTORIES (${BAJKA_INCLUDE_DIRS})
 link_directories(${BAJKA_LIBRARY_DIRS})
 
-
-    
-# Find GL
-#include (FindOpenGL)
-#INCLUDE_DIRECTORIES (${OPENGL_INCLUDE_DIR})
-
-# sdl
-#include (FindSDL)
-#INCLUDE_DIRECTORIES (${SDL_INCLUDE_DIR})
-
-#pkg_check_modules (OPENAL REQUIRED "openal")    
-#INCLUDE_DIRECTORIES (${OPENAL_INCLUDE_DIR})
-#link_directories(${OPENAL_LIBRARY_DIRS})
-#
-#pkg_check_modules (ALUT REQUIRED "freealut")    
-#INCLUDE_DIRECTORIES (${ALUT_INCLUDE_DIR})
-#link_directories(${ALUT_LIBRARY_DIRS})
-
 # Sources
 AUX_SOURCE_DIRECTORY (../src SOURCES)
 AUX_SOURCE_DIRECTORY (../src/sound SOURCES)
-AUX_SOURCE_DIRECTORY ("$ENV{NDK}/sources/android/native_app_glue" SOURCES)
+#AUX_SOURCE_DIRECTORY ("$ENV{NDK}/sources/android/native_app_glue" SOURCES)
 INCLUDE_DIRECTORIES ("$ENV{NDK}/sources/android/native_app_glue")
 
 # Local includes (inside project).
@@ -75,24 +57,7 @@ INCLUDE_DIRECTORIES (../src)
 
 # Biblioteka z silnikiem bajka.
 add_library (shell-android STATIC ${SOURCES})
-TARGET_LINK_LIBRARIES (shell-android ${TILIAE_LIBRARIES})
-TARGET_LINK_LIBRARIES (shell-android ${BAJKA_LIBRARIES}) 
-#TARGET_LINK_LIBRARIES (shell-android ${OPENAL_LIBRARIES}) 
-#TARGET_LINK_LIBRARIES (shell-android ${ALUT_LIBRARIES}) 
-    
-# Android-specific Log Support
-TARGET_LINK_LIBRARIES (shell-android log)
-
-# The EGL graphics library
-TARGET_LINK_LIBRARIES (shell-android EGL)
-
-# The Android native application APIs
-TARGET_LINK_LIBRARIES (shell-android android)
-
-# The OpenGL ES 1.x Library
-TARGET_LINK_LIBRARIES (shell-android GLESv2)
-TARGET_LINK_LIBRARIES (shell-android stdc++)
-    
+       
 INSTALL (
     TARGETS shell-android
     DESTINATION lib 
