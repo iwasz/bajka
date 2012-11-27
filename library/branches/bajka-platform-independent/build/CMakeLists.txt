@@ -134,31 +134,20 @@ INCLUDE_DIRECTORIES (../src)
 
 # Biblioteka z silnikiem bajka.
 if (ANDROID)
-    add_library (bajka STATIC ${SOURCES})
-    
-    # Android-specific Log Support
-#    TARGET_LINK_LIBRARIES (bajka log)
-#    
-    # The EGL graphics library
-#    TARGET_LINK_LIBRARIES (bajka EGL)
-#    
-    # The Android native application APIs
-#    TARGET_LINK_LIBRARIES (bajka android)
-#    
-    # The OpenGL ES 1.x Library
-#    TARGET_LINK_LIBRARIES (bajka GLESv1_CM)
-#    TARGET_LINK_LIBRARIES (bajka stdc++)
+    add_library (bajka STATIC ${SOURCES})   
 else ()
     add_library (bajka SHARED ${SOURCES})
 endif ()
 
-TARGET_LINK_LIBRARIES (bajka ${OPENGL_LIBRARIES})
-TARGET_LINK_LIBRARIES (bajka ${TILIAE_LIBRARIES})
-TARGET_LINK_LIBRARIES (bajka ${JANSSON_LIBRARIES})
-TARGET_LINK_LIBRARIES (bajka ${PNG_LIBRARIES})
-TARGET_LINK_LIBRARIES (bajka ${ZLIB_LIBRARIES})
-TARGET_LINK_LIBRARIES (bajka ${JPEG_LIBRARIES})
-TARGET_LINK_LIBRARIES (bajka ${FREETYPE_LIBRARIES})
+if (NOT ANDROID)
+    TARGET_LINK_LIBRARIES (bajka ${OPENGL_LIBRARIES})
+    TARGET_LINK_LIBRARIES (bajka ${TILIAE_LIBRARIES})
+    TARGET_LINK_LIBRARIES (bajka ${JANSSON_LIBRARIES})
+    TARGET_LINK_LIBRARIES (bajka ${PNG_LIBRARIES})
+    TARGET_LINK_LIBRARIES (bajka ${ZLIB_LIBRARIES})
+    TARGET_LINK_LIBRARIES (bajka ${JPEG_LIBRARIES})
+    TARGET_LINK_LIBRARIES (bajka ${FREETYPE_LIBRARIES})
+endif ()
 
 if (USE_CHIPMUNK)
     TARGET_LINK_LIBRARIES (bajka chipmunk)

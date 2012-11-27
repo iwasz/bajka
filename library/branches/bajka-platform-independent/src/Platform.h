@@ -15,9 +15,6 @@
 extern uint32_t getCurrentMs ();
 extern void delayMs (uint32_t);
 
-// Graphics
-extern void swapBuffers ();
-
 // Logging
 extern int log (const char *format, ...);
 
