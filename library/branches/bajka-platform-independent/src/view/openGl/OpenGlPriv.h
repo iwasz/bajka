@@ -13,9 +13,9 @@
  * Inkluduje nagłówki OpenGL zależne od platformy.
  */
 
-#if defined (LINUX)
+#ifndef ANDROID
 #include <GL/glew.h>
-#elif defined (ANDROID)
+#else
 #include <GLES2/gl2.h>
 #endif
 
