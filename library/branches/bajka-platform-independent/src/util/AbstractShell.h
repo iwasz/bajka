@@ -27,7 +27,7 @@ public:
         AbstractShell ();
         virtual ~AbstractShell ();
 
-        int run (Util::ShellConfig const *cfg, void *userData = NULL);
+        int run (Util::ShellConfig const &cfg, void *userData = NULL);
         void quit ();
         virtual void reset ();
         void pause ();
@@ -55,7 +55,7 @@ protected:
 
 private:
 
-        void overrideConfig (Util::ShellConfig const *cfg);
+        void overrideConfig (Util::ShellConfig const &cfg);
         void updateLayout (Model::IModel *root);
 
 };

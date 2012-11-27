@@ -32,7 +32,9 @@ struct ShellConfig {
                 viewportWidth (-1),
                 viewportHeight (-1),
                 showAABB (false),
-                loopDelayMs (-1) {}
+                loopDelayMs (-1),
+                definitionFile ("main.xml"),
+                configFile ("config.xml") {}
 
         bool             fullScreen;
         int             viewportWidth;
@@ -50,7 +52,7 @@ class IShell {
 public:
         virtual ~IShell() {}
 
-        virtual int run (Util::ShellConfig const *cfg, void *userData) = 0;
+        virtual int run (Util::ShellConfig const &cfg, void *userData) = 0;
         virtual void quit () = 0;
         virtual  void pause () = 0;
         virtual  void resume () = 0;

@@ -16,7 +16,7 @@ extern uint32_t getCurrentMs ();
 extern void delayMs (uint32_t);
 
 // Logging
-extern int log (const char *format, ...);
+extern int printlog (const char *format, ...);
 
 namespace Util {
 class Config;
