@@ -13,7 +13,10 @@
 #include <boost/program_options/variables_map.hpp>
 #include <boost/program_options/cmdline.hpp>
 #include <boost/program_options/parsers.hpp>
+#else
+#include <android_native_app_glue.h>
 #endif
+
 #include <string>
 #include "DebugButtonController.h"
 #include "ReloadableXmlModelManager.h"
@@ -64,13 +67,11 @@ int main (int argc, char **argv)
  * event loop for receiving input events and doing other things.
  */
 void android_main (struct android_app* state) {
-    struct engine engine;
-
     // Make sure glue isn't stripped.
     app_dummy();
 
     Shell *shell = Shell::instance ();
-    return shell->run (NULL, state);
+    shell->run (NULL, state);
 }
 
 #endif

@@ -10,7 +10,6 @@
 #define RELOADABLE_XMLMODELMANAGER_H_
 
 #include <model/manager/XmlModelManager.h>
-#include <container/Container.h>
 #include "util/ReflectionMacros.h"
 
 class ReloadableXmlModelManager : public Model::XmlModelManager {
@@ -22,8 +21,9 @@ public:
         ReloadableXmlModelManager () : lastFileTime (0), lastMs (0) {}
         virtual ~ReloadableXmlModelManager () {}
 
-        virtual Model::IModel *get (std::string const &file, std::string const &name);
+#ifndef ANDROID
         virtual bool run (Util::IShell *shell);
+#endif
 
 private:
 
