@@ -36,6 +36,7 @@ private:
         void destroy ();
         void dispatchEvents ();
         void swapBuffers ();
+        Common::DataSource *newDataSource ();
 
         friend Util::IShell *shell ();
 
