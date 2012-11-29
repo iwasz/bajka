@@ -35,6 +35,7 @@
 #include "Shell.h"
 //#include "EventDispatcher.h"
 #include "sound/Sound.h"
+#include "common/dataSource/DataSource.h"
 
 namespace M = Model;
 namespace V = View;
@@ -342,4 +343,12 @@ void Shell::reset ()
 void Shell::swapBuffers ()
 {
         eglSwapBuffers (myimpl->display, myimpl->surface);
+}
+
+/****************************************************************************/
+
+Common::DataSource *Shell::newDataSource ()
+{
+        myimpl->state = static_cast <android_app *> (impl->userData);
+        return new Common::DataSource (myimpl->state->activity->assetManager);
 }
