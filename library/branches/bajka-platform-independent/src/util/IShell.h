@@ -19,6 +19,10 @@ namespace Model {
 class IModel;
 }
 
+namespace Common {
+class DataSource;
+}
+
 namespace Util {
 class Config;
 
@@ -72,6 +76,11 @@ protected:
         virtual void loop () = 0;
         virtual void destroy () = 0;
         virtual void swapBuffers () = 0;
+
+        /**
+         * Skasować za pomocą delete!
+         */
+        virtual Common::DataSource *newDataSource () = 0;
 
 };
 

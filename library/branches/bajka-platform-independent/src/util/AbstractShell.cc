@@ -23,6 +23,7 @@
 #include "tween/Manager.h"
 #include "Platform.h"
 #include "model/manager/IModelManager.h"
+#include "common/dataSource/DataSource.h"
 
 namespace Util {
 using namespace Container;
@@ -43,10 +44,11 @@ AbstractShell::~AbstractShell () { delete impl; }
 int AbstractShell::run (Util::ShellConfig const &cfg, void *userData)
 {
         impl->userData = userData;
+        Common::DataSource *ds = newDataSource ();
 
         try {
                 {
-                        Ptr <MetaContainer> metaContainer = CompactMetaService::parseFile (cfg.configFile);
+                        Ptr <MetaContainer> metaContainer = CompactMetaService::parseFile (ds, cfg.configFile);
                         Ptr <BeanFactoryContainer> container = ContainerFactory::create (metaContainer, true);
 
                         container->addConversion (typeid (Geometry::Point), Geometry::stringToPointVariant);
@@ -64,7 +66,7 @@ int AbstractShell::run (Util::ShellConfig const &cfg, void *userData)
 
                         init ();
 
-                        Ptr <BeanFactoryContainer> container2 = Container::ContainerFactory::createAndInit (Container::CompactMetaService::parseFile (cfg.definitionFile), true, container.get ());
+                        Ptr <BeanFactoryContainer> container2 = Container::ContainerFactory::createAndInit (Container::CompactMetaService::parseFile (ds, cfg.definitionFile), true, container.get ());
                         impl->modelManager = ocast <M::IModelManager *> (container2->getBean ("modelManager"));
 
                         loop ();
@@ -82,6 +84,7 @@ int AbstractShell::run (Util::ShellConfig const &cfg, void *userData)
                 printlog ("Unknown exception caught");
         }
 
+        delete ds;
         return EXIT_SUCCESS;
 }
 
