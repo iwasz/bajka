@@ -70,17 +70,15 @@ public:
 
         virtual void setModel (Model::IModel *model) = 0;
 
+        virtual Common::DataSource *getDataSource () = 0;
+        virtual void createDataSource () = 0;
+
 protected:
 
         virtual void init () = 0;
         virtual void loop () = 0;
         virtual void destroy () = 0;
         virtual void swapBuffers () = 0;
-
-        /**
-         * Skasować za pomocą delete!
-         */
-        virtual Common::DataSource *newDataSource () = 0;
 
 };
 

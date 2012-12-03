@@ -11,6 +11,8 @@
 #include "view/freetype/Freetype.h"
 #include "util/Exceptions.h"
 #include "view/resource/Bitmap.h"
+#include "Platform.h"
+#include "util/IShell.h"
 
 namespace View {
 
@@ -37,7 +39,7 @@ TTFFont::TTFFont (std::string const &path, int ptSize, long int index) : renderT
 
 TTFFont::~TTFFont ()
 {
-        TTF_CloseFont (font);
+        ttfCloseFont (font);
         font = NULL;
 }
 
@@ -53,7 +55,7 @@ void TTFFont::open (std::string const &path, int ptSize, long int index)
                 index = 0;
         }
 
-        font = TTF_OpenFontIndex (path.c_str (), ptSize, index);
+        font = ttfOpenFont (shell ()->getDataSource(), path.c_str (), ptSize, index);
 
         if (!font) {
                 throw Util::InitException ("TTFFont::open : !font");
@@ -66,10 +68,10 @@ Ptr <IBitmap> TTFFont::render (std::string const &text, View::Color const &fgCol
 {
         switch (renderType) {
         case SOLID:
-                return TTF_RenderUTF8_Solid (font, text.c_str (), fgColor, true);
+                return ttfRenderUTF8Solid (font, text.c_str (), fgColor, true);
 
         case BLENDED:
-                return TTF_RenderUTF8_Blended (font, text.c_str (), fgColor, true);
+                return ttfRenderUTF8Blended (font, text.c_str (), fgColor, true);
         }
 
         throw Util::RuntimeException ("TTFFont::render : unknown renderType");
@@ -82,7 +84,7 @@ Ptr <IBitmap> TTFFont::renderMulti (std::string const &text, View::Color const &
 #if 0
 //        TODO
         // Bez lineWrapu.
-        int lineSkip = TTF_FontLineSkip (font);
+        int lineSkip = ttfFontLineSkip (font);
         int width = 0, height = 0;
 
         Core::StringVector tokens;
@@ -91,7 +93,7 @@ Ptr <IBitmap> TTFFont::renderMulti (std::string const &text, View::Color const &
         // Ustal jaka będzie szerokość w pixelach najdłuższej wyrenderowanej linijki.
         for (Core::StringVector::const_iterator i = tokens.begin (); i != tokens.end (); ++i) {
                 int w = 0;
-                TTF_SizeUTF8 (font, i->c_str (), &w, &height);
+                ttfSizeUTF8 (font, i->c_str (), &w, &height);
 
                 if (w > width) {
                         width = w;
@@ -143,64 +145,64 @@ Ptr <IBitmap> TTFFont::renderMulti (std::string const &text, View::Color const &
 
 int TTFFont::getHinting () const
 {
-        return TTF_GetFontHinting (font);
+        return ttfGetFontHinting (font);
 }
 
 /****************************************************************************/
 
 void TTFFont::setHinting (int hint)
 {
-        if (TTF_GetFontHinting (font) == hint) {
+        if (ttfGetFontHinting (font) == hint) {
                 return;
         }
 
-        TTF_SetFontHinting (font, hint);
+        ttfSetFontHinting (font, hint);
 }
 
 /****************************************************************************/
 
 int TTFFont::getStyle () const
 {
-        return TTF_GetFontStyle (font);
+        return ttfGetFontStyle (font);
 }
 
 /****************************************************************************/
 
 void TTFFont::setStyle (int i)
 {
-        if (TTF_GetFontStyle (font) == i) {
+        if (ttfGetFontStyle (font) == i) {
                 return;
         }
 
-        TTF_SetFontStyle (font, i);
+        ttfSetFontStyle (font, i);
 }
 
 /****************************************************************************/
 
 int TTFFont::getOutline () const
 {
-        return TTF_GetFontOutline (font);
+        return ttfGetFontOutline (font);
 }
 
 /****************************************************************************/
 
 void TTFFont::setOutline (int i)
 {
-        TTF_SetFontOutline (font, i);
+        ttfSetFontOutline (font, i);
 }
 
 /****************************************************************************/
 
 bool TTFFont::getKerning () const
 {
-        return TTF_GetFontKerning (font);
+        return ttfGetFontKerning (font);
 }
 
 /****************************************************************************/
 
 void TTFFont::setKerning (bool b)
 {
-        TTF_SetFontKerning (font, b);
+        ttfSetFontKerning (font, b);
 }
 
 } /* namespace View */

@@ -23,10 +23,11 @@ void XmlModelManager::load (std::string const &param1, std::string const &param2
 
 /****************************************************************************/
 
-IModel *XmlModelManager::get (std::string const &param1, std::string const &param2)
+IModel *XmlModelManager::get (Util::IShell *shell, std::string const &param1, std::string const &param2)
 {
         try {
-                Ptr <Container::BeanFactoryContainer> newContainer = Container::ContainerFactory::createAndInit (Container::CompactMetaService::parseFile (param1), false, mainContainer);
+                Common::DataSource *ds = shell->getDataSource ();
+                Ptr <Container::BeanFactoryContainer> newContainer = Container::ContainerFactory::createAndInit (Container::CompactMetaService::parseFile (ds, param1), false, mainContainer);
                 Model::IModel *m = ocast <Model::IModel *> (newContainer->getBean (param2));
 
                 // Tu następuje skasowanie starego modelu.
@@ -34,13 +35,13 @@ IModel *XmlModelManager::get (std::string const &param1, std::string const &para
                 return m;
         }
         catch (Core::Exception const &e) {
-                printlog ("Core::Exception caught : %s\n", e.getMessage ().c_str ());
+                printlog ("Manager : Core::Exception caught : %s\n", e.getMessage ().c_str ());
         }
         catch (std::exception const &e) {
-                printlog ("std::exception caught : %s\n", e.what ());
+                printlog ("Manager : std::exception caught : %s\n", e.what ());
         }
         catch (...) {
-                printlog ("Unknown exception caught");
+                printlog ("Manager : Unknown exception caught");
         }
 
         return NULL;
@@ -62,7 +63,7 @@ bool XmlModelManager::run (Util::IShell *shell)
         }
 
         shell->onManagerUnloadModel ();
-        IModel *m = get (requestedFile, requestedName);
+        IModel *m = get (shell, requestedFile, requestedName);
 
         if (m) {
                 shell->setModel (m);

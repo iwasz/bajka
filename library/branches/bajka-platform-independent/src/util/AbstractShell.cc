@@ -44,7 +44,8 @@ AbstractShell::~AbstractShell () { delete impl; }
 int AbstractShell::run (Util::ShellConfig const &cfg, void *userData)
 {
         impl->userData = userData;
-        Common::DataSource *ds = newDataSource ();
+        createDataSource ();
+        Common::DataSource *ds = getDataSource ();
 
         try {
                 {
@@ -143,7 +144,10 @@ void AbstractShell::init ()
 {
         srand (time (NULL));
         Tween::init ();
+
+#ifndef ANDROID // TODO To nie może tak być!
         impl->glContext.init (impl->config);
+#endif
 }
 
 /****************************************************************************/
