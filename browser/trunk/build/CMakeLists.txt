@@ -133,3 +133,24 @@ if (NOT ANDROID)
     TARGET_LINK_LIBRARIES (browser boost_system)
     TARGET_LINK_LIBRARIES (browser ${GLEW_LIBRARIES})
 endif ()
+
+# http://www.rojtberg.net/465/debugging-native-code-with-ndk-gdb-using-standalone-cmake-toolchain/
+# TODO sprawdz, czy debug build
+if (ANDROID)
+    message ("1. generate Android.mk")
+    file (WRITE ./android/jni/Android.mk "APP_ABI := ${ANDROID_NDK_ABI_NAME}\n")
+    
+    message ("2. generate gdb.setup")
+    get_directory_property (INCLUDE_DIRECTORIES DIRECTORY . INCLUDE_DIRECTORIES)
+    string (REGEX REPLACE ";" " " INCLUDE_DIRECTORIES "${INCLUDE_DIRECTORIES}")
+#    file (WRITE ./android/libs/${ANDROID_NDK_ABI_NAME}/gdb.setup "set solib-search-path ./android/obj/local/${ANDROID_NDK_ABI_NAME}\n")
+    file (WRITE ./android/libs/${ANDROID_NDK_ABI_NAME}/gdb.setup "set solib-search-path ./android/libs/${ANDROID_NDK_ABI_NAME}\n")    
+    file (APPEND ./android/libs/${ANDROID_NDK_ABI_NAME}/gdb.setup "directory ${INCLUDE_DIRECTORIES}\n")
+    
+    message ("3. copy gdbserver executable")
+    file (COPY "$ENV{NDK}/toolchains/arm-linux-androideabi-4.4.3/prebuilt/gdbserver" DESTINATION "./android/libs/${ANDROID_NDK_ABI_NAME}/")
+    
+#    message ("4. copy lib to obj")
+#    add_custom_command(TARGET browser POST_BUILD COMMAND mkdir -p ./android/obj/local/${ANDROID_NDK_ABI_NAME}/)
+#    add_custom_command(TARGET browser POST_BUILD COMMAND cp ./android/libs/${ANDROID_NDK_ABI_NAME}/lib${LIBRARY_NAME}.so ./android/obj/local/${ANDROID_NDK_ABI_NAME}/)
+endif ()
