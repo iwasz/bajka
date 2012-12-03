@@ -72,7 +72,7 @@
   <LinearGroup id="button" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true" type="vertical">
     <label set-as="child" text="Button" view.foreground="@orange" />
     <Rectangle set-as="view" foreground="@orange" background="00000000" thickness="3"/>
-    <DebugButtonController set-as="controller" eventMask="0xffff" clicked="@siusiu"  normal="@orange"  hover="@crimson" modelManager="@modelManager" sound="@buttonSource" />
+    <DebugButtonController set-as="controller" eventMask="0xffff" clicked="@siusiu"  normal="@orange"  hover="@crimson" modelManager="@modelManager"  />
     <prop-alias name="file" value="controller.file" />
     <prop-alias name="name" value="controller.name" />
     <prop-alias name="text" value="children.0.view.text" />
