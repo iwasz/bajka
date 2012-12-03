@@ -195,24 +195,24 @@ static __inline__ int TTF_Glyph_strikethrough_top_row (TTF_Font *font, c_glyph *
  byteswapped.  A UNICODE BOM character at the beginning of a string
  will override this setting for that string.
  */
-void TTF_ByteSwappedUNICODE (int swapped)
+void ttfByteSwappedUNICODE (int swapped)
 {
         TTF_byteswapped = swapped;
 }
 
-static void TTF_SetFTError (const char *msg, FT_Error error)
+static void ttfSetFTError (const char *msg, FT_Error error)
 {
         throw Util::InitException (std::string ("Freetype : ") + msg);
 }
 
-int TTF_Init (void)
+int ttfInit (void)
 {
         int status = 0;
 
         if (!TTF_initialized) {
                 FT_Error error = FT_Init_FreeType (&library);
                 if (error) {
-                        TTF_SetFTError ("Couldn't init FreeType engine", error);
+                        ttfSetFTError ("Couldn't init FreeType engine", error);
                         status = -1;
                 }
         }
@@ -238,7 +238,7 @@ static unsigned long RWread (FT_Stream stream, unsigned long offset, unsigned ch
 
 /****************************************************************************/
 
-TTF_Font* TTF_OpenFontIndexRW (Common::DataSource *src, int freesrc, int ptsize, long index)
+TTF_Font* ttfOpenFont (Common::DataSource *src, const char *file, int freesrc, int ptsize, long index)
 {
         TTF_Font* font;
         FT_Error error;
@@ -247,6 +247,8 @@ TTF_Font* TTF_OpenFontIndexRW (Common::DataSource *src, int freesrc, int ptsize,
         FT_Stream stream;
         FT_CharMap found;
         int position, i;
+
+        src->open (file);
 
         if (!TTF_initialized) {
                 throw Util::InitException ("Freetype : library not initialized");
@@ -272,7 +274,7 @@ TTF_Font* TTF_OpenFontIndexRW (Common::DataSource *src, int freesrc, int ptsize,
         stream = (FT_Stream) malloc (sizeof(*stream));
 
         if (stream == NULL) {
-                TTF_CloseFont (font);
+                ttfCloseFont (font);
                 throw Util::InitException ("Freetype : Out of memory");
         }
 
@@ -290,8 +292,8 @@ TTF_Font* TTF_OpenFontIndexRW (Common::DataSource *src, int freesrc, int ptsize,
 
         error = FT_Open_Face (library, &font->args, index, &font->face);
         if (error) {
-                TTF_SetFTError ("Couldn't load font file", error);
-                TTF_CloseFont (font);
+                ttfSetFTError ("Couldn't load font file", error);
+                ttfCloseFont (font);
                 return NULL;
         }
         face = font->face;
@@ -319,8 +321,8 @@ TTF_Font* TTF_OpenFontIndexRW (Common::DataSource *src, int freesrc, int ptsize,
                 /* Set the character size and use default DPI (72) */
                 error = FT_Set_Char_Size (font->face, 0, ptsize * 64, 0, 0);
                 if (error) {
-                        TTF_SetFTError ("Couldn't set font size", error);
-                        TTF_CloseFont (font);
+                        ttfSetFTError ("Couldn't set font size", error);
+                        ttfCloseFont (font);
                         return NULL;
                 }
 
@@ -392,21 +394,20 @@ TTF_Font* TTF_OpenFontIndexRW (Common::DataSource *src, int freesrc, int ptsize,
         return font;
 }
 
-TTF_Font* TTF_OpenFontRW (Common::DataSource *src, int freesrc, int ptsize)
+TTF_Font* ttfOpenFont (Common::DataSource *src, const char *file, int freesrc, int ptsize)
 {
-        return TTF_OpenFontIndexRW (src, freesrc, ptsize, 0);
+        return ttfOpenFont (src, file, freesrc, ptsize, 0);
 }
 
-TTF_Font* TTF_OpenFontIndex (const char *file, int ptsize, long index)
+TTF_Font* ttfOpenFont (const char *file, int ptsize, long index)
 {
         Common::DataSource *rw = new Common::DataSource;
-        rw->open (file);
-        return TTF_OpenFontIndexRW (rw, 1, ptsize, index);
+        return ttfOpenFont (rw, file, 1, ptsize, index);
 }
 
-TTF_Font* TTF_OpenFont (const char *file, int ptsize)
+TTF_Font* ttfOpenFont (const char *file, int ptsize)
 {
-        return TTF_OpenFontIndex (file, ptsize, 0);
+        return ttfOpenFont (file, ptsize, 0);
 }
 
 static void Flush_Glyph (c_glyph* glyph)
@@ -817,7 +818,7 @@ static FT_Error Find_Glyph (TTF_Font* font, uint16_t ch, int want)
         return retval;
 }
 
-void TTF_CloseFont (TTF_Font* font)
+void ttfCloseFont (TTF_Font* font)
 {
         if (font) {
                 Flush_Cache (font);
@@ -874,68 +875,68 @@ std::auto_ptr <UnicodeString> utf8ToUnicode (const char *text)
         return unicode_text;
 }
 
-int TTF_FontHeight (const TTF_Font *font)
+int ttfFontHeight (const TTF_Font *font)
 {
         return (font->height);
 }
 
-int TTF_FontAscent (const TTF_Font *font)
+int ttfFontAscent (const TTF_Font *font)
 {
         return (font->ascent);
 }
 
-int TTF_FontDescent (const TTF_Font *font)
+int ttfFontDescent (const TTF_Font *font)
 {
         return (font->descent);
 }
 
-int TTF_FontLineSkip (const TTF_Font *font)
+int ttfFontLineSkip (const TTF_Font *font)
 {
         return (font->lineskip);
 }
 
-int TTF_GetFontKerning (const TTF_Font *font)
+int ttfGetFontKerning (const TTF_Font *font)
 {
         return (font->kerning);
 }
 
-void TTF_SetFontKerning (TTF_Font *font, int allowed)
+void ttfSetFontKerning (TTF_Font *font, int allowed)
 {
         font->kerning = allowed;
 }
 
-long TTF_FontFaces (const TTF_Font *font)
+long ttfFontFaces (const TTF_Font *font)
 {
         return (font->face->num_faces);
 }
 
-int TTF_FontFaceIsFixedWidth (const TTF_Font *font)
+int ttfFontFaceIsFixedWidth (const TTF_Font *font)
 {
         return (FT_IS_FIXED_WIDTH (font->face));
 }
 
-char *TTF_FontFaceFamilyName (const TTF_Font *font)
+char *ttfFontFaceFamilyName (const TTF_Font *font)
 {
         return (font->face->family_name);
 }
 
-char *TTF_FontFaceStyleName (const TTF_Font *font)
+char *ttfFontFaceStyleName (const TTF_Font *font)
 {
         return (font->face->style_name);
 }
 
-int TTF_GlyphIsProvided (const TTF_Font *font, uint16_t ch)
+int ttfGlyphIsProvided (const TTF_Font *font, uint16_t ch)
 {
         return (FT_Get_Char_Index (font->face, ch));
 }
 
-int TTF_GlyphMetrics (TTF_Font *font, uint16_t ch, int* minx, int* maxx, int* miny, int* maxy, int* advance)
+int ttfGlyphMetrics (TTF_Font *font, uint16_t ch, int* minx, int* maxx, int* miny, int* maxy, int* advance)
 {
         FT_Error error;
 
         error = Find_Glyph (font, ch, CACHED_METRICS);
         if (error) {
-                TTF_SetFTError ("Couldn't find glyph", error);
+                ttfSetFTError ("Couldn't find glyph", error);
                 return -1;
         }
 
@@ -963,7 +964,7 @@ int TTF_GlyphMetrics (TTF_Font *font, uint16_t ch, int* minx, int* maxx, int* mi
         return 0;
 }
 
-int TTF_SizeUNICODE (TTF_Font *font, uint16_t *text, int *w, int *h)
+int ttfSizeUNICODE (TTF_Font *font, uint16_t *text, int *w, int *h)
 {
         int status;
         const uint16_t *ch;
@@ -1073,11 +1074,11 @@ int TTF_SizeUNICODE (TTF_Font *font, uint16_t *text, int *w, int *h)
         return status;
 }
 
-int TTF_SizeUTF8 (TTF_Font *font, const char *inputText, int *w, int *h)
+int ttfSizeUTF8 (TTF_Font *font, const char *inputText, int *w, int *h)
 {
         std::auto_ptr <UnicodeString> textAuto = utf8ToUnicode (inputText);
         uint16_t *text = &textAuto->front ();
-        return TTF_SizeUNICODE (font, text, w, h);
+        return ttfSizeUNICODE (font, text, w, h);
 }
 
 static inline uint8_t filterAllphaNoop (uint8_t a)
@@ -1092,7 +1093,7 @@ static inline uint8_t filterAllphaMono (uint8_t a)
 
 typedef uint8_t (*FilterAlphaFunctionPtr) (uint8_t a);
 
-static Ptr <IBitmap> TTF_RenderUTF8_Impl (TTF_Font *font,
+static Ptr <IBitmap> ttfRenderUTF8Impl (TTF_Font *font,
                                    const char *inputText,
                                    View::Color const &fg,
                                    int cacheType,
@@ -1108,7 +1109,7 @@ static Ptr <IBitmap> TTF_RenderUTF8_Impl (TTF_Font *font,
         int visibleHeight;
 
         /* Get the dimensions of the text surface */
-        if ((TTF_SizeUNICODE (font, text, &width, &height) < 0) || !width) {
+        if ((ttfSizeUNICODE (font, text, &width, &height) < 0) || !width) {
                 throw Util::InitException ("Freetype : Text has zero width");
         }
 
@@ -1217,39 +1218,39 @@ static Ptr <IBitmap> TTF_RenderUTF8_Impl (TTF_Font *font,
         return textBuf;
 }
 
-Ptr <IBitmap> TTF_RenderUTF8_Solid (TTF_Font *font, const char *inputText, View::Color const &fg, bool expandDimensions2)
+Ptr <IBitmap> ttfRenderUTF8Solid (TTF_Font *font, const char *inputText, View::Color const &fg, bool expandDimensions2)
 {
-        return TTF_RenderUTF8_Impl (font, inputText, fg, CACHED_BITMAP, filterAllphaMono, expandDimensions2);
+        return ttfRenderUTF8Impl (font, inputText, fg, CACHED_BITMAP, filterAllphaMono, expandDimensions2);
 }
 
-Ptr <IBitmap> TTF_RenderUTF8_Blended (TTF_Font *font, const char *inputText, View::Color const &fg, bool expandDimensions2)
+Ptr <IBitmap> ttfRenderUTF8Blended (TTF_Font *font, const char *inputText, View::Color const &fg, bool expandDimensions2)
 {
-        return TTF_RenderUTF8_Impl (font, inputText, fg, CACHED_PIXMAP, filterAllphaNoop, expandDimensions2);
+        return ttfRenderUTF8Impl (font, inputText, fg, CACHED_PIXMAP, filterAllphaNoop, expandDimensions2);
 }
 
 
-void TTF_SetFontStyle (TTF_Font* font, int style)
+void ttfSetFontStyle (TTF_Font* font, int style)
 {
         font->style = style | font->face_style;
 }
 
-int TTF_GetFontStyle (const TTF_Font* font)
+int ttfGetFontStyle (const TTF_Font* font)
 {
         return font->style;
 }
 
-void TTF_SetFontOutline (TTF_Font* font, int outline)
+void ttfSetFontOutline (TTF_Font* font, int outline)
 {
         font->outline = outline;
         Flush_Cache (font);
 }
 
-int TTF_GetFontOutline (const TTF_Font* font)
+int ttfGetFontOutline (const TTF_Font* font)
 {
         return font->outline;
 }
 
-void TTF_SetFontHinting (TTF_Font* font, int hinting)
+void ttfSetFontHinting (TTF_Font* font, int hinting)
 {
         if (hinting == TTF_HINTING_LIGHT)
                 font->hinting = FT_LOAD_TARGET_LIGHT;
@@ -1263,7 +1264,7 @@ void TTF_SetFontHinting (TTF_Font* font, int hinting)
         Flush_Cache (font);
 }
 
-int TTF_GetFontHinting (const TTF_Font* font)
+int ttfGetFontHinting (const TTF_Font* font)
 {
         if (font->hinting == FT_LOAD_TARGET_LIGHT)
                 return TTF_HINTING_LIGHT;
@@ -1274,7 +1275,7 @@ int TTF_GetFontHinting (const TTF_Font* font)
         return 0;
 }
 
-void TTF_Quit (void)
+void ttfQuit (void)
 {
         if (TTF_initialized) {
                 if (--TTF_initialized == 0) {
@@ -1283,12 +1284,12 @@ void TTF_Quit (void)
         }
 }
 
-int TTF_WasInit (void)
+int ttfWasInit (void)
 {
         return TTF_initialized;
 }
 
-int TTF_GetFontKerningSize (TTF_Font* font, int prev_index, int index)
+int ttfGetFontKerningSize (TTF_Font* font, int prev_index, int index)
 {
         FT_Vector delta;
         FT_Get_Kerning (font->face, prev_index, index, ft_kerning_default, &delta);

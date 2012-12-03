@@ -27,7 +27,7 @@ struct IModelManager : public Core::Object {
         virtual ~IModelManager () {}
 
         virtual void load (std::string const &param1, std::string const &param2) = 0;
-        virtual Model::IModel *get (std::string const &param1, std::string const &param2) = 0;
+        virtual Model::IModel *get (Util::IShell *shell, std::string const &param1, std::string const &param2) = 0;
 
         /*
          * Metoda dla Shella. Zwraca true gdy załadowano nowy model.

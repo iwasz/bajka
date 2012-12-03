@@ -22,7 +22,7 @@ public:
         virtual ~XmlModelManager () {}
 
         virtual void load (std::string const &file, std::string const &name);
-        virtual Model::IModel *get (std::string const &file, std::string const &name);
+        virtual Model::IModel *get (Util::IShell *shell, std::string const &file, std::string const &name);
         virtual bool run (Util::IShell *shell);
 
 protected:
