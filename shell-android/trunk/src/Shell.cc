@@ -90,8 +90,10 @@ struct Shell::Impl {
                   sensorEventQueue (NULL),
                   display (NULL),
                   surface (NULL),
-                  context (NULL)/*,
-                  savedState (NULL)*/ {}
+                  context (NULL),/*
+                  savedState (NULL)*/
+                  dataSource (NULL)
+        {}
 
         android_app *state;
         ASensorManager *sensorManager;
@@ -101,6 +103,7 @@ struct Shell::Impl {
         EGLSurface surface;
         EGLContext context;
 //        struct saved_state savedState;
+        Common::DataSource *dataSource;
 };
 
 /****************************************************************************/
@@ -182,14 +185,13 @@ static void engine_handle_cmd (struct android_app* app, int32_t cmd) {
 //            engine->app->savedStateSize = sizeof(struct saved_state);
 //            break;
 //
-//        case APP_CMD_INIT_WINDOW:
-//            // The window is being shown, get it ready.
-//            if (engine->app->window != NULL) {
-//                engine_init_display(engine);
-//                engine_draw_frame(engine);
-//            }
-//            break;
-//
+        case APP_CMD_INIT_WINDOW:
+            // The window is being shown, get it ready.
+            if (app->window != NULL) {
+                    shell->initDisplay ();
+            }
+            break;
+
         case APP_CMD_TERM_WINDOW:
             // The window is being hidden or closed, clean it up.
 //            engine_term_display(engine);
@@ -221,10 +223,31 @@ static void engine_handle_cmd (struct android_app* app, int32_t cmd) {
 
 void Shell::init ()
 {
-        if (TTF_Init () < 0) {
+        if (ttfInit () < 0) {
                 throw U::InitException ("TTF_Init failed");
         }
 
+        AbstractShell::init ();
+
+        myimpl->state = static_cast <android_app *> (impl->userData);
+        myimpl->state->userData = this;
+        myimpl->state->onAppCmd = engine_handle_cmd;
+        myimpl->state->onInputEvent = engine_handle_input;
+
+        // Prepare to monitor accelerometer
+        myimpl->sensorManager = ASensorManager_getInstance ();
+        myimpl->accelerometerSensor = ASensorManager_getDefaultSensor (myimpl->sensorManager, ASENSOR_TYPE_ACCELEROMETER);
+        myimpl->sensorEventQueue = ASensorManager_createEventQueue (myimpl->sensorManager, myimpl->state->looper, LOOPER_ID_USER, NULL, NULL);
+
+//        TODO tu można jakoś zapisywac stan - saved_state to jest struktura użytkownika.
+//        if (myimpl->state->savedState != NULL) {
+//                // We are starting with a previous saved state; restore from it.
+//                myimpl->savedState = *(struct saved_state *)myimpl->state->savedState;
+//        }
+}
+
+void Shell::initDisplay ()
+{
         /*
          * Here specify the attributes of the desired configuration.
          * Below, we select an EGLConfig with at least 8 bits per color
@@ -287,23 +310,7 @@ void Shell::init ()
         glEnable(GL_CULL_FACE);
         glDisable(GL_DEPTH_TEST);
 
-        AbstractShell::init ();
-
-        myimpl->state = static_cast <android_app *> (impl->userData);
-        myimpl->state->userData = this;
-        myimpl->state->onAppCmd = engine_handle_cmd;
-        myimpl->state->onInputEvent = engine_handle_input;
-
-        // Prepare to monitor accelerometer
-        myimpl->sensorManager = ASensorManager_getInstance ();
-        myimpl->accelerometerSensor = ASensorManager_getDefaultSensor (myimpl->sensorManager, ASENSOR_TYPE_ACCELEROMETER);
-        myimpl->sensorEventQueue = ASensorManager_createEventQueue (myimpl->sensorManager, myimpl->state->looper, LOOPER_ID_USER, NULL, NULL);
-
-//        TODO tu można jakoś zapisywac stan - saved_state to jest struktura użytkownika.
-//        if (myimpl->state->savedState != NULL) {
-//                // We are starting with a previous saved state; restore from it.
-//                myimpl->savedState = *(struct saved_state *)myimpl->state->savedState;
-//        }
+        impl->glContext.init (impl->config);
 }
 
 /****************************************************************************/
@@ -347,8 +354,16 @@ void Shell::swapBuffers ()
 
 /****************************************************************************/
 
-Common::DataSource *Shell::newDataSource ()
+Common::DataSource *Shell::getDataSource ()
+{
+        return myimpl->dataSource;
+}
+
+/****************************************************************************/
+
+void Shell::createDataSource ()
 {
         myimpl->state = static_cast <android_app *> (impl->userData);
-        return new Common::DataSource (myimpl->state->activity->assetManager);
+        myimpl->dataSource = new Common::DataSource (myimpl->state->activity->assetManager);
 }
+

@@ -27,16 +27,20 @@ public:
         static Shell *instance () { return &instance_; }
         void reset ();
 
+        // TODO private
+        void initDisplay ();
+
+        Common::DataSource *getDataSource ();
+        void createDataSource ();
+
 private:
 
         Shell ();
 
         void init ();
-        void preInit ();
         void destroy ();
         void dispatchEvents ();
         void swapBuffers ();
-        Common::DataSource *newDataSource ();
 
         friend Util::IShell *shell ();
 
