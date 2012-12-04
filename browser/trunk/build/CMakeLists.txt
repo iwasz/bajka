@@ -18,6 +18,7 @@ ADD_DEFINITIONS (-Winvalid-pch)
 ADD_DEFINITIONS (-Wall)
 ADD_DEFINITIONS (-DBAJKA_DEBUG)
 ADD_DEFINITIONS (-DREFLECTION_ENABLED)
+add_definitions (-Wl,-z,defs)
 #ADD_DEFINITIONS (-fsyntax-only)
  
 SET (CMAKE_VERBOSE_MAKEFILE 0)
@@ -77,6 +78,7 @@ if (NOT ANDROID)
     TARGET_LINK_LIBRARIES (${PROJECT_NAME} boost_program_options)
 endif ()
 
+TARGET_LINK_LIBRARIES (${PROJECT_NAME} stdc++)
 TARGET_LINK_LIBRARIES (${PROJECT_NAME} ${TILIAE_LIBRARIES})
 TARGET_LINK_LIBRARIES (${PROJECT_NAME} ${BAJKA_LIBRARIES})
 TARGET_LINK_LIBRARIES (${PROJECT_NAME} ${SHELL_LIBRARIES})
@@ -125,7 +127,6 @@ if (ANDROID)
     
     # The OpenGL ES 1.x Library
     TARGET_LINK_LIBRARIES (${PROJECT_NAME} GLESv2)
-    TARGET_LINK_LIBRARIES (${PROJECT_NAME} stdc++)
 endif ()
 
 
@@ -148,8 +149,8 @@ if (ANDROID)
     file (APPEND ./android/libs/${ANDROID_NDK_ABI_NAME}/gdb.setup "directory ${INCLUDE_DIRECTORIES}\n")
     
     message ("3. copy gdbserver executable")
-#    file (COPY "$ENV{NDK}/toolchains/arm-linux-androideabi-4.4.3/prebuilt/gdbserver" DESTINATION "./android/libs/${ANDROID_NDK_ABI_NAME}/")
-    file (COPY "$ENV{NDK}/prebuilt/android-arm/gdbserver/gdbserver" DESTINATION "./android/libs/${ANDROID_NDK_ABI_NAME}/")
+    file (COPY "$ENV{NDK}/toolchains/arm-linux-androideabi-4.4.3/prebuilt/gdbserver" DESTINATION "./android/libs/${ANDROID_NDK_ABI_NAME}/")
+#    file (COPY "$ENV{NDK}/prebuilt/android-arm/gdbserver/gdbserver" DESTINATION "./android/libs/${ANDROID_NDK_ABI_NAME}/")
     
     message ("4. copy lib to obj")
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND mkdir -p ./android/obj/local/${ANDROID_NDK_ABI_NAME}/)
