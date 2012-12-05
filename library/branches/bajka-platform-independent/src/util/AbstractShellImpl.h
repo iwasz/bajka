@@ -31,7 +31,7 @@ struct AbstractShellImpl {
                 model (NULL),
                 modelManager (NULL),
                 loopActive (true),
-                loopPaused (false),
+                loopPaused (true),
                 userData (NULL) {}
 
         Util::Config *config;

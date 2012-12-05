@@ -14,6 +14,9 @@
 #include "view/openGl/OpenGl.h"
 #include "util/IShell.h"
 
+// TODO wywalić.
+#include "Platform.h"
+
 namespace View {
 using namespace Geometry;
 
@@ -45,14 +48,17 @@ void Rectangle::update (Model::IModel *model, Event::UpdateEvent *, View::GLCont
                 b.ur.x, b.ll.y, 0.0, 1.0
         };
 
+        if (!buffer) {
+                glGenBuffers (1, &buffer);
+        }
+
         glLineWidth (getThickness ());
         glBindBuffer (GL_ARRAY_BUFFER, buffer);
         glBufferData (GL_ARRAY_BUFFER, 16 * sizeof (GLfloat), verts, GL_DYNAMIC_DRAW);
+        glVertexAttribPointer (ctx->positionAttribLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
+        glBindBuffer (GL_ARRAY_BUFFER, 0);
 
         glEnableVertexAttribArray (ctx->positionAttribLocation);
-
-        // Użyj aktualnie zbindowanego bufora
-        glVertexAttribPointer (ctx->positionAttribLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
         Color const &bg = getBackground ();
         if (bg.a > 0) {
@@ -64,10 +70,12 @@ void Rectangle::update (Model::IModel *model, Event::UpdateEvent *, View::GLCont
         Color const &fg = getForeground ();
         if (fg.a > 0) {
                 glUniform4f (ctx->colorUniformLocation, fg.r, fg.g, fg.b, fg.a);
+                printlog ("-----1");
                 glDrawArrays (GL_LINE_LOOP, 0, 4);
+                printlog ("-----2");
         }
 
-        glBindBuffer (GL_ARRAY_BUFFER, 0);
+        glDisableVertexAttribArray (ctx->positionAttribLocation);
 }
 
 } /* namespace View */
