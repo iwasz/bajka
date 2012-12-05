@@ -13,24 +13,25 @@
 #include "view/resource/Bitmap.h"
 #include "Platform.h"
 #include "util/IShell.h"
+#include <common/dataSource/DataSource.h>
 
 namespace View {
 
-TTFFont::TTFFont (std::string const &path) : renderType (SOLID)
+TTFFont::TTFFont (std::string const &path) : renderType (SOLID), dataSource (NULL)
 {
         open (path);
 }
 
 /****************************************************************************/
 
-TTFFont::TTFFont (std::string const &path, int ptSize) : renderType (SOLID)
+TTFFont::TTFFont (std::string const &path, int ptSize) : renderType (SOLID), dataSource (NULL)
 {
         open (path, ptSize);
 }
 
 /****************************************************************************/
 
-TTFFont::TTFFont (std::string const &path, int ptSize, long int index) : renderType (SOLID)
+TTFFont::TTFFont (std::string const &path, int ptSize, long int index) : renderType (SOLID), dataSource (NULL)
 {
         open (path, ptSize, index);
 }
@@ -40,6 +41,7 @@ TTFFont::TTFFont (std::string const &path, int ptSize, long int index) : renderT
 TTFFont::~TTFFont ()
 {
         ttfCloseFont (font);
+        shell ()->deleteDataSource (dataSource);
         font = NULL;
 }
 
@@ -55,7 +57,11 @@ void TTFFont::open (std::string const &path, int ptSize, long int index)
                 index = 0;
         }
 
-        font = ttfOpenFont (shell ()->getDataSource(), path.c_str (), ptSize, index);
+
+        shell ()->deleteDataSource (dataSource);
+        dataSource = shell ()->newDataSource ();
+
+        font = ttfOpenFont (dataSource, path.c_str (), ptSize, index);
 
         if (!font) {
                 throw Util::InitException ("TTFFont::open : !font");
