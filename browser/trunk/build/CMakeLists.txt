@@ -149,8 +149,8 @@ if (ANDROID)
     file (APPEND ./android/libs/${ANDROID_NDK_ABI_NAME}/gdb.setup "directory ${INCLUDE_DIRECTORIES}\n")
     
     message ("3. copy gdbserver executable")
-    file (COPY "$ENV{NDK}/toolchains/arm-linux-androideabi-4.4.3/prebuilt/gdbserver" DESTINATION "./android/libs/${ANDROID_NDK_ABI_NAME}/")
-#    file (COPY "$ENV{NDK}/prebuilt/android-arm/gdbserver/gdbserver" DESTINATION "./android/libs/${ANDROID_NDK_ABI_NAME}/")
+#    file (COPY "$ENV{NDK}/toolchains/arm-linux-androideabi-4.4.3/prebuilt/gdbserver" DESTINATION "./android/libs/${ANDROID_NDK_ABI_NAME}/")
+    file (COPY "$ENV{NDK}/prebuilt/android-arm/gdbserver/gdbserver" DESTINATION "./android/libs/${ANDROID_NDK_ABI_NAME}/")
     
     message ("4. copy lib to obj")
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND mkdir -p ./android/obj/local/${ANDROID_NDK_ABI_NAME}/)
