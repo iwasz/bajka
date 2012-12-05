@@ -189,6 +189,7 @@ static void engine_handle_cmd (struct android_app* app, int32_t cmd) {
             // The window is being shown, get it ready.
             if (app->window != NULL) {
                     shell->initDisplay ();
+                    shell->resume ();
             }
             break;
 
