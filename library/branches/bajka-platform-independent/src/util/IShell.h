@@ -70,8 +70,14 @@ public:
 
         virtual void setModel (Model::IModel *model) = 0;
 
-        virtual Common::DataSource *getDataSource () = 0;
-        virtual void createDataSource () = 0;
+        /**
+         * Must be freed after use. Those metods (new and delete) are
+         * parts of IShell API, because of dependencies needed during creation
+         * of DataSource itself. Under Android AAssetManager is necessary
+         * for this, and is stored in IShell class.
+         */
+        virtual Common::DataSource *newDataSource () = 0;
+        virtual void deleteDataSource (Common::DataSource *ds) = 0;
 
 protected:
 

@@ -14,6 +14,10 @@
 
 struct TTF_Font;
 
+namespace Common {
+class DataSource;
+}
+
 namespace View {
 
 class TTFFont : public IFont {
@@ -77,6 +81,7 @@ private:
 
         TTF_Font *font;
         int renderType; // TODO to powinno być typu Type
+        Common::DataSource *dataSource;
 
         E_ (TTFFont)
 };

@@ -26,8 +26,9 @@ void XmlModelManager::load (std::string const &param1, std::string const &param2
 IModel *XmlModelManager::get (Util::IShell *shell, std::string const &param1, std::string const &param2)
 {
         try {
-                Common::DataSource *ds = shell->getDataSource ();
+                Common::DataSource *ds = shell->newDataSource ();
                 Ptr <Container::BeanFactoryContainer> newContainer = Container::ContainerFactory::createAndInit (Container::CompactMetaService::parseFile (ds, param1), false, mainContainer);
+                shell->deleteDataSource (ds);
                 Model::IModel *m = ocast <Model::IModel *> (newContainer->getBean (param2));
 
                 // Tu następuje skasowanie starego modelu.

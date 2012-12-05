@@ -44,8 +44,7 @@ AbstractShell::~AbstractShell () { delete impl; }
 int AbstractShell::run (Util::ShellConfig const &cfg, void *userData)
 {
         impl->userData = userData;
-        createDataSource ();
-        Common::DataSource *ds = getDataSource ();
+        Common::DataSource *ds = newDataSource ();
 
         try {
                 {
@@ -85,7 +84,7 @@ int AbstractShell::run (Util::ShellConfig const &cfg, void *userData)
                 printlog ("Unknown exception caught");
         }
 
-        delete ds;
+        deleteDataSource (ds);
         return EXIT_SUCCESS;
 }
 
