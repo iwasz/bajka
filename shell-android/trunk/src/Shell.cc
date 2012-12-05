@@ -248,43 +248,85 @@ void Shell::init ()
 
 void Shell::initDisplay ()
 {
+        EGLint w, h, format;
+        EGLDisplay display = eglGetDisplay (EGL_DEFAULT_DISPLAY);
+
+        if (display == EGL_NO_DISPLAY) {
+                throw U::InitException ("eglGetDisplay returned EGL_NO_DISPLAY");
+        }
+
+        if (eglInitialize (display, NULL, NULL) == EGL_FALSE) {
+                EGLint error = eglGetError ();
+
+                if (error == EGL_BAD_DISPLAY) {
+                        throw U::InitException ("eglInitialize returned EGL_BAD_DISPLAY : display is not an EGL display connection.");
+                }
+                if (error == EGL_NOT_INITIALIZED) {
+                        throw U::InitException ("eglInitialize returned EGL_NOT_INITIALIZED : display cannot be initialized.");
+                }
+        }
+
         /*
          * Here specify the attributes of the desired configuration.
          * Below, we select an EGLConfig with at least 8 bits per color
          * component compatible with on-screen windows
          */
         const EGLint attribs[] = {
-                EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+                EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+//                EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
                 EGL_BLUE_SIZE, 8,
                 EGL_GREEN_SIZE, 8,
                 EGL_RED_SIZE, 8,
+                EGL_ALPHA_SIZE, 8,
                 EGL_NONE
         };
 
-        EGLint w, h, format;
-        EGLint numConfigs;
-        EGLConfig config;
-        EGLSurface surface;
-        EGLContext context;
-        EGLDisplay display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
 
-        eglInitialize(display, 0, 0);
+        EGLint numConfigs;
+        eglChooseConfig (display, attribs, NULL, 0, &numConfigs);
+
+        if (numConfigs < 1) {
+                throw U::InitException ("eglChooseConfig returned 0 configs matching supplied attribList.");
+        }
 
         /* Here, the application chooses the configuration it desires. In this
          * sample, we have a very simplified selection process, where we pick
          * the first EGLConfig that matches our criteria */
-        eglChooseConfig(display, attribs, &config, 1, &numConfigs);
+        EGLConfig config;
+
+        if (eglChooseConfig (display, attribs, &config, 1, &numConfigs) == EGL_FALSE) {
+                switch (eglGetError ()) {
+                case EGL_BAD_DISPLAY:
+                        throw U::InitException ("eglChooseConfig returned EGL_BAD_DISPLAY : display is not an EGL display connection.");
+                case EGL_BAD_ATTRIBUTE:
+                        throw U::InitException ("eglChooseConfig returned EGL_BAD_ATTRIBUTE : attribute_list contains an invalid frame buffer configuration attribute or an attribute value that is unrecognized or out of range.");
+                case EGL_NOT_INITIALIZED:
+                        throw U::InitException ("eglChooseConfig returned EGL_NOT_INITIALIZED : display has not been initialized.");
+                case EGL_BAD_PARAMETER:
+                        throw U::InitException ("eglChooseConfig returned EGL_BAD_PARAMETER :   num_config is NULL.");
+                }
+        }
 
         /* EGL_NATIVE_VISUAL_ID is an attribute of the EGLConfig that is
          * guaranteed to be accepted by ANativeWindow_setBuffersGeometry().
          * As soon as we picked a EGLConfig, we can safely reconfigure the
          * ANativeWindow buffers to match, using EGL_NATIVE_VISUAL_ID. */
-        eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format);
+        eglGetConfigAttrib (display, config, EGL_NATIVE_VISUAL_ID, &format);
 
         ANativeWindow_setBuffersGeometry (myimpl->state->window, 0, 0, format);
 
-        surface = eglCreateWindowSurface (display, config, myimpl->state->window, NULL);
-        context = eglCreateContext (display, config, NULL, NULL);
+        EGLSurface surface = eglCreateWindowSurface (display, config, myimpl->state->window, NULL);
+
+        if (surface == EGL_NO_SURFACE) {
+                throw U::InitException ("eglCreateWindowSurface returned EGL_NO_SURFACE.");
+        }
+
+        const EGLint attribList[] = { EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE};
+        EGLContext context = eglCreateContext (display, config, NULL, attribList);
+
+        if (context == EGL_NO_CONTEXT) {
+                throw U::InitException ("eglCreateContext returned EGL_NO_CONTEXT.");
+        }
 
         if (eglMakeCurrent (display, surface, surface, context) == EGL_FALSE) {
                 throw U::InitException ("eglMakeCurrent failed");
@@ -354,16 +396,15 @@ void Shell::swapBuffers ()
 
 /****************************************************************************/
 
-Common::DataSource *Shell::getDataSource ()
+Common::DataSource *Shell::newDataSource ()
 {
-        return myimpl->dataSource;
+        myimpl->state = static_cast <android_app *> (impl->userData);
+        return new Common::DataSource (myimpl->state->activity->assetManager);
 }
 
 /****************************************************************************/
 
-void Shell::createDataSource ()
+void Shell::deleteDataSource (Common::DataSource *ds)
 {
-        myimpl->state = static_cast <android_app *> (impl->userData);
-        myimpl->dataSource = new Common::DataSource (myimpl->state->activity->assetManager);
+        delete ds;
 }
-
