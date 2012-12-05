@@ -99,38 +99,47 @@ void AbstractShell::loop ()
 #endif
 
         int loopDelayMs = impl->config->loopDelayMs;
+        int deltaMs = 0;
 
         while (impl->loopActive) {
+                if (!impl->loopPaused) {
 
-                bool newModelLoaded = impl->modelManager->run (this);
+                        bool newModelLoaded = impl->modelManager->run (this);
 
-                if (newModelLoaded) {
-                        assert (impl->model);
-                        updateLayout (impl->model);
-                }
+                        if (newModelLoaded) {
+                                assert (impl->model);
+                                updateLayout (impl->model);
+                        }
 
-                uint32_t currentMs = getCurrentMs ();
-                int deltaMs = currentMs - lastMs;
-                lastMs = currentMs;
+                        uint32_t currentMs = getCurrentMs ();
+                        deltaMs = currentMs - lastMs;
+                        lastMs = currentMs;
 
 #if 0
-                second += deltaMs;
-                ++frames;
+                        second += deltaMs;
+                        ++frames;
 
-                if (second >= 1000) {
-                        std::cerr << "fps=" << frames << std::endl;
-                        frames = second = 0;
-                }
+                        if (second >= 1000) {
+                                std::cerr << "fps=" << frames << std::endl;
+                                frames = second = 0;
+                        }
 #endif
+                }
 
                 dispatchEvents ();
-                impl->updateEvent.setDeltaMs (deltaMs);
-                impl->model->update (&impl->updateEvent, this);
 
-                Tween::Manager::getMain ()->update (deltaMs);
+                static int i = 0;
+                if (!impl->loopPaused) {
+                        if (++i > 3) {
+                                impl->updateEvent.setDeltaMs (deltaMs);
+                                impl->model->update (&impl->updateEvent, this);
 
-                // swap buffers to display, since we're double buffered.
-                swapBuffers ();
+                                Tween::Manager::getMain ()->update (deltaMs);
+
+                                // swap buffers to display, since we're double buffered.
+                                swapBuffers ();
+                        }
+                }
 
                 // Tak śmiga, że damy delay
                 delayMs (loopDelayMs); // 60fps
