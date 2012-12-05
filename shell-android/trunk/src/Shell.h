@@ -30,8 +30,8 @@ public:
         // TODO private
         void initDisplay ();
 
-        Common::DataSource *getDataSource ();
-        void createDataSource ();
+        Common::DataSource *newDataSource ();
+        void deleteDataSource (Common::DataSource *ds);
 
 private:
 
