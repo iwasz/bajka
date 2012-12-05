@@ -151,7 +151,7 @@ void Shell::dispatchEvents ()
             // Check if we are exiting.
             if (myimpl->state->destroyRequested != 0) {
                 //engine_term_display (&engine);
-                impl->loopActive = false;
+                quit ();
                 return;
             }
         }
@@ -218,6 +218,20 @@ static void engine_handle_cmd (struct android_app* app, int32_t cmd) {
 //            engine_draw_frame (engine);
 //            break;
     }
+}
+
+static void handleCmdInit (struct android_app* app, int32_t cmd)
+{
+        Shell *shell = static_cast<Shell *> (app->userData);
+
+        if (cmd != APP_CMD_INIT_WINDOW) {
+                return;
+        }
+
+        if (app->window != NULL) {
+                shell->initDisplay ();
+                shell->resume ();
+        }
 }
 
 /****************************************************************************/
