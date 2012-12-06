@@ -33,7 +33,7 @@
   <TTFFont id="defaultFont" renderType="0" hinting="1">
     <cargs>
       <value type="text">volter.ttf</value>
-      <value type="int">48</value>
+      <value type="int">18</value>
     </cargs>
   </TTFFont>
 
