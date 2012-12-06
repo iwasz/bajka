@@ -25,7 +25,6 @@ public:
 
         virtual ~Shell ();
         static Shell *instance () { return &instance_; }
-        void reset ();
 
         // TODO private
         void initDisplay ();
@@ -37,7 +36,7 @@ private:
 
         Shell ();
 
-        void init ();
+        void initDependent ();
         void destroy ();
         void dispatchEvents ();
         void swapBuffers ();

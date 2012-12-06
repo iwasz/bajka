@@ -185,14 +185,6 @@ static void engine_handle_cmd (struct android_app* app, int32_t cmd) {
 //            engine->app->savedStateSize = sizeof(struct saved_state);
 //            break;
 //
-//        case APP_CMD_INIT_WINDOW:
-//            // The window is being shown, get it ready.
-//            if (app->window != NULL) {
-//                    shell->initDisplay ();
-//                    shell->resume ();
-//            }
-//            break;
-
         case APP_CMD_TERM_WINDOW:
             // The window is being hidden or closed, clean it up.
 //            engine_term_display(engine);
@@ -249,13 +241,11 @@ static void handleCmdInit (struct android_app* app, int32_t cmd)
 
 /****************************************************************************/
 
-void Shell::init ()
+void Shell::initDependent ()
 {
         if (ttfInit () < 0) {
                 throw U::InitException ("TTF_Init failed");
         }
-
-        AbstractShell::init ();
 
         InitWindowDTO initWindowDTO;
         initWindowDTO.shell = this;
@@ -429,13 +419,6 @@ void Shell::destroy ()
         myimpl->display = EGL_NO_DISPLAY;
         myimpl->context = EGL_NO_CONTEXT;
         myimpl->surface = EGL_NO_SURFACE;
-}
-
-/****************************************************************************/
-
-void Shell::reset ()
-{
-        AbstractShell::reset ();
 }
 
 /****************************************************************************/
