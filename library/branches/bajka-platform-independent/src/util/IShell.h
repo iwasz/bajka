@@ -58,9 +58,6 @@ public:
 
         virtual int run (Util::ShellConfig const &cfg, void *userData) = 0;
         virtual void quit () = 0;
-        virtual  void pause () = 0;
-        virtual  void resume () = 0;
-        virtual  bool isPaused () const = 0;
 
         virtual Util::Config *getConfig () = 0;
         virtual View::GLContext *getGLContext () = 0;

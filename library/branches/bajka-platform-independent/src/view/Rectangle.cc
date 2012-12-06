@@ -48,10 +48,6 @@ void Rectangle::update (Model::IModel *model, Event::UpdateEvent *, View::GLCont
                 b.ur.x, b.ll.y, 0.0, 1.0
         };
 
-        if (!buffer) {
-                glGenBuffers (1, &buffer);
-        }
-
         glLineWidth (getThickness ());
         glBindBuffer (GL_ARRAY_BUFFER, buffer);
         glBufferData (GL_ARRAY_BUFFER, 16 * sizeof (GLfloat), verts, GL_DYNAMIC_DRAW);
@@ -70,9 +66,7 @@ void Rectangle::update (Model::IModel *model, Event::UpdateEvent *, View::GLCont
         Color const &fg = getForeground ();
         if (fg.a > 0) {
                 glUniform4f (ctx->colorUniformLocation, fg.r, fg.g, fg.b, fg.a);
-                printlog ("-----1");
                 glDrawArrays (GL_LINE_LOOP, 0, 4);
-                printlog ("-----2");
         }
 
         glDisableVertexAttribArray (ctx->positionAttribLocation);

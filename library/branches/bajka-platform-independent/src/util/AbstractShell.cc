@@ -43,11 +43,14 @@ AbstractShell::~AbstractShell () { delete impl; }
 
 int AbstractShell::run (Util::ShellConfig const &cfg, void *userData)
 {
+        // Stage 1
         impl->userData = userData;
+        // Datasource
         Common::DataSource *ds = newDataSource ();
 
         try {
                 {
+                        // Read config
                         Ptr <MetaContainer> metaContainer = CompactMetaService::parseFile (ds, cfg.configFile);
                         Ptr <BeanFactoryContainer> container = ContainerFactory::create (metaContainer, true);
 
@@ -62,10 +65,16 @@ int AbstractShell::run (Util::ShellConfig const &cfg, void *userData)
 
                         ContainerFactory::init (container.get (), metaContainer.get ());
                         impl->config = vcast <U::Config *> (container->getBean ("config"));
+
+                        // Override
                         overrideConfig (cfg);
 
+                         // Stage 2 platform independent
+//                        init ();
+                        // Stage 3 platform dependent
                         init ();
 
+                        // Read definition
                         Ptr <BeanFactoryContainer> container2 = Container::ContainerFactory::createAndInit (Container::CompactMetaService::parseFile (ds, cfg.definitionFile), true, container.get ());
                         impl->modelManager = ocast <M::IModelManager *> (container2->getBean ("modelManager"));
 
@@ -85,6 +94,7 @@ int AbstractShell::run (Util::ShellConfig const &cfg, void *userData)
         }
 
         deleteDataSource (ds);
+        printlog ("Exit from AbstractShell.");
         return EXIT_SUCCESS;
 }
 
@@ -101,45 +111,37 @@ void AbstractShell::loop ()
         int loopDelayMs = impl->config->loopDelayMs;
         int deltaMs = 0;
 
-        while (impl->loopActive) {
-                if (!impl->loopPaused) {
+        while (!impl->quit) {
+                bool newModelLoaded = impl->modelManager->run (this);
 
-                        bool newModelLoaded = impl->modelManager->run (this);
+                if (newModelLoaded) {
+                        assert (impl->model);
+                        updateLayout (impl->model);
+                }
 
-                        if (newModelLoaded) {
-                                assert (impl->model);
-                                updateLayout (impl->model);
-                        }
-
-                        uint32_t currentMs = getCurrentMs ();
-                        deltaMs = currentMs - lastMs;
-                        lastMs = currentMs;
+                uint32_t currentMs = getCurrentMs ();
+                deltaMs = currentMs - lastMs;
+                lastMs = currentMs;
 
 #if 0
-                        second += deltaMs;
-                        ++frames;
+                second += deltaMs;
+                ++frames;
 
-                        if (second >= 1000) {
-                                std::cerr << "fps=" << frames << std::endl;
-                                frames = second = 0;
-                        }
-#endif
+                if (second >= 1000) {
+                        std::cerr << "fps=" << frames << std::endl;
+                        frames = second = 0;
                 }
+#endif
 
                 dispatchEvents ();
 
-                static int i = 0;
-                if (!impl->loopPaused) {
-                        if (++i > 3) {
-                                impl->updateEvent.setDeltaMs (deltaMs);
-                                impl->model->update (&impl->updateEvent, this);
+                impl->updateEvent.setDeltaMs (deltaMs);
+                impl->model->update (&impl->updateEvent, this);
 
-                                Tween::Manager::getMain ()->update (deltaMs);
+                Tween::Manager::getMain ()->update (deltaMs);
 
-                                // swap buffers to display, since we're double buffered.
-                                swapBuffers ();
-                        }
-                }
+                // swap buffers to display, since we're double buffered.
+                swapBuffers ();
 
                 // Tak śmiga, że damy delay
                 delayMs (loopDelayMs); // 60fps
@@ -194,7 +196,7 @@ void AbstractShell::overrideConfig (Util::ShellConfig const &cfg)
 
 void AbstractShell::quit ()
 {
-        impl->loopActive = false;
+        impl->quit = true;
 }
 
 /****************************************************************************/
@@ -313,27 +315,6 @@ void AbstractShell::updateLayout (Model::IModel *root)
 View::GLContext *AbstractShell::getGLContext ()
 {
         return &impl->glContext;
-}
-
-/****************************************************************************/
-
-void AbstractShell::pause ()
-{
-        impl->loopPaused = true;
-}
-
-/****************************************************************************/
-
-void AbstractShell::resume ()
-{
-        impl->loopPaused = false;
-}
-
-/****************************************************************************/
-
-bool AbstractShell::isPaused () const
-{
-        return impl->loopPaused;
 }
 
 } /* namespace Util */

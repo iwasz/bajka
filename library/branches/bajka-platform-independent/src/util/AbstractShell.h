@@ -30,9 +30,6 @@ public:
         int run (Util::ShellConfig const &cfg, void *userData = NULL);
         void quit ();
         virtual void reset ();
-        void pause ();
-        void resume ();
-        bool isPaused () const;
 
         Model::IModel *getModel ();
         virtual void setModel (Model::IModel *model);
