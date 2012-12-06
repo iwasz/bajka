@@ -30,8 +30,7 @@ struct AbstractShellImpl {
         AbstractShellImpl () : config (NULL),
                 model (NULL),
                 modelManager (NULL),
-                loopActive (true),
-                loopPaused (true),
+                quit (false),
                 userData (NULL) {}
 
         Util::Config *config;
@@ -39,8 +38,7 @@ struct AbstractShellImpl {
         Model::IModelManager *modelManager;
         Event::EventIndex eventIndex;
         Event::PointerInsideIndex pointerInsideIndex;
-        bool loopActive;
-        bool loopPaused;
+        bool quit;
         Event::UpdateEvent updateEvent;
         View::GLContext glContext;
         void *userData;
