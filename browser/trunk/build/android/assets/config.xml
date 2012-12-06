@@ -7,9 +7,8 @@
 <!-- | undefined behaviour.                                                                  | -->
 <!-- +=======================================================================================+ -->
 
-  <Config id="config" autoViewport="true" autoProjection="true" fullScreen="true" windowCaption="Bajka browser">
-<!--   <Config id="config" viewportWidth="160" viewportHeight="100" projectionWidth="1280" projectionHeight="720" windowCaption="Bajka browser"> -->
-<!--   <Config id="config" viewportWidth="160" viewportHeight="100" autoProjection="true" windowCaption="Bajka browser"> -->
+<!--   <Config id="config" autoViewport="true" autoProjection="true" fullScreen="true" windowCaption="Bajka browser"> -->
+  <Config id="config" autoViewport="true" fullScreen="true" projectionWidth="320" projectionHeight="200" windowCaption="Bajka browser">
     <value set-as="vertex">#version 100
 attribute vec4 position;
 attribute vec2 texCoordIn;

@@ -2,26 +2,22 @@
 <beans>
   <RelativeGroup id="scene">
     <LayerProperties set-as="groupProps" />
-    <ClearScreenGrid set-as="view" color="6b6b6bff" gridColor="616161ff" density="20" />
+    <ClearScreen set-as="view" color="6b6b6bff" />
 
-    <label set-as="child" text="Demka" view.font="@dekar"/>
+    <label set-as="child" text="Demka" view.font="@dekar">
+      <RelativeGroupProperties set-as="groupProps" vAlign="center" hAlign="center" translate="50, 90"/>
+    </label>
 
-
-<!--     <label set-as="child" text="Demka" view.font="@dekar"> -->
-<!--       <RelativeGroupProperties set-as="groupProps" vAlign="center" hAlign="center" translate="50, 90"/> -->
-<!--     </label> -->
-
-      <rect set-as="child" box="0, 0, 100, 100"/>
-
-<!--     <LinearGroup set-as="child" type="vertical" spacing="10" wrapContentsW="true" wrapContentsH="true"> -->
-<!--       <button set-as="child" file="layouts.xml" name="scene" text="Layouts" /> -->
-<!--       <button set-as="child" file="swinia.xml" name="scene" text="Swinia" /> -->
-<!--       <button set-as="child" file="tweens.xml" name="scene" text="Tween test" /> -->
-<!--       <button set-as="child" file="sound.xml" name="scene" text="Sound test" /> -->
-<!--       <button set-as="child" file="gles-test.xml" name="scene" text="GLES/GL20" /> -->
-<!--       <button set-as="child" controller.quit="true" text="Quit" /> -->
+    <LinearGroup set-as="child" type="vertical" spacing="10" wrapContentsW="true" wrapContentsH="true">
+      <button set-as="child" file="layouts.xml" name="scene" text="Layouts" />
+      <button set-as="child" file="swinia.xml" name="scene" text="Swinia" />
+      <button set-as="child" file="tweens.xml" name="scene" text="Tween test" />
+      <button set-as="child" file="sound.xml" name="scene" text="Sound test" />
+      <button set-as="child" file="gles-test.xml" name="scene" text="GLES/GL20" />
+      <button set-as="child" controller.quit="true" text="Quit" />
+<!--       <image set-as="child" path="franek.jpg"/> -->
       
-<!--       <RelativeGroupProperties set-as="groupProps" vAlign="center" hAlign="center" translate="50, 50"/> -->
-<!--     </LinearGroup> -->
+      <RelativeGroupProperties set-as="groupProps" vAlign="center" hAlign="center" translate="50, 50"/>
+    </LinearGroup>
   </RelativeGroup>
 </beans>
