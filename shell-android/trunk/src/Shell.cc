@@ -131,7 +131,7 @@ void Shell::dispatchEvents ()
         // If not animating, we will block forever waiting for events.
         // If animating, we loop until all events are read, then continue
         // to draw the next frame of animation.
-        while ((ident = ALooper_pollAll (!isPaused () ? 0 : -1, NULL, &events, (void**)&source)) >= 0) {
+        while ((ident = ALooper_pollAll (0, NULL, &events, (void**)&source)) >= 0) {
 
             // Process this event.
             if (source != NULL) {
@@ -185,13 +185,13 @@ static void engine_handle_cmd (struct android_app* app, int32_t cmd) {
 //            engine->app->savedStateSize = sizeof(struct saved_state);
 //            break;
 //
-        case APP_CMD_INIT_WINDOW:
-            // The window is being shown, get it ready.
-            if (app->window != NULL) {
-                    shell->initDisplay ();
-                    shell->resume ();
-            }
-            break;
+//        case APP_CMD_INIT_WINDOW:
+//            // The window is being shown, get it ready.
+//            if (app->window != NULL) {
+//                    shell->initDisplay ();
+//                    shell->resume ();
+//            }
+//            break;
 
         case APP_CMD_TERM_WINDOW:
             // The window is being hidden or closed, clean it up.
@@ -220,17 +220,30 @@ static void engine_handle_cmd (struct android_app* app, int32_t cmd) {
     }
 }
 
+/**
+ * Data transfer for handleCmdInit
+ */
+struct InitWindowDTO {
+
+        InitWindowDTO () : shell (NULL), initDone (false) {}
+
+        Shell *shell;
+        bool initDone;
+};
+
+/****************************************************************************/
+
 static void handleCmdInit (struct android_app* app, int32_t cmd)
 {
-        Shell *shell = static_cast<Shell *> (app->userData);
+        InitWindowDTO *initWindowDTO = static_cast <InitWindowDTO *> (app->userData);
 
         if (cmd != APP_CMD_INIT_WINDOW) {
                 return;
         }
 
         if (app->window != NULL) {
-                shell->initDisplay ();
-                shell->resume ();
+                initWindowDTO->shell->initDisplay ();
+                initWindowDTO->initDone = true;
         }
 }
 
@@ -244,7 +257,29 @@ void Shell::init ()
 
         AbstractShell::init ();
 
+        InitWindowDTO initWindowDTO;
+        initWindowDTO.shell = this;
+
         myimpl->state = static_cast <android_app *> (impl->userData);
+        myimpl->state->userData = &initWindowDTO;
+        myimpl->state->onAppCmd = handleCmdInit;
+        myimpl->state->onInputEvent = NULL;
+
+        // Read all pending events.
+        int ident;
+        int events;
+        struct android_poll_source* source = NULL;
+
+        while (!initWindowDTO.initDone) {
+                while ((ident = ALooper_pollAll (0, NULL, &events, (void**)&source)) >= 0) {
+                    if (source != NULL) {
+                        source->process (myimpl->state, source);
+                    }
+                }
+
+                delayMs (20);
+        }
+
         myimpl->state->userData = this;
         myimpl->state->onAppCmd = engine_handle_cmd;
         myimpl->state->onInputEvent = engine_handle_input;
@@ -328,6 +363,7 @@ void Shell::initDisplay ()
          * ANativeWindow buffers to match, using EGL_NATIVE_VISUAL_ID. */
         eglGetConfigAttrib (display, config, EGL_NATIVE_VISUAL_ID, &format);
 
+        printlog ("myimpl->state : %p, myimpl->state->window : %p", myimpl->state, myimpl->state->window);
         ANativeWindow_setBuffersGeometry (myimpl->state->window, 0, 0, format);
 
         EGLSurface surface = eglCreateWindowSurface (display, config, myimpl->state->window, NULL);
