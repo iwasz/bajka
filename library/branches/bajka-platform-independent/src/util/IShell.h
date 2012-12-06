@@ -40,10 +40,10 @@ struct ShellConfig {
                 definitionFile ("main.xml"),
                 configFile ("config.xml") {}
 
-        bool             fullScreen;
+        bool            fullScreen;
         int             viewportWidth;
         int             viewportHeight;
-        bool             showAABB;
+        bool            showAABB;
         int             loopDelayMs;
         std::string     definitionFile;
         std::string     configFile;
@@ -78,7 +78,13 @@ public:
 
 protected:
 
-        virtual void init () = 0;
+        virtual void prepare (void *userData) = 0;
+        virtual void readConfig (Common::DataSource *ds, Util::ShellConfig const &cfg) = 0;
+        virtual void overrideConfig (Util::ShellConfig const &cfg) = 0;
+        virtual void initIndependent () = 0;
+        virtual void initDependent () = 0;
+        virtual void readDefinition (Common::DataSource *ds, Util::ShellConfig const &cfg) = 0;
+
         virtual void loop () = 0;
         virtual void destroy () = 0;
         virtual void swapBuffers () = 0;

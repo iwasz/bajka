@@ -43,44 +43,18 @@ AbstractShell::~AbstractShell () { delete impl; }
 
 int AbstractShell::run (Util::ShellConfig const &cfg, void *userData)
 {
-        // Stage 1
-        impl->userData = userData;
+        prepare (userData);
+
         // Datasource
         Common::DataSource *ds = newDataSource ();
 
         try {
-                {
-                        // Read config
-                        Ptr <MetaContainer> metaContainer = CompactMetaService::parseFile (ds, cfg.configFile);
-                        Ptr <BeanFactoryContainer> container = ContainerFactory::create (metaContainer, true);
-
-                        container->addConversion (typeid (Geometry::Point), Geometry::stringToPointVariant);
-                        container->addConversion (typeid (Geometry::Point3), Geometry::stringToPoint3Variant);
-                        container->addConversion (typeid (Geometry::LineString), Geometry::stringToLineStringVariant);
-                        container->addConversion (typeid (Model::HAlign), Model::stringToHAlign);
-                        container->addConversion (typeid (Model::VAlign), Model::stringToVAlign);
-                        container->addConversion (typeid (Model::HGravity), Model::stringToHGravity);
-                        container->addConversion (typeid (Model::VGravity), Model::stringToVGravity);
-                        container->addConversion (typeid (Model::LinearGroup::Type), Model::stringToLinearGroupType);
-
-                        ContainerFactory::init (container.get (), metaContainer.get ());
-                        impl->config = vcast <U::Config *> (container->getBean ("config"));
-
-                        // Override
-                        overrideConfig (cfg);
-
-                         // Stage 2 platform independent
-//                        init ();
-                        // Stage 3 platform dependent
-                        init ();
-
-                        // Read definition
-                        Ptr <BeanFactoryContainer> container2 = Container::ContainerFactory::createAndInit (Container::CompactMetaService::parseFile (ds, cfg.definitionFile), true, container.get ());
-                        impl->modelManager = ocast <M::IModelManager *> (container2->getBean ("modelManager"));
-
-                        loop ();
-                }
-
+                readConfig (ds, cfg);
+                overrideConfig (cfg);
+                initIndependent ();
+                initDependent ();
+                readDefinition (ds, cfg);
+                loop ();
                 destroy ();
         }
         catch (Core::Exception const &e) {
@@ -96,6 +70,74 @@ int AbstractShell::run (Util::ShellConfig const &cfg, void *userData)
         deleteDataSource (ds);
         printlog ("Exit from AbstractShell.");
         return EXIT_SUCCESS;
+}
+
+/****************************************************************************/
+
+void AbstractShell::prepare (void *userData)
+{
+        impl->userData = userData;
+}
+
+/****************************************************************************/
+
+void AbstractShell::readConfig (Common::DataSource *ds, Util::ShellConfig const &cfg)
+{
+        Ptr <MetaContainer> metaContainer = CompactMetaService::parseFile (ds, cfg.configFile);
+        impl->configContainer = ContainerFactory::create (metaContainer, true);
+
+        impl->configContainer->addConversion (typeid (Geometry::Point), Geometry::stringToPointVariant);
+        impl->configContainer->addConversion (typeid (Geometry::Point3), Geometry::stringToPoint3Variant);
+        impl->configContainer->addConversion (typeid (Geometry::LineString), Geometry::stringToLineStringVariant);
+        impl->configContainer->addConversion (typeid (Model::HAlign), Model::stringToHAlign);
+        impl->configContainer->addConversion (typeid (Model::VAlign), Model::stringToVAlign);
+        impl->configContainer->addConversion (typeid (Model::HGravity), Model::stringToHGravity);
+        impl->configContainer->addConversion (typeid (Model::VGravity), Model::stringToVGravity);
+        impl->configContainer->addConversion (typeid (Model::LinearGroup::Type), Model::stringToLinearGroupType);
+
+        ContainerFactory::init (impl->configContainer.get (), metaContainer.get ());
+        impl->config = vcast <U::Config *> (impl->configContainer->getBean ("config"));
+}
+
+/****************************************************************************/
+
+void AbstractShell::overrideConfig (Util::ShellConfig const &cfg)
+{
+        if (cfg.fullScreen) {
+                impl->config->fullScreen = true;
+        }
+
+        if (cfg.showAABB) {
+                impl->config->showAABB = true;
+        }
+
+        if (cfg.viewportWidth > 0) {
+                impl->config->viewportWidth = cfg.viewportWidth;
+        }
+
+        if (cfg.viewportHeight > 0) {
+                impl->config->viewportHeight = cfg.viewportHeight;
+        }
+
+        if (cfg.loopDelayMs > 0) {
+                impl->config->loopDelayMs = cfg.viewportHeight;
+        }
+}
+
+/****************************************************************************/
+
+void AbstractShell::initIndependent ()
+{
+        srand (time (NULL));
+        Tween::init ();
+}
+
+/****************************************************************************/
+
+void AbstractShell::readDefinition (Common::DataSource *ds, Util::ShellConfig const &cfg)
+{
+        impl->mainContainer = Container::ContainerFactory::createAndInit (Container::CompactMetaService::parseFile (ds, cfg.definitionFile), true, impl->configContainer.get ());
+        impl->modelManager = ocast <M::IModelManager *> (impl->mainContainer->getBean ("modelManager"));
 }
 
 /****************************************************************************/
@@ -150,46 +192,9 @@ void AbstractShell::loop ()
 
 /****************************************************************************/
 
-void AbstractShell::init ()
-{
-        srand (time (NULL));
-        Tween::init ();
-
-#ifndef ANDROID // TODO To nie może tak być!
-        impl->glContext.init (impl->config);
-#endif
-}
-
-/****************************************************************************/
-
 void AbstractShell::destroy ()
 {
         Tween::destroy ();
-}
-
-/****************************************************************************/
-
-void AbstractShell::overrideConfig (Util::ShellConfig const &cfg)
-{
-        if (cfg.fullScreen) {
-                impl->config->fullScreen = true;
-        }
-
-        if (cfg.showAABB) {
-                impl->config->showAABB = true;
-        }
-
-        if (cfg.viewportWidth > 0) {
-                impl->config->viewportWidth = cfg.viewportWidth;
-        }
-
-        if (cfg.viewportHeight > 0) {
-                impl->config->viewportHeight = cfg.viewportHeight;
-        }
-
-        if (cfg.loopDelayMs > 0) {
-                impl->config->loopDelayMs = cfg.viewportHeight;
-        }
 }
 
 /****************************************************************************/

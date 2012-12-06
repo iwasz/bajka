@@ -28,10 +28,10 @@ extern int ttfInit (void);
  * Some .fon fonts will have several sizes embedded in the file, so the
  * point size becomes the index of choosing which size.  If the value
  * is too high, the last indexed size will be the default. */
-extern TTF_Font * ttfOpenFont (const char *file, int ptsize);
-extern TTF_Font * ttfOpenFont (const char *file, int ptsize, long index);
-extern TTF_Font * ttfOpenFont (Common::DataSource *src, const char *file, int freesrc, int ptsize);
-extern TTF_Font * ttfOpenFont (Common::DataSource *src, const char *file, int freesrc, int ptsize, long index);
+//extern TTF_Font * ttfOpenFont (const char *file, int ptsize);
+//extern TTF_Font * ttfOpenFont (const char *file, int ptsize, long index);
+extern TTF_Font * ttfOpenFont (Common::DataSource *src, const char *file, /*int freesrc,*/ int ptsize);
+extern TTF_Font * ttfOpenFont (Common::DataSource *src, const char *file, /*int freesrc,*/ int ptsize, long index);
 
 /* Set and retrieve the font style */
 #define TTF_STYLE_NORMAL	0x00

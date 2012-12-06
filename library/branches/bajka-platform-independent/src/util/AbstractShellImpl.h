@@ -20,6 +20,10 @@ namespace Model {
 class IModelManager;
 }
 
+namespace Container {
+class BeanFactoryContainer;
+}
+
 namespace Util {
 
 /**
@@ -42,6 +46,8 @@ struct AbstractShellImpl {
         Event::UpdateEvent updateEvent;
         View::GLContext glContext;
         void *userData;
+        Ptr <Container::BeanFactoryContainer> configContainer;
+        Ptr <Container::BeanFactoryContainer> mainContainer;
 };
 
 }

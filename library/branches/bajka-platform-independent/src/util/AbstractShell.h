@@ -42,8 +42,7 @@ public:
 
 protected:
 
-        virtual void init ();
-                void loop ();
+        void loop ();
         virtual void destroy ();
         virtual void dispatchEvents () = 0;
 
@@ -52,7 +51,12 @@ protected:
 
 private:
 
+        void prepare (void *userData);
+        void readConfig (Common::DataSource *ds, Util::ShellConfig const &cfg);
         void overrideConfig (Util::ShellConfig const &cfg);
+        void initIndependent ();
+        void readDefinition (Common::DataSource *ds, Util::ShellConfig const &cfg);
+
         void updateLayout (Model::IModel *root);
 
 };
