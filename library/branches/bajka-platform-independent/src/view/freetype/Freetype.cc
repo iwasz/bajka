@@ -104,7 +104,7 @@ struct TTF_Font {
 
         /* We are responsible for closing the font stream */
         Common::DataSource *src;
-        int freesrc;
+//        int freesrc;
         FT_Open_Args args;
 
         /* For non-scalable formats, we must remember which font index size */
@@ -238,7 +238,7 @@ static unsigned long RWread (FT_Stream stream, unsigned long offset, unsigned ch
 
 /****************************************************************************/
 
-TTF_Font* ttfOpenFont (Common::DataSource *src, const char *file, int freesrc, int ptsize, long index)
+TTF_Font* ttfOpenFont (Common::DataSource *src, const char *file, /*int freesrc,*/ int ptsize, long index)
 {
         TTF_Font* font;
         FT_Error error;
@@ -269,7 +269,7 @@ TTF_Font* ttfOpenFont (Common::DataSource *src, const char *file, int freesrc, i
         memset (font, 0, sizeof(*font));
 
         font->src = src;
-        font->freesrc = freesrc;
+//        font->freesrc = freesrc;
 
         stream = (FT_Stream) malloc (sizeof(*stream));
 
@@ -396,19 +396,19 @@ TTF_Font* ttfOpenFont (Common::DataSource *src, const char *file, int freesrc, i
 
 TTF_Font* ttfOpenFont (Common::DataSource *src, const char *file, int freesrc, int ptsize)
 {
-        return ttfOpenFont (src, file, freesrc, ptsize, 0);
+        return ttfOpenFont (src, file, /*freesrc,*/ ptsize, 0);
 }
 
-TTF_Font* ttfOpenFont (const char *file, int ptsize, long index)
-{
-        Common::DataSource *rw = new Common::DataSource;
-        return ttfOpenFont (rw, file, 1, ptsize, index);
-}
-
-TTF_Font* ttfOpenFont (const char *file, int ptsize)
-{
-        return ttfOpenFont (file, ptsize, 0);
-}
+//TTF_Font* ttfOpenFont (const char *file, int ptsize, long index)
+//{
+//        Common::DataSource *rw = new Common::DataSource;
+//        return ttfOpenFont (rw, file, 1, ptsize, index);
+//}
+//
+//TTF_Font* ttfOpenFont (const char *file, int ptsize)
+//{
+//        return ttfOpenFont (file, ptsize, 0);
+//}
 
 static void Flush_Glyph (c_glyph* glyph)
 {
@@ -828,9 +828,9 @@ void ttfCloseFont (TTF_Font* font)
                 if (font->args.stream) {
                         free (font->args.stream);
                 }
-                if (font->freesrc) {
-                        font->src->close ();
-                }
+//                if (font->freesrc) {
+//                        font->src->close ();
+//                }
                 free (font);
         }
 }
