@@ -6,36 +6,18 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include <iostream>
-#include <cmath>
-#include <ctime>
-#include <cstring>
-#include <cstdlib>
-#include <cstdio>
-#include <boost/bind.hpp>
-#include <cstdlib>
-
-#include <jni.h>
-#include <errno.h>
-#include <time.h>
-
 #include <EGL/egl.h>
 #include <view/openGl/OpenGl.h>
-
-#include <android/sensor.h>
-#include <android/log.h>
 #include <android_native_app_glue.h>
-
+#include <android/input.h>
 #include <Platform.h>
 #include <util/AbstractShellImpl.h>
-#include <util/ReflectionMacros.h>
 #include <util/Exceptions.h>
 #include <view/freetype/Freetype.h>
-//#include "GraphicsService.h"
 #include "Shell.h"
-//#include "EventDispatcher.h"
 #include "sound/Sound.h"
 #include "common/dataSource/DataSource.h"
+#include "EventDispatcher.h"
 
 namespace M = Model;
 namespace V = View;
@@ -45,49 +27,8 @@ namespace U = Util;
 
 /****************************************************************************/
 
-uint32_t getCurrentMs ()
-{
-        timespec ts;
-
-        if (clock_gettime (CLOCK_MONOTONIC, &ts) == -1) {
-                throw U::RuntimeException ("clock_gettime (CLOCK_MONOTONIC) failed");
-        }
-
-        return ts.tv_sec * 1000 + ts.tv_nsec / 1000.0;
-}
-
-/****************************************************************************/
-
-void delayMs (uint32_t ms)
-{
-        timespec req, res;
-
-        req.tv_sec = ms / 1000;
-        req.tv_nsec = (ms % 1000) * 1000;
-
-        if (nanosleep (&req, &res) == -1) {
-                throw U::RuntimeException ("nanosleep (&req, &res) failed");
-        }
-}
-
-/****************************************************************************/
-
-int printlog (const char *format, ...)
-{
-        va_list args;
-        va_start(args, format);
-        int ret = __android_log_vprint (ANDROID_LOG_INFO, "bajka", format, args);
-        va_end(args);
-        return ret;
-}
-
-/****************************************************************************/
-
 struct Shell::Impl {
-        Impl () : state (NULL),
-                  sensorManager (NULL),
-                  accelerometerSensor (NULL),
-                  sensorEventQueue (NULL),
+        Impl () : app (NULL),
                   display (NULL),
                   surface (NULL),
                   context (NULL),/*
@@ -95,15 +36,13 @@ struct Shell::Impl {
                   dataSource (NULL)
         {}
 
-        android_app *state;
-        ASensorManager *sensorManager;
-        const ASensor *accelerometerSensor;
-        ASensorEventQueue *sensorEventQueue;
+        android_app *app;
         EGLDisplay display;
         EGLSurface surface;
         EGLContext context;
 //        struct saved_state savedState;
         Common::DataSource *dataSource;
+        EventDispatcher dispatcher;
 };
 
 /****************************************************************************/
@@ -117,64 +56,23 @@ View::GLContext *glContext () { return shell ()->getGLContext (); }
 Shell::Shell () : myimpl (new Impl) {}
 Shell::~Shell () { delete myimpl; }
 
-/****************************************************************************/
-
-void Shell::dispatchEvents ()
-{
-//        myimpl->dispatcher.pollAndDispatch (impl->model, impl->eventIndex, &impl->pointerInsideIndex, getGLContext ());
-
-        // Read all pending events.
-        int ident;
-        int events;
-        struct android_poll_source* source;
-
-        // If not animating, we will block forever waiting for events.
-        // If animating, we loop until all events are read, then continue
-        // to draw the next frame of animation.
-        while ((ident = ALooper_pollAll (0, NULL, &events, (void**)&source)) >= 0) {
-
-            // Process this event.
-            if (source != NULL) {
-                source->process (myimpl->state, source);
-            }
-
-            // If a sensor has data, process it now.
-            if (ident == LOOPER_ID_USER) {
-                if (myimpl->accelerometerSensor != NULL) {
-                    ASensorEvent event;
-                    while (ASensorEventQueue_getEvents (myimpl->sensorEventQueue, &event, 1) > 0) {
-                        // LOGI("accelerometer: x=%f y=%f z=%f", event.acceleration.x, event.acceleration.y, event.acceleration.z);
-                    }
-                }
-            }
-
-            // Check if we are exiting.
-            if (myimpl->state->destroyRequested != 0) {
-                //engine_term_display (&engine);
-                quit ();
-                return;
-            }
-        }
-}
-
 /**
  * Process the next input event.
  */
-static int32_t engine_handle_input (struct android_app* app, AInputEvent* event) {
-//    struct engine* engine = (struct engine*)app->userData;
-//    if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
-//        engine->animating = 1;
-//        engine->state.x = AMotionEvent_getX(event, 0);
-//        engine->state.y = AMotionEvent_getY(event, 0);
-//        return 1;
-//    }
-    return 0;
+int32_t handleInput (struct android_app* app, AInputEvent *event) {
+        Shell *shell = static_cast <Shell *> (app->userData);
+        EventDispatcher *dispatcher = static_cast <EventDispatcher *> (shell->getEventDispatcher ());
+        bool ret = false;
+
+        Event::IEvent *e = dispatcher->translate (event, shell->getGLContext ());
+        ret |= dispatcher->dispatch (shell->impl->model, shell->impl->eventIndex, &shell->impl->pointerInsideIndex, e);
+        return ret;
 }
 
 /**
  * Process the next main command.
  */
-static void engine_handle_cmd (struct android_app* app, int32_t cmd) {
+static void handleCmd (struct android_app* app, int32_t cmd) {
     Shell *shell = static_cast <Shell *> (app->userData);
 
     switch (cmd) {
@@ -225,7 +123,7 @@ struct InitWindowDTO {
 
 /****************************************************************************/
 
-static void handleCmdInit (struct android_app* app, int32_t cmd)
+void handleCmdInit (struct android_app* app, int32_t cmd)
 {
         InitWindowDTO *initWindowDTO = static_cast <InitWindowDTO *> (app->userData);
 
@@ -250,10 +148,10 @@ void Shell::initDependent ()
         InitWindowDTO initWindowDTO;
         initWindowDTO.shell = this;
 
-        myimpl->state = static_cast <android_app *> (impl->userData);
-        myimpl->state->userData = &initWindowDTO;
-        myimpl->state->onAppCmd = handleCmdInit;
-        myimpl->state->onInputEvent = NULL;
+        myimpl->app = static_cast <android_app *> (impl->userData);
+        myimpl->app->userData = &initWindowDTO;
+        myimpl->app->onAppCmd = handleCmdInit;
+        myimpl->app->onInputEvent = NULL;
 
         // Read all pending events.
         int ident;
@@ -263,21 +161,18 @@ void Shell::initDependent ()
         while (!initWindowDTO.initDone) {
                 while ((ident = ALooper_pollAll (0, NULL, &events, (void**)&source)) >= 0) {
                     if (source != NULL) {
-                        source->process (myimpl->state, source);
+                        source->process (myimpl->app, source);
                     }
                 }
 
                 delayMs (20);
         }
 
-        myimpl->state->userData = this;
-        myimpl->state->onAppCmd = engine_handle_cmd;
-        myimpl->state->onInputEvent = engine_handle_input;
+        myimpl->app->userData = this;
+        myimpl->app->onAppCmd = handleCmd;
+        myimpl->app->onInputEvent = handleInput;
 
-        // Prepare to monitor accelerometer
-        myimpl->sensorManager = ASensorManager_getInstance ();
-        myimpl->accelerometerSensor = ASensorManager_getDefaultSensor (myimpl->sensorManager, ASENSOR_TYPE_ACCELEROMETER);
-        myimpl->sensorEventQueue = ASensorManager_createEventQueue (myimpl->sensorManager, myimpl->state->looper, LOOPER_ID_USER, NULL, NULL);
+        myimpl->dispatcher.init (myimpl->app);
 
 //        TODO tu można jakoś zapisywac stan - saved_state to jest struktura użytkownika.
 //        if (myimpl->state->savedState != NULL) {
@@ -285,6 +180,8 @@ void Shell::initDependent ()
 //                myimpl->savedState = *(struct saved_state *)myimpl->state->savedState;
 //        }
 }
+
+/****************************************************************************/
 
 void Shell::initDisplay ()
 {
@@ -353,10 +250,10 @@ void Shell::initDisplay ()
          * ANativeWindow buffers to match, using EGL_NATIVE_VISUAL_ID. */
         eglGetConfigAttrib (display, config, EGL_NATIVE_VISUAL_ID, &format);
 
-        printlog ("myimpl->state : %p, myimpl->state->window : %p", myimpl->state, myimpl->state->window);
-        ANativeWindow_setBuffersGeometry (myimpl->state->window, 0, 0, format);
+        printlog ("myimpl->state : %p, myimpl->state->window : %p", myimpl->app, myimpl->app->window);
+        ANativeWindow_setBuffersGeometry (myimpl->app->window, 0, 0, format);
 
-        EGLSurface surface = eglCreateWindowSurface (display, config, myimpl->state->window, NULL);
+        EGLSurface surface = eglCreateWindowSurface (display, config, myimpl->app->window, NULL);
 
         if (surface == EGL_NO_SURFACE) {
                 throw U::InitException ("eglCreateWindowSurface returned EGL_NO_SURFACE.");
@@ -432,8 +329,8 @@ void Shell::swapBuffers ()
 
 Common::DataSource *Shell::newDataSource ()
 {
-        myimpl->state = static_cast <android_app *> (impl->userData);
-        return new Common::DataSource (myimpl->state->activity->assetManager);
+        myimpl->app = static_cast <android_app *> (impl->userData);
+        return new Common::DataSource (myimpl->app->activity->assetManager);
 }
 
 /****************************************************************************/
@@ -441,4 +338,11 @@ Common::DataSource *Shell::newDataSource ()
 void Shell::deleteDataSource (Common::DataSource *ds)
 {
         delete ds;
+}
+
+/****************************************************************************/
+
+Event::IEventDispather *Shell::getEventDispatcher ()
+{
+        return &myimpl->dispatcher;
 }
