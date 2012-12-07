@@ -24,6 +24,7 @@
 #include "Platform.h"
 #include "model/manager/IModelManager.h"
 #include "common/dataSource/DataSource.h"
+#include "events/IEventDispather.h"
 
 namespace Util {
 using namespace Container;
@@ -152,6 +153,7 @@ void AbstractShell::loop ()
 
         int loopDelayMs = impl->config->loopDelayMs;
         int deltaMs = 0;
+        Event::IEventDispather *dispatcher = getEventDispatcher ();
 
         while (!impl->quit) {
                 bool newModelLoaded = impl->modelManager->run (this);
@@ -175,7 +177,7 @@ void AbstractShell::loop ()
                 }
 #endif
 
-                dispatchEvents ();
+                dispatcher->pollAndDispatch (impl->model, impl->eventIndex, &impl->pointerInsideIndex, &impl->glContext);
 
                 impl->updateEvent.setDeltaMs (deltaMs);
                 impl->model->update (&impl->updateEvent, this);

@@ -44,7 +44,6 @@ protected:
 
         void loop ();
         virtual void destroy ();
-        virtual void dispatchEvents () = 0;
 
         class Impl;
         AbstractShellImpl *impl;
