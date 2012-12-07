@@ -53,7 +53,7 @@ public:
         /**
          * Wspołrzędne myszy na wspołrzedne projekcji (clip coordinates, czy jak one tam...)
          */
-        void mouseToDisplay (int x, int y, float *nx, float *ny) const;
+        void mouseToDisplay (float x, float y, float *nx, float *ny) const;
 
 public:
 

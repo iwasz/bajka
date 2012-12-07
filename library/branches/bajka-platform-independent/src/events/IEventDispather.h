@@ -13,6 +13,10 @@ namespace Model {
 struct IModel;
 }
 
+namespace View {
+class GLContext;
+}
+
 namespace Event {
 class IEvent;
 class PointerInsideIndex;
@@ -24,6 +28,11 @@ class EventIndex;
 class IEventDispather {
 public:
         virtual ~IEventDispather () {}
+
+        /**
+         *
+         */
+        virtual bool pollAndDispatch (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex, View::GLContext const *ctx) = 0;
 
         /**
          * Zwraca true, kiedy event został obsłużony przez grę i nie powinien zostać przekazany do

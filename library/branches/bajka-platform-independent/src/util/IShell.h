@@ -23,6 +23,10 @@ namespace Common {
 class DataSource;
 }
 
+namespace Event {
+class IEventDispather;
+}
+
 namespace Util {
 class Config;
 
@@ -75,6 +79,12 @@ public:
          */
         virtual Common::DataSource *newDataSource () = 0;
         virtual void deleteDataSource (Common::DataSource *ds) = 0;
+
+        /**
+         * Piece of code responsible for gathering events from system and passing them
+         * to appliaction.
+         */
+        virtual Event::IEventDispather *getEventDispatcher () = 0;
 
 protected:
 

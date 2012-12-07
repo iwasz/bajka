@@ -131,7 +131,7 @@ void GLContext::initProjectionMatrix (Util::Config *config)
 
 /****************************************************************************/
 
-void GLContext::mouseToDisplay (int x, int y, float *nx, float *ny) const
+void GLContext::mouseToDisplay (float x, float y, float *nx, float *ny) const
 {
         double projectionViewPortRatioW = config->projectionWidth / config->viewportWidth;
         double projectionViewPortRatioH = config->projectionHeight / config->viewportHeight;
