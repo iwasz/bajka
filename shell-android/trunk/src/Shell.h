@@ -17,6 +17,11 @@ namespace Model {
 class IModel;
 }
 
+struct android_app;
+struct AInputEvent;
+extern int32_t handleInput (struct android_app *app, AInputEvent *event);
+extern void handleCmdInit (struct android_app* app, int32_t cmd);
+
 /**
  *
  */
@@ -26,11 +31,10 @@ public:
         virtual ~Shell ();
         static Shell *instance () { return &instance_; }
 
-        // TODO private
-        void initDisplay ();
-
         Common::DataSource *newDataSource ();
         void deleteDataSource (Common::DataSource *ds);
+
+        Event::IEventDispather *getEventDispatcher ();
 
 private:
 
@@ -38,10 +42,12 @@ private:
 
         void initDependent ();
         void destroy ();
-        void dispatchEvents ();
         void swapBuffers ();
+        void initDisplay ();
 
         friend Util::IShell *shell ();
+        friend int32_t handleInput (struct android_app* app, AInputEvent *event);
+        friend void handleCmdInit (struct android_app* app, int32_t cmd);
 
 private:
 
