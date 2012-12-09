@@ -70,7 +70,7 @@ void android_main (struct android_app* state) {
     // Make sure glue isn't stripped.
     app_dummy();
 
-    sleep (4);
+//    sleep (4);
 
     Shell *shell = Shell::instance ();
     Util::ShellConfig config;
