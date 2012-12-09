@@ -33,7 +33,7 @@ else()
 endif()
 
 SET (CMAKE_VERBOSE_MAKEFILE 0)
-SET (USE_CHIPMUNK 1)
+#SET (USE_CHIPMUNK 1)
 
 INSTALL (
     DIRECTORY "${PROJECT_SOURCE_DIR}/../src/"
@@ -72,9 +72,9 @@ pkg_check_modules (PNG REQUIRED "libpng")
 INCLUDE_DIRECTORIES (${PNG_INCLUDE_DIRS})
 link_directories(${PNG_LIBRARY_DIRS})
 
-pkg_check_modules (ZLIB REQUIRED "zlib")
-INCLUDE_DIRECTORIES (${ZLIB_INCLUDE_DIRS})
-link_directories(${ZLIB_LIBRARY_DIRS})
+#pkg_check_modules (ZLIB REQUIRED "zlib")
+#INCLUDE_DIRECTORIES (${ZLIB_INCLUDE_DIRS})
+#link_directories(${ZLIB_LIBRARY_DIRS})
 
 FIND_PACKAGE (JPEG)
 INCLUDE_DIRECTORIES (${JPEG_INCLUDE_DIR})
@@ -115,7 +115,9 @@ AUX_SOURCE_DIRECTORY (../src/events/types SOURCES)
 
 AUX_SOURCE_DIRECTORY (../src/model SOURCES)
 AUX_SOURCE_DIRECTORY (../src/model/static SOURCES)
+if (USE_CHIPMUNK)
 AUX_SOURCE_DIRECTORY (../src/model/physics SOURCES)
+endif ()
 AUX_SOURCE_DIRECTORY (../src/model/layout SOURCES)
 AUX_SOURCE_DIRECTORY (../src/model/manager SOURCES)
 
