@@ -65,7 +65,27 @@ Event::IEvent *EventDispatcher::translate (AInputEvent *event, View::GLContext c
         int32_t eventType = AInputEvent_getType (event);
 
         if (eventType == AINPUT_EVENT_TYPE_MOTION) {
-                return updateMouseMotionEvent (event, ctx);
+
+                int32_t i = AMotionEvent_getAction (event);
+                unsigned char eventAction = AMOTION_EVENT_ACTION_MASK & i;
+                unsigned char pointerIndex = AMOTION_EVENT_ACTION_POINTER_INDEX_MASK & i;
+
+                switch (eventAction) {
+                case AMOTION_EVENT_ACTION_DOWN:
+                case AMOTION_EVENT_ACTION_POINTER_DOWN:
+                        return updateMouseButtonEventImpl (&buttonPressEvent, event, ctx);
+
+                case AMOTION_EVENT_ACTION_UP:
+                case AMOTION_EVENT_ACTION_POINTER_UP:
+                        return updateMouseButtonEventImpl (&buttonReleaseEvent, event, ctx);
+
+                case AMOTION_EVENT_ACTION_MOVE:
+                        return updateMouseMotionEvent (event, ctx);
+
+                default:
+                        break;
+                }
+
         }
         else if (eventType == AINPUT_EVENT_TYPE_KEY) {
 
@@ -165,14 +185,15 @@ MouseButtonEvent *EventDispatcher::updateMouseButtonEvent (AInputEvent *event, V
 MouseButtonEvent *EventDispatcher::updateMouseButtonEventImpl (MouseButtonEvent *output, AInputEvent *event, View::GLContext const *ctx)
 {
 //        output->setButton (translateMouseButton (event));
-        mouseMotionEvent.setButtons (0);
+        buttonPressEvent.setButton (LEFT);
 
         float x = AMotionEvent_getX (event, 0);
         float y = AMotionEvent_getY (event, 0);
 
         G::Point p;
         ctx->mouseToDisplay (x, y, &p.x, &p.y);
-        mouseMotionEvent.setPosition (p);
+        buttonPressEvent.setPosition (p);
+        return &buttonPressEvent;
 }
 
 /*--------------------------------------------------------------------------*/
