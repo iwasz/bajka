@@ -25,6 +25,7 @@
 #include "model/manager/IModelManager.h"
 #include "common/dataSource/DataSource.h"
 #include "events/IEventDispather.h"
+#include <view/freetype/Freetype.h>
 
 namespace Util {
 using namespace Container;
@@ -131,6 +132,10 @@ void AbstractShell::initIndependent ()
 {
         srand (time (NULL));
         Tween::init ();
+
+        if (ttfInit () < 0) {
+                throw U::InitException ("TTF_Init failed");
+        }
 }
 
 /****************************************************************************/
