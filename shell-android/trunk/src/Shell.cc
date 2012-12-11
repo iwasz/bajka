@@ -13,7 +13,6 @@
 #include <Platform.h>
 #include <util/AbstractShellImpl.h>
 #include <util/Exceptions.h>
-#include <view/freetype/Freetype.h>
 #include "Shell.h"
 #include "sound/Sound.h"
 #include "common/dataSource/DataSource.h"
@@ -141,10 +140,6 @@ void handleCmdInit (struct android_app* app, int32_t cmd)
 
 void Shell::initDependent ()
 {
-        if (ttfInit () < 0) {
-                throw U::InitException ("TTF_Init failed");
-        }
-
         InitWindowDTO initWindowDTO;
         initWindowDTO.shell = this;
 
@@ -285,10 +280,6 @@ void Shell::initDisplay ()
         myimpl->display = display;
         myimpl->context = context;
         myimpl->surface = surface;
-
-        // Initialize GL state.
-        glEnable(GL_CULL_FACE);
-        glDisable(GL_DEPTH_TEST);
 
         impl->glContext.init (impl->config);
 }
