@@ -9,6 +9,14 @@
 #ifndef BAJKA_SHELL_H_
 #define BAJKA_SHELL_H_
 
+// To zostanie.
+
+#include "ShellFactory.h"
+#include "GameLoop.h"
+
+// To już nie.
+
+
 #include <util/AbstractShell.h>
 
 class Impl;
