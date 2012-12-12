@@ -66,15 +66,18 @@ int main (int argc, char **argv)
  * android_native_app_glue.  It runs in its own thread, with its own
  * event loop for receiving input events and doing other things.
  */
-void android_main (struct android_app* state) {
+void android_main (struct android_app* app) {
     // Make sure glue isn't stripped.
     app_dummy();
 
 //    sleep (4);
 
-    Shell *shell = Shell::instance ();
-    Util::ShellConfig config;
-    shell->run (config, state);
+//    Shell *shell = Shell::instance ();
+//    Util::ShellConfig config;
+//    shell->run (config, state);
+
+        std::auto_ptr <GameLoop> loop = ShellFactory::createGameLoop (NULL, app);
+        loop->loop ();
 }
 
 #endif
