@@ -6,30 +6,34 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef SHELLCONTEXT_H_
-#define SHELLCONTEXT_H_
+#ifndef GRAPHICSSERVICE_H_
+#define GRAPHICSSERVICE_H_
+
+#include <EGL/egl.h>
 
 struct android_app;
 class ShellFactory;
 
-namespace Util {
-class ShellConfig;
-}
-
 /**
- * DTO grubaśne.
+ *
  */
-struct ShellContext {
+class GraphicsService {
+public:
 
-        Util::ShellConfig *shellConfig;
-        android_app *app;
+        void initDisplay ();
+        void termDisplay ();
 
 private:
 
-        ShellContext ();
-        ShellContext (ShellContext const &) {}
+        GraphicsService (android_app *app);
         friend class ShellFactory;
 
+private:
+
+        android_app *app;
+        EGLDisplay display;
+        EGLSurface surface;
+        EGLContext context;
 };
 
-#endif /* SHELLCONTEXT_H_ */
+#endif /* GRAPHICSSERVICE_H_ */

@@ -12,6 +12,8 @@
 #include <stdint.h>
 
 class ShellContext;
+class ShellFactory;
+class GraphicsService;
 
 /**
  *
@@ -77,9 +79,20 @@ public:
          */
         void onConfigChanged (ShellContext *ctx);
 
-        void onStep (ShellContext *ctx);
+        enum RunningMode { NORMAL, USER_PAUSE, AUTO_PAUSE };
+        void onStep (ShellContext *ctx, RunningMode r);
 
         int32_t onInputEvent (ShellContext *ctx);
+
+private:
+
+        LifecycleHandler () : graphicsService (NULL) {}
+        LifecycleHandler (LifecycleHandler const &) {}
+        friend class ShellFactory;
+
+private:
+
+        GraphicsService *graphicsService;
 
 };
 

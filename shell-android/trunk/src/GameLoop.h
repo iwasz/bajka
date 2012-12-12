@@ -15,6 +15,7 @@ class ShellContext;
 struct android_app;
 struct AInputEvent;
 class LifecycleHandler;
+class ShellFactory;
 
 /**
  *
@@ -22,13 +23,15 @@ class LifecycleHandler;
 class GameLoop {
 public:
 
-        GameLoop (ShellContext *c, LifecycleHandler *h);
         ~GameLoop ();
 
         void init ();
         void loop ();
 
 private:
+
+        friend class ShellFactory;
+        GameLoop (ShellContext *c, LifecycleHandler *h);
 
         static void handleCmd (android_app *app, int32_t cmd);
         void handleCmd (int32_t cmd);
@@ -42,7 +45,8 @@ private:
         bool userPause;
         bool autoPause;
         bool suspended;
-        bool firstLoad;
+        bool firstInitWindow;
+        bool firstGainedFocus;
         bool savedStatePending;
         bool rendering;
 };

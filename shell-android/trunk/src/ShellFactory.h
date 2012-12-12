@@ -15,11 +15,15 @@ class GameLoop;
 class ShellContext;
 struct android_app;
 class LifecycleHandler;
+class GraphicsService;
 
 namespace Util {
 class ShellConfig;
 }
 
+/**
+ *
+ */
 class ShellFactory {
 public:
 
@@ -30,6 +34,7 @@ private:
         /// Usunać za pomocą delete
         static ShellContext *createShellContext (Util::ShellConfig *sConfig, android_app *app);
         static LifecycleHandler *createLifecycleHandler ();
+        static GraphicsService *createGraphicsService (android_app *app);
 
 };
 

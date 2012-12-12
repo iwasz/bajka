@@ -20,7 +20,8 @@ GameLoop::GameLoop (ShellContext *c, LifecycleHandler *h) :
         userPause (false),
         autoPause (false),
         suspended (false),
-        firstLoad (true),
+        firstInitWindow (true),
+        firstGainedFocus (true),
         savedStatePending (false),
         rendering (false)
 {
@@ -76,7 +77,19 @@ void GameLoop::loop ()
                 }
 
                 if (rendering) {
-                        lifecycleHandler->onStep (context);
+                        LifecycleHandler::RunningMode r;
+
+                        if (autoPause) {
+                                r = LifecycleHandler::AUTO_PAUSE;
+                        }
+                        else if (userPause) {
+                                r = LifecycleHandler::AUTO_PAUSE;
+                        }
+                        else {
+                                r = LifecycleHandler::NORMAL;
+                        }
+
+                        lifecycleHandler->onStep (context, r);
                 }
 
                 delayMs (17);
@@ -108,7 +121,13 @@ void GameLoop::handleCmd (int32_t cmd)
 
         case APP_CMD_INIT_WINDOW:
                 printlog ("APP_CMD_INIT_WINDOW");
-                // TODO podobno to może się wykonać *PO* APP_CMD_GAINED_FOCUS.
+
+                if (firstInitWindow) {
+                        lifecycleHandler->onFirstTimeReadyForRender (context);
+                        firstInitWindow = false;
+                }
+
+                rendering = true;
                 break;
 
         case APP_CMD_TERM_WINDOW:
@@ -130,27 +149,20 @@ void GameLoop::handleCmd (int32_t cmd)
 
         case APP_CMD_GAINED_FOCUS:
                 printlog ("APP_CMD_GAINED_FOCUS");
+                lifecycleHandler->onGainedFocus (context, firstGainedFocus);
+                firstGainedFocus = false;
 
-                if (firstLoad) {
-                        lifecycleHandler->onFirstTimeReadyForRender (context);
-                        firstLoad = false;
-                        lifecycleHandler->onGainedFocus (context, true);
-                }
-                else {
-                        lifecycleHandler->onGainedFocus (context, false);
-
-                        if (savedStatePending) {
-                                lifecycleHandler->onLoadState (context);
-                                savedStatePending = false;
-                        }
+                if (savedStatePending) {
+                        lifecycleHandler->onLoadState (context);
+                        savedStatePending = false;
                 }
 
-                rendering = true;
                 break;
 
         case APP_CMD_LOST_FOCUS:
                 printlog ("APP_CMD_LOST_FOCUS");
                 lifecycleHandler->onLostFocus (context);
+                autoPause = true;
                 break;
 
         case APP_CMD_CONFIG_CHANGED:
@@ -189,7 +201,8 @@ void GameLoop::handleCmd (int32_t cmd)
 
         case APP_CMD_DESTROY:
                 printlog ("APP_CMD_DESTROY");
-                firstLoad = true;
+                firstInitWindow = true;
+                firstGainedFocus = true;
                 lifecycleHandler->onDestroy (context);
                 break;
 
