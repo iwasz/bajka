@@ -24,7 +24,7 @@ uint32_t getCurrentMs ()
                 throw U::RuntimeException ("clock_gettime (CLOCK_MONOTONIC) failed");
         }
 
-        return ts.tv_sec * 1000 + ts.tv_nsec / 1000.0;
+        return ts.tv_sec * 1000 + ts.tv_nsec / 1000000.0;
 }
 
 /****************************************************************************/
@@ -34,7 +34,7 @@ void delayMs (uint32_t ms)
         timespec req, res;
 
         req.tv_sec = ms / 1000;
-        req.tv_nsec = (ms % 1000) * 1000;
+        req.tv_nsec = (ms % 1000) * 1000000;
 
         if (nanosleep (&req, &res) == -1) {
                 throw U::RuntimeException ("nanosleep (&req, &res) failed");

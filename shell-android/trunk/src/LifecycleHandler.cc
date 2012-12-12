@@ -9,11 +9,14 @@
 #include "LifecycleHandler.h"
 #include "ShellContext.h"
 #include <Platform.h>
+#include "GraphicsService.h"
+
+/****************************************************************************/
 
 void LifecycleHandler::onFirstTimeReadyForRender (ShellContext *ctx)
 {
         printlog ("LifecycleHandler::onFirstTimeReadyForRender");
-
+        graphicsService->initDisplay ();
 }
 
 /****************************************************************************/
@@ -21,7 +24,7 @@ void LifecycleHandler::onFirstTimeReadyForRender (ShellContext *ctx)
 void LifecycleHandler::onGainedFocus (ShellContext *ctx, bool firstTime)
 {
         printlog ("LifecycleHandler::onGainedFocus");
-
+        graphicsService->initDisplay ();
 }
 
 /****************************************************************************/
@@ -90,13 +93,21 @@ void LifecycleHandler::onConfigChanged (ShellContext *ctx)
 
 /****************************************************************************/
 
-void LifecycleHandler::onStep (ShellContext *ctx)
+void LifecycleHandler::onStep (ShellContext *ctx, RunningMode r)
 {
 #ifndef NDEBUG
         static int i = 0;
 
-        if (++i % 100 == 0) {
-                printlog ("LifecycleHandler::onStep -> rendering...");
+        if ((++i % 100) == 0) {
+                if (r == NORMAL) {
+                        printlog ("LifecycleHandler::onStep -> rendering...");
+                }
+                else if (r == AUTO_PAUSE) {
+                        printlog ("LifecycleHandler::onStep -> auto pause...");
+                }
+                else {
+                        printlog ("LifecycleHandler::onStep -> user pause...");
+                }
         }
 #endif
 

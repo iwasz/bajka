@@ -11,11 +11,13 @@
 #include <util/IShell.h>
 #include "ShellContext.h"
 #include "LifecycleHandler.h"
+#include "GraphicsService.h"
 
 std::auto_ptr <GameLoop> ShellFactory::createGameLoop (Util::ShellConfig *sConfig, android_app *app)
 {
         ShellContext *ctx = createShellContext (sConfig, app);
         LifecycleHandler *handler = createLifecycleHandler ();
+        handler->graphicsService = createGraphicsService (app);
         std::auto_ptr <GameLoop> loop = std::auto_ptr <GameLoop> (new GameLoop (ctx, handler));
         loop->init ();
         return loop;
@@ -37,4 +39,11 @@ LifecycleHandler *ShellFactory::createLifecycleHandler ()
 {
         LifecycleHandler *handler = new LifecycleHandler;
         return handler;
+}
+
+/****************************************************************************/
+
+GraphicsService *ShellFactory::createGraphicsService (android_app *app)
+{
+        return new GraphicsService (app);
 }
