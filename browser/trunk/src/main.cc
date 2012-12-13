@@ -76,7 +76,8 @@ void android_main (struct android_app* app) {
 //    Util::ShellConfig config;
 //    shell->run (config, state);
 
-        std::auto_ptr <GameLoop> loop = ShellFactory::createGameLoop (NULL, app);
+        Util::ShellConfig config;
+        std::auto_ptr <GameLoop> loop = ShellFactory::createGameLoop (&config, app);
         loop->loop ();
 }
 
