@@ -56,8 +56,14 @@ void GameLoop::loop ()
                 int ident;
                 int events;
                 struct android_poll_source *source;
+                uint32_t lastMs = getCurrentMs ();
+                uint32_t deltaMs = 0;
 
                 while (true) {
+
+                        uint32_t currentMs = getCurrentMs ();
+                        deltaMs = currentMs - lastMs;
+                        lastMs = currentMs;
 
                         while ((ident = ALooper_pollAll ((suspended) ? (-1) : (0), NULL, &events, (void**)&source)) >= 0) {
 

@@ -24,8 +24,8 @@ std::auto_ptr <GameLoop> ShellFactory::createGameLoop (Util::ShellConfig *sConfi
         ShellContext *ctx = createShellContext (sConfig, app);
         LifecycleHandler *handler = createLifecycleHandler ();
         handler->graphicsService = createGraphicsService (app);
-        handler->bajkaService = createBajkaService ();
         handler->dataSourceService = createDataSourceService (app);
+        handler->bajkaService = createBajkaService (handler->dataSourceService);
         std::auto_ptr <GameLoop> loop = std::auto_ptr <GameLoop> (new GameLoop (ctx, handler));
         loop->init ();
         return loop;
@@ -58,13 +58,13 @@ GraphicsService *ShellFactory::createGraphicsService (android_app *app)
 
 /****************************************************************************/
 
-Util::BajkaService *ShellFactory::createBajkaService ()
+Util::BajkaService *ShellFactory::createBajkaService (Util::IDataSourceService *d)
 {
-        return new Util::BajkaService;
+        return new Util::BajkaService (d);
 }
 /****************************************************************************/
 
-DataSourceService *ShellFactory::createDataSourceService (android_app *app)
+Util::IDataSourceService *ShellFactory::createDataSourceService (android_app *app)
 {
         return new DataSourceService (app);
 }

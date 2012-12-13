@@ -9,6 +9,8 @@
 #ifndef SHELL_BAJKAAAAA_DATASOURCESERVICE_H_
 #define SHELL_BAJKAAAAA_DATASOURCESERVICE_H_
 
+#include <util/IDataSourceService.h>
+
 struct android_app;
 
 namespace Common {
@@ -18,7 +20,7 @@ class DataSource;
 /**
  * Fabryka właściwie.
  */
-class DataSourceService {
+class DataSourceService : public Util::IDataSourceService {
 public:
 
         DataSourceService (android_app *app);
