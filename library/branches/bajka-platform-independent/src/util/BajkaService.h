@@ -17,6 +17,7 @@ namespace Util {
 class ShellConfig;
 class Config;
 class Scene;
+class IDataSourceService;
 
 /**
  * Do inicjowania i konfigurowania biblioteki bajka z zewnątrz, czyli z shella.
@@ -24,7 +25,7 @@ class Scene;
 class BajkaService {
 public:
 
-        BajkaService ();
+        BajkaService (Util::IDataSourceService *d);
         ~BajkaService ();
 
         /**

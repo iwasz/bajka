@@ -25,6 +25,7 @@
 #include "Platform.h"
 #include "Scene.h"
 #include "model/manager/IModelManager.h"
+#include "IDataSourceService.h"
 
 using Model::IModelManager;
 
@@ -38,18 +39,22 @@ namespace M = Model;
  */
 struct BajkaService::Impl {
 
-        Impl () : config (NULL) {}
+        Impl () : config (NULL), dataSourceService (NULL) {}
 
         View::GLContext glContext;
         Ptr <Container::BeanFactoryContainer> configContainer;
         Ptr <Container::BeanFactoryContainer> mainContainer;
         Util::Config *config;
+        Util::IDataSourceService *dataSourceService;
 
 };
 
 /****************************************************************************/
 
-BajkaService::BajkaService () : impl (new Impl) {}
+BajkaService::BajkaService (Util::IDataSourceService *d) : impl (new Impl)
+{
+        impl->dataSourceService = d;
+}
 
 /****************************************************************************/
 
@@ -73,6 +78,7 @@ U::Config *BajkaService::loadConfig (Common::DataSource *ds, Util::ShellConfig c
         impl->configContainer->addConversion (typeid (Model::HGravity), Model::stringToHGravity);
         impl->configContainer->addConversion (typeid (Model::VGravity), Model::stringToVGravity);
         impl->configContainer->addConversion (typeid (Model::LinearGroup::Type), Model::stringToLinearGroupType);
+        impl->configContainer->addSingleton ("dataSourceService", Core::Variant ("Benek pies"));
 
         ContainerFactory::init (impl->configContainer.get (), metaContainer.get ());
         impl->config = vcast <U::Config *> (impl->configContainer->getBean ("config"));
@@ -143,11 +149,11 @@ void BajkaService::initProjectionMatrix (Util::Config *config)
 
 /****************************************************************************/
 
-Util::Scene *BajkaService::loadScene (Common::DataSource *ds, Util::ShellConfig const &cfg)
+Util::Scene *BajkaService::loadScene (Common::DataSource *ds, Util::ShellConfig const &sCfg)
 {
-        impl->mainContainer = Container::ContainerFactory::createAndInit (Container::CompactMetaService::parseFile (ds, cfg.definitionFile), true, impl->configContainer.get ());
+        impl->mainContainer = Container::ContainerFactory::createAndInit (Container::CompactMetaService::parseFile (ds, sCfg.definitionFile), true, impl->configContainer.get ());
         M::IModelManager *modelManager = ocast <M::IModelManager *> (impl->mainContainer->getBean ("modelManager"));
-        U::Scene *scene = new U::Scene (modelManager);
+        U::Scene *scene = new U::Scene (modelManager, impl->config);
         return scene;
 }
 

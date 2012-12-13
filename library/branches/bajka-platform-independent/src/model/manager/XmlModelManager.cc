@@ -7,10 +7,11 @@
  ****************************************************************************/
 
 #include "XmlModelManager.h"
-#include "util/IShell.h"
+#include "util/Scene.h"
 #include <container/ContainerFactory.h>
 #include <iostream>
 #include "Platform.h"
+#include "util/IDataSourceService.h"
 
 namespace Model {
 
@@ -23,12 +24,12 @@ void XmlModelManager::load (std::string const &param1, std::string const &param2
 
 /****************************************************************************/
 
-IModel *XmlModelManager::get (Util::IShell *shell, std::string const &param1, std::string const &param2)
+IModel *XmlModelManager::get (std::string const &param1, std::string const &param2)
 {
         try {
-                Common::DataSource *ds = shell->newDataSource ();
+                Common::DataSource *ds = dataSourceService->newDataSource ();
                 Ptr <Container::BeanFactoryContainer> newContainer = Container::ContainerFactory::createAndInit (Container::CompactMetaService::parseFile (ds, param1), false, mainContainer);
-                shell->deleteDataSource (ds);
+                dataSourceService->deleteDataSource (ds);
                 Model::IModel *m = ocast <Model::IModel *> (newContainer->getBean (param2));
 
                 // Tu następuje skasowanie starego modelu.
@@ -50,7 +51,7 @@ IModel *XmlModelManager::get (Util::IShell *shell, std::string const &param1, st
 
 /****************************************************************************/
 
-bool XmlModelManager::run (Util::IShell *shell)
+bool XmlModelManager::run (Util::Scene *scene)
 {
         if (!dirty) {
                 return false;
@@ -63,15 +64,29 @@ bool XmlModelManager::run (Util::IShell *shell)
                 requestedName = this->name;
         }
 
-        shell->onManagerUnloadModel ();
-        IModel *m = get (shell, requestedFile, requestedName);
+        callOnManagerUnloadModel (scene);
+        IModel *m = get (requestedFile, requestedName);
 
         if (m) {
-                shell->setModel (m);
-                shell->onManagerLoadModel ();
+                scene->setModel (m);
+                callOnManagerLoadModel (scene);
         }
 
         return true;
+}
+
+/****************************************************************************/
+
+void XmlModelManager::callOnManagerUnloadModel (Util::Scene *scene)
+{
+        scene->onManagerUnloadModel ();
+}
+
+/****************************************************************************/
+
+void XmlModelManager::callOnManagerLoadModel (Util::Scene *scene)
+{
+        scene->onManagerUnloadModel ();
 }
 
 } /* namespace Model */
