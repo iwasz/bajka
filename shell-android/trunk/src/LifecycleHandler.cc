@@ -162,7 +162,7 @@ void LifecycleHandler::onStep (ShellContext *ctx, bool autoPause)
         }
 #endif
 
-        scene->onStep ();
+        scene->onStep (&updateEvent);
         delayMs (ctx->config->loopDelayMs);
         graphicsService->swapBuffers ();
 }

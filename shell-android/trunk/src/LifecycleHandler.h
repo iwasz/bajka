@@ -10,15 +10,16 @@
 #define BAJKA_SHELL_LIFECYCLEHANDLER_H_
 
 #include <stdint.h>
+#include <events/types/UpdateEvent.h>
 
 class ShellContext;
 class ShellFactory;
 class GraphicsService;
-class DataSourceService;
 
 namespace Util {
 class BajkaService;
 class Scene;
+class IDataSourceService;
 }
 
 /**
@@ -105,8 +106,9 @@ private:
 
         GraphicsService *graphicsService;
         Util::BajkaService *bajkaService;
-        DataSourceService *dataSourceService;
+        Util::IDataSourceService *dataSourceService;
         Util::Scene *scene;
+        Event::UpdateEvent updateEvent;
 
 };
 
