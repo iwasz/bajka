@@ -6,32 +6,29 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef SHELLCONTEXT_H_
-#define SHELLCONTEXT_H_
+#ifndef SHELL_BAJKAAAAA_DATASOURCESERVICE_H_
+#define SHELL_BAJKAAAAA_DATASOURCESERVICE_H_
 
 struct android_app;
-class ShellFactory;
 
-namespace Util {
-class ShellConfig;
-class Config;
+namespace Common {
+class DataSource;
 }
 
 /**
- * DTO grubaśne.
+ * Fabryka właściwie.
  */
-struct ShellContext {
+class DataSourceService {
+public:
 
-        Util::ShellConfig *shellConfig;
-        Util::Config *config;
-        android_app *app;
+        DataSourceService (android_app *app);
+
+        Common::DataSource *newDataSource ();
+        void deleteDataSource (Common::DataSource *ds);
 
 private:
 
-        ShellContext ();
-        ShellContext (ShellContext const &) {}
-        friend class ShellFactory;
-
+        android_app *app;
 };
 
-#endif /* SHELLCONTEXT_H_ */
+#endif /* DATASOURCESERVICE_H_ */

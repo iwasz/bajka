@@ -14,12 +14,20 @@
 class ShellContext;
 class ShellFactory;
 class GraphicsService;
+class DataSourceService;
+
+namespace Util {
+class BajkaService;
+class Scene;
+}
 
 /**
  *
  */
 class LifecycleHandler {
 public:
+
+        ~LifecycleHandler ();
 
         /**
          * Tu aplikacja jest gotowa do renderowania, odtwarzania dźwięku, okno jest widoczne, user może
@@ -39,8 +47,9 @@ public:
          * - włączyć auto pauzę, ale nie wyłączając renderowania,
          * - wyłączyć dźwięki,
          * - zmniejszyć odświerzanie - jednym słowem zwolnić CPU jak najbardziej.
+         * Wartość zwracana : true, jeśli należy włączyć autoPauzę. False, jeśli normalnie kontunuujemy program.
          */
-        void onLostFocus (ShellContext *ctx);
+        bool onLostFocus (ShellContext *ctx);
 
         /**
          * Zatrzymać renderowanie zupełnie. Gra powinna konsumowac 0% CPU.
@@ -79,20 +88,25 @@ public:
          */
         void onConfigChanged (ShellContext *ctx);
 
-        enum RunningMode { NORMAL, USER_PAUSE, AUTO_PAUSE };
-        void onStep (ShellContext *ctx, RunningMode r);
+        /**
+         * Tu gra renderuje.
+         */
+        void onStep (ShellContext *ctx, bool autoPause);
 
         int32_t onInputEvent (ShellContext *ctx);
 
 private:
 
-        LifecycleHandler () : graphicsService (NULL) {}
+        LifecycleHandler () : graphicsService (NULL), bajkaService (NULL), dataSourceService (NULL), scene (NULL) {}
         LifecycleHandler (LifecycleHandler const &) {}
         friend class ShellFactory;
 
 private:
 
         GraphicsService *graphicsService;
+        Util::BajkaService *bajkaService;
+        DataSourceService *dataSourceService;
+        Util::Scene *scene;
 
 };
 

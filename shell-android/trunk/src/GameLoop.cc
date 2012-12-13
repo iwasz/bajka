@@ -13,11 +13,15 @@
 #include "GameLoop.h"
 #include "ShellContext.h"
 #include "LifecycleHandler.h"
+#include <core/Exception.h>
+#include <exception>
+#include <cstdlib>
+
+/****************************************************************************/
 
 GameLoop::GameLoop (ShellContext *c, LifecycleHandler *h) :
         context (c),
         lifecycleHandler (h),
-        userPause (false),
         autoPause (false),
         suspended (false),
         firstInitWindow (true),
@@ -25,7 +29,6 @@ GameLoop::GameLoop (ShellContext *c, LifecycleHandler *h) :
         savedStatePending (false),
         rendering (false)
 {
-
 }
 
 /****************************************************************************/
@@ -49,50 +52,50 @@ void GameLoop::init ()
 
 void GameLoop::loop ()
 {
-        int ident;
-        int events;
-        struct android_poll_source *source;
+        try {
+                int ident;
+                int events;
+                struct android_poll_source *source;
 
-        while (true) {
+                while (true) {
 
-                while ((ident = ALooper_pollAll (0, NULL, &events, (void**)&source)) >= 0) {
+                        while ((ident = ALooper_pollAll ((suspended) ? (-1) : (0), NULL, &events, (void**)&source)) >= 0) {
 
-                    if (source != NULL) {
-                        source->process (context->app, source);
-                    }
+                            if (source != NULL) {
+                                source->process (context->app, source);
+                            }
 
-        //            if (ident == LOOPER_ID_USER) {
-        //                if (accelerometerSensor != NULL) {
-        //                    ASensorEvent event;
-        //                    while (ASensorEventQueue_getEvents (sensorEventQueue, &event, 1) > 0) {
-        //                        // LOGI("accelerometer: x=%f y=%f z=%f", event.acceleration.x, event.acceleration.y, event.acceleration.z);
-        //                    }
-        //                }
-        //            }
+                //            if (ident == LOOPER_ID_USER) {
+                //                if (accelerometerSensor != NULL) {
+                //                    ASensorEvent event;
+                //                    while (ASensorEventQueue_getEvents (sensorEventQueue, &event, 1) > 0) {
+                //                        // LOGI("accelerometer: x=%f y=%f z=%f", event.acceleration.x, event.acceleration.y, event.acceleration.z);
+                //                    }
+                //                }
+                //            }
 
-                    if (context->app->destroyRequested != 0) {
-                        // TODO
-                        return;
-                    }
+                            if (context->app->destroyRequested != 0) {
+                                // TODO
+                                return;
+                            }
+                        }
+
+                        if (rendering) {
+                                lifecycleHandler->onStep (context, autoPause);
+                        }
                 }
-
-                if (rendering) {
-                        LifecycleHandler::RunningMode r;
-
-                        if (autoPause) {
-                                r = LifecycleHandler::AUTO_PAUSE;
-                        }
-                        else if (userPause) {
-                                r = LifecycleHandler::AUTO_PAUSE;
-                        }
-                        else {
-                                r = LifecycleHandler::NORMAL;
-                        }
-
-                        lifecycleHandler->onStep (context, r);
-                }
-
-                delayMs (17);
+        }
+        catch (Core::Exception const &e) {
+                printlog ("GameLoop::loop : Core::Exception caught : %s\n", e.getMessage ().c_str ());
+                abort ();
+        }
+        catch (std::exception const &e) {
+                printlog ("GameLoop::loop : std::exception caught : %s\n", e.what ());
+                abort ();
+        }
+        catch (...) {
+                printlog ("GameLoop::loop : Unknown exception caught");
+                abort ();
         }
 }
 
@@ -133,6 +136,8 @@ void GameLoop::handleCmd (int32_t cmd)
         case APP_CMD_TERM_WINDOW:
                 printlog ("APP_CMD_TERM_WINDOW");
                 lifecycleHandler->onSurfaceDestroyed (context);
+                rendering = false;
+                suspended = true;
                 break;
 
         case APP_CMD_WINDOW_RESIZED:
@@ -157,12 +162,15 @@ void GameLoop::handleCmd (int32_t cmd)
                         savedStatePending = false;
                 }
 
+                suspended = false;
+                rendering = true;
                 break;
 
         case APP_CMD_LOST_FOCUS:
                 printlog ("APP_CMD_LOST_FOCUS");
-                lifecycleHandler->onLostFocus (context);
-                autoPause = true;
+                if (lifecycleHandler->onLostFocus (context)) {
+                        autoPause = true;
+                }
                 break;
 
         case APP_CMD_CONFIG_CHANGED:
@@ -192,6 +200,7 @@ void GameLoop::handleCmd (int32_t cmd)
                 printlog ("APP_CMD_PAUSE");
                 lifecycleHandler->onPause (context);
                 rendering = false;
+                suspended = true;
                 break;
 
         case APP_CMD_STOP:
