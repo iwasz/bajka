@@ -32,6 +32,7 @@ public:
          * Inicjuje.
          */
         void init (Util::Config *config);
+        void initProjectionMatrix (Util::Config *config);
 
         /**
          * Pobiera macierz z góry stosu za pomocą getCurrentMatrix, moży ją przez m i
@@ -64,10 +65,6 @@ public:
         GLint modelViewLocation;
         GLint projectionLocation;
         GLint texCoordInAttribLocation;
-
-private:
-
-        void initProjectionMatrix (Util::Config *config);
 
 private:
 
