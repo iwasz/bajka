@@ -10,6 +10,7 @@
 #include <boost/numeric/ublas/matrix.hpp>
 #include "util/Exceptions.h"
 #include "util/Config.h"
+#include "Platform.h"
 
 namespace View {
 using namespace boost::numeric::ublas;
@@ -59,14 +60,14 @@ void GLContext::init (Util::Config *config)
         positionAttribLocation = glGetAttribLocation (currentProgramObject, "position");
         texCoordInAttribLocation = glGetAttribLocation (currentProgramObject, "texCoordIn");
 
-        initProjectionMatrix (config);
-
         // Initialize GL state.
         glEnable(GL_CULL_FACE);
         glDisable(GL_DEPTH_TEST);
         glEnable (GL_TEXTURE_2D);
         glEnable (GL_BLEND);
         glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        printlog ("GLContext::init : done.");
 }
 
 /****************************************************************************/
@@ -122,14 +123,7 @@ void GLContext::initProjectionMatrix (Util::Config *config)
         }
 
         projection.setViewport (-rX, rX, -rY, rY);
-
-//        projectionInverted = projection;
-//        projectionInverted.invert ();
-
-#if 0
-        std::cerr << "projection matrix : " << projection << std::endl;
-        std::cerr << "projection inverted matrix : " << projectionInverted << std::endl;
-#endif
+        printlog ("GLContext::initProjectionMatrix : new viewport set : viewport.w=%f, viewport.h=%f.", 2*rX, 2*rY);
 }
 
 /****************************************************************************/

@@ -2,26 +2,32 @@
  *                                                                          *
  *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 19, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BAJKA_UTIL_H_
-#define BAJKA_UTIL_H_
+#ifndef BAJKA_SCENE_H_
+#define BAJKA_SCENE_H_
 
-/**
- * \defgroup Util
- * Klasy pomocnicze. Matematyka, geometria, struktury drzewiaste. Rożne klasy pomocnicze.
- */
+namespace Model {
+class IModelManager;
+}
 
-#include "Commons.h"
-#include "Config.h"
-#include "IShell.h"
-#include "Math.h"
-#include "ReflectionMacros.h"
-#include "BajkaService.h"
-#include "Scene.h"
+namespace Util {
 
-#	endif /* UTIL_H_ */
+class Scene {
+public:
+
+        Scene (Model::IModelManager *modelManager);
+        ~Scene ();
+
+        void onStep ();
+
+private:
+
+        struct Impl;
+        Impl *impl;
+};
+
+} /* namespace Util */
+#endif /* SCENE_H_ */
