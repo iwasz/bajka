@@ -42,13 +42,12 @@ private:
 
         ShellContext *context;
         LifecycleHandler *lifecycleHandler;
-        bool userPause;
         bool autoPause;
         bool suspended;
         bool firstInitWindow;
         bool firstGainedFocus;
         bool savedStatePending;
-        bool rendering;
+        bool rendering; // rendering i suspended są osobno, bo w czasie inicjowania mają odwrotne wartości.
 };
 
 #endif /* GAMELOOP_H_ */

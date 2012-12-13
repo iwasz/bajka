@@ -6,32 +6,22 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef SHELLCONTEXT_H_
-#define SHELLCONTEXT_H_
+#include "DataSourceService.h"
+#include <common/dataSource/DataSource.h>
+#include <android_native_app_glue.h>
 
-struct android_app;
-class ShellFactory;
+DataSourceService::DataSourceService (android_app *a) : app (a) {}
 
-namespace Util {
-class ShellConfig;
-class Config;
+/****************************************************************************/
+
+Common::DataSource *DataSourceService::newDataSource ()
+{
+        return new Common::DataSource (app->activity->assetManager);
 }
 
-/**
- * DTO grubaśne.
- */
-struct ShellContext {
+/****************************************************************************/
 
-        Util::ShellConfig *shellConfig;
-        Util::Config *config;
-        android_app *app;
-
-private:
-
-        ShellContext ();
-        ShellContext (ShellContext const &) {}
-        friend class ShellFactory;
-
-};
-
-#endif /* SHELLCONTEXT_H_ */
+void DataSourceService::deleteDataSource (Common::DataSource *ds)
+{
+        delete ds;
+}

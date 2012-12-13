@@ -9,7 +9,23 @@
 #include "LifecycleHandler.h"
 #include "ShellContext.h"
 #include <Platform.h>
+#include <util/BajkaService.h>
+#include <util/Scene.h>
 #include "GraphicsService.h"
+#include "DataSourceService.h"
+#include <exception>
+#include <Platform.h>
+#include <util/Config.h>
+
+/****************************************************************************/
+
+LifecycleHandler::~LifecycleHandler ()
+{
+        delete graphicsService;
+        delete bajkaService;
+        delete dataSourceService;
+        delete scene;
+}
 
 /****************************************************************************/
 
@@ -17,6 +33,32 @@ void LifecycleHandler::onFirstTimeReadyForRender (ShellContext *ctx)
 {
         printlog ("LifecycleHandler::onFirstTimeReadyForRender");
         graphicsService->initDisplay ();
+        Common::DataSource *ds = dataSourceService->newDataSource ();
+
+        try {
+                ctx->config = bajkaService->loadAndOverrideConfig (ds, *ctx->shellConfig);
+        }
+        catch (std::exception const &e) {
+                dataSourceService->deleteDataSource (ds);
+                throw;
+        }
+
+        dataSourceService->deleteDataSource (ds);
+        graphicsService->saveScreenDimensionsInConfig (ctx->config);
+        bajkaService->init (ctx->config);
+        bajkaService->initProjectionMatrix (ctx->config);
+
+        ds = dataSourceService->newDataSource ();
+
+        try {
+                scene = bajkaService->loadScene (ds, *ctx->shellConfig);
+        }
+        catch (std::exception const &e) {
+                dataSourceService->deleteDataSource (ds);
+                throw;
+        }
+
+        dataSourceService->deleteDataSource (ds);
 }
 
 /****************************************************************************/
@@ -25,14 +67,22 @@ void LifecycleHandler::onGainedFocus (ShellContext *ctx, bool firstTime)
 {
         printlog ("LifecycleHandler::onGainedFocus");
         graphicsService->initDisplay ();
+
+        if (ctx->config) {
+                graphicsService->saveScreenDimensionsInConfig (ctx->config);
+                bajkaService->initProjectionMatrix (ctx->config);
+        }
+
+        // TODO event
 }
 
 /****************************************************************************/
 
-void LifecycleHandler::onLostFocus (ShellContext *ctx)
+bool LifecycleHandler::onLostFocus (ShellContext *ctx)
 {
         printlog ("LifecycleHandler::onLostFocus");
-
+        // TODO event i na podstawie wartości zwracanej z niego zwracamu tutaj true (autopauza) lub false (bez autopauzy)
+        return true; // true oznacza, ze chcemy wejść w autopauzę.
 }
 
 /****************************************************************************/
@@ -48,7 +98,7 @@ void LifecycleHandler::onPause (ShellContext *ctx)
 void LifecycleHandler::onSurfaceDestroyed (ShellContext *ctx)
 {
         printlog ("LifecycleHandler::onSurfaceDestroyed");
-
+        graphicsService->unbindSurfaceAndContext ();
 }
 
 /****************************************************************************/
@@ -56,7 +106,7 @@ void LifecycleHandler::onSurfaceDestroyed (ShellContext *ctx)
 void LifecycleHandler::onStop (ShellContext *ctx)
 {
         printlog ("LifecycleHandler::onStop");
-
+        graphicsService->termDisplay ();
 }
 
 /****************************************************************************/
@@ -89,28 +139,32 @@ void LifecycleHandler::onConfigChanged (ShellContext *ctx)
 {
         printlog ("LifecycleHandler::onConfigChanged");
 
+        if (ctx->config) {
+                graphicsService->saveScreenDimensionsInConfig (ctx->config);
+                bajkaService->initProjectionMatrix (ctx->config);
+        }
 }
 
 /****************************************************************************/
 
-void LifecycleHandler::onStep (ShellContext *ctx, RunningMode r)
+void LifecycleHandler::onStep (ShellContext *ctx, bool autoPause)
 {
 #ifndef NDEBUG
         static int i = 0;
 
         if ((++i % 100) == 0) {
-                if (r == NORMAL) {
-                        printlog ("LifecycleHandler::onStep -> rendering...");
-                }
-                else if (r == AUTO_PAUSE) {
+                if (autoPause) {
                         printlog ("LifecycleHandler::onStep -> auto pause...");
                 }
                 else {
-                        printlog ("LifecycleHandler::onStep -> user pause...");
+                        printlog ("LifecycleHandler::onStep -> rendering...");
                 }
         }
 #endif
 
+        scene->onStep ();
+        delayMs (ctx->config->loopDelayMs);
+        graphicsService->swapBuffers ();
 }
 
 /****************************************************************************/

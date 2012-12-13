@@ -9,15 +9,23 @@
 #include "ShellFactory.h"
 #include "GameLoop.h"
 #include <util/IShell.h>
+#include <util/BajkaService.h>
 #include "ShellContext.h"
 #include "LifecycleHandler.h"
 #include "GraphicsService.h"
+#include "DataSourceService.h"
+#include <cassert>
 
 std::auto_ptr <GameLoop> ShellFactory::createGameLoop (Util::ShellConfig *sConfig, android_app *app)
 {
+        assert (sConfig);
+        assert (app);
+
         ShellContext *ctx = createShellContext (sConfig, app);
         LifecycleHandler *handler = createLifecycleHandler ();
         handler->graphicsService = createGraphicsService (app);
+        handler->bajkaService = createBajkaService ();
+        handler->dataSourceService = createDataSourceService (app);
         std::auto_ptr <GameLoop> loop = std::auto_ptr <GameLoop> (new GameLoop (ctx, handler));
         loop->init ();
         return loop;
@@ -46,4 +54,17 @@ LifecycleHandler *ShellFactory::createLifecycleHandler ()
 GraphicsService *ShellFactory::createGraphicsService (android_app *app)
 {
         return new GraphicsService (app);
+}
+
+/****************************************************************************/
+
+Util::BajkaService *ShellFactory::createBajkaService ()
+{
+        return new Util::BajkaService;
+}
+/****************************************************************************/
+
+DataSourceService *ShellFactory::createDataSourceService (android_app *app)
+{
+        return new DataSourceService (app);
 }
