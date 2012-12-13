@@ -12,18 +12,32 @@
 #include "IModelManager.h"
 #include <container/Container.h>
 
+namespace Util {
+class Scene;
+class IDataSourceService;
+}
+
 namespace Model {
 
+/**
+ *
+ */
 class XmlModelManager : public IModelManager {
 public:
 
         C__ (void)
-        XmlModelManager () : dirty (true), mainContainer (NULL) {}
+        XmlModelManager () : dirty (true), mainContainer (NULL), dataSourceService (NULL) {}
         virtual ~XmlModelManager () {}
 
         virtual void load (std::string const &file, std::string const &name);
-        virtual Model::IModel *get (Util::IShell *shell, std::string const &file, std::string const &name);
-        virtual bool run (Util::IShell *shell);
+        virtual Model::IModel *get (std::string const &file, std::string const &name);
+        virtual bool run (Util::Scene *scene);
+
+        /**
+         * Derived classes can use this.
+         */
+        void callOnManagerUnloadModel (Util::Scene *scene);
+        void callOnManagerLoadModel (Util::Scene *scene);
 
 protected:
 
@@ -40,6 +54,7 @@ protected:
 
         Container::BeanFactoryContainer *p_ (mainContainer);
         Ptr <Container::BeanFactoryContainer> childContainer;
+        Util::IDataSourceService * p_ (dataSourceService);
 
         E_ (XmlModelManager)
 };

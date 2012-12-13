@@ -9,23 +9,36 @@
 #include "Scene.h"
 #include "model/IModel.h"
 #include "model/manager/IModelManager.h"
+#include "events/types/UpdateEvent.h"
+#include "model/layout/LayerProperties.h"
+#include "model/IBox.h"
+#include "model/IGroup.h"
+#include "Config.h"
+#include "events/EventIdex.h"
+#include "events/PointerInsideIndex.h"
+#include "tween/Manager.h"
+#include "events/types/ManagerEvent.h"
 
 namespace Util {
 namespace M = Model;
 
 struct Scene::Impl {
 
-        Impl () : model (NULL), modelManager (NULL) {}
+        Impl () : model (NULL), modelManager (NULL), config (NULL) {}
 
         M::IModel *model;
         M::IModelManager *modelManager;
+        Config *config;
+        Event::EventIndex eventIndex;
+        Event::PointerInsideIndex pointerInsideIndex;
 };
 
 /****************************************************************************/
 
-Scene::Scene (M::IModelManager *m) : impl (new Impl)
+Scene::Scene (M::IModelManager *m, Config *c) : impl (new Impl)
 {
         impl->modelManager = m;
+        impl->config = c;
 }
 
 /****************************************************************************/
@@ -37,46 +50,113 @@ Scene::~Scene ()
 
 /****************************************************************************/
 
-void Scene::onStep ()
+void Scene::onStep (Event::UpdateEvent *updateEvent)
 {
-        uint32_t lastMs = getCurrentMs ();
+//        bool newModelLoaded = impl->modelManager->run (this);
+//
+//        if (newModelLoaded) {
+//                assert (impl->model);
+//                updateLayout ();
+//        }
+//
+//        impl->model->update (updateEvent, this);
+//        Tween::Manager::getMain ()->update (deltaMs);
+}
 
-#if 0
-        int second = 0, frames = 0;
-#endif
+/****************************************************************************/
 
-        int deltaMs = 0;
-        Event::IEventDispather *dispatcher = getEventDispatcher ();
+void Scene::setModel (Model::IModel *m)
+{
+        impl->model = m;
+        impl->eventIndex.clear ();
+        impl->pointerInsideIndex.clear ();
+        impl->eventIndex.add (0xFFFFu & ~Event::MOUSE_EVENTS, m);
 
-        while (!impl->quit) {
-                bool newModelLoaded = impl->modelManager->run (this);
+        if (m->isGroup ()) {
+                Model::IGroup *g = dynamic_cast <Model::IGroup *> (m);
+                g->setIndices (&impl->eventIndex, &impl->pointerInsideIndex);
+        }
+}
 
-                if (newModelLoaded) {
-                        assert (impl->model);
-                        updateLayout (impl->model);
-                }
+/****************************************************************************/
 
-                uint32_t currentMs = getCurrentMs ();
-                deltaMs = currentMs - lastMs;
-                lastMs = currentMs;
+void Scene::reset ()
+{
+        impl->eventIndex.clear ();
+        impl->pointerInsideIndex.clear ();
+}
 
-#if 0
-                second += deltaMs;
-                ++frames;
+/****************************************************************************/
 
-                if (second >= 1000) {
-                        std::cerr << "fps=" << frames << std::endl;
-                        frames = second = 0;
-                }
-#endif
+void Scene::onManagerLoadModel ()
+{
+        M::IModel *m = impl->model;
+        Event::ManagerEvent event;
 
-                dispatcher->pollAndDispatch (impl->model, impl->eventIndex, &impl->pointerInsideIndex, &impl->glContext);
+        if (m && m->getController () && m->getController ()->getEventMask () & Event::MANAGER_EVENT) {
+                m->getController ()->onManagerLoad (&event, m, m->getView ());
+        }
+}
 
-                impl->updateEvent.setDeltaMs (deltaMs);
-                impl->model->update (&impl->updateEvent, this);
+/****************************************************************************/
 
-                Tween::Manager::getMain ()->update (deltaMs);
+void Scene::onManagerUnloadModel ()
+{
+        Tween::Manager::getMain ()->killAll ();
 
+        M::IModel *m = impl->model;
+        Event::ManagerEvent event;
+
+        if (m && m->getController () && m->getController ()->getEventMask () & Event::MANAGER_EVENT) {
+                m->getController ()->onManagerUnload (&event, m, m->getView ());
+        }
+}
+
+/****************************************************************************/
+
+void Scene::updateLayout ()
+{
+        M::IGroupProperties const *props = impl->model->getGroupProps ();
+
+        if (!props) {
+                return;
+        }
+
+        M::LayerProperties const *scrProps = dynamic_cast <M::LayerProperties const *> (props);
+
+        if (!scrProps) {
+                return;
+        }
+
+        Model::IBox *box = dynamic_cast <Model::IBox *> (impl->model);
+
+        if (!box) {
+                return;
+        }
+
+        if (scrProps->fillW) {
+                box->setWidth (impl->config->projectionWidth);
+        }
+
+        if (scrProps->fillH) {
+                box->setHeight (impl->config->projectionHeight);
+
+        }
+
+        if (!scrProps->centerGroup || !impl->model->isGroup ()) {
+                return;
+        }
+
+        M::IGroup *group = dynamic_cast <M::IGroup *> (impl->model);
+
+        if (group->getCoordinateSystemOrigin () == M::IGroup::BOTTOM_LEFT) {
+                Geometry::Point t;
+                t.x = -box->getWidth () / 2.0;
+                t.y = -box->getHeight () / 2.0;
+                impl->model->setTranslate (t);
+        }
+        else {
+                impl->model->setTranslate (Geometry::ZERO_POINT);
         }
 }
 
