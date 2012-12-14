@@ -13,7 +13,6 @@
 #include "model/Model.h"
 #include "util/Exceptions.h"
 #include "view/openGl/OpenGl.h"
-#include "util/IShell.h"
 
 namespace View {
 

@@ -18,10 +18,10 @@
 
 #include "Commons.h"
 #include "Config.h"
-#include "IShell.h"
 #include "Math.h"
 #include "ReflectionMacros.h"
 #include "BajkaService.h"
 #include "Scene.h"
+#include "ShellConfig.h"
 
 #	endif /* UTIL_H_ */

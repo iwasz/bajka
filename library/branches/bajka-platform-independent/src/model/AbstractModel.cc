@@ -7,7 +7,6 @@
  ****************************************************************************/
 
 #include <algorithm>
-#include <boost/bind.hpp>
 #include "model/AbstractModel.h"
 #include "model/Group.h"
 #include "view/Widget.h"
@@ -15,8 +14,8 @@
 #include "events/types/UpdateEvent.h"
 #include "Platform.h"
 #include "util/Config.h"
-#include "util/IShell.h"
 #include "view/draw/Primitives.h"
+#include "util/UpdateContext.h"
 
 namespace Model {
 using namespace Geometry;
@@ -53,35 +52,43 @@ void AbstractModel::setRotationCenter (Geometry::Point const &p)
 
 /****************************************************************************/
 
-void AbstractModel::update (Event::UpdateEvent *e, Util::IShell *shell)
+void AbstractModel::update (Event::UpdateEvent *e, Util::UpdateContext *uCtx)
 {
         if (controller && controller->getEventMask () & Event::UPDATE_EVENT) {
                 controller->onPreUpdate (e, this, view);
                 controller->onUpdate (e, this, view);
         }
 
+        View::GLContext *glContext = uCtx->glContext;
+
         if (config ()->showAABB) {
-                View::DrawUtil::drawAABB (shell->getGLContext (), this);
+                View::DrawUtil::drawAABB (glContext, this);
         }
 
         if (view) {
-                view->preUpdate (this, e, shell->getGLContext ());
-                view->update (this, e, shell->getGLContext ());
+                view->preUpdate (this, e, glContext);
+                view->update (this, e, glContext);
         }
         else {
-        	View::Widget::defaultPreUpdate (this, shell->getGLContext ());
+        	View::Widget::defaultPreUpdate (this, glContext);
         }
 
         if (isGroup ()) {
                 IGroup *g = dynamic_cast <IGroup *> (this);
-                std::for_each (g->begin (), g->end (), boost::bind (&IModel::update, _1, e, shell));
+
+                // Call stack of this was hilarous.
+                // std::for_each (g->begin (), g->end (), boost::bind (&IModel::update, _1, e, shell));
+
+                for (ModelVector::iterator i = g->begin (); i != g->end (); ++i) {
+                        (*i)->update (e, uCtx);
+                }
         }
 
         if (view) {
-                view->postUpdate (this, e, shell->getGLContext ());
+                view->postUpdate (this, e, glContext);
         }
         else {
-        	View::Widget::defaultPostUpdate (this, shell->getGLContext ());
+        	View::Widget::defaultPostUpdate (this, glContext);
         }
 
         if (controller && controller->getEventMask () & Event::UPDATE_EVENT) {

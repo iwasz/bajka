@@ -70,7 +70,7 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        virtual void update (Event::UpdateEvent *e, Util::IShell *shell);
+        virtual void update (Event::UpdateEvent *e, Util::UpdateContext *uCtx);
 
 /*--------------------------------------------------------------------------*/
 

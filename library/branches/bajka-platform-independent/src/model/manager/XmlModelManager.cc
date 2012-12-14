@@ -11,7 +11,6 @@
 #include <container/ContainerFactory.h>
 #include <iostream>
 #include "Platform.h"
-#include "util/IDataSourceService.h"
 
 namespace Model {
 
@@ -27,9 +26,9 @@ void XmlModelManager::load (std::string const &param1, std::string const &param2
 IModel *XmlModelManager::get (std::string const &param1, std::string const &param2)
 {
         try {
-                Common::DataSource *ds = dataSourceService->newDataSource ();
+                Common::DataSource *ds = newDataSource ();
                 Ptr <Container::BeanFactoryContainer> newContainer = Container::ContainerFactory::createAndInit (Container::CompactMetaService::parseFile (ds, param1), false, mainContainer);
-                dataSourceService->deleteDataSource (ds);
+                deleteDataSource (ds);
                 Model::IModel *m = ocast <Model::IModel *> (newContainer->getBean (param2));
 
                 // Tu następuje skasowanie starego modelu.
@@ -73,20 +72,6 @@ bool XmlModelManager::run (Util::Scene *scene)
         }
 
         return true;
-}
-
-/****************************************************************************/
-
-void XmlModelManager::callOnManagerUnloadModel (Util::Scene *scene)
-{
-        scene->onManagerUnloadModel ();
-}
-
-/****************************************************************************/
-
-void XmlModelManager::callOnManagerLoadModel (Util::Scene *scene)
-{
-        scene->onManagerUnloadModel ();
 }
 
 } /* namespace Model */

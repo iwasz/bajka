@@ -18,9 +18,15 @@ extern void delayMs (uint32_t);
 // Logging
 extern int printlog (const char *format, ...);
 
+namespace Common {
+class DataSource;
+}
+
+extern Common::DataSource *newDataSource ();
+extern void deleteDataSource (Common::DataSource *ds);
+
 namespace Util {
 class Config;
-class IShell;
 }
 
 namespace View {
@@ -28,7 +34,6 @@ class GLContext;
 }
 
 extern Util::Config *config ();
-extern Util::IShell *shell ();
-extern View::GLContext *glContext ();
+//extern View::GLContext *glContext ();
 
 #endif /* SHELL_H_ */

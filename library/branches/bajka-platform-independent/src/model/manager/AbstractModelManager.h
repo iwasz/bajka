@@ -6,20 +6,25 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "Points.h"
-#include "view/openGl/OpenGl.h"
-#include "model/IVertexBufferEnabled.h"
-#include "model/IModel.h"
-#include "util/Exceptions.h"
-#include "draw/Primitives.h"
+#ifndef ABSTRACTMODELMANAGER_H_
+#define ABSTRACTMODELMANAGER_H_
 
-namespace View {
+#include "IModelManager.h"
 
-void Points::update (Model::IModel *model, Event::UpdateEvent *, View::GLContext *ctx)
-{
-//        Model::IVertexBufferEnabled *array = dynamic_cast <Model::IVertexBufferEnabled *>  (model);
-//        assertThrow (array , "Points::update : !cB")
-//        DrawUtil::drawPoints (ctx, array->getVertexBuffer (), color, size);
-}
+namespace Model {
 
-} /* namespace View */
+class AbstractModelManager : public IModelManager {
+public:
+
+        virtual ~AbstractModelManager () {}
+
+        /**
+         * Derived classes can use this.
+         */
+        void callOnManagerUnloadModel (Util::Scene *scene);
+        void callOnManagerLoadModel (Util::Scene *scene);
+
+};
+
+} /* namespace Model */
+#endif /* ABSTRACTMODELMANAGER_H_ */

@@ -89,7 +89,7 @@ IModel *Space::findContains (Geometry::Point const &point)
 
 /****************************************************************************/
 
-void Space::update (Event::UpdateEvent *e, Util::IShell *shell)
+void Space::update (Event::UpdateEvent *e, Util::UpdateContext *uCtx)
 {
         // Run chipmunk
         if (space) {

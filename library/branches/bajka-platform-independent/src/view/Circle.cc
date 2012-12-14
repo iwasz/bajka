@@ -9,7 +9,6 @@
 #include "draw/Primitives.h"
 #include "model/static/Circle.h"
 #include "Circle.h"
-#include "util/IShell.h"
 
 namespace View {
 

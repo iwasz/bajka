@@ -18,6 +18,7 @@
 #include "events/PointerInsideIndex.h"
 #include "tween/Manager.h"
 #include "events/types/ManagerEvent.h"
+#include "util/UpdateContext.h"
 
 namespace Util {
 namespace M = Model;
@@ -31,14 +32,17 @@ struct Scene::Impl {
         Config *config;
         Event::EventIndex eventIndex;
         Event::PointerInsideIndex pointerInsideIndex;
+        Util::UpdateContext updateContext;
 };
 
 /****************************************************************************/
 
-Scene::Scene (M::IModelManager *m, Config *c) : impl (new Impl)
+Scene::Scene (M::IModelManager *m, Config *c, View::GLContext *gl) : impl (new Impl)
 {
         impl->modelManager = m;
         impl->config = c;
+        impl->updateContext.config = c;
+        impl->updateContext.glContext = gl;
 }
 
 /****************************************************************************/
@@ -52,15 +56,15 @@ Scene::~Scene ()
 
 void Scene::onStep (Event::UpdateEvent *updateEvent)
 {
-//        bool newModelLoaded = impl->modelManager->run (this);
-//
-//        if (newModelLoaded) {
-//                assert (impl->model);
-//                updateLayout ();
-//        }
-//
-//        impl->model->update (updateEvent, this);
-//        Tween::Manager::getMain ()->update (deltaMs);
+        bool newModelLoaded = impl->modelManager->run (this);
+
+        if (newModelLoaded) {
+                assert (impl->model);
+                updateLayout ();
+        }
+
+        impl->model->update (updateEvent, &impl->updateContext);
+        Tween::Manager::getMain ()->update (updateEvent->getDeltaMs ());
 }
 
 /****************************************************************************/
