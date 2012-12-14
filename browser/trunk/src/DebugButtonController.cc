@@ -11,7 +11,6 @@
 #include <events/types/Types.h>
 #include <view/Primitive.h>
 #include <Platform.h>
-#include <util/IShell.h>
 
 using namespace Controller;
 
@@ -30,7 +29,8 @@ IController::HandlingType DebugButtonController::onButtonPress (Event::ButtonPre
 #endif
 
         if (quit) {
-                shell ()->quit ();
+//                 TODO
+//                shell ()->quit ();
         }
 
         if (modelManager && !file.empty () && !name.empty ()) {
