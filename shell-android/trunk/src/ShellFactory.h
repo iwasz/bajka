@@ -20,7 +20,6 @@ class GraphicsService;
 namespace Util {
 class ShellConfig;
 class BajkaService;
-class IDataSourceService;
 }
 
 /**
@@ -37,8 +36,7 @@ private:
         static ShellContext *createShellContext (Util::ShellConfig *sConfig, android_app *app);
         static LifecycleHandler *createLifecycleHandler ();
         static GraphicsService *createGraphicsService (android_app *app);
-        static Util::BajkaService *createBajkaService (Util::IDataSourceService *d);
-        static Util::IDataSourceService *createDataSourceService (android_app *app);
+        static Util::BajkaService *createBajkaService ();
 
 };
 

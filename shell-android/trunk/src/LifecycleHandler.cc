@@ -12,10 +12,10 @@
 #include <util/BajkaService.h>
 #include <util/Scene.h>
 #include "GraphicsService.h"
-#include "DataSourceService.h"
 #include <exception>
 #include <Platform.h>
 #include <util/Config.h>
+#include <util/ShellConfig.h>
 
 /****************************************************************************/
 
@@ -23,7 +23,6 @@ LifecycleHandler::~LifecycleHandler ()
 {
         delete graphicsService;
         delete bajkaService;
-        delete dataSourceService;
         delete scene;
 }
 
@@ -33,32 +32,11 @@ void LifecycleHandler::onFirstTimeReadyForRender (ShellContext *ctx)
 {
         printlog ("LifecycleHandler::onFirstTimeReadyForRender");
         graphicsService->initDisplay ();
-        Common::DataSource *ds = dataSourceService->newDataSource ();
-
-        try {
-                ctx->config = bajkaService->loadAndOverrideConfig (ds, *ctx->shellConfig);
-        }
-        catch (std::exception const &e) {
-                dataSourceService->deleteDataSource (ds);
-                throw;
-        }
-
-        dataSourceService->deleteDataSource (ds);
+        ctx->config = bajkaService->loadAndOverrideConfig (*ctx->shellConfig);
         graphicsService->saveScreenDimensionsInConfig (ctx->config);
         bajkaService->init (ctx->config);
         bajkaService->initProjectionMatrix (ctx->config);
-
-        ds = dataSourceService->newDataSource ();
-
-        try {
-                scene = bajkaService->loadScene (ds, *ctx->shellConfig);
-        }
-        catch (std::exception const &e) {
-                dataSourceService->deleteDataSource (ds);
-                throw;
-        }
-
-        dataSourceService->deleteDataSource (ds);
+        scene = bajkaService->loadScene (ctx->shellConfig->definitionFile);
 }
 
 /****************************************************************************/
@@ -147,7 +125,7 @@ void LifecycleHandler::onConfigChanged (ShellContext *ctx)
 
 /****************************************************************************/
 
-void LifecycleHandler::onStep (ShellContext *ctx, bool autoPause)
+void LifecycleHandler::onStep (ShellContext *ctx, bool autoPause, uint32_t deltaMs)
 {
 #ifndef NDEBUG
         static int i = 0;
@@ -162,6 +140,8 @@ void LifecycleHandler::onStep (ShellContext *ctx, bool autoPause)
         }
 #endif
 
+        updateEvent.setDeltaMs (deltaMs);
+        updateEvent.setAutoPause (autoPause);
         scene->onStep (&updateEvent);
         delayMs (ctx->config->loopDelayMs);
         graphicsService->swapBuffers ();

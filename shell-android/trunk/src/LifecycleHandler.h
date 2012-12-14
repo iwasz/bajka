@@ -19,7 +19,6 @@ class GraphicsService;
 namespace Util {
 class BajkaService;
 class Scene;
-class IDataSourceService;
 }
 
 /**
@@ -92,13 +91,13 @@ public:
         /**
          * Tu gra renderuje.
          */
-        void onStep (ShellContext *ctx, bool autoPause);
+        void onStep (ShellContext *ctx, bool autoPause, uint32_t deltaMs);
 
         int32_t onInputEvent (ShellContext *ctx);
 
 private:
 
-        LifecycleHandler () : graphicsService (NULL), bajkaService (NULL), dataSourceService (NULL), scene (NULL) {}
+        LifecycleHandler () : graphicsService (NULL), bajkaService (NULL), scene (NULL) {}
         LifecycleHandler (LifecycleHandler const &) {}
         friend class ShellFactory;
 
@@ -106,7 +105,6 @@ private:
 
         GraphicsService *graphicsService;
         Util::BajkaService *bajkaService;
-        Util::IDataSourceService *dataSourceService;
         Util::Scene *scene;
         Event::UpdateEvent updateEvent;
 

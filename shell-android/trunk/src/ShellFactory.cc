@@ -8,24 +8,26 @@
 
 #include "ShellFactory.h"
 #include "GameLoop.h"
-#include <util/IShell.h>
 #include <util/BajkaService.h>
 #include "ShellContext.h"
 #include "LifecycleHandler.h"
 #include "GraphicsService.h"
-#include "DataSourceService.h"
 #include <cassert>
+
+extern android_app *androidAppForDataSource (android_app *a);
+
+/****************************************************************************/
 
 std::auto_ptr <GameLoop> ShellFactory::createGameLoop (Util::ShellConfig *sConfig, android_app *app)
 {
         assert (sConfig);
         assert (app);
 
+        androidAppForDataSource (app);
         ShellContext *ctx = createShellContext (sConfig, app);
         LifecycleHandler *handler = createLifecycleHandler ();
         handler->graphicsService = createGraphicsService (app);
-        handler->dataSourceService = createDataSourceService (app);
-        handler->bajkaService = createBajkaService (handler->dataSourceService);
+        handler->bajkaService = createBajkaService ();
         std::auto_ptr <GameLoop> loop = std::auto_ptr <GameLoop> (new GameLoop (ctx, handler));
         loop->init ();
         return loop;
@@ -58,13 +60,7 @@ GraphicsService *ShellFactory::createGraphicsService (android_app *app)
 
 /****************************************************************************/
 
-Util::BajkaService *ShellFactory::createBajkaService (Util::IDataSourceService *d)
+Util::BajkaService *ShellFactory::createBajkaService ()
 {
-        return new Util::BajkaService (d);
-}
-/****************************************************************************/
-
-Util::IDataSourceService *ShellFactory::createDataSourceService (android_app *app)
-{
-        return new DataSourceService (app);
+        return new Util::BajkaService ();
 }
