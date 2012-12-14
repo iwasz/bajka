@@ -9,15 +9,12 @@
 #ifndef BAJKASERVICE_H_
 #define BAJKASERVICE_H_
 
-namespace Common {
-class DataSource;
-}
+#include <string>
 
 namespace Util {
 class ShellConfig;
 class Config;
 class Scene;
-class IDataSourceService;
 
 /**
  * Do inicjowania i konfigurowania biblioteki bajka z zewnątrz, czyli z shella.
@@ -25,25 +22,25 @@ class IDataSourceService;
 class BajkaService {
 public:
 
-        BajkaService (Util::IDataSourceService *d);
+        BajkaService ();
         ~BajkaService ();
 
         /**
          * Nie kasować, kontener skasuje.
          */
-        Util::Config *loadAndOverrideConfig (Common::DataSource *dataDource, Util::ShellConfig const &cfg);
+        Util::Config *loadAndOverrideConfig (Util::ShellConfig const &cfg);
 
         /**
          * Skasować za pomocą delete.
          */
-        Util::Scene *loadScene (Common::DataSource *ds, Util::ShellConfig const &cfg);
+        Util::Scene *loadScene (std::string const &sceneFile);
         void init (Util::Config *config);
         void initProjectionMatrix (Util::Config *config);
 
 private:
 
-        Util::Config *loadConfig (Common::DataSource *dataDource, Util::ShellConfig const &cfg);
-        Util::Config *overrideConfig (Util::ShellConfig const &cfg, Util::Config *cfg2);
+        Util::Config *loadConfig (std::string const &configFile);
+        Util::Config *overrideConfig (Util::ShellConfig const &shellConfig, Util::Config *config);
 
 private:
 

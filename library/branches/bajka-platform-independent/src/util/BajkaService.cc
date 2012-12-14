@@ -7,7 +7,6 @@
  ****************************************************************************/
 
 #include "BajkaService.h"
-#include "IShell.h"
 #include "view/openGl/GLContext.h"
 #include <container/beanFactory/BeanFactoryContainer.h>
 #include <container/metaStructure/model/MetaContainer.h>
@@ -25,9 +24,16 @@
 #include "Platform.h"
 #include "Scene.h"
 #include "model/manager/IModelManager.h"
-#include "IDataSourceService.h"
+#include "ShellConfig.h"
 
-using Model::IModelManager;
+/****************************************************************************/
+
+static Util::Config *config_ = NULL;
+
+Util::Config *config () { return config_; }
+void config (Util::Config *c) { config_ = c; }
+
+/****************************************************************************/
 
 namespace Util {
 using namespace Container;
@@ -39,21 +45,19 @@ namespace M = Model;
  */
 struct BajkaService::Impl {
 
-        Impl () : config (NULL), dataSourceService (NULL) {}
+        Impl () : config (NULL) {}
 
         View::GLContext glContext;
         Ptr <Container::BeanFactoryContainer> configContainer;
         Ptr <Container::BeanFactoryContainer> mainContainer;
         Util::Config *config;
-        Util::IDataSourceService *dataSourceService;
 
 };
 
 /****************************************************************************/
 
-BajkaService::BajkaService (Util::IDataSourceService *d) : impl (new Impl)
+BajkaService::BajkaService () : impl (new Impl)
 {
-        impl->dataSourceService = d;
 }
 
 /****************************************************************************/
@@ -65,24 +69,35 @@ BajkaService::~BajkaService ()
 
 /****************************************************************************/
 
-U::Config *BajkaService::loadConfig (Common::DataSource *ds, Util::ShellConfig const &cfg)
+U::Config *BajkaService::loadConfig (std::string const &configFile)
 {
-        Ptr <MetaContainer> metaContainer = CompactMetaService::parseFile (ds, cfg.configFile);
-        impl->configContainer = ContainerFactory::create (metaContainer, true);
+        Common::DataSource *ds = newDataSource ();
 
-        impl->configContainer->addConversion (typeid (Geometry::Point), Geometry::stringToPointVariant);
-        impl->configContainer->addConversion (typeid (Geometry::Point3), Geometry::stringToPoint3Variant);
-        impl->configContainer->addConversion (typeid (Geometry::LineString), Geometry::stringToLineStringVariant);
-        impl->configContainer->addConversion (typeid (Model::HAlign), Model::stringToHAlign);
-        impl->configContainer->addConversion (typeid (Model::VAlign), Model::stringToVAlign);
-        impl->configContainer->addConversion (typeid (Model::HGravity), Model::stringToHGravity);
-        impl->configContainer->addConversion (typeid (Model::VGravity), Model::stringToVGravity);
-        impl->configContainer->addConversion (typeid (Model::LinearGroup::Type), Model::stringToLinearGroupType);
-        impl->configContainer->addSingleton ("dataSourceService", Core::Variant ("Benek pies"));
+        try {
+                Ptr <MetaContainer> metaContainer = CompactMetaService::parseFile (ds, configFile);
+                impl->configContainer = ContainerFactory::create (metaContainer, true);
 
-        ContainerFactory::init (impl->configContainer.get (), metaContainer.get ());
-        impl->config = vcast <U::Config *> (impl->configContainer->getBean ("config"));
-        printlog ("BajkaService::loadConfig : done.");
+                impl->configContainer->addConversion (typeid (Geometry::Point), Geometry::stringToPointVariant);
+                impl->configContainer->addConversion (typeid (Geometry::Point3), Geometry::stringToPoint3Variant);
+                impl->configContainer->addConversion (typeid (Geometry::LineString), Geometry::stringToLineStringVariant);
+                impl->configContainer->addConversion (typeid (Model::HAlign), Model::stringToHAlign);
+                impl->configContainer->addConversion (typeid (Model::VAlign), Model::stringToVAlign);
+                impl->configContainer->addConversion (typeid (Model::HGravity), Model::stringToHGravity);
+                impl->configContainer->addConversion (typeid (Model::VGravity), Model::stringToVGravity);
+                impl->configContainer->addConversion (typeid (Model::LinearGroup::Type), Model::stringToLinearGroupType);
+                impl->configContainer->addSingleton ("dataSourceService", Core::Variant ("Benek pies"));
+
+                ContainerFactory::init (impl->configContainer.get (), metaContainer.get ());
+                impl->config = vcast <U::Config *> (impl->configContainer->getBean ("config"));
+                config (impl->config);
+                printlog ("BajkaService::loadConfig : done.");
+        }
+        catch (std::exception const &e) {
+                deleteDataSource (ds);
+                throw;
+        }
+
+        deleteDataSource (ds);
         return impl->config;
 }
 
@@ -120,9 +135,9 @@ U::Config *BajkaService::overrideConfig (Util::ShellConfig const &shellConfig, U
 
 /****************************************************************************/
 
-Util::Config *BajkaService::loadAndOverrideConfig (Common::DataSource *dataDource, Util::ShellConfig const &cfg)
+Util::Config *BajkaService::loadAndOverrideConfig (Util::ShellConfig const &cfg)
 {
-        U::Config *c = loadConfig (dataDource, cfg);
+        U::Config *c = loadConfig (cfg.configFile);
         return overrideConfig (cfg, c);
 }
 
@@ -149,11 +164,22 @@ void BajkaService::initProjectionMatrix (Util::Config *config)
 
 /****************************************************************************/
 
-Util::Scene *BajkaService::loadScene (Common::DataSource *ds, Util::ShellConfig const &sCfg)
+Util::Scene *BajkaService::loadScene (std::string const &sceneFile)
 {
-        impl->mainContainer = Container::ContainerFactory::createAndInit (Container::CompactMetaService::parseFile (ds, sCfg.definitionFile), true, impl->configContainer.get ());
-        M::IModelManager *modelManager = ocast <M::IModelManager *> (impl->mainContainer->getBean ("modelManager"));
-        U::Scene *scene = new U::Scene (modelManager, impl->config);
+        Common::DataSource *ds = newDataSource ();
+        U::Scene *scene = NULL;
+
+        try {
+                impl->mainContainer = Container::ContainerFactory::createAndInit (Container::CompactMetaService::parseFile (ds, sceneFile), true, impl->configContainer.get ());
+                M::IModelManager *modelManager = ocast <M::IModelManager *> (impl->mainContainer->getBean ("modelManager"));
+                scene = new U::Scene (modelManager, impl->config, &impl->glContext);
+        }
+        catch (std::exception const &e) {
+                deleteDataSource (ds);
+                throw;
+        }
+
+        deleteDataSource (ds);
         return scene;
 }
 

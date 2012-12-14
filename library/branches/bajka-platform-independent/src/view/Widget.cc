@@ -12,7 +12,6 @@
 #include "Platform.h"
 #include "util/Config.h"
 #include "draw/Primitives.h"
-#include "util/IShell.h"
 
 namespace View {
 

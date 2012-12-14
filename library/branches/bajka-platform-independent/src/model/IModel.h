@@ -20,7 +20,7 @@
 #include "layout/IGroupProperties.h"
 
 namespace Util {
-class IShell;
+class UpdateContext;
 }
 
 namespace Event {
@@ -52,7 +52,7 @@ struct IModel : public virtual Core::Object {
          * obiekt graficzny (model) z uwzględnieniem zagnieżdżonej i drzewiastej struktury
          * modeli.
          */
-        virtual void update (Event::UpdateEvent *e, Util::IShell *shell) = 0;
+        virtual void update (Event::UpdateEvent *e, Util::UpdateContext *uCtx) = 0;
 
         /**
          * \name Transformacje.

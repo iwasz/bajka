@@ -15,7 +15,6 @@
 #include "types/MouseEvent.h"
 #include "types/MouseMotionEvent.h"
 #include "Platform.h"
-#include "util/IShell.h"
 
 namespace Event {
 namespace M = Model;
@@ -103,7 +102,8 @@ bool AbstractEventDispatcher::dispatch (Model::IModel *m, Event::EventIndex cons
                 }
 
                 if (type & Event::QUIT_EVENT /*&& !eventHandled == HANDLED_BREAK*/) {
-                        shell ()->quit ();
+//TODO
+//                        shell ()->quit ();
                 }
         }
 

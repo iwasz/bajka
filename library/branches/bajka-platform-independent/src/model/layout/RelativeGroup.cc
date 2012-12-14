@@ -22,12 +22,12 @@ namespace trans = boost::geometry::strategy::transform;
 
 /****************************************************************************/
 
-void RelativeGroup::update (Event::UpdateEvent *e, Util::IShell *shell)
+void RelativeGroup::update (Event::UpdateEvent *e, Util::UpdateContext *uCtx)
 {
         // TODO to nie powino się updejtować przy każdym odświerzeniu. Do wywalenia jest ta metoda.
         // Może używac jakiegoś cache child-objectów i sprawdzać czy coś im się zmieniło (na przykład za pomocą jakiegoś HASHa wyliczanego na podstawie translate, angle i size).
         updateLayout ();
-        Group::update (e, shell);
+        Group::update (e, uCtx);
 }
 
 /****************************************************************************/

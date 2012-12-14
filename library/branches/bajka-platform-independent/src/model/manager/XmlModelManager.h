@@ -9,35 +9,24 @@
 #ifndef XMLMODELMANAGER_H_
 #define XMLMODELMANAGER_H_
 
-#include "IModelManager.h"
 #include <container/Container.h>
-
-namespace Util {
-class Scene;
-class IDataSourceService;
-}
+#include "AbstractModelManager.h"
 
 namespace Model {
 
 /**
  *
  */
-class XmlModelManager : public IModelManager {
+class XmlModelManager : public AbstractModelManager {
 public:
 
         C__ (void)
-        XmlModelManager () : dirty (true), mainContainer (NULL), dataSourceService (NULL) {}
+        XmlModelManager () : dirty (true), mainContainer (NULL) {}
         virtual ~XmlModelManager () {}
 
         virtual void load (std::string const &file, std::string const &name);
         virtual Model::IModel *get (std::string const &file, std::string const &name);
         virtual bool run (Util::Scene *scene);
-
-        /**
-         * Derived classes can use this.
-         */
-        void callOnManagerUnloadModel (Util::Scene *scene);
-        void callOnManagerLoadModel (Util::Scene *scene);
 
 protected:
 
@@ -54,7 +43,6 @@ protected:
 
         Container::BeanFactoryContainer *p_ (mainContainer);
         Ptr <Container::BeanFactoryContainer> childContainer;
-        Util::IDataSourceService * p_ (dataSourceService);
 
         E_ (XmlModelManager)
 };

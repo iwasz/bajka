@@ -12,10 +12,6 @@
 #include "model/physics/CPBox.h"
 #include "util/Exceptions.h"
 #include "view/openGl/OpenGl.h"
-#include "util/IShell.h"
-
-// TODO wywalić.
-#include "Platform.h"
 
 namespace View {
 using namespace Geometry;

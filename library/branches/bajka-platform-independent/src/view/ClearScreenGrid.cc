@@ -98,13 +98,13 @@ void ClearScreenGrid::update (Model::IModel *, Event::UpdateEvent *e, View::GLCo
 
         glBindBuffer (GL_ARRAY_BUFFER, gridBuffer);
         glEnableVertexAttribArray (ctx->positionAttribLocation);
-        glVertexAttribPointer (glContext ()->positionAttribLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
+        glVertexAttribPointer (ctx->positionAttribLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
         glUniform4f (ctx->colorUniformLocation, gridColor.r, gridColor.g, gridColor.b, gridColor.a);
         glDrawArrays (GL_LINES, 0, gridVertsCount);
 
         glBindBuffer (GL_ARRAY_BUFFER, axesBuffer);
         glEnableVertexAttribArray (ctx->positionAttribLocation);
-        glVertexAttribPointer (glContext ()->positionAttribLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
+        glVertexAttribPointer (ctx->positionAttribLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
         glUniform4f (ctx->colorUniformLocation, gridColor.r - 0.1, gridColor.g - 0.1, gridColor.b - 0.1, gridColor.a);
         glDrawArrays (GL_LINES, 0, 4);
 

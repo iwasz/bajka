@@ -12,7 +12,11 @@
 namespace Model {
 class IModelManager;
 class IModel;
-class XmlModelManager; // Wywołuje prywatne handlery.
+class AbstractModelManager; // Wywołuje prywatne handlery.
+}
+
+namespace View {
+class GLContext;
 }
 
 namespace Event {
@@ -28,7 +32,7 @@ class Config;
 class Scene {
 public:
 
-        Scene (Model::IModelManager *modelManager, Config *c);
+        Scene (Model::IModelManager *modelManager, Config *c, View::GLContext *gl);
         ~Scene ();
 
         void onStep (Event::UpdateEvent *updateEvent);
@@ -38,7 +42,7 @@ public:
 private:
 
         void updateLayout ();
-        friend class Model::XmlModelManager;
+        friend class Model::AbstractModelManager;
         void onManagerLoadModel ();
         void onManagerUnloadModel ();
 

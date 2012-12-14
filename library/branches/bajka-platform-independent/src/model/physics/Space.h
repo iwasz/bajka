@@ -32,7 +32,7 @@ public:
 
         // W środku rodzica.
         virtual Geometry::Point computeCenter () const { return Geometry::ZERO_POINT; }
-        virtual void update (Event::UpdateEvent *e, Util::IShell *shell);
+        virtual void update (Event::UpdateEvent *e, Util::UpdateContext *uCtx);
 
 /*--------------------------------------------------------------------------*/
 

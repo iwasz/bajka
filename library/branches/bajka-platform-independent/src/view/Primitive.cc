@@ -12,7 +12,6 @@
 #include "model/IModel.h"
 #include "util/Exceptions.h"
 #include "view/draw/Primitives.h"
-#include "util/IShell.h"
 
 namespace View {
 

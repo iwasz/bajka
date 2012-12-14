@@ -6,27 +6,26 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef SHELL_BAJKA_IIIDATASOURCESERVICE_H_
-#define SHELL_BAJKA_IIIDATASOURCESERVICE_H_
+#ifndef UPDATECONTEXT_H_
+#define UPDATECONTEXT_H_
 
-struct android_app;
-
-namespace Common {
-class DataSource;
+namespace View {
+class GLContext;
 }
 
 namespace Util {
+class Config;
 
 /**
- * Fabryka właściwie.
+ * Kazdy model w kazdej metodzie update dostanie takie DTO.
  */
-struct IDataSourceService {
-public:
-        virtual ~IDataSourceService () {}
-        virtual Common::DataSource *newDataSource () = 0;
-        virtual void deleteDataSource (Common::DataSource *ds) = 0;
+struct  UpdateContext {
+
+        UpdateContext () : glContext (NULL), config (NULL) {}
+
+        View::GLContext *glContext;
+        Util::Config *config;
 };
 
-} // namespace Util
-
-#endif /* DATASOURCESERVICE_H_ */
+} /* namespace Util */
+#endif /* UPDATECONTEXT_H_ */

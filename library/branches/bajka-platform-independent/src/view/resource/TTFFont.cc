@@ -12,7 +12,6 @@
 #include "util/Exceptions.h"
 #include "view/resource/Bitmap.h"
 #include "Platform.h"
-#include "util/IShell.h"
 #include <common/dataSource/DataSource.h>
 
 namespace View {
@@ -41,7 +40,7 @@ TTFFont::TTFFont (std::string const &path, int ptSize, long int index) : renderT
 TTFFont::~TTFFont ()
 {
         ttfCloseFont (font);
-        shell ()->deleteDataSource (dataSource);
+        deleteDataSource (dataSource);
         font = NULL;
 }
 
@@ -58,8 +57,8 @@ void TTFFont::open (std::string const &path, int ptSize, long int index)
         }
 
 
-        shell ()->deleteDataSource (dataSource);
-        dataSource = shell ()->newDataSource ();
+        deleteDataSource (dataSource);
+        dataSource = newDataSource ();
 
         font = ttfOpenFont (dataSource, path.c_str (), ptSize, index);
 
