@@ -87,7 +87,7 @@ void GameLoop::loop ()
                         }
 
                         if (rendering) {
-                                lifecycleHandler->onStep (context, autoPause);
+                                lifecycleHandler->onStep (context, autoPause, deltaMs);
                         }
                 }
         }

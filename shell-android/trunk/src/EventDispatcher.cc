@@ -14,7 +14,6 @@
 #include <events/types/IEvent.h>
 #include <model/IGroup.h>
 #include <Platform.h>
-#include <util/IShell.h>
 #include <util/Config.h>
 #include <view/openGl/GLContext.h>
 #include <android_native_app_glue.h>
@@ -50,7 +49,8 @@ bool EventDispatcher::pollAndDispatch (Model::IModel *m, Event::EventIndex const
             }
 
             if (app->destroyRequested != 0) {
-                shell ()->quit ();
+//                    TODO
+//                shell ()->quit ();
                 return true; //?
             }
         }

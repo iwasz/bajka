@@ -11,6 +11,8 @@
 #include <time.h>
 #include <android/log.h>
 #include <util/Exceptions.h>
+#include <android_native_app_glue.h>
+#include <common/dataSource/DataSource.h>
 
 namespace U = Util;
 
@@ -50,5 +52,33 @@ int printlog (const char *format, ...)
         int ret = __android_log_vprint (ANDROID_LOG_INFO, "bajka", format, args);
         va_end(args);
         return ret;
+}
+
+/****************************************************************************/
+
+android_app *androidAppForDataSource (android_app *a)
+{
+        static android_app *app = NULL;
+
+        if (a) {
+                app = a;
+        }
+
+        return app;
+}
+
+/****************************************************************************/
+
+Common::DataSource *newDataSource ()
+{
+        android_app *app = androidAppForDataSource (NULL);
+        return new Common::DataSource (app->activity->assetManager);
+}
+
+/****************************************************************************/
+
+void deleteDataSource (Common::DataSource *ds)
+{
+        delete ds;
 }
 
