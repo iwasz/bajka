@@ -11,7 +11,6 @@
 #include <boost/filesystem.hpp>
 #endif
 #include <iostream>
-#include <util/IShell.h>
 #include <model/IModel.h>
 #include <Platform.h>
 #include <tween/Manager.h>
@@ -20,7 +19,7 @@
 /****************************************************************************/
 
 #ifndef ANDROID
-bool ReloadableXmlModelManager::run (Util::IShell *shell)
+bool ReloadableXmlModelManager::run (Util::Scene *scene)
 {
         uint32_t currentMs = getCurrentMs ();
         std::time_t currentFileTime;
@@ -47,7 +46,7 @@ bool ReloadableXmlModelManager::run (Util::IShell *shell)
         dirty = false;
         lastFileTime = boost::filesystem::last_write_time (requestedFile);
 
-        shell->onManagerUnloadModel ();
+        scene->onManagerUnloadModel ();
         Model::IModel *m = get (requestedFile, requestedName);
 
         if (m) {

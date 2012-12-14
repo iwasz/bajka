@@ -12,6 +12,9 @@
 #include <model/manager/XmlModelManager.h>
 #include "util/ReflectionMacros.h"
 
+/**
+ *
+ */
 class ReloadableXmlModelManager : public Model::XmlModelManager {
 public:
 
@@ -22,7 +25,7 @@ public:
         virtual ~ReloadableXmlModelManager () {}
 
 #ifndef ANDROID
-        virtual bool run (Util::IShell *shell);
+        virtual bool run (Util::Scene *scene);
 #endif
 
 private:
