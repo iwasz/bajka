@@ -38,17 +38,17 @@ public:
         EventDispatcher () : app (NULL), sensorManager (NULL), accelerometerSensor (NULL), sensorEventQueue (NULL) {}
         virtual ~EventDispatcher () {}
 
-        /**
-         * Pobiera kolejne eventy z systemu i przekazuje je do dispatch.
-         */
-        bool pollAndDispatch (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex, View::GLContext const *ctx);
         void reset ();
         void init (void *userData);
-
-        Event::IEvent *translate (AInputEvent *event, View::GLContext const *ctx);
+        bool process (void *systemEvent,
+                      Model::IModel *model,
+                      Event::EventIndex const &modeliIndex,
+                      Event::PointerInsideIndex *pointerInsideIndex,
+                      View::GLContext const *ctx);
 
 private:
 
+        Event::IEvent *translate (void *systemEvent, View::GLContext const *ctx);
         Event::MouseButton translateMouseButton (AInputEvent *event);
 
         Event::KeyboardEvent *updateKeyboardUpEvent (AInputEvent *event);
@@ -56,7 +56,6 @@ private:
         Event::MouseMotionEvent *updateMouseMotionEvent (AInputEvent *event, View::GLContext const *ctx);
         Event::MouseButtonEvent *updateMouseButtonEvent (AInputEvent *event, View::GLContext const *ctx);
         Event::MouseButtonEvent *updateMouseButtonEventImpl (Event::MouseButtonEvent *output, AInputEvent *event, View::GLContext const *ctx);
-        Event::ActiveEvent *updateActiveEvent (AInputEvent *event);
         Event::ResizeEvent *updateResizeEvent (AInputEvent *event);
 
 private:
@@ -68,8 +67,6 @@ private:
         Event::ButtonReleaseEvent buttonReleaseEvent;
         Event::QuitEvent quitEvent;
         Event::ResizeEvent resizeEvent;
-        Event::ActiveEvent activeEvent;
-        Event::ExposeEvent exposeEvent;
 
         android_app *app;
         ASensorManager *sensorManager;

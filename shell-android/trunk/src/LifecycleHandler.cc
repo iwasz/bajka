@@ -16,6 +16,9 @@
 #include <Platform.h>
 #include <util/Config.h>
 #include <util/ShellConfig.h>
+#include "tween/Manager.h"
+
+using Reflection::Manager;
 
 /****************************************************************************/
 
@@ -143,15 +146,16 @@ void LifecycleHandler::onStep (ShellContext *ctx, bool autoPause, uint32_t delta
         updateEvent.setDeltaMs (deltaMs);
         updateEvent.setAutoPause (autoPause);
         scene->onStep (&updateEvent);
+        Tween::Manager::getMain ()->update (deltaMs);
         delayMs (ctx->config->loopDelayMs);
         graphicsService->swapBuffers ();
 }
 
 /****************************************************************************/
 
-int32_t LifecycleHandler::onInputEvent (ShellContext *ctx)
+bool LifecycleHandler::onInputEvent (ShellContext *ctx, AInputEvent *event)
 {
         printlog ("LifecycleHandler::onInputEvent");
-        return 0;
+        return eventDispatcher.process (event, scene->getModel (), *scene->getEventIndex (), scene->getPointerInsideIndex (), ctx->glContext);
 }
 

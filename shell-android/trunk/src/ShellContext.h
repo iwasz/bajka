@@ -17,6 +17,10 @@ class ShellConfig;
 class Config;
 }
 
+namespace View {
+class GLContext;
+}
+
 /**
  * DTO grubaśne.
  */
@@ -25,6 +29,7 @@ struct ShellContext {
         Util::ShellConfig *shellConfig;
         Util::Config *config;
         android_app *app;
+        View::GLContext *glContext;
 
 private:
 

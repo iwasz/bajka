@@ -56,7 +56,7 @@ int printlog (const char *format, ...)
 
 /****************************************************************************/
 
-android_app *androidAppForDataSource (android_app *a)
+android_app *androidAppInternal (android_app *a)
 {
         static android_app *app = NULL;
 
@@ -71,7 +71,7 @@ android_app *androidAppForDataSource (android_app *a)
 
 Common::DataSource *newDataSource ()
 {
-        android_app *app = androidAppForDataSource (NULL);
+        android_app *app = androidAppInternal (NULL);
         return new Common::DataSource (app->activity->assetManager);
 }
 
@@ -82,3 +82,11 @@ void deleteDataSource (Common::DataSource *ds)
         delete ds;
 }
 
+/****************************************************************************/
+
+void quit ()
+{
+        printlog ("Quit request by user");
+        android_app *app = androidAppInternal (NULL);
+        ANativeActivity_finish(app->activity);
+}
