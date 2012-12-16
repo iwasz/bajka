@@ -22,7 +22,7 @@ void AbstractModelManager::callOnManagerUnloadModel (Util::Scene *scene)
 
 void AbstractModelManager::callOnManagerLoadModel (Util::Scene *scene)
 {
-        scene->onManagerUnloadModel ();
+        scene->onManagerLoadModel ();
 }
 
 } /* namespace Model */
