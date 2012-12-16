@@ -12,7 +12,7 @@
 
 using namespace Tween;
 
-Controller::IController::HandlingType TweenButtonController::onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v)
+Event::Handling TweenButtonController::onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v)
 {
 	std::cerr << "TweenButtonController::onButtonPress" << std::endl;
 
