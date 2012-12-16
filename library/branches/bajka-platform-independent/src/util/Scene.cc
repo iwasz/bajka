@@ -64,7 +64,6 @@ void Scene::onStep (Event::UpdateEvent *updateEvent)
         }
 
         impl->model->update (updateEvent, &impl->updateContext);
-        Tween::Manager::getMain ()->update (updateEvent->getDeltaMs ());
 }
 
 /****************************************************************************/
@@ -80,6 +79,13 @@ void Scene::setModel (Model::IModel *m)
                 Model::IGroup *g = dynamic_cast <Model::IGroup *> (m);
                 g->setIndices (&impl->eventIndex, &impl->pointerInsideIndex);
         }
+}
+
+/****************************************************************************/
+
+Model::IModel *Scene::getModel ()
+{
+        return impl->model;
 }
 
 /****************************************************************************/
@@ -162,6 +168,20 @@ void Scene::updateLayout ()
         else {
                 impl->model->setTranslate (Geometry::ZERO_POINT);
         }
+}
+
+/****************************************************************************/
+
+Event::EventIndex *Scene::getEventIndex ()
+{
+        return &impl->eventIndex;
+}
+
+/****************************************************************************/
+
+Event::PointerInsideIndex *Scene::getPointerInsideIndex ()
+{
+        return &impl->pointerInsideIndex;
 }
 
 } /* namespace Util */

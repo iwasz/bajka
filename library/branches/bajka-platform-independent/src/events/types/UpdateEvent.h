@@ -28,7 +28,7 @@ public:
         void setDeltaMs (uint32_t  i) { this->deltaMs = i; }
 
         Type getType () const { return UPDATE_EVENT; }
-        virtual bool runCallback (Model::IModel *m, View::IView *v, Controller::IController *c, void *d) { return true; }
+        virtual Handling runCallback (Model::IModel *m, View::IView *v, Controller::IController *c, void *d) { return Event::IGNORE; }
 
         bool getAutoPause () const { return autoPause; }
         void setAutoPause (bool autoPause) { this->autoPause = autoPause; }

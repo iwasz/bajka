@@ -47,7 +47,7 @@ public:
         void setMovement (const Geometry::Point &movement) { this->movement = movement; }
 
         Type getType () const { return MOUSE_MOTION_EVENT; }
-        virtual bool runCallback (Model::IModel *m, View::IView *v, Controller::IController *c, void *d) { return c->onMouseMotionDispatch (static_cast <MouseMotionEvent *> (this), m, v, static_cast <PointerInsideIndex *> (d)); }
+        virtual Handling runCallback (Model::IModel *m, View::IView *v, Controller::IController *c, void *d) { return c->onMouseMotionDispatch (static_cast <MouseMotionEvent *> (this), m, v, static_cast <PointerInsideIndex *> (d)); }
 
         virtual std::string toString () const;
 

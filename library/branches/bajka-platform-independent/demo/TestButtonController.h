@@ -18,7 +18,7 @@ public:
 	b_ ("ButtonController")
 
         virtual ~TestButtonController() {}
-        virtual HandlingType onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v);
+        virtual Event::Handling onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v);
 
         S_ (setTestModel) void setTestModel (Model::IModel *m) { testModel = m; }
 

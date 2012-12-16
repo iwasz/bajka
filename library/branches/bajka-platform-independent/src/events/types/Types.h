@@ -19,11 +19,8 @@
 #include "MouseEvent.h"
 #include "MouseMotionEvent.h"
 #include "QuitEvent.h"
-#include "TimerEvent.h"
 #include "KeyCode.h"
-#include "ExposeEvent.h"
 #include "ResizeEvent.h"
-#include "ActiveEvent.h"
 #include "ManagerEvent.h"
 #include "UpdateEvent.h"
 

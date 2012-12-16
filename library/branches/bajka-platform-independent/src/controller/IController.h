@@ -10,6 +10,7 @@
 #define BAJKA_ICONTROLLER_H_
 
 #include <core/Object.h>
+#include "events/Handling.h"
 
 namespace Model {
 class IModel;
@@ -26,10 +27,7 @@ class ButtonReleaseEvent;
 class MouseMotionEvent;
 class KeyDownEvent;
 class KeyUpEvent;
-class TimerEvent;
 class QuitEvent;
-class ActiveEvent;
-class ExposeEvent;
 class ResizeEvent;
 class UpdateEvent;
 class ManagerEvent;
@@ -53,30 +51,18 @@ struct IController : public Core::Object {
 
 /*--------------------------------------------------------------------------*/
 
-        /**
-         * Informacja w jaki sposób metody kontrolerów obsłużyły event.
-         */
-        enum HandlingType {
-                IGNORED, /** < Metoda ignoruje ten event */
-                HANDLED, /** < Metoda obsłużyła ten event, ale pozwala przekazać go dalej do innych kontrolerów */
-                HANDLED_BREAK /** Metoda obsłużyła ten event i żaden inny kontroler ma już nie dostać tego eventu. */
-        };
-
-        virtual HandlingType onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v) = 0;
-        virtual HandlingType onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v) = 0;
-                HandlingType onMouseMotionDispatch (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v, Event::PointerInsideIndex *d);
-        virtual HandlingType onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) = 0;
-        virtual HandlingType onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) = 0;
-        virtual HandlingType onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) = 0;
-        virtual HandlingType onKeyDown (Event::KeyDownEvent *e, Model::IModel *m, View::IView *v) = 0;
-        virtual HandlingType onKeyUp (Event::KeyUpEvent *e, Model::IModel *m, View::IView *v) = 0;
-        virtual HandlingType onTimer (Event::TimerEvent *e, Model::IModel *m, View::IView *v) = 0;
-        virtual HandlingType onQuit (Event::QuitEvent *e, Model::IModel *m, View::IView *v) = 0;
-        virtual HandlingType onActive (Event::ActiveEvent *e, Model::IModel *m, View::IView *v) = 0;
-        virtual HandlingType onExpose (Event::ExposeEvent *e, Model::IModel *m, View::IView *v) = 0;
-        virtual HandlingType onResize (Event::ResizeEvent *e, Model::IModel *m, View::IView *v) = 0;
-        virtual HandlingType onManagerLoad (Event::ManagerEvent *e, Model::IModel *m, View::IView *v) = 0;
-        virtual HandlingType onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual Event::Handling onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual Event::Handling onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v) = 0;
+                Event::Handling onMouseMotionDispatch (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v, Event::PointerInsideIndex *d);
+        virtual Event::Handling onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual Event::Handling onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual Event::Handling onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual Event::Handling onKeyDown (Event::KeyDownEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual Event::Handling onKeyUp (Event::KeyUpEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual Event::Handling onQuit (Event::QuitEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual Event::Handling onResize (Event::ResizeEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual Event::Handling onManagerLoad (Event::ManagerEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual Event::Handling onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v) = 0;
 
 /*--------------------------------------------------------------------------*/
 

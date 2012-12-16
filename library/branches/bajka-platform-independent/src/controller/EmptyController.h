@@ -25,20 +25,17 @@ struct EmptyController : public IController {
 
 /*--------------------------------------------------------------------------*/
 
-        virtual HandlingType onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v) { return IGNORED; }
-        virtual HandlingType onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v) { return IGNORED; }
-        virtual HandlingType onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) { return IGNORED; }
-        virtual HandlingType onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) { return IGNORED; }
-        virtual HandlingType onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) { return IGNORED; }
-        virtual HandlingType onKeyDown (Event::KeyDownEvent *e, Model::IModel *m, View::IView *v) { return IGNORED; }
-        virtual HandlingType onKeyUp (Event::KeyUpEvent *e, Model::IModel *m, View::IView *v) { return IGNORED; }
-        virtual HandlingType onTimer (Event::TimerEvent *e, Model::IModel *m, View::IView *v) { return IGNORED; }
-        virtual HandlingType onQuit (Event::QuitEvent *e, Model::IModel *m, View::IView *v) { return IGNORED; }
-        virtual HandlingType onActive (Event::ActiveEvent *e, Model::IModel *m, View::IView *v) { return IGNORED; }
-        virtual HandlingType onExpose (Event::ExposeEvent *e, Model::IModel *m, View::IView *v) { return IGNORED; }
-        virtual HandlingType onResize (Event::ResizeEvent *e, Model::IModel *m, View::IView *v) { return IGNORED; }
-        virtual HandlingType onManagerLoad (Event::ManagerEvent *e, Model::IModel *m, View::IView *v) { return IGNORED; }
-        virtual HandlingType onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v) { return IGNORED; }
+        virtual Event::Handling onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v) { return Event::IGNORE; }
+        virtual Event::Handling onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v) { return Event::IGNORE; }
+        virtual Event::Handling onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) { return Event::IGNORE; }
+        virtual Event::Handling onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) { return Event::IGNORE; }
+        virtual Event::Handling onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) { return Event::IGNORE; }
+        virtual Event::Handling onKeyDown (Event::KeyDownEvent *e, Model::IModel *m, View::IView *v) { return Event::IGNORE; }
+        virtual Event::Handling onKeyUp (Event::KeyUpEvent *e, Model::IModel *m, View::IView *v) { return Event::IGNORE; }
+        virtual Event::Handling onQuit (Event::QuitEvent *e, Model::IModel *m, View::IView *v) { return Event::IGNORE; }
+        virtual Event::Handling onResize (Event::ResizeEvent *e, Model::IModel *m, View::IView *v) { return Event::IGNORE; }
+        virtual Event::Handling onManagerLoad (Event::ManagerEvent *e, Model::IModel *m, View::IView *v) { return Event::IGNORE; }
+        virtual Event::Handling onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v) { return Event::IGNORE; }
 
         m_ (setEventMask)
         E_ (EmptyController)

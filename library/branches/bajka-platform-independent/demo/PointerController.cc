@@ -12,10 +12,10 @@
 
 namespace Demo {
 
-Controller::IController::HandlingType PointerController::onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
+Event::Handling PointerController::onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
 {
         pointer->setTranslate (Geometry::makePoint (e->getPosition ().x + offset.x, e->getPosition ().y + offset.y));
-        return Controller::IController::HANDLED;
+        return Controller::IController::Event::BREAK;
 }
 
 } /* namespace Demo */
