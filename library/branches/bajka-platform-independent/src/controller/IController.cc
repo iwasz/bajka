@@ -13,9 +13,9 @@
 
 namespace Controller {
 
-IController::HandlingType IController::onMouseMotionDispatch (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v, Event::PointerInsideIndex *d)
+Event::Handling IController::onMouseMotionDispatch (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v, Event::PointerInsideIndex *d)
 {
-        HandlingType ret = IGNORED;
+        Event::Handling ret = Event::PASS;
 
         if (!d->isPointerInside (m)) {
                 d->add (m);

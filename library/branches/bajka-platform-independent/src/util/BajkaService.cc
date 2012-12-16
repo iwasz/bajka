@@ -183,4 +183,11 @@ Util::Scene *BajkaService::loadScene (std::string const &sceneFile)
         return scene;
 }
 
+/****************************************************************************/
+
+View::GLContext *BajkaService::getGLContext ()
+{
+        return &impl->glContext;
+}
+
 } /* namespace Util */

@@ -14,7 +14,7 @@
 namespace Demo {
 using namespace Tween;
 
-Controller::IController::HandlingType Instructions1Controller::onManagerLoad (Event::ManagerEvent *e, Model::IModel *m, View::IView *v)
+Event::Handling Instructions1Controller::onManagerLoad (Event::ManagerEvent *e, Model::IModel *m, View::IView *v)
 {
         printlog ("Instructions1Controller::onManagerLoad");
 
@@ -54,15 +54,15 @@ Controller::IController::HandlingType Instructions1Controller::onManagerLoad (Ev
 //                rel (Y, 50)->
 //                start ();
 
-        return Controller::IController::HANDLED;
+        return Controller::IController::Event::BREAK;
 }
 
 /****************************************************************************/
 
-Controller::IController::HandlingType Instructions1Controller::onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v)
+Event::Handling Instructions1Controller::onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v)
 {
         std::cerr << "Instructions1Controller::onManagerUnload" << std::endl;
-        return Controller::IController::HANDLED;
+        return Controller::IController::Event::BREAK;
 }
 
 } /* namespace Demo */

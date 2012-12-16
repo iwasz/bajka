@@ -10,6 +10,7 @@
 #include "util/Exceptions.h"
 #include <cstdio>
 #include <common/dataSource/DataSource.h>
+#include "Platform.h"
 
 namespace View {
 
@@ -23,23 +24,32 @@ void load (const char *path,
            int *bitDepth,
            bool expandDimensions2)
 {
-        Common::DataSource ds;
-        ds.open (path, Common::DataSource::MODE_UNKNOWN);
+        Common::DataSource *ds = newDataSource ();
+        ds->open (path, Common::DataSource::MODE_UNKNOWN);
 
-        if (checkIfPng (&ds)) {
-                ds.rewind ();
-                pngLoad (&ds, data, width, height, visibleWidthOut, visibleHeightOut, colorSpace, bitDepth, expandDimensions2);
-                return;
+        try {
+                if (checkIfPng (ds)) {
+                        ds->rewind ();
+                        pngLoad (ds, data, width, height, visibleWidthOut, visibleHeightOut, colorSpace, bitDepth, expandDimensions2);
+                        deleteDataSource (ds);
+                        return;
+                }
+
+                ds->rewind ();
+
+                if (checkIfJpeg (ds)) {
+                        ds->rewind ();
+                        jpegLoad (ds, data, width, height, visibleWidthOut, visibleHeightOut, colorSpace, bitDepth, expandDimensions2);
+                        deleteDataSource (ds);
+                        return;
+                }
+        }
+        catch (std::exception const &) {
+                deleteDataSource (ds);
+                throw;
         }
 
-        ds.rewind ();
-
-        if (checkIfJpeg (&ds)) {
-                ds.rewind ();
-                jpegLoad (&ds, data, width, height, visibleWidthOut, visibleHeightOut, colorSpace, bitDepth, expandDimensions2);
-                return;
-        }
-
+        deleteDataSource (ds);
         throw Util::OperationNotSupportedException (std::string ("load : unsupported file format. File : ") + path);
 }
 

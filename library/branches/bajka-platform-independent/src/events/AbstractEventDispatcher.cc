@@ -35,11 +35,12 @@ bool AbstractEventDispatcher::dispatch (Model::IModel *m, Event::EventIndex cons
         if (type & MOUSE_EVENTS) {
                 MouseEvent *mev = static_cast <MouseEvent *> (e);
                 G::Point const &p = mev->getPosition ();
+                Event::Handling h = Event::IGNORE;
 
 /**
  * Smartfony nie generują czegoś takiego jak event on mouseOver i on mouseOut.
  */
-#ifndef USE_TOUCH_SCREEN
+//#ifndef USE_TOUCH_SCREEN
                 if (type & Event::MOUSE_MOTION_EVENT) {
                         MouseMotionEvent *mmev = static_cast <MouseMotionEvent *> (e);
 
@@ -63,13 +64,13 @@ bool AbstractEventDispatcher::dispatch (Model::IModel *m, Event::EventIndex cons
                                         // Zawsze będzie kontroler (bo to on dodaje model do kolekcji pointerInside), ale i tak sprawdzamy.
                                         C::IController *ctr;
                                         if ((ctr = (*i)->getController ())) {
-                                                C::IController::HandlingType h = ctr->onMouseOut (mmev, *i, (*i)->getView ());
+                                                h = ctr->onMouseOut (mmev, *i, (*i)->getView ());
 
-                                                if (h >= C::IController::HANDLED) {
+                                                if (h != Event::IGNORE) {
                                                         eventHandled = true;
                                                 }
 
-                                                if (h == C::IController::HANDLED_BREAK) {
+                                                if (h == Event::BREAK) {
                                                         break;
                                                 }
                                         }
@@ -83,12 +84,13 @@ bool AbstractEventDispatcher::dispatch (Model::IModel *m, Event::EventIndex cons
                         }
                 }
 
-#endif
+//#endif
+                if (h != Event::BREAK) {
+                        M::IModel *model = m->findContains (p);
 
-                M::IModel *model = m->findContains (p);
-
-                if (model) {
-                        eventHandled |= dispatchEventBackwards (model, mev, pointerInsideIndex);
+                        if (model) {
+                                eventHandled |= dispatchEventBackwards (model, mev, pointerInsideIndex);
+                        }
                 }
         }
         else {
@@ -96,30 +98,33 @@ bool AbstractEventDispatcher::dispatch (Model::IModel *m, Event::EventIndex cons
                 typedef Event::EventIndex::Pair Pair;
 
                 Pair pair = modeliIndex.getModels (type);
+                bool breakChain = false;
 
                 for (Iterator i = pair.first; i != pair.second; ++i) {
-                        eventHandled |= dispatchEventBackwards (i->second, e, pointerInsideIndex);
-                }
+                        eventHandled |= dispatchEventBackwards (i->second, e, pointerInsideIndex, &breakChain);
 
-                if (type & Event::QUIT_EVENT /*&& !eventHandled == HANDLED_BREAK*/) {
-//TODO
-//                        shell ()->quit ();
+                        if (breakChain) {
+                                break;
+                        }
                 }
         }
-
 
         return eventHandled;
 }
 
 /****************************************************************************/
 
-bool AbstractEventDispatcher::dispatchEventBackwards (Model::IModel *m, IEvent *e, Event::PointerInsideIndex *pointerInsideIndex)
+bool AbstractEventDispatcher::dispatchEventBackwards (Model::IModel *m, IEvent *e, Event::PointerInsideIndex *pointerInsideIndex, bool *breakChain)
 {
         C::IController *controller = m->getController ();
-        bool eventHandled = false;
+        Handling h = IGNORE;
 
         if (controller && controller->getEventMask () & e->getType ()) {
-                eventHandled |= e->runCallback (m, m->getView (), controller, pointerInsideIndex);
+                h = e->runCallback (m, m->getView (), controller, pointerInsideIndex);
+        }
+
+        if (h == BREAK) {
+                return true;
         }
 
 #if 0
@@ -127,10 +132,10 @@ bool AbstractEventDispatcher::dispatchEventBackwards (Model::IModel *m, IEvent *
 #endif
 
         if ((m = m->getParent ())) {
-                eventHandled |= dispatchEventBackwards (m, e, pointerInsideIndex);
+                return dispatchEventBackwards (m, e, pointerInsideIndex);
         }
 
-        return eventHandled;
+        return h != IGNORE;
 }
 
 } /* namespace Event */

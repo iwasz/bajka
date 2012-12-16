@@ -23,28 +23,28 @@ class PointerInsideIndex;
 class EventIndex;
 
 /**
- *
+ * Obsługuje eventy wejścia, czyli klawiatura, myszka sensory.
+ * - Konwertuje eventy z systemu na eventy bajki.
+ * - Rozsyła te eventy do zainteresowanych kontrolerów.
  */
 class IEventDispather {
 public:
         virtual ~IEventDispather () {}
 
         /**
-         *
+         * @param systemEvent Event z systemu, czyli na przykład z SDL, czy AInputEvent z androida.
+         * @param ctx GLContext, który jest potrzebny, zeby zamieniać współrzędne kursora myszy na
+         * współrzędne projekcji.
+         * @return Zwraca true, gdy event został obsłużony przez jakikolwiek kontroler. Czyli, jeśli
+         * kontroler z metody obsługującej ten event zwórócił coś innego niż IGNORED. Jeżeli żaden
+         * kontroler nie złapał tego eventu, albo każdy który go złapał zwrócił IGNORED, to metoda
+         * zwróci false i w przypadku Androida, event trafi do systemu.
          */
-        virtual bool pollAndDispatch (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex, View::GLContext const *ctx) = 0;
-
-        /**
-         * Zwraca true, kiedy event został obsłużony przez grę i nie powinien zostać przekazany do
-         * systemu. Ma to znaczenie w androidzie, gdzie aplikacja i system współdzielą eventy.
-         */
-        virtual bool dispatch (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex, Event::IEvent *event) = 0;
-
-        /**
-         *
-         */
-        virtual bool dispatchEventBackwards (Model::IModel *m, IEvent *e, Event::PointerInsideIndex *pointerInsideIndex) = 0;
-
+        virtual bool process (void *systemEvent,
+                              Model::IModel *model,
+                              Event::EventIndex const &modeliIndex,
+                              Event::PointerInsideIndex *pointerInsideIndex,
+                              View::GLContext const *ctx) = 0;
 };
 
 } /* namespace Event */

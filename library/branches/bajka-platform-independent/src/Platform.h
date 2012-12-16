@@ -34,6 +34,6 @@ class GLContext;
 }
 
 extern Util::Config *config ();
-//extern View::GLContext *glContext ();
+extern void quit ();
 
 #endif /* SHELL_H_ */

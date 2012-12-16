@@ -21,6 +21,8 @@ class GLContext;
 
 namespace Event {
 class UpdateEvent;
+class PointerInsideIndex;
+class EventIndex;
 }
 
 namespace Util {
@@ -36,8 +38,13 @@ public:
         ~Scene ();
 
         void onStep (Event::UpdateEvent *updateEvent);
-        void setModel (Model::IModel *m);
         void reset ();
+
+        void setModel (Model::IModel *m);
+        Model::IModel *getModel ();
+
+        Event::EventIndex *getEventIndex ();
+        Event::PointerInsideIndex *getPointerInsideIndex ();
 
 private:
 

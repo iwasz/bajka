@@ -21,7 +21,7 @@ public:
         virtual ~ManagerEvent () {}
 
         Type getType () const { return MANAGER_EVENT; }
-        bool runCallback (Model::IModel *m, View::IView *v, Controller::IController *c, void *d) { return true; }
+        Handling runCallback (Model::IModel *m, View::IView *v, Controller::IController *c, void *d) { return Event::IGNORE; }
 
         std::string toString () const { return ""; }
 };

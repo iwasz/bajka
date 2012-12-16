@@ -33,8 +33,8 @@ public:
 
         virtual ~Instructions1Controller () {}
 
-        HandlingType onManagerLoad (Event::ManagerEvent *e, Model::IModel *m, View::IView *v);
-        HandlingType onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v);
+        Event::Handling onManagerLoad (Event::ManagerEvent *e, Model::IModel *m, View::IView *v);
+        Event::Handling onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v);
 
         S_ (setPlayer) void setPlayer      (Model::IModel *m) { player = m; }
         S_ (setButtonLeft) void setButtonLeft  (Model::IModel *m) { buttonLeft = m; }

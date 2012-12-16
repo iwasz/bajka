@@ -25,20 +25,17 @@ struct DebugController : public IController {
 
 /*--------------------------------------------------------------------------*/
 
-        HandlingType onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v);
-        HandlingType onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v);
-        HandlingType onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v);
-        HandlingType onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v);
-        HandlingType onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v);
-        HandlingType onKeyDown (Event::KeyDownEvent *e, Model::IModel *m, View::IView *v);
-        HandlingType onKeyUp (Event::KeyUpEvent *e, Model::IModel *m, View::IView *v);
-        HandlingType onTimer (Event::TimerEvent *e, Model::IModel *m, View::IView *v);
-        HandlingType onQuit (Event::QuitEvent *e, Model::IModel *m, View::IView *v);
-        HandlingType onActive (Event::ActiveEvent *e, Model::IModel *m, View::IView *v);
-        HandlingType onExpose (Event::ExposeEvent *e, Model::IModel *m, View::IView *v);
-        HandlingType onResize (Event::ResizeEvent *e, Model::IModel *m, View::IView *v);
-        HandlingType onManagerLoad (Event::ManagerEvent *e, Model::IModel *m, View::IView *v);
-        HandlingType onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v);
+        Event::Handling onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v);
+        Event::Handling onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v);
+        Event::Handling onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v);
+        Event::Handling onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v);
+        Event::Handling onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v);
+        Event::Handling onKeyDown (Event::KeyDownEvent *e, Model::IModel *m, View::IView *v);
+        Event::Handling onKeyUp (Event::KeyUpEvent *e, Model::IModel *m, View::IView *v);
+        Event::Handling onQuit (Event::QuitEvent *e, Model::IModel *m, View::IView *v);
+        Event::Handling onResize (Event::ResizeEvent *e, Model::IModel *m, View::IView *v);
+        Event::Handling onManagerLoad (Event::ManagerEvent *e, Model::IModel *m, View::IView *v);
+        Event::Handling onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v);
 
         m_ (setEventMask)
         E_ (DebugController)

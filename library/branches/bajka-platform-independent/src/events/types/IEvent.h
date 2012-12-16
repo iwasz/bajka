@@ -13,6 +13,7 @@
 #include "controller/IController.h"
 #include <core/IToStringEnabled.h>
 #include <map>
+#include "events/Handling.h"
 
 namespace Model {
 class IModel;
@@ -35,18 +36,15 @@ enum Type {
         MOUSE_MOTION_EVENT      = 0x01,     //!< MOUSE_MOTION_EVENT
         BUTTON_PRESS_EVENT      = 0x01 << 1,//!< BUTTON_PRESS_EVENT
         BUTTON_RELEASE_EVENT    = 0x01 << 2,//!< BUTTON_RELEASE_EVENT
-        TIMER_EVENT             = 0x01 << 3,//!< TIMER_EVENT
-        KEY_DOWN_EVENT          = 0x01 << 4,//!< KEY_DOWN_EVENT
-        KEY_UP_EVENT            = 0x01 << 5,//!< KEY_UP_EVENT
-        QUIT_EVENT              = 0x01 << 6,//!< QUIT_EVENT
-        ACTIVE_EVENT            = 0x01 << 7,
-        EXPOSE_EVENT            = 0x01 << 8,
-        RESIZE_EVENT            = 0x01 << 9,
-        MOUSE_OVER_EVENT        = 0x01 << 10,
-        MOUSE_OUT_EVENT         = 0x01 << 11,
-        UPDATE_EVENT            = 0x01 << 12,
-        MANAGER_EVENT           = 0x01 << 13,
-        EVENT_TERMINATOR        = 0x01 << 14 //!< Do not use.
+        KEY_DOWN_EVENT          = 0x01 << 3,//!< KEY_DOWN_EVENT
+        KEY_UP_EVENT            = 0x01 << 4,//!< KEY_UP_EVENT
+        QUIT_EVENT              = 0x01 << 5,//!< QUIT_EVENT
+        RESIZE_EVENT            = 0x01 << 6,
+        MOUSE_OVER_EVENT        = 0x01 << 7,
+        MOUSE_OUT_EVENT         = 0x01 << 8,
+        UPDATE_EVENT            = 0x01 << 9,
+        MANAGER_EVENT           = 0x01 << 10,
+        EVENT_TERMINATOR        = 0x01 << 11 //!< Do not use.
 };
 
 const unsigned int MOUSE_EVENTS = MOUSE_MOTION_EVENT | BUTTON_PRESS_EVENT | BUTTON_RELEASE_EVENT;
@@ -60,7 +58,7 @@ public:
         virtual ~IEvent () {}
 
         virtual Type getType () const = 0;
-        virtual bool runCallback (Model::IModel *m, View::IView *v, Controller::IController *c, void *d) = 0;
+        virtual Handling runCallback (Model::IModel *m, View::IView *v, Controller::IController *c, void *d) = 0;
 };
 
 }
