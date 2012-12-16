@@ -231,5 +231,14 @@ void GameLoop::handleCmd (int32_t cmd)
 
 int32_t GameLoop::handleInput (AInputEvent *event)
 {
-        return lifecycleHandler->onInputEvent (context);
+        if (rendering) {
+                /*
+                 * onInputEvent zwróci true, jesli bajka w jakikolwiek zareagowała na event.
+                 * False, jeśli nie zareagowała i wówczas event trafi do systemu i zostanie
+                 * obsłużony w domyślny sposób.
+                 */
+                return (int32_t)lifecycleHandler->onInputEvent (context, event);
+        }
+
+        return 0;
 }

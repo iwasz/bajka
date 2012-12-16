@@ -14,7 +14,7 @@
 #include "GraphicsService.h"
 #include <cassert>
 
-extern android_app *androidAppForDataSource (android_app *a);
+extern android_app *androidAppInternal (android_app *a);
 
 /****************************************************************************/
 
@@ -23,11 +23,12 @@ std::auto_ptr <GameLoop> ShellFactory::createGameLoop (Util::ShellConfig *sConfi
         assert (sConfig);
         assert (app);
 
-        androidAppForDataSource (app);
+        androidAppInternal (app);
         ShellContext *ctx = createShellContext (sConfig, app);
         LifecycleHandler *handler = createLifecycleHandler ();
         handler->graphicsService = createGraphicsService (app);
         handler->bajkaService = createBajkaService ();
+        ctx->glContext = handler->bajkaService->getGLContext ();
         std::auto_ptr <GameLoop> loop = std::auto_ptr <GameLoop> (new GameLoop (ctx, handler));
         loop->init ();
         return loop;

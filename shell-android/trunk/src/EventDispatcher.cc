@@ -26,42 +26,21 @@ using namespace Event;
 
 /****************************************************************************/
 
-bool EventDispatcher::pollAndDispatch (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex, View::GLContext const *ctx)
+bool EventDispatcher::process (void *systemEvent,
+                               Model::IModel *model,
+                               Event::EventIndex const &modeliIndex,
+                               Event::PointerInsideIndex *pointerInsideIndex,
+                               View::GLContext const *ctx)
 {
-        int ident;
-        int events;
-        struct android_poll_source* source;
-        bool ret = false;
-
-        while ((ident = ALooper_pollAll (0, NULL, &events, (void**)&source)) >= 0) {
-
-            if (source != NULL) {
-                source->process (app, source);
-            }
-
-            if (ident == LOOPER_ID_USER) {
-                if (accelerometerSensor != NULL) {
-                    ASensorEvent event;
-                    while (ASensorEventQueue_getEvents (sensorEventQueue, &event, 1) > 0) {
-                        // LOGI("accelerometer: x=%f y=%f z=%f", event.acceleration.x, event.acceleration.y, event.acceleration.z);
-                    }
-                }
-            }
-
-            if (app->destroyRequested != 0) {
-//                    TODO
-//                shell ()->quit ();
-                return true; //?
-            }
-        }
-
-        return ret;
+        Event::IEvent *e = translate (systemEvent, ctx);
+        return dispatch (model, modeliIndex, pointerInsideIndex, e);
 }
 
 /****************************************************************************/
 
-Event::IEvent *EventDispatcher::translate (AInputEvent *event, View::GLContext const *ctx)
+Event::IEvent *EventDispatcher::translate (void *systemEvent, View::GLContext const *ctx)
 {
+        AInputEvent *event = static_cast <AInputEvent *> (systemEvent);
         int32_t eventType = AInputEvent_getType (event);
 
         if (eventType == AINPUT_EVENT_TYPE_MOTION) {
@@ -226,15 +205,6 @@ MouseButton EventDispatcher::translateMouseButton (AInputEvent *event)
 //        case SDL_BUTTON_LEFT:
 //                return LEFT;
 //        }
-}
-
-/****************************************************************************/
-
-Event::ActiveEvent *EventDispatcher::updateActiveEvent (AInputEvent *event)
-{
-//        activeEvent.setActive (event->active.gain);
-//        activeEvent.setState (static_cast <ActiveState> (event->active.state));
-//        return &activeEvent;
 }
 
 /****************************************************************************/

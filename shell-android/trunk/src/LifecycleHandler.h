@@ -11,6 +11,7 @@
 
 #include <stdint.h>
 #include <events/types/UpdateEvent.h>
+#include "EventDispatcher.h"
 
 class ShellContext;
 class ShellFactory;
@@ -93,7 +94,10 @@ public:
          */
         void onStep (ShellContext *ctx, bool autoPause, uint32_t deltaMs);
 
-        int32_t onInputEvent (ShellContext *ctx);
+        /**
+         * Klawiatura, mysz, dotyk, sensory.
+         */
+        bool onInputEvent (ShellContext *ctx, AInputEvent *event);
 
 private:
 
@@ -107,6 +111,7 @@ private:
         Util::BajkaService *bajkaService;
         Util::Scene *scene;
         Event::UpdateEvent updateEvent;
+        EventDispatcher eventDispatcher;
 
 };
 
