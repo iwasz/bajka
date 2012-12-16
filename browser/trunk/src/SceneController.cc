@@ -16,9 +16,9 @@ void SceneController::init ()
         tweenFactory->create()->start ();
 }
 
-SceneController::HandlingType SceneController::onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v)
+Event::Handling SceneController::onManagerUnload (Event::ManagerEvent *e, Model::IModel *m, View::IView *v)
 {
-        return IGNORED;
+        return Event::PASS;
 }
 
 } /* namespace Tween */

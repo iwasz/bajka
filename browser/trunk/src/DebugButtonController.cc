@@ -14,7 +14,7 @@
 
 using namespace Controller;
 
-IController::HandlingType DebugButtonController::onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v)
+Event::Handling DebugButtonController::onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v)
 {
         View::Primitive *primitive = dynamic_cast <View::Primitive *> (v);
 
@@ -29,46 +29,45 @@ IController::HandlingType DebugButtonController::onButtonPress (Event::ButtonPre
 #endif
 
         if (quit) {
-//                 TODO
-//                shell ()->quit ();
+                ::quit ();
         }
 
         if (modelManager && !file.empty () && !name.empty ()) {
                 modelManager->load (file, name);
         }
 
-        return HANDLED;
+        return Event::BREAK;
 }
 
 /****************************************************************************/
 
-IController::HandlingType DebugButtonController::onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v)
+Event::Handling DebugButtonController::onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v)
 {
         View::Primitive *primitive = dynamic_cast <View::Primitive *> (v);
         if (primitive) {
                 primitive->setForeground (normal);
         }
-        return HANDLED;
+        return Event::BREAK;
 }
 
 /****************************************************************************/
 
-IController::HandlingType DebugButtonController::onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
+Event::Handling DebugButtonController::onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
 {
         View::Primitive *primitive = dynamic_cast <View::Primitive *> (v);
         if (primitive) {
                 primitive->setForeground (hover);
         }
-        return HANDLED;
+        return Event::BREAK;
 }
 
 /****************************************************************************/
 
-IController::HandlingType DebugButtonController::onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
+Event::Handling DebugButtonController::onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
 {
         View::Primitive *primitive = dynamic_cast <View::Primitive *> (v);
         if (primitive) {
                 primitive->setForeground (normal);
         }
-        return HANDLED;
+        return Event::BREAK;
 }

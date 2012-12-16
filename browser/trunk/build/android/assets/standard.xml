@@ -37,17 +37,17 @@
     </cargs>
   </TTFFont>
 
-  <TTFFont id="volter48" renderType="0" hinting="1">
+  <TTFFont id="volter36" renderType="0" hinting="1">
     <cargs>
       <value type="text">volter.ttf</value>
-      <value type="int">48</value>
+      <value type="int">36</value>
     </cargs>
   </TTFFont>  
 
   <TTFFont id="dekar" renderType="1" hinting="1">
     <cargs>
       <value type="text">Dekar.otf</value>
-      <value type="int">48</value>
+      <value type="int">72</value>
     </cargs>
   </TTFFont>  
 
@@ -70,7 +70,7 @@
   </Color> 
 
   <LinearGroup id="button" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true" type="vertical">
-    <label set-as="child" text="Button" view.foreground="@orange" />
+    <label set-as="child" text="Button" view.foreground="@orange" view.font="@volter36"/>
     <Rectangle set-as="view" foreground="@orange" background="00000000" thickness="3"/>
     <DebugButtonController set-as="controller" eventMask="0xffff" clicked="@siusiu"  normal="@orange"  hover="@crimson" modelManager="@modelManager"  />
     <prop-alias name="file" value="controller.file" />
