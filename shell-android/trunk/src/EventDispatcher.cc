@@ -135,7 +135,7 @@ KeyboardEvent *EventDispatcher::updateKeyboardDownEvent (AInputEvent *event)
 
 /****************************************************************************/
 
-MouseMotionEvent *EventDispatcher::updateMouseMotionEvent (AInputEvent *event, View::GLContext const *ctx)
+MotionMoveEvent *EventDispatcher::updateMouseMotionEvent (AInputEvent *event, View::GLContext const *ctx)
 {
 //        mouseMotionEvent.setButtons ((unsigned int)event->motion.state);
         mouseMotionEvent.setButtons (0);
@@ -162,20 +162,10 @@ MouseMotionEvent *EventDispatcher::updateMouseMotionEvent (AInputEvent *event, V
 
 /****************************************************************************/
 
-MouseButtonEvent *EventDispatcher::updateMouseButtonEvent (AInputEvent *event, View::GLContext const *ctx)
-{
-//        return (event->button.type == SDL_MOUSEBUTTONDOWN) ?
-//                        (updateMouseButtonEventImpl (&buttonPressEvent, event, ctx)) :
-//                        (updateMouseButtonEventImpl (&buttonReleaseEvent, event, ctx));
-        return updateMouseButtonEventImpl (&buttonPressEvent, event, ctx);
-}
-
-/*--------------------------------------------------------------------------*/
-
-MouseButtonEvent *EventDispatcher::updateMouseButtonEventImpl (MouseButtonEvent *output, AInputEvent *event, View::GLContext const *ctx)
+Event::MotionEvent *EventDispatcher::updateMouseButtonEventImpl (Event::MotionEvent *output, AInputEvent *event, View::GLContext const *ctx)
 {
 //        output->setButton (translateMouseButton (event));
-        output->setButton (LEFT);
+        output->setButtons (Event::BUTTON0);
 
         float x = AMotionEvent_getX (event, 0);
         float y = AMotionEvent_getY (event, 0);
