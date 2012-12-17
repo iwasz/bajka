@@ -79,7 +79,7 @@ protected:
 
         /*
          * Ustawiane przez App. To jest indeks, który zawiera informację o modelach, nad którymi
-         * aktualnie znajduje się kursor myszy. Ten indeks ułatwia generowanie eventów onMouseOut.
+         * aktualnie znajduje się kursor myszy. Ten indeks ułatwia generowanie eventów onMotionOut.
          * Grupy mają do niego wskaźnik, żeby mogły usuwać z niego na berząco modele, gdy user usunie
          * model z grupy.
          */

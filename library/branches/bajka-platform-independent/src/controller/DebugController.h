@@ -25,11 +25,11 @@ struct DebugController : public IController {
 
 /*--------------------------------------------------------------------------*/
 
-        Event::Handling onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v);
-        Event::Handling onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v);
-        Event::Handling onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v);
-        Event::Handling onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v);
-        Event::Handling onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v);
+        Event::Handling onMotionDown (Event::MotionDownEvent *e, Model::IModel *m, View::IView *v);
+        Event::Handling onMotionUp (Event::MotionUpEvent *e, Model::IModel *m, View::IView *v);
+        Event::Handling onMotionMove (Event::MotionMoveEvent *e, Model::IModel *m, View::IView *v);
+        Event::Handling onMotionOver (Event::MotionMoveEvent *e, Model::IModel *m, View::IView *v);
+        Event::Handling onMotionOut (Event::MotionMoveEvent *e, Model::IModel *m, View::IView *v);
         Event::Handling onKeyDown (Event::KeyDownEvent *e, Model::IModel *m, View::IView *v);
         Event::Handling onKeyUp (Event::KeyUpEvent *e, Model::IModel *m, View::IView *v);
         Event::Handling onQuit (Event::QuitEvent *e, Model::IModel *m, View::IView *v);

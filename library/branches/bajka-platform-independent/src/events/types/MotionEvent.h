@@ -41,16 +41,20 @@ struct MotionPointer {
 
         MotionPointer ();
 
-        float x;
-        float y;
-        float offsetX;
-        float offsety;
+        /// Współrzędne ekranowe kursora.
+        Geometry::Point position;
+        /// Przesunięcie kursora w stosunku do poprzendiego punktu.
+        Geometry::Point movement;
+        /// Siła nacisku.
         float pressure;
+        /// Rozmiar punktu.
         float size;
 };
 
 /**
- * Event związany jakoś z myszą.
+ * Event związany myszą lub z ekranem dotykowym. Dane pogrupowane są na kursory. Kiedy
+ * podłączona jest mysz, to kursor jest tylko jeden. Kiedy używamy ekranu dotykowego,
+ * kursorów jest tyle ile palców dotykających ekranu.
  * \ingroup Events
  */
 class MotionEvent : public IEvent {
@@ -59,20 +63,19 @@ public:
         MotionEvent ();
         virtual ~MotionEvent () {}
 
-        /// Współrzędne ekranowe kursora.
-        const Geometry::Point &getPosition () const {  return position; }
-
         /*
          * Dodatkowe klawisze na klawiaturze naciśnięte podczas tego eventu (takie jak ALT, CTRL etc).
          * Działa tylko na Androidzie.
          */
         KeyMod getMetaState () const { return metaState; }
+        void setMetaState (KeyMod metaState) { this->metaState = metaState; }
 
         /**
          * Liczba naciśniętych przycisków myszy lub, liczba pointerów na ekranie dotykowym (liczba
          * palców dotykających ekranu).
          */
         int getPointerCount () const { return pointerCount; }
+        void setPointerCount (int pointerCount) { this->pointerCount = pointerCount; }
 
         /**
          * Maska bitowa zawierająca informację o naciśniętych przyciskach myszy, albo o
@@ -80,20 +83,16 @@ public:
          * MotionPointer.
          */
         uint32_t getButtons () const { return buttons; }
+        void setButtons (uint32_t buttons) { this->buttons = buttons; }
 
         /**
          * Zwraca pointer o danym indeksie. Nie dokonuje
          */
         MotionPointer const &getPointer (unsigned int i) const;
+        MotionPointer &getPointer (unsigned int i);
 
 private:
 
-        /// Współrzędne ekranowe kursora.
-        void setPosition (const Geometry::Point &position) { this->position = position; }
-
-private:
-
-        Geometry::Point position;
         KeyMod metaState;
         int pointerCount;
         uint32_t buttons;

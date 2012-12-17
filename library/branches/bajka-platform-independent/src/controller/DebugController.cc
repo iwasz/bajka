@@ -12,41 +12,41 @@
 
 namespace Controller {
 
-Event::Handling DebugController::onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v)
+Event::Handling DebugController::onMotionDown (Event::MotionDownEvent *e, Model::IModel *m, View::IView *v)
 {
-        printlog ("DebugController::onButtonPress : %p, %s\n", this, e->toString ().c_str ());
+        printlog ("DebugController::onMotionDown : %p, %s\n", this, e->toString ().c_str ());
         return Event::IGNORE;
 }
 
 /****************************************************************************/
 
-Event::Handling DebugController::onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v)
+Event::Handling DebugController::onMotionUp (Event::MotionUpEvent *e, Model::IModel *m, View::IView *v)
 {
-        printlog ("DebugController::onButtonRelease : %p, %s\n", this, e->toString ().c_str ());
+        printlog ("DebugController::onMotionUp : %p, %s\n", this, e->toString ().c_str ());
         return Event::IGNORE;
 }
 
 /****************************************************************************/
 
-Event::Handling DebugController::onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
+Event::Handling DebugController::onMotionMove (Event::MotionMoveEvent *e, Model::IModel *m, View::IView *v)
 {
-        printlog ("DebugController::onMouseMotion : %p, %s\n", this, e->toString ().c_str ());
+        printlog ("DebugController::onMotionMove : %p, %s\n", this, e->toString ().c_str ());
         return Event::IGNORE;
 }
 
 /****************************************************************************/
 
-Event::Handling DebugController::onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
+Event::Handling DebugController::onMotionOver (Event::MotionMoveEvent *e, Model::IModel *m, View::IView *v)
 {
-        printlog ("DebugController::onMouseOver : %p, %s\n", this, e->toString ().c_str ());
+        printlog ("DebugController::onMotionOver : %p, %s\n", this, e->toString ().c_str ());
         return Event::IGNORE;
 }
 
 /****************************************************************************/
 
-Event::Handling DebugController::onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
+Event::Handling DebugController::onMotionOut (Event::MotionMoveEvent *e, Model::IModel *m, View::IView *v)
 {
-        printlog ("DebugController::onMouseOut : %p, %s\n", this, e->toString ().c_str ());
+        printlog ("DebugController::onMotionOut : %p, %s\n", this, e->toString ().c_str ());
         return Event::IGNORE;
 }
 

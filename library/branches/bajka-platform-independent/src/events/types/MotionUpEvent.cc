@@ -2,22 +2,18 @@
  *                                                                          *
  *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
  *  ~~~~~~~~                                                                *
- *  Date : Nov 18, 2009                                                     *
- *  ~~~~~~                                                                  *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "MouseMotionEvent.h"
+#include "MotionUpEvent.h"
 
 namespace Event {
 
-std::string MouseMotionEvent::toString () const
+std::string MotionUpEvent::toString () const
 {
-//        return "MouseMotionEvent (position=" + Geometry::toString (position) +
-//                        ", movement=" + Geometry::toString (movement) +
-//                        ", buttons=" + boost::lexical_cast <std::string> (buttons)+ ")";
-        return "MouseMotionEvent";
+//        return "MotionUpEvent (position=" + Geometry::toString (position) + ", button=" + boost::lexical_cast <std::string> (button)+ ")";
+        return "MotionUpEvent";
 }
 
-} // namespace Event
+} /* namespace Event1 */

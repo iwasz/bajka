@@ -13,8 +13,8 @@
 #include "PointerInsideIndex.h"
 #include "types/IEvent.h"
 #include "types/MotionEvent.h"
-#include "types/MouseMotionEvent.h"
 #include "Platform.h"
+#include "types/MotionMoveEvent.h"
 
 namespace Event {
 namespace M = Model;
@@ -33,25 +33,21 @@ bool AbstractEventDispatcher::dispatch (Model::IModel *m, Event::EventIndex cons
         Event::Type type = e->getType();
 
         if (type & MOUSE_EVENTS) {
-                MotionEvent *mev = static_cast <MotionEvent *> (e);
-                G::Point const &p = mev->getPosition ();
+                MotionEvent *mev = dynamic_cast <MotionEvent *> (e);
                 Event::Handling h = Event::IGNORE;
 
-/**
- * Smartfony nie generują czegoś takiego jak event on mouseOver i on mouseOut.
- */
-//#ifndef USE_TOUCH_SCREEN
-                if (type & Event::MOUSE_MOTION_EVENT) {
-                        MouseMotionEvent *mmev = static_cast <MouseMotionEvent *> (e);
+                // Obsługa motionOver and Out.
+                if (type & Event::MOTION_MOVE_EVENT && mev->getPointerCount () == 1) {
+                        MotionMoveEvent *mmev = static_cast <MotionMoveEvent *> (e);
 
                         /*
-                         * Sprawdzamy czy onMouseOut. Uwaga! pointerInside jest unordered (hash), czyli
-                         * onMouseOut odpali się w losowej kolejności. Zastanowić się, czy to bardzo źle.
+                         * Sprawdzamy czy onMotionOut. Uwaga! pointerInside jest unordered (hash), czyli
+                         * onMotionOut odpali się w losowej kolejności. Zastanowić się, czy to bardzo źle.
                          */
                         typedef Event::PointerInsideIndex::Iterator Iterator;
                         for (Iterator i = pointerInsideIndex->begin (); i != pointerInsideIndex->end ();) {
                                 M::IModel *parent;
-                                G::Point copy = p;
+                                G::Point copy = mev->getPointer (0).position;
 
                                 if ((parent = (*i)->getParent ())) {
                                         dynamic_cast <M::IGroup *> (parent)->groupToScreen (&copy);
@@ -64,7 +60,7 @@ bool AbstractEventDispatcher::dispatch (Model::IModel *m, Event::EventIndex cons
                                         // Zawsze będzie kontroler (bo to on dodaje model do kolekcji pointerInside), ale i tak sprawdzamy.
                                         C::IController *ctr;
                                         if ((ctr = (*i)->getController ())) {
-                                                h = ctr->onMouseOut (mmev, *i, (*i)->getView ());
+                                                h = ctr->onMotionOut (mmev, *i, (*i)->getView ());
 
                                                 if (h != Event::IGNORE) {
                                                         eventHandled = true;
@@ -84,12 +80,18 @@ bool AbstractEventDispatcher::dispatch (Model::IModel *m, Event::EventIndex cons
                         }
                 }
 
-//#endif
                 if (h != Event::BREAK) {
-                        M::IModel *model = m->findContains (p);
+                        /*
+                         * TODO to jest źle. Pointery nie muszą być po kolei! Jeśli kolejno przykładam 3 palce,
+                         * to mam pointery 0, 1 i 2. Jeśli jadę 3ma palcami i odrywam środkowy, to mam teraz
+                         * pointery 0 i 2.
+                         */
+                        for (int i = 0; i < mev->getPointerCount (); ++i) {
+                                M::IModel *model = m->findContains (mev->getPointer (i).position);
 
-                        if (model) {
-                                eventHandled |= dispatchEventBackwards (model, mev, pointerInsideIndex);
+                                if (model) {
+                                        eventHandled |= dispatchEventBackwards (model, mev, pointerInsideIndex);
+                                }
                         }
                 }
         }

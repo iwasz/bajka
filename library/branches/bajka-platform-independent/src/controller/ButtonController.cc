@@ -16,7 +16,7 @@ using View::StatefulWidget;
 
 namespace Controller {
 
-Event::Handling ButtonController::onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v)
+Event::Handling ButtonController::onMotionDown (Event::MotionDownEvent *e, Model::IModel *m, View::IView *v)
 {
         assertThrow (v, "!v");
         v->setState (2);
@@ -25,7 +25,7 @@ Event::Handling ButtonController::onButtonPress (Event::ButtonPressEvent *e, Mod
 
 /****************************************************************************/
 
-Event::Handling ButtonController::onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v)
+Event::Handling ButtonController::onMotionUp (Event::MotionUpEvent *e, Model::IModel *m, View::IView *v)
 {
         assertThrow (v, "!v");
         v->setState (0);
@@ -34,7 +34,7 @@ Event::Handling ButtonController::onButtonRelease (Event::ButtonReleaseEvent *e,
 
 /****************************************************************************/
 
-Event::Handling ButtonController::onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
+Event::Handling ButtonController::onMotionOver (Event::MotionMoveEvent *e, Model::IModel *m, View::IView *v)
 {
         assertThrow (v, "!v");
         v->setState (1);
@@ -43,7 +43,7 @@ Event::Handling ButtonController::onMouseOver (Event::MouseMotionEvent *e, Model
 
 /****************************************************************************/
 
-Event::Handling ButtonController::onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
+Event::Handling ButtonController::onMotionOut (Event::MotionMoveEvent *e, Model::IModel *m, View::IView *v)
 {
         assertThrow (v, "!v");
         v->setState (0);

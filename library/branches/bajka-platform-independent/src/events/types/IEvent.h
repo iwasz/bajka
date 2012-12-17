@@ -33,9 +33,9 @@ namespace Event {
  * \ingroup Events
  */
 enum Type {
-        MOUSE_MOTION_EVENT      = 0x01,     //!< MOUSE_MOTION_EVENT
-        BUTTON_PRESS_EVENT      = 0x01 << 1,//!< BUTTON_PRESS_EVENT
-        BUTTON_RELEASE_EVENT    = 0x01 << 2,//!< BUTTON_RELEASE_EVENT
+        MOTION_MOVE_EVENT      = 0x01,     //!< MOUSE_MOTION_EVENT
+        MOTION_DOWN_EVENT      = 0x01 << 1,//!< BUTTON_PRESS_EVENT
+        MOTION_UP_EVENT    = 0x01 << 2,//!< BUTTON_RELEASE_EVENT
         KEY_DOWN_EVENT          = 0x01 << 3,//!< KEY_DOWN_EVENT
         KEY_UP_EVENT            = 0x01 << 4,//!< KEY_UP_EVENT
         QUIT_EVENT              = 0x01 << 5,//!< QUIT_EVENT
@@ -47,7 +47,7 @@ enum Type {
         EVENT_TERMINATOR        = 0x01 << 11 //!< Do not use.
 };
 
-const unsigned int MOUSE_EVENTS = MOUSE_MOTION_EVENT | BUTTON_PRESS_EVENT | BUTTON_RELEASE_EVENT;
+const unsigned int MOUSE_EVENTS = MOTION_MOVE_EVENT | MOTION_DOWN_EVENT | MOTION_UP_EVENT;
 
 /**
  * Typowy visitor-pattern się zrobił.

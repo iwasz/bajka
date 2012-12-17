@@ -20,7 +20,7 @@ namespace Event {
 /**
  * Index zawierający modele, które w danym momencie mają nad sobą kursor myszy.
  * Indeks ten pozwala zaobserwować moment, kiedy ten kursor wyjedzie poza obszar
- * obiektu i dzięki temu pozwala wygenerowac event onMouseOut. Wskaźnik do tego
+ * obiektu i dzięki temu pozwala wygenerowac event onMotionOut. Wskaźnik do tego
  * indeksu mają app, EventDispatcher i wszystkie grupy. EventDispatcher dodaje
  * modele do indeksu, a app i grupy usuwają (kiedy wyjmiemy akiś model z grupy).
  */

@@ -6,24 +6,24 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef BUTTONPRESSEVENT_H_
-#define BUTTONPRESSEVENT_H_
+#ifndef BUTTONRELEASEEVENT_H_
+#define BUTTONRELEASEEVENT_H_
 
-#include "MouseButtonEvent.h"
+#include "MotionEvent.h"
 
 namespace Event {
 
 /**
- * Event oznaczający wciśnięcie guzika myszy.
+ * Event oznaczający puszczenie guzika myszy.
  * \ingroup Events
  */
-struct ButtonPressEvent : public MouseButtonEvent {
-        virtual ~ButtonPressEvent () {}
-        Type getType () const { return  BUTTON_PRESS_EVENT; }
-        virtual Handling runCallback (Model::IModel *m, View::IView *v, Controller::IController *c, void *d) { return c->onButtonPress (static_cast <ButtonPressEvent *> (this), m, v); }
+struct MotionUpEvent : public MotionEvent {
+        virtual ~MotionUpEvent () {}
+        Type getType () const { return  MOTION_UP_EVENT; }
+        virtual Handling runCallback (Model::IModel *m, View::IView *v, Controller::IController *c, void *d) { return c->onMotionUp (static_cast <MotionUpEvent *> (this), m, v); }
         virtual std::string toString () const;
 };
 
 } /* namespace Event */
 
-#	endif /* BUTTONPRESSEVENT_H_ */
+#	endif /* BUTTONRELEASEEVENT_H_ */
