@@ -22,9 +22,9 @@ class IView;
 
 namespace Event {
 class IEvent;
-class ButtonPressEvent;
-class ButtonReleaseEvent;
-class MouseMotionEvent;
+class MotionDownEvent;
+class MotionUpEvent;
+class MotionMoveEvent;
 class KeyDownEvent;
 class KeyUpEvent;
 class QuitEvent;
@@ -51,12 +51,12 @@ struct IController : public Core::Object {
 
 /*--------------------------------------------------------------------------*/
 
-        virtual Event::Handling onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v) = 0;
-        virtual Event::Handling onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v) = 0;
-                Event::Handling onMouseMotionDispatch (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v, Event::PointerInsideIndex *d);
-        virtual Event::Handling onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) = 0;
-        virtual Event::Handling onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) = 0;
-        virtual Event::Handling onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual Event::Handling onMotionDown (Event::MotionDownEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual Event::Handling onMotionUp (Event::MotionUpEvent *e, Model::IModel *m, View::IView *v) = 0;
+                Event::Handling onMotionMoveDispatch (Event::MotionMoveEvent *e, Model::IModel *m, View::IView *v, Event::PointerInsideIndex *d);
+        virtual Event::Handling onMotionMove (Event::MotionMoveEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual Event::Handling onMotionOver (Event::MotionMoveEvent *e, Model::IModel *m, View::IView *v) = 0;
+        virtual Event::Handling onMotionOut (Event::MotionMoveEvent *e, Model::IModel *m, View::IView *v) = 0;
         virtual Event::Handling onKeyDown (Event::KeyDownEvent *e, Model::IModel *m, View::IView *v) = 0;
         virtual Event::Handling onKeyUp (Event::KeyUpEvent *e, Model::IModel *m, View::IView *v) = 0;
         virtual Event::Handling onQuit (Event::QuitEvent *e, Model::IModel *m, View::IView *v) = 0;

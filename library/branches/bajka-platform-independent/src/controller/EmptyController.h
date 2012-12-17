@@ -25,11 +25,11 @@ struct EmptyController : public IController {
 
 /*--------------------------------------------------------------------------*/
 
-        virtual Event::Handling onButtonPress (Event::ButtonPressEvent *e, Model::IModel *m, View::IView *v) { return Event::IGNORE; }
-        virtual Event::Handling onButtonRelease (Event::ButtonReleaseEvent *e, Model::IModel *m, View::IView *v) { return Event::IGNORE; }
-        virtual Event::Handling onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) { return Event::IGNORE; }
-        virtual Event::Handling onMouseOver (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) { return Event::IGNORE; }
-        virtual Event::Handling onMouseOut (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v) { return Event::IGNORE; }
+        virtual Event::Handling onMotionDown (Event::MotionDownEvent *e, Model::IModel *m, View::IView *v) { return Event::IGNORE; }
+        virtual Event::Handling onMotionUp (Event::MotionUpEvent *e, Model::IModel *m, View::IView *v) { return Event::IGNORE; }
+        virtual Event::Handling onMotionMove (Event::MotionMoveEvent *e, Model::IModel *m, View::IView *v) { return Event::IGNORE; }
+        virtual Event::Handling onMotionOver (Event::MotionMoveEvent *e, Model::IModel *m, View::IView *v) { return Event::IGNORE; }
+        virtual Event::Handling onMotionOut (Event::MotionMoveEvent *e, Model::IModel *m, View::IView *v) { return Event::IGNORE; }
         virtual Event::Handling onKeyDown (Event::KeyDownEvent *e, Model::IModel *m, View::IView *v) { return Event::IGNORE; }
         virtual Event::Handling onKeyUp (Event::KeyUpEvent *e, Model::IModel *m, View::IView *v) { return Event::IGNORE; }
         virtual Event::Handling onQuit (Event::QuitEvent *e, Model::IModel *m, View::IView *v) { return Event::IGNORE; }

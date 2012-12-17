@@ -32,6 +32,7 @@ protected:
          * wywołań.
          */
         bool dispatchEventBackwards (Model::IModel *m, IEvent *e, Event::PointerInsideIndex *pointerInsideIndex, bool *breakChain = NULL);
+
 };
 
 } /* namespace Event */

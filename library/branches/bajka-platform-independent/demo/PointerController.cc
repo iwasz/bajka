@@ -12,7 +12,7 @@
 
 namespace Demo {
 
-Event::Handling PointerController::onMouseMotion (Event::MouseMotionEvent *e, Model::IModel *m, View::IView *v)
+Event::Handling PointerController::onMouseMotion (Event::MotionMoveEvent *e, Model::IModel *m, View::IView *v)
 {
         pointer->setTranslate (Geometry::makePoint (e->getPosition ().x + offset.x, e->getPosition ().y + offset.y));
         return Controller::IController::Event::BREAK;

@@ -11,10 +11,8 @@
 namespace Event {
 
 MotionPointer::MotionPointer () :
-        x (0),
-        y (0),
-        offsetX (0),
-        offsety (0),
+        position (Geometry::ZERO_POINT),
+        movement (Geometry::ZERO_POINT),
         pressure (0),
         size (0)
 {
@@ -23,8 +21,7 @@ MotionPointer::MotionPointer () :
 /****************************************************************************/
 
 MotionEvent::MotionEvent () :
-        position (Geometry::ZERO_POINT),
-        metaState (0),
+        metaState (MOD_NONE),
         pointerCount (0),
         buttons (0)
 {
@@ -35,7 +32,15 @@ MotionEvent::MotionEvent () :
 MotionPointer const &MotionEvent::getPointer (unsigned int i) const
 {
         assert (i < MAX_POINTERS);
-        return &pointers[i];
+        return pointers[i];
+}
+
+/****************************************************************************/
+
+MotionPointer &MotionEvent::getPointer (unsigned int i)
+{
+        assert (i < MAX_POINTERS);
+        return pointers[i];
 }
 
 } // namespace Event
