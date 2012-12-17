@@ -130,7 +130,7 @@ void LifecycleHandler::onConfigChanged (ShellContext *ctx)
 
 void LifecycleHandler::onStep (ShellContext *ctx, bool autoPause, uint32_t deltaMs)
 {
-#ifndef NDEBUG
+#if 0
         static int i = 0;
 
         if ((++i % 100) == 0) {
@@ -155,7 +155,9 @@ void LifecycleHandler::onStep (ShellContext *ctx, bool autoPause, uint32_t delta
 
 bool LifecycleHandler::onInputEvent (ShellContext *ctx, AInputEvent *event)
 {
+#if 0
         printlog ("LifecycleHandler::onInputEvent");
+#endif
         return eventDispatcher.process (event, scene->getModel (), *scene->getEventIndex (), scene->getPointerInsideIndex (), ctx->glContext);
 }
 
