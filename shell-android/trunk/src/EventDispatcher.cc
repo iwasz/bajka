@@ -24,7 +24,18 @@ namespace C = Controller;
 namespace G = Geometry;
 using namespace Event;
 
-/****************************************************************************/
+/*
+ * Właściwości MotionEventa na które bedę reagować :
+ * - Action - AMOTION_EVENT_ACTION_DOWN, AMOTION_EVENT_ACTION_UP etc.
+ * - AMotionEvent_getMetaState - meta klawisze (alt, shift, ctrl etc) naciśięte podczas tego eventu.
+ * - liczba pointerów (lub liczba naciśniętych jednocześnie guzików myszy).
+ * - pointers - gdy mysza, to powie które guzki naciśnięte. Gdy pointery, indeksy pointerów.
+ * - per pointer:
+ * -  x, y - bezwzględna pozycja.
+ * -  offsetX, offsetY
+ * -  pressure
+ * -  size
+ */
 
 bool EventDispatcher::process (void *systemEvent,
                                Model::IModel *model,
@@ -164,20 +175,20 @@ MouseButtonEvent *EventDispatcher::updateMouseButtonEvent (AInputEvent *event, V
 MouseButtonEvent *EventDispatcher::updateMouseButtonEventImpl (MouseButtonEvent *output, AInputEvent *event, View::GLContext const *ctx)
 {
 //        output->setButton (translateMouseButton (event));
-        buttonPressEvent.setButton (LEFT);
+        output->setButton (LEFT);
 
         float x = AMotionEvent_getX (event, 0);
         float y = AMotionEvent_getY (event, 0);
 
         G::Point p;
         ctx->mouseToDisplay (x, y, &p.x, &p.y);
-        buttonPressEvent.setPosition (p);
-        return &buttonPressEvent;
+        output->setPosition (p);
+        return output;
 }
 
 /*--------------------------------------------------------------------------*/
 
-MouseButton EventDispatcher::translateMouseButton (AInputEvent *event)
+MotionPointer EventDispatcher::translateMouseButton (AInputEvent *event)
 {
 //        switch (event->button.button) {
 //        case SDL_BUTTON_MIDDLE:
