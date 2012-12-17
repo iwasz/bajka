@@ -12,7 +12,7 @@
 #include "EventIdex.h"
 #include "PointerInsideIndex.h"
 #include "types/IEvent.h"
-#include "types/MouseEvent.h"
+#include "types/MotionEvent.h"
 #include "types/MouseMotionEvent.h"
 #include "Platform.h"
 
@@ -33,7 +33,7 @@ bool AbstractEventDispatcher::dispatch (Model::IModel *m, Event::EventIndex cons
         Event::Type type = e->getType();
 
         if (type & MOUSE_EVENTS) {
-                MouseEvent *mev = static_cast <MouseEvent *> (e);
+                MotionEvent *mev = static_cast <MotionEvent *> (e);
                 G::Point const &p = mev->getPosition ();
                 Event::Handling h = Event::IGNORE;
 
