@@ -12,7 +12,7 @@
 #define MOUSEMOTIONEVENT_H_
 
 #include "geometry/Point.h"
-#include "MouseEvent.h"
+#include "MotionEvent.h"
 
 namespace Event {
 class PointerInsideIndex;
@@ -21,12 +21,12 @@ class PointerInsideIndex;
  * Event ruchu myszy.
  * \ingroup Events
  */
-class MouseMotionEvent : public MouseEvent {
+class MouseMotionEvent : public MotionEvent {
 public:
 
         MouseMotionEvent () : movement (Geometry::ZERO_POINT) {}
         MouseMotionEvent (const Geometry::Point &position, const Geometry::Point &movement, unsigned int b) :
-                MouseEvent (position),
+                MotionEvent (/*position*/),
                 movement (movement),
                 buttons (b) {}
 

@@ -11,7 +11,7 @@
 #ifndef MOUSEBUTTONEVENT_H_
 #define MOUSEBUTTONEVENT_H_
 
-#include "MouseEvent.h"
+#include "MotionEvent.h"
 #include "geometry/Point.h"
 
 namespace Event {
@@ -20,12 +20,12 @@ namespace Event {
  * Event kliknięcia klawisza myszy.
  * \ingroup Events
  */
-class MouseButtonEvent : public MouseEvent {
+class MouseButtonEvent : public MotionEvent {
 public:
 
-        MouseButtonEvent () : button (static_cast <MouseButton> (0)) {}
-        MouseButtonEvent (MouseButton button, const Geometry::Point &position) :
-                MouseEvent (position),
+        MouseButtonEvent () : button (static_cast <MotionButton> (0)) {}
+        MouseButtonEvent (MotionButton button, const Geometry::Point &position) :
+                MotionEvent (),
                 button (button) {}
 
         virtual ~MouseButtonEvent () {}
@@ -34,12 +34,12 @@ public:
          * Wciśnięty guzik myszy. Wartość typu Event::MouseButton (należy porównywać
          * ze zdefiniowanymi stałymi).
          */
-        MouseButton getButton () const { return button; }
-        void setButton (MouseButton button) { this->button = button; }
+        MotionButton getButton () const { return button; }
+        void setButton (MotionButton button) { this->button = button; }
 
 protected:
 
-        MouseButton button;
+        MotionButton button;
 
 };
 

@@ -16,7 +16,7 @@
 #include "KeyDownEvent.h"
 #include "KeyUpEvent.h"
 #include "MouseButtonEvent.h"
-#include "MouseEvent.h"
+#include "MotionEvent.h"
 #include "MouseMotionEvent.h"
 #include "QuitEvent.h"
 #include "KeyCode.h"
