@@ -53,16 +53,15 @@ private:
 
         Event::KeyboardEvent *updateKeyboardUpEvent (AInputEvent *event);
         Event::KeyboardEvent *updateKeyboardDownEvent (AInputEvent *event);
-        Event::MouseMotionEvent *updateMouseMotionEvent (AInputEvent *event, View::GLContext const *ctx);
-        Event::MouseButtonEvent *updateMouseButtonEvent (AInputEvent *event, View::GLContext const *ctx);
-        Event::MouseButtonEvent *updateMouseButtonEventImpl (Event::MouseButtonEvent *output, AInputEvent *event, View::GLContext const *ctx);
+        Event::MotionMoveEvent *updateMouseMotionEvent (AInputEvent *event, View::GLContext const *ctx);
+        Event::MotionEvent *updateMouseButtonEventImpl (Event::MotionEvent *output, AInputEvent *event, View::GLContext const *ctx);
         Event::ResizeEvent *updateResizeEvent (AInputEvent *event);
 
 private:
 
-        Event::MouseMotionEvent mouseMotionEvent;
-        Event::ButtonPressEvent buttonPressEvent;
-        Event::ButtonReleaseEvent buttonReleaseEvent;
+        Event::MotionMoveEvent mouseMotionEvent;
+        Event::MotionDownEvent buttonPressEvent;
+        Event::MotionUpEvent buttonReleaseEvent;
 
         Event::KeyDownEvent keyDownEvent;
         Event::KeyUpEvent keyUpEvent;
