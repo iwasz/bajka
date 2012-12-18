@@ -58,19 +58,19 @@ Event::IEvent *EventDispatcher::translate (void *systemEvent, View::GLContext co
 
                 int32_t i = AMotionEvent_getAction (event);
                 unsigned char eventAction = AMOTION_EVENT_ACTION_MASK & i;
-                unsigned char pointerIndex = AMOTION_EVENT_ACTION_POINTER_INDEX_MASK & i;
+//                unsigned char pointerIndex = AMOTION_EVENT_ACTION_POINTER_INDEX_MASK & i;
 
                 switch (eventAction) {
                 case AMOTION_EVENT_ACTION_DOWN:
                 case AMOTION_EVENT_ACTION_POINTER_DOWN:
-                        return updateMouseButtonEventImpl (&buttonPressEvent, event, ctx);
+                        return updateMotionEvent (&motionDownEvent, event, ctx);
 
                 case AMOTION_EVENT_ACTION_UP:
                 case AMOTION_EVENT_ACTION_POINTER_UP:
-                        return updateMouseButtonEventImpl (&buttonReleaseEvent, event, ctx);
+                        return updateMotionEvent (&motionUpEvent, event, ctx);
 
                 case AMOTION_EVENT_ACTION_MOVE:
-                        return updateMouseMotionEvent (event, ctx);
+                        return updateMotionEvent (&motionMoveEvent, event, ctx);
 
                 default:
                         break;
@@ -135,77 +135,31 @@ KeyboardEvent *EventDispatcher::updateKeyboardDownEvent (AInputEvent *event)
 
 /****************************************************************************/
 
-MotionMoveEvent *EventDispatcher::updateMouseMotionEvent (AInputEvent *event, View::GLContext const *ctx)
+MotionEvent *EventDispatcher::updateMotionEvent (Event::MotionEvent *output, AInputEvent const *event, View::GLContext const *ctx)
 {
-//        mouseMotionEvent.setButtons ((unsigned int)event->motion.state);
-        mouseMotionEvent.setButtons (0);
+        size_t pcnt = AMotionEvent_getPointerCount (event);
+        output->setPointerCount (pcnt);
+        // output->setMetaState (); TODO
 
-        float x = AMotionEvent_getX (event, 0);
-        float y = AMotionEvent_getY (event, 0);
+        for (size_t i = 0; i < pcnt; ++i) {
 
-        G::Point p;
-        ctx->mouseToDisplay (x, y, &p.x, &p.y);
-        mouseMotionEvent.setPosition (p);
+                float x = AMotionEvent_getX (event, i);
+                float y = AMotionEvent_getY (event, i);
+
+                MotionPointer &pointer = output->getPointer (i);
+                G::Point &p = pointer.position;
+                ctx->mouseToDisplay (x, y, &p.x, &p.y);
+
+                pointer.id = AMotionEvent_getPointerId (event, i);
+                pointer.pressure = AMotionEvent_getPressure (event, i);
+                pointer.size = AMotionEvent_getSize (event, i);
+                // pointer.movement = ? TODO
+        }
 
 #if 1
-        printlog ("Motion event %f, %f", p.x, p.y);
+        printlog (output->toString ().c_str ());
 #endif
-#if 0
-        std::cerr << event->motion.xrel << ", " << event->motion.yrel << std::endl;
-#endif
-
-        // ?
-//        mouseMotionEvent.setMovement (G::makePoint (event->motion.xrel, event->motion.yrel));
-
-        return &mouseMotionEvent;
-}
-
-/****************************************************************************/
-
-Event::MotionEvent *EventDispatcher::updateMouseButtonEventImpl (Event::MotionEvent *output, AInputEvent *event, View::GLContext const *ctx)
-{
-//        output->setButton (translateMouseButton (event));
-        output->setButtons (Event::BUTTON0);
-
-        float x = AMotionEvent_getX (event, 0);
-        float y = AMotionEvent_getY (event, 0);
-
-        G::Point p;
-        ctx->mouseToDisplay (x, y, &p.x, &p.y);
-        output->setPosition (p);
         return output;
-}
-
-/*--------------------------------------------------------------------------*/
-
-MotionPointer EventDispatcher::translateMouseButton (AInputEvent *event)
-{
-//        switch (event->button.button) {
-//        case SDL_BUTTON_MIDDLE:
-//                return CENTER;
-//
-//        case SDL_BUTTON_RIGHT:
-//                return RIGHT;
-//
-//        case 4:
-//                return BUTTON4;
-//
-//        case 5:
-//                return BUTTON5;
-//
-//        case 6:
-//                return BUTTON6;
-//
-//        case 7:
-//                return BUTTON7;
-//
-//        case 8:
-//                return BUTTON8;
-//
-//        default:
-//        case SDL_BUTTON_LEFT:
-//                return LEFT;
-//        }
 }
 
 /****************************************************************************/
@@ -214,7 +168,7 @@ Event::ResizeEvent *EventDispatcher::updateResizeEvent (AInputEvent *event)
 {
 //        resizeEvent.setWidth (event->resize.w);
 //        resizeEvent.setHeight (event->resize.h);
-//        return &resizeEvent;
+        return &resizeEvent;
 }
 
 /****************************************************************************/

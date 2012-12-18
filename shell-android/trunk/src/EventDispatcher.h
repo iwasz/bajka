@@ -49,19 +49,17 @@ public:
 private:
 
         Event::IEvent *translate (void *systemEvent, View::GLContext const *ctx);
-        Event::MotionPointer translateMouseButton (AInputEvent *event);
 
         Event::KeyboardEvent *updateKeyboardUpEvent (AInputEvent *event);
         Event::KeyboardEvent *updateKeyboardDownEvent (AInputEvent *event);
-        Event::MotionMoveEvent *updateMouseMotionEvent (AInputEvent *event, View::GLContext const *ctx);
-        Event::MotionEvent *updateMouseButtonEventImpl (Event::MotionEvent *output, AInputEvent *event, View::GLContext const *ctx);
+        Event::MotionEvent *updateMotionEvent (Event::MotionEvent *output, AInputEvent const *event, View::GLContext const *ctx);
         Event::ResizeEvent *updateResizeEvent (AInputEvent *event);
 
 private:
 
-        Event::MotionMoveEvent mouseMotionEvent;
-        Event::MotionDownEvent buttonPressEvent;
-        Event::MotionUpEvent buttonReleaseEvent;
+        Event::MotionMoveEvent motionMoveEvent;
+        Event::MotionDownEvent motionDownEvent;
+        Event::MotionUpEvent motionUpEvent;
 
         Event::KeyDownEvent keyDownEvent;
         Event::KeyUpEvent keyUpEvent;
