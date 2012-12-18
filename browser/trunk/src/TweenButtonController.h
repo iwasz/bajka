@@ -20,7 +20,7 @@ public:
 
 	TweenButtonController () : tweenFactory (NULL) {}
         virtual ~TweenButtonController() {}
-        virtual Event::Handling onButtonPress (Event::MotionDownEvent *e, Model::IModel *m, View::IView *v);
+        virtual Event::Handling onMotionDown (Event::MotionDownEvent *e, Model::IModel *m, View::IView *v);
 
 private:
 

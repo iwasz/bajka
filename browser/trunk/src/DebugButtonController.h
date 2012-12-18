@@ -28,10 +28,10 @@ public:
 
 /*--------------------------------------------------------------------------*/
 
-        virtual Event::Handling onButtonPress (Event::MotionDownEvent *e, Model::IModel *m, View::IView *v);
-        virtual Event::Handling onButtonRelease (Event::MotionUpEvent *e, Model::IModel *m, View::IView *v);
-        virtual Event::Handling onMouseOver (Event::MotionMoveEvent *e, Model::IModel *m, View::IView *v);
-        virtual Event::Handling onMouseOut (Event::MotionMoveEvent *e, Model::IModel *m, View::IView *v);
+        virtual Event::Handling onMotionDown (Event::MotionDownEvent *e, Model::IModel *m, View::IView *v);
+        virtual Event::Handling onMotionUp (Event::MotionUpEvent *e, Model::IModel *m, View::IView *v);
+        virtual Event::Handling onMotionOver (Event::MotionMoveEvent *e, Model::IModel *m, View::IView *v);
+        virtual Event::Handling onMotionOut (Event::MotionMoveEvent *e, Model::IModel *m, View::IView *v);
 
 private:
 

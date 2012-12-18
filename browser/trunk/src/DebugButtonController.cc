@@ -14,7 +14,7 @@
 
 using namespace Controller;
 
-Event::Handling DebugButtonController::onButtonPress (Event::MotionDownEvent *e, Model::IModel *m, View::IView *v)
+Event::Handling DebugButtonController::onMotionDown (Event::MotionDownEvent *e, Model::IModel *m, View::IView *v)
 {
         View::Primitive *primitive = dynamic_cast <View::Primitive *> (v);
 
@@ -41,7 +41,7 @@ Event::Handling DebugButtonController::onButtonPress (Event::MotionDownEvent *e,
 
 /****************************************************************************/
 
-Event::Handling DebugButtonController::onButtonRelease (Event::MotionUpEvent *e, Model::IModel *m, View::IView *v)
+Event::Handling DebugButtonController::onMotionUp (Event::MotionUpEvent *e, Model::IModel *m, View::IView *v)
 {
         View::Primitive *primitive = dynamic_cast <View::Primitive *> (v);
         if (primitive) {
@@ -52,7 +52,7 @@ Event::Handling DebugButtonController::onButtonRelease (Event::MotionUpEvent *e,
 
 /****************************************************************************/
 
-Event::Handling DebugButtonController::onMouseOver (Event::MotionMoveEvent *e, Model::IModel *m, View::IView *v)
+Event::Handling DebugButtonController::onMotionOver (Event::MotionMoveEvent *e, Model::IModel *m, View::IView *v)
 {
         View::Primitive *primitive = dynamic_cast <View::Primitive *> (v);
         if (primitive) {
@@ -63,7 +63,7 @@ Event::Handling DebugButtonController::onMouseOver (Event::MotionMoveEvent *e, M
 
 /****************************************************************************/
 
-Event::Handling DebugButtonController::onMouseOut (Event::MotionMoveEvent *e, Model::IModel *m, View::IView *v)
+Event::Handling DebugButtonController::onMotionOut (Event::MotionMoveEvent *e, Model::IModel *m, View::IView *v)
 {
         View::Primitive *primitive = dynamic_cast <View::Primitive *> (v);
         if (primitive) {
