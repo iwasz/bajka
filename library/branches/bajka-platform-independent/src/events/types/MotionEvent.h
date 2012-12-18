@@ -49,6 +49,17 @@ struct MotionPointer {
         float pressure;
         /// Rozmiar punktu.
         float size;
+        /// Słuzy do rozróżniania pointerów. Dla myszki nie ma znaczenia, bo 1 pointer.
+        int32_t id;
+};
+
+/**
+ * Źródło eventu.
+ */
+enum MotionSource {
+        MOUSE,  //!< Mysz - jeden pointer, ale wile guzików.
+        TOUCH,  //!< Ekran dotykowy - wiele pointerów, kazdy po jednmym "guziku", nie można odrywać palca od ekranu poczas ruchu (w szczególnosci nie działa onMotionOver i Out).
+        OTHER   //!< Inne.
 };
 
 /**
@@ -91,11 +102,17 @@ public:
         MotionPointer const &getPointer (unsigned int i) const;
         MotionPointer &getPointer (unsigned int i);
 
+        MotionSource getSource () const { return source; }
+        void setSource (MotionSource s) { source = s; }
+
+        virtual std::string toString () const;
+
 private:
 
         KeyMod metaState;
         int pointerCount;
         uint32_t buttons;
+        MotionSource source;
         MotionPointer pointers[MAX_POINTERS];
 };
 

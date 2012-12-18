@@ -24,20 +24,11 @@ class PointerInsideIndex;
 class MotionMoveEvent : public MotionEvent {
 public:
 
-        MotionMoveEvent () : movement (Geometry::ZERO_POINT) {}
         virtual ~MotionMoveEvent () {}
-
-        const Geometry::Point &getMovement () const {  return movement; }
-        void setMovement (const Geometry::Point &m) { this->movement = movement; }
 
         Type getType () const { return MOTION_MOVE_EVENT; }
         virtual Handling runCallback (Model::IModel *m, View::IView *v, Controller::IController *c, void *d) { return c->onMotionMoveDispatch (static_cast <MotionMoveEvent *> (this), m, v, static_cast <PointerInsideIndex *> (d)); }
         virtual std::string toString () const;
-
-private:
-
-        Geometry::Point movement;
-
 };
 
 }

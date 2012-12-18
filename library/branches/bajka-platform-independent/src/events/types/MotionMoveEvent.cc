@@ -14,10 +14,7 @@ namespace Event {
 
 std::string MotionMoveEvent::toString () const
 {
-//        return "MotionMoveEvent (position=" + Geometry::toString (position) +
-//                        ", movement=" + Geometry::toString (movement) +
-//                        ", buttons=" + boost::lexical_cast <std::string> (buttons)+ ")";
-        return "MotionMoveEvent";
+        return "MotionMoveEvent " + MotionEvent::toString ();
 }
 
 } // namespace Event
