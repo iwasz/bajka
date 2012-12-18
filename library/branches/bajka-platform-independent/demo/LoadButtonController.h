@@ -19,7 +19,7 @@ public:
 	b_ ("ButtonController")
 
         virtual ~LoadButtonController() {}
-        virtual Event::Handling onButtonPress (Event::MotionDownEvent *e, Model::IModel *m, View::IView *v)
+        virtual Event::Handling onMotionDown (Event::MotionDownEvent *e, Model::IModel *m, View::IView *v)
         {
                 manager ()->play (name);
                 return Event::BREAK;

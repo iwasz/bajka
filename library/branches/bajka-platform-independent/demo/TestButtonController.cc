@@ -13,9 +13,9 @@
 
 using namespace Tween;
 
-Event::Handling TestButtonController::onButtonPress (Event::MotionDownEvent *e, Model::IModel *m, View::IView *v)
+Event::Handling TestButtonController::onMotionDown (Event::MotionDownEvent *e, Model::IModel *m, View::IView *v)
 {
-	std::cerr << "TestButtonController::onButtonPress" << std::endl;
+	std::cerr << "TestButtonController::onMotionDown" << std::endl;
 
 	Geometry::Point p = testModel->getTranslate ();
 
@@ -59,6 +59,6 @@ Event::Handling TestButtonController::onButtonPress (Event::MotionDownEvent *e, 
                 start ();
 
 
-	return Controller::ButtonController::onButtonPress (e, m, v);
+	return Controller::ButtonController::onMotionDown (e, m, v);
 }
 
