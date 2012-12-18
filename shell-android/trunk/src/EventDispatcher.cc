@@ -139,6 +139,19 @@ MotionEvent *EventDispatcher::updateMotionEvent (Event::MotionEvent *output, AIn
 {
         size_t pcnt = AMotionEvent_getPointerCount (event);
         output->setPointerCount (pcnt);
+
+        int32_t src = AInputEvent_getSource (event);
+
+        if (src == AINPUT_SOURCE_TOUCHSCREEN) {
+                output->setSource (TOUCH);
+        }
+        else if (src == AINPUT_SOURCE_MOUSE) {
+                output->setSource (MOUSE);
+        }
+        else {
+                output->setSource (OTHER);
+        }
+
         // output->setMetaState (); TODO
 
         for (size_t i = 0; i < pcnt; ++i) {
@@ -156,7 +169,7 @@ MotionEvent *EventDispatcher::updateMotionEvent (Event::MotionEvent *output, AIn
                 // pointer.movement = ? TODO
         }
 
-#if 1
+#if 0
         printlog (output->toString ().c_str ());
 #endif
         return output;
