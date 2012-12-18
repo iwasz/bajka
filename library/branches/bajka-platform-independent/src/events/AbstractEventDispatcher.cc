@@ -37,7 +37,7 @@ bool AbstractEventDispatcher::dispatch (Model::IModel *m, Event::EventIndex cons
                 Event::Handling h = Event::IGNORE;
 
                 // Obsługa motionOver and Out.
-                if (type & Event::MOTION_MOVE_EVENT && mev->getPointerCount () == 1) {
+                if (type & Event::MOTION_MOVE_EVENT && mev->getSource () == MOUSE) {
                         MotionMoveEvent *mmev = static_cast <MotionMoveEvent *> (e);
 
                         /*
@@ -81,11 +81,6 @@ bool AbstractEventDispatcher::dispatch (Model::IModel *m, Event::EventIndex cons
                 }
 
                 if (h != Event::BREAK) {
-                        /*
-                         * TODO to jest źle. Pointery nie muszą być po kolei! Jeśli kolejno przykładam 3 palce,
-                         * to mam pointery 0, 1 i 2. Jeśli jadę 3ma palcami i odrywam środkowy, to mam teraz
-                         * pointery 0 i 2.
-                         */
                         for (int i = 0; i < mev->getPointerCount (); ++i) {
                                 M::IModel *model = m->findContains (mev->getPointer (i).position);
 
