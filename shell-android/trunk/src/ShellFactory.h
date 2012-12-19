@@ -17,6 +17,10 @@ struct android_app;
 class LifecycleHandler;
 class GraphicsService;
 
+namespace Sound {
+class IDevice;
+}
+
 namespace Util {
 class ShellConfig;
 class BajkaService;
@@ -37,6 +41,7 @@ private:
         static LifecycleHandler *createLifecycleHandler ();
         static GraphicsService *createGraphicsService (android_app *app);
         static Util::BajkaService *createBajkaService ();
+        static Sound::IDevice *createSoundDevice (android_app *app);
 
 };
 
