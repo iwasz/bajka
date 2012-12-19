@@ -7,6 +7,7 @@
  ****************************************************************************/
 
 #include "Buffer.h"
+#include "SoundContext.h"
 #include <SLES/OpenSLES.h>
 #include <SLES/OpenSLES_Android.h>
 #include <sound/SoundException.h>
@@ -39,17 +40,28 @@ Buffer::Buffer ()
 
 Buffer::~Buffer ()
 {
+        // destroy file descriptor audio player object, and invalidate all associated interfaces
+        if (impl->fdPlayerObject != NULL) {
+                (*impl->fdPlayerObject)->Destroy (impl->fdPlayerObject);
+                impl->fdPlayerObject = NULL;
+                impl->fdPlayerPlay = NULL;
+                impl->fdPlayerSeek = NULL;
+                impl->fdPlayerMuteSolo = NULL;
+                impl->fdPlayerVolume = NULL;
+        }
+
         delete impl;
 }
 
 /****************************************************************************/
 
-void Buffer::setLoad (std::string const &path)
+void Buffer::setLoad (std::string const &filename)
 {
+        assert (device);
+        SoundContext *ctx = device->getSoundContext ();
         SLresult result;
-        assert (impl->app->activity->assetManager);
-        AAsset* asset = AAssetManager_open (impl->app->activity->assetManager, filename.c_str (), AASSET_MODE_UNKNOWN);
-
+        assert (ctx->app->activity->assetManager);
+        AAsset* asset = AAssetManager_open (ctx->app->activity->assetManager, filename.c_str (), AASSET_MODE_UNKNOWN);
         assert (asset);
 
         // open asset as file descriptor
@@ -64,44 +76,44 @@ void Buffer::setLoad (std::string const &path)
         SLDataSource audioSrc = { &loc_fd, &format_mime };
 
         // configure audio sink
-        SLDataLocator_OutputMix loc_outmix = { SL_DATALOCATOR_OUTPUTMIX, impl->outputMixObject };
+        SLDataLocator_OutputMix loc_outmix = { SL_DATALOCATOR_OUTPUTMIX, ctx->outputMixObject };
         SLDataSink audioSnk = { &loc_outmix, NULL };
 
         // create audio player
         const SLInterfaceID ids[3] = { SL_IID_SEEK, SL_IID_MUTESOLO, SL_IID_VOLUME };
         const SLboolean req[3] = { SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE };
 
-        result = (*impl->engineEngine)->CreateAudioPlayer (impl->engineEngine, &fdPlayerObject, &audioSrc, &audioSnk, 3, ids, req);
+        result = (*ctx->engineEngine)->CreateAudioPlayer (ctx->engineEngine, &impl->fdPlayerObject, &audioSrc, &audioSnk, 3, ids, req);
         assert(SL_RESULT_SUCCESS == result);
 
         // realize the player
-        result = (*fdPlayerObject)->Realize(fdPlayerObject, SL_BOOLEAN_FALSE);
+        result = (*impl->fdPlayerObject)->Realize (impl->fdPlayerObject, SL_BOOLEAN_FALSE);
         assert(SL_RESULT_SUCCESS == result);
 
         // get the play interface
-        result = (*fdPlayerObject)->GetInterface(fdPlayerObject, SL_IID_PLAY, &fdPlayerPlay);
+        result = (*impl->fdPlayerObject)->GetInterface (impl->fdPlayerObject, SL_IID_PLAY, &impl->fdPlayerPlay);
         assert(SL_RESULT_SUCCESS == result);
 
         // get the seek interface
-        result = (*fdPlayerObject)->GetInterface(fdPlayerObject, SL_IID_SEEK, &fdPlayerSeek);
+        result = (*impl->fdPlayerObject)->GetInterface (impl->fdPlayerObject, SL_IID_SEEK, &impl->fdPlayerSeek);
         assert(SL_RESULT_SUCCESS == result);
 
         // get the mute/solo interface
-        result = (*fdPlayerObject)->GetInterface(fdPlayerObject, SL_IID_MUTESOLO, &fdPlayerMuteSolo);
+        result = (*impl->fdPlayerObject)->GetInterface (impl->fdPlayerObject, SL_IID_MUTESOLO, &impl->fdPlayerMuteSolo);
         assert(SL_RESULT_SUCCESS == result);
 
         // get the volume interface
-        result = (*fdPlayerObject)->GetInterface(fdPlayerObject, SL_IID_VOLUME, &fdPlayerVolume);
+        result = (*impl->fdPlayerObject)->GetInterface (impl->fdPlayerObject, SL_IID_VOLUME, &impl->fdPlayerVolume);
         assert(SL_RESULT_SUCCESS == result);
 
         // enable whole file looping
-        result = (*fdPlayerSeek)->SetLoop(fdPlayerSeek, SL_BOOLEAN_TRUE, 0, SL_TIME_UNKNOWN);
+        result = (*impl->fdPlayerSeek)->SetLoop (impl->fdPlayerSeek, SL_BOOLEAN_TRUE, 0, SL_TIME_UNKNOWN);
         assert(SL_RESULT_SUCCESS == result);
 
         // Uruchomienie zapętlonego dźwięku z Asseta
         // set the player's state
 //        result = (*fdPlayerPlay)->SetPlayState (fdPlayerPlay, isPlaying ? SL_PLAYSTATE_PLAYING : SL_PLAYSTATE_PAUSED);
-        result = (*fdPlayerPlay)->SetPlayState (fdPlayerPlay, SL_PLAYSTATE_PLAYING);
+        result = (*impl->fdPlayerPlay)->SetPlayState (impl->fdPlayerPlay, SL_PLAYSTATE_PLAYING);
         assert(SL_RESULT_SUCCESS == result);
 }
 
