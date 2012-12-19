@@ -17,6 +17,10 @@ class ShellContext;
 class ShellFactory;
 class GraphicsService;
 
+namespace Sound {
+class IDevice;
+}
+
 namespace Util {
 class BajkaService;
 class Scene;
@@ -101,13 +105,14 @@ public:
 
 private:
 
-        LifecycleHandler () : graphicsService (NULL), bajkaService (NULL), scene (NULL) {}
+        LifecycleHandler () : graphicsService (NULL), soundDevice (NULL), bajkaService (NULL), scene (NULL) {}
         LifecycleHandler (LifecycleHandler const &) {}
         friend class ShellFactory;
 
 private:
 
         GraphicsService *graphicsService;
+        Sound::IDevice *soundDevice;
         Util::BajkaService *bajkaService;
         Util::Scene *scene;
         Event::UpdateEvent updateEvent;

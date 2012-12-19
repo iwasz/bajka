@@ -6,10 +6,12 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ANDROID_SHELL_SOUND_H_
-#define ANDROID_SHELL_SOUND_H_
+#ifndef BAJKA_SHELL_SOUND_H_
+#define BAJKA_SHELL_SOUND_H_
 
-
-
+#include "Buffer.h"
+#include "Device.h"
+#include "Listener.h"
+#include "Source.h"
 
 #endif /* SOUND_H_ */

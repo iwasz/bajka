@@ -17,6 +17,7 @@
 #include <util/Config.h>
 #include <util/ShellConfig.h>
 #include "tween/Manager.h"
+#include "sound/Device.h"
 
 using Reflection::Manager;
 
@@ -25,6 +26,7 @@ using Reflection::Manager;
 LifecycleHandler::~LifecycleHandler ()
 {
         delete graphicsService;
+        delete soundDevice;
         delete bajkaService;
         delete scene;
 }
