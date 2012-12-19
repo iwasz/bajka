@@ -136,6 +136,9 @@ if (ANDROID)
     
     # The OpenGL ES 1.x Library
     TARGET_LINK_LIBRARIES (${PROJECT_NAME} GLESv2)
+
+    # The OpenGL SL
+    TARGET_LINK_LIBRARIES (${PROJECT_NAME} OpenSLES)
 endif ()
 
 
