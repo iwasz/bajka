@@ -131,6 +131,8 @@ AUX_SOURCE_DIRECTORY (../src/tween/ease SOURCES)
 AUX_SOURCE_DIRECTORY (../src/tween/accessor SOURCES)
 AUX_SOURCE_DIRECTORY (../src/tween/parser SOURCES)
 
+AUX_SOURCE_DIRECTORY (../src/sound SOURCES)
+
 # Local includes (inside project).
 INCLUDE_DIRECTORIES (../src)
 
