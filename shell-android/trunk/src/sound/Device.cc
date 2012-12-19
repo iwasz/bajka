@@ -7,6 +7,7 @@
  ****************************************************************************/
 
 #include "Device.h"
+#include "SoundContext.h"
 #include <SLES/OpenSLES.h>
 #include <SLES/OpenSLES_Android.h>
 #include <cstddef>
@@ -35,6 +36,7 @@ struct Device::Impl {
         // output mix interfaces
         SLObjectItf outputMixObject;
         SLEnvironmentalReverbItf outputMixEnvironmentalReverb;
+        SoundContext context;
 };
 
 /****************************************************************************/
@@ -98,6 +100,10 @@ void Device::init (void *systemData)
                 result = (*impl->outputMixEnvironmentalReverb)->SetEnvironmentalReverbProperties (impl->outputMixEnvironmentalReverb, &reverbSettings);
         }
         // ignore unsuccessful result codes for environmental reverb, as it is optional for this example
+
+        impl->context.app = impl->app;
+        impl->context.engineEngine = impl->engineEngine;
+        impl->context.outputMixObject = impl->outputMixObject;
 }
 
 /****************************************************************************/
@@ -105,4 +111,12 @@ void Device::init (void *systemData)
 void Device::printInfo ()
 {
         printlog ("Device::printInfo here");
+}
+
+/****************************************************************************/
+
+SoundContext *Device::getSoundContext ()
+{
+        return &impl->context;
+
 }

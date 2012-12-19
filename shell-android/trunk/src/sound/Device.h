@@ -13,6 +13,7 @@
 #include <string>
 
 class Buffer;
+class SoundContext;
 
 /**
  * Inicjuje / zamyka OpenSL ES.
@@ -30,10 +31,10 @@ public:
 
 private:
 
-        void createAssetAudioPlayer (std::string const &filename);
-
         Device ();
         friend class ShellFactory;
+        friend class Buffer;
+        SoundContext *getSoundContext ();
 
 private:
 

@@ -25,12 +25,12 @@ public:
         /**
          * Ładuje plik wav.
          */
-        m_ (setLoad) void setLoad (std::string const &path);
+        void setLoad (std::string const &path);
 
         /**
          * Nazwa pod jaką ten bufor będzie dostepny dla źródeł.
          */
-        m_ (setName) void setName (std::string const &name);
+        void setName (std::string const &name);
         std::string const &getName () const;
 
         /**
