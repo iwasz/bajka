@@ -20,7 +20,5 @@
       <RelativeGroupProperties set-as="groupProps" vAlign="center" hAlign="center" translate="50, 50"/>
     </LinearGroup>
   </RelativeGroup>
-  
-  <Buffer load="bgm.mp3" device="@device" />
-  
+   
 </beans>

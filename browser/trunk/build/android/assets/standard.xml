@@ -91,12 +91,10 @@
     <prop-alias name="path" value="view.bitmap.path"/>
   </Box>
     
-<!--
-  <Device id="device" init-method="init"/>
-  <Buffer id="buffer" device="@device" load="test.wav" abstract="true" />
-  <Source id="source" device="@device" buffer="@buffer" abstract="true" />
+  <Device id="device" androidApp="@androidApp" init-method="init"/>
+  <Buffer id="buffer" device="@device" load="bgm.mp3" />
+<!--   <Source id="source" device="@device" buffer="@buffer" abstract="true" /> -->
 
-  <buffer id="buttonBuffer" load="test.wav" />
-  <source id="buttonSource" buffer="@buttonBuffer" />
--->
+<!--   <buffer id="buttonBuffer" load="test.wav" /> -->
+<!--   <source id="buttonSource" buffer="@buttonBuffer" /> -->
 </beans>
