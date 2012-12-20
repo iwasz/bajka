@@ -10,6 +10,7 @@
 #define BAJKASERVICE_H_
 
 #include <string>
+#include <core/Typedefs.h>
 
 namespace View {
 class GLContext;
@@ -32,7 +33,7 @@ public:
         /**
          * Nie kasować, kontener skasuje.
          */
-        Util::Config *loadAndOverrideConfig (Util::ShellConfig const &cfg);
+        Util::Config *loadAndOverrideConfig (Util::ShellConfig const &cfg, Core::VariantMap const &externalSingletons);
 
         /**
          * Skasować za pomocą delete.
@@ -44,7 +45,7 @@ public:
 
 private:
 
-        Util::Config *loadConfig (std::string const &configFile);
+        Util::Config *loadConfig (std::string const &configFile, Core::VariantMap const &externalSingletons);
         Util::Config *overrideConfig (Util::ShellConfig const &shellConfig, Util::Config *config);
 
 private:

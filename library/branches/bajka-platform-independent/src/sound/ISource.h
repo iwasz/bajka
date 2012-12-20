@@ -11,10 +11,11 @@
 
 #include <util/ReflectionMacros.h>
 #include <geometry/Point3.h>
+#include <core/Object.h>
 
 namespace Sound {
 
-class ISource {
+class ISource : public Core::Object {
 public:
         d__
         virtual ~ISource () {}

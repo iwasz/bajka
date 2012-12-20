@@ -27,7 +27,7 @@ public:
          * będzie to android_app.
          */
         m_ (init)
-        virtual void init (void *systemData) = 0;
+        virtual void init () = 0;
 
         /**
          * Debugowe informacje.

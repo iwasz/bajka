@@ -69,7 +69,7 @@ BajkaService::~BajkaService ()
 
 /****************************************************************************/
 
-U::Config *BajkaService::loadConfig (std::string const &configFile)
+U::Config *BajkaService::loadConfig (std::string const &configFile, Core::VariantMap const &externalSingletons)
 {
         Common::DataSource *ds = newDataSource ();
 
@@ -85,7 +85,10 @@ U::Config *BajkaService::loadConfig (std::string const &configFile)
                 impl->configContainer->addConversion (typeid (Model::HGravity), Model::stringToHGravity);
                 impl->configContainer->addConversion (typeid (Model::VGravity), Model::stringToVGravity);
                 impl->configContainer->addConversion (typeid (Model::LinearGroup::Type), Model::stringToLinearGroupType);
-                impl->configContainer->addSingleton ("dataSourceService", Core::Variant ("Benek pies"));
+
+                for (Core::VariantMap::const_iterator i = externalSingletons.begin (); i != externalSingletons.end (); ++i) {
+                        impl->configContainer->addSingleton (i->first.c_str (), i->second);
+                }
 
                 ContainerFactory::init (impl->configContainer.get (), metaContainer.get ());
                 impl->config = vcast <U::Config *> (impl->configContainer->getBean ("config"));
@@ -135,9 +138,9 @@ U::Config *BajkaService::overrideConfig (Util::ShellConfig const &shellConfig, U
 
 /****************************************************************************/
 
-Util::Config *BajkaService::loadAndOverrideConfig (Util::ShellConfig const &cfg)
+Util::Config *BajkaService::loadAndOverrideConfig (Util::ShellConfig const &cfg, Core::VariantMap const &externalSingletons)
 {
-        U::Config *c = loadConfig (cfg.configFile);
+        U::Config *c = loadConfig (cfg.configFile, externalSingletons);
         return overrideConfig (cfg, c);
 }
 

@@ -11,10 +11,11 @@
 
 #include <util/ReflectionMacros.h>
 #include <string>
+#include <core/Object.h>
 
 namespace Sound {
 
-class IBuffer {
+class IBuffer : public Core::Object {
 public:
         d__
         virtual ~IBuffer () {}
@@ -27,10 +28,6 @@ public:
         m_ (setName) virtual void setName (std::string const &name) = 0;
         virtual std::string const &getName () const = 0;
 
-        /**
-         * Platform dependent - moze inny typ?
-         */
-        virtual unsigned int getSystemId () const = 0;
         E_ (IBuffer)
 };
 
