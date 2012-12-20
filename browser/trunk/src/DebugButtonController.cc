@@ -22,11 +22,9 @@ Event::Handling DebugButtonController::onMotionDown (Event::MotionDownEvent *e, 
                 primitive->setForeground (clicked);
         }
 
-#ifndef ANDROID
         if (sound) {
                 sound->play ();
         }
-#endif
 
         if (quit) {
                 ::quit ();
