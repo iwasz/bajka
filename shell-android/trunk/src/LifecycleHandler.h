@@ -12,6 +12,7 @@
 #include <stdint.h>
 #include <events/types/UpdateEvent.h>
 #include "EventDispatcher.h"
+#include <core/Typedefs.h>
 
 class ShellContext;
 class ShellFactory;
@@ -105,14 +106,14 @@ public:
 
 private:
 
-        LifecycleHandler () : graphicsService (NULL), soundDevice (NULL), bajkaService (NULL), scene (NULL) {}
+        LifecycleHandler () : graphicsService (NULL), bajkaService (NULL), scene (NULL) {}
         LifecycleHandler (LifecycleHandler const &) {}
         friend class ShellFactory;
+        Core::VariantMap prepareSingletonMap (ShellContext *ctx);
 
 private:
 
         GraphicsService *graphicsService;
-        Sound::IDevice *soundDevice;
         Util::BajkaService *bajkaService;
         Util::Scene *scene;
         Event::UpdateEvent updateEvent;

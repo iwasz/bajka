@@ -41,7 +41,6 @@ private:
         static LifecycleHandler *createLifecycleHandler ();
         static GraphicsService *createGraphicsService (android_app *app);
         static Util::BajkaService *createBajkaService ();
-        static Sound::IDevice *createSoundDevice (android_app *app);
 
 };
 

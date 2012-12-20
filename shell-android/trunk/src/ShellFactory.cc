@@ -28,7 +28,6 @@ std::auto_ptr <GameLoop> ShellFactory::createGameLoop (Util::ShellConfig *sConfi
         ShellContext *ctx = createShellContext (sConfig, app);
         LifecycleHandler *handler = createLifecycleHandler ();
         handler->graphicsService = createGraphicsService (app);
-        handler->soundDevice = createSoundDevice (app);
         handler->bajkaService = createBajkaService ();
         ctx->glContext = handler->bajkaService->getGLContext ();
         std::auto_ptr <GameLoop> loop = std::auto_ptr <GameLoop> (new GameLoop (ctx, handler));
@@ -66,13 +65,4 @@ GraphicsService *ShellFactory::createGraphicsService (android_app *app)
 Util::BajkaService *ShellFactory::createBajkaService ()
 {
         return new Util::BajkaService ();
-}
-
-/****************************************************************************/
-
-Sound::IDevice *ShellFactory::createSoundDevice (android_app *app)
-{
-        Sound::IDevice *device = new Device;
-        device->init (app);
-        return device;
 }

@@ -11,6 +11,7 @@
 
 #include <sound/IDevice.h>
 #include <string>
+#include <android_native_app_glue.h>
 
 class Buffer;
 class SoundContext;
@@ -24,16 +25,16 @@ public:
         C__ (void)
         b_ ("IDevice")
 
+        Device ();
         virtual ~Device ();
 
-        void init (void *systemData);
+        void init ();
         void printInfo ();
+        m_ (setAndroidApp) void setAndroidApp (android_app *app);
 
-private:
-
-        Device ();
-        friend class ShellFactory;
-        friend class Buffer;
+        /*
+         * No a part of an API.
+         */
         SoundContext *getSoundContext ();
 
 private:

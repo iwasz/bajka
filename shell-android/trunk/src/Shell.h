@@ -13,6 +13,7 @@
 
 #include "ShellFactory.h"
 #include "GameLoop.h"
+#include "sound/Sound.h"
 
 //// To już nie.
 //

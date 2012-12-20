@@ -18,6 +18,8 @@
 #include <util/ShellConfig.h>
 #include "tween/Manager.h"
 #include "sound/Device.h"
+#include <android_native_app_glue.h>
+#include <view/openGl/GLContext.h>
 
 using Reflection::Manager;
 
@@ -26,7 +28,6 @@ using Reflection::Manager;
 LifecycleHandler::~LifecycleHandler ()
 {
         delete graphicsService;
-        delete soundDevice;
         delete bajkaService;
         delete scene;
 }
@@ -37,7 +38,8 @@ void LifecycleHandler::onFirstTimeReadyForRender (ShellContext *ctx)
 {
         printlog ("LifecycleHandler::onFirstTimeReadyForRender");
         graphicsService->initDisplay ();
-        ctx->config = bajkaService->loadAndOverrideConfig (*ctx->shellConfig);
+        Core::VariantMap singletons = prepareSingletonMap (ctx);
+        ctx->config = bajkaService->loadAndOverrideConfig (*ctx->shellConfig, singletons);
         graphicsService->saveScreenDimensionsInConfig (ctx->config);
         bajkaService->init (ctx->config);
         bajkaService->initProjectionMatrix (ctx->config);
@@ -163,3 +165,15 @@ bool LifecycleHandler::onInputEvent (ShellContext *ctx, AInputEvent *event)
         return eventDispatcher.process (event, scene->getModel (), *scene->getEventIndex (), scene->getPointerInsideIndex (), ctx->glContext);
 }
 
+/****************************************************************************/
+
+Core::VariantMap LifecycleHandler::prepareSingletonMap (ShellContext *ctx)
+{
+        Core::VariantMap ret;
+        ret["graphicsService"] = Core::Variant (graphicsService);
+        ret["scene"] = Core::Variant (scene);
+        ret["eventDispatcher"] = Core::Variant (&eventDispatcher);
+        ret["androidApp"] = Core::Variant (ctx->app);
+        ret["glContext"] = Core::Variant (ctx->glContext);
+        return ret;
+}
