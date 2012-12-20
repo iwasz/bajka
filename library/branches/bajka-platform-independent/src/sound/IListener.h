@@ -11,13 +11,14 @@
 
 #include <geometry/Point3.h>
 #include <util/ReflectionMacros.h>
+#include <core/Object.h>
 
 namespace Sound {
 
 /**
  * 3D audio listener.
  */
-class IListener {
+class IListener : public Core::Object {
 public:
         d__
         virtual ~IListener () {}
@@ -37,7 +38,7 @@ public:
         virtual Geometry::Point3 getUp () const = 0;
         m_ (setUp) virtual void setUp (Geometry::Point3 &p) = 0;
 
-        E_ (Listener)
+        E_ (IListener)
 };
 
 } /* namespace Sound */
