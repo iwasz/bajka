@@ -61,9 +61,9 @@ Device::~Device ()
 
 /****************************************************************************/
 
-void Device::init (void *systemData)
+void Device::init ()
 {
-        impl->app = static_cast <android_app *> (systemData);
+        assert (impl->app);
         SLresult result;
 
         // create engine
@@ -119,4 +119,11 @@ SoundContext *Device::getSoundContext ()
 {
         return &impl->context;
 
+}
+
+/****************************************************************************/
+
+void Device::setAndroidApp (android_app *app)
+{
+        impl->app = app;
 }

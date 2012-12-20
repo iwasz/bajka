@@ -6,7 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "Buffer.h"
+#include "BackgroundMusicSource.h"
 #include "SoundContext.h"
 #include <SLES/OpenSLES.h>
 #include <SLES/OpenSLES_Android.h>
@@ -17,7 +17,7 @@
 
 /****************************************************************************/
 
-struct Buffer::Impl {
+struct BackgroundMusicSource::Impl {
 
         Impl () : fdPlayerObject (NULL), fdPlayerPlay (NULL), fdPlayerSeek (NULL), fdPlayerMuteSolo (NULL), fdPlayerVolume (NULL) {};
 
@@ -31,14 +31,14 @@ struct Buffer::Impl {
 
 /****************************************************************************/
 
-Buffer::Buffer ()
+BackgroundMusicSource::BackgroundMusicSource ()
 {
         impl = new Impl;
 }
 
 /****************************************************************************/
 
-Buffer::~Buffer ()
+BackgroundMusicSource::~BackgroundMusicSource ()
 {
         // destroy file descriptor audio player object, and invalidate all associated interfaces
         if (impl->fdPlayerObject != NULL) {
@@ -55,7 +55,7 @@ Buffer::~Buffer ()
 
 /****************************************************************************/
 
-void Buffer::setLoad (std::string const &filename)
+void BackgroundMusicSource::setLoad (std::string const &filename)
 {
         assert (device);
         SoundContext *ctx = device->getSoundContext ();
@@ -119,25 +119,18 @@ void Buffer::setLoad (std::string const &filename)
 
 /****************************************************************************/
 
-void Buffer::setName (std::string const &name)
+void BackgroundMusicSource::setName (std::string const &name)
 {
         impl->name = name;
-//        assertThrow (device, "Buffer::setName : device must be set prior to calling this method.");
+//        assertThrow (device, "BackgroundMusicSource::setName : device must be set prior to calling this method.");
 //        device->unregisterBuffer (name);
 //        device->registerBuffer (name, this);
 }
 
 /****************************************************************************/
 
-std::string const &Buffer::getName () const
+std::string const &BackgroundMusicSource::getName () const
 {
         return impl->name;
 }
 
-/****************************************************************************/
-
-void *Buffer::getSystemId () const
-{
-//        return impl->buffer;
-        return 0;
-}

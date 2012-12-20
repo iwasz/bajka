@@ -13,17 +13,17 @@
 #include <sound/IBuffer.h>
 
 /**
- * Updated the native audio API based on the Khronos Group OpenSL ES 1.0.1? standard.
- * With API Level 14, you can now decode compressed audio (e.g. MP3, AAC, Vorbis) to PCM.
- * For more details, see docs/opensles/index.html and http://www.khronos.org/opensles/.
+ * Specjalny typ źródła, który działa bez bufora. Sam ładuje sobie plik muzyczny i go odtwarza.
+ * Na androidzie potrafi sam zdekodować mp3 i inne formaty.(na 99% od API LEVEL-9).
+ * TODO Musi implementować interfejs ISource.
  */
-class Buffer : public Sound::IBuffer {
+class BackgroundMusicSource : public Sound::IBuffer {
 public:
         C__ (void)
         b_ ("IBuffer")
 
-        Buffer ();
-        virtual ~Buffer ();
+        BackgroundMusicSource ();
+        virtual ~BackgroundMusicSource ();
 
         /**
          * Ładuje plik wav.
@@ -35,8 +35,6 @@ public:
          */
         void setName (std::string const &name);
         std::string const &getName () const;
-
-        void *getSystemId () const;
 
 private:
 
