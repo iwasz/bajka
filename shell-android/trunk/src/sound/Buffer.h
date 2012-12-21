@@ -36,7 +36,8 @@ public:
         void setName (std::string const &name);
         std::string const &getName () const;
 
-        void *getSystemId () const;
+        void const *getData () const;
+        size_t getSize () const;
 
 private:
 

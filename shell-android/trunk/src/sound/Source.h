@@ -9,9 +9,12 @@
 #ifndef BAJKA_SHELL_SOURCE_H_
 #define BAJKA_SHELL_SOURCE_H_
 
-#include "Device.h"
-#include "Buffer.h"
 #include <sound/ISource.h>
+
+namespace Sound {
+class IDevice;
+class IBuffer;
+}
 
 /**
  *
@@ -24,6 +27,8 @@ public:
         Source ();
         virtual ~Source ();
 
+        m_ (init)
+        void init ();
         void play (std::string const &bufferName);
         void play ();
         void pause ();
@@ -53,13 +58,13 @@ public:
 
 private:
 
-        void play (Buffer *buf);
+        void play (Sound::IBuffer *buf);
 
 private:
 
         struct Impl;
-        Device *p_(device)
-        Buffer *p_(buffer)
+        Sound::IDevice *p_(device)
+        Sound::IBuffer *p_(buffer)
         Impl *impl;
 
         E_ (Source)

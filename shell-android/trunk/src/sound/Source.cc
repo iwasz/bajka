@@ -9,10 +9,25 @@
 #include "Source.h"
 #include <sound/SoundException.h>
 #include <util/Exceptions.h>
+#include <SLES/OpenSLES.h>
+#include <SLES/OpenSLES_Android.h>
+#include "SoundContext.h"
+#include "Device.h"
+#include "Buffer.h"
+#include <stdint.h>
 
 /****************************************************************************/
 
 struct Source::Impl {
+
+        Impl () : playerObject (NULL), playerPlay (NULL), playerSeek (NULL), playerMuteSolo (NULL), playerVolume (NULL), playerBufferQueue (NULL) {};
+
+        SLObjectItf playerObject;
+        SLPlayItf playerPlay;
+        SLSeekItf playerSeek;
+        SLMuteSoloItf playerMuteSolo;
+        SLVolumeItf playerVolume;
+        SLAndroidSimpleBufferQueueItf playerBufferQueue;
 };
 
 /****************************************************************************/
@@ -26,7 +41,87 @@ Source::Source () : impl (new Impl)
 Source::~Source ()
 {
         stop ();
+
+        if (impl->playerObject) {
+            (*impl->playerObject)->Destroy (impl->playerObject);
+        }
+
         delete impl;
+}
+
+/****************************************************************************/
+
+void Source::init ()
+{
+        assert (device);
+        Device *dev = dynamic_cast <Device *> (device);
+        assert (dev);
+        SoundContext *ctx = dev->getSoundContext ();
+        SLresult result;
+
+        // configure audio source
+        SLDataLocator_AndroidSimpleBufferQueue loc_bufq = { SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE, 2 };
+        SLDataFormat_PCM format_pcm = {
+                SL_DATAFORMAT_PCM,
+                1,
+                SL_SAMPLINGRATE_8,
+                SL_PCMSAMPLEFORMAT_FIXED_16,
+                SL_PCMSAMPLEFORMAT_FIXED_16,
+                SL_SPEAKER_FRONT_CENTER,
+                SL_BYTEORDER_LITTLEENDIAN };
+
+        SLDataSource audioSrc = {&loc_bufq, &format_pcm};
+
+        // configure audio sink
+        SLDataLocator_OutputMix loc_outmix = { SL_DATALOCATOR_OUTPUTMIX, ctx->outputMixObject };
+        SLDataSink audioSnk = { &loc_outmix, NULL };
+
+        // create audio player
+        const SLInterfaceID ids[3] = {SL_IID_BUFFERQUEUE, SL_IID_EFFECTSEND,
+                /*SL_IID_MUTESOLO,*/ SL_IID_VOLUME};
+        const SLboolean req[3] = {SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE,
+                /*SL_BOOLEAN_TRUE,*/ SL_BOOLEAN_TRUE};
+        result = (*ctx->engineEngine)->CreateAudioPlayer (ctx->engineEngine, &impl->playerObject, &audioSrc, &audioSnk, 3, ids, req);
+        assert(SL_RESULT_SUCCESS == result);
+
+        result = (*ctx->engineEngine)->CreateAudioPlayer (ctx->engineEngine, &impl->playerObject, &audioSrc, &audioSnk, 3, ids, req);
+        assert(SL_RESULT_SUCCESS == result);
+
+        // realize the player
+        result = (*impl->playerObject)->Realize (impl->playerObject, SL_BOOLEAN_FALSE);
+        assert(SL_RESULT_SUCCESS == result);
+
+        // get the buffer queue interface
+        result = (*impl->playerObject)->GetInterface (impl->playerObject, SL_IID_BUFFERQUEUE, &impl->playerBufferQueue);
+        assert(SL_RESULT_SUCCESS == result);
+
+//        // register callback on the buffer queue
+//        result = (*impl->playerBufferQueue)->RegisterCallback (impl->playerBufferQueue, bqPlayerCallback, NULL);
+//        assert(SL_RESULT_SUCCESS == result);
+
+        // get the play interface
+        result = (*impl->playerObject)->GetInterface (impl->playerObject, SL_IID_PLAY, &impl->playerPlay);
+        assert(SL_RESULT_SUCCESS == result);
+
+        // get the seek interface
+        result = (*impl->playerObject)->GetInterface (impl->playerObject, SL_IID_SEEK, &impl->playerSeek);
+        assert(SL_RESULT_SUCCESS == result);
+
+        // get the mute/solo interface
+        result = (*impl->playerObject)->GetInterface (impl->playerObject, SL_IID_MUTESOLO, &impl->playerMuteSolo);
+        assert(SL_RESULT_SUCCESS == result);
+
+        // get the volume interface
+        result = (*impl->playerObject)->GetInterface (impl->playerObject, SL_IID_VOLUME, &impl->playerVolume);
+        assert(SL_RESULT_SUCCESS == result);
+
+//        // enable whole file looping
+//        result = (*impl->playerSeek)->SetLoop (impl->playerSeek, SL_BOOLEAN_TRUE, 0, SL_TIME_UNKNOWN);
+//        assert(SL_RESULT_SUCCESS == result);
+
+        // set the player's state
+        result = (*impl->playerPlay)->SetPlayState (impl->playerPlay, SL_PLAYSTATE_PLAYING);
+        assert(SL_RESULT_SUCCESS == result);
 }
 
 /****************************************************************************/
@@ -46,9 +141,28 @@ void Source::play ()
 
 /****************************************************************************/
 
-void Source::play (Buffer *buf)
+void Source::play (Sound::IBuffer *buf)
 {
         assertThrow (buffer, "Source::play () needs buffer to play. Set it using setBuffer method.");
+
+        SLresult result;
+        SLuint32 playerState;
+
+        (*impl->playerObject)->GetState (impl->playerObject, &playerState);
+        if (playerState != SL_OBJECT_STATE_REALIZED) {
+                throw Sound::SoundException ("PlayerState != SL_OBJECT_STATE_REALIZED");
+        }
+
+        int16_t const *lBuffer = static_cast <int16_t const *> (buffer->getData ());
+        size_t lLength = buf->getSize ();
+
+        // Removes any sound from the queue.
+        result = (*impl->playerBufferQueue)->Clear (impl->playerBufferQueue);
+        assert (result == SL_RESULT_SUCCESS);
+
+        // Plays the new sound.
+        result = (*impl->playerBufferQueue)->Enqueue (impl->playerBufferQueue, lBuffer, lLength);
+        assert (result == SL_RESULT_SUCCESS);
 }
 
 /****************************************************************************/
