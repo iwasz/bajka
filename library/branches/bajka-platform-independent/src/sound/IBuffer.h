@@ -28,6 +28,12 @@ public:
         m_ (setName) virtual void setName (std::string const &name) = 0;
         virtual std::string const &getName () const = 0;
 
+        /**
+         * Zwraca dane bufora.
+         */
+        virtual void const *getData () const = 0;
+        virtual size_t getSize () const = 0;
+
         E_ (IBuffer)
 };
 
