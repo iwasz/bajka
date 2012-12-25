@@ -72,7 +72,7 @@
   <LinearGroup id="button" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true" type="vertical">
     <label set-as="child" text="Button" view.foreground="@orange" view.font="@volter36"/>
     <Rectangle set-as="view" foreground="@orange" background="00000000" thickness="3"/>
-    <DebugButtonController set-as="controller" eventMask="0xffff" clicked="@siusiu"  normal="@orange"  hover="@crimson" modelManager="@modelManager"  />
+    <DebugButtonController set-as="controller" eventMask="0xffff" clicked="@siusiu"  normal="@orange"  hover="@crimson" modelManager="@modelManager" sound="@buttonSource"  />
     <prop-alias name="file" value="controller.file" />
     <prop-alias name="name" value="controller.name" />
     <prop-alias name="text" value="children.0.view.text" />
@@ -92,9 +92,9 @@
   </Box>
     
   <Device id="device" androidApp="@androidApp" init-method="init"/>
-  <Buffer id="buffer" device="@device" load="bgm.mp3" />
-<!--   <Source id="source" device="@device" buffer="@buffer" abstract="true" /> -->
+  <Buffer id="buffer" device="@device" abstract="true" />
+  <Source id="source" device="@device" abstract="true" />
 
-<!--   <buffer id="buttonBuffer" load="test.wav" /> -->
-<!--   <source id="buttonSource" buffer="@buttonBuffer" /> -->
+  <buffer id="buttonBuffer" load="test.pcm" />
+  <source id="buttonSource" buffer="@buttonBuffer" />
 </beans>
