@@ -10,6 +10,8 @@
 #define BAJKA_SHELL_SOURCE_H_
 
 #include <sound/ISource.h>
+#include <sound/IDevice.h>
+#include <sound/IBuffer.h>
 
 namespace Sound {
 class IDevice;
