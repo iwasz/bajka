@@ -62,13 +62,13 @@ void Source::init ()
         // configure audio source
         SLDataLocator_AndroidSimpleBufferQueue loc_bufq = { SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE, 2 };
         SLDataFormat_PCM format_pcm = {
-                SL_DATAFORMAT_PCM,
-                1,
-                SL_SAMPLINGRATE_8,
-                SL_PCMSAMPLEFORMAT_FIXED_16,
-                SL_PCMSAMPLEFORMAT_FIXED_16,
-                SL_SPEAKER_FRONT_CENTER,
-                SL_BYTEORDER_LITTLEENDIAN };
+                SL_DATAFORMAT_PCM,                // formatType;
+                1,                                // numChannels;
+                SL_SAMPLINGRATE_8,                // samplesPerSec;
+                SL_PCMSAMPLEFORMAT_FIXED_16,      // bitsPerSample;
+                SL_PCMSAMPLEFORMAT_FIXED_16,      // containerSize;
+                SL_SPEAKER_FRONT_CENTER,          // channelMask;
+                SL_BYTEORDER_LITTLEENDIAN };      // endianness;
 
         SLDataSource audioSrc = {&loc_bufq, &format_pcm};
 
