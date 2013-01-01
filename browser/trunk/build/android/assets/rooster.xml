@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
   <import resource="animal.xml" />
-  <animalScene id="scene" animal="pig.png" left="zebra.xml" right="rooster.xml" /> 
+  <animalScene id="scene" animal="rooster.png" left="zebra.xml" right="wielblad.xml" /> 
 </beans>
