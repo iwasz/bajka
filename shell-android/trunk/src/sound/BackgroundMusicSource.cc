@@ -14,6 +14,7 @@
 #include <util/Exceptions.h>
 #include <android/asset_manager.h>
 #include <android_native_app_glue.h>
+#include "Utils.h"
 
 /****************************************************************************/
 
@@ -85,36 +86,37 @@ void BackgroundMusicSource::setLoad (std::string const &filename)
 
         result = (*ctx->engineEngine)->CreateAudioPlayer (ctx->engineEngine, &impl->fdPlayerObject, &audioSrc, &audioSnk, 3, ids, req);
         assert(SL_RESULT_SUCCESS == result);
+        soundThrow (result);
 
         // realize the player
         result = (*impl->fdPlayerObject)->Realize (impl->fdPlayerObject, SL_BOOLEAN_FALSE);
-        assert(SL_RESULT_SUCCESS == result);
+        soundThrow (result);
 
         // get the play interface
         result = (*impl->fdPlayerObject)->GetInterface (impl->fdPlayerObject, SL_IID_PLAY, &impl->fdPlayerPlay);
-        assert(SL_RESULT_SUCCESS == result);
+        soundThrow (result);
 
         // get the seek interface
         result = (*impl->fdPlayerObject)->GetInterface (impl->fdPlayerObject, SL_IID_SEEK, &impl->fdPlayerSeek);
-        assert(SL_RESULT_SUCCESS == result);
+        soundThrow (result);
 
         // get the mute/solo interface
         result = (*impl->fdPlayerObject)->GetInterface (impl->fdPlayerObject, SL_IID_MUTESOLO, &impl->fdPlayerMuteSolo);
-        assert(SL_RESULT_SUCCESS == result);
+        soundThrow (result);
 
         // get the volume interface
         result = (*impl->fdPlayerObject)->GetInterface (impl->fdPlayerObject, SL_IID_VOLUME, &impl->fdPlayerVolume);
-        assert(SL_RESULT_SUCCESS == result);
+        soundThrow (result);
 
         // enable whole file looping
         result = (*impl->fdPlayerSeek)->SetLoop (impl->fdPlayerSeek, SL_BOOLEAN_TRUE, 0, SL_TIME_UNKNOWN);
-        assert(SL_RESULT_SUCCESS == result);
+        soundThrow (result);
 
         // Uruchomienie zapętlonego dźwięku z Asseta
         // set the player's state
 //        result = (*fdPlayerPlay)->SetPlayState (fdPlayerPlay, isPlaying ? SL_PLAYSTATE_PLAYING : SL_PLAYSTATE_PAUSED);
 //        result = (*impl->fdPlayerPlay)->SetPlayState (impl->fdPlayerPlay, SL_PLAYSTATE_PLAYING);
-//        assert(SL_RESULT_SUCCESS == result);
+//        soundThrow (result);
 }
 
 /****************************************************************************/
