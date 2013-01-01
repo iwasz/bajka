@@ -14,7 +14,7 @@
 namespace Sound {
 
 /**
- * Ładuje cały plik z danymi PCM do bufora w pamięci. Zwolnić pamięć za pomocą delete [].
+ * Ładuje cały plik z danymi PCM do bufora w pamięci. Zwolnić pamięć za pomocą free.
  */
 extern void load (const char *path, void **data, size_t *bytesLen);
 
