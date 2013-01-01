@@ -19,18 +19,17 @@ void load (const char *path, void **data, size_t *bytesLen)
 {
         assert (data);
         assert (bytesLen);
-
         Common::DataSource *ds = newDataSource ();
-        ds->open (path, Common::DataSource::MODE_UNKNOWN);
 
         try {
+                ds->open (path, Common::DataSource::MODE_UNKNOWN);
                 *bytesLen = ds->getLength ();
-                *data = new unsigned char[*bytesLen];
+                unsigned char *tmpData = (unsigned char *)malloc (*bytesLen);
 
                 size_t bytesRead = 0;
                 size_t offset = 0;
 
-                while ((bytesRead = ds->read (data + offset, BUFSIZ))) {
+                while ((bytesRead = ds->read (tmpData + offset, BUFSIZ))) {
 
                         if (bytesRead < 0) {
                                 throw Util::InitException ("Sound::load : could not read from resource.");
@@ -38,6 +37,8 @@ void load (const char *path, void **data, size_t *bytesLen)
 
                         offset += bytesRead;
                 }
+
+                *data = tmpData;
         }
         catch (std::exception const &) {
                 deleteDataSource (ds);
