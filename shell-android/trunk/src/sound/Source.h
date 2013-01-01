@@ -38,6 +38,7 @@ public:
         void rewind ();
 
         float getGain () const;
+        /// Ustawia głośność w zakresie od 0 do 1
         void setGain (float f);
 
         float getPitch () const;

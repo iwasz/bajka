@@ -180,10 +180,16 @@ void GameLoop::handleCmd (int32_t cmd)
                 break;
 
         case APP_CMD_CONFIG_CHANGED:
+        {
+#if 0
+                // Zawsze zwracza zerowy contentRect...
+                ARect &r = context->app->contentRect;
+                printlog ("viewport.h context->app->contentRect --> %d, %d, %d, %d", r.bottom, r.left, r.right, r.top);
+#endif
                 printlog ("APP_CMD_CONFIG_CHANGED");
                 lifecycleHandler->onConfigChanged (context);
                 break;
-
+        }
         case APP_CMD_LOW_MEMORY:
                 printlog ("APP_CMD_LOW_MEMORY");
                 break;

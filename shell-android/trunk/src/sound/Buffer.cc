@@ -21,16 +21,10 @@
 
 struct Buffer::Impl {
 
-        Impl () : /*playerObject (NULL), playerPlay (NULL), playerSeek (NULL), playerMuteSolo (NULL), playerVolume (NULL)*/ data (NULL), size (0) {};
+        Impl () : data (NULL), size (0) {};
 
         std::string name;
-//        SLObjectItf playerObject;
-//        SLPlayItf playerPlay;
-//        SLSeekItf playerSeek;
-//        SLMuteSoloItf playerMuteSolo;
-//        SLVolumeItf playerVolume;
-
-        int16_t *data;
+        void *data;
         size_t size;
 
 };
@@ -46,7 +40,7 @@ Buffer::Buffer ()
 
 Buffer::~Buffer ()
 {
-        delete impl->data;
+        free (impl->data);
         delete impl;
 }
 
@@ -55,9 +49,7 @@ Buffer::~Buffer ()
 void Buffer::setLoad (std::string const &filename)
 {
         assert (device);
-//        SoundContext *ctx = device->getSoundContext ();
-        void *data = &impl->data;
-        Sound::load (filename.c_str (), &data, &impl->size);
+        Sound::load (filename.c_str (), &impl->data, &impl->size);
 }
 
 /****************************************************************************/

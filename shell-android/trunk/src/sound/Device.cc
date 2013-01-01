@@ -14,9 +14,8 @@
 #include <android/asset_manager.h>
 #include <android_native_app_glue.h>
 #include <Platform.h>
-
-// TODO wywal
-#include <cassert>
+#include "Utils.h"
+#include <sound/SoundException.h>
 
 /**
  *
@@ -63,30 +62,33 @@ Device::~Device ()
 
 void Device::init ()
 {
-        assert (impl->app);
+        if (!impl->app) {
+                throw Sound::SoundException ("!impl->app");
+        }
+
         SLresult result;
 
         // create engine
         result = slCreateEngine (&impl->engineObject, 0, NULL, 0, NULL, NULL);
-        assert(SL_RESULT_SUCCESS == result);
+        soundThrow (result);
 
         // realize the engine
         result = (*impl->engineObject)->Realize (impl->engineObject, SL_BOOLEAN_FALSE);
-        assert(SL_RESULT_SUCCESS == result);
+        soundThrow (result);
 
         // get the engine interface, which is needed in order to create other objects
         result = (*impl->engineObject)->GetInterface (impl->engineObject, SL_IID_ENGINE, &impl->engineEngine);
-        assert(SL_RESULT_SUCCESS == result);
+        soundThrow (result);
 
         // create output mix, with environmental reverb specified as a non-required interface
         const SLInterfaceID ids[1] = { SL_IID_ENVIRONMENTALREVERB };
         const SLboolean req[1] = { SL_BOOLEAN_FALSE };
         result = (*impl->engineEngine)->CreateOutputMix (impl->engineEngine,  &impl->outputMixObject, 1, ids, req);
-        assert(SL_RESULT_SUCCESS == result);
+        soundThrow (result);
 
         // realize the output mix
         result = (*impl->outputMixObject)->Realize (impl->outputMixObject, SL_BOOLEAN_FALSE);
-        assert(SL_RESULT_SUCCESS == result);
+        soundThrow (result);
 
         // get the environmental reverb interface
         // this could fail if the environmental reverb effect is not available,
