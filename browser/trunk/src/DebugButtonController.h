@@ -21,7 +21,7 @@ class DebugButtonController : public Controller::EmptyController {
 public:
         C__ (void)
         b_ ("EmptyController")
-        DebugButtonController () : quit (false) {}
+        DebugButtonController () : sound (NULL), quit (false) {}
         virtual ~DebugButtonController () {}
 
 /*--------------------------------------------------------------------------*/
