@@ -6,7 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifdef USE_CHIPMUNK
+#ifdef WITH_CHIPMUNK
 #ifndef BAJKA_MODEL_CP_ISHAPE_H_
 #define BAJKA_MODEL_CP_ISHAPE_H_
 

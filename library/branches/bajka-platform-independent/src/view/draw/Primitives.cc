@@ -297,19 +297,14 @@ void DrawUtil::drawRectangle (View::GLContext *ctx, G::Point const &a, G::Point 
 //        switch (type) {
 //                case Model::VertexBuffer::FLOAT:
 //                        return GL_FLOAT;
-//#ifndef USE_OPENGLES
 //                case Model::VertexBuffer::DOUBLE:
 //                        return GL_DOUBLE;
-//
 //                case Model::VertexBuffer::INT:
 //                        return GL_INT;
-//#else
 //                case Model::VertexBuffer::FIXED:
 //                        return GL_FIXED;
-//
 //                case Model::VertexBuffer::BYTE:
 //                        return GL_BYTE;
-//#endif
 //                case Model::VertexBuffer::SHORT:
 //                        return GL_SHORT;
 //                default:

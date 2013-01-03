@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef WITH_FREETYPE
 #include <boost/algorithm/string.hpp>
 #include "TTFFont.h"
 #include "view/freetype/Freetype.h"
@@ -211,3 +212,4 @@ void TTFFont::setKerning (bool b)
 }
 
 } /* namespace View */
+#endif

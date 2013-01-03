@@ -6,7 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifdef USE_CHIPMUNK
+#ifdef WITH_CHIPMUNK
 #include <chipmunk.h>
 #include "geometry/AffineMatrix.h"
 #include "Shape.h"

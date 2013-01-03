@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef WITH_FREETYPE
 #ifndef BAJKA_FREETYPE_TTF_H
 #define BAJKA_FREETYPE_TTF_H
 
@@ -119,5 +120,5 @@ extern Ptr <View::IBitmap> ttfRenderUTF8Solid (TTF_Font *font, const char *text,
  */
 extern Ptr <View::IBitmap> ttfRenderUTF8Blended (TTF_Font *font, const char *text, View::Color const &, bool expandDimensions2 = true);
 
-
-#endif /* _SDL_TTF_H */
+#endif
+#endif

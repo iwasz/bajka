@@ -19,21 +19,41 @@ endif()
 
 SET (CMAKE_C_FLAGS "-g -fPIC -Wall -O0 -Winvalid-pch -ffunction-sections -fdata-sections")
 SET (CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
-
 SET (CMAKE_C_FLAGS_RELEASE "-g0 -fPIC -Wall -O3 -Winvalid-pch -ffunction-sections -fdata-sections -DNDEBUG")
 SET (CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
 
 if (ANDROID)
     ADD_DEFINITIONS (-DANDROID)
-    ADD_DEFINITIONS (-DUSE_OPENGLES)    
-    ADD_DEFINITIONS (-DUSE_TOUCH_SCREEN)
 else()
     ADD_DEFINITIONS (-DLINUX)
-    ADD_DEFINITIONS (-DUSE_OPENGL)    
 endif()
 
 SET (CMAKE_VERBOSE_MAKEFILE 0)
-#SET (USE_CHIPMUNK 1)
+SET (WITH_CHIPMUNK          OFF CACHE BOOL "")
+SET (WITH_PNG               ON CACHE BOOL "")
+SET (WITH_JPEG              OFF CACHE BOOL "")
+SET (WITH_FREETYPE          ON CACHE BOOL "")
+SET (WITH_CORE_STRING       OFF CACHE BOOL "")
+
+if (WITH_CORE_STRING)
+    add_definitions (-DWITH_CORE_STRING)
+endif ()
+
+if (WITH_CHIPMUNK)
+    ADD_DEFINITIONS (-DWITH_CHIPMUNK)
+endif()
+
+if (WITH_PNG)
+    ADD_DEFINITIONS (-DWITH_PNG)
+endif()
+
+if (WITH_JPEG)
+    ADD_DEFINITIONS (-DWITH_JPEG)
+endif()
+
+if (WITH_FREETYPE)
+    ADD_DEFINITIONS (-DWITH_FREETYPE)
+endif()
 
 INSTALL (
     DIRECTORY "${PROJECT_SOURCE_DIR}/../src/"
@@ -68,24 +88,22 @@ pkg_check_modules (JANSSON REQUIRED "jansson")
 INCLUDE_DIRECTORIES (${JANSSON_INCLUDE_DIRS})
 link_directories(${JANSSON_LIBRARY_DIRS})
 
-pkg_check_modules (PNG REQUIRED "libpng")
-INCLUDE_DIRECTORIES (${PNG_INCLUDE_DIRS})
-link_directories(${PNG_LIBRARY_DIRS})
+if (WITH_PNG)
+    pkg_check_modules (PNG REQUIRED "libpng")
+    INCLUDE_DIRECTORIES (${PNG_INCLUDE_DIRS})
+    link_directories(${PNG_LIBRARY_DIRS})
+endif ()
 
-#pkg_check_modules (ZLIB REQUIRED "zlib")
-#INCLUDE_DIRECTORIES (${ZLIB_INCLUDE_DIRS})
-#link_directories(${ZLIB_LIBRARY_DIRS})
+if (WITH_JPEG)
+    FIND_PACKAGE (JPEG)
+    INCLUDE_DIRECTORIES (${JPEG_INCLUDE_DIR})
+endif ()    
 
-FIND_PACKAGE (JPEG)
-INCLUDE_DIRECTORIES (${JPEG_INCLUDE_DIR})
-
-pkg_check_modules (FREETYPE REQUIRED "freetype2")
-INCLUDE_DIRECTORIES (${FREETYPE_INCLUDE_DIRS})
-link_directories(${FREETYPE_LIBRARY_DIRS})
-
-if (USE_CHIPMUNK)
-    ADD_DEFINITIONS (-DUSE_CHIPMUNK)
-endif()
+if (WITH_FREETYPE)
+    pkg_check_modules (FREETYPE REQUIRED "freetype2")
+    INCLUDE_DIRECTORIES (${FREETYPE_INCLUDE_DIRS})
+    link_directories(${FREETYPE_LIBRARY_DIRS})
+endif ()
 
 IF(NOT ANDROID)
     # Find GL
@@ -108,16 +126,21 @@ AUX_SOURCE_DIRECTORY (../src/view/resource SOURCES)
 AUX_SOURCE_DIRECTORY (../src/view/animation SOURCES)
 AUX_SOURCE_DIRECTORY (../src/view/openGl SOURCES)
 AUX_SOURCE_DIRECTORY (../src/view/graphicFile SOURCES)
-AUX_SOURCE_DIRECTORY (../src/view/freetype SOURCES)
+
+if (WITH_FREETYPE) 
+    AUX_SOURCE_DIRECTORY (../src/view/freetype SOURCES)
+endif ()
 
 AUX_SOURCE_DIRECTORY (../src/events SOURCES)
 AUX_SOURCE_DIRECTORY (../src/events/types SOURCES)
 
 AUX_SOURCE_DIRECTORY (../src/model SOURCES)
 AUX_SOURCE_DIRECTORY (../src/model/static SOURCES)
-if (USE_CHIPMUNK)
-AUX_SOURCE_DIRECTORY (../src/model/physics SOURCES)
+
+if (WITH_CHIPMUNK)
+    AUX_SOURCE_DIRECTORY (../src/model/physics SOURCES)
 endif ()
+
 AUX_SOURCE_DIRECTORY (../src/model/layout SOURCES)
 AUX_SOURCE_DIRECTORY (../src/model/manager SOURCES)
 
@@ -154,7 +177,7 @@ if (NOT ANDROID)
     TARGET_LINK_LIBRARIES (bajka ${FREETYPE_LIBRARIES})
 endif ()
 
-if (USE_CHIPMUNK)
+if (WITH_CHIPMUNK)
     TARGET_LINK_LIBRARIES (bajka chipmunk)
 endif()
     

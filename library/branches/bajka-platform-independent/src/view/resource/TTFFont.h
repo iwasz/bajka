@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef WITH_FREETYPE
 #ifndef BAJKA_TTFFONT_H_
 #define BAJKA_TTFFONT_H_
 
@@ -89,3 +90,4 @@ private:
 } /* namespace View */
 
 #endif /* TTFFONT_H_ */
+#endif

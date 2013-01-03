@@ -151,9 +151,11 @@ void BajkaService::init (U::Config *config)
         srand (time (NULL));
         Tween::init ();
 
+#ifdef WITH_FREETYPE
         if (ttfInit () < 0) {
                 throw U::InitException ("TTF_Init failed");
         }
+#endif
 
         impl->glContext.init (config);
 }

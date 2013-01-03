@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef WITH_PNG
 #ifndef BAJKA_RESOURCES_PNG_H_
 #define BAJKA_RESOURCES_PNG_H_
 
@@ -35,3 +36,4 @@ extern bool checkIfPng (Common::DataSource *source);
 } // namespace
 
 #endif /* PNG_H_ */
+#endif

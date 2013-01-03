@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef WITH_JPEG
 #ifndef BAJKA_RESOURCE_JPEG_H_
 #define BAJKA_RESOURCE_JPEG_H_
 
@@ -35,3 +36,4 @@ extern bool checkIfJpeg (Common::DataSource *source);
 } /* namespace View */
 
 #endif /* JPEG_H_ */
+#endif

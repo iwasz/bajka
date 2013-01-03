@@ -6,7 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifdef USE_CHIPMUNK
+#ifdef WITH_CHIPMUNK
 #ifndef PHYSICS_MODEL_LINESTRING_H_
 #define PHYSICS_MODEL_LINESTRING_H_
 

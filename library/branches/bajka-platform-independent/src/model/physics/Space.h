@@ -6,7 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifdef USE_CHIPMUNK
+#ifdef WITH_CHIPMUNK
 #ifndef BAJKA_SPACE_H_
 #define BAJKA_SPACE_H_
 

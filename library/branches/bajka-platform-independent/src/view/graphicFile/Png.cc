@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef WITH_PNG
 #include <zlib.h>
 #include <png.h>
 #include <string>
@@ -218,3 +219,5 @@ static void userReadFn (png_structp png_ptr, png_bytep data, png_size_t length)
 }
 
 } // namespace
+
+#endif

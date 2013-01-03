@@ -6,7 +6,6 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#if defined (USE_OPENGL) || defined (USE_OPENGLES)
 #include "OpenGl.h"
 #include "util/Exceptions.h"
 #include "util/Config.h"
@@ -99,4 +98,3 @@ GLuint linkProgram (GLuint vertexShader, GLuint fragmentShader)
         return programObject;
 }
 
-#endif
