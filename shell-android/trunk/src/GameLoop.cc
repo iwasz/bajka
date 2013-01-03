@@ -108,15 +108,43 @@ void GameLoop::loop ()
 /****************************************************************************/
 
 void GameLoop::handleCmd (android_app *app, int32_t cmd) {
-    GameLoop *that = static_cast <GameLoop *> (app->userData);
-    that->handleCmd (cmd);
+        try {
+            GameLoop *that = static_cast <GameLoop *> (app->userData);
+            that->handleCmd (cmd);
+        }
+        catch (Core::Exception const &e) {
+                printlog ("GameLoop::loop : Core::Exception caught : %s\n", e.getMessage ().c_str ());
+                abort ();
+        }
+        catch (std::exception const &e) {
+                printlog ("GameLoop::loop : std::exception caught : %s\n", e.what ());
+                abort ();
+        }
+        catch (...) {
+                printlog ("GameLoop::loop : Unknown exception caught");
+                abort ();
+        }
 }
 
 /****************************************************************************/
 
 int32_t GameLoop::handleInput (struct android_app* app, AInputEvent *event) {
-        GameLoop *that = static_cast <GameLoop *> (app->userData);
-        return that->handleInput (event);
+        try {
+                GameLoop *that = static_cast <GameLoop *> (app->userData);
+                return that->handleInput (event);
+        }
+        catch (Core::Exception const &e) {
+                printlog ("GameLoop::loop : Core::Exception caught : %s\n", e.getMessage ().c_str ());
+                abort ();
+        }
+        catch (std::exception const &e) {
+                printlog ("GameLoop::loop : std::exception caught : %s\n", e.what ());
+                abort ();
+        }
+        catch (...) {
+                printlog ("GameLoop::loop : Unknown exception caught");
+                abort ();
+        }
 }
 
 /****************************************************************************/
