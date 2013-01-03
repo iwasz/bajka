@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<beans>
-  <import resource="animal.xml" />
-  <animalScene id="scene" animal="zajac.png" left="pies.xml" right="jez.xml"/> 
-</beans>

@@ -6,14 +6,7 @@
     </Image>
     <prop-alias name="path" value="view.bitmap.path"/>
   </Box>
-
-  <!-- Single line text with default font and color -->
-  <Box id="label" abstract="true" autoUpdateToViewSize="true">
-    <Text set-as="view" foreground="ff0000ff" font="@defaultFont" />
-    <prop-alias name="text" value="view.text"/>
-    <prop-alias name="fg" value="view.foreground"/>
-  </Box>
-  
+ 
   <Box id="rect" abstract="true">
     <ref bean="rectWidget" set-as="view"/>
     <prop-alias name="fg" value="view.foreground"/>
@@ -23,63 +16,14 @@
 
   <Rectangle id="rectWidget" foreground="0000ffff" background="00000000"/>
 
-  <Circle id="circle" radius="30" abstract="true">
-    <View::Circle set-as="view" id="circleWgt" foreground="FFFFFFFF" background="555555ff" />
-    <prop-alias name="fg" value="view.foreground"/>
-    <prop-alias name="bg" value="view.background"/>
-    <prop-alias name="th" value="view.thickness"/>    
-  </Circle>
-  
-  <TTFFont id="defaultFont" renderType="0" hinting="1">
-    <cargs>
-      <value type="text">volter.ttf</value>
-      <value type="int">18</value>
-    </cargs>
-  </TTFFont>
-
-  <TTFFont id="volter36" renderType="0" hinting="1">
-    <cargs>
-      <value type="text">volter.ttf</value>
-      <value type="int">36</value>
-    </cargs>
-  </TTFFont>  
-
-  <TTFFont id="dekar" renderType="1" hinting="1">
-    <cargs>
-      <value type="text">Dekar.otf</value>
-      <value type="int">72</value>
-    </cargs>
-  </TTFFont>  
-
-  <Color id="orange">
-    <cargs>
-      <value>ff4411ff</value>
-    </cargs>
-  </Color> 
-
-  <Color id="crimson">
-    <cargs>
-      <value>d44015ff</value>
-    </cargs>
-  </Color> 
-
   <Color id="siusiu">
     <cargs>
       <value>fafac6ff</value>
     </cargs>
   </Color> 
 
-  <LinearGroup id="button" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true" type="vertical">
-    <label set-as="child" text="Button" view.foreground="@orange" view.font="@volter36"/>
-    <Rectangle set-as="view" foreground="@orange" background="00000000" thickness="3"/>
-    <DebugButtonController set-as="controller" eventMask="0xffff" clicked="@siusiu"  normal="@orange"  hover="@crimson" modelManager="@modelManager" sound="@buttonSource"  />
-    <prop-alias name="file" value="controller.file" />
-    <prop-alias name="name" value="controller.name" />
-    <prop-alias name="text" value="children.0.view.text" />
-  </LinearGroup>
-
   <image id="imgButton" abstract="true">
-    <DebugButtonController set-as="controller" eventMask="0xffff" modelManager="@modelManager" />
+    <DebugButtonController set-as="controller" eventMask="0xffff" modelManager="@modelManager" sound="@buttonSource"/>
     <prop-alias name="file" value="controller.file" />
     <prop-alias name="name" value="controller.name" />
   </image>
