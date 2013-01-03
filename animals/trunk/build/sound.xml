@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+  <RelativeGroup id="scene">
+    <LayerProperties set-as="groupProps" />
+    <ClearScreen set-as="view" color="000000ff" />
+
+    <button set-as="child" file="menu.xml" name="scene" text="Back">
+      <RelativeGroupProperties set-as="groupProps" translate="50, 95" />
+    </button>
+
+    <button set-as="child" file="" text="Center">
+      <RelativeGroupProperties set-as="groupProps" translate="50, 90" />
+      <source set-as="controller.sound" buffer="@buttonBuffer" />
+    </button>
+
+    <button set-as="child" file="" text="Left">
+      <RelativeGroupProperties set-as="groupProps" translate="10, 90" />
+      <source set-as="controller.sound" buffer="@buttonBuffer" looping="true" pitch="1.5"/>
+    </button>
+
+  </RelativeGroup>
+
+  <Listener id="listener" depends-on="scene" gain="1" position="0, 0, 0"/>
+
+</beans>

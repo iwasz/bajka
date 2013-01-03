@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+  <RelativeGroup id="animalScene" abstract="true">
+    <LayerProperties set-as="groupProps" fillW="true" fillH="true" />
+    <ClearScreen set-as="view" color="5aa3fcff" />
+
+    <ref bean="grass1" set-as="child" />
+
+    <image set-as="child" path="pig.png">
+      <RelativeGroupProperties set-as="groupProps" translate="50, 35" hAlign="center" vAlign="center"/>
+    </image>    
+
+    <ref bean="grass2" set-as="child" />
+    <ref bean="sun" set-as="child" />
+    <ref bean="cloud1" set-as="child" />
+    <ref bean="cloud2" set-as="child" />
+        
+    <imgButton set-as="child" path="left.png" file="menu.xml" name="scene">
+      <RelativeGroupProperties set-as="groupProps" translate="5, 50" hAlign="center" vAlign="center"/>
+    </imgButton>
+
+    <imgButton set-as="child" path="right.png" file="menu.xml" name="scene">
+      <RelativeGroupProperties set-as="groupProps" translate="95, 50" hAlign="center" vAlign="center"/>
+    </imgButton>
+
+    <imgButton set-as="child" path="close.png" file="menu.xml" name="scene">
+      <RelativeGroupProperties set-as="groupProps" translate="5, 95" hAlign="center" vAlign="center"/>
+    </imgButton>
+    
+    <SceneController set-as="controller" init-method="init">
+      <TweenFactory set-as="tweenFactory" container="@#container">
+        <value set-as="source">
+          {"type":"multi", "tweens":[
+            {"type":"to", "obj":"sun", "t":15000, "ease":"LINEAR_INOUT", "repeat":-1, "targets":[{"ANGLE":360}]},
+            {"type":"to", "obj":"sun", "t":500, "repeat":-1, "yoyo":true, "overwrite":"NONE", "targets":[{"SCALE":1.1}]},
+            {"type":"to", "obj":"grass1", "t":1000, "repeat":-1, "yoyo":true, "overwrite":"NONE", "targets":[{"X":"-10"}]},
+            {"type":"to", "obj":"grass2", "t":1000, "repeat":-1, "yoyo":true, "overwrite":"NONE", "targets":[{"X":"10"}]},
+            {"type":"to", "obj":"cloud1", "t":60000, "repeat":-1, "ease":"LINEAR_INOUT", "overwrite":"NONE", "targets":[{"X":-455}]},
+            {"type":"to", "obj":"cloud2", "t":80000, "repeat":-1, "ease":"LINEAR_INOUT", "overwrite":"NONE", "delay":30000, "targets":[{"X":-300}]}
+          ]}            
+        </value>
+      </TweenFactory>
+    </SceneController>
+    
+    <prop-alias name="animal" value="children.1.view.bitmap.path"/>
+    <prop-alias name="left" value="children.6.controller.file"/>
+    <prop-alias name="right" value="children.7.controller.file"/>
+  </RelativeGroup>
+
+  <image id="cloud1" view.bitmap="@cloud" translate="1280, 500"/>
+  <image id="cloud2" view.bitmap="@cloud" translate="1280, 550" scale="0.7"/>
+  <image id="sun" path="sunny.png" translate="950, 420"/>
+  <loopImage id="grass1" set-as="child" view.bitmap="@grass" width="1300" height="300" />
+  <loopImage id="grass2" set-as="child" view.bitmap="@grass" width="1300" height="300" translate="-100, -70"/>
+     
+  <FileBitmap id="cloud" path="cloud.png"/>
+  <FileBitmap id="grass" path="grass.png"/>
+  
+</beans>
+
+<!-- 
+Ikony : http://www.pixel-mixer.com/
+ -->
