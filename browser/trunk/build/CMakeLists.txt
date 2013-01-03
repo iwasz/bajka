@@ -6,26 +6,43 @@ if(COMMAND cmake_policy)
     cmake_policy(SET CMP0003 NEW)
 endif(COMMAND cmake_policy)
 
-SET (USE_CHIPMUNK 0)
-#SET (USE_CHIPMUNK "" CACHE BOOLEAN "Whether use chipmunk physics library or nor") 
-#SET_PROPERTY (CACHE USE_CHIPMUNK PROPERTY STRINGS Linux Windows Android iPhone)
+#ADD_DEFINITIONS (-DUSE_SDL)
 
-ADD_DEFINITIONS (-DUSE_SDL)
-ADD_DEFINITIONS (-DUSE_OPENGL)
-#ADD_DEFINITIONS (-DUSE_CHIPMUNK)
-
-ADD_DEFINITIONS (-O0)
-#ADD_DEFINITIONS (-g -fvisibility=hidden)
-ADD_DEFINITIONS (-g)
-ADD_DEFINITIONS (-Winvalid-pch)
-#ADD_DEFINITIONS (-H)
-ADD_DEFINITIONS (-Wall)
-ADD_DEFINITIONS (-DBAJKA_DEBUG)
 ADD_DEFINITIONS (-DREFLECTION_ENABLED)
 add_definitions (-Wl,-z,defs)
-#ADD_DEFINITIONS (-fsyntax-only)
+
+SET (CMAKE_C_FLAGS "-g -fPIC -Wall -O0 -Winvalid-pch -ffunction-sections -fdata-sections")
+SET (CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
+SET (CMAKE_C_FLAGS_RELEASE "-g0 -fPIC -Wall -O3 -Winvalid-pch -ffunction-sections -fdata-sections -DNDEBUG")
+SET (CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
  
 SET (CMAKE_VERBOSE_MAKEFILE 0)
+
+SET (WITH_CHIPMUNK          OFF CACHE BOOL "")
+SET (WITH_PNG               ON CACHE BOOL "")
+SET (WITH_JPEG              OFF CACHE BOOL "")
+SET (WITH_FREETYPE          ON CACHE BOOL "")
+SET (WITH_CORE_STRING       OFF CACHE BOOL "")
+
+if (WITH_CORE_STRING)
+    add_definitions (-DWITH_CORE_STRING)
+endif ()
+
+if (WITH_CHIPMUNK)
+    ADD_DEFINITIONS (-DWITH_CHIPMUNK)
+endif()
+
+if (WITH_PNG)
+    ADD_DEFINITIONS (-DWITH_PNG)
+endif()
+
+if (WITH_JPEG)
+    ADD_DEFINITIONS (-DWITH_JPEG)
+endif()
+
+if (WITH_FREETYPE)
+    ADD_DEFINITIONS (-DWITH_FREETYPE)
+endif()
 
 if (ANDROID)
     ADD_DEFINITIONS (-static)
@@ -117,12 +134,7 @@ if (ANDROID)
     TARGET_LINK_LIBRARIES (${PROJECT_NAME} ${FREETYPE_LIBRARIES})
 
 #    set (CMAKE_SHARED_LINKER_FLAGS "-static -Wl,--no-undefined")
-    
-#    pkg_check_modules (ZLIB REQUIRED "zlib")
-#    INCLUDE_DIRECTORIES (${ZLIB_INCLUDE_DIRS})
-#    link_directories(${ZLIB_LIBRARY_DIRS})
-#    TARGET_LINK_LIBRARIES (${PROJECT_NAME} ${ZLIB_LIBRARIES})
-    
+        
     TARGET_LINK_LIBRARIES (${PROJECT_NAME} z)
     
     # Android-specific Log Support
