@@ -45,7 +45,7 @@ void delayMs (uint32_t ms)
 
 /****************************************************************************/
 
-int printlog (const char *format, ...)
+int printlogImpl (const char *format, ...)
 {
         va_list args;
         va_start(args, format);
