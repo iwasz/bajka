@@ -16,7 +16,13 @@ extern uint32_t getCurrentMs ();
 extern void delayMs (uint32_t);
 
 // Logging
-extern int printlog (const char *format, ...);
+extern int printlogImpl (const char *format, ...);
+
+#ifndef NDEBUG
+#define printlog(...) printlogImpl(__VA_ARGS__)
+#else
+#define printlog(...)
+#endif
 
 namespace Common {
 class DataSource;

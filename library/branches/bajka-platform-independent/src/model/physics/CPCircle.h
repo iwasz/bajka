@@ -6,7 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifdef USE_CHIPMUNK
+#ifdef WITH_CHIPMUNK
 #ifndef BAJKA_PHYS_CIRCLE_H_
 #define BAJKA_PHYS_CIRCLE_H_
 

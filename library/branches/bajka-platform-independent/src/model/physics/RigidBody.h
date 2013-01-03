@@ -6,7 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifdef USE_CHIPMUNK
+#ifdef WITH_CHIPMUNK
 #ifndef BAJKA_RIGIDBODY_H_
 #define BAJKA_RIGIDBODY_H_
 

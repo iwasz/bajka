@@ -6,6 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifdef WITH_JPEG
 #include "Jpeg.h"
 #include <cstdio>
 #include <cstdlib>
@@ -365,3 +366,4 @@ static void myOutputMessage (j_common_ptr cinfo)
 }
 
 } /* namespace View */
+#endif

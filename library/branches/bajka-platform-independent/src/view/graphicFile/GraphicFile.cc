@@ -28,6 +28,8 @@ void load (const char *path,
         ds->open (path, Common::DataSource::MODE_UNKNOWN);
 
         try {
+#ifdef WITH_PNG
+
                 if (checkIfPng (ds)) {
                         ds->rewind ();
                         pngLoad (ds, data, width, height, visibleWidthOut, visibleHeightOut, colorSpace, bitDepth, expandDimensions2);
@@ -36,13 +38,16 @@ void load (const char *path,
                 }
 
                 ds->rewind ();
+#endif
 
+#ifdef WITH_JPEG
                 if (checkIfJpeg (ds)) {
                         ds->rewind ();
                         jpegLoad (ds, data, width, height, visibleWidthOut, visibleHeightOut, colorSpace, bitDepth, expandDimensions2);
                         deleteDataSource (ds);
                         return;
                 }
+#endif
         }
         catch (std::exception const &) {
                 deleteDataSource (ds);
