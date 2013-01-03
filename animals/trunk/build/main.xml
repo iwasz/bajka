@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<beans>
-  <import resource="standard.xml" />
-  <ReloadableXmlModelManager id="modelManager" file="menu.xml" name="scene" mainContainer="@#container"/>  
-</beans>
-
