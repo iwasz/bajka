@@ -1,0 +1,3 @@
+/home/iwasz/local/lib/libuvc.so
+/home/iwasz/local/include/utlist.h
+/home/iwasz/local/include/libuvc/libuvc.h
