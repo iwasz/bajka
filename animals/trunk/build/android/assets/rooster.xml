@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
   <import resource="animal.xml" />
-  <animalScene id="scene" animal="rooster.png" left="zebra.xml" right="wielblad.xml" /> 
+  <animalScene id="scene" animal="rooster.png" left="pig.xml" right="turkey.xml" animalSound="@animalSource" translate="40, 10"/>
+  <buffer id="animalBuffer" load="rooster.raw" />
+  <source id="animalSource" buffer="@animalBuffer" />
 </beans>
