@@ -5,16 +5,16 @@
     <ClearScreen set-as="view" color="5aa3fcff" />
 
     <ref bean="grass1" set-as="child" />
+    <ref bean="cloud1" set-as="child" />
+    <ref bean="cloud2" set-as="child" />
 
-    <image set-as="child" path="pig.png">
+    <image set-as="child">
       <RelativeGroupProperties set-as="groupProps" translate="50, 35" hAlign="center" vAlign="center"/>
       <DebugButtonController set-as="controller" eventMask="0xffff" />
     </image>    
 
     <ref bean="grass2" set-as="child" />
     <ref bean="sun" set-as="child" />
-    <ref bean="cloud1" set-as="child" />
-    <ref bean="cloud2" set-as="child" />
         
     <imgButton set-as="child" path="left.png" file="menu.xml" name="scene">
       <RelativeGroupProperties set-as="groupProps" translate="5, 50" hAlign="center" vAlign="center"/>
@@ -24,9 +24,9 @@
       <RelativeGroupProperties set-as="groupProps" translate="95, 50" hAlign="center" vAlign="center"/>
     </imgButton>
 
-    <imgButton set-as="child" path="close.png" file="menu.xml" name="scene">
-      <RelativeGroupProperties set-as="groupProps" translate="5, 95" hAlign="center" vAlign="center"/>
-    </imgButton>
+<!--     <imgButton set-as="child" path="close.png" file="menu.xml" name="scene"> -->
+<!--       <RelativeGroupProperties set-as="groupProps" translate="5, 95" hAlign="center" vAlign="center"/> -->
+<!--     </imgButton> -->
     
     <SceneController set-as="controller" init-method="init">
       <TweenFactory set-as="tweenFactory" container="@#container">
@@ -43,8 +43,9 @@
       </TweenFactory>
     </SceneController>
     
-    <prop-alias name="animal" value="children.1.view.bitmap.path"/>
-    <prop-alias name="animalSound" value="children.1.controller.sound"/>
+    <prop-alias name="animal" value="children.3.view.bitmap.path"/>
+    <prop-alias name="animalSound" value="children.3.controller.sound"/>
+    <prop-alias name="translate" value="children.3.groupProps.translate"/>
     <prop-alias name="left" value="children.6.controller.file"/>
     <prop-alias name="right" value="children.7.controller.file"/>
   </RelativeGroup>
