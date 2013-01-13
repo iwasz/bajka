@@ -30,7 +30,7 @@ SET (CMAKE_VERBOSE_MAKEFILE 0)
 if (ANDROID)
     ADD_DEFINITIONS (-static)
     SET (EXECUTABLE_OUTPUT_PATH "./")
-    SET (LIBRARY_OUTPUT_PATH "./android/libs/armeabi-v7a")
+    SET (LIBRARY_OUTPUT_PATH "./android/libs/armeabi")
 endif ()
      
 # Boost, można zakomentowa, you can skip this

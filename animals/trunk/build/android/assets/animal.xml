@@ -7,9 +7,10 @@
     <ref bean="grass1" set-as="child" />
     <ref bean="cloud1" set-as="child" />
     <ref bean="cloud2" set-as="child" />
-
+    <ref bean="cloud3" set-as="child" />
+    
     <image set-as="child">
-      <RelativeGroupProperties set-as="groupProps" translate="50, 35" hAlign="center" vAlign="center"/>
+<!--       <RelativeGroupProperties set-as="groupProps" translate="50, 35" hAlign="center" vAlign="center"/> -->
       <DebugButtonController set-as="controller" eventMask="0xffff" />
     </image>    
 
@@ -43,15 +44,19 @@
       </TweenFactory>
     </SceneController>
     
-    <prop-alias name="animal" value="children.3.view.bitmap.path"/>
-    <prop-alias name="animalSound" value="children.3.controller.sound"/>
-    <prop-alias name="translate" value="children.3.groupProps.translate"/>
-    <prop-alias name="left" value="children.6.controller.file"/>
-    <prop-alias name="right" value="children.7.controller.file"/>
-  </RelativeGroup>
+    <prop-alias name="animal" value="children.4.view.bitmap.path"/>
+    <prop-alias name="animalSound" value="children.4.controller.sound"/>
+    <prop-alias name="translate" value="children.4.groupProps.translate"/>
+    <prop-alias name="left" value="children.7.controller.file"/>
+    <prop-alias name="right" value="children.8.controller.file"/>
+    <prop-alias name="translatePx" value="children.4.translate"/>
+    <prop-alias name="width" value="children.4.width"/>
+    <prop-alias name="height" value="children.4.height"/>
+    </RelativeGroup>
 
   <image id="cloud1" view.bitmap="@cloud" translate="1280, 500"/>
   <image id="cloud2" view.bitmap="@cloud" translate="1280, 550" scale="0.7"/>
+  <image id="cloud3" view.bitmap="@cloud" translate="100, 450"/>
   <image id="sun" path="sunny.png" translate="950, 420"/>
   <loopImage id="grass1" set-as="child" view.bitmap="@grass" width="1300" height="300" />
   <loopImage id="grass2" set-as="child" view.bitmap="@grass" width="1300" height="300" translate="-100, -70"/>

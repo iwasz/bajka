@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
   <import resource="animal.xml" />
-  <animalScene id="scene" animal="turkey.png" left="rooster.xml" right="cat.xml" animalSound="@animalSource" translate="40, 10" />
+  <animalScene id="scene" animal="turkey.png" left="rooster.xml" right="cat.xml" animalSound="@animalSource" translatePx="450, 40" width="450" height="350" />
   <buffer id="animalBuffer" load="turkey.raw" />
   <source id="animalSource" buffer="@animalBuffer" />
 </beans>
