@@ -8,7 +8,7 @@
 <!-- +=======================================================================================+ -->
 
 <!--  <Config id="config" autoViewport="true" autoProjection="true" fullScreen="true" windowCaption="Bajka browser"> -->
-    <Config id="config" autoViewport="true" fullScreen="true" projectionHeight="720"> 
+    <Config id="config" autoViewport="true" fullScreen="true" projectionWidth="1280"> 
     <value set-as="vertex">#version 100
 attribute vec4 position;
 attribute vec2 texCoordIn;
