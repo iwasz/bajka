@@ -38,12 +38,19 @@ void LifecycleHandler::onFirstTimeReadyForRender (ShellContext *ctx)
 {
         printlog ("LifecycleHandler::onFirstTimeReadyForRender");
         graphicsService->initDisplay ();
+        printlog ("after initDisplay");
         Core::VariantMap singletons = prepareSingletonMap (ctx);
+        printlog ("after prepSingle");
         ctx->config = bajkaService->loadAndOverrideConfig (*ctx->shellConfig, singletons);
+        printlog ("after loadAndOverr");
         graphicsService->saveScreenDimensionsInConfig (ctx->config);
+        printlog ("after saveScreenCon");
         bajkaService->init (ctx->config);
+        printlog ("after bajkaServ.init");
         bajkaService->initProjectionMatrix (ctx->config);
+        printlog ("after initproj");
         scene = bajkaService->loadScene (ctx->shellConfig->definitionFile);
+        printlog ("after loadSce");
 }
 
 /****************************************************************************/

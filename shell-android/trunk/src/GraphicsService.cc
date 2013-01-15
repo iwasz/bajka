@@ -140,7 +140,21 @@ bool GraphicsService::initDisplay ()
 
         printlog ("GraphicsService::initDisplay : eglMakeCurrent (%p, %p, %p, %p);", display, surface, surface, context);
         if (eglMakeCurrent (display, surface, surface, context) == EGL_FALSE) {
-                throw U::InitException ("eglMakeCurrent failed");
+                printlog ("GraphicsService::initDisplay : eglMakeCurrent (%p, %p, %p, %p); FAILED. Throwing an exception!", display, surface, surface, context);
+
+                switch (eglGetError ()) {
+                case EGL_BAD_DISPLAY: throw U::InitException ("EGL_BAD_DISPLAY is generated if display is not an EGL display connection.");
+                case EGL_NOT_INITIALIZED: throw U::InitException ("EGL_NOT_INITIALIZED is generated if display has not been initialized.");
+                case EGL_BAD_SURFACE: throw U::InitException ("EGL_BAD_SURFACE is generated if draw or read is not an EGL surface.");
+                case EGL_BAD_CONTEXT: throw U::InitException ("EGL_BAD_CONTEXT is generated if context is not an EGL rendering context.");
+                case EGL_BAD_MATCH: throw U::InitException ("EGL_BAD_MATCH is generated if draw or read are not compatible with context, or if context is set to EGL_NO_CONTEXT and draw or read are not set to EGL_NO_SURFACE, or if draw or read are set to EGL_NO_SURFACE and context is not set to EGL_NO_CONTEXT.");
+                case EGL_BAD_ACCESS: throw U::InitException ("EGL_BAD_ACCESS is generated if context is current to some other thread.");
+                case EGL_BAD_NATIVE_PIXMAP: throw U::InitException ("EGL_BAD_NATIVE_PIXMAP may be generated if a native pixmap underlying either draw or read is no longer valid.");
+                case EGL_BAD_NATIVE_WINDOW: throw U::InitException ("EGL_BAD_NATIVE_WINDOW may be generated if a native window underlying either draw or read is no longer valid.");
+                case EGL_BAD_CURRENT_SURFACE: throw U::InitException ("EGL_BAD_CURRENT_SURFACE is generated if the previous context has unflushed commands and the previous surface is no longer valid.");
+                case EGL_BAD_ALLOC: throw U::InitException ("EGL_BAD_ALLOC may be generated if allocation of ancillary buffers for draw or read were delayed until eglMakeCurrent is called, and there are not enough resources to allocate them.");
+                case EGL_CONTEXT_LOST: throw U::InitException ("EGL_CONTEXT_LOST is generated if a power management event has occurred. The application must destroy all contexts and reinitialise OpenGL ES state and objects to continue rendering.");
+                }
         }
 
         return true;
