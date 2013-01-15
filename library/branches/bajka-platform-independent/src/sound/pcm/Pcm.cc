@@ -12,6 +12,7 @@
 #include <common/dataSource/DataSource.h>
 #include <cstdio>
 #include "util/Exceptions.h"
+#include <cstdlib>
 
 namespace Sound {
 

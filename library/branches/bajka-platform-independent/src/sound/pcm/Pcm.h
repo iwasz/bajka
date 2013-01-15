@@ -10,6 +10,7 @@
 #define BAJKA_SOUND_PCM_H_
 
 #include <stdint.h>
+#include <cstddef>
 
 namespace Sound {
 
