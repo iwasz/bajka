@@ -56,8 +56,9 @@ int main (int argc, char **argv)
         config.fullScreen = vm.count ("fullscreen");
         config.showAABB = vm.count ("showaabb");
 
-        Shell *shell = Shell::instance ();
-        return shell->run (config);
+        Util::ShellConfig config;
+        std::auto_ptr <GameLoop> loop = ShellFactory::createGameLoop (&config, app);
+        loop->loop ();
 }
 
 #else // ANDROID
