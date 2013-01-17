@@ -28,7 +28,7 @@ GraphicsService::GraphicsService (android_app *a) :
 
 /****************************************************************************/
 
-bool GraphicsService::initDisplay ()
+bool GraphicsService::initDisplay (Util::Config *)
 {
         if (eglGetCurrentContext () != EGL_NO_CONTEXT) {
                 return true;
