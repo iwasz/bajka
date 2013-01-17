@@ -58,6 +58,11 @@ void Shell::dispatchEvents ()
 
 void Shell::init ()
 {
+	// TODO - to musi być na początku init dependent
+        //impl->glContext.init (impl->config);
+
+
+
         /* Initialize SDL for video output */
         if (SDL_Init (SDL_INIT_VIDEO) < 0) {
                 throw U::InitException ("Unable to initialize SDL : " + std::string (SDL_GetError ()));
