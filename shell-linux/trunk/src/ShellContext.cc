@@ -1,19 +1,15 @@
 /****************************************************************************
  *                                                                          *
- *  Author : lukasz.iwaszkiewicz@tiliae.eu                                  *
+ *  Author : lukasz.iwaszkiewicz@gmail.com                                  *
  *  ~~~~~~~~                                                                *
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include <cstdarg>
-#include <cstdio>
+#include <cstddef>
+#include "ShellContext.h"
 
-int log (const char *format, ...)
+ShellContext::ShellContext () : shellConfig (NULL), config (NULL), glContext (NULL)
 {
-        va_list args;
-        va_start (args, format);
-        int ret = vprintf (format, args);
-        va_end (args);
-        return ret;
+
 }
