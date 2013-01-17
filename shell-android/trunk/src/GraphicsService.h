@@ -32,7 +32,7 @@ public:
          * się nie powiodła, ale jest szansa, że nastęþnym razem będzie OK. Zrzuca wyjątki
          * gdy sytuacja jest krytyczna.
          */
-        bool initDisplay ();
+        bool initDisplay (Util::Config *config);
         void termDisplay ();
         void unbindSurfaceAndContext ();
 

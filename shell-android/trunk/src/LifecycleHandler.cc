@@ -37,7 +37,7 @@ LifecycleHandler::~LifecycleHandler ()
 void LifecycleHandler::onFirstTimeReadyForRender (ShellContext *ctx)
 {
         printlog ("LifecycleHandler::onFirstTimeReadyForRender");
-        graphicsService->initDisplay ();
+        graphicsService->initDisplay (ctx->config);
         printlog ("after initDisplay");
         Core::VariantMap singletons = prepareSingletonMap (ctx);
         printlog ("after prepSingle");
@@ -58,7 +58,7 @@ void LifecycleHandler::onFirstTimeReadyForRender (ShellContext *ctx)
 void LifecycleHandler::onGainedFocus (ShellContext *ctx, bool firstTime)
 {
         printlog ("LifecycleHandler::onGainedFocus");
-        graphicsService->initDisplay ();
+        graphicsService->initDisplay (ctx->config);
 
         if (ctx->config) {
                 graphicsService->saveScreenDimensionsInConfig (ctx->config);
