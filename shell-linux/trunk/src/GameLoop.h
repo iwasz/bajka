@@ -44,7 +44,7 @@ private:
         LifecycleHandler *lifecycleHandler;
         bool autoPause;
         bool suspended;
-        bool firstInitWindow;
+//        bool firstInitWindow;
         bool firstGainedFocus;
         bool savedStatePending;
         bool rendering; // rendering i suspended są osobno, bo w czasie inicjowania mają odwrotne wartości.
