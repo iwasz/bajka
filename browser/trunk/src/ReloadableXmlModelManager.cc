@@ -15,6 +15,7 @@
 #include <Platform.h>
 #include <tween/Manager.h>
 #include <container/Container.h>
+#include <util/Scene.h>
 
 /****************************************************************************/
 
@@ -46,12 +47,12 @@ bool ReloadableXmlModelManager::run (Util::Scene *scene)
         dirty = false;
         lastFileTime = boost::filesystem::last_write_time (requestedFile);
 
-        scene->onManagerUnloadModel ();
+        callOnManagerUnloadModel (scene);
         Model::IModel *m = get (requestedFile, requestedName);
 
         if (m) {
-                shell->setModel (m);
-                shell->onManagerLoadModel ();
+                scene->setModel (m);
+                callOnManagerLoadModel (scene);
         }
 
         return true;
