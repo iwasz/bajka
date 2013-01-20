@@ -1119,8 +1119,8 @@ static Ptr <IBitmap> ttfRenderUTF8Impl (TTF_Font *font,
         visibleHeight = height;
 
         if (expandDimensions2) {
-                width = Util::Math::nextSqr (width);
-                height = Util::Math::nextSqr (height);
+                width = Util::nextSqr (width);
+                height = Util::nextSqr (height);
         }
 
         textBuf->allocate (width, height, RGBA);

@@ -113,8 +113,8 @@ void pngLoad (Common::DataSource *source,
         int num_channels = png_get_channels (png_ptr, info_ptr);
 
         if (expandDimensions2) {
-                *widthOut = Util::Math::nextSqr (width);
-                *heightOut = Util::Math::nextSqr (height);
+                *widthOut = Util::nextSqr (width);
+                *heightOut = Util::nextSqr (height);
         }
         else {
                 *widthOut = width;
