@@ -21,7 +21,7 @@ GameLoop::GameLoop (ShellContext *c, LifecycleHandler *h) :
         lifecycleHandler (h),
         autoPause (false),
         suspended (false),
-        firstInitWindow (true),
+        /*firstInitWindow (true),*/
         firstGainedFocus (true),
         savedStatePending (false),
         rendering (false)
@@ -40,6 +40,8 @@ GameLoop::~GameLoop ()
 
 void GameLoop::init ()
 {
+        lifecycleHandler->onFirstTimeReadyForRender (context);
+        rendering = true;
 }
 
 /****************************************************************************/
