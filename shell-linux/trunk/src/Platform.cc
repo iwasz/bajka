@@ -10,8 +10,10 @@
 #include <cstdio>
 #include <SDL.h>
 #include <stdint.h>
+#include <Platform.h>
+#include <common/dataSource/DataSource.h>
 
-int log (const char *format, ...)
+int printlogImpl (const char *format, ...)
 {
         va_list args;
         va_start (args, format);
@@ -30,4 +32,26 @@ uint32_t getCurrentMs ()
 void delayMs (uint32_t ms)
 {
         SDL_Delay (ms);
+}
+
+/****************************************************************************/
+
+Common::DataSource *newDataSource ()
+{
+        return new Common::DataSource ();
+}
+
+/****************************************************************************/
+
+void deleteDataSource (Common::DataSource *ds)
+{
+        delete ds;
+}
+
+/****************************************************************************/
+
+void quit ()
+{
+        printlog ("Quit request by user");
+        exit (0);
 }

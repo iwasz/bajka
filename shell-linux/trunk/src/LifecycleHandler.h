@@ -102,7 +102,7 @@ public:
         /**
          * Klawiatura, mysz, dotyk, sensory.
          */
-        bool onInputEvent (ShellContext *ctx, AInputEvent *event);
+        bool onInputEvent (ShellContext *ctx, void *systemEvent);
 
 private:
 

@@ -18,7 +18,6 @@
 #include <util/ShellConfig.h>
 #include "tween/Manager.h"
 #include "sound/Device.h"
-#include <android_native_app_glue.h>
 #include <view/openGl/GLContext.h>
 
 using Reflection::Manager;
@@ -37,7 +36,7 @@ LifecycleHandler::~LifecycleHandler ()
 void LifecycleHandler::onFirstTimeReadyForRender (ShellContext *ctx)
 {
         printlog ("LifecycleHandler::onFirstTimeReadyForRender");
-        graphicsService->initDisplay ();
+        graphicsService->initDisplay (ctx->config);
         Core::VariantMap singletons = prepareSingletonMap (ctx);
         ctx->config = bajkaService->loadAndOverrideConfig (*ctx->shellConfig, singletons);
         graphicsService->saveScreenDimensionsInConfig (ctx->config);
@@ -51,7 +50,7 @@ void LifecycleHandler::onFirstTimeReadyForRender (ShellContext *ctx)
 void LifecycleHandler::onGainedFocus (ShellContext *ctx, bool firstTime)
 {
         printlog ("LifecycleHandler::onGainedFocus");
-        graphicsService->initDisplay ();
+        graphicsService->initDisplay (ctx->config);
 
         if (ctx->config) {
                 graphicsService->saveScreenDimensionsInConfig (ctx->config);
@@ -157,12 +156,13 @@ void LifecycleHandler::onStep (ShellContext *ctx, bool autoPause, uint32_t delta
 
 /****************************************************************************/
 
-bool LifecycleHandler::onInputEvent (ShellContext *ctx, AInputEvent *event)
+bool LifecycleHandler::onInputEvent (ShellContext *ctx, void *systemEvent)
 {
 #if 0
         printlog ("LifecycleHandler::onInputEvent");
 #endif
-        return eventDispatcher.process (event, scene->getModel (), *scene->getEventIndex (), scene->getPointerInsideIndex (), ctx->glContext);
+
+        return eventDispatcher.process (systemEvent, scene->getModel (), *scene->getEventIndex (), scene->getPointerInsideIndex (), ctx->glContext);
 }
 
 /****************************************************************************/
@@ -173,7 +173,7 @@ Core::VariantMap LifecycleHandler::prepareSingletonMap (ShellContext *ctx)
         ret["graphicsService"] = Core::Variant (graphicsService);
         ret["scene"] = Core::Variant (scene);
         ret["eventDispatcher"] = Core::Variant (&eventDispatcher);
-        ret["androidApp"] = Core::Variant (ctx->app);
+//        ret["androidApp"] = Core::Variant (ctx->app);
         ret["glContext"] = Core::Variant (ctx->glContext);
         return ret;
 }
