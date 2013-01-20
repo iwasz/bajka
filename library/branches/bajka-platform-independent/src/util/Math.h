@@ -8,20 +8,18 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef MATH_H_
-#define MATH_H_
+#ifndef BAJKA_UTIL_MATH_H_
+#define BAJKA_UTIL_MATH_H_
 
 namespace Util {
 
-struct Math {
-
-        /**
-         * Returns next power of two equal or greater than i.
-         */
-        static unsigned int nextSqr (unsigned int i);
-        static int randInt (int from, int to);
-        static double randDouble (double from, double to);
-};
+/**
+ * Returns next power of two equal or greater than i.
+ */
+extern unsigned int nextSqr (unsigned int i);
+extern int randInt (int from, int to);
+extern double randDouble (double from, double to);
+extern int numberOfSetBits (int i);
 
 }
 

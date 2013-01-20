@@ -99,8 +99,8 @@ void jpegLoad (Common::DataSource *source,
          */
 
         if (expandDimensions2) {
-                *widthOut = Util::Math::nextSqr (cinfo.output_width);
-                *heightOut = Util::Math::nextSqr (cinfo.output_height);
+                *widthOut = Util::nextSqr (cinfo.output_width);
+                *heightOut = Util::nextSqr (cinfo.output_height);
         }
         else {
                 *widthOut = cinfo.output_width;
