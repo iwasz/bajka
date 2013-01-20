@@ -15,8 +15,8 @@
 #include <events/types/IEvent.h>
 #include <model/IGroup.h>
 #include <Platform.h>
-#include <util/IShell.h>
 #include <util/Config.h>
+#include <util/Math.h>
 #include <view/openGl/GLContext.h>
 
 namespace M = Model;
@@ -27,17 +27,39 @@ using namespace Event;
 
 /****************************************************************************/
 
-bool EventDispatcher::pollAndDispatch (Model::IModel *m, Event::EventIndex const &modeliIndex, Event::PointerInsideIndex *pointerInsideIndex, View::GLContext const *ctx)
+bool EventDispatcher::process (void *systemEvent,
+                               Model::IModel *model,
+                               Event::EventIndex const &modeliIndex,
+                               Event::PointerInsideIndex *pointerInsideIndex,
+                               View::GLContext const *ctx)
 {
         SDL_Event event;
         bool ret = false;
 
         while (SDL_PollEvent (&event)) {
                 Event::IEvent *e = translate (&event, ctx);
-                ret |= dispatch (m, modeliIndex, pointerInsideIndex, e);
+                ret |= dispatch (model, modeliIndex, pointerInsideIndex, e);
         }
 
         return ret;
+}
+
+/****************************************************************************/
+
+void EventDispatcher::reset ()
+{
+        // Discard all pending events
+        SDL_Event event;
+
+        while (SDL_PollEvent (&event) > 0)
+                ;
+}
+
+/****************************************************************************/
+
+void EventDispatcher::init (void *userData)
+{
+
 }
 
 /****************************************************************************/
@@ -46,11 +68,13 @@ Event::IEvent *EventDispatcher::translate (SDL_Event *event, View::GLContext con
 {
         switch (event->type) {
         case SDL_MOUSEMOTION:
-                return updateMouseMotionEvent (event, ctx);
+                return updateMotionEvent (event, ctx);
 
         case SDL_MOUSEBUTTONDOWN:
+                return updateMouseButtonEvent (&motionDownEvent, event, ctx);
+
         case SDL_MOUSEBUTTONUP:
-                return updateMouseButtonEvent (event, ctx);
+                return updateMouseButtonEvent (&motionUpEvent, event, ctx);
 
         case SDL_KEYDOWN:
                 return updateKeyboardDownEvent (event);
@@ -61,14 +85,14 @@ Event::IEvent *EventDispatcher::translate (SDL_Event *event, View::GLContext con
         case SDL_QUIT:
                 return &quitEvent;
 
-        case SDL_ACTIVEEVENT:
-                return updateActiveEvent (event);
+//        case SDL_ACTIVEEVENT:
+//                return updateActiveEvent (event);
 
-        case SDL_VIDEORESIZE:
-                return updateResizeEvent (event);
+//        case SDL_VIDEORESIZE:
+//                return updateResizeEvent (event);
 
-        case SDL_VIDEOEXPOSE:
-                return &exposeEvent;
+//        case SDL_VIDEOEXPOSE:
+//                return &exposeEvent;
 
         default:
                 break;
@@ -97,103 +121,65 @@ KeyboardEvent *EventDispatcher::updateKeyboardDownEvent (SDL_Event *event)
 
 /****************************************************************************/
 
-MouseMotionEvent *EventDispatcher::updateMouseMotionEvent (SDL_Event *event, View::GLContext const *ctx)
+MotionEvent *EventDispatcher::updateMotionEvent (SDL_Event *event, View::GLContext const *ctx)
 {
-        mouseMotionEvent.setButtons ((unsigned int)event->motion.state);
+        motionMoveEvent.setSource (MOUSE);
+        motionMoveEvent.setButtons (event->motion.state);
+        int pcnt = Util::numberOfSetBits (event->motion.state);
+        motionMoveEvent.setPointerCount (pcnt);
 
-        G::Point p;
-        ctx->mouseToDisplay (event->button.x, event->button.y, &p.x, &p.y);
-        mouseMotionEvent.setPosition (p);
+        // output->setMetaState (); TODO
 
-#if 0
-        std::cerr << event->motion.xrel << ", " << event->motion.yrel << std::endl;
-#endif
+        for (int i = 0; i < pcnt; ++i) {
 
-        // ?
-        mouseMotionEvent.setMovement (G::makePoint (event->motion.xrel, event->motion.yrel));
+                MotionPointer &pointer = motionMoveEvent.getPointer (i);
+                G::Point &p = pointer.position;
+                ctx->mouseToDisplay (event->motion.x, event->motion.y, &p.x, &p.y);
 
-        return &mouseMotionEvent;
+                pointer.id = i;
+                pointer.movement.x = event->motion.xrel;
+                pointer.movement.y = event->motion.yrel;
+        }
+
+        return &motionMoveEvent;
 }
 
 /****************************************************************************/
 
-MouseButtonEvent *EventDispatcher::updateMouseButtonEvent (SDL_Event *event, View::GLContext const *ctx)
+MotionEvent *EventDispatcher::updateMouseButtonEvent (Event::MotionEvent *output, SDL_Event *event, View::GLContext const *ctx)
 {
-        return (event->button.type == SDL_MOUSEBUTTONDOWN) ?
-                        (updateMouseButtonEventImpl (&buttonPressEvent, event, ctx)) :
-                        (updateMouseButtonEventImpl (&buttonReleaseEvent, event, ctx));
-}
+        output->setSource (MOUSE);
+        output->setPointerCount (1);
 
-/*--------------------------------------------------------------------------*/
+        // output->setMetaState (); TODO
+        unsigned int pointerIndex = event->button.button - 1;
+        output->setButtons (1 << pointerIndex);
 
-MouseButtonEvent *EventDispatcher::updateMouseButtonEventImpl (MouseButtonEvent *output, SDL_Event *event, View::GLContext const *ctx)
-{
-        output->setButton (translateMouseButton (event));
-
-        G::Point p;
+        MotionPointer &pointer = output->getPointer (pointerIndex);
+        G::Point &p = pointer.position;
         ctx->mouseToDisplay (event->button.x, event->button.y, &p.x, &p.y);
-        output->setPosition (p);
+
+        pointer.id = pointerIndex;
+        pointer.movement.x = 0;
+        pointer.movement.y = 0;
         return output;
 }
 
-/*--------------------------------------------------------------------------*/
-
-MouseButton EventDispatcher::translateMouseButton (SDL_Event *event)
-{
-        switch (event->button.button) {
-        case SDL_BUTTON_MIDDLE:
-                return CENTER;
-
-        case SDL_BUTTON_RIGHT:
-                return RIGHT;
-
-        case 4:
-                return BUTTON4;
-
-        case 5:
-                return BUTTON5;
-
-        case 6:
-                return BUTTON6;
-
-        case 7:
-                return BUTTON7;
-
-        case 8:
-                return BUTTON8;
-
-        default:
-        case SDL_BUTTON_LEFT:
-                return LEFT;
-        }
-}
-
 /****************************************************************************/
 
-Event::ActiveEvent *EventDispatcher::updateActiveEvent (SDL_Event *event)
-{
-        activeEvent.setActive (event->active.gain);
-        activeEvent.setState (static_cast <ActiveState> (event->active.state));
-        return &activeEvent;
-}
-
-/****************************************************************************/
-
-Event::ResizeEvent *EventDispatcher::updateResizeEvent (SDL_Event *event)
-{
-        resizeEvent.setWidth (event->resize.w);
-        resizeEvent.setHeight (event->resize.h);
-        return &resizeEvent;
-}
-
-/****************************************************************************/
-
-void EventDispatcher::reset ()
-{
-        // Discard all pending events
-        SDL_Event event;
-
-        while (SDL_PollEvent (&event) > 0)
-                ;
-}
+//Event::ActiveEvent *EventDispatcher::updateActiveEvent (SDL_Event *event)
+//{
+//        activeEvent.setActive (event->active.gain);
+//        activeEvent.setState (static_cast <ActiveState> (event->active.state));
+//        return &activeEvent;
+//}
+//
+///****************************************************************************/
+//
+//Event::ResizeEvent *EventDispatcher::updateResizeEvent (SDL_Event *event)
+//{
+//        resizeEvent.setWidth (event->resize.w);
+//        resizeEvent.setHeight (event->resize.h);
+//        return &resizeEvent;
+//}
 
