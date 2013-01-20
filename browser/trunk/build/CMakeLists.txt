@@ -64,6 +64,9 @@ pkg_check_modules (BAJKA REQUIRED "bajka")
 INCLUDE_DIRECTORIES (${BAJKA_INCLUDE_DIRS})
 link_directories(${BAJKA_LIBRARY_DIRS})
 
+pkg_check_modules (SPARSE_HASH REQUIRED "libsparsehash")
+INCLUDE_DIRECTORIES (${SPARSE_HASH_INCLUDE_DIRS})
+
 if (NOT ANDROID)
     pkg_check_modules (SHELL REQUIRED "shell-linux")
 else ()
@@ -80,8 +83,11 @@ if (NOT ANDROID)
 endif ()
 
 # Sources
-AUX_SOURCE_DIRECTORY ("$ENV{NDK}/sources/android/native_app_glue" SOURCES)
-INCLUDE_DIRECTORIES ("$ENV{NDK}/sources/android/native_app_glue")
+if (ANDROID)
+    AUX_SOURCE_DIRECTORY ("$ENV{NDK}/sources/android/native_app_glue" SOURCES)
+    INCLUDE_DIRECTORIES ("$ENV{NDK}/sources/android/native_app_glue")
+endif()
+
 AUX_SOURCE_DIRECTORY (../src SOURCES)
 
 # Local includes (inside project).

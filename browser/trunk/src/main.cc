@@ -21,6 +21,8 @@
 #include "DebugButtonController.h"
 #include "ReloadableXmlModelManager.h"
 #include "SceneController.h"
+#include <ShellFactory.h>
+#include <GameLoop.h>
 
 #ifndef ANDROID
 namespace po = boost::program_options;
@@ -56,8 +58,7 @@ int main (int argc, char **argv)
         config.fullScreen = vm.count ("fullscreen");
         config.showAABB = vm.count ("showaabb");
 
-        Util::ShellConfig config;
-        std::auto_ptr <GameLoop> loop = ShellFactory::createGameLoop (&config, app);
+        std::auto_ptr <GameLoop> loop = ShellFactory::createGameLoop (&config);
         loop->loop ();
 }
 
