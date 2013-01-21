@@ -37,20 +37,20 @@ LifecycleHandler::~LifecycleHandler ()
 void LifecycleHandler::onFirstTimeReadyForRender (ShellContext *ctx)
 {
         printlog ("LifecycleHandler::onFirstTimeReadyForRender");
-        graphicsService->initDisplay (ctx->config);
-        printlog ("after initDisplay");
         Core::VariantMap singletons = prepareSingletonMap (ctx);
-        printlog ("after prepSingle");
+        printlog ("after prepareSingletonMap (ctx)");
         ctx->config = bajkaService->loadAndOverrideConfig (*ctx->shellConfig, singletons);
-        printlog ("after loadAndOverr");
+        printlog ("after bajkaService->loadAndOverrideConfig (*ctx->shellConfig, singletons)");
+        graphicsService->initDisplay (NULL);
+        printlog ("after graphicsService->initDisplay ()");
         graphicsService->saveScreenDimensionsInConfig (ctx->config);
-        printlog ("after saveScreenCon");
+        printlog ("after graphicsService->saveScreenDimensionsInConfig (ctx->config)");
         bajkaService->init (ctx->config);
-        printlog ("after bajkaServ.init");
+        printlog ("after bajkaService->init (ctx->config);");
         bajkaService->initProjectionMatrix (ctx->config);
-        printlog ("after initproj");
+        printlog ("after bajkaService->initProjectionMatrix (ctx->config)");
         scene = bajkaService->loadScene (ctx->shellConfig->definitionFile);
-        printlog ("after loadSce");
+        printlog ("after bajkaService->loadScene (ctx->shellConfig->definitionFile)");
 }
 
 /****************************************************************************/
@@ -180,7 +180,7 @@ Core::VariantMap LifecycleHandler::prepareSingletonMap (ShellContext *ctx)
         ret["graphicsService"] = Core::Variant (graphicsService);
         ret["scene"] = Core::Variant (scene);
         ret["eventDispatcher"] = Core::Variant (&eventDispatcher);
-        ret["androidApp"] = Core::Variant (ctx->app);
+//        ret["androidApp"] = Core::Variant (ctx->app);
         ret["glContext"] = Core::Variant (ctx->glContext);
         return ret;
 }
