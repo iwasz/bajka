@@ -9,11 +9,11 @@
 #ifndef ABSTRACTEVENTDISPATCHER_H_
 #define ABSTRACTEVENTDISPATCHER_H_
 
-#include "IEventDispather.h"
+#include "IEventDispatcher.h"
 
 namespace Event {
 
-class AbstractEventDispatcher : public IEventDispather {
+class AbstractEventDispatcher : public IEventDispatcher {
 public:
 
         virtual ~AbstractEventDispatcher () {}
