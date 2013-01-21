@@ -6,8 +6,8 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef EVENTDISPATCHER_H_
-#define EVENTDISPATCHER_H_
+#ifndef SHELL_EVENTDISPATCHER_H_
+#define SHELL_EVENTDISPATCHER_H_
 
 #include <android/input.h>
 #include <android/sensor.h>
