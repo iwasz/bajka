@@ -9,7 +9,7 @@
 #include <cstddef>
 #include "ShellContext.h"
 
-ShellContext::ShellContext () : shellConfig (NULL), config (NULL), app (NULL), glContext (NULL)
+ShellContext::ShellContext () : shellConfig (NULL), config (NULL), /*app (NULL),*/ glContext (NULL)
 {
 
 }

@@ -19,9 +19,10 @@
 
 /****************************************************************************/
 
-GameLoop::GameLoop (ShellContext *c, LifecycleHandler *h) :
+GameLoop::GameLoop (ShellContext *c, LifecycleHandler *h, android_app *a) :
         context (c),
         lifecycleHandler (h),
+        app (a),
         autoPause (false),
         suspended (false),
         firstInitWindow (true),
@@ -43,9 +44,9 @@ GameLoop::~GameLoop ()
 
 void GameLoop::init ()
 {
-        context->app->userData = this;
-        context->app->onAppCmd = handleCmd;
-        context->app->onInputEvent = handleInput;
+        app->userData = this;
+        app->onAppCmd = handleCmd;
+        app->onInputEvent = handleInput;
 }
 
 /****************************************************************************/
@@ -68,7 +69,7 @@ void GameLoop::loop ()
                         while ((ident = ALooper_pollAll ((suspended) ? (-1) : (0), NULL, &events, (void**)&source)) >= 0) {
 
                             if (source != NULL) {
-                                source->process (context->app, source);
+                                source->process (app, source);
                             }
 
                 //            if (ident == LOOPER_ID_USER) {
@@ -80,7 +81,7 @@ void GameLoop::loop ()
                 //                }
                 //            }
 
-                            if (context->app->destroyRequested != 0) {
+                            if (app->destroyRequested != 0) {
                                 // TODO
                                 return;
                             }

@@ -30,7 +30,7 @@ std::auto_ptr <GameLoop> ShellFactory::createGameLoop (Util::ShellConfig *sConfi
         handler->graphicsService = createGraphicsService (app);
         handler->bajkaService = createBajkaService ();
         ctx->glContext = handler->bajkaService->getGLContext ();
-        std::auto_ptr <GameLoop> loop = std::auto_ptr <GameLoop> (new GameLoop (ctx, handler));
+        std::auto_ptr <GameLoop> loop = std::auto_ptr <GameLoop> (new GameLoop (ctx, handler, app));
         loop->init ();
         return loop;
 }
@@ -40,7 +40,7 @@ std::auto_ptr <GameLoop> ShellFactory::createGameLoop (Util::ShellConfig *sConfi
 ShellContext *ShellFactory::createShellContext (Util::ShellConfig *sConfig, android_app *app)
 {
         ShellContext *ctx = new ShellContext;
-        ctx->app = app;
+//        ctx->app = app;
         ctx->shellConfig = sConfig;
         return ctx;
 }
