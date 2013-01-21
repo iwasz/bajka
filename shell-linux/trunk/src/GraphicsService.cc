@@ -26,6 +26,12 @@ GraphicsService::GraphicsService ()
 
 bool GraphicsService::initDisplay (Util::Config *config)
 {
+        Uint32 subsystemInit = SDL_WasInit (SDL_INIT_EVERYTHING);
+
+        if (subsystemInit & SDL_INIT_VIDEO) {
+                return true;
+        }
+
         /* Initialize SDL for video output */
         if (SDL_Init (SDL_INIT_VIDEO) < 0) {
                 throw U::InitException ("Unable to initialize SDL : " + std::string (SDL_GetError ()));

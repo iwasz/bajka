@@ -17,10 +17,14 @@ int printlogImpl (const char *format, ...)
 {
         va_list args;
         va_start (args, format);
-        int ret = vprintf (format, args);
+        std::string fmt = format;
+        fmt += "\n";
+        int ret = vprintf (fmt.c_str (), args);
         va_end (args);
         return ret;
 }
+
+/****************************************************************************/
 
 uint32_t getCurrentMs ()
 {
