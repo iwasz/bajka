@@ -11,15 +11,15 @@
 #include <android_native_app_glue.h>
 #include <Platform.h>
 #include "GameLoop.h"
-#include "ShellContext.h"
-#include "LifecycleHandler.h"
+#include <util/ShellContext.h>
+#include <util/LifecycleHandler.h>
 #include <core/Exception.h>
 #include <exception>
 #include <cstdlib>
 
 /****************************************************************************/
 
-GameLoop::GameLoop (ShellContext *c, LifecycleHandler *h, android_app *a) :
+GameLoop::GameLoop (Util::ShellContext *c, Util::LifecycleHandler *h, android_app *a) :
         context (c),
         lifecycleHandler (h),
         app (a),

@@ -10,20 +10,22 @@
 #define SHELLFACTORY_H_
 
 #include <memory>
+#include <core/Typedefs.h>
 
 class GameLoop;
-class ShellContext;
 struct android_app;
-class LifecycleHandler;
 class GraphicsService;
+class EventDispatcher;
 
 namespace Sound {
 class IDevice;
 }
 
 namespace Util {
+class LifecycleHandler;
 class ShellConfig;
 class BajkaService;
+class ShellContext;
 }
 
 /**
@@ -37,10 +39,15 @@ public:
 private:
 
         /// Usunać za pomocą delete
-        static ShellContext *createShellContext (Util::ShellConfig *sConfig, android_app *app);
-        static LifecycleHandler *createLifecycleHandler ();
+        static Util::ShellContext *createShellContext (Util::ShellConfig *sConfig, android_app *app);
+        static Util::LifecycleHandler *createLifecycleHandler ();
         static GraphicsService *createGraphicsService (android_app *app);
         static Util::BajkaService *createBajkaService ();
+        static EventDispatcher *createEventDispatcher ();
+
+private:
+
+        static Core::VariantMap singletons;
 
 };
 

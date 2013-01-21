@@ -11,10 +11,13 @@
 
 #include <stdint.h>
 
+namespace Util {
 class ShellContext;
+class LifecycleHandler;
+}
+
 struct android_app;
 struct AInputEvent;
-class LifecycleHandler;
 class ShellFactory;
 struct android_app;
 
@@ -32,7 +35,7 @@ public:
 private:
 
         friend class ShellFactory;
-        GameLoop (ShellContext *c, LifecycleHandler *h, android_app *a);
+        GameLoop (Util::ShellContext *c, Util::LifecycleHandler *h, android_app *a);
 
         static void handleCmd (android_app *app, int32_t cmd);
         void handleCmd (int32_t cmd);
@@ -41,8 +44,8 @@ private:
 
 private:
 
-        ShellContext *context;
-        LifecycleHandler *lifecycleHandler;
+        Util::ShellContext *context;
+        Util::LifecycleHandler *lifecycleHandler;
         android_app *app;
         bool autoPause;
         bool suspended;

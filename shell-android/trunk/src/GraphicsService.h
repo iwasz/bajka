@@ -10,6 +10,7 @@
 #define GRAPHICSSERVICE_H_
 
 #include <EGL/egl.h>
+#include <util/IGraphicsService.h>
 
 struct android_app;
 class ShellFactory;
@@ -21,8 +22,10 @@ class Config;
 /**
  *
  */
-class GraphicsService {
+class GraphicsService : public Util::IGraphicsService {
 public:
+
+        virtual ~GraphicsService () {}
 
         /**
          * Metoda inicjująca EGL, którą można wywoływac wiele razy na róznych etapach
