@@ -27,9 +27,9 @@ class EventIndex;
  * - Konwertuje eventy z systemu na eventy bajki.
  * - Rozsyła te eventy do zainteresowanych kontrolerów.
  */
-class IEventDispather {
+class IEventDispatcher {
 public:
-        virtual ~IEventDispather () {}
+        virtual ~IEventDispatcher () {}
 
         /**
          * @param systemEvent Event z systemu, czyli na przykład z SDL, czy AInputEvent z androida.
