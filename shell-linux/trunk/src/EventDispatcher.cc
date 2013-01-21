@@ -33,14 +33,10 @@ bool EventDispatcher::process (void *systemEvent,
                                Event::PointerInsideIndex *pointerInsideIndex,
                                View::GLContext const *ctx)
 {
-        SDL_Event event;
+        SDL_Event *event = static_cast <SDL_Event *> (systemEvent);
         bool ret = false;
-
-        while (SDL_PollEvent (&event)) {
-                Event::IEvent *e = translate (&event, ctx);
-                ret |= dispatch (model, modeliIndex, pointerInsideIndex, e);
-        }
-
+        Event::IEvent *e = translate (event, ctx);
+        ret |= dispatch (model, modeliIndex, pointerInsideIndex, e);
         return ret;
 }
 
@@ -48,11 +44,11 @@ bool EventDispatcher::process (void *systemEvent,
 
 void EventDispatcher::reset ()
 {
-        // Discard all pending events
-        SDL_Event event;
-
-        while (SDL_PollEvent (&event) > 0)
-                ;
+//        // Discard all pending events
+//        SDL_Event event;
+//
+//        while (SDL_PollEvent (&event) > 0)
+//                ;
 }
 
 /****************************************************************************/

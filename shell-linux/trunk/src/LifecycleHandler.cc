@@ -36,9 +36,9 @@ LifecycleHandler::~LifecycleHandler ()
 void LifecycleHandler::onFirstTimeReadyForRender (ShellContext *ctx)
 {
         printlog ("LifecycleHandler::onFirstTimeReadyForRender");
-        graphicsService->initDisplay (ctx->config);
         Core::VariantMap singletons = prepareSingletonMap (ctx);
         ctx->config = bajkaService->loadAndOverrideConfig (*ctx->shellConfig, singletons);
+        graphicsService->initDisplay (ctx->config);
         graphicsService->saveScreenDimensionsInConfig (ctx->config);
         bajkaService->init (ctx->config);
         bajkaService->initProjectionMatrix (ctx->config);

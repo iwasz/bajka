@@ -33,11 +33,6 @@ private:
         friend class ShellFactory;
         GameLoop (ShellContext *c, LifecycleHandler *h);
 
-        static void handleCmd (android_app *app, int32_t cmd);
-        void handleCmd (int32_t cmd);
-        static int32_t handleInput (android_app *app, AInputEvent *event);
-        int32_t handleInput (AInputEvent *event);
-
 private:
 
         ShellContext *context;
