@@ -38,7 +38,7 @@ void LifecycleHandler::onFirstTimeReadyForRender (Util::ShellContext *ctx)
         printlog ("LifecycleHandler::onFirstTimeReadyForRender");
         ctx->config = bajkaService->loadAndOverrideConfig (*ctx->shellConfig, *singletons);
         printlog ("after bajkaService->loadAndOverrideConfig (*ctx->shellConfig, singletons)");
-        graphicsService->initDisplay (NULL);
+        graphicsService->initDisplay (ctx->config);
         printlog ("after graphicsService->initDisplay ()");
         graphicsService->saveScreenDimensionsInConfig (ctx->config);
         printlog ("after graphicsService->saveScreenDimensionsInConfig (ctx->config)");
