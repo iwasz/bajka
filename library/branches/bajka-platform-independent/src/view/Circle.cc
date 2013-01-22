@@ -27,6 +27,7 @@ Circle::~Circle ()
 /****************************************************************************/
 
 static const GLfloat circleVAR[] = {
+         0.0f,     0.0f,    0.0f, 1.0f,
          0.0000f,  1.0000f, 0.0f, 1.0f,
          0.2588f,  0.9659f, 0.0f, 1.0f,
          0.5000f,  0.8660f, 0.0f, 1.0f,
@@ -51,8 +52,7 @@ static const GLfloat circleVAR[] = {
         -0.7071f,  0.7071f, 0.0f, 1.0f,
         -0.5000f,  0.8660f, 0.0f, 1.0f,
         -0.2588f,  0.9659f, 0.0f, 1.0f,
-         0.0000f,  1.0000f, 0.0f, 1.0f,
-         0.0f,     0.0f,    0.0f, 1.0f  // For an extra line to see the rotation.
+         0.0000f,  1.0000f, 0.0f, 1.0f
 };
 
 static const int circleVAR_indices = sizeof (circleVAR) / (sizeof (GLfloat) * 4);
@@ -62,7 +62,6 @@ static const int circleVAR_indices = sizeof (circleVAR) / (sizeof (GLfloat) * 4)
 void Circle::update (Model::IModel *model, Event::UpdateEvent *, View::GLContext *ctx)
 {
         glLineWidth (getThickness ());
-
         glBindBuffer (GL_ARRAY_BUFFER, buffer);
         glBufferData (GL_ARRAY_BUFFER, sizeof (circleVAR), circleVAR, GL_STATIC_DRAW);
 

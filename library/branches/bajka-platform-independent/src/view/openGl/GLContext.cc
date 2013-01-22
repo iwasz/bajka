@@ -61,7 +61,13 @@ void GLContext::init (Util::Config *config)
         texCoordInAttribLocation = glGetAttribLocation (currentProgramObject, "texCoordIn");
 
         // Initialize GL state.
-        glEnable(GL_CULL_FACE);
+        /*
+         * In a scene composed entirely of opaque closed surfaces, back-facing polygons are never visible.
+         * Eliminating these invisible polygons has the obvious benefit of speeding up the rendering of the
+         * image. To enable and disable elimination of back-facing polygons, call glEnable and glDisable with
+         * argument GL_CULL_FACE.
+         */
+        glDisable (GL_CULL_FACE);
         glDisable(GL_DEPTH_TEST);
         glEnable (GL_TEXTURE_2D);
         glEnable (GL_BLEND);

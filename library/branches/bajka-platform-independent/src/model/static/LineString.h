@@ -15,6 +15,9 @@
 
 namespace Model {
 
+/**
+ *  A linestring (named so by OGC) is a collection (default a vector) of points.
+ */
 class LineString : public AbstractModel, public IVertexBufferEnabled {
 public:
 
