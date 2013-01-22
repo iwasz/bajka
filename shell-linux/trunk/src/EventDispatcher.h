@@ -48,9 +48,6 @@ private:
         Event::KeyboardEvent *updateKeyboardDownEvent (SDL_Event *event);
         Event::MotionEvent *updateMotionEvent (SDL_Event *event, View::GLContext const *ctx);
         Event::MotionEvent *updateMouseButtonEvent (Event::MotionEvent *output, SDL_Event *event, View::GLContext const *ctx);
-//        Event::MouseButtonEvent *updateMouseButtonEventImpl (Event::MouseButtonEvent *output, SDL_Event *event, View::GLContext const *ctx);
-//        Event::ActiveEvent *updateActiveEvent (SDL_Event *event);
-//        Event::ResizeEvent *updateResizeEvent (SDL_Event *event);
 
 private:
 
@@ -61,9 +58,6 @@ private:
         Event::KeyUpEvent keyUpEvent;
         Event::KeyDownEvent keyDownEvent;
         Event::QuitEvent quitEvent;
-//        Event::ResizeEvent resizeEvent;
-//        Event::ActiveEvent activeEvent;
-//        Event::ExposeEvent exposeEvent;
 };
 
 #endif /* EVENTDISPATCHER_H_ */
