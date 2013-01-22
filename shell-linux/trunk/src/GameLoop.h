@@ -11,11 +11,14 @@
 
 #include <stdint.h>
 
-class ShellContext;
 struct android_app;
 struct AInputEvent;
-class LifecycleHandler;
 class ShellFactory;
+
+namespace Util {
+class ShellContext;
+class LifecycleHandler;
+}
 
 /**
  *
@@ -31,15 +34,14 @@ public:
 private:
 
         friend class ShellFactory;
-        GameLoop (ShellContext *c, LifecycleHandler *h);
+        GameLoop (Util::ShellContext *c, Util::LifecycleHandler *h);
 
 private:
 
-        ShellContext *context;
-        LifecycleHandler *lifecycleHandler;
+        Util::ShellContext *context;
+        Util::LifecycleHandler *lifecycleHandler;
         bool autoPause;
         bool suspended;
-//        bool firstInitWindow;
         bool firstGainedFocus;
         bool savedStatePending;
         bool rendering; // rendering i suspended są osobno, bo w czasie inicjowania mają odwrotne wartości.

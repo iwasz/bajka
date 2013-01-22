@@ -9,6 +9,8 @@
 #ifndef GRAPHICSSERVICE_H_
 #define GRAPHICSSERVICE_H_
 
+#include <util/IGraphicsService.h>
+
 class ShellFactory;
 
 namespace Util {
@@ -18,7 +20,7 @@ class Config;
 /**
  *
  */
-class GraphicsService {
+class GraphicsService : public Util::IGraphicsService {
 public:
 
         /**

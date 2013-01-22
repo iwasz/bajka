@@ -18,6 +18,7 @@
 #include <util/Config.h>
 #include <util/Math.h>
 #include <view/openGl/GLContext.h>
+#include <SDL.h>
 
 namespace M = Model;
 namespace V = View;
@@ -81,15 +82,6 @@ Event::IEvent *EventDispatcher::translate (SDL_Event *event, View::GLContext con
         case SDL_QUIT:
                 return &quitEvent;
 
-//        case SDL_ACTIVEEVENT:
-//                return updateActiveEvent (event);
-
-//        case SDL_VIDEORESIZE:
-//                return updateResizeEvent (event);
-
-//        case SDL_VIDEOEXPOSE:
-//                return &exposeEvent;
-
         default:
                 break;
         }
@@ -121,21 +113,21 @@ MotionEvent *EventDispatcher::updateMotionEvent (SDL_Event *event, View::GLConte
 {
         motionMoveEvent.setSource (MOUSE);
         motionMoveEvent.setButtons (event->motion.state);
-        int pcnt = Util::numberOfSetBits (event->motion.state);
-        motionMoveEvent.setPointerCount (pcnt);
+//        int pcnt = std::max (Util::numberOfSetBits (event->motion.state), 1);
+//        motionMoveEvent.setPointerCount (pcnt);
+        motionMoveEvent.setPointerCount (1);
 
-        // output->setMetaState (); TODO
+//        // output->setMetaState (); TODO
+//        for (int i = 0; i < pcnt; ++i) {
 
-        for (int i = 0; i < pcnt; ++i) {
-
-                MotionPointer &pointer = motionMoveEvent.getPointer (i);
+                MotionPointer &pointer = motionMoveEvent.getPointer (0);
                 G::Point &p = pointer.position;
                 ctx->mouseToDisplay (event->motion.x, event->motion.y, &p.x, &p.y);
 
-                pointer.id = i;
+                pointer.id = 0;
                 pointer.movement.x = event->motion.xrel;
                 pointer.movement.y = event->motion.yrel;
-        }
+//        }
 
         return &motionMoveEvent;
 }
@@ -161,21 +153,4 @@ MotionEvent *EventDispatcher::updateMouseButtonEvent (Event::MotionEvent *output
         return output;
 }
 
-/****************************************************************************/
-
-//Event::ActiveEvent *EventDispatcher::updateActiveEvent (SDL_Event *event)
-//{
-//        activeEvent.setActive (event->active.gain);
-//        activeEvent.setState (static_cast <ActiveState> (event->active.state));
-//        return &activeEvent;
-//}
-//
-///****************************************************************************/
-//
-//Event::ResizeEvent *EventDispatcher::updateResizeEvent (SDL_Event *event)
-//{
-//        resizeEvent.setWidth (event->resize.w);
-//        resizeEvent.setHeight (event->resize.h);
-//        return &resizeEvent;
-//}
 

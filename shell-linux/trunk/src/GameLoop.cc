@@ -8,15 +8,16 @@
 
 #include <Platform.h>
 #include "GameLoop.h"
-#include "ShellContext.h"
-#include "LifecycleHandler.h"
+#include <util/ShellContext.h>
+#include <util/LifecycleHandler.h>
 #include <core/Exception.h>
 #include <exception>
 #include <cstdlib>
+#include <SDL.h>
 
 /****************************************************************************/
 
-GameLoop::GameLoop (ShellContext *c, LifecycleHandler *h) :
+GameLoop::GameLoop (Util::ShellContext *c, Util::LifecycleHandler *h) :
         context (c),
         lifecycleHandler (h),
         autoPause (false),
@@ -52,6 +53,10 @@ void GameLoop::loop ()
                 uint32_t deltaMs = 0;
 
                 while (true) {
+
+                        if (rendering) {
+                                lifecycleHandler->onStep (context, autoPause, deltaMs);
+                        }
 
                         // Tu eventy pobierz
                         SDL_Event event;
@@ -92,10 +97,6 @@ void GameLoop::loop ()
                                                 break;
                                         }
                                 }
-                        }
-
-                        if (rendering) {
-                                lifecycleHandler->onStep (context, autoPause, deltaMs);
                         }
                 }
         }
