@@ -38,10 +38,10 @@ void Rectangle::update (Model::IModel *model, Event::UpdateEvent *, View::GLCont
         Geometry::Box const &b = cB->getBox ();
 
         GLfloat verts[] = {
-                b.ll.x, b.ll.y, 0.0, 1.0,
-                b.ll.x, b.ur.y, 0.0, 1.0,
+                b.ur.x, b.ll.y, 0.0, 1.0,
                 b.ur.x, b.ur.y, 0.0, 1.0,
-                b.ur.x, b.ll.y, 0.0, 1.0
+                b.ll.x, b.ur.y, 0.0, 1.0,
+                b.ll.x, b.ll.y, 0.0, 1.0
         };
 
         glLineWidth (getThickness ());
@@ -55,7 +55,6 @@ void Rectangle::update (Model::IModel *model, Event::UpdateEvent *, View::GLCont
         Color const &bg = getBackground ();
         if (bg.a > 0) {
                 glUniform4f (ctx->colorUniformLocation, bg.r, bg.g, bg.b, bg.a);
-                // TODO Traingle fan zrobi 4 trójkąty. A kwadrat można narysować za pomocą 2.
                 glDrawArrays (GL_TRIANGLE_FAN, 0, 4);
         }
 

@@ -61,18 +61,18 @@ bool AbstractEventDispatcher::dispatch (Model::IModel *m, Event::EventIndex cons
                                         C::IController *ctr;
                                         if ((ctr = (*i)->getController ())) {
                                                 h = ctr->onMotionOut (mmev, *i, (*i)->getView ());
-
-                                                if (h != Event::IGNORE) {
-                                                        eventHandled = true;
-                                                }
-
-                                                if (h == Event::BREAK) {
-                                                        break;
-                                                }
                                         }
 
                                         pointerInsideIndex->remove (*i);
                                         i = j;
+
+                                        if (h != Event::IGNORE) {
+                                                eventHandled = true;
+                                        }
+
+                                        if (h == Event::BREAK) {
+                                                break;
+                                        }
                                 }
                                 else {
                                         ++i;
@@ -85,6 +85,9 @@ bool AbstractEventDispatcher::dispatch (Model::IModel *m, Event::EventIndex cons
                                 M::IModel *model = m->findContains (mev->getPointer (i).position);
 
                                 if (model) {
+#if 0
+                                        printlog ("m=%p, model=%p", m, model);
+#endif
                                         eventHandled |= dispatchEventBackwards (model, mev, pointerInsideIndex);
                                 }
                         }
