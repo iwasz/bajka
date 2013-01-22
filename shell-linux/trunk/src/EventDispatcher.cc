@@ -143,11 +143,12 @@ MotionEvent *EventDispatcher::updateMouseButtonEvent (Event::MotionEvent *output
         unsigned int pointerIndex = event->button.button - 1;
         output->setButtons (1 << pointerIndex);
 
-        MotionPointer &pointer = output->getPointer (pointerIndex);
+//        MotionPointer &pointer = output->getPointer (pointerIndex);
+        MotionPointer &pointer = output->getPointer (0);
         G::Point &p = pointer.position;
         ctx->mouseToDisplay (event->button.x, event->button.y, &p.x, &p.y);
 
-        pointer.id = pointerIndex;
+        pointer.id = 0;
         pointer.movement.x = 0;
         pointer.movement.y = 0;
         return output;
