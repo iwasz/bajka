@@ -200,8 +200,10 @@ void GraphicsService::unbindSurfaceAndContext ()
          * must stop rendering.
          *
          */
-        if (eglMakeCurrent (display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT) == EGL_FALSE) {
-                throw U::InitException ("eglMakeCurrent failed");
+        if (this->display != EGL_NO_DISPLAY) {
+                if (eglMakeCurrent (display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT) == EGL_FALSE) {
+                        throw U::InitException ("eglMakeCurrent failed");
+                }
         }
 
         if (surface != EGL_NO_SURFACE) {
