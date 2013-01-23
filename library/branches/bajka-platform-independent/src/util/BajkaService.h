@@ -40,6 +40,7 @@ public:
          */
         Util::Scene *loadScene (std::string const &sceneFile);
         void init (Util::Config *config);
+        void initGLContext (Util::Config *config);
         void initProjectionMatrix (Util::Config *config);
         View::GLContext *getGLContext ();
 

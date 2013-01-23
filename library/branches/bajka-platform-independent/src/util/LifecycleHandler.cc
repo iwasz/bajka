@@ -43,8 +43,18 @@ void LifecycleHandler::onFirstTimeReadyForRender (Util::ShellContext *ctx)
         graphicsService->saveScreenDimensionsInConfig (ctx->config);
         printlog ("after graphicsService->saveScreenDimensionsInConfig (ctx->config)");
         bajkaService->init (ctx->config);
+        bajkaService->initGLContext (ctx->config);
         printlog ("after bajkaService->init (ctx->config);");
         bajkaService->initProjectionMatrix (ctx->config);
+
+        graphicsService->unbindSurfaceAndContext ();
+        graphicsService->termDisplay ();
+
+        graphicsService->initDisplay (ctx->config);
+        graphicsService->saveScreenDimensionsInConfig (ctx->config);
+        bajkaService->initGLContext (ctx->config);
+        bajkaService->initProjectionMatrix (ctx->config);
+
         printlog ("after bajkaService->initProjectionMatrix (ctx->config)");
         scene = bajkaService->loadScene (ctx->shellConfig->definitionFile);
         printlog ("after bajkaService->loadScene (ctx->shellConfig->definitionFile)");
@@ -59,6 +69,7 @@ void LifecycleHandler::onGainedFocus (Util::ShellContext *ctx, bool firstTime)
 
         if (ctx->config) {
                 graphicsService->saveScreenDimensionsInConfig (ctx->config);
+                bajkaService->initGLContext (ctx->config);
                 bajkaService->initProjectionMatrix (ctx->config);
         }
 
