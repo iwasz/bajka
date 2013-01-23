@@ -42,6 +42,7 @@ void main()
   gl_FragColor = color + texture2D (textureIn, texCoordOut);
 }
     </value>
+
   </Config>
   
 </beans>

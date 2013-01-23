@@ -4,4 +4,8 @@
   <animalScene id="scene" animal="pig.png" left="lamb.xml" right="rooster.xml" animalSound="@animalSource" translatePx="200, 30" width="800" height="336"/>
   <buffer id="animalBuffer" load="pig.raw" />
   <source id="animalSource" buffer="@animalBuffer" />
+<!--   <Group id="scene"> -->
+<!--     <ClearScreen set-as="view" color="5aa3fcff" /> -->
+<!--     <rect set-as="child" box="0, 0, 100, 100" th="3" fg="ff0000ff" /> -->
+<!--   </Group>   -->
 </beans>
