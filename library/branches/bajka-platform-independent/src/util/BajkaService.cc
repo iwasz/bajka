@@ -74,11 +74,8 @@ U::Config *BajkaService::loadConfig (std::string const &configFile, Core::Varian
         Common::DataSource *ds = newDataSource ();
 
         try {
-                printlog ("1");
                 Ptr <MetaContainer> metaContainer = CompactMetaService::parseFile (ds, configFile);
-                printlog ("2");
                 impl->configContainer = ContainerFactory::create (metaContainer, true);
-                printlog ("3");
 
                 impl->configContainer->addConversion (typeid (Geometry::Point), Geometry::stringToPointVariant);
                 impl->configContainer->addConversion (typeid (Geometry::Point3), Geometry::stringToPoint3Variant);
@@ -88,21 +85,14 @@ U::Config *BajkaService::loadConfig (std::string const &configFile, Core::Varian
                 impl->configContainer->addConversion (typeid (Model::HGravity), Model::stringToHGravity);
                 impl->configContainer->addConversion (typeid (Model::VGravity), Model::stringToVGravity);
                 impl->configContainer->addConversion (typeid (Model::LinearGroup::Type), Model::stringToLinearGroupType);
-                printlog ("4");
 
                 for (Core::VariantMap::const_iterator i = externalSingletons.begin (); i != externalSingletons.end (); ++i) {
                         impl->configContainer->addSingleton (i->first.c_str (), i->second);
                 }
-                printlog ("5");
 
                 ContainerFactory::init (impl->configContainer.get (), metaContainer.get ());
-                printlog ("6");
-
                 impl->config = vcast <U::Config *> (impl->configContainer->getBean ("config"));
-                printlog ("7");
-
                 config (impl->config);
-
                 printlog ("BajkaService::loadConfig : done.");
         }
         catch (std::exception const &e) {
