@@ -207,7 +207,7 @@ void GraphicsService::unbindSurfaceAndContext ()
         }
 
         if (surface != EGL_NO_SURFACE) {
-                if (eglDestroySurface (this->display, this->surface) == EGL_FALSE) {
+                if (eglDestroySurface (display, surface) == EGL_FALSE) {
                         throw U::InitException ("eglDestroySurface failed");
                 }
                 surface = EGL_NO_SURFACE;
@@ -255,5 +255,7 @@ bool GraphicsService::saveScreenDimensionsInConfig (Util::Config *config)
 
 void GraphicsService::swapBuffers ()
 {
+        glFlush ();
+        glFinish ();
         eglSwapBuffers (display, surface);
 }
