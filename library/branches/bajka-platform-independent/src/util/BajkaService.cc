@@ -156,7 +156,12 @@ void BajkaService::init (U::Config *config)
                 throw U::InitException ("TTF_Init failed");
         }
 #endif
+}
 
+/****************************************************************************/
+
+void BajkaService::initGLContext (Util::Config *config)
+{
         impl->glContext.init (config);
 }
 

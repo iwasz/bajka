@@ -20,20 +20,21 @@ using namespace Geometry;
 
 Rectangle::Rectangle ()
 {
-        glGenBuffers (1, &buffer);
+//        glGenBuffers (1, &buffer);
 }
 
 /****************************************************************************/
 
 Rectangle::~Rectangle ()
 {
-        glDeleteBuffers (1, &buffer);
+//        glDeleteBuffers (1, &buffer);
 }
 
 /****************************************************************************/
 
 void Rectangle::update (Model::IModel *model, Event::UpdateEvent *, View::GLContext *ctx)
 {
+        glGenBuffers (1, &buffer);
         Model::IBox *cB = dynamic_cast <Model::IBox *>  (model);
         Geometry::Box const &b = cB->getBox ();
 
@@ -65,6 +66,7 @@ void Rectangle::update (Model::IModel *model, Event::UpdateEvent *, View::GLCont
         }
 
         glDisableVertexAttribArray (ctx->positionAttribLocation);
+        glDeleteBuffers (1, &buffer);
 }
 
 } /* namespace View */
