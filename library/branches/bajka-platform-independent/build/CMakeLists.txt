@@ -145,6 +145,8 @@ AUX_SOURCE_DIRECTORY (../src/model/layout SOURCES)
 AUX_SOURCE_DIRECTORY (../src/model/manager SOURCES)
 
 AUX_SOURCE_DIRECTORY (../src/geometry SOURCES)
+AUX_SOURCE_DIRECTORY (../src/geometry/svg SOURCES)
+
 AUX_SOURCE_DIRECTORY (../src/util SOURCES)
 
 AUX_SOURCE_DIRECTORY (../src/controller SOURCES)
