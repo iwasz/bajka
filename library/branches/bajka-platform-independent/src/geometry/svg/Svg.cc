@@ -17,6 +17,9 @@
 #include "util/Exceptions.h"
 #include "geometry/Point.h"
 #include <vector>
+#include "geometry/LineString.h"
+#include "geometry/Ring.h"
+#include "geometry/Polygon.h"
 
 namespace Geometry {
 
@@ -25,7 +28,10 @@ namespace Geometry {
  */
 struct Impl {
 
-        Impl (Core::VariantMap *o/*, Core::IAllocator <char> *aloc*/) : output (o) {}
+        Impl (Core::VariantMap *o/*, Core::IAllocator <char> *aloc*/) :
+                output (o),
+                currentPathState (NONE),
+                currentPolygon (NULL) {}
 
         // Rozkmiń co to za tag
         void onOpenElement (mxml_node_t *node);
@@ -42,11 +48,13 @@ struct Impl {
 
         typedef std::vector <Geometry::Point> PointVector;
 
+private:
+
         /**
          * Parsuje path opisany w specyfikacji SVG. W wariancie jest wskaxnik, który trzeba usunąć
          * za pomocą delete (?będzie zależeć od alokatora?).
          */
-        static Core::Variant parseSvgPath (const char *path);
+        Core::Variant parseSvgPath (const char *path);
         static const char* getNextPathItem (const char* s, char* it);
         static int isnum (char c) { return strchr("0123456789+-.eE", c) != 0; }
         static int getArgsPerElement (char cmd);
@@ -67,7 +75,20 @@ struct Impl {
                                  float x3, float y3, float x4, float y4,
                                  int level);
 
+        static void quadBezRec (PointVector *p,
+                                float x1, float y1, float x2, float y2,
+                                float x3, float y3, int level);
+
+        static void quadBez (PointVector *p,
+                             float x1, float y1, float cx,
+                             float cy, float x2, float y2);
+
         static float distPtSeg(float x, float y, float px, float py, float qx, float qy);
+
+        void addToPolygon (PointVector *p);
+        Core::Variant commitPolygon (PointVector *p);
+        Core::Variant commitRing (PointVector *p);
+        Core::Variant commitLineString (PointVector *p);
 
 private:
 
@@ -75,6 +96,10 @@ private:
         std::string currentId;
         Core::Variant currentObject;
         static const float P_TOL;
+
+        enum PathState { NONE, LINE_STRING, RING, POLYGON };
+        PathState currentPathState;
+        Geometry::Polygon *currentPolygon;
 };
 
 /****************************************************************************/
@@ -215,15 +240,15 @@ void Impl::onCloseRect (mxml_node_t *node)
 
 Core::Variant Impl::parseSvgPath (const char *s)
 {
-        bool closedFlag = 0;
+//        bool closedFlag = 0;
         int nargs = 0;
         int rargs = 0;
         char item[64];
         char cmd;
         float args[10];
         float cpx, cpy, cpx2, cpy2;
-        // TODO to pewnei będzie inny typ>
         PointVector tmpBuf;
+        PathState state = NONE;
 
         while (*s) {
                 s = getNextPathItem (s, item);
@@ -287,37 +312,85 @@ Core::Variant Impl::parseSvgPath (const char *s)
 
                         if (cmd == 'M' || cmd == 'm') {
 
-                                // Commit path. Chyba start nowego path.
-                                if (p->nbuf) {
-                                        svgCreatePath (p, closedFlag);
+                                switch (state) {
+                                case NONE:
+                                        state = LINE_STRING;
+                                        break;
+
+                                case LINE_STRING:
+                                case RING:
+                                        state = POLYGON;
+                                        addToPolygon (&tmpBuf);
+                                        break;
+
+                                case POLYGON:
+                                        addToPolygon (&tmpBuf);
+                                        break;
+
+                                default:
+                                        break;
                                 }
 
-                                // Start new subpath.
-                                svgResetPath(p);
-                                closedFlag = 0;
+//                                // Commit path. Chyba start nowego path.
+//                                if (p->nbuf) {
+//                                        svgCreatePath (p, closedFlag);
+//                                }
+//
+//                                // Start new subpath.
+//                                svgResetPath(p);
+                                tmpBuf.clear ();
+//                                closedFlag = 0;
                                 nargs = 0;
                                 cpx = 0; cpy = 0;
                         }
                         else if (cmd == 'Z' || cmd == 'z') {
-                                closedFlag = 1;
 
-                                // Commit path.Koniec całego path
-                                if (p->nbuf) {
-                                        svgCreatePath(p, closedFlag);
+                                switch (state) {
+                                case LINE_STRING:
+                                        state = RING;
+                                        break;
+
+                                case POLYGON:
+                                        addToPolygon (&tmpBuf);
+                                        break;
+
+                                default: break;
                                 }
 
+//                                closedFlag = 1;
+
+//                                // Commit path.Koniec całego path
+//                                if (p->nbuf) {
+//                                        svgCreatePath(p, closedFlag);
+//                                }
+
                                 // Start new subpath.
-                                svgResetPath(p);
-                                closedFlag = 0;
+//                                svgResetPath(p);
+//                                closedFlag = 0;
                                 nargs = 0;
                         }
                 }
         }
 
         // Commit path.
-        if (p->nbuf)
-                svgCreatePath(p, closedFlag);
+        switch (state) {
+        case LINE_STRING:
+                return commitLineString (&tmpBuf);
+                break;
 
+        case RING:
+                return commitRing (&tmpBuf);
+                break;
+
+        case POLYGON:
+                return commitPolygon (&tmpBuf);
+                break;
+
+        default:
+                break;
+        }
+
+        throw Util::InitException("Impl::parseSvgPath : don't know how to parse path id : ." + currentId);
 }
 
 /****************************************************************************/
@@ -586,7 +659,45 @@ void Impl::cubicBez (PointVector *p,
 
 /****************************************************************************/
 
-float Impl::distPtSeg(float x, float y, float px, float py, float qx, float qy)
+void Impl::quadBezRec (PointVector *p,
+                       float x1, float y1, float x2, float y2,
+                       float x3, float y3, int level)
+{
+        float x12,y12,x23,y23,x123,y123,d;
+
+        if (level > 12) return;
+
+        x12 = (x1+x2)*0.5f;
+        y12 = (y1+y2)*0.5f;
+        x23 = (x2+x3)*0.5f;
+        y23 = (y2+y3)*0.5f;
+        x123 = (x12+x23)*0.5f;
+        y123 = (y12+y23)*0.5f;
+
+        d = distPtSeg(x123, y123, x1,y1, x3,y3);
+        if (level > 0 && d < P_TOL * P_TOL)
+        {
+                p->push_back (Geometry::makePoint (x123, y123));
+                return;
+        }
+
+        quadBezRec (p, x1,y1, x12,y12, x123,y123, level+1);
+        quadBezRec (p, x123,y123, x23,y23, x3,y3, level+1);
+}
+
+/****************************************************************************/
+
+void Impl::quadBez (PointVector *p,
+                    float x1, float y1, float cx,
+                    float cy, float x2, float y2)
+{
+        quadBezRec (p, x1,y1, cx,cy, x2,y2, 0);
+        p->push_back (Geometry::makePoint (x2, y2));
+}
+
+/****************************************************************************/
+
+float Impl::distPtSeg (float x, float y, float px, float py, float qx, float qy)
 {
         float pqx, pqy, dx, dy, d, t;
         pqx = qx-px;
@@ -601,6 +712,43 @@ float Impl::distPtSeg(float x, float y, float px, float py, float qx, float qy)
         dx = px + t*pqx - x;
         dy = py + t*pqy - y;
         return dx*dx + dy*dy;
+}
+
+/****************************************************************************/
+
+void Impl::addToPolygon (PointVector *p)
+{
+        if (p->empty ()) {
+                return;
+        }
+
+        if (!currentPolygon) {
+                currentPolygon = new Geometry::Polygon;
+        }
+}
+
+/****************************************************************************/
+
+Core::Variant Impl::commitPolygon (PointVector *p)
+{
+        addToPolygon (p);
+        Core::Variant v (currentPolygon);
+        currentPolygon = NULL;
+        return v;
+}
+
+/****************************************************************************/
+
+Core::Variant Impl::commitRing (PointVector *p)
+{
+        return  Core::Variant (new Geometry::Ring (p->begin (), p->end ()));
+}
+
+/****************************************************************************/
+
+Core::Variant Impl::commitLineString (PointVector *p)
+{
+        return Core::Variant (new Geometry::LineString (p->begin (), p->end ()));
 }
 
 /****************************************************************************/
