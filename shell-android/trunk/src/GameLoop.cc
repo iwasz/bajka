@@ -17,6 +17,9 @@
 #include <exception>
 #include <cstdlib>
 
+// Usunąć
+#include <EGL/egl.h>
+
 /****************************************************************************/
 
 GameLoop::GameLoop (Util::ShellContext *c, Util::LifecycleHandler *h, android_app *a) :

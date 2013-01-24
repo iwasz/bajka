@@ -255,7 +255,7 @@ bool GraphicsService::saveScreenDimensionsInConfig (Util::Config *config)
 
 void GraphicsService::swapBuffers ()
 {
-        glFlush ();
-        glFinish ();
+//        glFlush ();
+//        glFinish ();
         eglSwapBuffers (display, surface);
 }
