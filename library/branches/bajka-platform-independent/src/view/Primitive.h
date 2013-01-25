@@ -22,9 +22,8 @@ public:
         C__ (void)
         b_ ("Widget")
 
-        Primitive () : thickness (1), prettyJoin (false) {}
+        Primitive () : thickness (1) {}
         virtual ~Primitive () {}
-        virtual void update (Model::IModel *model, Event::UpdateEvent *e, View::GLContext *ctx);
 
         Color const &getBackground () const { return background; }
         m_ (setBackground) void setBackground (Color const &background) { this->background = background; }
@@ -38,15 +37,11 @@ public:
         float getThickness () const { return thickness; }
         m_ (setThickness) void setThickness (float t) { thickness = t; }
 
-        bool getPrettyJoin () const { return prettyJoin; }
-        m_ (setPrettyJoin) void setPrettyJoin (bool b) { prettyJoin = b; }
-
 private:
 
         Color foreground;
         Color background;
         float thickness;
-        bool prettyJoin;
 
         E_ (Primitive)
 };
