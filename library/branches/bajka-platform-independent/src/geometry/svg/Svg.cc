@@ -20,6 +20,9 @@
 #include "geometry/LineString.h"
 #include "geometry/Ring.h"
 #include "geometry/Polygon.h"
+#include <core/variant/Cast.h>
+#include <boost/geometry/io/dsv/write.hpp>
+#include <boost/geometry/geometry.hpp>
 
 namespace Geometry {
 
@@ -725,6 +728,17 @@ void Impl::addToPolygon (PointVector *p)
         if (!currentPolygon) {
                 currentPolygon = new Geometry::Polygon;
         }
+
+        if (currentPolygon->outer ().empty ()) {
+                currentPolygon->outer ().resize (p->size ());
+                std::copy (p->begin (), p->end (), currentPolygon->outer ().begin ());
+        }
+        else {
+                currentPolygon->inners ().push_back (Polygon::ring_type ());
+                Polygon::ring_type &last = currentPolygon->inners ().back ();
+                last.resize (p->size ());
+                std::copy (p->begin (), p->end (), last.begin ());
+        }
 }
 
 /****************************************************************************/
@@ -732,6 +746,7 @@ void Impl::addToPolygon (PointVector *p)
 Core::Variant Impl::commitPolygon (PointVector *p)
 {
         addToPolygon (p);
+        boost::geometry::correct (*currentPolygon);
         Core::Variant v (currentPolygon);
         currentPolygon = NULL;
         return v;
@@ -741,25 +756,42 @@ Core::Variant Impl::commitPolygon (PointVector *p)
 
 Core::Variant Impl::commitRing (PointVector *p)
 {
-        return  Core::Variant (new Geometry::Ring (p->begin (), p->end ()));
+        Geometry::Ring *ret = new Geometry::Ring (p->begin (), p->end ());
+        boost::geometry::correct (*ret);
+        return  Core::Variant (ret);
 }
 
 /****************************************************************************/
 
 Core::Variant Impl::commitLineString (PointVector *p)
 {
-        return Core::Variant (new Geometry::LineString (p->begin (), p->end ()));
+        Geometry::LineString *ret = new Geometry::LineString (p->begin (), p->end ());
+        boost::geometry::correct (*ret);
+        return Core::Variant (ret);
 }
 
 /****************************************************************************/
 
+#ifndef NDEBUG
 void Svg::test ()
 {
-        Core::VariantMap objects = parseFile ("test.svg");
+        Core::VariantMap objects = parseFile ("ape.svg");
 
         for (Core::VariantMap::const_iterator i = objects.begin (); i != objects.end (); ++i) {
                 std::string const &id = i->first;
-                std::cerr << "id=" << id << ", " << i->second << std::endl;
+
+                if (ccast <Geometry::LineString *> (i->second)) {
+                        Geometry::LineString *ls = vcast <Geometry::LineString *> (i->second);
+                        std::cerr << id << "=" << boost::geometry::dsv (*ls) << std::endl;
+                }
+                else if (ccast <Geometry::Ring *> (i->second)) {
+                        Geometry::Ring *ri = vcast <Geometry::Ring *> (i->second);
+                        std::cerr << id << "=" << boost::geometry::dsv (*ri) << std::endl;
+                }
+                else if (ccast <Geometry::Polygon *> (i->second)) {
+                        Geometry::Polygon *po = vcast <Geometry::Polygon *> (i->second);
+                        std::cerr << id << "=" << boost::geometry::dsv (*po) << std::endl;
+                }
         }
 
 #if 0
@@ -781,6 +813,7 @@ void Svg::test ()
         svgDelete(plist);
 #endif
 }
+#endif
 
 
 
