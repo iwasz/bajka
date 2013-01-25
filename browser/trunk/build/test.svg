@@ -13,7 +13,7 @@
    height="1052.3622047"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.2 r9819"
+   inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="test.svg">
   <defs
      id="defs4" />
@@ -24,15 +24,15 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="102.59122"
-     inkscape:cy="518.03932"
+     inkscape:zoom="1.4"
+     inkscape:cx="337.96032"
+     inkscape:cy="575.70621"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1056"
-     inkscape:window-x="0"
+     inkscape:window-width="1280"
+     inkscape:window-height="1000"
+     inkscape:window-x="1920"
      inkscape:window-y="24"
      inkscape:window-maximized="1" />
   <metadata
@@ -56,5 +56,14 @@
        d="m 127.14286,826.6479 c 0,0 -98.57143,-167.14286 -42.85715,-138.57143 C 140,716.6479 180,795.21933 180,795.21933 c 0,0 -14.28571,-114.28572 18.57143,-115.71429 32.85714,-1.42857 48.57143,108.57143 48.57143,108.57143 0,0 64.28571,-122.85714 95.71428,-71.42857 31.42857,51.42857 -47.14285,121.42857 -47.14285,121.42857 0,0 57.14285,-18.57143 84.28571,37.14286 27.14286,55.71428 -85.71429,40 -85.71429,40 0,0 50,74.28571 25.71429,99.99997 -24.28571,25.7143 -117.14286,-58.5714 -117.14286,-58.5714 0,0 18.57143,105.7143 -51.42857,82.8571 -70,-22.8571 -45.71428,-114.28567 -45.71428,-114.28567 0,0 -117.142861,-5.71429 -81.42858,-41.42857 C 60,848.07647 127.14286,826.6479 127.14286,826.6479 z"
        id="path3792"
        inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 421.42857,773.79075 67.14286,-84.28571 28.57143,101.42857 80,-72.85714 -2.85715,78.57143 68.57143,82.85714 -150,-25.71429"
+       id="path3051"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#ffff00;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 207.84375 231.65625 L 145 321.65625 L 53.5625 405.9375 L 83.5625 457.375 L 40.71875 501.65625 L 102.15625 513.0625 L 110.71875 568.78125 L 202.15625 465.9375 L 262.15625 618.78125 L 305 440.21875 L 363.5625 520.21875 L 337.84375 385.9375 L 257.84375 385.9375 L 305 280.21875 L 210.71875 344.5 L 207.84375 231.65625 z M 145.71875 379.5 L 198.5625 393.78125 L 187.15625 442.375 L 118.5625 473.78125 L 120 422.375 L 145.71875 379.5 z M 256.4375 402.375 L 281.4375 430.21875 L 237.15625 458.4375 L 220.71875 424.5 L 253.9375 424.875 L 234.65625 410.21875 L 256.4375 402.375 z "
+       id="path3053" />
   </g>
 </svg>
