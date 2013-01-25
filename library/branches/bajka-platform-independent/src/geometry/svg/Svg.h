@@ -20,10 +20,12 @@ namespace Geometry {
 
 class Svg {
 public:
-        void test ();
-
         static Core::VariantMap parseFile (Common::DataSource *ds, std::string const &path);
         static Core::VariantMap parseFile (std::string const &path);
+
+#ifndef NDEBUG
+        void test ();
+#endif
 };
 
 } /* namespace Geometry */

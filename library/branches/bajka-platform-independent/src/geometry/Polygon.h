@@ -18,8 +18,7 @@ namespace Geometry {
  * Skomplikowany poligon, kŧóry składa się z jedego pierścienia (ring) zewnętrznego
  * i zero lub więcej pierścieni wewnętrznych (dziurek).
  */
-struct Polygon : public boost::geometry::model::polygon <Point> {
-};
+typedef boost::geometry::model::polygon <Point> Polygon;
 
 } /* namespace Geometry */
 
