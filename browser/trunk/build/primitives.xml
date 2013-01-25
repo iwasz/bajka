@@ -6,5 +6,14 @@
     
     <rect set-as="child" box="0, 0, 25, 50" th="2" fg="ffff00ff" bg="00ff00ff" translate="-630,285"/>
     <circle set-as="child" origin="0, 0" radius="20" th="2" fg="00ff00ff" bg="ff00ffff" translate="-600,255" />
+    
+        <Ring set-as="child" depends-on="ape" data="@path3122">
+            view
+        </Ring>
+  
+    
   </Group>
+  
+  <SvgGeometry id="ape" cont="@#container" file="ape.svg" /> 
+  
 </beans>

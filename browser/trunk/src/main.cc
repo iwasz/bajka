@@ -24,7 +24,7 @@
 #include <ShellFactory.h>
 #include <GameLoop.h>
 
-#include <geometry/svg/Svg.h>
+//#include <geometry/svg/Svg.h>
 
 #ifndef ANDROID
 namespace po = boost::program_options;
@@ -60,9 +60,9 @@ int main (int argc, char **argv)
         config.fullScreen = vm.count ("fullscreen");
         config.showAABB = vm.count ("showaabb");
 
-        Geometry::Svg svg;
-        svg.test ();
-        return 0;
+//        Geometry::Svg svg;
+//        svg.test ();
+//        return 0;
 
         std::auto_ptr <GameLoop> loop = ShellFactory::createGameLoop (&config);
         loop->loop ();
