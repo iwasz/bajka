@@ -6,47 +6,44 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "Rectangle.h"
+#include "Polygon.h"
 #include "draw/Primitives.h"
 #include "model/static/Box.h"
 #include "model/physics/CPBox.h"
 #include "util/Exceptions.h"
 #include "view/openGl/OpenGl.h"
+#include "model/VertexBuffer.h"
+#include "model/IVertexBufferEnabled.h"
+
+using Model::VertexBuffer;
 
 namespace View {
 using namespace Geometry;
 
 /****************************************************************************/
 
-Rectangle::Rectangle ()
+Polygon::Polygon ()
 {
         glGenBuffers (1, &buffer);
 }
 
 /****************************************************************************/
 
-Rectangle::~Rectangle ()
+Polygon::~Polygon ()
 {
         glDeleteBuffers (1, &buffer);
 }
 
 /****************************************************************************/
 
-void Rectangle::update (Model::IModel *model, Event::UpdateEvent *, View::GLContext *ctx)
+void Polygon::update (Model::IModel *model, Event::UpdateEvent *, View::GLContext *ctx)
 {
-        Model::IBox *cB = dynamic_cast <Model::IBox *>  (model);
-        Geometry::Box const &b = cB->getBox ();
-
-        GLfloat verts[] = {
-                b.ur.x, b.ll.y, 0.0, 1.0,
-                b.ur.x, b.ur.y, 0.0, 1.0,
-                b.ll.x, b.ur.y, 0.0, 1.0,
-                b.ll.x, b.ll.y, 0.0, 1.0
-        };
+        Model::IVertexBufferEnabled *array = dynamic_cast <Model::IVertexBufferEnabled *>  (model);
+        VertexBuffer vBuf = array->getVertexBuffer ();
 
         glLineWidth (getThickness ());
         glBindBuffer (GL_ARRAY_BUFFER, buffer);
-        glBufferData (GL_ARRAY_BUFFER, 16 * sizeof (GLfloat), verts, GL_DYNAMIC_DRAW);
+        glBufferData (GL_ARRAY_BUFFER, vBuf.numVertices * 2 * sizeof (GLfloat), vBuf.buffer, GL_DYNAMIC_DRAW);
         glVertexAttribPointer (ctx->positionAttribLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
         glBindBuffer (GL_ARRAY_BUFFER, 0);
 

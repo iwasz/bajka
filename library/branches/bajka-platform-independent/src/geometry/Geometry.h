@@ -22,7 +22,7 @@
  * model::segment           | Segment        | -           | Class segment: small class containing two points.
  * model::referring_segment | -              | -           | Class segment: small class containing two (templatized) point references.
  * model::linestring        | LineString     | LineString  | A linestring (named so by OGC) is a collection (default a vector) of points.
- * model::ring              | Ring           | -           | A ring (aka linear ring) is a *closed* line which should not be selfintersecting.
+ * model::ring              | Ring           | Ring        | A ring (aka linear ring) is a *closed* line which should not be selfintersecting.
  * model::polygon           | Polygon        | Polygon     | The polygon contains an outer ring and zero or more inner rings.
  * model::multi_point       | -              | -           | A collection of points.
  * model::multi_linestring  | -              | -           | A collection of linestrings.
