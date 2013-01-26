@@ -89,10 +89,10 @@ void DrawUtil::drawRectangle (View::GLContext *ctx, G::Box const &b, Color const
 void DrawUtil::drawRectangle (View::GLContext *ctx, G::Point const &a, G::Point const &b, Color const &fg, Color const &bg, float thickness)
 {
         GLfloat verts[] = {
-                a.x, a.y, 0.0, 1.0,
-                a.x, b.y, 0.0, 1.0,
-                b.x, b.y, 0.0, 1.0,
-                b.x, a.y, 0.0, 1.0
+                a.x, a.y,
+                a.x, b.y,
+                b.x, b.y,
+                b.x, a.y
         };
 
         glLineWidth (thickness);
@@ -101,12 +101,12 @@ void DrawUtil::drawRectangle (View::GLContext *ctx, G::Point const &a, G::Point 
         GLuint buffer;
         glGenBuffers (1, &buffer); // TODO czy tego nie trzeba skasowac jakoś?
         glBindBuffer (GL_ARRAY_BUFFER, buffer);
-        glBufferData (GL_ARRAY_BUFFER, 16 * sizeof (GLfloat), verts, GL_STATIC_DRAW);
+        glBufferData (GL_ARRAY_BUFFER, 8 * sizeof (GLfloat), verts, GL_STATIC_DRAW);
 
         glEnableVertexAttribArray (ctx->positionAttribLocation);
 
         // Użyj aktualnie zbindowanego bufora
-        glVertexAttribPointer (ctx->positionAttribLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
+        glVertexAttribPointer (ctx->positionAttribLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
         if (bg.a > 0) {
                 glUniform4f (ctx->colorUniformLocation, bg.r, bg.g, bg.b, bg.a);

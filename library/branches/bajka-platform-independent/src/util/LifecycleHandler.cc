@@ -39,8 +39,10 @@ void LifecycleHandler::onFirstTimeReadyForRender (Util::ShellContext *ctx)
         ctx->config = bajkaService->loadAndOverrideConfig (*ctx->shellConfig, *singletons);
         printlog ("after bajkaService->loadAndOverrideConfig (*ctx->shellConfig, singletons)");
 
+#ifdef ANDROID
         graphicsService->initDisplay (ctx->config);
         graphicsService->termDisplay ();
+#endif
 
         graphicsService->initDisplay (ctx->config);
         graphicsService->saveScreenDimensionsInConfig (ctx->config);

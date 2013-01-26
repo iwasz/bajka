@@ -6,20 +6,20 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "SvgGeometry.h"
+#include "SvgGeometryFactory.h"
 #include <container/beanFactory/BeanFactoryContainer.h>
 #include "Svg.h"
 
 namespace Geometry {
 
-SvgGeometry::~SvgGeometry ()
+SvgGeometryFactory::~SvgGeometryFactory ()
 {
 //        Svg::deleteGeometries (&loadedObjects);
 }
 
 /****************************************************************************/
 
-void SvgGeometry::setFile (std::string const &s)
+void SvgGeometryFactory::setFile (std::string const &s)
 {
         loadedObjects = Svg::parseFile (s);
 

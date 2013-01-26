@@ -27,35 +27,35 @@ Circle::~Circle ()
 /****************************************************************************/
 
 static const GLfloat circleVAR[] = {
-         0.0f,     0.0f,    0.0f, 1.0f,
-         0.0000f,  1.0000f, 0.0f, 1.0f,
-         0.2588f,  0.9659f, 0.0f, 1.0f,
-         0.5000f,  0.8660f, 0.0f, 1.0f,
-         0.7071f,  0.7071f, 0.0f, 1.0f,
-         0.8660f,  0.5000f, 0.0f, 1.0f,
-         0.9659f,  0.2588f, 0.0f, 1.0f,
-         1.0000f,  0.0000f, 0.0f, 1.0f,
-         0.9659f, -0.2588f, 0.0f, 1.0f,
-         0.8660f, -0.5000f, 0.0f, 1.0f,
-         0.7071f, -0.7071f, 0.0f, 1.0f,
-         0.5000f, -0.8660f, 0.0f, 1.0f,
-         0.2588f, -0.9659f, 0.0f, 1.0f,
-         0.0000f, -1.0000f, 0.0f, 1.0f,
-        -0.2588f, -0.9659f, 0.0f, 1.0f,
-        -0.5000f, -0.8660f, 0.0f, 1.0f,
-        -0.7071f, -0.7071f, 0.0f, 1.0f,
-        -0.8660f, -0.5000f, 0.0f, 1.0f,
-        -0.9659f, -0.2588f, 0.0f, 1.0f,
-        -1.0000f, -0.0000f, 0.0f, 1.0f,
-        -0.9659f,  0.2588f, 0.0f, 1.0f,
-        -0.8660f,  0.5000f, 0.0f, 1.0f,
-        -0.7071f,  0.7071f, 0.0f, 1.0f,
-        -0.5000f,  0.8660f, 0.0f, 1.0f,
-        -0.2588f,  0.9659f, 0.0f, 1.0f,
-         0.0000f,  1.0000f, 0.0f, 1.0f
+         0.0f,     0.0f,
+         0.0000f,  1.0000f,
+         0.2588f,  0.9659f,
+         0.5000f,  0.8660f,
+         0.7071f,  0.7071f,
+         0.8660f,  0.5000f,
+         0.9659f,  0.2588f,
+         1.0000f,  0.0000f,
+         0.9659f, -0.2588f,
+         0.8660f, -0.5000f,
+         0.7071f, -0.7071f,
+         0.5000f, -0.8660f,
+         0.2588f, -0.9659f,
+         0.0000f, -1.0000f,
+        -0.2588f, -0.9659f,
+        -0.5000f, -0.8660f,
+        -0.7071f, -0.7071f,
+        -0.8660f, -0.5000f,
+        -0.9659f, -0.2588f,
+        -1.0000f, -0.0000f,
+        -0.9659f,  0.2588f,
+        -0.8660f,  0.5000f,
+        -0.7071f,  0.7071f,
+        -0.5000f,  0.8660f,
+        -0.2588f,  0.9659f,
+         0.0000f,  1.0000f
 };
 
-static const int circleVAR_indices = sizeof (circleVAR) / (sizeof (GLfloat) * 4);
+static const int circleVAR_indices = sizeof (circleVAR) / (sizeof (GLfloat) * 2);
 
 /****************************************************************************/
 
@@ -63,11 +63,11 @@ void Circle::update (Model::IModel *model, Event::UpdateEvent *, View::GLContext
 {
         glLineWidth (getThickness ());
         glBindBuffer (GL_ARRAY_BUFFER, buffer);
-        glBufferData (GL_ARRAY_BUFFER, sizeof (circleVAR), circleVAR, GL_STATIC_DRAW);
+        glBufferData (GL_ARRAY_BUFFER, sizeof (circleVAR) * sizeof (GLfloat), circleVAR, GL_STATIC_DRAW);
 
         glEnableVertexAttribArray (ctx->positionAttribLocation);
 
-        glVertexAttribPointer (ctx->positionAttribLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
+        glVertexAttribPointer (ctx->positionAttribLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
         Color const &bg = getBackground ();
         if (bg.a > 0) {

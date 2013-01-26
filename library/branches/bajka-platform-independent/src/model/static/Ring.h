@@ -6,8 +6,8 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef MODEL_LINESTRING_H_
-#define MODEL_LINESTRING_H_
+#ifndef MODEL_RING_BAJKA_H_
+#define MODEL_RING_BAJKA_H_
 
 #include "geometry/Ring.h"
 #include "model/AbstractModel.h"

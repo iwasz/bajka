@@ -111,16 +111,16 @@ void Image::check ()
 void Image::drawTile (float textureOffsetX, float textureOffsetY, View::GLContext *ctx)
 {
         GLfloat verts[] = {
-                textureOffsetX,            textureOffsetY,             0.0, 1.0,
-                imgWidth + textureOffsetX, textureOffsetY,             0.0, 1.0,
-                textureOffsetX,            imgHeight + textureOffsetY, 0.0, 1.0,
-                imgWidth + textureOffsetX, imgHeight + textureOffsetY, 0.0, 1.0
+                textureOffsetX,            textureOffsetY,
+                imgWidth + textureOffsetX, textureOffsetY,
+                textureOffsetX,            imgHeight + textureOffsetY,
+                imgWidth + textureOffsetX, imgHeight + textureOffsetY
         };
 
         // Stworzenie bufora i zainicjowanie go danymi z vertex array.
         glBindBuffer (GL_ARRAY_BUFFER, vertexBuffer);
-        glBufferSubData (GL_ARRAY_BUFFER, 0, 16 * sizeof (GLfloat), verts);
-        glVertexAttribPointer (ctx->positionAttribLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
+        glBufferSubData (GL_ARRAY_BUFFER, 0, 8 * sizeof (GLfloat), verts);
+        glVertexAttribPointer (ctx->positionAttribLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
         glBindBuffer (GL_ARRAY_BUFFER, 0);
 
         float texCoordW = double (imgWidth) / texWidth;
