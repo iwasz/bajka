@@ -7,11 +7,11 @@
 <!-- | undefined behaviour.                                                                  | -->
 <!-- +=======================================================================================+ -->
 
-<!--   <Config id="config" viewportWidth="1280" viewportHeight="720" autoProjection="true" windowCaption="Bajka browser"> -->
-  <Config id="config" viewportWidth="640" viewportHeight="400" projectionWidth="1280" projectionHeight="720" windowCaption="Bajka browser">
+  <Config id="config" viewportWidth="1280" viewportHeight="720" autoProjection="true" windowCaption="Bajka browser">
+<!--   <Config id="config" viewportWidth="640" viewportHeight="400" projectionWidth="1280" projectionHeight="720" windowCaption="Bajka browser"> -->
 <!--   <Config id="config" viewportWidth="160" viewportHeight="100" autoProjection="true" windowCaption="Bajka browser"> -->
     <value set-as="vertex">#version 120
-attribute vec4 position;
+attribute vec2 position;
 attribute vec2 texCoordIn;
 
 varying vec2 texCoordOut;
@@ -21,7 +21,7 @@ uniform mat4 modelView;
    
 void main()                                        
 {                                                  
-  gl_Position = projection * modelView * position;             
+  gl_Position = projection * modelView * vec4 (position.x, position.y, 0.0, 1.0);
   texCoordOut = texCoordIn;
 }                                                  
     </value>
