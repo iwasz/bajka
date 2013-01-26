@@ -8,8 +8,8 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef VIEW_H_
-#define VIEW_H_
+#ifndef BAJKA_VIEW_H_
+#define BAJKA_VIEW_H_
 
 /**
  * \defgroup View
@@ -21,6 +21,7 @@
 #include "Image.h"
 #include "IView.h"
 #include "Primitive.h"
+#include "Polygon.h"
 #include "Rectangle.h"
 #include "Text.h"
 #include "View.h"

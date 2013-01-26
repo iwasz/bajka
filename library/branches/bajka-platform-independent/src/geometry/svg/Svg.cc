@@ -779,18 +779,19 @@ void Svg::test ()
 
         for (Core::VariantMap::const_iterator i = objects.begin (); i != objects.end (); ++i) {
                 std::string const &id = i->first;
+                std::cerr << "id=" << id << ", type=" << i->second << ", data=";
 
                 if (ccast <Geometry::LineString *> (i->second)) {
                         Geometry::LineString *ls = vcast <Geometry::LineString *> (i->second);
-                        std::cerr << id << "=" << boost::geometry::dsv (*ls) << std::endl;
+                        std::cerr << boost::geometry::dsv (*ls) << std::endl;
                 }
                 else if (ccast <Geometry::Ring *> (i->second)) {
                         Geometry::Ring *ri = vcast <Geometry::Ring *> (i->second);
-                        std::cerr << id << "=" << boost::geometry::dsv (*ri) << std::endl;
+                        std::cerr << boost::geometry::dsv (*ri) << std::endl;
                 }
                 else if (ccast <Geometry::Polygon *> (i->second)) {
                         Geometry::Polygon *po = vcast <Geometry::Polygon *> (i->second);
-                        std::cerr << id << "=" << boost::geometry::dsv (*po) << std::endl;
+                        std::cerr << boost::geometry::dsv (*po) << std::endl;
                 }
         }
 

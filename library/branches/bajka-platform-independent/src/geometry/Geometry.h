@@ -38,5 +38,6 @@
 #include "Polygon.h"
 #include "LineString.h"
 #include "Segment.h"
+#include "svg/SvgGeometryFactory.h"
 
 #	endif /* PRIMITIVE_H_ */

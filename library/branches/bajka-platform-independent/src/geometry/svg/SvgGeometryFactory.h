@@ -21,14 +21,14 @@ namespace Geometry {
  * Ładuje obiekty geometryczne (te z namespace Geometry::) do kontenera. Ustawia je jako singletony
  * zewnętrzne o nazwach takich jak nazwy w SVG.
  */
-class SvgGeometry {
+class SvgGeometryFactory {
 public:
         C__ (void)
 
         /**
          * Kasuje załadowane singletony z pamięci.
          */
-        ~SvgGeometry ();
+        ~SvgGeometryFactory ();
 
         /**
          * ładuje z pliku i ustawia do kontenera jako singletony.
@@ -37,7 +37,7 @@ public:
 private:
         Container::BeanFactoryContainer *p_ (cont);
         Core::VariantMap loadedObjects;
-        E_ (SvgGeometry)
+        E_ (SvgGeometryFactory)
 };
 
 } /* namespace Geometry */

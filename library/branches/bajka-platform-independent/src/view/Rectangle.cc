@@ -38,16 +38,16 @@ void Rectangle::update (Model::IModel *model, Event::UpdateEvent *, View::GLCont
         Geometry::Box const &b = cB->getBox ();
 
         GLfloat verts[] = {
-                b.ur.x, b.ll.y, 0.0, 1.0,
-                b.ur.x, b.ur.y, 0.0, 1.0,
-                b.ll.x, b.ur.y, 0.0, 1.0,
-                b.ll.x, b.ll.y, 0.0, 1.0
+                b.ur.x, b.ll.y,
+                b.ur.x, b.ur.y,
+                b.ll.x, b.ur.y,
+                b.ll.x, b.ll.y
         };
 
         glLineWidth (getThickness ());
         glBindBuffer (GL_ARRAY_BUFFER, buffer);
-        glBufferData (GL_ARRAY_BUFFER, 16 * sizeof (GLfloat), verts, GL_DYNAMIC_DRAW);
-        glVertexAttribPointer (ctx->positionAttribLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
+        glBufferData (GL_ARRAY_BUFFER, 8 * sizeof (GLfloat), verts, GL_DYNAMIC_DRAW);
+        glVertexAttribPointer (ctx->positionAttribLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
         glBindBuffer (GL_ARRAY_BUFFER, 0);
 
         glEnableVertexAttribArray (ctx->positionAttribLocation);

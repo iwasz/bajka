@@ -11,5 +11,8 @@
 
 #include "Box.h"
 #include "Circle.h"
+#include "LineString.h"
+#include "Polygon.h"
+#include "Ring.h"
 
 #	endif /* BASIC_H_ */

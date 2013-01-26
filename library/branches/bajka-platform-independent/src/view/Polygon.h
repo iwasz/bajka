@@ -32,7 +32,7 @@ private:
 
         GLuint buffer;
 
-        E_ (Rectangle)
+        E_ (Polygon)
 };
 
 } /* namespace View */

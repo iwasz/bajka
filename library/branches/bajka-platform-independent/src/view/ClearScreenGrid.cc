@@ -34,13 +34,9 @@ ClearScreenGrid::ClearScreenGrid () : density (20), gridVertsCount (0)
                 GLfloat x = -w2 + i * density;
                 verts.push_back (x);
                 verts.push_back (h2 + 1);
-                verts.push_back (0); // TODO tego możnaby się pozbyć i przekazywac do shadera vec2
-                verts.push_back (1);
 
                 verts.push_back (x);
                 verts.push_back (-h2 - 1);
-                verts.push_back (0);
-                verts.push_back (1);
         }
 
         // Poziome kreski
@@ -48,30 +44,26 @@ ClearScreenGrid::ClearScreenGrid () : density (20), gridVertsCount (0)
                 GLfloat y = -h2 + i * density;
                 verts.push_back (w2 + 1);
                 verts.push_back (y);
-                verts.push_back (0);
-                verts.push_back (1);
 
                 verts.push_back (-w2 - 1);
                 verts.push_back (y);
-                verts.push_back (0);
-                verts.push_back (1);
         }
 
-        gridVertsCount = verts.size () / 4u;
+        gridVertsCount = verts.size () / 2u;
 
         glBindBuffer (GL_ARRAY_BUFFER, gridBuffer);
         glBufferData (GL_ARRAY_BUFFER, verts.size () * sizeof (GLfloat), &verts.front (), GL_STATIC_DRAW);
         glBindBuffer (GL_ARRAY_BUFFER, 0);
 
         GLfloat verts1[] = {
-                -w2 - 1, 0,       0, 1,
-                w2 + 1,  0,       0, 1,
-                0,       -h2 - 1, 0, 1,
-                0,       h2 + 1,  0, 1
+                -w2 - 1, 0,
+                w2 + 1,  0,
+                0,       -h2 - 1,
+                0,       h2 + 1
         };
 
         glBindBuffer (GL_ARRAY_BUFFER, axesBuffer);
-        glBufferData (GL_ARRAY_BUFFER, 16 * sizeof (GLfloat), verts1, GL_STATIC_DRAW);
+        glBufferData (GL_ARRAY_BUFFER, 8 * sizeof (GLfloat), verts1, GL_STATIC_DRAW);
         glBindBuffer (GL_ARRAY_BUFFER, 0);
 }
 
@@ -98,13 +90,13 @@ void ClearScreenGrid::update (Model::IModel *, Event::UpdateEvent *e, View::GLCo
 
         glBindBuffer (GL_ARRAY_BUFFER, gridBuffer);
         glEnableVertexAttribArray (ctx->positionAttribLocation);
-        glVertexAttribPointer (ctx->positionAttribLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
+        glVertexAttribPointer (ctx->positionAttribLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
         glUniform4f (ctx->colorUniformLocation, gridColor.r, gridColor.g, gridColor.b, gridColor.a);
         glDrawArrays (GL_LINES, 0, gridVertsCount);
 
         glBindBuffer (GL_ARRAY_BUFFER, axesBuffer);
         glEnableVertexAttribArray (ctx->positionAttribLocation);
-        glVertexAttribPointer (ctx->positionAttribLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
+        glVertexAttribPointer (ctx->positionAttribLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
         glUniform4f (ctx->colorUniformLocation, gridColor.r - 0.1, gridColor.g - 0.1, gridColor.b - 0.1, gridColor.a);
         glDrawArrays (GL_LINES, 0, 4);
 
