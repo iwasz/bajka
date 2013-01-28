@@ -798,16 +798,26 @@ void Svg::test ()
                 }
         }
 
-        Geometry::Ring *ape = vcast <Geometry::Ring *> (objects["path3122"]);
+//        Geometry::Ring *ape = vcast <Geometry::Ring *> (objects["path3122"]);
         std::vector<p2t::Point*> polyline;
+//
+//        for (Geometry::Ring::const_iterator i = ape->begin (); i != ape->end (); ++i) {
+//                polyline.push_back (new p2t::Point (i->x, i->y));
+//        }
+//
+//        // usunąć ostatni punkt, gdyż jest taki sam, jak pierwszy, a poly2tri nie akceptuje powtórzeń.
+//        polyline.resize (polyline.size () - 1);
 
-        for (Geometry::Ring::const_iterator i = ape->begin (); i != ape->end (); ++i) {
-                polyline.push_back (new p2t::Point (i->x, i->y));
-        }
+        polyline.push_back (new p2t::Point (50, 0));
+        polyline.push_back (new p2t::Point (0, 0));
+        polyline.push_back (new p2t::Point (0, 50));
+        polyline.push_back (new p2t::Point (50, 50));
 
-        // usunąć ostatni punkt, gdyż jest taki sam, jak pierwszy, a poly2tri nie akceptuje powtórzeń.
-        polyline.resize (polyline.size () - 1);
-
+        /**
+         * Robi kopię points.
+         * Inicjuje CDT : tworzy obiekt Sweep i SweepContext.
+         * Tworzy obiekty Edge. Dla każdej pary punktów z points.
+         */
         p2t::CDT* cdt = new p2t::CDT(polyline);
         cdt->Triangulate();
 
