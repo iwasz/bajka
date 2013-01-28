@@ -179,7 +179,6 @@ Node& Sweep::NewFrontTriangle(SweepContext& tcx, Point& point, Node& node)
   Triangle* triangle = new Triangle(point, *node.point, *node.next->point);
 
   triangle->MarkNeighbor(*node.triangle);
-  tcx.AddToMap(triangle);
 
   Node* new_node = new Node(point);
   nodes_.push_back(new_node);
@@ -204,8 +203,6 @@ void Sweep::Fill(SweepContext& tcx, Node& node)
   //       for now constrained_edge values are copied during the legalize
   triangle->MarkNeighbor(*node.prev->triangle);
   triangle->MarkNeighbor(*node.triangle);
-
-  tcx.AddToMap(triangle);
 
   // Update the advancing front
   node.prev->next = node.next;

@@ -146,6 +146,9 @@ AUX_SOURCE_DIRECTORY (../src/model/manager SOURCES)
 
 AUX_SOURCE_DIRECTORY (../src/geometry SOURCES)
 AUX_SOURCE_DIRECTORY (../src/geometry/svg SOURCES)
+AUX_SOURCE_DIRECTORY (../src/geometry/tessellator SOURCES)
+AUX_SOURCE_DIRECTORY (../src/geometry/tessellator/common SOURCES)
+AUX_SOURCE_DIRECTORY (../src/geometry/tessellator/sweep  SOURCES)
 
 AUX_SOURCE_DIRECTORY (../src/util SOURCES)
 

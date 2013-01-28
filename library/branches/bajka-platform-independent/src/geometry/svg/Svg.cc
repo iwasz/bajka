@@ -24,6 +24,9 @@
 #include <boost/geometry/io/dsv/write.hpp>
 #include <boost/geometry/geometry.hpp>
 
+// TODO usuń.
+#include "geometry/tessellator/poly2tri.h"
+
 namespace Geometry {
 
 /**
@@ -795,6 +798,45 @@ void Svg::test ()
                 }
         }
 
+        Geometry::Ring *ape = vcast <Geometry::Ring *> (objects["path3122"]);
+        std::vector<p2t::Point*> polyline;
+
+        for (Geometry::Ring::const_iterator i = ape->begin (); i != ape->end (); ++i) {
+                polyline.push_back (new p2t::Point (i->x, i->y));
+        }
+
+        // usunąć ostatni punkt, gdyż jest taki sam, jak pierwszy, a poly2tri nie akceptuje powtórzeń.
+        polyline.resize (polyline.size () - 1);
+
+        p2t::CDT* cdt = new p2t::CDT(polyline);
+        cdt->Triangulate();
+
+        /// Constrained triangles
+        typedef std::vector<p2t::Triangle> TVec;
+
+        TVec const &triangles = cdt->GetTriangles();
+
+        std::cerr << "\ntriangles : ";
+        for (TVec::const_iterator i = triangles.begin (); i != triangles.end (); ++i) {
+                p2t::Point const *p = i->GetPoint (0);
+                std::cerr << "(" << p->x << "," << p->y << ",";
+                p = i->GetPoint (1);
+                std::cerr << p->x << "," << p->y << ",";
+                p = i->GetPoint (2);
+                std::cerr << p->x << "," << p->y << "), ";
+        }
+
+//        std::cerr << "\nmap : ";
+//        for (TMap::iterator i = map.begin (); i != map.end (); ++i) {
+//                p2t::Point *p = (*i)->GetPoint (0);
+//                std::cerr << "(" << p->x << "," << p->y << ",";
+//                p = (*i)->GetPoint (1);
+//                std::cerr << p->x << "," << p->y << ",";
+//                p = (*i)->GetPoint (2);
+//                std::cerr << p->x << "," << p->y << "), ";
+//        }
+
+
 #if 0
         struct SVGPath* plist;
         plist = svgParseFromFile ("test.svg");
@@ -815,7 +857,5 @@ void Svg::test ()
 #endif
 }
 #endif
-
-
 
 } /* namespace Geometry */
