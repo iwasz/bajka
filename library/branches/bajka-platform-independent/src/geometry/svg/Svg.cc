@@ -780,6 +780,7 @@ void Svg::test ()
 {
         Core::VariantMap objects = parseFile ("ape.svg");
 
+# if 0
         for (Core::VariantMap::const_iterator i = objects.begin (); i != objects.end (); ++i) {
                 std::string const &id = i->first;
                 std::cerr << "id=" << id << ", type=" << i->second << ", data=";
@@ -797,7 +798,9 @@ void Svg::test ()
                         std::cerr << boost::geometry::dsv (*po) << std::endl;
                 }
         }
+#endif
 
+#if 0
 //        Geometry::Ring *ape = vcast <Geometry::Ring *> (objects["path3122"]);
         std::vector<p2t::Point*> polyline;
 //
@@ -845,7 +848,7 @@ void Svg::test ()
 //                p = (*i)->GetPoint (2);
 //                std::cerr << p->x << "," << p->y << "), ";
 //        }
-
+#endif
 
 #if 0
         struct SVGPath* plist;
@@ -865,6 +868,9 @@ void Svg::test ()
         // Delete
         svgDelete(plist);
 #endif
+
+
+
 }
 #endif
 
