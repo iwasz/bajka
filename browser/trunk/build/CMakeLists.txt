@@ -51,9 +51,10 @@ if (ANDROID)
 endif ()
      
 # Boost, można zakomentowa, you can skip this
-find_package (Boost REQUIRED)
-include_directories(${Boost_INCLUDE_DIRS})
-link_directories(${Boost_LIBRARY_DIRS})
+# Zakomentoeałę, bo na laptopie zaczęło się wywalac.
+#find_package (Boost REQUIRED)
+#include_directories(${Boost_INCLUDE_DIRS})
+#link_directories(${Boost_LIBRARY_DIRS})
 
 include (FindPkgConfig)
 pkg_check_modules (TILIAE REQUIRED "tiliae")

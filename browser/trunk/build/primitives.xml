@@ -7,10 +7,13 @@
     <rect set-as="child" box="0, 0, 25, 50" th="2" fg="ffff00ff" bg="00ff00ff" translate="-630,285" />
     <circle set-as="child" origin="0, 0" radius="20" th="2" fg="00ff00ff" bg="ff00ffff" translate="-600,255" />
 
-    <Ring set-as="child" depends-on="ape" data="@path3122" view="@redPoly"/>
+    <Ring set-as="child" depends-on="ape" data="@path3122" view="@redPoly">
+        <TestController set-as="controller" eventMask="0x200" testView="@redPoly"/>
+    </Ring>
+    
   </Group>
 
   <SvgGeometryFactory id="ape" cont="@#container" file="ape.svg" />
-  <Polygon id="redPoly" foreground="@orange" background="00000000"/>
+  <TestView id="redPoly" foreground="@orange" background="00000000"/>
 
 </beans>
