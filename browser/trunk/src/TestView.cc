@@ -67,6 +67,16 @@ void TestView::update (Model::IModel *model, Event::UpdateEvent *, View::GLConte
                 glDrawArrays (GL_LINES, 0, voronoi->size ());
         }
 
+        if (voronoi) {
+                glBindBuffer (GL_ARRAY_BUFFER, buffer);
+                glBufferData (GL_ARRAY_BUFFER, delaunay->size () * 2 * sizeof (GLfloat), (void *)&delaunay->front (), GL_DYNAMIC_DRAW);
+                glVertexAttribPointer (ctx->positionAttribLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+                glBindBuffer (GL_ARRAY_BUFFER, 0);
+
+                glUniform4f (ctx->colorUniformLocation, 0, 1, 0, 1);
+                glDrawArrays (GL_LINES, 0, delaunay->size ());
+        }
+
         glDisableVertexAttribArray (ctx->positionAttribLocation);
 }
 

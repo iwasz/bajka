@@ -63,6 +63,51 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
 
         TestView *tv = dynamic_cast <TestView *> (v);
         tv->voronoi = &voronoi;
+        tv->delaunay = &delaunay;
         std::cerr << "Voronoi prim. edges : " << result << std::endl;
+
+        /// Triangulacja
+        for (voronoi_diagram<double>::const_cell_iterator it = vd.cells().begin(); it != vd.cells().end(); ++it) {
+
+                voronoi_diagram<double>::cell_type const &cell = *it;
+
+                if (!cell.contains_point()) {
+                        continue;
+                }
+
+                std::size_t indexA = cell.source_index ();
+                PPoint const &a = points[indexA];
+                //printf ("Cell #%ud contains a point: (%d, %d).\n", cell_index, x(p), y(p));
+
+                // This is convenient way to iterate edges around Voronoi cell.
+                voronoi_diagram<double>::edge_type const *edge = cell.incident_edge();
+                do {
+                        if (!edge->is_primary()) {
+                                continue;
+                        }
+
+                        voronoi_diagram<double>::edge_type const *twin = edge->twin ();
+
+                        if (!twin) {
+                                continue;
+                        }
+
+                        voronoi_diagram<double>::cell_type const *cellB = twin->cell ();
+
+                        if (!cellB->contains_point ()) {
+                                continue;
+                        }
+
+                        std::size_t indexB = cellB->source_index ();
+                        PPoint const &b = points[indexB];
+
+                        // TODO powtórzenia.
+                        delaunay.push_back (Geometry::makePoint (a.x (), a.y ()));
+                        delaunay.push_back (Geometry::makePoint (b.x (), b.y ()));
+
+                        edge = edge->next();
+                } while (edge != cell.incident_edge());
+        }
+
 }
 

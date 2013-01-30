@@ -27,6 +27,7 @@ public:
         virtual void update (Model::IModel *model, Event::UpdateEvent *e, View::GLContext *ctx);
 
         Geometry::LineString *voronoi;
+        Geometry::LineString *delaunay;
 
 private:
 
