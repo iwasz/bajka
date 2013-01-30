@@ -9,7 +9,7 @@
 
   <Config id="config" viewportWidth="1280" viewportHeight="720" autoProjection="true" windowCaption="Bajka browser">
 <!--   <Config id="config" viewportWidth="640" viewportHeight="400" projectionWidth="1280" projectionHeight="720" windowCaption="Bajka browser"> -->
-<!--   <Config id="config" viewportWidth="160" viewportHeight="100" autoProjection="true" windowCaption="Bajka browser"> -->
+<!--   <Config id="config" viewportWidth="320" viewportHeight="200" projectionWidth="1280" projectionHeight="720" windowCaption="Bajka browser"> -->
     <value set-as="vertex">#version 120
 attribute vec2 position;
 attribute vec2 texCoordIn;

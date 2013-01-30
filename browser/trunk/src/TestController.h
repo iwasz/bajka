@@ -26,12 +26,11 @@ struct TestController : public Controller::EmptyController {
         virtual ~TestController () {}
 
         void onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View::IView *v);
-//        virtual void onUpdate (Event::UpdateEvent *e, Model::IModel *m, View::IView *v) {}
-//        virtual void onPostUpdate (Event::UpdateEvent *e, Model::IModel *m, View::IView *v) {}
 
         bool firstTime;
         TestView *p_ (testView);
         Geometry::LineString voronoi;
+        Geometry::LineString delaunay;
 
         E_ (TestController)
 };
