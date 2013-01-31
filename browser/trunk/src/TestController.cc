@@ -18,6 +18,48 @@
 
 using boost::polygon::voronoi_builder;
 using boost::polygon::voronoi_diagram;
+typedef boost::polygon::point_data<int> PPoint;
+
+
+static int side (PPoint const &a, PPoint const & b, PPoint const & c)
+{
+     return ((b.x () - a.x ()) * (c.y () - a.y ()) - (b.y () - a.y ()) * (c.x () - a.x ()));
+}
+
+/*
+ * TODO odkładając punkty do kolekcji voronoi i do delaunay trzeba sprawdzać powtórzenia, tak, aby dany odcinek
+ * odłożyć tylko raz. W przeciwnym wypadku będzie nieoszczędność pamięci.
+ *
+ * Upewniec się, ze input jest posortowany, że poligon jest CCW lub CW - zobaczyć jak.
+ *
+ * Dodać sprawdzanie czy punkt kŧóry łączymy jest wewnatrz także w kodzie triangulateDegenerated
+ */
+
+static void triangulateDegenerated (voronoi_diagram<double>::vertex_type const *v, std::vector<PPoint> const &points, Geometry::LineString *delaunay)
+{
+        printlog ("###triangulate degenerated");
+        std::vector<std::size_t> indices;
+
+        voronoi_diagram<double>::edge_type const *edge = v->incident_edge ();
+        do {
+                voronoi_diagram<double>::cell_type const *cell = edge->cell ();
+
+                if (cell->contains_point ()) {
+                        std::size_t index = cell->source_index ();
+                        indices.push_back (index);
+                }
+
+                edge = edge->rot_next ();
+        } while (edge != v->incident_edge ());
+
+        // Czworobok - wystarczy przeciąć go po przekątnej. TODO możnaby jakoś minimalizować ostre kąty.
+        if (indices.size () == 4) {
+                PPoint const &a = points[indices[0]];
+                PPoint const &b = points[indices[2]];
+                delaunay->push_back (Geometry::makePoint (a.x (), a.y ()));
+                delaunay->push_back (Geometry::makePoint (b.x (), b.y ()));
+        }
+}
 
 void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View::IView *v)
 {
@@ -32,7 +74,6 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
         Geometry::Ring *svg = ring->getData ();
         std::cerr << "SVG vertices : " << svg->size () << std::endl;
 
-        typedef boost::polygon::point_data<int> PPoint;
         std::vector<PPoint> points;
 
         for (Geometry::Ring::const_iterator i = svg->begin (); i != svg->end (); ++i) {
@@ -48,11 +89,97 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
                 if (it->is_primary ()) {
                         ++result;
 
+                        voronoi_diagram<double>::vertex_type const *v0 = it->vertex0 ();
+                        voronoi_diagram<double>::vertex_type const *v1 = it->vertex1 ();
+
+                        voronoi_diagram<double>::edge_type const &edge = *it;
+                        voronoi_diagram<double>::edge_type const *twin = edge.twin ();
+
+                        voronoi_diagram<double>::cell_type const *cell = edge.cell ();
+                        voronoi_diagram<double>::cell_type const *nextCell = twin->cell ();
+
+                        /*
+                         * Konstruuj GRAF delaunay - w wyniku mogą pojawić wielokaty większe niż trójkąty jeżeli w poblizuu siebie
+                         * znajdą się więcej niż 3 cocircullar sites.
+                         */
+                        if (cell->contains_point () && nextCell->contains_point ()) {
+                                std::size_t indexA = cell->source_index ();
+                                PPoint const &a = points[indexA];
+                                std::size_t indexB = nextCell->source_index ();
+                                PPoint const &b = points[indexB];
+
+                                std::size_t indexNextPoly = indexA + 1;
+                                int mySide = 1;
+                                if (indexNextPoly < points.size ()) {
+                                        PPoint const &n = points[indexNextPoly];
+                                        mySide = side (a, n, b);
+                                }
+
+                                if (mySide <= 0) {
+                                        // TODO powtórzenia.
+                                        delaunay.push_back (Geometry::makePoint (a.x (), a.y ()));
+                                        delaunay.push_back (Geometry::makePoint (b.x (), b.y ()));
+                                }
+                        }
+
+                        // Znajdż degeneracje i trianguluj je
+                        if (v0) {
+                                // Check if number of incident edges to this vertex was computed earlier (and stored in color).
+//                                if (v0->color ()) {
+//                                        // Triangulate degenerated sub-polygon
+//                                        triangulateDegenerated (v0, points, &delaunay);
+//                                }
+
+                                /*
+                                 * Compute the number of incident edges of a voronoi vertex. If its more than 3, we have a degenerate
+                                 * situation, where more than 3 site points are cocircullar, and the dual of voronoi graph will construct
+                                 * polygon instead of triangle.
+                                 */
+                                int edgeCnt = 0;
+                                voronoi_diagram<double>::edge_type const *edge = v0->incident_edge ();
+                                do {
+                                        ++edgeCnt;
+                                        edge = edge->rot_next ();
+                                } while (edge != v0->incident_edge ());
+
+                                if (edgeCnt > 3) {
+                                        printlog ("### v0 %d", edgeCnt);
+                                        v0->color (edgeCnt);
+                                        // Triangulate degenerated sub-polygon
+                                        triangulateDegenerated (v0, points, &delaunay);
+                                }
+                        }
+
+//                        if (v1) {
+//                                // Check if number of incident edges to this vertex was computed earlier (and stored in color).
+////                                if (v1->color ()) {
+////                                        // Triangulate degenerated sub-polygon
+////                                        triangulateDegenerated (v1, points, &delaunay);
+////                                }
+//
+//                                /*
+//                                 * Compute the number of incident edges of a voronoi vertex. If its more than 3, we have a degenerate
+//                                 * situation, where more than 3 site points are cocircullar, and the dual of voronoi graph will construct
+//                                 * polygon instead of triangle.
+//                                 */
+//                                int edgeCnt = 0;
+//                                voronoi_diagram<double>::edge_type const *edge = v1->incident_edge ();
+//                                do {
+//                                        ++edgeCnt;
+//                                        edge = edge->next ();
+//                                } while (edge != v1->incident_edge ());
+//
+//                                if (edgeCnt > 3) {
+//                                        printlog ("### v1 %d", edgeCnt);
+//                                        v1->color (edgeCnt);
+//                                        // Triangulate degenerated sub-polygon
+//                                        triangulateDegenerated (v1, points, &delaunay);
+//                                }
+//                        }
+
                         if (it->is_infinite ()) {
                                 continue;
                         }
-                        voronoi_diagram<double>::vertex_type const *v0 = it->vertex0 ();
-                        voronoi_diagram<double>::vertex_type const *v1 = it->vertex1 ();
 
                         voronoi.push_back (Geometry::makePoint (v0->x (), v0->y ()));
                         voronoi.push_back (Geometry::makePoint (v1->x (), v1->y ()));
@@ -64,7 +191,7 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
         tv->delaunay = &delaunay;
         std::cerr << "Voronoi prim. edges : " << result << std::endl;
 
-#if 1
+#if 0
         /// Triangulacja
         for (voronoi_diagram<double>::const_cell_iterator it = vd.cells ().begin (); it != vd.cells ().end (); ++it) {
 
