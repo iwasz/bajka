@@ -28,50 +28,54 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
                 return;
         }
 
-        Model::Ring *ring = dynamic_cast <Model::Ring *> (m);
+        Model::Ring *ring = dynamic_cast<Model::Ring *> (m);
         Geometry::Ring *svg = ring->getData ();
         std::cerr << "SVG vertices : " << svg->size () << std::endl;
 
-        typedef boost::polygon::point_data <int> PPoint;
-        std::vector <PPoint> points;
-        points.push_back(PPoint(0, 0));
-        points.push_back(PPoint(1, 6));
+        typedef boost::polygon::point_data<int> PPoint;
+        std::vector<PPoint> points;
 
         for (Geometry::Ring::const_iterator i = svg->begin (); i != svg->end (); ++i) {
                 points.push_back (PPoint (boost::math::iround (i->x), boost::math::iround (i->y)));
         }
 
         // Robi diagram
-        voronoi_diagram <double> vd;
-        construct_voronoi (points.begin(), points.end(), &vd);
+        voronoi_diagram<double> vd;
+        construct_voronoi (points.begin (), points.end (), &vd);
 
         int result = 0;
-        for (voronoi_diagram<double>::const_edge_iterator it = vd.edges().begin(); it != vd.edges().end(); ++it) {
-                if (it->is_primary()) {
+        for (voronoi_diagram<double>::const_edge_iterator it = vd.edges ().begin (); it != vd.edges ().end (); ++it) {
+                if (it->is_primary ()) {
                         ++result;
 
                         if (it->is_infinite ()) {
                                 continue;
                         }
-                        voronoi_diagram <double>::vertex_type const *v0 = it->vertex0 ();
-                        voronoi_diagram <double>::vertex_type const *v1 = it->vertex1 ();
+                        voronoi_diagram<double>::vertex_type const *v0 = it->vertex0 ();
+                        voronoi_diagram<double>::vertex_type const *v1 = it->vertex1 ();
 
                         voronoi.push_back (Geometry::makePoint (v0->x (), v0->y ()));
                         voronoi.push_back (Geometry::makePoint (v1->x (), v1->y ()));
                 }
         }
 
-        TestView *tv = dynamic_cast <TestView *> (v);
+        TestView *tv = dynamic_cast<TestView *> (v);
         tv->voronoi = &voronoi;
         tv->delaunay = &delaunay;
         std::cerr << "Voronoi prim. edges : " << result << std::endl;
 
+#if 1
         /// Triangulacja
-        for (voronoi_diagram<double>::const_cell_iterator it = vd.cells().begin(); it != vd.cells().end(); ++it) {
+        for (voronoi_diagram<double>::const_cell_iterator it = vd.cells ().begin (); it != vd.cells ().end (); ++it) {
 
                 voronoi_diagram<double>::cell_type const &cell = *it;
 
-                if (!cell.contains_point()) {
+                if (cell.is_degenerate ()) {
+                        printlog("---> !cell.is_degenerate!");
+                }
+
+                if (!cell.contains_point ()) {
+                        printlog("---> !cell.contains_point()");
                         continue;
                 }
 
@@ -80,21 +84,24 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
                 //printf ("Cell #%ud contains a point: (%d, %d).\n", cell_index, x(p), y(p));
 
                 // This is convenient way to iterate edges around Voronoi cell.
-                voronoi_diagram<double>::edge_type const *edge = cell.incident_edge();
+                voronoi_diagram<double>::edge_type const *edge = cell.incident_edge ();
                 do {
-                        if (!edge->is_primary()) {
+                        if (!edge->is_primary ()) {
+                                printlog("---> !edge->is_primary()");
                                 continue;
                         }
 
                         voronoi_diagram<double>::edge_type const *twin = edge->twin ();
 
                         if (!twin) {
+                                printlog("---> !twin");
                                 continue;
                         }
 
                         voronoi_diagram<double>::cell_type const *cellB = twin->cell ();
 
                         if (!cellB->contains_point ()) {
+                                printlog("---> !cellB->contains_point ()");
                                 continue;
                         }
 
@@ -105,8 +112,30 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
                         delaunay.push_back (Geometry::makePoint (a.x (), a.y ()));
                         delaunay.push_back (Geometry::makePoint (b.x (), b.y ()));
 
-                        edge = edge->next();
-                } while (edge != cell.incident_edge());
+                        edge = edge->next ();
+                } while (edge != cell.incident_edge ());
+        }
+#endif
+
+        for (voronoi_diagram<double>::const_vertex_iterator it = vd.vertices ().begin (); it != vd.vertices ().end (); ++it) {
+                const voronoi_diagram<double>::vertex_type &vertex = *it;
+                const voronoi_diagram<double>::edge_type *edge = vertex.incident_edge ();
+
+                if (vertex.is_degenerate ()) {
+                        printlog ("--->> vertex is degenerate");
+                }
+
+                int edgeCnt = 0;
+                // This is convenient way to iterate edges around Voronoi vertex.
+                do {
+                        ++edgeCnt;
+                        edge = edge->rot_next ();
+                } while (edge != vertex.incident_edge ());
+
+                // Degeneracja
+                if (edgeCnt > 3) {
+                        printlog ("vertex has %d edges", edgeCnt);
+                }
         }
 
 }
