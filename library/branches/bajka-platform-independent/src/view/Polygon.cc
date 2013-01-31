@@ -15,6 +15,11 @@
 #include "model/VertexBuffer.h"
 #include "model/IVertexBufferEnabled.h"
 
+//#include <boost/polygon/voronoi.hpp>
+//using boost::polygon::voronoi_builder;
+//using boost::polygon::voronoi_diagram;
+
+
 using Model::VertexBuffer;
 
 namespace View {
