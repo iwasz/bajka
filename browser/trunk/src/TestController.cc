@@ -87,11 +87,12 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
         int result = 0;
         for (voronoi_diagram<double>::const_edge_iterator it = vd.edges ().begin (); it != vd.edges ().end (); ++it) {
                 if (it->is_primary ()) {
+
                         ++result;
 
                         voronoi_diagram<double>::vertex_type const *v0 = it->vertex0 ();
                         voronoi_diagram<double>::vertex_type const *v1 = it->vertex1 ();
-
+#if 1
                         voronoi_diagram<double>::edge_type const &edge = *it;
                         voronoi_diagram<double>::edge_type const *twin = edge.twin ();
 
@@ -176,7 +177,7 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
 //                                        triangulateDegenerated (v1, points, &delaunay);
 //                                }
 //                        }
-
+#endif
                         if (it->is_infinite ()) {
                                 continue;
                         }
