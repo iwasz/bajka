@@ -18,12 +18,39 @@
 
 using boost::polygon::voronoi_builder;
 using boost::polygon::voronoi_diagram;
-typedef boost::polygon::point_data<int> PPoint;
 
 
-static int side (PPoint const &a, PPoint const & b, PPoint const & c)
-{
-     return ((b.x () - a.x ()) * (c.y () - a.y ()) - (b.y () - a.y ()) * (c.x () - a.x ()));
+//typedef boost::polygon::point_data<int> PPoint;
+
+
+//struct Geometry::Point {
+//  float x;
+//  float y;
+//};
+
+namespace boost {
+namespace polygon {
+
+template <>
+struct geometry_concept<Geometry::Point> { typedef point_concept type; };
+
+template <>
+struct point_traits<Geometry::Point> {
+  typedef int coordinate_type;
+
+  /*
+   * TODO sprawdzić jak często to się wykonuje i skąd. Jak tylko w kroku inicjacji, to OK.
+   * Dał bym tutaj też mnożnik, żeby uniknąć sytuacji, kiedy dwa zmiennoprzecinkowe punkty
+   * wejściowe, które są bardzo blisko siebie zostaną przez poniższy get zwróceone jako
+   * ten sam punkt. Można albo mnożyć przez stała (np 1000), albo znaleźć najmniejszą różnicę
+   * mięczy dwoma współrzednymi w danych wejściowych i przeskalować je odpowiednio.
+   */
+  static inline coordinate_type get(const Geometry::Point& point, orientation_2d orient) {
+    return (orient == HORIZONTAL) ? boost::math::iround (point.x) : boost::math::iround (point.y);
+  }
+};
+
+}
 }
 
 /*
@@ -35,7 +62,7 @@ static int side (PPoint const &a, PPoint const & b, PPoint const & c)
  * Dodać sprawdzanie czy punkt kŧóry łączymy jest wewnatrz także w kodzie triangulateDegenerated
  */
 
-static void triangulateDegenerated (voronoi_diagram<double>::vertex_type const *v, std::vector<PPoint> const &points, Geometry::LineString *delaunay)
+static void triangulateDegenerated (voronoi_diagram<double>::vertex_type const *v, std::vector<Geometry::Point> const &points, Geometry::LineString *delaunay)
 {
         printlog ("###triangulate degenerated");
         std::vector<std::size_t> indices;
@@ -54,10 +81,10 @@ static void triangulateDegenerated (voronoi_diagram<double>::vertex_type const *
 
         // Czworobok - wystarczy przeciąć go po przekątnej. TODO możnaby jakoś minimalizować ostre kąty.
         if (indices.size () == 4) {
-                PPoint const &a = points[indices[0]];
-                PPoint const &b = points[indices[2]];
-                delaunay->push_back (Geometry::makePoint (a.x (), a.y ()));
-                delaunay->push_back (Geometry::makePoint (b.x (), b.y ()));
+                Geometry::Point const &a = points[indices[0]];
+                Geometry::Point const &b = points[indices[2]];
+                delaunay->push_back (Geometry::makePoint (a.x, a.y));
+                delaunay->push_back (Geometry::makePoint (b.x, b.y));
         }
 }
 
@@ -74,15 +101,25 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
         Geometry::Ring *svg = ring->getData ();
         std::cerr << "SVG vertices : " << svg->size () << std::endl;
 
-        std::vector<PPoint> points;
 
-        for (Geometry::Ring::const_iterator i = svg->begin (); i != svg->end (); ++i) {
-                points.push_back (PPoint (boost::math::iround (i->x), boost::math::iround (i->y)));
-        }
+
+
+//        std::vector<Geometry::Point> points;
+//
+//        for (Geometry::Ring::const_iterator i = svg->begin (); i != svg->end (); ++i) {
+//                Geometry::Point p;
+//                p.x = boost::math::iround (i->x);
+//                p.y = boost::math::iround (i->y);
+//                points.push_back (p);
+//        }
+
+        // Zamiast kopiowania możemy podać nasze dane w niezmienionej postaci.
+        Geometry::Ring const &points = *svg;
 
         // Robi diagram
         voronoi_diagram<double> vd;
         construct_voronoi (points.begin (), points.end (), &vd);
+        size_t pointsSize = points.size ();
 
         int result = 0;
         for (voronoi_diagram<double>::const_edge_iterator it = vd.edges ().begin (); it != vd.edges ().end (); ++it) {
@@ -104,22 +141,33 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
                          * znajdą się więcej niż 3 cocircullar sites.
                          */
                         if (cell->contains_point () && nextCell->contains_point ()) {
+                                // Start point of delaunay edge to be drawn.
                                 std::size_t indexA = cell->source_index ();
-                                PPoint const &a = points[indexA];
+                                Geometry::Point const &a = points[indexA];
+                                Geometry::Point const &ap = points[(indexA == 0) ? (pointsSize - 1) : (indexA - 1)];
+                                Geometry::Point const &an = points[(indexA == pointsSize - 1) ? (0) : (indexA + 1)];
+
+                                // End point of delaunay edge to be drawn.
                                 std::size_t indexB = nextCell->source_index ();
-                                PPoint const &b = points[indexB];
+                                Geometry::Point const &b = points[indexB];
 
-                                std::size_t indexNextPoly = indexA + 1;
-                                int mySide = 1;
-                                if (indexNextPoly < points.size ()) {
-                                        PPoint const &n = points[indexNextPoly];
-                                        mySide = side (a, n, b);
-                                }
+                                // Przy założeniu, że counter-clockwise
+                                int apx = ap.x - a.x;
+                                int apy = ap.y - a.y;
+                                int anx = an.x - a.x;
+                                int any = an.y - a.y;
+                                int bx = b.x - a.x;
+                                int by = b.y - a.y;
 
-                                if (mySide <= 0) {
+                                int apXan = apx * any - apy * anx;
+                                int apXb = apx * by - apy * bx;
+                                int bXan = bx * any - by * anx;
+
+                                if ((apXan >= 0 && apXb >= 0 && bXan >= 0) ||
+                                    (apXan < 0 && !(apXb < 0 && bXan < 0))) {
                                         // TODO powtórzenia.
-                                        delaunay.push_back (Geometry::makePoint (a.x (), a.y ()));
-                                        delaunay.push_back (Geometry::makePoint (b.x (), b.y ()));
+                                        delaunay.push_back (Geometry::makePoint (a.x, a.y));
+                                        delaunay.push_back (Geometry::makePoint (b.x, b.y));
                                 }
                         }
 
@@ -144,7 +192,7 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
                                 } while (edge != v0->incident_edge ());
 
                                 if (edgeCnt > 3) {
-                                        printlog ("### v0 %d", edgeCnt);
+//                                        printlog ("### v0 %d", edgeCnt);
                                         v0->color (edgeCnt);
                                         // Triangulate degenerated sub-polygon
                                         triangulateDegenerated (v0, points, &delaunay);
