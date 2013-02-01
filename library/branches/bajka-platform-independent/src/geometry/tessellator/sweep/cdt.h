@@ -28,7 +28,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
+ 
 #ifndef CDT_H
 #define CDT_H
 
@@ -41,56 +41,62 @@
  * @author Mason Green <mason.green@gmail.com>
  *
  */
-
+ 
 namespace p2t {
 
-class CDT {
+class CDT
+{
 public:
 
-        /**
-         * Constructor - add polyline with non repeating points
-         *
-         * @param polyline
-         */
-        CDT (std::vector<Point*> polyline);
+  /**
+   * Constructor - add polyline with non repeating points
+   * 
+   * @param polyline
+   */
+  CDT(std::vector<Point*> polyline);
+  
+   /**
+   * Destructor - clean up memory
+   */
+  ~CDT();
+  
+  /**
+   * Add a hole
+   * 
+   * @param polyline
+   */
+  void AddHole(std::vector<Point*> polyline);
+  
+  /**
+   * Add a steiner point
+   * 
+   * @param point
+   */
+  void AddPoint(Point* point);
+  
+  /**
+   * Triangulate - do this AFTER you've added the polyline, holes, and Steiner points
+   */
+  void Triangulate();
+  
+  /**
+   * Get CDT triangles
+   */
+  std::vector<Triangle*> GetTriangles();
+  
+  /**
+   * Get triangle map
+   */
+  std::list<Triangle*> GetMap();
 
-        /**
-         * Destructor - clean up memory
-         */
-        ~CDT ();
+  private:
 
-        /**
-         * Add a hole
-         *
-         * @param polyline
-         */
-        void AddHole (std::vector<Point*> polyline);
-
-        /**
-         * Add a steiner point
-         *
-         * @param point
-         */
-        void AddPoint (Point* point);
-
-        /**
-         * Triangulate - do this AFTER you've added the polyline, holes, and Steiner points
-         */
-        void Triangulate ();
-
-        /**
-         * Get CDT triangles
-         */
-        std::vector<Triangle> const &GetTriangles ();
-
-private:
-
-        /**
-         * Internals
-         */
-
-        SweepContext* sweep_context_;
-        Sweep* sweep_;
+  /**
+   * Internals
+   */
+   
+  SweepContext* sweep_context_;
+  Sweep* sweep_;
 
 };
 

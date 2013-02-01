@@ -56,9 +56,14 @@ void SweepContext::AddPoint(Point* point) {
   points_.push_back(point);
 }
 
-std::vector<Triangle> const &SweepContext::GetTriangles()
+std::vector<Triangle*> SweepContext::GetTriangles()
 {
   return triangles_;
+}
+
+std::list<Triangle*> SweepContext::GetMap()
+{
+  return map_;
 }
 
 void SweepContext::InitTriangulation()
@@ -103,6 +108,11 @@ Point* SweepContext::GetPoint(const int& index)
   return points_[index];
 }
 
+void SweepContext::AddToMap(Triangle* triangle)
+{
+  map_.push_back(triangle);
+}
+
 Node& SweepContext::LocateNode(Point& point)
 {
   // TODO implement search tree
@@ -115,6 +125,8 @@ void SweepContext::CreateAdvancingFront(std::vector<Node*> nodes)
   (void) nodes;
   // Initial triangle
   Triangle* triangle = new Triangle(*points_[0], *tail_, *head_);
+
+  map_.push_back(triangle);
 
   af_head_ = new Node(*triangle->GetPoint(1), *triangle);
   af_middle_ = new Node(*triangle->GetPoint(0), *triangle);
@@ -145,12 +157,16 @@ void SweepContext::MapTriangleToNodes(Triangle& t)
   }
 }
 
+void SweepContext::RemoveFromMap(Triangle* triangle)
+{
+  map_.remove(triangle);
+}
 
 void SweepContext::MeshClean(Triangle& triangle)
 {
   if (&triangle != NULL && !triangle.IsInterior()) {
     triangle.IsInterior(true);
-    triangles_.push_back(triangle);
+    triangles_.push_back(&triangle);
     for (int i = 0; i < 3; i++) {
       if (!triangle.constrained_edge[i])
         MeshClean(*triangle.GetNeighbor(i));
@@ -171,6 +187,11 @@ SweepContext::~SweepContext()
     delete af_tail_;
 
     typedef std::list<Triangle*> type_list;
+
+    for(type_list::iterator iter = map_.begin(); iter != map_.end(); ++iter) {
+        Triangle* ptr = *iter;
+        delete ptr;
+    }
 
      for(unsigned int i = 0; i < edge_list.size(); i++) {
         delete edge_list[i];
