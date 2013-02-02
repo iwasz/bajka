@@ -36,7 +36,7 @@ void TestView::update (Model::IModel *model, Event::UpdateEvent *, View::GLConte
 {
 
         glLineWidth (getThickness ());
-        glPointSize (3);
+        glPointSize (2);
         glEnableVertexAttribArray (ctx->positionAttribLocation);
 
         if (voronoi) {

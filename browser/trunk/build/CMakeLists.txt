@@ -13,7 +13,7 @@ add_definitions (-Wl,-z,defs)
 
 SET (CMAKE_C_FLAGS "-g -fPIC -Wall -O0 -Winvalid-pch -ffunction-sections -fdata-sections")
 SET (CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
-SET (CMAKE_C_FLAGS_RELEASE "-g0 -fPIC -Wall -O3 -Winvalid-pch -ffunction-sections -fdata-sections -DNDEBUG")
+SET (CMAKE_C_FLAGS_RELEASE "-g0 -fPIC -Wall -O3 -Winvalid-pch -ffunction-sections -fdata-sections -ffast-math -DNDEBUG")
 SET (CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
  
 SET (CMAKE_VERBOSE_MAKEFILE 0)
@@ -164,6 +164,7 @@ endif ()
 if (NOT ANDROID)
     TARGET_LINK_LIBRARIES (${PROJECT_NAME} boost_filesystem)
     TARGET_LINK_LIBRARIES (${PROJECT_NAME} boost_system)
+    TARGET_LINK_LIBRARIES (${PROJECT_NAME} boost_timer)
     TARGET_LINK_LIBRARIES (${PROJECT_NAME} ${GLEW_LIBRARIES})
 endif ()
 
