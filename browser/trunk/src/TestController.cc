@@ -18,6 +18,12 @@
 #include "geometry/Point.h"
 #include "TestView.h"
 
+#include "gems5/basic.h"
+extern "C" int generate_random_ordering(int n);
+extern "C" int construct_trapezoids(int nseg, segment_t *seg);
+extern "C" int monotonate_trapezoids(int n);
+extern "C" int triangulate_monotone_polygons(int nmonpoly, int op[][3]);
+
 using boost::polygon::voronoi_builder;
 using boost::polygon::voronoi_diagram;
 
@@ -233,6 +239,7 @@ void DelaunayTriangulation::triangulateDegenerated (voronoi_diagram<double>::ver
 
 bool DelaunayTriangulation::diagonalInside (Geometry::Point const &a, Geometry::Point const &ap, Geometry::Point const &an, Geometry::Point const &b)
 {
+        return true;
         int apx = ap.x - a.x;
         int apy = ap.y - a.y;
         int anx = an.x - a.x;
@@ -262,8 +269,54 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
         Geometry::Ring *svg = ring->getData ();
         std::cerr << "SVG vertices : " << svg->size () << std::endl;
 
+// Moja niedokończona implementacja
+#if 1
         DelaunayTriangulation cdt (*svg, &voronoi, &delaunay);
         cdt.constructDelaunay ();
+#endif
+
+// Implemantacja z graphic gems - nie delaunay.
+#if 0
+        Geometry::Ring const &vertices = *svg;
+        int n = vertices.size ();
+        n = 5;
+
+        // Computation
+        int triangles[SEGSIZE][3];
+        int nmonpoly;
+
+        memset((void *)seg, 0, sizeof(seg));
+        for (int i = 1; i <= n; i++)
+          {
+            seg[i].is_inserted = FALSE;
+
+            seg[i].v0.x = vertices[i].x; /* x-cood */
+            seg[i].v0.y = vertices[i].y; /* y-cood */
+            if (i == 1)
+              {
+                seg[n].v1.x = seg[i].v0.x;
+                seg[n].v1.y = seg[i].v0.y;
+              }
+            else
+              {
+                seg[i - 1].v1.x = seg[i].v0.x;
+                seg[i - 1].v1.y = seg[i].v0.y;
+              }
+          }
+
+        global.nseg = n;
+
+        // initialization
+        for (int i = 1; i <= n; i++) {
+                seg[i].is_inserted = FALSE;
+        }
+
+        generate_random_ordering(n);
+
+        construct_trapezoids(n, seg);
+        nmonpoly = monotonate_trapezoids(n);
+        triangulate_monotone_polygons(nmonpoly, triangles);
+#endif
 
         TestView *tv = dynamic_cast<TestView *> (v);
         tv->voronoi = &voronoi;
