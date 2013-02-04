@@ -8,6 +8,8 @@
 <!--     <circle set-as="child" origin="0, 0" radius="20" th="2" fg="00ff00ff" bg="ff00ffff" translate="-600,255" /> -->
 
 <!--     <Ring set-as="child" depends-on="ape" data="@path3122" view="@redPoly" translate="-100, 260" scale="2"> -->
+<!--     <Ring set-as="child" depends-on="ape" data="@path3122" view="@redPoly" translate="-400, 150" scale="4"> -->
+<!--     <Ring set-as="child" depends-on="ape" data="@path3122" view="@redPoly" translate="-100, 260" scale="2"> -->
 <!--     <Ring set-as="child" depends-on="ape" data="@path3122" view="@redPoly" translate="200, 900" scale="4"> -->
     <Ring set-as="child" depends-on="ape" data="@path3122" view="@redPoly" translate="-800, 400" scale="7">
         <TestController set-as="controller" eventMask="0x200" testView="@redPoly"/>
