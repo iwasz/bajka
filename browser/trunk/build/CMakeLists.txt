@@ -90,6 +90,7 @@ if (ANDROID)
 endif()
 
 AUX_SOURCE_DIRECTORY (../src SOURCES)
+AUX_SOURCE_DIRECTORY (../src/gems5 SOURCES)
 
 # Local includes (inside project).
 INCLUDE_DIRECTORIES (../src)
