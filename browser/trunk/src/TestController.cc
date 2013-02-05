@@ -18,15 +18,6 @@
 #include "geometry/Point.h"
 #include "TestView.h"
 
-#include "gems5/basic.h"
-extern "C" int generate_random_ordering(int n);
-extern "C" int construct_trapezoids(int nseg, segment_t *seg);
-extern "C" int monotonate_trapezoids(int n);
-extern "C" int triangulate_monotone_polygons(int nmonpoly, int op[][3]);
-
-using boost::polygon::voronoi_builder;
-using boost::polygon::voronoi_diagram;
-
 namespace boost {
 namespace polygon {
 
@@ -56,6 +47,32 @@ struct point_traits<Geometry::Point> {
 
 /*##########################################################################*/
 
+/**
+ *
+ */
+template<typename T>
+struct my_voronoi_diagram_traits {
+        typedef T coordinate_type;
+        typedef boost::polygon::voronoi_cell<coordinate_type> cell_type;
+        typedef boost::polygon::voronoi_vertex<coordinate_type> vertex_type;
+        typedef boost::polygon::voronoi_edge<coordinate_type> edge_type;
+
+        typedef struct {
+                bool operator() (const vertex_type& v1, const vertex_type& v2) const
+                {
+                        return false;
+                }
+        } vertex_equality_predicate_type;
+};
+
+/**
+ *
+ */
+typedef boost::polygon::voronoi_diagram<double, my_voronoi_diagram_traits <double> > my_voronoi_diagram;
+
+/**
+ * Input must be in COUNTER CLOCKWISE order.
+ */
 // template
 class DelaunayTriangulation {
 public:
@@ -65,21 +82,6 @@ public:
         void constructDelaunay ();
 
 private:
-
-        /**
-         * TODO : DOC
-         */
-        bool checkDegeneration (voronoi_diagram<double>::vertex_type const *v);
-
-        /*
-         * TODO odkładając punkty do kolekcji voronoi i do delaunay trzeba sprawdzać powtórzenia, tak, aby dany odcinek
-         * odłożyć tylko raz. W przeciwnym wypadku będzie nieoszczędność pamięci.
-         *
-         * Upewniec się, ze input jest posortowany, że poligon jest CCW lub CW - zobaczyć jak.
-         *
-         * Dodać sprawdzanie czy punkt kŧóry łączymy jest wewnatrz także w kodzie triangulateDegenerated
-         */
-        void triangulateDegenerated (voronoi_diagram<double>::vertex_type const *v);
 
         /**
          * Returns if diagonal (a, b) lays completely inside the polygon. It assumes two things:
@@ -102,7 +104,7 @@ private:
 
 void DelaunayTriangulation::constructDelaunay ()
 {
-        voronoi_diagram<double> vd;
+        my_voronoi_diagram vd;
 
 #ifndef NDEBUG
         boost::timer::cpu_timer t0;
@@ -118,19 +120,19 @@ void DelaunayTriangulation::constructDelaunay ()
         size_t pointsSize = input.size ();
 
         int result = 0;
-        for (voronoi_diagram<double>::const_edge_iterator it = vd.edges ().begin (); it != vd.edges ().end (); ++it) {
+        for (my_voronoi_diagram::const_edge_iterator it = vd.edges ().begin (); it != vd.edges ().end (); ++it) {
                 if (it->is_primary ()) {
 
                         ++result;
 
-                        voronoi_diagram<double>::vertex_type const *v0 = it->vertex0 ();
-                        voronoi_diagram<double>::vertex_type const *v1 = it->vertex1 ();
+                        my_voronoi_diagram::vertex_type const *v0 = it->vertex0 ();
+                        my_voronoi_diagram::vertex_type const *v1 = it->vertex1 ();
 
-                        voronoi_diagram<double>::edge_type const &edge = *it;
-                        voronoi_diagram<double>::edge_type const *twin = edge.twin ();
+                        my_voronoi_diagram::edge_type const &edge = *it;
+                        my_voronoi_diagram::edge_type const *twin = edge.twin ();
 
-                        voronoi_diagram<double>::cell_type const *cell = edge.cell ();
-                        voronoi_diagram<double>::cell_type const *nextCell = twin->cell ();
+                        my_voronoi_diagram::cell_type const *cell = edge.cell ();
+                        my_voronoi_diagram::cell_type const *nextCell = twin->cell ();
 
                         /*
                          * Konstruuj GRAF delaunay - w wyniku mogą pojawić wielokaty większe niż trójkąty jeżeli w poblizuu siebie
@@ -154,10 +156,6 @@ void DelaunayTriangulation::constructDelaunay ()
                                 }
                         }
 
-                        // Znajdż degeneracje i trianguluj je
-                        checkDegeneration (v0);
-                        checkDegeneration (v1);
-
                         if (it->is_infinite ()) {
                                 continue;
                         }
@@ -175,71 +173,9 @@ void DelaunayTriangulation::constructDelaunay ()
 
 /****************************************************************************/
 
-bool DelaunayTriangulation::checkDegeneration (voronoi_diagram<double>::vertex_type const *v)
-{
-        // Znajdż degeneracje i trianguluj je
-        if (v && !v->color ()) {
-
-                /*
-                 * Compute the number of incident edges of a voronoi vertex. If its more than 3, we have a degenerate
-                 * situation, where more than 3 site points are cocircullar, and the dual of voronoi graph will construct
-                 * polygon instead of triangle.
-                 */
-                int edgeCnt = 0;
-                voronoi_diagram<double>::edge_type const *edge = v->incident_edge ();
-                do {
-                        ++edgeCnt;
-                        edge = edge->rot_next ();
-                } while (edge != v->incident_edge ());
-
-                v->color (edgeCnt);
-
-                if (edgeCnt > 3) {
-                        // Triangulate degenerated sub-polygon
-                        triangulateDegenerated (v);
-                        return true;
-                }
-        }
-
-        return false;
-}
-
-/****************************************************************************/
-
-void DelaunayTriangulation::triangulateDegenerated (voronoi_diagram<double>::vertex_type const *v)
-{
-        std::vector<std::size_t> indices;
-
-        voronoi_diagram<double>::edge_type const *edge = v->incident_edge ();
-        do {
-                voronoi_diagram<double>::cell_type const *cell = edge->cell ();
-
-                if (cell->contains_point ()) {
-                        std::size_t index = cell->source_index ();
-                        indices.push_back (index);
-                }
-
-                edge = edge->rot_next ();
-        } while (edge != v->incident_edge ());
-
-        // Czworobok - wystarczy przeciąć go po przekątnej. TODO możnaby jakoś minimalizować ostre kąty.
-        if (indices.size () == 4) {
-                Geometry::Point const &a = input[indices[0]];
-                Geometry::Point const &b = input[indices[2]];
-                delaunay->push_back (Geometry::makePoint (a.x, a.y));
-                delaunay->push_back (Geometry::makePoint (b.x, b.y));
-        }
-        else if (indices.size () > 4) {
-                printlog ("--> Degeneration of level 5 or higher");
-                // TODO
-        }
-}
-
-/****************************************************************************/
-
 bool DelaunayTriangulation::diagonalInside (Geometry::Point const &a, Geometry::Point const &ap, Geometry::Point const &an, Geometry::Point const &b)
 {
-        return true;
+//        return true;
         int apx = ap.x - a.x;
         int apy = ap.y - a.y;
         int anx = an.x - a.x;
