@@ -17,6 +17,7 @@
 #include <model/static/Ring.h>
 #include "geometry/Point.h"
 #include "TestView.h"
+#include <stdint.h>
 
 namespace boost {
 namespace polygon {
@@ -44,7 +45,6 @@ struct point_traits<Geometry::Point> {
 }
 }
 
-
 /*##########################################################################*/
 
 /**
@@ -69,6 +69,26 @@ struct my_voronoi_diagram_traits {
  *
  */
 typedef boost::polygon::voronoi_diagram<double, my_voronoi_diagram_traits <double> > my_voronoi_diagram;
+
+/*##########################################################################*/
+
+// size_t może być zamienione na uint32_t (24 bytes on 32bit machine, 48 or 36 on 64bit).
+struct Triangle {
+        // Endpoints of a triangle.
+        uint32_t a, b, c;
+
+        // Adjacent triangles (opposite side of a, b, c).
+        Triangle *A, *B, *C;
+};
+
+typedef std::vector <Triangle> TriangleVector;
+
+// Data structure not optimized. Maybe some contiguous memory region can be used to eliminate memory partition and std::vector overhead.
+typedef std::vector <Triangle *> TrianglePtrVector;
+
+typedef std::vector <TrianglePtrVector> TriangleIndex;
+
+/*##########################################################################*/
 
 /**
  * Input must be in COUNTER CLOCKWISE order.
@@ -98,6 +118,9 @@ private:
         Geometry::Ring const &input;
         Geometry::LineString *voronoi;
         Geometry::LineString *delaunay;
+        TriangleVector triangulation;
+        TriangleIndex triangleIndex;
+
 };
 
 /****************************************************************************/
