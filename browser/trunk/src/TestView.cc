@@ -56,7 +56,8 @@ void TestView::update (Model::IModel *model, Event::UpdateEvent *, View::GLConte
                 glBindBuffer (GL_ARRAY_BUFFER, 0);
 
                 glUniform4f (ctx->colorUniformLocation, 0, 1, 0, 1);
-                glDrawArrays (GL_LINES, 0, delaunay->size ());
+//                glDrawArrays (GL_LINES, 0, delaunay->size ());
+                glDrawArrays (GL_TRIANGLES, 0, delaunay->size ());
         }
 
         // Actual object
