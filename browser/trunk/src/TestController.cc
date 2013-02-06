@@ -81,12 +81,54 @@ struct Triangle {
         Triangle *A, *B, *C;
 };
 
+Triangle makeTriangle (uint32_t a, uint32_t b, uint32_t c)
+{
+        Triangle t;
+        t.a = a;
+        t.b = b;
+        t.c = c;
+        return t;
+}
+
 typedef std::vector <Triangle> TriangleVector;
+
+std::ostream &operator<< (std::ostream &o, TriangleVector const &e)
+{
+        for (TriangleVector::const_iterator i = e.begin (); i != e.end (); ++i) {
+                o << i->a << ", " << i->b << ", " << i->c << "\n";
+        }
+
+        return o;
+}
 
 // Data structure not optimized. Maybe some contiguous memory region can be used to eliminate memory partition and std::vector overhead.
 typedef std::vector <Triangle *> TrianglePtrVector;
 
 typedef std::vector <TrianglePtrVector> TriangleIndex;
+
+typedef std::vector <std::vector <uint32_t> > EdgeFans;
+
+std::ostream &operator<< (std::ostream &o, EdgeFans const &e)
+{
+        size_t cnt = 0;
+        for (EdgeFans::const_iterator i = e.begin (); i != e.end (); ++i, ++cnt) {
+                o << cnt << " : ";
+
+                for (std::vector <uint32_t>::const_iterator j = i->begin (); j != i->end (); ++j) {
+                        o << *j;
+
+                        if (j + 1 == i->end ()) {
+                                o << "\n";
+                                break;
+                        }
+                        else {
+                                o << ", ";
+                        }
+                }
+        }
+
+        return o;
+}
 
 /*##########################################################################*/
 
@@ -97,13 +139,20 @@ typedef std::vector <TrianglePtrVector> TriangleIndex;
 class DelaunayTriangulation {
 public:
 
-        DelaunayTriangulation (Geometry::Ring const &i, Geometry::LineString *v, Geometry::LineString *d) : input (i), voronoi (v), delaunay (d) {}
+        DelaunayTriangulation (const Geometry::Ring& i, Geometry::LineString* v,
+                        Geometry::LineString* d) :
+                        input(i), voronoi(v), delaunay(d)
+        {
+                // -1 jest bo ostatni punkt nie moze być połączony sam ze sobą, a indeksem wiatraka jest mniejsza liczba z dwóch.
+                // A kolejne -1 bo SVG ma ostatni punkt powtórzony.
+                // TODO trzeba obsłużyć przypadek gdy ostatni powtórzony i gdy nie.
+                edgeFans.resize (input.size() - 2);
+        }
 
         void constructDelaunay ();
         void constructDelaunay2 ();
 
 private:
-
         /**
          * Returns if diagonal (a, b) lays completely inside the polygon. It assumes two things:
          * - Points in polygon are stored in counter clockwise order.
@@ -112,18 +161,19 @@ private:
          * This second condition is easy to conform to, since we operate on diagonals generated
          * by triangulation algotihm.
          */
-        bool diagonalInside (Geometry::Point const &a, Geometry::Point const &ap, Geometry::Point const &an, Geometry::Point const &b);
+        bool diagonalInside (const Geometry::Point& a,
+                        const Geometry::Point& ap, const Geometry::Point& an,
+                        const Geometry::Point& b);
+
+        void addTriangle (uint32_t b, uint32_t c, size_t& a);
 
 private:
-
-        Geometry::Ring const &input;
+        const Geometry::Ring&input;
         Geometry::LineString *voronoi;
         Geometry::LineString *delaunay;
         TriangleVector triangulation;
         TriangleIndex triangleIndex;
-
-        typedef std::vector <std::pair <uint32_t, uint32_t> > EdgeVector;
-        EdgeVector edges;
+        EdgeFans edgeFans;
 };
 
 /****************************************************************************/
@@ -179,7 +229,14 @@ void DelaunayTriangulation::constructDelaunay ()
                                         // TODO powtórzenia.
                                         delaunay->push_back (Geometry::makePoint (a.x, a.y));
                                         delaunay->push_back (Geometry::makePoint (b.x, b.y));
-                                        edges.push_back (std::make_pair (indexA, indexB));
+//                                        edges.push_back (std::make_pair (indexA, indexB));
+
+                                        // TODO Tu jest spadek dokładności.
+                                        uint32_t min = std::min (indexA, indexB);
+                                        uint32_t max = std::max (indexA, indexB);
+
+                                        edgeFans[min].push_back (max);
+                                        std::cerr << min << "->" << max << std::endl;
                                 }
                         }
 
@@ -195,7 +252,20 @@ void DelaunayTriangulation::constructDelaunay ()
 #ifndef NDEBUG
         printlog ("Triangulation time (derived from voronoi as its dual) : %f ms", t1.elapsed ().wall / 1000000.0);
         printlog ("Voronoi prim. edges : %d", result);
+        std::cout << edgeFans << std::endl;
 #endif
+}
+
+void DelaunayTriangulation::addTriangle (uint32_t b, uint32_t c, size_t& a)
+{
+        uint32_t bcMin = std::min(b, c);
+        uint32_t bcMax = std::max(b, c);
+        const std::vector<uint32_t>& edgesOfbcMin = edgeFans[bcMin];
+        // Znaleziono krawedz b-c
+        if (std::find(edgesOfbcMin.begin(), edgesOfbcMin.end(), bcMax)
+                        != edgesOfbcMin.end()) {
+                triangulation.push_back(makeTriangle(a, b, c));
+        }
 }
 
 /****************************************************************************/
@@ -215,9 +285,8 @@ void DelaunayTriangulation::constructDelaunay2 ()
 #endif
 
         boost::timer::cpu_timer t1;
-//        size_t pointsSize = input.size ();
-//        int result = 0;
 
+        // 1. Store all the triangle edges in convenient format.
         for (my_voronoi_diagram::const_cell_iterator it = vd.cells ().begin (); it != vd.cells ().end (); ++it) {
 
                 my_voronoi_diagram::cell_type const &cell = *it;
@@ -227,12 +296,9 @@ void DelaunayTriangulation::constructDelaunay2 ()
                 }
 
                 cell.color (true);
+                my_voronoi_diagram::cell_type::source_index_type index = cell.source_index();
                 my_voronoi_diagram::edge_type const *edge = cell.incident_edge ();
-                my_voronoi_diagram::cell_type const *prevCell = NULL;
-                size_t index = cell.source_index ();
-                size_t prevIndex = 0;
 
-                // This is convenient way to iterate edges around Voronoi cell.
                 do {
                         if (edge->color () || !edge->is_primary ()) {
                                 edge = edge->next ();
@@ -244,25 +310,71 @@ void DelaunayTriangulation::constructDelaunay2 ()
 
                         my_voronoi_diagram::cell_type const *adjacentCell = edge->twin ()->cell ();
 
-                        printlog ("Processing edge : %d, %d", index, adjacentCell->source_index ());
-
                         if (!adjacentCell->contains_point ()) {
                                 edge = edge->next ();
                                 continue;
                         }
 
-                        if (prevCell) {
-                                printlog ("New triangle : %d, %d, %d", cell.source_index (), prevCell->source_index (), adjacentCell->source_index ());
-                        }
+                        my_voronoi_diagram::cell_type::source_index_type indexAdjacent = adjacentCell->source_index();
 
-                        prevCell = adjacentCell;
+                        // TODO Tu jest spadek dokładności (z 64bit -> 32bit).
+                        uint32_t min = std::min (index, indexAdjacent);
+                        uint32_t max = std::max (index, indexAdjacent);
+
+                        edgeFans[min].push_back (max);
                         edge = edge->next ();
                 } while (edge != cell.incident_edge ());
         }
 
 #ifndef NDEBUG
+//        std::cout << edgeFans << std::endl;
+#endif
+
+        // 2. make triangles from data gathered in step 1.
+        size_t a = 0;
+        for (EdgeFans::const_iterator i = edgeFans.begin (); i != edgeFans.end (); ++i, ++a) {
+
+                // TODO Czy napewno dobry warunek!?
+                if (i->size () < 2) {
+                        continue;
+                }
+
+                if (i->size () == 2) {
+                        uint32_t b = i->operator [] (0);
+                        uint32_t c = i->operator [] (1);
+                        addTriangle (b, c, a);
+                        continue;
+                }
+
+                // Tylko przy założeniu, ze pierwszy if jest dobry.
+                for (std::vector <uint32_t>::const_iterator j = i->begin (); j != i->end (); ++j) {
+
+                        // Prawdodobny trójkąt : a, b, c. krawędzie a-b i a-c zostały znalezione. Teraz trzeba odszukać czy istnieje b-c.
+                        uint32_t b;
+
+                        if (j == i->begin ()) {
+                                b = *(i->end () - 1);
+                        }
+                        else {
+                                b = *(j - 1);
+                        }
+
+                        uint32_t c = *j;
+                        addTriangle (b, c, a);
+                }
+        }
+
+        // 3. Create debug output
+        for (TriangleVector::const_iterator i = triangulation.begin (); i != triangulation.end (); ++i) {
+                delaunay->push_back (input[i->a]);
+                delaunay->push_back (input[i->b]);
+                delaunay->push_back (input[i->c]);
+        }
+
+#ifndef NDEBUG
         printlog ("Triangulation time (derived from voronoi as its dual) : %f ms", t1.elapsed ().wall / 1000000.0);
-//        printlog ("Voronoi prim. edges : %d", result);
+        //        printlog ("Voronoi prim. edges : %d", result);
+//        std::cout << triangulation << std::endl;
 #endif
 }
 
@@ -303,7 +415,7 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
 // Moja niedokończona implementacja
 #if 1
         DelaunayTriangulation cdt (*svg, &voronoi, &delaunay);
-        cdt.constructDelaunay ();
+        cdt.constructDelaunay2 ();
 #endif
 
         TestView *tv = dynamic_cast<TestView *> (v);
