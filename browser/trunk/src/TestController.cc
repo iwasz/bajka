@@ -100,6 +100,7 @@ public:
         DelaunayTriangulation (Geometry::Ring const &i, Geometry::LineString *v, Geometry::LineString *d) : input (i), voronoi (v), delaunay (d) {}
 
         void constructDelaunay ();
+        void constructDelaunay2 ();
 
 private:
 
@@ -121,6 +122,8 @@ private:
         TriangleVector triangulation;
         TriangleIndex triangleIndex;
 
+        typedef std::vector <std::pair <uint32_t, uint32_t> > EdgeVector;
+        EdgeVector edges;
 };
 
 /****************************************************************************/
@@ -176,6 +179,7 @@ void DelaunayTriangulation::constructDelaunay ()
                                         // TODO powtórzenia.
                                         delaunay->push_back (Geometry::makePoint (a.x, a.y));
                                         delaunay->push_back (Geometry::makePoint (b.x, b.y));
+                                        edges.push_back (std::make_pair (indexA, indexB));
                                 }
                         }
 
@@ -196,9 +200,77 @@ void DelaunayTriangulation::constructDelaunay ()
 
 /****************************************************************************/
 
+void DelaunayTriangulation::constructDelaunay2 ()
+{
+        my_voronoi_diagram vd;
+
+#ifndef NDEBUG
+        boost::timer::cpu_timer t0;
+#endif
+
+        construct_voronoi (input.begin (), input.end (), &vd);
+
+#ifndef NDEBUG
+        printlog ("Voronoi diagram construction time : %f ms", t0.elapsed ().wall / 1000000.0);
+#endif
+
+        boost::timer::cpu_timer t1;
+//        size_t pointsSize = input.size ();
+//        int result = 0;
+
+        for (my_voronoi_diagram::const_cell_iterator it = vd.cells ().begin (); it != vd.cells ().end (); ++it) {
+
+                my_voronoi_diagram::cell_type const &cell = *it;
+
+                if (cell.color () || !cell.contains_point ()) {
+                        continue;
+                }
+
+                cell.color (true);
+                my_voronoi_diagram::edge_type const *edge = cell.incident_edge ();
+                my_voronoi_diagram::cell_type const *prevCell = NULL;
+                size_t index = cell.source_index ();
+                size_t prevIndex = 0;
+
+                // This is convenient way to iterate edges around Voronoi cell.
+                do {
+                        if (edge->color () || !edge->is_primary ()) {
+                                edge = edge->next ();
+                                continue;
+                        }
+
+                        edge->color (true);
+                        edge->twin ()->color (true);
+
+                        my_voronoi_diagram::cell_type const *adjacentCell = edge->twin ()->cell ();
+
+                        printlog ("Processing edge : %d, %d", index, adjacentCell->source_index ());
+
+                        if (!adjacentCell->contains_point ()) {
+                                edge = edge->next ();
+                                continue;
+                        }
+
+                        if (prevCell) {
+                                printlog ("New triangle : %d, %d, %d", cell.source_index (), prevCell->source_index (), adjacentCell->source_index ());
+                        }
+
+                        prevCell = adjacentCell;
+                        edge = edge->next ();
+                } while (edge != cell.incident_edge ());
+        }
+
+#ifndef NDEBUG
+        printlog ("Triangulation time (derived from voronoi as its dual) : %f ms", t1.elapsed ().wall / 1000000.0);
+//        printlog ("Voronoi prim. edges : %d", result);
+#endif
+}
+
+/****************************************************************************/
+
 bool DelaunayTriangulation::diagonalInside (Geometry::Point const &a, Geometry::Point const &ap, Geometry::Point const &an, Geometry::Point const &b)
 {
-//        return true;
+        return true;
         int apx = ap.x - a.x;
         int apy = ap.y - a.y;
         int anx = an.x - a.x;
@@ -232,49 +304,6 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
 #if 1
         DelaunayTriangulation cdt (*svg, &voronoi, &delaunay);
         cdt.constructDelaunay ();
-#endif
-
-// Implemantacja z graphic gems - nie delaunay.
-#if 0
-        Geometry::Ring const &vertices = *svg;
-        int n = vertices.size ();
-        n = 5;
-
-        // Computation
-        int triangles[SEGSIZE][3];
-        int nmonpoly;
-
-        memset((void *)seg, 0, sizeof(seg));
-        for (int i = 1; i <= n; i++)
-          {
-            seg[i].is_inserted = FALSE;
-
-            seg[i].v0.x = vertices[i].x; /* x-cood */
-            seg[i].v0.y = vertices[i].y; /* y-cood */
-            if (i == 1)
-              {
-                seg[n].v1.x = seg[i].v0.x;
-                seg[n].v1.y = seg[i].v0.y;
-              }
-            else
-              {
-                seg[i - 1].v1.x = seg[i].v0.x;
-                seg[i - 1].v1.y = seg[i].v0.y;
-              }
-          }
-
-        global.nseg = n;
-
-        // initialization
-        for (int i = 1; i <= n; i++) {
-                seg[i].is_inserted = FALSE;
-        }
-
-        generate_random_ordering(n);
-
-        construct_trapezoids(n, seg);
-        nmonpoly = monotonate_trapezoids(n);
-        triangulate_monotone_polygons(nmonpoly, triangles);
 #endif
 
         TestView *tv = dynamic_cast<TestView *> (v);
