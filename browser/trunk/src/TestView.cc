@@ -39,16 +39,6 @@ void TestView::update (Model::IModel *model, Event::UpdateEvent *, View::GLConte
         glPointSize (2);
         glEnableVertexAttribArray (ctx->positionAttribLocation);
 
-        if (voronoi) {
-                glBindBuffer (GL_ARRAY_BUFFER, buffer);
-                glBufferData (GL_ARRAY_BUFFER, voronoi->size () * 2 * sizeof (GLfloat), (void *)&voronoi->front (), GL_DYNAMIC_DRAW);
-                glVertexAttribPointer (ctx->positionAttribLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
-                glBindBuffer (GL_ARRAY_BUFFER, 0);
-
-                glUniform4f (ctx->colorUniformLocation, 1, 1, 1, 0.2);
-                glDrawArrays (GL_LINES, 0, voronoi->size ());
-        }
-
         if (delaunay) {
                 glBindBuffer (GL_ARRAY_BUFFER, buffer);
                 glBufferData (GL_ARRAY_BUFFER, delaunay->size () * 2 * sizeof (GLfloat), (void *)&delaunay->front (), GL_DYNAMIC_DRAW);
@@ -58,6 +48,16 @@ void TestView::update (Model::IModel *model, Event::UpdateEvent *, View::GLConte
                 glUniform4f (ctx->colorUniformLocation, 0, 1, 0, 1);
 //                glDrawArrays (GL_LINES, 0, delaunay->size ());
                 glDrawArrays (GL_TRIANGLES, 0, delaunay->size ());
+        }
+
+        if (voronoi) {
+                glBindBuffer (GL_ARRAY_BUFFER, buffer);
+                glBufferData (GL_ARRAY_BUFFER, voronoi->size () * 2 * sizeof (GLfloat), (void *)&voronoi->front (), GL_DYNAMIC_DRAW);
+                glVertexAttribPointer (ctx->positionAttribLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+                glBindBuffer (GL_ARRAY_BUFFER, 0);
+
+                glUniform4f (ctx->colorUniformLocation, 1, 1, 1, 0.2);
+                glDrawArrays (GL_LINES, 0, voronoi->size ());
         }
 
         // Actual object
