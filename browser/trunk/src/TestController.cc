@@ -146,11 +146,12 @@ public:
                 // -1 jest bo ostatni punkt nie moze być połączony sam ze sobą, a indeksem wiatraka jest mniejsza liczba z dwóch.
                 // A kolejne -1 bo SVG ma ostatni punkt powtórzony.
                 // TODO trzeba obsłużyć przypadek gdy ostatni powtórzony i gdy nie.
-                edgeFans.resize (input.size() - 2);
+//                edgeFans.resize (input.size() - 2);
         }
 
         void constructDelaunay ();
         void constructDelaunay2 ();
+        void constructDelaunay3 ();
 
 private:
         /**
@@ -166,6 +167,15 @@ private:
                         const Geometry::Point& b);
 
         void addTriangle (uint32_t b, uint32_t c, size_t& a);
+
+
+        // TODO do usunięcia lub przeniesienia.
+        typedef double coordinate_type;
+        typedef my_voronoi_diagram::vertex_type vertex_type;
+        typedef my_voronoi_diagram::edge_type edge_type;
+        typedef my_voronoi_diagram::cell_type cell_type;
+        typedef Geometry::Point point_type;
+        void clip_infinite_edge (const edge_type& edge, std::vector<point_type>* clipped_edge);
 
 private:
         const Geometry::Ring&input;
@@ -210,6 +220,7 @@ void DelaunayTriangulation::constructDelaunay ()
                         my_voronoi_diagram::cell_type const *cell = edge.cell ();
                         my_voronoi_diagram::cell_type const *nextCell = twin->cell ();
 
+#if 0
                         /*
                          * Konstruuj GRAF delaunay - w wyniku mogą pojawić wielokaty większe niż trójkąty jeżeli w poblizuu siebie
                          * znajdą się więcej niż 3 cocircullar sites.
@@ -236,23 +247,27 @@ void DelaunayTriangulation::constructDelaunay ()
                                         uint32_t max = std::max (indexA, indexB);
 
                                         edgeFans[min].push_back (max);
-                                        std::cerr << min << "->" << max << std::endl;
+//                                        std::cerr << min << "->" << max << std::endl;
                                 }
                         }
-
+#endif
                         if (it->is_infinite ()) {
-                                continue;
+                                std::vector<point_type> samples;
+                                clip_infinite_edge (*it, &samples);
+                                voronoi->push_back (samples[0]);
+                                voronoi->push_back (samples[1]);
                         }
-
-                        voronoi->push_back (Geometry::makePoint (v0->x (), v0->y ()));
-                        voronoi->push_back (Geometry::makePoint (v1->x (), v1->y ()));
+                        else {
+                                voronoi->push_back (Geometry::makePoint (v0->x (), v0->y ()));
+                                voronoi->push_back (Geometry::makePoint (v1->x (), v1->y ()));
+                        }
                 }
         }
 
 #ifndef NDEBUG
         printlog ("Triangulation time (derived from voronoi as its dual) : %f ms", t1.elapsed ().wall / 1000000.0);
         printlog ("Voronoi prim. edges : %d", result);
-        std::cout << edgeFans << std::endl;
+//        std::cout << edgeFans << std::endl;
 #endif
 }
 
@@ -327,7 +342,7 @@ void DelaunayTriangulation::constructDelaunay2 ()
         }
 
 #ifndef NDEBUG
-//        std::cout << edgeFans << std::endl;
+        std::cout << edgeFans << std::endl;
 #endif
 
         // 2. make triangles from data gathered in step 1.
@@ -380,6 +395,70 @@ void DelaunayTriangulation::constructDelaunay2 ()
 
 /****************************************************************************/
 
+void DelaunayTriangulation::constructDelaunay3 ()
+{
+        my_voronoi_diagram vd;
+
+#ifndef NDEBUG
+        boost::timer::cpu_timer t0;
+#endif
+
+        construct_voronoi (input.begin (), input.end (), &vd);
+
+#ifndef NDEBUG
+        printlog ("Voronoi diagram construction time : %f ms", t0.elapsed ().wall / 1000000.0);
+#endif
+
+        boost::timer::cpu_timer t1;
+
+        size_t cnt = 0;
+        for (my_voronoi_diagram::const_vertex_iterator it = vd.vertices ().begin (); it != vd.vertices ().end (); ++it, ++cnt) {
+                vertex_type const &vertex = *it;
+                edge_type const *edge = vertex.incident_edge ();
+
+                uint32_t triangleVertices[3];
+
+                size_t edgeCnt = 0;
+                do {
+                        if (!edge->is_primary ()) {
+                                continue;
+                        }
+
+                        cell_type const *cell = edge->cell ();
+                        size_t index = cell->source_index ();
+                        triangleVertices[edgeCnt++] = index;
+                        edge = edge->rot_next ();
+
+                        if (edgeCnt >= 3) {
+                                break;
+                        }
+                } while (edge != vertex.incident_edge ());
+
+                if (edgeCnt == 3) {
+                        Triangle triangle;
+                        triangle.a = triangleVertices[0];
+                        triangle.b = triangleVertices[1];
+                        triangle.c = triangleVertices[2];
+                        triangulation.push_back (triangle);
+                }
+        }
+
+        // 3. Create debug output
+        for (TriangleVector::const_iterator i = triangulation.begin (); i != triangulation.end (); ++i) {
+                delaunay->push_back (input[i->a]);
+                delaunay->push_back (input[i->b]);
+                delaunay->push_back (input[i->c]);
+        }
+
+#ifndef NDEBUG
+        printlog ("Triangulation time (derived from voronoi as its dual) : %f ms", t1.elapsed ().wall / 1000000.0);
+        //        printlog ("Voronoi prim. edges : %d", result);
+//        std::cout << triangulation << std::endl;
+#endif
+}
+
+/****************************************************************************/
+
 bool DelaunayTriangulation::diagonalInside (Geometry::Point const &a, Geometry::Point const &ap, Geometry::Point const &an, Geometry::Point const &b)
 {
         return true;
@@ -395,6 +474,42 @@ bool DelaunayTriangulation::diagonalInside (Geometry::Point const &a, Geometry::
         int bXan = bx * any - by * anx;
 
         return ((apXan >= 0 && apXb >= 0 && bXan >= 0) || (apXan < 0 && !(apXb < 0 && bXan < 0)));
+}
+
+/****************************************************************************/
+
+void DelaunayTriangulation::clip_infinite_edge (const edge_type& edge, std::vector<point_type>* clipped_edge)
+{
+        const cell_type& cell1 = *edge.cell ();
+        const cell_type& cell2 = *edge.twin ()->cell ();
+        point_type origin, direction;
+
+        // Infinite edges could not be created by two segment sites.
+        if (cell1.contains_point () && cell2.contains_point ()) {
+                point_type const &p1 = input[cell1.source_index ()];
+                point_type const &p2 = input[cell2.source_index ()];
+                origin.x = (p1.x + p2.x) * 0.5;
+                origin.y = (p1.y + p2.y) * 0.5;
+                direction.x = p1.y - p2.y;
+                direction.y = p2.x - p1.x;
+        }
+
+//        coordinate_type side = xh (brect_) - xl (brect_);
+        coordinate_type side = 800;
+        coordinate_type koef = side / (std::max) (fabs (direction.x), fabs (direction.y));
+
+        if (edge.vertex0 () == NULL) {
+                clipped_edge->push_back (Geometry::makePoint (origin.x - direction.x * koef, origin.y - direction.y * koef));
+        }
+        else {
+                clipped_edge->push_back (Geometry::makePoint (edge.vertex0 ()->x (), edge.vertex0 ()->y ()));
+        }
+        if (edge.vertex1 () == NULL) {
+                clipped_edge->push_back (Geometry::makePoint (origin.x + direction.x * koef, origin.y + direction.y * koef));
+        }
+        else {
+                clipped_edge->push_back (Geometry::makePoint (edge.vertex1 ()->x (), edge.vertex1 ()->y ()));
+        }
 }
 
 /*##########################################################################*/
@@ -415,7 +530,8 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
 // Moja niedokończona implementacja
 #if 1
         DelaunayTriangulation cdt (*svg, &voronoi, &delaunay);
-        cdt.constructDelaunay2 ();
+        cdt.constructDelaunay ();
+        cdt.constructDelaunay3 ();
 #endif
 
         TestView *tv = dynamic_cast<TestView *> (v);
