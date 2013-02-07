@@ -45,9 +45,10 @@ void TestView::update (Model::IModel *model, Event::UpdateEvent *, View::GLConte
                 glVertexAttribPointer (ctx->positionAttribLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
                 glBindBuffer (GL_ARRAY_BUFFER, 0);
 
-                glUniform4f (ctx->colorUniformLocation, 0, 1, 0, 1);
+                glUniform4f (ctx->colorUniformLocation, 0, 1, 0, 0.5);
 //                glDrawArrays (GL_LINES, 0, delaunay->size ());
                 glDrawArrays (GL_TRIANGLES, 0, delaunay->size ());
+
         }
 
         if (voronoi) {
@@ -79,6 +80,10 @@ void TestView::update (Model::IModel *model, Event::UpdateEvent *, View::GLConte
                 glUniform4f (ctx->colorUniformLocation, fg.r, fg.g, fg.b, fg.a);
 //                glDrawArrays (GL_LINE_LOOP, 0, vBuf.numVertices);
                 glDrawArrays (GL_POINTS, 0, vBuf.numVertices);
+
+                glPointSize (4);
+                glUniform4f (ctx->colorUniformLocation, fg.r, fg.g, fg.b, fg.a);
+                glDrawArrays (GL_POINTS, 0, 3);
         }
 
         glDisableVertexAttribArray (ctx->positionAttribLocation);
