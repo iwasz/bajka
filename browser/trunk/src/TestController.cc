@@ -57,6 +57,7 @@ struct my_voronoi_diagram_traits {
         typedef boost::polygon::voronoi_vertex<coordinate_type> vertex_type;
         typedef boost::polygon::voronoi_edge<coordinate_type> edge_type;
 
+        // This copes with degenerations.
         typedef struct {
                 bool operator() (const vertex_type& v1, const vertex_type& v2) const
                 {
@@ -74,12 +75,39 @@ typedef boost::polygon::voronoi_diagram<double, my_voronoi_diagram_traits <doubl
 
 // size_t może być zamienione na uint32_t (24 bytes on 32bit machine, 48 or 36 on 64bit).
 struct Triangle {
+
+        Triangle () : a (), b (), c (), A (), B (), C () {}
+
         // Endpoints of a triangle.
         uint32_t a, b, c;
 
         // Adjacent triangles (opposite side of a, b, c).
         Triangle *A, *B, *C;
+
+        bool hasPoint (uint32_t p) const { return p == a || p == b || p == c; }
+        bool hasEdge (uint32_t x, uint32_t y) const { return hasPoint (x) && hasPoint(y); }
+
+//        /**
+//         * Zakłada, że this i t są styczne. Zwraca wierzchołek z thisa, który leży po drugiej stronie
+//         * niż styczny trójkąt t. Czyli zwraca ten wierzchołek , który nie jest wspólny.
+//         */
+//        uint32_t getOppositeVertexToAdjacent (Triangle const &t) const
+//        {
+//                if (!t.hasPoint (a)) {
+//                        return a;
+//                }
+//                if (!t.hasPoint (b)) {
+//                        return b;
+//                }
+//                if (!t.hasPoint (c)) {
+//                        return c;
+//                }
+//        }
 };
+
+//BOOST_STATIC_ASSERT (boost::has_trivial_assign <Triangle>::value);
+//BOOST_STATIC_ASSERT (boost::has_trivial_copy <Triangle>::value);
+//BOOST_STATIC_ASSERT (boost::is_pod <Triangle>::value);
 
 Triangle makeTriangle (uint32_t a, uint32_t b, uint32_t c)
 {
@@ -92,17 +120,51 @@ Triangle makeTriangle (uint32_t a, uint32_t b, uint32_t c)
 
 typedef std::vector <Triangle> TriangleVector;
 
+std::ostream &operator<< (std::ostream &o, Triangle const &i)
+{
+        o << i.a << "," << i.b << "," << i.c;
+        return o;
+}
+
 std::ostream &operator<< (std::ostream &o, TriangleVector const &e)
 {
-        for (TriangleVector::const_iterator i = e.begin (); i != e.end (); ++i) {
-                o << i->a << ", " << i->b << ", " << i->c << "\n";
+        size_t cnt = 0;
+        for (TriangleVector::const_iterator i = e.begin (); i != e.end (); ++i, ++cnt) {
+                o << cnt << ". " << *i << " A=";
+
+                if (i->A) {
+                        o << *(i->A);
+                }
+                else {
+                        o << "NULL";
+                }
+
+                o << " B=";
+
+                if (i->B) {
+                        o << *(i->B);
+                }
+                else {
+                        o << "NULL";
+                }
+
+                o << " C=";
+
+                if (i->C) {
+                        o << *(i->C);
+                }
+                else {
+                        o << "NULL";
+                }
+
+                o << "\n";
         }
 
         return o;
 }
 
 // Data structure not optimized. Maybe some contiguous memory region can be used to eliminate memory partition and std::vector overhead.
-typedef std::vector <Triangle *> TrianglePtrVector;
+typedef std::vector <Triangle const *> TrianglePtrVector;
 
 typedef std::vector <TrianglePtrVector> TriangleIndex;
 
@@ -147,10 +209,11 @@ public:
                 // A kolejne -1 bo SVG ma ostatni punkt powtórzony.
                 // TODO trzeba obsłużyć przypadek gdy ostatni powtórzony i gdy nie.
 //                edgeFans.resize (input.size() - 2);
+                triangleIndex.resize (input.size ());
         }
 
         void constructDelaunay ();
-        void constructDelaunay2 ();
+//        void constructDelaunay2 ();
         void constructDelaunay3 ();
 
 private:
@@ -166,7 +229,7 @@ private:
                         const Geometry::Point& ap, const Geometry::Point& an,
                         const Geometry::Point& b);
 
-        void addTriangle (uint32_t b, uint32_t c, size_t& a);
+//        void addTriangle (uint32_t b, uint32_t c, size_t& a);
 
 
         // TODO do usunięcia lub przeniesienia.
@@ -183,7 +246,7 @@ private:
         Geometry::LineString *delaunay;
         TriangleVector triangulation;
         TriangleIndex triangleIndex;
-        EdgeFans edgeFans;
+//        EdgeFans edgeFans;
 };
 
 /****************************************************************************/
@@ -203,7 +266,6 @@ void DelaunayTriangulation::constructDelaunay ()
 #endif
 
         boost::timer::cpu_timer t1;
-        size_t pointsSize = input.size ();
 
         int result = 0;
         for (my_voronoi_diagram::const_edge_iterator it = vd.edges ().begin (); it != vd.edges ().end (); ++it) {
@@ -214,13 +276,13 @@ void DelaunayTriangulation::constructDelaunay ()
                         my_voronoi_diagram::vertex_type const *v0 = it->vertex0 ();
                         my_voronoi_diagram::vertex_type const *v1 = it->vertex1 ();
 
+#if 0
                         my_voronoi_diagram::edge_type const &edge = *it;
                         my_voronoi_diagram::edge_type const *twin = edge.twin ();
 
                         my_voronoi_diagram::cell_type const *cell = edge.cell ();
                         my_voronoi_diagram::cell_type const *nextCell = twin->cell ();
 
-#if 0
                         /*
                          * Konstruuj GRAF delaunay - w wyniku mogą pojawić wielokaty większe niż trójkąty jeżeli w poblizuu siebie
                          * znajdą się więcej niż 3 cocircullar sites.
@@ -271,6 +333,7 @@ void DelaunayTriangulation::constructDelaunay ()
 #endif
 }
 
+#if 0
 void DelaunayTriangulation::addTriangle (uint32_t b, uint32_t c, size_t& a)
 {
         uint32_t bcMin = std::min(b, c);
@@ -392,6 +455,7 @@ void DelaunayTriangulation::constructDelaunay2 ()
 //        std::cout << triangulation << std::endl;
 #endif
 }
+#endif
 
 /****************************************************************************/
 
@@ -411,12 +475,14 @@ void DelaunayTriangulation::constructDelaunay3 ()
 
         boost::timer::cpu_timer t1;
 
-        size_t cnt = 0;
-        for (my_voronoi_diagram::const_vertex_iterator it = vd.vertices ().begin (); it != vd.vertices ().end (); ++it, ++cnt) {
+        // 1. Make triangles from voronoi.
+        for (my_voronoi_diagram::const_vertex_iterator it = vd.vertices ().begin (); it != vd.vertices ().end (); ++it) {
                 vertex_type const &vertex = *it;
                 edge_type const *edge = vertex.incident_edge ();
 
                 uint32_t triangleVertices[3];
+                uint32_t triangleCnt = triangulation.size ();
+                vertex.color (triangleCnt);
 
                 size_t edgeCnt = 0;
                 do {
@@ -427,12 +493,10 @@ void DelaunayTriangulation::constructDelaunay3 ()
                         cell_type const *cell = edge->cell ();
                         size_t index = cell->source_index ();
                         triangleVertices[edgeCnt++] = index;
+                        // Add 1 thus default 0 is invalid.
+                        edge->color (triangleCnt + 1);
                         edge = edge->rot_next ();
-
-                        if (edgeCnt >= 3) {
-                                break;
-                        }
-                } while (edge != vertex.incident_edge ());
+                } while (edge != vertex.incident_edge () && edgeCnt < 3);
 
                 if (edgeCnt == 3) {
                         Triangle triangle;
@@ -440,10 +504,83 @@ void DelaunayTriangulation::constructDelaunay3 ()
                         triangle.b = triangleVertices[1];
                         triangle.c = triangleVertices[2];
                         triangulation.push_back (triangle);
+//                        std::cerr << triangulation << std::endl;
+
+                        // Update triangle index.
+                        Triangle const *t = &triangulation.back ();
+                        triangleIndex[triangle.a].push_back (t);
+                        std::cerr << "Point " << triangle.a << " has incident triangle : " << *t << std::endl;
+                        triangleIndex[triangle.b].push_back (t);
+                        std::cerr << "Point " << triangle.b << " has incident triangle : " << *t << std::endl;
+                        triangleIndex[triangle.c].push_back (t);
+                        std::cerr << "Point " << triangle.c << " has incident triangle : " << *t << std::endl;
                 }
         }
 
-        // 3. Create debug output
+        // 2. Link triangles.
+        for (my_voronoi_diagram::const_vertex_iterator it = vd.vertices ().begin (); it != vd.vertices ().end (); ++it) {
+                vertex_type const &vertex = *it;
+                Triangle &triangle = triangulation[vertex.color ()];
+                edge_type const *edge = vertex.incident_edge ();
+                size_t edgeCnt = 0;
+
+                do {
+                        if (!edge->is_primary ()) {
+                                continue;
+                        }
+
+                        uint32_t adjacentIndex = edge->twin ()->color ();
+
+                        // Index with value 0 is invalid.
+                        if (!adjacentIndex) {
+                                edge = edge->rot_next ();
+                                continue;
+                        }
+
+                        Triangle &adjacentTriangle = triangulation[adjacentIndex - 1];
+
+                        // Sprawdzić którym bokiem się stykają i ustawić.
+                        if (!adjacentTriangle.hasPoint (triangle.a)) {
+                                triangle.A = &adjacentTriangle;
+                        }
+                        else if (!adjacentTriangle.hasPoint (triangle.b)) {
+                                triangle.B = &adjacentTriangle;
+                        }
+                        else if (!adjacentTriangle.hasPoint (triangle.c)) {
+                                triangle.C = &adjacentTriangle;
+                        }
+
+                        ++edgeCnt;
+                        edge = edge->rot_next ();
+                } while (edge != vertex.incident_edge () && edgeCnt < 3);
+        }
+
+        // 3. Perform CDT
+        /*
+         * TODO This is loop made for simple polygons (without holes). It is also possible to make
+         * loop for dicrete list of constraints (that are not linked).
+         */
+        size_t inputSize = input.size ();
+        for (size_t i = 0; i < inputSize; ++i) {
+                size_t j = (i + 1) % inputSize;
+
+                TrianglePtrVector const &trianglesForPoint = triangleIndex[i];
+                std::cerr << "Point " << i << " has " << trianglesForPoint.size () << " triangles : ";
+
+                bool found = false;
+                for (TrianglePtrVector::const_iterator k = trianglesForPoint.begin (); k != trianglesForPoint.end (); ++k) {
+                        std::cerr << **k <<  " | ";
+                        if ((*k)->hasEdge (i, j)) {
+                                found = true;
+//                                break;
+                        }
+                }
+
+                std::cerr << "\n";
+                std::cerr << "Constraint (" << i << ", " << j << ") was" << ((found) ? (" ") : (" **NOT** ")) << "found in triangulation." << std::endl;
+        }
+
+        // 4. Create debug output
         for (TriangleVector::const_iterator i = triangulation.begin (); i != triangulation.end (); ++i) {
                 delaunay->push_back (input[i->a]);
                 delaunay->push_back (input[i->b]);
@@ -453,7 +590,7 @@ void DelaunayTriangulation::constructDelaunay3 ()
 #ifndef NDEBUG
         printlog ("Triangulation time (derived from voronoi as its dual) : %f ms", t1.elapsed ().wall / 1000000.0);
         //        printlog ("Voronoi prim. edges : %d", result);
-//        std::cout << triangulation << std::endl;
+        std::cout << triangulation << std::endl;
 #endif
 }
 
