@@ -76,7 +76,7 @@ typedef boost::polygon::voronoi_diagram<double, my_voronoi_diagram_traits <doubl
 // size_t może być zamienione na uint32_t (24 bytes on 32bit machine, 48 or 36 on 64bit).
 struct Triangle {
 
-        Triangle () : a (), b (), c (), A (), B (), C () {}
+        Triangle () : a (0), b (0), c (0), A (0), B (0), C (0) {}
 
         // Endpoints of a triangle.
         uint32_t a, b, c;
@@ -86,23 +86,6 @@ struct Triangle {
 
         bool hasPoint (uint32_t p) const { return p == a || p == b || p == c; }
         bool hasEdge (uint32_t x, uint32_t y) const { return hasPoint (x) && hasPoint(y); }
-
-//        /**
-//         * Zakłada, że this i t są styczne. Zwraca wierzchołek z thisa, który leży po drugiej stronie
-//         * niż styczny trójkąt t. Czyli zwraca ten wierzchołek , który nie jest wspólny.
-//         */
-//        uint32_t getOppositeVertexToAdjacent (Triangle const &t) const
-//        {
-//                if (!t.hasPoint (a)) {
-//                        return a;
-//                }
-//                if (!t.hasPoint (b)) {
-//                        return b;
-//                }
-//                if (!t.hasPoint (c)) {
-//                        return c;
-//                }
-//        }
 };
 
 //BOOST_STATIC_ASSERT (boost::has_trivial_assign <Triangle>::value);
@@ -168,6 +151,26 @@ typedef std::vector <Triangle const *> TrianglePtrVector;
 
 typedef std::vector <TrianglePtrVector> TriangleIndex;
 
+std::ostream &operator<< (std::ostream &o, TriangleIndex const &e)
+{
+        size_t cnt = 0;
+        for (TriangleIndex::const_iterator i = e.begin (); i != e.end (); ++i, ++cnt) {
+                TrianglePtrVector const &trianglesForPoint = *i;
+
+                for (TrianglePtrVector::const_iterator k = trianglesForPoint.begin (); k != trianglesForPoint.end (); ++k) {
+                        o << cnt << " : " << **k;
+
+                        if (k + 1 != trianglesForPoint.end ()) {
+                                o << " | ";
+                        }
+                }
+
+                o << "\n";
+        }
+
+        return o;
+}
+
 typedef std::vector <std::vector <uint32_t> > EdgeFans;
 
 std::ostream &operator<< (std::ostream &o, EdgeFans const &e)
@@ -210,6 +213,7 @@ public:
                 // TODO trzeba obsłużyć przypadek gdy ostatni powtórzony i gdy nie.
 //                edgeFans.resize (input.size() - 2);
                 triangleIndex.resize (input.size ());
+                triangulation.reserve (input.size ());
         }
 
         void constructDelaunay ();
@@ -238,10 +242,12 @@ private:
         typedef my_voronoi_diagram::edge_type edge_type;
         typedef my_voronoi_diagram::cell_type cell_type;
         typedef Geometry::Point point_type;
+        typedef std::pair <uint32_t, uint32_t> Edge;
+        typedef std::list <Edge> EdgeList;
         void clip_infinite_edge (const edge_type& edge, std::vector<point_type>* clipped_edge);
 
 private:
-        const Geometry::Ring&input;
+        const Geometry::Ring &input;
         Geometry::LineString *voronoi;
         Geometry::LineString *delaunay;
         TriangleVector triangulation;
@@ -467,7 +473,7 @@ void DelaunayTriangulation::constructDelaunay3 ()
         boost::timer::cpu_timer t0;
 #endif
 
-        construct_voronoi (input.begin (), input.end (), &vd);
+        construct_voronoi (input.begin (), input.end () - 1, &vd);
 
 #ifndef NDEBUG
         printlog ("Voronoi diagram construction time : %f ms", t0.elapsed ().wall / 1000000.0);
@@ -508,12 +514,19 @@ void DelaunayTriangulation::constructDelaunay3 ()
 
                         // Update triangle index.
                         Triangle const *t = &triangulation.back ();
+
+                        assert (triangleIndex.size () > triangle.a);
                         triangleIndex[triangle.a].push_back (t);
-                        std::cerr << "Point " << triangle.a << " has incident triangle : " << *t << std::endl;
+
+                        assert (triangleIndex.size () > triangle.b);
                         triangleIndex[triangle.b].push_back (t);
-                        std::cerr << "Point " << triangle.b << " has incident triangle : " << *t << std::endl;
+
+                        assert (triangleIndex.size () > triangle.c);
                         triangleIndex[triangle.c].push_back (t);
-                        std::cerr << "Point " << triangle.c << " has incident triangle : " << *t << std::endl;
+
+//                        std::cerr << "Point " << triangle.a << " has incident triangle : " << *t << std::endl;
+//                        std::cerr << "Point " << triangle.b << " has incident triangle : " << *t << std::endl;
+//                        std::cerr << "Point " << triangle.c << " has incident triangle : " << *t << std::endl;
                 }
         }
 
@@ -555,32 +568,94 @@ void DelaunayTriangulation::constructDelaunay3 ()
                 } while (edge != vertex.incident_edge () && edgeCnt < 3);
         }
 
-        // 3. Perform CDT
+        // Update triangleVector (data structure for CDT).
         /*
          * TODO This is loop made for simple polygons (without holes). It is also possible to make
          * loop for dicrete list of constraints (that are not linked).
+         * TODO -1 bo ostatni się powtarza. Uwzględnic lepiej.
          */
-        size_t inputSize = input.size ();
+        EdgeList missingConstraints;
+        size_t inputSize = input.size () - 1;
         for (size_t i = 0; i < inputSize; ++i) {
                 size_t j = (i + 1) % inputSize;
 
+                assert (triangleIndex.size () > i);
                 TrianglePtrVector const &trianglesForPoint = triangleIndex[i];
-                std::cerr << "Point " << i << " has " << trianglesForPoint.size () << " triangles : ";
+
+                assert (!trianglesForPoint.empty ());
+//                std::cerr << "Point " << i << " has " << trianglesForPoint.size () << " triangles : ";
+//                std::cerr << *trianglesForPoint.front () << std::endl;
 
                 bool found = false;
                 for (TrianglePtrVector::const_iterator k = trianglesForPoint.begin (); k != trianglesForPoint.end (); ++k) {
-                        std::cerr << **k <<  " | ";
                         if ((*k)->hasEdge (i, j)) {
                                 found = true;
 //                                break;
                         }
                 }
 
-                std::cerr << "\n";
-                std::cerr << "Constraint (" << i << ", " << j << ") was" << ((found) ? (" ") : (" **NOT** ")) << "found in triangulation." << std::endl;
+//                std::cerr << "\n";
+//                std::cerr << "Constraint (" << i << ", " << j << ") was" << ((found) ? (" ") : (" **NOT** ")) << "found in triangulation." << std::endl;
+
+                if (!found) {
+                        std::cerr << "Constraint (" << i << ", " << j << ") was **NOT** found in triangulation." << std::endl;
+                        missingConstraints.push_back (std::make_pair (i, j));
+                }
         }
 
-        // 4. Create debug output
+        // 4. Add missing segments.
+        for (EdgeList::const_iterator i = missingConstraints.begin (); i != missingConstraints.end (); ++i) {
+                Edge const &missingConstraint = *i;
+                EdgeList crossingEdges;
+                findIntersectingEdges (missingConstraint, &crossingEdges);
+
+                EdgeList newEdges;
+                EdgeList::iterator i = missingConstraints.begin ();
+                while (!crossingEdges.empty ()) {
+                        EdgeList::iterator next = i;
+                        ++next;
+
+                        Edge e = *i;
+                        Triangle *a, b;
+                        findTrianglesSharingEdge (e, a, b);
+
+                        if (!twoTrianglesConvex (*a, *b)) {
+
+                                if (crossingEdges.size () == 1) {
+                                        // TODO Jeśli została tylko jedna brakująca, to nei ma wyjścia - trzeba coś zrobić.
+                                        // TODO nieskończona
+                                }
+
+                                i = next;
+                                continue;
+                        }
+
+                        crossingEdges.erase (i);
+
+                        Edge newDiagonal;
+                        /*
+                         * Tu trzeba
+                         * - uaktualnić wierzchołki trójkątów.
+                         * - uaktualnić ich zlinkowane trójkąty.
+                         * - uaktualnic triangleIndex.
+                         */
+                        flip (a, b, &newDiagonal);
+
+                        if (intersects (e, newDiagonal)) {
+                                missingConstraints.push_back (newDiagonal);
+                        }
+                        else {
+                                newEdges.push_back (newDiagonal);
+                        }
+
+                        i = next;
+                }
+        }
+
+        // 4. Make CDT from DT.
+
+
+        // 5. Create debug output
         for (TriangleVector::const_iterator i = triangulation.begin (); i != triangulation.end (); ++i) {
                 delaunay->push_back (input[i->a]);
                 delaunay->push_back (input[i->b]);
@@ -674,4 +749,5 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
         TestView *tv = dynamic_cast<TestView *> (v);
         tv->voronoi = &voronoi;
         tv->delaunay = &delaunay;
+        exit (0);
 }
