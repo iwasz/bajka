@@ -16,7 +16,7 @@
     
   </Group>
 
-  <SvgGeometryFactory id="ape" cont="@#container" file="ape-orig.svg" />
+  <SvgGeometryFactory id="ape" cont="@#container" file="ape.svg" />
   <TestView id="redPoly" foreground="@orange" background="00000000"/>
 
 </beans>
