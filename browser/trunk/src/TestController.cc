@@ -149,6 +149,20 @@ std::ostream &operator<< (std::ostream &o, TriangleVector const &e)
 // Data structure not optimized. Maybe some contiguous memory region can be used to eliminate memory partition and std::vector overhead.
 typedef std::vector <Triangle const *> TrianglePtrVector;
 
+std::ostream &operator<< (std::ostream &o, TrianglePtrVector const &e)
+{
+        size_t cnt = 0;
+        for (TrianglePtrVector::const_iterator i = e.begin (); i != e.end (); ++i, ++cnt) {
+                o << **i;
+
+                if (i + 1 != e.end ()) {
+                        o << ",";
+                }
+        }
+
+        return o;
+}
+
 typedef std::vector <TrianglePtrVector> TriangleIndex;
 
 std::ostream &operator<< (std::ostream &o, TriangleIndex const &e)
@@ -195,6 +209,50 @@ std::ostream &operator<< (std::ostream &o, EdgeFans const &e)
         return o;
 }
 
+/****************************************************************************/
+
+namespace Geometry {
+struct Edge {
+        Geometry::Point a;
+        Geometry::Point b;
+};
+
+BOOST_STATIC_ASSERT (boost::has_trivial_assign <Edge>::value);
+BOOST_STATIC_ASSERT (boost::has_trivial_copy <Edge>::value);
+BOOST_STATIC_ASSERT (boost::is_pod <Edge>::value);
+
+float getArea (Point const &a, Point const &b, Point const &c)
+{
+        return (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
+}
+
+bool isLeft (Point const &a, Point const &b, Point const &c)
+{
+        return getArea (a, b, c) > 0;
+}
+
+// TODO To musi pracować na INTACH z voronoia! Nie może być tego epsilona!
+bool isCollinear (Point const &a, Point const &b, Point const &c)
+{
+        return fabs (getArea (a, b, c)) < 0.00001;
+}
+
+/**
+ * Computational geometry in C - second edition.
+ */
+bool intersects (Edge const &a, Edge const &b)
+{
+        if (isCollinear (a.a, a.b, b.a) ||
+            isCollinear (a.a, a.b, b.b) ||
+            isCollinear (b.a, b.b, a.a) ||
+            isCollinear (b.a, b.b, a.b)) {
+                return false;
+        }
+
+        return (isLeft (a.a, a.b, b.a) ^ isLeft (a.a, a.b, b.b)) && (isLeft (b.a, b.b, a.a) ^ isLeft (b.a, b.b, a.b));
+}
+
+}
 /*##########################################################################*/
 
 /**
@@ -208,12 +266,9 @@ public:
                         Geometry::LineString* d) :
                         input(i), voronoi(v), delaunay(d)
         {
-                // -1 jest bo ostatni punkt nie moze być połączony sam ze sobą, a indeksem wiatraka jest mniejsza liczba z dwóch.
-                // A kolejne -1 bo SVG ma ostatni punkt powtórzony.
-                // TODO trzeba obsłużyć przypadek gdy ostatni powtórzony i gdy nie.
-//                edgeFans.resize (input.size() - 2);
                 triangleIndex.resize (input.size ());
-                triangulation.reserve (input.size ());
+                // TODO ***KRYTYCZNE*** ustawić tu tyle ile ma być. Da się to wyliczyć na początku!?
+                triangulation.reserve (input.size () * 10);
         }
 
         void constructDelaunay ();
@@ -242,9 +297,28 @@ private:
         typedef my_voronoi_diagram::edge_type edge_type;
         typedef my_voronoi_diagram::cell_type cell_type;
         typedef Geometry::Point point_type;
+public:
         typedef std::pair <uint32_t, uint32_t> Edge;
+private:
         typedef std::list <Edge> EdgeList;
-        void clip_infinite_edge (const edge_type& edge, std::vector<point_type>* clipped_edge);
+        void clipInfiniteEdge (const edge_type& edge, std::vector<point_type>* clipped_edge);
+
+        /**
+         * Input : this->triangulation (performed earlier), edge to check for. Edge must have endpoints
+         * in this->input.
+         * Output : list of edges which intersects with edge.
+         */
+        void findCrossingEdges (Edge const &edge, EdgeList *crossingEdges, TrianglePtrVector *triangles);
+
+        /**
+         * First tuple element : number of intersections (0, 1 or 2).
+         * Second tuple element : number of first edge (if any) which intersects with edge e.
+         * Third tuple element : number of second edge (if any) which intersects with edge e.
+         * - 1 : c-b
+         * - 2 : c-a
+         * - 3 : b-a
+         */
+        boost::tuple <int, int, int> intersects (Triangle const &t, Geometry::Edge const &e);
 
 private:
         const Geometry::Ring &input;
@@ -252,8 +326,58 @@ private:
         Geometry::LineString *delaunay;
         TriangleVector triangulation;
         TriangleIndex triangleIndex;
-//        EdgeFans edgeFans;
 };
+
+/****************************************************************************/
+
+std::ostream &operator<< (std::ostream &o, DelaunayTriangulation::Edge const &e)
+{
+        o << "(" << e.first << "," << e.second << ")";
+        return o;
+}
+
+/****************************************************************************/
+
+boost::tuple <int, int, int> DelaunayTriangulation::intersects (Triangle const &t, Geometry::Edge const &e)
+{
+        boost::tuple <int, int, int> ret;
+
+        int cnt = 0;
+        Geometry::Edge edge;
+        edge.a = input[t.c];
+        edge.b = input[t.b];
+        if (Geometry::intersects (e, edge)) {
+                ret.get<1> () = 1;
+                ++cnt;
+        }
+
+        edge.a = input[t.c];
+        edge.b = input[t.a];
+        if (Geometry::intersects (e, edge)) {
+                if (cnt) {
+                        ret.get<2> () = 2;
+                }
+                else {
+                        ret.get<1> () = 2;
+                }
+                ++cnt;
+        }
+
+        edge.a = input[t.b];
+        edge.b = input[t.a];
+        if (Geometry::intersects (e, edge)) {
+                if (cnt) {
+                        ret.get<2> () = 3;
+                }
+                else {
+                        ret.get<1> () = 3;
+                }
+                ++cnt;
+        }
+
+        ret.get<0> () = cnt;
+        return ret;
+}
 
 /****************************************************************************/
 
@@ -321,7 +445,7 @@ void DelaunayTriangulation::constructDelaunay ()
 #endif
                         if (it->is_infinite ()) {
                                 std::vector<point_type> samples;
-                                clip_infinite_edge (*it, &samples);
+                                clipInfiniteEdge (*it, &samples);
                                 voronoi->push_back (samples[0]);
                                 voronoi->push_back (samples[1]);
                         }
@@ -473,7 +597,7 @@ void DelaunayTriangulation::constructDelaunay3 ()
         boost::timer::cpu_timer t0;
 #endif
 
-        construct_voronoi (input.begin (), input.end () - 1, &vd);
+        construct_voronoi (input.begin (), input.end (), &vd);
 
 #ifndef NDEBUG
         printlog ("Voronoi diagram construction time : %f ms", t0.elapsed ().wall / 1000000.0);
@@ -530,6 +654,10 @@ void DelaunayTriangulation::constructDelaunay3 ()
                 }
         }
 
+#ifndef NDEBUG
+        std::cerr << "Delaunay triangulation produced : " << triangulation.size () << " triangles." << std::endl;
+#endif
+
         // 2. Link triangles.
         for (my_voronoi_diagram::const_vertex_iterator it = vd.vertices ().begin (); it != vd.vertices ().end (); ++it) {
                 vertex_type const &vertex = *it;
@@ -568,37 +696,44 @@ void DelaunayTriangulation::constructDelaunay3 ()
                 } while (edge != vertex.incident_edge () && edgeCnt < 3);
         }
 
-        // Update triangleVector (data structure for CDT).
+#if 1
+        std::cout << triangulation << std::endl;
+#endif
+
+        // 3. Update triangleVector (data structure for CDT).
         /*
          * TODO This is loop made for simple polygons (without holes). It is also possible to make
          * loop for dicrete list of constraints (that are not linked).
-         * TODO -1 bo ostatni się powtarza. Uwzględnic lepiej.
          */
         EdgeList missingConstraints;
-        size_t inputSize = input.size () - 1;
+        size_t inputSize = input.size ();
+
         for (size_t i = 0; i < inputSize; ++i) {
                 size_t j = (i + 1) % inputSize;
 
                 assert (triangleIndex.size () > i);
                 TrianglePtrVector const &trianglesForPoint = triangleIndex[i];
 
+#if 0
+                if (trianglesForPoint.empty ()) {
+                        std::cerr << "UWAGA : trianglesForPoint.empty () : nie ma trójkątów stycznych do punktu o indeksie : " << i << ". TODO rozkminić czy to OK. i_max = " << inputSize -1  << std::endl;
+                }
+#endif
+
                 assert (!trianglesForPoint.empty ());
-//                std::cerr << "Point " << i << " has " << trianglesForPoint.size () << " triangles : ";
-//                std::cerr << *trianglesForPoint.front () << std::endl;
 
                 bool found = false;
                 for (TrianglePtrVector::const_iterator k = trianglesForPoint.begin (); k != trianglesForPoint.end (); ++k) {
                         if ((*k)->hasEdge (i, j)) {
                                 found = true;
-//                                break;
+                                break;
                         }
                 }
 
-//                std::cerr << "\n";
-//                std::cerr << "Constraint (" << i << ", " << j << ") was" << ((found) ? (" ") : (" **NOT** ")) << "found in triangulation." << std::endl;
-
                 if (!found) {
+#if 1
                         std::cerr << "Constraint (" << i << ", " << j << ") was **NOT** found in triangulation." << std::endl;
+#endif
                         missingConstraints.push_back (std::make_pair (i, j));
                 }
         }
@@ -606,32 +741,40 @@ void DelaunayTriangulation::constructDelaunay3 ()
         // 4. Add missing segments.
         for (EdgeList::const_iterator i = missingConstraints.begin (); i != missingConstraints.end (); ++i) {
                 Edge const &missingConstraint = *i;
+
                 EdgeList crossingEdges;
-                findIntersectingEdges (missingConstraint, &crossingEdges);
+                TrianglePtrVector crossingTriangles;
+                findCrossingEdges (missingConstraint, &crossingEdges, &crossingTriangles);
+
+                std::cerr << "Constraint " << missingConstraint << " crosses : " << crossingTriangles << std::endl;
+                continue;
 
                 EdgeList newEdges;
-                EdgeList::iterator i = missingConstraints.begin ();
+                EdgeList::iterator i = crossingEdges.begin ();
                 while (!crossingEdges.empty ()) {
                         EdgeList::iterator next = i;
                         ++next;
 
                         Edge e = *i;
                         Triangle *a, b;
+#if 0
                         findTrianglesSharingEdge (e, a, b);
 
                         if (!twoTrianglesConvex (*a, *b)) {
 
                                 if (crossingEdges.size () == 1) {
-                                        // TODO Jeśli została tylko jedna brakująca, to nei ma wyjścia - trzeba coś zrobić.
-                                        // TODO nieskończona
+                                        /*
+                                         * TODO Jeśli jest tylko jedna przecinająca dany constraint, to jeśli convex,
+                                         * to flip, a jeśli nie, to nie wiem, ale coś trzeba tu zrobić.
+                                         */
                                 }
 
                                 i = next;
                                 continue;
                         }
-
+#endif
+                        // Dwa przyległę trójkąty zawierające e tworzą czworobok wypukły.
                         crossingEdges.erase (i);
-
                         Edge newDiagonal;
                         /*
                          * Tu trzeba
@@ -639,6 +782,7 @@ void DelaunayTriangulation::constructDelaunay3 ()
                          * - uaktualnić ich zlinkowane trójkąty.
                          * - uaktualnic triangleIndex.
                          */
+#if 0
                         flip (a, b, &newDiagonal);
 
                         if (intersects (e, newDiagonal)) {
@@ -647,7 +791,7 @@ void DelaunayTriangulation::constructDelaunay3 ()
                         else {
                                 newEdges.push_back (newDiagonal);
                         }
-
+#endif
                         i = next;
                 }
         }
@@ -665,8 +809,86 @@ void DelaunayTriangulation::constructDelaunay3 ()
 #ifndef NDEBUG
         printlog ("Triangulation time (derived from voronoi as its dual) : %f ms", t1.elapsed ().wall / 1000000.0);
         //        printlog ("Voronoi prim. edges : %d", result);
-        std::cout << triangulation << std::endl;
+//        std::cout << triangulation << std::endl;
 #endif
+}
+
+/****************************************************************************/
+
+Triangle *getAdjacentTriangle (Triangle const &triangle, int side)
+{
+        switch (side) {
+        case 1:
+                return triangle.A;
+        case 2:
+                return triangle.B;
+        case 3:
+                return triangle.C;
+        case 0:
+        default:
+                return NULL;
+        }
+}
+
+/****************************************************************************/
+
+void DelaunayTriangulation::findCrossingEdges (Edge const &edge, EdgeList *crossingEdges, TrianglePtrVector *triangles)
+{
+        TrianglePtrVector const &incidentTriangles = triangleIndex[edge.first];
+        Geometry::Edge e;
+        e.a = input[edge.first];
+        e.b = input[edge.second];
+
+        Triangle const *start = NULL;
+        boost::tuple <int, int, int> intersections;
+        for (TrianglePtrVector::const_iterator k = incidentTriangles.begin (); k != incidentTriangles.end (); ++k) {
+                intersections = intersects (**k, e);
+                if (intersections.get<0> ()) {
+                        start = *k;
+                        break;
+                }
+        }
+
+        if (start) {
+                std::cerr << "Missing constraint : (" << edge.first << "," << edge.second << "), first triangle intersecinting this constraint : " << *start << std::endl;
+        }
+
+        assert (start);
+        // TODO DODAJ - tylko co - edge, czy trójkąty też!?
+//        crossingEdges->push_back (start....);
+        triangles->push_back (start);
+
+        int commonEdge = intersections.get<1> ();
+        Triangle const *next = start;
+
+        while (true) {
+                next = getAdjacentTriangle (*next, commonEdge);
+
+                // Musi być, bo gdyby nie było, to by znaczyło, że constraint wychodzi poza zbiór punktów (ma jeden koniec gdzieś w powietrzu).
+                assert (next);
+
+                // TODO DODAJ - tylko co - edge, czy trójkąty też!?
+                //        crossingEdges->push_back (next....);
+                triangles->push_back (next);
+
+                if (next->hasPoint (edge.second)) {
+                        break;
+                }
+
+                intersections = intersects (*next, e);
+
+                // Musi się przecinać w 2 punktach, bo inaczej by wyszło z funkcji.
+                assert (intersections.get<0> () == 2);
+
+                // Eliminate commonEdge from equation - we know about it already. Find new commonEdge.
+                if (intersections.get<1> () == commonEdge) {
+                        commonEdge = intersections.get<2> ();
+                }
+                else if (intersections.get<2> () == commonEdge) {
+                        commonEdge = intersections.get<1> ();
+                }
+        }
+
 }
 
 /****************************************************************************/
@@ -690,7 +912,10 @@ bool DelaunayTriangulation::diagonalInside (Geometry::Point const &a, Geometry::
 
 /****************************************************************************/
 
-void DelaunayTriangulation::clip_infinite_edge (const edge_type& edge, std::vector<point_type>* clipped_edge)
+/**
+ * Implementation based on BOOST.
+ */
+void DelaunayTriangulation::clipInfiniteEdge (const edge_type& edge, std::vector<point_type>* clipped_edge)
 {
         const cell_type& cell1 = *edge.cell ();
         const cell_type& cell2 = *edge.twin ()->cell ();
@@ -735,9 +960,43 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
                 return;
         }
 
+/*-------------------------------------------------------------------------*/
+        // Unit testy.
+        Geometry::Edge a, b;
+        a.a.x = -1;
+        a.a.y = 0;
+        a.b.x = 1;
+        a.b.y = 0;
+        b.a.x = 0;
+        b.a.y = 1;
+        b.b.x = 0;
+        b.b.y = -1;
+
+        assert (Geometry::intersects (a, b));
+
+        // Stykają się, ale nie przecinają.
+        a.a.x = -1;
+        a.a.y = 1;
+        a.b.x = 1;
+        a.b.y = 1;
+        b.a.x = 0;
+        b.a.y = 1;
+        b.b.x = 0;
+        b.b.y = -1;
+
+        assert (!Geometry::intersects (a, b));
+
+/*--------------------------------------------------------------------------*/
+
         Model::Ring *ring = dynamic_cast<Model::Ring *> (m);
         Geometry::Ring *svg = ring->getData ();
+
+//        boost::geometry::correct (*svg);
+        // Bo z SVG jakoś tak załadował, że 2 ostatnie są jak pierwszy.
+        svg->resize (svg->size () - 2);
+
         std::cerr << "SVG vertices : " << svg->size () << std::endl;
+//        std::cerr << boost::geometry::dsv (*svg) << std::endl;
 
 // Moja niedokończona implementacja
 #if 1
@@ -749,5 +1008,4 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
         TestView *tv = dynamic_cast<TestView *> (v);
         tv->voronoi = &voronoi;
         tv->delaunay = &delaunay;
-        exit (0);
 }
