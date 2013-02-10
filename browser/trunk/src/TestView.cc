@@ -81,9 +81,10 @@ void TestView::update (Model::IModel *model, Event::UpdateEvent *, View::GLConte
 //                glDrawArrays (GL_LINE_LOOP, 0, vBuf.numVertices);
                 glDrawArrays (GL_POINTS, 0, vBuf.numVertices);
 
-                glPointSize (4);
-                glUniform4f (ctx->colorUniformLocation, fg.r, fg.g, fg.b, fg.a);
-                glDrawArrays (GL_POINTS, 0, 3);
+//                glPointSize (4);
+//                glUniform4f (ctx->colorUniformLocation, fg.r, fg.g, fg.b, fg.a);
+//                glDrawArrays (GL_POINTS, 0, 3);
+//                glDrawArrays (GL_POINTS, 552, 1);
         }
 
         glDisableVertexAttribArray (ctx->positionAttribLocation);
