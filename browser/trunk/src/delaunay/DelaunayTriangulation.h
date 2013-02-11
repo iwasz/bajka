@@ -6,50 +6,23 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "TestController.h"
-#include <Platform.h>
+#ifndef DELAUNAYTRIANGULATION_H_
+#define DELAUNAYTRIANGULATION_H_
 
-#include <geometry/Ring.h>
-#include <model/static/Ring.h>
-#include "geometry/Point.h"
-#include "TestView.h"
-#include <stdint.h>
+#include "DelaunayTypes.h"
+#include "DelaunayIndex.h"
 
 #include <boost/polygon/voronoi.hpp>
+#include <boost/math/special_functions/round.hpp>
+#ifndef NDEBUG
+#include <boost/timer/timer.hpp>
+#endif
 
-namespace boost {
-namespace polygon {
-
-template <>
-struct geometry_concept<Geometry::Point> {
-        typedef point_concept type;
-};
-
-template<>
-struct point_traits<Geometry::Point> {
-        typedef int coordinate_type;
-
-        /*
-         * TODO sprawdzić jak często to się wykonuje i skąd. Jak tylko w kroku inicjacji, to OK.
-         * Dał bym tutaj też mnożnik, żeby uniknąć sytuacji, kiedy dwa zmiennoprzecinkowe punkty
-         * wejściowe, które są bardzo blisko siebie zostaną przez poniższy get zwróceone jako
-         * ten sam punkt. Można albo mnożyć przez stała (np 1000), albo znaleźć najmniejszą różnicę
-         * mięczy dwoma współrzednymi w danych wejściowych i przeskalować je odpowiednio.
-         */
-        static inline coordinate_type get (const Geometry::Point& point, orientation_2d orient)
-        {
-                return (orient == HORIZONTAL) ? boost::math::iround (point.x) : boost::math::iround (point.y);
-        }
-};
-
-}
-}
-
-#include "delaunay/DelaunayTriangulation.h"
-
-
-#if 0
-/*##########################################################################*/
+//#include <geometry/Ring.h>
+//#include <model/static/Ring.h>
+//#include "geometry/Point.h"
+//#include "TestView.h"
+//#include <stdint.h>
 
 /**
  *
@@ -259,10 +232,15 @@ bool intersects (Edge const &a, Edge const &b)
 }
 /*##########################################################################*/
 
+template <typename I>
+struct DelaunayTriangulationTraits {
+        typedef I IndexType;
+};
+
 /**
  * Input must be in COUNTER CLOCKWISE order.
  */
-// template
+template <typename Traits = DelaunayTriangulationTraits <uint32_t> >
 class DelaunayTriangulation {
 public:
 
@@ -803,14 +781,14 @@ void DelaunayTriangulation::constructDelaunay3 ()
                          * - uaktualnić ich zlinkowane trójkąty.
                          * - uaktualnic triangleIndex (potrzebny w findCrossing edges).
                          */
-                        flip (a, b, &newDiagonal);
-
-                        if (intersects (e.get<0> (), newDiagonal)) {
-                                missingConstraints.push_back (newDiagonal);
-                        }
-                        else {
-                                newEdges.push_back (newDiagonal);
-                        }
+//                        flip (a, b, &newDiagonal);
+//
+//                        if (intersects (e.get<0> (), newDiagonal)) {
+//                                missingConstraints.push_back (newDiagonal);
+//                        }
+//                        else {
+//                                newEdges.push_back (newDiagonal);
+//                        }
 
                         i = next;
                 }
@@ -1052,82 +1030,5 @@ void DelaunayTriangulation::clipInfiniteEdge (const edge_type& edge, std::vector
                 clipped_edge->push_back (Geometry::makePoint (edge.vertex1 ()->x (), edge.vertex1 ()->y ()));
         }
 }
-#endif
-/*##########################################################################*/
 
-void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View::IView *v)
-{
-        if (firstTime) {
-                firstTime = false;
-        }
-        else {
-                return;
-        }
-
-/*-------------------------------------------------------------------------*/
-        // Unit testy.
-        Geometry::Edge a, b;
-        a.a.x = -1;
-        a.a.y = 0;
-        a.b.x = 1;
-        a.b.y = 0;
-        b.a.x = 0;
-        b.a.y = 1;
-        b.b.x = 0;
-        b.b.y = -1;
-
-        assert (Geometry::intersects (a, b));
-
-        // Stykają się, ale nie przecinają.
-        a.a.x = -1;
-        a.a.y = 1;
-        a.b.x = 1;
-        a.b.y = 1;
-        b.a.x = 0;
-        b.a.y = 1;
-        b.b.x = 0;
-        b.b.y = -1;
-
-        assert (!Geometry::intersects (a, b));
-
-        Triangle t;
-        t.a = 3;
-        t.b = 2;
-        t.c = 1;
-        DelaunayTriangulation::Edge ed;
-        ed.first = 3;
-        ed.second = 2;
-        assert (getEdgeSide (t, ed) == 3);
-
-        ed.first = 1;
-        ed.second = 3;
-        assert (getEdgeSide (t, ed) == 2);
-
-        ed.first = 1;
-        ed.second = 2;
-        assert (getEdgeSide (t, ed) == 1);
-
-/*--------------------------------------------------------------------------*/
-
-        Model::Ring *ring = dynamic_cast<Model::Ring *> (m);
-        Geometry::Ring *svg = ring->getData ();
-
-//        boost::geometry::correct (*svg);
-        // Bo z SVG jakoś tak załadował, że 2 ostatnie są jak pierwszy.
-        svg->resize (svg->size () - 2);
-
-        std::cerr << "SVG vertices : " << svg->size () << std::endl;
-//        std::cerr << boost::geometry::dsv (*svg) << std::endl;
-
-// Moja niedokończona implementacja
-#if 1
-        DelaunayTriangulation cdt (*svg, &voronoi, &delaunay, &crossing);
-        cdt.constructDelaunay ();
-        cdt.constructDelaunay3 ();
-#endif
-
-        TestView *tv = dynamic_cast<TestView *> (v);
-        tv->voronoi = &voronoi;
-        tv->delaunay = &delaunay;
-        tv->crossing = &crossing;
-}
+#endif /* DELAUNAYTRIANGULATION_H_ */
