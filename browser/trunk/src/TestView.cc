@@ -51,6 +51,18 @@ void TestView::update (Model::IModel *model, Event::UpdateEvent *, View::GLConte
 
         }
 
+        if (crossing) {
+                glBindBuffer (GL_ARRAY_BUFFER, buffer);
+                glBufferData (GL_ARRAY_BUFFER, crossing->size () * 2 * sizeof (GLfloat), (void *)&crossing->front (), GL_DYNAMIC_DRAW);
+                glVertexAttribPointer (ctx->positionAttribLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+                glBindBuffer (GL_ARRAY_BUFFER, 0);
+
+                glUniform4f (ctx->colorUniformLocation, 1, 0, 0, 0.5);
+//                glDrawArrays (GL_LINES, 0, delaunay->size ());
+                glDrawArrays (GL_TRIANGLES, 0, crossing->size ());
+
+        }
+
         if (voronoi) {
                 glBindBuffer (GL_ARRAY_BUFFER, buffer);
                 glBufferData (GL_ARRAY_BUFFER, voronoi->size () * 2 * sizeof (GLfloat), (void *)&voronoi->front (), GL_DYNAMIC_DRAW);
