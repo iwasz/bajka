@@ -240,8 +240,7 @@ struct DelaunayTriangulationTraits {
 /**
  * Input must be in COUNTER CLOCKWISE order.
  */
-template <typename Traits = DelaunayTriangulationTraits <uint32_t> >
-class DelaunayTriangulation {
+uyhhhhhhhhhhhhhclass DelaunayTriangulation {
 public:
 
         DelaunayTriangulation (const Geometry::Ring& i, Geometry::LineString* v, Geometry::LineString* d, Geometry::LineString* c) :
