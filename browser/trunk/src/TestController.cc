@@ -274,6 +274,17 @@ public:
 //        void constructDelaunay2 ();
         void constructDelaunay3 ();
 
+        // TODO do usunięcia lub przeniesienia.
+        typedef double coordinate_type;
+        typedef my_voronoi_diagram::vertex_type vertex_type;
+        typedef my_voronoi_diagram::edge_type edge_type;
+        typedef my_voronoi_diagram::cell_type cell_type;
+        typedef Geometry::Point point_type;
+        typedef std::pair <uint32_t, uint32_t> Edge;
+        typedef std::list <Edge> EdgeList;
+        typedef boost::tuple <Edge, Triangle const *, Triangle const *> CrossingEdge;
+        typedef std::list <CrossingEdge> CrossingEdgeList;
+
 private:
         /**
          * Returns if diagonal (a, b) lays completely inside the polygon. It assumes two things:
@@ -285,29 +296,16 @@ private:
          */
         bool diagonalInside (const Geometry::Point& a,
                         const Geometry::Point& ap, const Geometry::Point& an,
-                        const Geometry::Point& b);
+                        const Geometry::Point& b) const;
 
-//        void addTriangle (uint32_t b, uint32_t c, size_t& a);
-
-
-        // TODO do usunięcia lub przeniesienia.
-        typedef double coordinate_type;
-        typedef my_voronoi_diagram::vertex_type vertex_type;
-        typedef my_voronoi_diagram::edge_type edge_type;
-        typedef my_voronoi_diagram::cell_type cell_type;
-        typedef Geometry::Point point_type;
-public:
-        typedef std::pair <uint32_t, uint32_t> Edge;
-private:
-        typedef std::list <Edge> EdgeList;
-        void clipInfiniteEdge (const edge_type& edge, std::vector<point_type>* clipped_edge);
+        void clipInfiniteEdge (const edge_type& edge, std::vector<point_type>* clipped_edge) const;
 
         /**
          * Input : this->triangulation (performed earlier), edge to check for. Edge must have endpoints
          * in this->input.
          * Output : list of edges which intersects with edge.
          */
-        void findCrossingEdges (Edge const &edge, EdgeList *crossingEdges, TrianglePtrVector *triangles);
+        void findCrossingEdges (Edge const &edge, CrossingEdgeList *crossingEdges, TrianglePtrVector *crossingTriangles) const;
 
         /**
          * First tuple element : number of intersections (0, 1 or 2).
@@ -317,7 +315,20 @@ private:
          * - 2 : c-a
          * - 3 : b-a
          */
-        boost::tuple <int, int, int> intersects (Triangle const &t, Geometry::Edge const &e);
+        boost::tuple <int, int, int> intersects (Triangle const &t, Geometry::Edge const &e) const;
+
+        /**
+         * Are two adjacent triangles form quadrilateral which is convex?
+         */
+        bool twoTrianglesConvex (CrossingEdge const &c) const;
+
+        Geometry::Edge indexEdgeToEdge (Edge const &e) const
+        {
+                Geometry::Edge f;
+                f.a = input[e.first];
+                f.b = input[e.second];
+                return f;
+        }
 
 private:
         const Geometry::Ring &input;
@@ -338,7 +349,7 @@ std::ostream &operator<< (std::ostream &o, DelaunayTriangulation::Edge const &e)
 
 /****************************************************************************/
 
-boost::tuple <int, int, int> DelaunayTriangulation::intersects (Triangle const &t, Geometry::Edge const &e)
+boost::tuple <int, int, int> DelaunayTriangulation::intersects (Triangle const &t, Geometry::Edge const &e) const
 {
         boost::tuple <int, int, int> ret;
 
@@ -742,8 +753,9 @@ void DelaunayTriangulation::constructDelaunay3 ()
         for (EdgeList::const_iterator i = missingConstraints.begin (); i != missingConstraints.end (); ++i) {
                 Edge const &missingConstraint = *i;
 
-                EdgeList crossingEdges;
+                CrossingEdgeList crossingEdges;
                 TrianglePtrVector crossingTriangles;
+
                 findCrossingEdges (missingConstraint, &crossingEdges, &crossingTriangles);
 
                 std::cerr << "Constraint " << missingConstraint << " crosses : " << crossingTriangles << std::endl;
@@ -754,21 +766,17 @@ void DelaunayTriangulation::constructDelaunay3 ()
                         crossing->push_back (input[(*i)->c]);
                 }
 
-                continue;
-
                 EdgeList newEdges;
-                EdgeList::iterator i = crossingEdges.begin ();
+                CrossingEdgeList::iterator i = crossingEdges.begin ();
                 while (!crossingEdges.empty ()) {
-                        EdgeList::iterator next = i;
+                        CrossingEdgeList::iterator next = i;
                         ++next;
 
-                        Edge e = *i;
-                        Triangle *a, b;
-#if 0
-                        findTrianglesSharingEdge (e, a, b);
+                        CrossingEdge e = *i;
 
-                        if (!twoTrianglesConvex (*a, *b)) {
+                        if (!twoTrianglesConvex (e)) {
 
+                                std::cerr << "####> !CONVEX" << std::endl;
                                 if (crossingEdges.size () == 1) {
                                         /*
                                          * TODO Jeśli jest tylko jedna przecinająca dany constraint, to jeśli convex,
@@ -779,7 +787,9 @@ void DelaunayTriangulation::constructDelaunay3 ()
                                 i = next;
                                 continue;
                         }
-#endif
+
+                        std::cerr << "####> +++CONVEX" << std::endl;
+
                         // Dwa przyległę trójkąty zawierające e tworzą czworobok wypukły.
                         crossingEdges.erase (i);
                         Edge newDiagonal;
@@ -787,9 +797,8 @@ void DelaunayTriangulation::constructDelaunay3 ()
                          * Tu trzeba
                          * - uaktualnić wierzchołki trójkątów.
                          * - uaktualnić ich zlinkowane trójkąty.
-                         * - uaktualnic triangleIndex.
+                         * - uaktualnic triangleIndex (potrzebny w findCrossing edges).
                          */
-#if 0
                         flip (a, b, &newDiagonal);
 
                         if (intersects (e, newDiagonal)) {
@@ -798,7 +807,7 @@ void DelaunayTriangulation::constructDelaunay3 ()
                         else {
                                 newEdges.push_back (newDiagonal);
                         }
-#endif
+
                         i = next;
                 }
         }
@@ -807,10 +816,21 @@ void DelaunayTriangulation::constructDelaunay3 ()
 
 
         // 5. Create debug output
+//        Trójkąty
+//        for (TriangleVector::const_iterator i = triangulation.begin (); i != triangulation.end (); ++i) {
+//                delaunay->push_back (input[i->a]);
+//                delaunay->push_back (input[i->b]);
+//                delaunay->push_back (input[i->c]);
+//        }
+
+//        Krawedzie trójkątów
         for (TriangleVector::const_iterator i = triangulation.begin (); i != triangulation.end (); ++i) {
                 delaunay->push_back (input[i->a]);
                 delaunay->push_back (input[i->b]);
+                delaunay->push_back (input[i->b]);
                 delaunay->push_back (input[i->c]);
+                delaunay->push_back (input[i->c]);
+                delaunay->push_back (input[i->a]);
         }
 
 #ifndef NDEBUG
@@ -858,27 +878,34 @@ DelaunayTriangulation::Edge getTriangleEdge (Triangle const &t, int side)
 
 /****************************************************************************/
 
-int getEdgeSide (Triangle const &t, DelaunayTriangulation::Edge const &e)
+uint32_t getTriangleVertex (Triangle const &t, int side)
 {
-        unsigned int pA = 0, pB = 0;
-        pA = (e.first == t.a) | ((e.first == t.b) << 1) | (e.first == t.c) | ((e.first == t.c) << 1);
-        pB = (e.second == t.a) | ((e.second == t.b) << 1) | (e.second == t.c) | ((e.second == t.c) << 1);
-        //std::cerr << pA << "," << pB << std::endl;
-        pA = pA + pB;
+        assert (side > 0 && side < 4);
 
-        if (pA == 3) {
-                return 3;
+        switch (side) {
+        case 1:
+                return t.a;
+        case 2:
+                return t.b;
+        case 3:
+                return t.c;
+        case 0:
+        default:
+                return 0;
         }
-        else if (pA == 4) {
-                return 2;
-        }
-
-        return 1;
 }
 
 /****************************************************************************/
 
-void DelaunayTriangulation::findCrossingEdges (Edge const &edge, EdgeList *crossingEdges, TrianglePtrVector *triangles)
+int getEdgeSide (Triangle const &t, DelaunayTriangulation::Edge const &e)
+{
+        return 6 - (((e.first == t.a) | ((e.first == t.b) << 1) | (e.first == t.c) | ((e.first == t.c) << 1)) +
+                    ((e.second == t.a) | ((e.second == t.b) << 1) | (e.second == t.c) | ((e.second == t.c) << 1)));
+}
+
+/****************************************************************************/
+
+void DelaunayTriangulation::findCrossingEdges (Edge const &edge, CrossingEdgeList *crossingEdges, TrianglePtrVector *triangles) const
 {
         TrianglePtrVector const &incidentTriangles = triangleIndex[edge.first];
         Geometry::Edge e;
@@ -902,24 +929,30 @@ void DelaunayTriangulation::findCrossingEdges (Edge const &edge, EdgeList *cross
 #endif
 
         assert (start);
-        // TODO DODAJ - tylko co - edge, czy trójkąty też!?
-//        crossingEdges->push_back (start....);
-        triangles->push_back (start);
+
+        if (triangles) {
+                triangles->push_back (start);
+        }
 
         int commonEdgeNumber = intersections.get<1> ();
         Triangle const *next = start;
 
         while (true) {
                 Edge commonEdge = getTriangleEdge (*next, commonEdgeNumber);
+                CrossingEdge crossingEdge;
+                crossingEdge.get<0> () = commonEdge;
+                crossingEdge.get<1> () = next;
                 next = getAdjacentTriangle (*next, commonEdgeNumber);
+                crossingEdge.get<2> () = next;
                 commonEdgeNumber = getEdgeSide (*next, commonEdge);
 
                 // Musi być, bo gdyby nie było, to by znaczyło, że constraint wychodzi poza zbiór punktów (ma jeden koniec gdzieś w powietrzu).
                 assert (next);
 
-                // TODO DODAJ - tylko co - edge, czy trójkąty też!?
-                //        crossingEdges->push_back (next....);
-                triangles->push_back (next);
+                if (triangles) {
+                        crossingEdges->push_back (crossingEdge);
+                        triangles->push_back (next);
+                }
 
                 if (next->hasPoint (edge.second)) {
                         break;
@@ -943,7 +976,24 @@ void DelaunayTriangulation::findCrossingEdges (Edge const &edge, EdgeList *cross
 
 /****************************************************************************/
 
-bool DelaunayTriangulation::diagonalInside (Geometry::Point const &a, Geometry::Point const &ap, Geometry::Point const &an, Geometry::Point const &b)
+bool DelaunayTriangulation::twoTrianglesConvex (CrossingEdge const &c) const
+{
+        Edge firstDiagonal = c.get<0> ();
+        Triangle const *a = c.get<1> ();
+        Triangle const *b = c.get<2> ();
+
+        int aSide = getEdgeSide (*a, firstDiagonal);
+        int bSide = getEdgeSide (*b, firstDiagonal);
+
+        Edge secondDiagonal = std::make_pair (getTriangleVertex (*a, aSide), getTriangleVertex (*b, bSide));
+        Geometry::Edge e1 = indexEdgeToEdge (firstDiagonal);
+        Geometry::Edge e2 = indexEdgeToEdge (secondDiagonal);
+        return Geometry::intersects (e1, e2);
+}
+
+/****************************************************************************/
+
+bool DelaunayTriangulation::diagonalInside (Geometry::Point const &a, Geometry::Point const &ap, Geometry::Point const &an, Geometry::Point const &b) const
 {
         return true;
         int apx = ap.x - a.x;
@@ -965,7 +1015,7 @@ bool DelaunayTriangulation::diagonalInside (Geometry::Point const &a, Geometry::
 /**
  * Implementation based on BOOST.
  */
-void DelaunayTriangulation::clipInfiniteEdge (const edge_type& edge, std::vector<point_type>* clipped_edge)
+void DelaunayTriangulation::clipInfiniteEdge (const edge_type& edge, std::vector<point_type>* clipped_edge) const
 {
         const cell_type& cell1 = *edge.cell ();
         const cell_type& cell2 = *edge.twin ()->cell ();
