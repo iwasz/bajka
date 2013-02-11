@@ -156,7 +156,7 @@ std::ostream &operator<< (std::ostream &o, TrianglePtrVector const &e)
                 o << **i;
 
                 if (i + 1 != e.end ()) {
-                        o << ",";
+                        o << " | ";
                 }
         }
 
@@ -262,9 +262,8 @@ bool intersects (Edge const &a, Edge const &b)
 class DelaunayTriangulation {
 public:
 
-        DelaunayTriangulation (const Geometry::Ring& i, Geometry::LineString* v,
-                        Geometry::LineString* d) :
-                        input(i), voronoi(v), delaunay(d)
+        DelaunayTriangulation (const Geometry::Ring& i, Geometry::LineString* v, Geometry::LineString* d, Geometry::LineString* c) :
+                        input(i), voronoi(v), delaunay(d), crossing (c)
         {
                 triangleIndex.resize (input.size ());
                 // TODO ***KRYTYCZNE*** ustawić tu tyle ile ma być. Da się to wyliczyć na początku!?
@@ -324,6 +323,7 @@ private:
         const Geometry::Ring &input;
         Geometry::LineString *voronoi;
         Geometry::LineString *delaunay;
+        Geometry::LineString *crossing;
         TriangleVector triangulation;
         TriangleIndex triangleIndex;
 };
@@ -696,7 +696,7 @@ void DelaunayTriangulation::constructDelaunay3 ()
                 } while (edge != vertex.incident_edge () && edgeCnt < 3);
         }
 
-#if 1
+#if 0
         std::cout << triangulation << std::endl;
 #endif
 
@@ -747,6 +747,13 @@ void DelaunayTriangulation::constructDelaunay3 ()
                 findCrossingEdges (missingConstraint, &crossingEdges, &crossingTriangles);
 
                 std::cerr << "Constraint " << missingConstraint << " crosses : " << crossingTriangles << std::endl;
+
+                for (TrianglePtrVector::const_iterator i = crossingTriangles.begin (); i != crossingTriangles.end (); ++i) {
+                        crossing->push_back (input[(*i)->a]);
+                        crossing->push_back (input[(*i)->b]);
+                        crossing->push_back (input[(*i)->c]);
+                }
+
                 continue;
 
                 EdgeList newEdges;
@@ -832,6 +839,45 @@ Triangle *getAdjacentTriangle (Triangle const &triangle, int side)
 
 /****************************************************************************/
 
+DelaunayTriangulation::Edge getTriangleEdge (Triangle const &t, int side)
+{
+        assert (side > 0 && side < 4);
+
+        switch (side) {
+        case 1:
+                return std::make_pair (t.c, t.b);
+        case 2:
+                return std::make_pair (t.c, t.a);
+        case 3:
+                return std::make_pair (t.b, t.a);
+        case 0:
+        default:
+                return DelaunayTriangulation::Edge ();
+        }
+}
+
+/****************************************************************************/
+
+int getEdgeSide (Triangle const &t, DelaunayTriangulation::Edge const &e)
+{
+        unsigned int pA = 0, pB = 0;
+        pA = (e.first == t.a) | ((e.first == t.b) << 1) | (e.first == t.c) | ((e.first == t.c) << 1);
+        pB = (e.second == t.a) | ((e.second == t.b) << 1) | (e.second == t.c) | ((e.second == t.c) << 1);
+        //std::cerr << pA << "," << pB << std::endl;
+        pA = pA + pB;
+
+        if (pA == 3) {
+                return 3;
+        }
+        else if (pA == 4) {
+                return 2;
+        }
+
+        return 1;
+}
+
+/****************************************************************************/
+
 void DelaunayTriangulation::findCrossingEdges (Edge const &edge, EdgeList *crossingEdges, TrianglePtrVector *triangles)
 {
         TrianglePtrVector const &incidentTriangles = triangleIndex[edge.first];
@@ -849,20 +895,24 @@ void DelaunayTriangulation::findCrossingEdges (Edge const &edge, EdgeList *cross
                 }
         }
 
+#if 0
         if (start) {
                 std::cerr << "Missing constraint : (" << edge.first << "," << edge.second << "), first triangle intersecinting this constraint : " << *start << std::endl;
         }
+#endif
 
         assert (start);
         // TODO DODAJ - tylko co - edge, czy trójkąty też!?
 //        crossingEdges->push_back (start....);
         triangles->push_back (start);
 
-        int commonEdge = intersections.get<1> ();
+        int commonEdgeNumber = intersections.get<1> ();
         Triangle const *next = start;
 
         while (true) {
-                next = getAdjacentTriangle (*next, commonEdge);
+                Edge commonEdge = getTriangleEdge (*next, commonEdgeNumber);
+                next = getAdjacentTriangle (*next, commonEdgeNumber);
+                commonEdgeNumber = getEdgeSide (*next, commonEdge);
 
                 // Musi być, bo gdyby nie było, to by znaczyło, że constraint wychodzi poza zbiór punktów (ma jeden koniec gdzieś w powietrzu).
                 assert (next);
@@ -881,11 +931,11 @@ void DelaunayTriangulation::findCrossingEdges (Edge const &edge, EdgeList *cross
                 assert (intersections.get<0> () == 2);
 
                 // Eliminate commonEdge from equation - we know about it already. Find new commonEdge.
-                if (intersections.get<1> () == commonEdge) {
-                        commonEdge = intersections.get<2> ();
+                if (intersections.get<1> () == commonEdgeNumber) {
+                        commonEdgeNumber = intersections.get<2> ();
                 }
-                else if (intersections.get<2> () == commonEdge) {
-                        commonEdge = intersections.get<1> ();
+                else if (intersections.get<2> () == commonEdgeNumber) {
+                        commonEdgeNumber = intersections.get<1> ();
                 }
         }
 
@@ -986,6 +1036,23 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
 
         assert (!Geometry::intersects (a, b));
 
+        Triangle t;
+        t.a = 3;
+        t.b = 2;
+        t.c = 1;
+        DelaunayTriangulation::Edge ed;
+        ed.first = 3;
+        ed.second = 2;
+        assert (getEdgeSide (t, ed) == 3);
+
+        ed.first = 1;
+        ed.second = 3;
+        assert (getEdgeSide (t, ed) == 2);
+
+        ed.first = 1;
+        ed.second = 2;
+        assert (getEdgeSide (t, ed) == 1);
+
 /*--------------------------------------------------------------------------*/
 
         Model::Ring *ring = dynamic_cast<Model::Ring *> (m);
@@ -1000,7 +1067,7 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
 
 // Moja niedokończona implementacja
 #if 1
-        DelaunayTriangulation cdt (*svg, &voronoi, &delaunay);
+        DelaunayTriangulation cdt (*svg, &voronoi, &delaunay, &crossing);
         cdt.constructDelaunay ();
         cdt.constructDelaunay3 ();
 #endif
@@ -1008,4 +1075,5 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
         TestView *tv = dynamic_cast<TestView *> (v);
         tv->voronoi = &voronoi;
         tv->delaunay = &delaunay;
+        tv->crossing = &crossing;
 }
