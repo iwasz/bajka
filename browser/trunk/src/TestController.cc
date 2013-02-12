@@ -15,36 +15,6 @@
 #include "TestView.h"
 #include <stdint.h>
 
-#include <boost/polygon/voronoi.hpp>
-
-namespace boost {
-namespace polygon {
-
-template <>
-struct geometry_concept<Geometry::Point> {
-        typedef point_concept type;
-};
-
-template<>
-struct point_traits<Geometry::Point> {
-        typedef int coordinate_type;
-
-        /*
-         * TODO sprawdzić jak często to się wykonuje i skąd. Jak tylko w kroku inicjacji, to OK.
-         * Dał bym tutaj też mnożnik, żeby uniknąć sytuacji, kiedy dwa zmiennoprzecinkowe punkty
-         * wejściowe, które są bardzo blisko siebie zostaną przez poniższy get zwróceone jako
-         * ten sam punkt. Można albo mnożyć przez stała (np 1000), albo znaleźć najmniejszą różnicę
-         * mięczy dwoma współrzednymi w danych wejściowych i przeskalować je odpowiednio.
-         */
-        static inline coordinate_type get (const Geometry::Point& point, orientation_2d orient)
-        {
-                return (orient == HORIZONTAL) ? boost::math::iround (point.x) : boost::math::iround (point.y);
-        }
-};
-
-}
-}
-
 #include "delaunay/DelaunayTriangulation.h"
 
 
