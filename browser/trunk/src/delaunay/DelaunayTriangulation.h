@@ -20,14 +20,16 @@
 namespace boost {
 namespace polygon {
 
+// TODO te traitsy nie mogą tak być!
 template <>
-struct geometry_concept<Geometry::Point> {
+struct geometry_concept<Delaunay::Point> {
         typedef point_concept type;
 };
 
 template<>
-struct point_traits<Geometry::Point> {
-        typedef int coordinate_type;
+struct point_traits<Delaunay::Point> {
+        typedef Delaunay::PointTraits <Delaunay::Point> DelaunayPointTraitsType;
+        typedef DelaunayPointTraitsType::IntCoordinateType coordinate_type;
 
         /*
          * TODO sprawdzić jak często to się wykonuje i skąd. Jak tylko w kroku inicjacji, to OK.
@@ -36,9 +38,9 @@ struct point_traits<Geometry::Point> {
          * ten sam punkt. Można albo mnożyć przez stała (np 1000), albo znaleźć najmniejszą różnicę
          * mięczy dwoma współrzednymi w danych wejściowych i przeskalować je odpowiednio.
          */
-        static inline coordinate_type get (const Geometry::Point& point, orientation_2d orient)
+        static inline coordinate_type get (const Delaunay::Point& point, orientation_2d orient)
         {
-                return (orient == HORIZONTAL) ? boost::math::iround (point.x) : boost::math::iround (point.y);
+                return (orient == HORIZONTAL) ? boost::math::iround (Delaunay::H::x (point)) : boost::math::iround (Delaunay::H::y (point));
         }
 };
 
@@ -108,6 +110,8 @@ public:
         }
 
         void constructDelaunay ();
+
+        TriangleVector const &getTriangulation () const { return triangulation; }
 
 private:
 
@@ -350,7 +354,7 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay ()
 //                                newEdges.push_back (newDiagonal);
 //                        }
 
-                        i = next;
+                        j = next;
                 }
         }
 

@@ -38,6 +38,8 @@ struct Triangle {
                 case C:
                         return c;
                 }
+
+                return 0; // warinig fix
         }
 
         void set (SideEnum s, IndexType v)
@@ -109,7 +111,7 @@ typename TriangleTraits <T>::IndexType a (T const &triangle)
 }
 
 template <typename T>
-void a (T const &triangle, typename TriangleTraits <T>::IndexType i)
+void a (T &triangle, typename TriangleTraits <T>::IndexType i)
 {
         TriangleMutableTraits <T>::set (triangle, A, i);
 }
@@ -121,7 +123,7 @@ typename TriangleTraits <T>::IndexType b (T const &triangle)
 }
 
 template <typename T>
-void b (T const &triangle, typename TriangleTraits <T>::IndexType i)
+void b (T &triangle, typename TriangleTraits <T>::IndexType i)
 {
         TriangleMutableTraits <T>::set (triangle, B, i);
 }
@@ -133,7 +135,7 @@ typename TriangleTraits <T>::IndexType c (T const &triangle)
 }
 
 template <typename T>
-void c (T const &triangle, typename TriangleTraits <T>::IndexType i)
+void c (T &triangle, typename TriangleTraits <T>::IndexType i)
 {
         TriangleMutableTraits <T>::set (triangle, C, i);
 }
