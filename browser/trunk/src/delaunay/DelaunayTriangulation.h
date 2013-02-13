@@ -9,21 +9,13 @@
 #ifndef DELAUNAYTRIANGULATION_H_
 #define DELAUNAYTRIANGULATION_H_
 
-#include "DelaunayTypes.h"
 #include "DelaunayIndex.h"
-#include "DelaunayTriangle.h"
 
 #include <boost/polygon/voronoi.hpp>
 #include <boost/math/special_functions/round.hpp>
 #ifndef NDEBUG
 #include <boost/timer/timer.hpp>
 #endif
-
-//#include <geometry/Ring.h>
-//#include <model/static/Ring.h>
-//#include "geometry/Point.h"
-//#include "TestView.h"
-//#include <stdint.h>
 
 namespace boost {
 namespace polygon {
@@ -57,7 +49,7 @@ struct point_traits<Geometry::Point> {
  *
  */
 template<typename T>
-struct my_voronoi_diagram_traits {
+struct triangulation_voronoi_diagram_traits {
         typedef T coordinate_type;
         typedef boost::polygon::voronoi_cell<coordinate_type> cell_type;
         typedef boost::polygon::voronoi_vertex<coordinate_type> vertex_type;
@@ -75,161 +67,8 @@ struct my_voronoi_diagram_traits {
 /**
  *
  */
-typedef boost::polygon::voronoi_diagram<double, my_voronoi_diagram_traits <double> > my_voronoi_diagram;
+typedef boost::polygon::voronoi_diagram<double, triangulation_voronoi_diagram_traits <double> > triangulation_voronoi_diagram;
 
-/*##########################################################################*/
-
-//// size_t może być zamienione na uint32_t (24 bytes on 32bit machine, 48 or 36 on 64bit).
-//struct Triangle {
-//
-//        Triangle () : a (0), b (0), c (0), A (0), B (0), C (0) {}
-//
-//        // Endpoints of a triangle.
-//        uint32_t a, b, c;
-//
-//        // Adjacent triangles (opposite side of a, b, c).
-//        Triangle *A, *B, *C;
-//
-//        bool hasPoint (uint32_t p) const { return p == a || p == b || p == c; }
-//        bool hasEdge (uint32_t x, uint32_t y) const { return hasPoint (x) && hasPoint(y); }
-//};
-
-//BOOST_STATIC_ASSERT (boost::has_trivial_assign <Triangle>::value);
-//BOOST_STATIC_ASSERT (boost::has_trivial_copy <Triangle>::value);
-//BOOST_STATIC_ASSERT (boost::is_pod <Triangle>::value);
-
-//Triangle makeTriangle (uint32_t a, uint32_t b, uint32_t c)
-//{
-//        Triangle t;
-//        t.a = a;
-//        t.b = b;
-//        t.c = c;
-//        return t;
-//}
-
-
-//std::ostream &operator<< (std::ostream &o, Triangle const &i)
-//{
-//        o << i.a << "," << i.b << "," << i.c;
-//        return o;
-//}
-
-//std::ostream &operator<< (std::ostream &o, TriangleVector const &e)
-//{
-//        size_t cnt = 0;
-//        for (TriangleVector::const_iterator i = e.begin (); i != e.end (); ++i, ++cnt) {
-//                o << cnt << ". " << *i << " A=";
-//
-//                if (i->A) {
-//                        o << *(i->A);
-//                }
-//                else {
-//                        o << "NULL";
-//                }
-//
-//                o << " B=";
-//
-//                if (i->B) {
-//                        o << *(i->B);
-//                }
-//                else {
-//                        o << "NULL";
-//                }
-//
-//                o << " C=";
-//
-//                if (i->C) {
-//                        o << *(i->C);
-//                }
-//                else {
-//                        o << "NULL";
-//                }
-//
-//                o << "\n";
-//        }
-//
-//        return o;
-//}
-
-
-//std::ostream &operator<< (std::ostream &o, TrianglePtrVector const &e)
-//{
-//        size_t cnt = 0;
-//        for (TrianglePtrVector::const_iterator i = e.begin (); i != e.end (); ++i, ++cnt) {
-//                o << **i;
-//
-//                if (i + 1 != e.end ()) {
-//                        o << " | ";
-//                }
-//        }
-//
-//        return o;
-//}
-
-//std::ostream &operator<< (std::ostream &o, TriangleIndex const &e)
-//{
-//        size_t cnt = 0;
-//        for (TriangleIndex::const_iterator i = e.begin (); i != e.end (); ++i, ++cnt) {
-//                TrianglePtrVector const &trianglesForPoint = *i;
-//
-//                for (TrianglePtrVector::const_iterator k = trianglesForPoint.begin (); k != trianglesForPoint.end (); ++k) {
-//                        o << cnt << " : " << **k;
-//
-//                        if (k + 1 != trianglesForPoint.end ()) {
-//                                o << " | ";
-//                        }
-//                }
-//
-//                o << "\n";
-//        }
-//
-//        return o;
-//}
-
-/****************************************************************************/
-
-namespace Geometry {
-struct Edge {
-        Geometry::Point a;
-        Geometry::Point b;
-};
-
-BOOST_STATIC_ASSERT (boost::has_trivial_assign <Edge>::value);
-BOOST_STATIC_ASSERT (boost::has_trivial_copy <Edge>::value);
-BOOST_STATIC_ASSERT (boost::is_pod <Edge>::value);
-
-float getArea (Point const &a, Point const &b, Point const &c)
-{
-        return (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
-}
-
-bool isLeft (Point const &a, Point const &b, Point const &c)
-{
-        return getArea (a, b, c) > 0;
-}
-
-// TODO To musi pracować na INTACH z voronoia! Nie może być tego epsilona!
-bool isCollinear (Point const &a, Point const &b, Point const &c)
-{
-        return fabs (getArea (a, b, c)) < 0.00001;
-}
-
-/**
- * Computational geometry in C - second edition.
- */
-bool intersects (Edge const &a, Edge const &b)
-{
-        if (isCollinear (a.a, a.b, b.a) ||
-            isCollinear (a.a, a.b, b.b) ||
-            isCollinear (b.a, b.b, a.a) ||
-            isCollinear (b.a, b.b, a.b)) {
-                return false;
-        }
-
-        return (isLeft (a.a, a.b, b.a) ^ isLeft (a.a, a.b, b.b)) && (isLeft (b.a, b.b, a.a) ^ isLeft (b.a, b.b, a.b));
-}
-
-}
 /*##########################################################################*/
 
 namespace Delaunay {
@@ -241,24 +80,55 @@ template <typename Input, typename Traits = DelaunayTriangulationTraits<> >
 class DelaunayTriangulation {
 public:
 
-        DelaunayTriangulation (Input const &input) : index (input) {}
+        typedef DelaunayIndex <Input, Traits> DelaunayIndexType;
+        typedef typename DelaunayIndexType::PointType PointType;
+        typedef typename DelaunayIndexType::PointTraitsType PointTraitsType;
+        typedef typename DelaunayIndexType::CoordinateType CoordinateType;
+        typedef typename DelaunayIndexType::EdgeType EdgeType;
+        typedef typename DelaunayIndexType::TriangleType TriangleType;
+        typedef typename DelaunayIndexType::TriangleTraitsType TriangleTraitsType;
+        typedef typename DelaunayIndexType::IndexType IndexType;
+        typedef typename DelaunayIndexType::TriangleEdgeType TriangleEdgeType;
+        typedef std::list <TriangleEdgeType> TriangleEdgeList;
+        typedef typename DelaunayIndexType::TriangleVector TriangleVector;
+        typedef typename DelaunayIndexType::TrianglePtrVector TrianglePtrVector;
+        typedef typename DelaunayIndexType::TriangleIndex TriangleIndex;
+        typedef typename DelaunayIndexType::CrossingEdge CrossingEdge;
+        typedef typename DelaunayIndexType::CrossingEdgeList CrossingEdgeList;
+        typedef typename DelaunayIndexType::IntersectionInfo IntersectionInfo;
+
+        typedef triangulation_voronoi_diagram::vertex_type vertex_type;
+        typedef triangulation_voronoi_diagram::edge_type edge_type;
+        typedef triangulation_voronoi_diagram::cell_type cell_type;
+
+        DelaunayTriangulation (Input const &i) : input (i), index (i)
+        {
+                // TODO ***KRYTYCZNE*** ustawić tu tyle ile ma być. Da się to wyliczyć na początku!?
+                triangulation.reserve (input.size () * 10);
+        }
+
         void constructDelaunay ();
 
-        // TODO do usunięcia lub przeniesienia.
-        typedef double coordinate_type;
-        typedef my_voronoi_diagram::vertex_type vertex_type;
-        typedef my_voronoi_diagram::edge_type edge_type;
-        typedef my_voronoi_diagram::cell_type cell_type;
-        typedef Geometry::Point point_type;
-        typedef std::pair <uint32_t, uint32_t> Edge;
-        typedef std::list <Edge> EdgeList;
-        typedef boost::tuple <Edge, Triangle const *, Triangle const *> CrossingEdge;
-        typedef std::list <CrossingEdge> CrossingEdgeList;
+private:
+
+        /**
+         * Returns if diagonal (a, b) lays completely inside the polygon. It assumes two things:
+         * - Points in polygon are stored in counter clockwise order.
+         * - Checked diagonal do not intersects with boundary segments (defined by polygon itself)
+         * in points other than a and b.
+         * This second condition is easy to conform to, since we operate on diagonals generated
+         * by triangulation algotihm.
+         */
+        bool diagonalInside (PointType const& a,
+                             PointType const& ap,
+                             PointType const& an,
+                             PointType const& b) const;
 
 private:
 
         Input const &input;
-        DelaunayIndex <Input, Traits> index;
+        DelaunayIndexType index;
+        TriangleVector triangulation;
 
 //        Geometry::LineString *voronoi;
 //        Geometry::LineString *delaunay;
@@ -279,7 +149,7 @@ private:
 template <typename Input, typename Traits>
 void DelaunayTriangulation<Input, Traits>::constructDelaunay ()
 {
-        my_voronoi_diagram vd;
+        triangulation_voronoi_diagram vd;
 
 #ifndef NDEBUG
         boost::timer::cpu_timer t0;
@@ -294,12 +164,12 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay ()
         boost::timer::cpu_timer t1;
 
         // 1. Make triangles from voronoi.
-        for (my_voronoi_diagram::const_vertex_iterator it = vd.vertices ().begin (); it != vd.vertices ().end (); ++it) {
+        for (triangulation_voronoi_diagram::const_vertex_iterator it = vd.vertices ().begin (); it != vd.vertices ().end (); ++it) {
                 vertex_type const &vertex = *it;
                 edge_type const *edge = vertex.incident_edge ();
 
-                uint32_t triangleVertices[3];
-                uint32_t triangleCnt = triangulation.size ();
+                IndexType triangleVertices[3];
+                IndexType triangleCnt = triangulation.size ();
                 vertex.color (triangleCnt);
 
                 size_t edgeCnt = 0;
@@ -317,24 +187,16 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay ()
                 } while (edge != vertex.incident_edge () && edgeCnt < 3);
 
                 if (edgeCnt == 3) {
-                        Triangle triangle;
-                        triangle.a = triangleVertices[0];
-                        triangle.b = triangleVertices[1];
-                        triangle.c = triangleVertices[2];
+                        TriangleType triangle;
+                        a (triangle, triangleVertices[0]);
+                        b (triangle, triangleVertices[1]);
+                        c (triangle, triangleVertices[2]);
                         triangulation.push_back (triangle);
 //                        std::cerr << triangulation << std::endl;
 
                         // Update triangle index.
-                        Triangle const *t = &triangulation.back ();
-
-                        assert (triangleIndex.size () > triangle.a);
-                        triangleIndex[triangle.a].push_back (t);
-
-                        assert (triangleIndex.size () > triangle.b);
-                        triangleIndex[triangle.b].push_back (t);
-
-                        assert (triangleIndex.size () > triangle.c);
-                        triangleIndex[triangle.c].push_back (t);
+                        TriangleType const *t = &triangulation.back ();
+                        index.addTriangle (t);
 
 //                        std::cerr << "Point " << triangle.a << " has incident triangle : " << *t << std::endl;
 //                        std::cerr << "Point " << triangle.b << " has incident triangle : " << *t << std::endl;
@@ -347,9 +209,9 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay ()
 #endif
 
         // 2. Link triangles.
-        for (my_voronoi_diagram::const_vertex_iterator it = vd.vertices ().begin (); it != vd.vertices ().end (); ++it) {
+        for (triangulation_voronoi_diagram::const_vertex_iterator it = vd.vertices ().begin (); it != vd.vertices ().end (); ++it) {
                 vertex_type const &vertex = *it;
-                Triangle &triangle = triangulation[vertex.color ()];
+                TriangleType &triangle = triangulation[vertex.color ()];
                 edge_type const *edge = vertex.incident_edge ();
                 size_t edgeCnt = 0;
 
@@ -366,17 +228,17 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay ()
                                 continue;
                         }
 
-                        Triangle &adjacentTriangle = triangulation[adjacentIndex - 1];
+                        TriangleType &adjacentTriangle = triangulation[adjacentIndex - 1];
 
                         // Sprawdzić którym bokiem się stykają i ustawić.
-                        if (!adjacentTriangle.hasPoint (triangle.a)) {
-                                triangle.A = &adjacentTriangle;
+                        if (!hasVertex (adjacentTriangle, triangle.a)) {
+                                triangle.tA = &adjacentTriangle; // TODO external index
                         }
-                        else if (!adjacentTriangle.hasPoint (triangle.b)) {
-                                triangle.B = &adjacentTriangle;
+                        else if (!hasVertex (adjacentTriangle, triangle.b)) {
+                                triangle.tB = &adjacentTriangle; // TODO external index
                         }
-                        else if (!adjacentTriangle.hasPoint (triangle.c)) {
-                                triangle.C = &adjacentTriangle;
+                        else if (!hasVertex (adjacentTriangle, triangle.c)) {
+                                triangle.tC = &adjacentTriangle; // TODO external index
                         }
 
                         ++edgeCnt;
@@ -393,14 +255,14 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay ()
          * TODO This is loop made for simple polygons (without holes). It is also possible to make
          * loop for dicrete list of constraints (that are not linked).
          */
-        EdgeList missingConstraints;
+        TriangleEdgeList missingConstraints;
         size_t inputSize = input.size ();
 
         for (size_t i = 0; i < inputSize; ++i) {
                 size_t j = (i + 1) % inputSize;
 
-                assert (triangleIndex.size () > i);
-                TrianglePtrVector const &trianglesForPoint = triangleIndex[i];
+                assert (index.getTriangleIndexSize () > i);
+                TrianglePtrVector const &trianglesForPoint = index.getTrianglesForIndex (i);
 
 #if 0
                 if (trianglesForPoint.empty ()) {
@@ -411,8 +273,8 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay ()
                 assert (!trianglesForPoint.empty ());
 
                 bool found = false;
-                for (TrianglePtrVector::const_iterator k = trianglesForPoint.begin (); k != trianglesForPoint.end (); ++k) {
-                        if ((*k)->hasEdge (i, j)) {
+                for (typename TrianglePtrVector::const_iterator k = trianglesForPoint.begin (); k != trianglesForPoint.end (); ++k) {
+                        if (hasEdge (**k, TriangleEdgeType (i, j))) {
                                 found = true;
                                 break;
                         }
@@ -422,36 +284,39 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay ()
 #if 1
                         std::cerr << "Constraint (" << i << ", " << j << ") was **NOT** found in triangulation." << std::endl;
 #endif
-                        missingConstraints.push_back (std::make_pair (i, j));
+                        missingConstraints.push_back (TriangleEdgeType (i, j));
                 }
         }
 
         // 4. Add missing segments.
-        for (EdgeList::const_iterator i = missingConstraints.begin (); i != missingConstraints.end (); ++i) {
-                Edge const &missingConstraint = *i;
+        for (typename TriangleEdgeList::const_iterator i = missingConstraints.begin (); i != missingConstraints.end (); ++i) {
+                TriangleEdgeType const &missingConstraint = *i;
 
                 CrossingEdgeList crossingEdges;
                 TrianglePtrVector crossingTriangles;
 
-                findCrossingEdges (missingConstraint, &crossingEdges, &crossingTriangles);
+                index.findCrossingEdges (missingConstraint, &crossingEdges, &crossingTriangles);
 
 //                std::cerr << "Constraint " << missingConstraint << " crosses : " << crossingTriangles << std::endl;
 
-                for (TrianglePtrVector::const_iterator i = crossingTriangles.begin (); i != crossingTriangles.end (); ++i) {
+#if 0
+                // TODO Debug output - to się może przydac.
+                for (typename TrianglePtrVector::const_iterator i = crossingTriangles.begin (); i != crossingTriangles.end (); ++i) {
                         crossing->push_back (input[(*i)->a]);
                         crossing->push_back (input[(*i)->b]);
                         crossing->push_back (input[(*i)->c]);
                 }
+#endif
 
-                EdgeList newEdges;
-                CrossingEdgeList::iterator i = crossingEdges.begin ();
+                TriangleEdgeList newEdges;
+                typename CrossingEdgeList::iterator j = crossingEdges.begin ();
                 while (!crossingEdges.empty ()) {
-                        CrossingEdgeList::iterator next = i;
+                        typename CrossingEdgeList::iterator next = j;
                         ++next;
 
-                        CrossingEdge e = *i;
+                        CrossingEdge e = *j;
 
-                        if (!twoTrianglesConvex (e)) {
+                        if (!index.twoTrianglesConvex (e)) {
 
                                 std::cerr << "####> !CONVEX" << std::endl;
                                 if (crossingEdges.size () == 1) {
@@ -461,15 +326,15 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay ()
                                          */
                                 }
 
-                                i = next;
+                                j = next;
                                 continue;
                         }
 
                         std::cerr << "####> +++CONVEX" << std::endl;
 
                         // Dwa przyległę trójkąty zawierające e tworzą czworobok wypukły.
-                        crossingEdges.erase (i);
-                        Edge newDiagonal;
+                        crossingEdges.erase (j);
+                        TriangleEdgeType newDiagonal;
                         /*
                          * Tu trzeba
                          * - uaktualnić wierzchołki trójkątów.
@@ -501,20 +366,40 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay ()
 //        }
 
 //        Krawedzie trójkątów
-        for (TriangleVector::const_iterator i = triangulation.begin (); i != triangulation.end (); ++i) {
-                delaunay->push_back (input[i->a]);
-                delaunay->push_back (input[i->b]);
-                delaunay->push_back (input[i->b]);
-                delaunay->push_back (input[i->c]);
-                delaunay->push_back (input[i->c]);
-                delaunay->push_back (input[i->a]);
-        }
+//        for (TriangleVector::const_iterator i = triangulation.begin (); i != triangulation.end (); ++i) {
+//                delaunay->push_back (input[i->a]);
+//                delaunay->push_back (input[i->b]);
+//                delaunay->push_back (input[i->b]);
+//                delaunay->push_back (input[i->c]);
+//                delaunay->push_back (input[i->c]);
+//                delaunay->push_back (input[i->a]);
+//        }
 
 #ifndef NDEBUG
         printlog ("Triangulation time (derived from voronoi as its dual) : %f ms", t1.elapsed ().wall / 1000000.0);
         //        printlog ("Voronoi prim. edges : %d", result);
 //        std::cout << triangulation << std::endl;
 #endif
+}
+
+/****************************************************************************/
+
+template <typename Input, typename Traits>
+bool DelaunayTriangulation <Input, Traits>::diagonalInside (PointType const &a, PointType const &ap, PointType const &an, PointType const &b) const
+{
+        return true;
+        int apx = ap.x - a.x;
+        int apy = ap.y - a.y;
+        int anx = an.x - a.x;
+        int any = an.y - a.y;
+        int bx = b.x - a.x;
+        int by = b.y - a.y;
+
+        int apXan = apx * any - apy * anx;
+        int apXb = apx * by - apy * bx;
+        int bXan = bx * any - by * anx;
+
+        return ((apXan >= 0 && apXb >= 0 && bXan >= 0) || (apXan < 0 && !(apXb < 0 && bXan < 0)));
 }
 
 } // namespace
