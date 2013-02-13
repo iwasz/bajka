@@ -82,6 +82,8 @@ struct PointMutableTraits {
         }
 };
 
+namespace H {
+
 /**
  * Helper accessor.
  */
@@ -118,6 +120,7 @@ void y (T const &point, typename PointTraits <T>::CoordinateType p)
         PointMutableTraits <T>::set (point, Y, p);
 }
 
+} // namespace Helper
 } // namespace Delaunay
 
 #endif /* DELAUNAYPOINT_H_ */

@@ -31,7 +31,7 @@ struct TriangleEdge {
 template <typename T>
 bool hasEdge (T const &t, TriangleEdge <T> const e)
 {
-        return hasVertex (e.a) && hasVertex (e.b);
+        return hasVertex (t, e.a) && hasVertex (t, e.b);
 }
 
 /****************************************************************************/
@@ -56,6 +56,8 @@ TriangleEdge<T> getEdge (T const &t, SideEnum side)
         case C:
                 return TriangleEdge<T> (b (t), a (t));
         }
+
+        return TriangleEdge<T> (0, 0); // warinig fix
 }
 
 } // namespace Delaunay

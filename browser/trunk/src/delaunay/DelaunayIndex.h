@@ -70,7 +70,7 @@ public:
          * - 2 : c-a
          * - 3 : b-a
          */
-        IntersectionInfo intersects (TriangleType const &t, TriangleEdgeType const &e) const;
+        IntersectionInfo intersects (TriangleType const &t, EdgeType const &e) const;
 
         /**
          * Are two adjacent triangles form quadrilateral which is convex?
@@ -101,30 +101,32 @@ DelaunayIndex <Input, Traits>::getAdjacentTriangle (TriangleType const &triangle
                 return triangle.tA;
         case B:
                 return triangle.tB;
-        case B:
+        case C:
                 return triangle.tC;
         }
+
+        return 0; // warning Fix
 }
 
 /****************************************************************************/
 
 template <typename Input, typename Traits>
 typename DelaunayIndex<Input, Traits>::IntersectionInfo
-DelaunayIndex<Input, Traits>::intersects (TriangleType const &t, TriangleEdgeType const &e) const
+DelaunayIndex<Input, Traits>::intersects (TriangleType const &t, EdgeType const &e) const
 {
         IntersectionInfo ret;
 
         int cnt = 0;
         EdgeType edge = triangleEdgeToEdge (TriangleEdgeType (c (t), b (t)));
 
-        if (intersects (e, edge)) {
+        if (Delaunay::intersects (e, edge)) {
                 ret.get<1> () = A;
                 ++cnt;
         }
 
         edge.a = input[t.c];
         edge.b = input[t.a];
-        if (intersects (e, edge)) {
+        if (Delaunay::intersects (e, edge)) {
                 if (cnt) {
                         ret.get<2> () = B;
                 }
@@ -136,7 +138,7 @@ DelaunayIndex<Input, Traits>::intersects (TriangleType const &t, TriangleEdgeTyp
 
         edge.a = input[t.b];
         edge.b = input[t.a];
-        if (intersects (e, edge)) {
+        if (Delaunay::intersects (e, edge)) {
                 if (cnt) {
                         ret.get<2> () = C;
                 }
@@ -155,7 +157,7 @@ DelaunayIndex<Input, Traits>::intersects (TriangleType const &t, TriangleEdgeTyp
 template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::findCrossingEdges (TriangleEdgeType const &edge, CrossingEdgeList *crossingEdges, TrianglePtrVector *crossingTriangles) const
 {
-        TrianglePtrVector const &incidentTriangles = triangleIndex[edge.first];
+        TrianglePtrVector const &incidentTriangles = triangleIndex[edge.a];
         EdgeType e = triangleEdgeToEdge (edge);
         TriangleType const *start = NULL;
         IntersectionInfo intersections;
@@ -200,7 +202,7 @@ void DelaunayIndex<Input, Traits>::findCrossingEdges (TriangleEdgeType const &ed
                         crossingTriangles->push_back (next);
                 }
 
-                if (hasPoint (*next, edge.second)) {
+                if (hasVertex (*next, edge.b)) {
                         break;
                 }
 
@@ -232,10 +234,10 @@ bool DelaunayIndex<Input, Traits>::twoTrianglesConvex (CrossingEdge const &c) co
         SideEnum aSide = getEdgeSide (*a, firstDiagonal);
         SideEnum bSide = getEdgeSide (*b, firstDiagonal);
 
-        TriangleEdgeType secondDiagonal = TriangleEdgeType (getVertex (*a, aSide), getTriangleVertex (*b, bSide));
+        TriangleEdgeType secondDiagonal = TriangleEdgeType (getVertex (*a, aSide), getVertex (*b, bSide));
         EdgeType e1 = triangleEdgeToEdge (firstDiagonal);
         EdgeType e2 = triangleEdgeToEdge (secondDiagonal);
-        return intersects (e1, e2);
+        return Delaunay::intersects (e1, e2);
 }
 
 /****************************************************************************/
@@ -250,9 +252,9 @@ void DelaunayIndex<Input, Traits>::addTriangle (IndexType index, TriangleType co
 template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::addTriangle (TriangleType const *triangle)
 {
-        addTriangle (a (triangle), triangle);
-        addTriangle (b (triangle), triangle);
-        addTriangle (c (triangle), triangle);
+        addTriangle (a (*triangle), triangle);
+        addTriangle (b (*triangle), triangle);
+        addTriangle (c (*triangle), triangle);
 }
 
 

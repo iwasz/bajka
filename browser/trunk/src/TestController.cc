@@ -1027,8 +1027,6 @@ void DelaunayTriangulation::clipInfiniteEdge (const edge_type& edge, std::vector
 
 void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View::IView *v)
 {
-        using namespace Delaunay;
-
         if (firstTime) {
                 firstTime = false;
         }
@@ -1089,16 +1087,44 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
 //        boost::geometry::correct (*svg);
         // Bo z SVG jakoś tak załadował, że 2 ostatnie są jak pierwszy.
         svg->resize (svg->size () - 2);
-
         std::cerr << "SVG vertices : " << svg->size () << std::endl;
 //        std::cerr << boost::geometry::dsv (*svg) << std::endl;
 
-// Moja niedokończona implementacja
-#if 1
-        DelaunayTriangulation <Geometry::Ring> cdt (*svg/*, &voronoi, &delaunay, &crossing*/);
+
+        typedef std::vector <Delaunay::Point> Input;
+        Input input;
+
+        for (Geometry::Ring::const_iterator i = svg->begin (); i != svg->end (); ++i) {
+                input.push_back (Delaunay::Point (i->x, i->y));
+        }
+
+        typedef Delaunay::DelaunayTriangulation <Input> MyTriagulation;
+        MyTriagulation cdt (input/*, &voronoi, &delaunay, &crossing*/);
         cdt.constructDelaunay ();
-//        cdt.constructDelaunay3 ();
-#endif
+
+        MyTriagulation::TriangleVector const &triangulation = cdt.getTriangulation ();
+
+        // 5. Create debug output
+//        Trójkąty
+//        for (TriangleVector::const_iterator i = triangulation.begin (); i != triangulation.end (); ++i) {
+//                delaunay->push_back (input[i->a]);
+//                delaunay->push_back (input[i->b]);
+//                delaunay->push_back (input[i->c]);
+//        }
+
+//        Krawedzie trójkątów
+        for (MyTriagulation::TriangleVector::const_iterator i = triangulation.begin (); i != triangulation.end (); ++i) {
+                Delaunay::Point const &a = input[Delaunay::a (*i)];
+                Delaunay::Point const &b = input[Delaunay::b (*i)];
+                Delaunay::Point const &c = input[Delaunay::c (*i)];
+
+                delaunay.push_back (Geometry::makePoint (a.x, a.y));
+                delaunay.push_back (Geometry::makePoint (b.x, b.y));
+                delaunay.push_back (Geometry::makePoint (b.x, b.y));
+                delaunay.push_back (Geometry::makePoint (c.x, c.y));
+                delaunay.push_back (Geometry::makePoint (c.x, c.y));
+                delaunay.push_back (Geometry::makePoint (a.x, a.y));
+        }
 
         TestView *tv = dynamic_cast<TestView *> (v);
         tv->voronoi = &voronoi;

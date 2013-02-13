@@ -19,13 +19,14 @@ namespace Delaunay {
 template <typename P>
 struct Edge {
         typedef P PointType;
+        Edge (PointType const a_, PointType const b_) : a (a_), b (b_) {}
         PointType a, b;
 };
 
 template <typename P>
 float getArea (P const &a, P const &b, P const &c)
 {
-        return (x (b) - x (a)) * (y (c) - y (a)) - (x (c) - x (a)) * (y (b) - y (a));
+        return (H::x (b) - H::x (a)) * (H::y (c) - H::y (a)) - (H::x (c) - H::x (a)) * (H::y (b) - H::y (a));
 }
 
 template <typename P>
