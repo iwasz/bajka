@@ -1027,6 +1027,8 @@ void DelaunayTriangulation::clipInfiniteEdge (const edge_type& edge, std::vector
 
 void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View::IView *v)
 {
+        using namespace Delaunay;
+
         if (firstTime) {
                 firstTime = false;
         }
@@ -1035,6 +1037,8 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
         }
 
 /*-------------------------------------------------------------------------*/
+#if 0
+//        TODO unit tests!
         // Unit testy.
         Geometry::Edge a, b;
         a.a.x = -1;
@@ -1076,7 +1080,7 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
         ed.first = 1;
         ed.second = 2;
         assert (getEdgeSide (t, ed) == 1);
-
+#endif
 /*--------------------------------------------------------------------------*/
 
         Model::Ring *ring = dynamic_cast<Model::Ring *> (m);
@@ -1091,9 +1095,9 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
 
 // Moja niedokończona implementacja
 #if 1
-        DelaunayTriangulation cdt (*svg, &voronoi, &delaunay, &crossing);
+        DelaunayTriangulation <Geometry::Ring> cdt (*svg/*, &voronoi, &delaunay, &crossing*/);
         cdt.constructDelaunay ();
-        cdt.constructDelaunay3 ();
+//        cdt.constructDelaunay3 ();
 #endif
 
         TestView *tv = dynamic_cast<TestView *> (v);

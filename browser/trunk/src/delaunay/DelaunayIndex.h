@@ -9,9 +9,14 @@
 #ifndef DELAUNAYINDEX_H_
 #define DELAUNAYINDEX_H_
 
-#include "DelaunayTypes.h"
 #include "DelaunayTriangle.h"
+#include "DelaunayPoint.h"
+#include "DelaunayEdge.h"
+#include "DelaunayTriangleEdge.h"
+#include "DelaunayTraits.h"
 #include <vector>
+#include <list>
+#include <boost/tuple/tuple.hpp>
 
 namespace Delaunay {
 
@@ -20,43 +25,42 @@ class DelaunayIndex {
 public:
 
         typedef typename Traits::PointType PointType;
-
+        typedef PointTraits<PointType> PointTraitsType;
+        typedef typename PointTraitsType::CoordinateType CoordinateType;
+        typedef Edge <PointType> EdgeType;
         typedef typename Traits::TriangleType TriangleType;
+        typedef TriangleTraits <TriangleType> TriangleTraitsType;
+        typedef typename TriangleTraitsType::IndexType IndexType;
+        typedef TriangleEdge<TriangleType> TriangleEdgeType;
         typedef std::vector <TriangleType> TriangleVector;
-
-        // Data structure not optimized. Maybe some contiguous memory region can be used to eliminate memory partition and std::vector overhead.
-        typedef std::vector <TriangleType const *> TrianglePtrVector;
+        typedef std::vector <TriangleType const *> TrianglePtrVector; // TODO Data structure not optimized. Maybe some contiguous memory region can be used to eliminate memory partition and std::vector overhead.
         typedef std::vector <TrianglePtrVector> TriangleIndex;
+        typedef boost::tuple <TriangleEdgeType, TriangleType const *, TriangleType const *> CrossingEdge;
+        typedef std::list <CrossingEdge> CrossingEdgeList;
+        typedef boost::tuple <int, SideEnum, SideEnum> IntersectionInfo;
 
         DelaunayIndex (Input const &i) : input (i)
         {
                 triangleIndex.resize (input.size ());
-                // TODO ***KRYTYCZNE*** ustawić tu tyle ile ma być. Da się to wyliczyć na początku!?
-                triangulation.reserve (input.size () * 10);
         }
 
-        TriangleType *getAdjacentTriangle (TriangleType const &triangle, SideEnum side);
+        size_t getTriangleIndexSize () const { return triangleIndex.size (); }
+        void addTriangle (IndexType index, TriangleType const *triangle);
+        void addTriangle (TriangleType const *triangle);
+        TrianglePtrVector const &getTrianglesForIndex (IndexType i) const { return triangleIndex[i]; }
+        TrianglePtrVector &getTrianglesForIndex (IndexType i) { return triangleIndex[i]; }
+
+/****************************************************************************/
 
 
-        /**
-         * Returns if diagonal (a, b) lays completely inside the polygon. It assumes two things:
-         * - Points in polygon are stored in counter clockwise order.
-         * - Checked diagonal do not intersects with boundary segments (defined by polygon itself)
-         * in points other than a and b.
-         * This second condition is easy to conform to, since we operate on diagonals generated
-         * by triangulation algotihm.
-         */
-        bool diagonalInside (const Geometry::Point& a,
-                             const Geometry::Point& ap,
-                             const Geometry::Point& an,
-                             const Geometry::Point& b) const;
+        TriangleType const *getAdjacentTriangle (TriangleType const &triangle, SideEnum side) const;
 
         /**
          * Input : this->triangulation (performed earlier), edge to check for. Edge must have endpoints
          * in this->input.
          * Output : list of edges which intersects with edge.
          */
-        void findCrossingEdges (Edge const &edge, CrossingEdgeList *crossingEdges, TrianglePtrVector *crossingTriangles) const;
+        void findCrossingEdges (TriangleEdgeType const &edge, CrossingEdgeList *crossingEdges, TrianglePtrVector *crossingTriangles) const;
 
         /**
          * First tuple element : number of intersections (0, 1 or 2).
@@ -66,34 +70,32 @@ public:
          * - 2 : c-a
          * - 3 : b-a
          */
-        boost::tuple <int, int, int> intersects (Triangle const &t, Geometry::Edge const &e) const;
+        IntersectionInfo intersects (TriangleType const &t, TriangleEdgeType const &e) const;
 
         /**
          * Are two adjacent triangles form quadrilateral which is convex?
          */
         bool twoTrianglesConvex (CrossingEdge const &c) const;
 
-        Geometry::Edge indexEdgeToEdge (Edge const &e) const
+        EdgeType triangleEdgeToEdge (TriangleEdgeType const &e) const
         {
-                Geometry::Edge f;
-                f.a = input[e.first];
-                f.b = input[e.second];
-                return f;
+                return EdgeType (input[e.a], input[e.a]);
         }
 
 private:
 
         Input const &input;
-        TriangleVector triangulation;
         TriangleIndex triangleIndex;
 
 };
 
 /****************************************************************************/
 
-template <typename Traits>
-typename DelaunayIndex <Traits>::TriangleType *DelaunayIndex <Traits>::getAdjacentTriangle (TriangleType const &triangle, SideEnum side)
+template <typename Input, typename Traits>
+typename DelaunayIndex <Input, Traits>::TriangleType const *
+DelaunayIndex <Input, Traits>::getAdjacentTriangle (TriangleType const &triangle, SideEnum side) const
 {
+        // TODO infromation about adjacent triangles shall be stored outside the Triangle itself. Some external vector is need.
         switch (side) {
         case A:
                 return triangle.tA;
@@ -104,40 +106,42 @@ typename DelaunayIndex <Traits>::TriangleType *DelaunayIndex <Traits>::getAdjace
         }
 }
 
+/****************************************************************************/
+
 template <typename Input, typename Traits>
-boost::tuple <int, int, int> DelaunayTriangulation<Input, Traits>::intersects (Triangle const &t, Geometry::Edge const &e) const
+typename DelaunayIndex<Input, Traits>::IntersectionInfo
+DelaunayIndex<Input, Traits>::intersects (TriangleType const &t, TriangleEdgeType const &e) const
 {
-        boost::tuple <int, int, int> ret;
+        IntersectionInfo ret;
 
         int cnt = 0;
-        Geometry::Edge edge;
-        edge.a = input[t.c];
-        edge.b = input[t.b];
-        if (Geometry::intersects (e, edge)) {
-                ret.get<1> () = 1;
+        EdgeType edge = triangleEdgeToEdge (TriangleEdgeType (c (t), b (t)));
+
+        if (intersects (e, edge)) {
+                ret.get<1> () = A;
                 ++cnt;
         }
 
         edge.a = input[t.c];
         edge.b = input[t.a];
-        if (Geometry::intersects (e, edge)) {
+        if (intersects (e, edge)) {
                 if (cnt) {
-                        ret.get<2> () = 2;
+                        ret.get<2> () = B;
                 }
                 else {
-                        ret.get<1> () = 2;
+                        ret.get<1> () = B;
                 }
                 ++cnt;
         }
 
         edge.a = input[t.b];
         edge.b = input[t.a];
-        if (Geometry::intersects (e, edge)) {
+        if (intersects (e, edge)) {
                 if (cnt) {
-                        ret.get<2> () = 3;
+                        ret.get<2> () = C;
                 }
                 else {
-                        ret.get<1> () = 3;
+                        ret.get<1> () = C;
                 }
                 ++cnt;
         }
@@ -148,17 +152,15 @@ boost::tuple <int, int, int> DelaunayTriangulation<Input, Traits>::intersects (T
 
 /****************************************************************************/
 
-template <typename Traits>
-void DelaunayTriangulation<Traits>::findCrossingEdges (Edge const &edge, CrossingEdgeList *crossingEdges, TrianglePtrVector *triangles) const
+template <typename Input, typename Traits>
+void DelaunayIndex<Input, Traits>::findCrossingEdges (TriangleEdgeType const &edge, CrossingEdgeList *crossingEdges, TrianglePtrVector *crossingTriangles) const
 {
         TrianglePtrVector const &incidentTriangles = triangleIndex[edge.first];
-        Geometry::Edge e;
-        e.a = input[edge.first];
-        e.b = input[edge.second];
+        EdgeType e = triangleEdgeToEdge (edge);
+        TriangleType const *start = NULL;
+        IntersectionInfo intersections;
 
-        Triangle const *start = NULL;
-        boost::tuple <int, int, int> intersections;
-        for (TrianglePtrVector::const_iterator k = incidentTriangles.begin (); k != incidentTriangles.end (); ++k) {
+        for (typename TrianglePtrVector::const_iterator k = incidentTriangles.begin (); k != incidentTriangles.end (); ++k) {
                 intersections = intersects (**k, e);
                 if (intersections.get<0> ()) {
                         start = *k;
@@ -174,31 +176,31 @@ void DelaunayTriangulation<Traits>::findCrossingEdges (Edge const &edge, Crossin
 
         assert (start);
 
-        if (triangles) {
-                triangles->push_back (start);
+        if (crossingTriangles) {
+                crossingTriangles->push_back (start);
         }
 
-        int commonEdgeNumber = intersections.get<1> ();
+        SideEnum commonEdgeNumber = intersections.get<1> ();
         Triangle const *next = start;
 
         while (true) {
-                Edge commonEdge = getTriangleEdge (*next, commonEdgeNumber);
+                TriangleEdgeType commonEdge = getEdge (*next, commonEdgeNumber);
                 CrossingEdge crossingEdge;
-                crossingEdge.get<0> () = commonEdge;
-                crossingEdge.get<1> () = next;
+                crossingEdge.template get<0> () = commonEdge;
+                crossingEdge.template get<1> () = next;
                 next = getAdjacentTriangle (*next, commonEdgeNumber);
-                crossingEdge.get<2> () = next;
+                crossingEdge.template get<2> () = next;
                 commonEdgeNumber = getEdgeSide (*next, commonEdge);
 
                 // Musi być, bo gdyby nie było, to by znaczyło, że constraint wychodzi poza zbiór punktów (ma jeden koniec gdzieś w powietrzu).
                 assert (next);
 
-                if (triangles) {
+                if (crossingTriangles) {
                         crossingEdges->push_back (crossingEdge);
-                        triangles->push_back (next);
+                        crossingTriangles->push_back (next);
                 }
 
-                if (next->hasPoint (edge.second)) {
+                if (hasPoint (*next, edge.second)) {
                         break;
                 }
 
@@ -220,41 +222,116 @@ void DelaunayTriangulation<Traits>::findCrossingEdges (Edge const &edge, Crossin
 
 /****************************************************************************/
 
-bool DelaunayTriangulation::twoTrianglesConvex (CrossingEdge const &c) const
+template <typename Input, typename Traits>
+bool DelaunayIndex<Input, Traits>::twoTrianglesConvex (CrossingEdge const &c) const
 {
-        Edge firstDiagonal = c.get<0> ();
-        Triangle const *a = c.get<1> ();
-        Triangle const *b = c.get<2> ();
+        TriangleEdgeType firstDiagonal = c.template get<0> ();
+        TriangleType const *a = c.template get<1> ();
+        TriangleType const *b = c.template get<2> ();
 
-        int aSide = getEdgeSide (*a, firstDiagonal);
-        int bSide = getEdgeSide (*b, firstDiagonal);
+        SideEnum aSide = getEdgeSide (*a, firstDiagonal);
+        SideEnum bSide = getEdgeSide (*b, firstDiagonal);
 
-        Edge secondDiagonal = std::make_pair (getTriangleVertex (*a, aSide), getTriangleVertex (*b, bSide));
-        Geometry::Edge e1 = indexEdgeToEdge (firstDiagonal);
-        Geometry::Edge e2 = indexEdgeToEdge (secondDiagonal);
-        return Geometry::intersects (e1, e2);
+        TriangleEdgeType secondDiagonal = TriangleEdgeType (getVertex (*a, aSide), getTriangleVertex (*b, bSide));
+        EdgeType e1 = triangleEdgeToEdge (firstDiagonal);
+        EdgeType e2 = triangleEdgeToEdge (secondDiagonal);
+        return intersects (e1, e2);
 }
 
 /****************************************************************************/
 
-bool DelaunayTriangulation::diagonalInside (Geometry::Point const &a, Geometry::Point const &ap, Geometry::Point const &an, Geometry::Point const &b) const
+template <typename Input, typename Traits>
+void DelaunayIndex<Input, Traits>::addTriangle (IndexType index, TriangleType const *triangle)
 {
-        return true;
-        int apx = ap.x - a.x;
-        int apy = ap.y - a.y;
-        int anx = an.x - a.x;
-        int any = an.y - a.y;
-        int bx = b.x - a.x;
-        int by = b.y - a.y;
-
-        int apXan = apx * any - apy * anx;
-        int apXb = apx * by - apy * bx;
-        int bXan = bx * any - by * anx;
-
-        return ((apXan >= 0 && apXb >= 0 && bXan >= 0) || (apXan < 0 && !(apXb < 0 && bXan < 0)));
+        assert (getTriangleIndexSize () > index);
+        triangleIndex[index].push_back (triangle);
 }
 
-/****************************************************************************/
+template <typename Input, typename Traits>
+void DelaunayIndex<Input, Traits>::addTriangle (TriangleType const *triangle)
+{
+        addTriangle (a (triangle), triangle);
+        addTriangle (b (triangle), triangle);
+        addTriangle (c (triangle), triangle);
+}
+
+
+#if 0
+#ifndef NDEBUG
+template <>
+std::ostream &operator<< (std::ostream &o, TriangleVector const &e)
+{
+        size_t cnt = 0;
+        for (TriangleVector::const_iterator i = e.begin (); i != e.end (); ++i, ++cnt) {
+                o << cnt << ". " << *i << " A=";
+
+                if (i->A) {
+                        o << *(i->A);
+                }
+                else {
+                        o << "NULL";
+                }
+
+                o << " B=";
+
+                if (i->B) {
+                        o << *(i->B);
+                }
+                else {
+                        o << "NULL";
+                }
+
+                o << " C=";
+
+                if (i->C) {
+                        o << *(i->C);
+                }
+                else {
+                        o << "NULL";
+                }
+
+                o << "\n";
+        }
+
+        return o;
+}
+
+
+std::ostream &operator<< (std::ostream &o, TrianglePtrVector const &e)
+{
+        size_t cnt = 0;
+        for (TrianglePtrVector::const_iterator i = e.begin (); i != e.end (); ++i, ++cnt) {
+                o << **i;
+
+                if (i + 1 != e.end ()) {
+                        o << " | ";
+                }
+        }
+
+        return o;
+}
+
+std::ostream &operator<< (std::ostream &o, TriangleIndex const &e)
+{
+        size_t cnt = 0;
+        for (TriangleIndex::const_iterator i = e.begin (); i != e.end (); ++i, ++cnt) {
+                TrianglePtrVector const &trianglesForPoint = *i;
+
+                for (TrianglePtrVector::const_iterator k = trianglesForPoint.begin (); k != trianglesForPoint.end (); ++k) {
+                        o << cnt << " : " << **k;
+
+                        if (k + 1 != trianglesForPoint.end ()) {
+                                o << " | ";
+                        }
+                }
+
+                o << "\n";
+        }
+
+        return o;
+}
+#endif
+#endif
 
 } // namespace
 
