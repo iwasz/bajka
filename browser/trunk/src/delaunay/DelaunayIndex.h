@@ -77,9 +77,17 @@ public:
          */
         bool twoTrianglesConvex (CrossingEdge const &c) const;
 
+        /**
+         * Perform a flip, and return new diagonal. Triangle index.
+         */
+        void flip (CrossingEdge const &c, TriangleEdgeType const *newDiagonal);
+
+        /**
+         * Index based edge to coordinate based edge.
+         */
         EdgeType triangleEdgeToEdge (TriangleEdgeType const &e) const
         {
-                return EdgeType (input[e.a], input[e.a]);
+                return EdgeType (input[e.a], input[e.b]);
         }
 
 private:
@@ -249,6 +257,8 @@ void DelaunayIndex<Input, Traits>::addTriangle (IndexType index, TriangleType co
         triangleIndex[index].push_back (triangle);
 }
 
+/****************************************************************************/
+
 template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::addTriangle (TriangleType const *triangle)
 {
@@ -257,6 +267,32 @@ void DelaunayIndex<Input, Traits>::addTriangle (TriangleType const *triangle)
         addTriangle (c (*triangle), triangle);
 }
 
+/****************************************************************************/
+
+template <typename Input, typename Traits>
+void DelaunayIndex<Input, Traits>::flip (CrossingEdge const &cross, TriangleEdgeType const *newDiagonal)
+{
+        TriangleEdgeType oldDiagonal = cross.template get<0> ();
+        TriangleType *f = const_cast <TriangleType *> (cross.template get<1> ()); // TODO get rid of const_cast!
+        TriangleType *s = const_cast <TriangleType *> (cross.template get<2> ()); // TODO get rid of const_cast!
+        TriangleType fCopy = *f;
+        TriangleType sCopy = *s;
+
+        SideEnum fSide = getEdgeSide (*f, oldDiagonal);
+        IndexType fRemain = getVertex (*f, fSide);
+        SideEnum sSide = getEdgeSide (*s, oldDiagonal);
+        IndexType sRemain = getVertex (*s, sSide);
+
+        // TODO Order of vertices is random. FIX. CCW.
+        a (*f, fRemain);
+        b (*f, sRemain);
+        c (*f, oldDiagonal.a);
+
+        // TODO Order of vertices is random. FIX. CCW.
+        a (*s, sRemain);
+        b (*s, fRemain);
+        c (*s, oldDiagonal.b);
+}
 
 #if 0
 #ifndef NDEBUG

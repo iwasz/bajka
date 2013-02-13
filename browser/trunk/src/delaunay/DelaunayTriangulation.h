@@ -15,6 +15,8 @@
 #include <boost/math/special_functions/round.hpp>
 #ifndef NDEBUG
 #include <boost/timer/timer.hpp>
+// TODO REMOVE THIS!!
+#include <geometry/LineString.h>
 #endif
 
 namespace boost {
@@ -109,7 +111,8 @@ public:
                 triangulation.reserve (input.size () * 10);
         }
 
-        void constructDelaunay ();
+        // TODO remove crossing
+        void constructDelaunay (Geometry::LineString *crossing);
 
         TriangleVector const &getTriangulation () const { return triangulation; }
 
@@ -151,7 +154,7 @@ private:
 /****************************************************************************/
 
 template <typename Input, typename Traits>
-void DelaunayTriangulation<Input, Traits>::constructDelaunay ()
+void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineString *crossing)
 {
         triangulation_voronoi_diagram vd;
 
@@ -303,12 +306,16 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay ()
 
 //                std::cerr << "Constraint " << missingConstraint << " crosses : " << crossingTriangles << std::endl;
 
-#if 0
+#if 1
                 // TODO Debug output - to się może przydac.
                 for (typename TrianglePtrVector::const_iterator i = crossingTriangles.begin (); i != crossingTriangles.end (); ++i) {
-                        crossing->push_back (input[(*i)->a]);
-                        crossing->push_back (input[(*i)->b]);
-                        crossing->push_back (input[(*i)->c]);
+                        Delaunay::Point const &a = input[Delaunay::a (**i)];
+                        Delaunay::Point const &b = input[Delaunay::b (**i)];
+                        Delaunay::Point const &c = input[Delaunay::c (**i)];
+
+                        crossing->push_back (Geometry::makePoint (a.x, a.y));
+                        crossing->push_back (Geometry::makePoint (b.x, b.y));
+                        crossing->push_back (Geometry::makePoint (c.x, c.y));
                 }
 #endif
 
@@ -339,13 +346,15 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay ()
                         // Dwa przyległę trójkąty zawierające e tworzą czworobok wypukły.
                         crossingEdges.erase (j);
                         TriangleEdgeType newDiagonal;
+
                         /*
                          * Tu trzeba
                          * - uaktualnić wierzchołki trójkątów.
                          * - uaktualnić ich zlinkowane trójkąty.
                          * - uaktualnic triangleIndex (potrzebny w findCrossing edges).
                          */
-//                        flip (a, b, &newDiagonal);
+                        index.flip (e, &newDiagonal);
+                        break;
 //
 //                        if (intersects (e.get<0> (), newDiagonal)) {
 //                                missingConstraints.push_back (newDiagonal);
