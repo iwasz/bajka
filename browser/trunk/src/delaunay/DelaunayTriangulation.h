@@ -300,6 +300,11 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
         for (typename TriangleEdgeList::const_iterator i = missingConstraints.begin (); i != missingConstraints.end (); ++i) {
                 TriangleEdgeType const &missingConstraint = *i;
 
+                if (missingConstraint.a != 450) {
+                        continue;
+                }
+                std::cerr << "Missing constraint : " << missingConstraint << std::endl;
+
                 CrossingEdgeList crossingEdges;
                 TrianglePtrVector crossingTriangles;
 

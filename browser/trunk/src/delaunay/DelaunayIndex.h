@@ -295,6 +295,7 @@ void DelaunayIndex<Input, Traits>::flip (CrossingEdge const &cross, TriangleEdge
         TriangleType fCopy = *f;
         TriangleType sCopy = *s;
 
+        std::cerr << "oldDiagonal : " << oldDiagonal << ", f : " << *f << ", s : " << *s << ", ptr : " << f << ", " << s << std::endl;
 //        SideEnum fSide = getEdgeSide (*f, oldDiagonal);
 //        IndexType fRemain = getVertex (*f, fSide);
 //        SideEnum sSide = getEdgeSide (*s, oldDiagonal);
@@ -305,10 +306,14 @@ void DelaunayIndex<Input, Traits>::flip (CrossingEdge const &cross, TriangleEdge
         SideEnum fc = otherThan (foa, fob);
         IndexType fcIndex = getVertex (*f, fc);
 
+        std::cerr << "foa : " << (int)foa << ", fob : " << (int)fob << ", fc : " << (int)fc << ", fcIndex : " << fcIndex << std::endl;
+
         SideEnum soa = getVertexSide (*s, oldDiagonal.a);
         SideEnum sob = getVertexSide (*s, oldDiagonal.b);
         SideEnum sc = otherThan (soa, sob);
         IndexType scIndex = getVertex (*s, sc);
+
+        std::cerr << "soa : " << (int)soa << ", sob : " << (int)sob << ", sc : " << (int)sc << ", scIndex : " << scIndex << std::endl;
 
         // TODO CCW sort of entire new triangle
         setVertex (*f, fob, scIndex);
@@ -329,6 +334,8 @@ void DelaunayIndex<Input, Traits>::flip (CrossingEdge const &cross, TriangleEdge
         newDiagonal->a = fcIndex;
         newDiagonal->b = scIndex;
 
+        std::cerr << "newDiagonal : " << *newDiagonal << ", f : " << *f << ", s : " << *s << std::endl;
+
 //        // TODO Order of vertices is random. FIX. CCW.
 //        a (*f, fRemain);
 //        b (*f, sRemain);
@@ -344,6 +351,7 @@ void DelaunayIndex<Input, Traits>::flip (CrossingEdge const &cross, TriangleEdge
 
 #if 0
 #ifndef NDEBUG
+
 template <>
 std::ostream &operator<< (std::ostream &o, TriangleVector const &e)
 {
