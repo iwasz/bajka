@@ -52,8 +52,8 @@ public:
 
 /****************************************************************************/
 
-
-        TriangleType const *getAdjacentTriangle (TriangleType const &triangle, SideEnum side) const;
+        TriangleType *getAdjacentTriangle (TriangleType const &triangle, SideEnum side);
+        void setAdjacentTriangle (TriangleType &t, SideEnum s, TriangleType *a);
 
         /**
          * Input : this->triangulation (performed earlier), edge to check for. Edge must have endpoints
@@ -80,7 +80,7 @@ public:
         /**
          * Perform a flip, and return new diagonal. Triangle index.
          */
-        void flip (CrossingEdge const &c, TriangleEdgeType const *newDiagonal);
+        void flip (CrossingEdge const &c, TriangleEdgeType *newDiagonal);
 
         /**
          * Index based edge to coordinate based edge.
@@ -100,8 +100,8 @@ private:
 /****************************************************************************/
 
 template <typename Input, typename Traits>
-typename DelaunayIndex <Input, Traits>::TriangleType const *
-DelaunayIndex <Input, Traits>::getAdjacentTriangle (TriangleType const &triangle, SideEnum side) const
+typename DelaunayIndex <Input, Traits>::TriangleType *
+DelaunayIndex <Input, Traits>::getAdjacentTriangle (TriangleType const &triangle, SideEnum side)
 {
         // TODO infromation about adjacent triangles shall be stored outside the Triangle itself. Some external vector is need.
         switch (side) {
@@ -114,6 +114,22 @@ DelaunayIndex <Input, Traits>::getAdjacentTriangle (TriangleType const &triangle
         }
 
         return 0; // warning Fix
+}
+
+template <typename Input, typename Traits>
+void DelaunayIndex <Input, Traits>::setAdjacentTriangle (TriangleType &t, SideEnum s, TriangleType *a)
+{
+        switch (s) {
+        case A:
+                t.tA = a;
+                break;
+        case B:
+                t.tB = a;
+                break;
+        case C:
+                t.tC = a;
+                break;
+        }
 }
 
 /****************************************************************************/
@@ -198,7 +214,8 @@ void DelaunayIndex<Input, Traits>::findCrossingEdges (TriangleEdgeType const &ed
                 CrossingEdge crossingEdge;
                 crossingEdge.template get<0> () = commonEdge;
                 crossingEdge.template get<1> () = next;
-                next = getAdjacentTriangle (*next, commonEdgeNumber);
+                // TODO - rozwiązać sprawę z const / nie cost.
+                next = const_cast <DelaunayIndex *> (this)->getAdjacentTriangle (*next, commonEdgeNumber);
                 crossingEdge.template get<2> () = next;
                 commonEdgeNumber = getEdgeSide (*next, commonEdge);
 
@@ -270,7 +287,7 @@ void DelaunayIndex<Input, Traits>::addTriangle (TriangleType const *triangle)
 /****************************************************************************/
 
 template <typename Input, typename Traits>
-void DelaunayIndex<Input, Traits>::flip (CrossingEdge const &cross, TriangleEdgeType const *newDiagonal)
+void DelaunayIndex<Input, Traits>::flip (CrossingEdge const &cross, TriangleEdgeType *newDiagonal)
 {
         TriangleEdgeType oldDiagonal = cross.template get<0> ();
         TriangleType *f = const_cast <TriangleType *> (cross.template get<1> ()); // TODO get rid of const_cast!
@@ -278,20 +295,51 @@ void DelaunayIndex<Input, Traits>::flip (CrossingEdge const &cross, TriangleEdge
         TriangleType fCopy = *f;
         TriangleType sCopy = *s;
 
-        SideEnum fSide = getEdgeSide (*f, oldDiagonal);
-        IndexType fRemain = getVertex (*f, fSide);
-        SideEnum sSide = getEdgeSide (*s, oldDiagonal);
-        IndexType sRemain = getVertex (*s, sSide);
+//        SideEnum fSide = getEdgeSide (*f, oldDiagonal);
+//        IndexType fRemain = getVertex (*f, fSide);
+//        SideEnum sSide = getEdgeSide (*s, oldDiagonal);
+//        IndexType sRemain = getVertex (*s, sSide);
 
-        // TODO Order of vertices is random. FIX. CCW.
-        a (*f, fRemain);
-        b (*f, sRemain);
-        c (*f, oldDiagonal.a);
+        SideEnum foa = getVertexSide (*f, oldDiagonal.a);
+        SideEnum fob = getVertexSide (*f, oldDiagonal.b);
+        SideEnum fc = otherThan (foa, fob);
+        IndexType fcIndex = getVertex (*f, fc);
 
-        // TODO Order of vertices is random. FIX. CCW.
-        a (*s, sRemain);
-        b (*s, fRemain);
-        c (*s, oldDiagonal.b);
+        SideEnum soa = getVertexSide (*s, oldDiagonal.a);
+        SideEnum sob = getVertexSide (*s, oldDiagonal.b);
+        SideEnum sc = otherThan (soa, sob);
+        IndexType scIndex = getVertex (*s, sc);
+
+        // TODO CCW sort of entire new triangle
+        setVertex (*f, fob, scIndex);
+
+//        krawędź fob - foa (czyli fc) <- trójkąt przylegly do sob - sc, czyli soa
+//      krawędź fob -fc <- s
+        setAdjacentTriangle (*f, fc, getAdjacentTriangle (*s, soa));
+        setAdjacentTriangle (*f, foa, s);
+
+        // TODO CCW sort of entire new triangle
+        setVertex (*s, sob, fcIndex);
+
+        //// Krawędź
+        setAdjacentTriangle (*s, sc, getAdjacentTriangle (*f, foa));
+        setAdjacentTriangle (*s, foa, f);
+
+        // TODO CCW sort
+        newDiagonal->a = fcIndex;
+        newDiagonal->b = scIndex;
+
+//        // TODO Order of vertices is random. FIX. CCW.
+//        a (*f, fRemain);
+//        b (*f, sRemain);
+//        c (*f, oldDiagonal.a);
+//        f->tC = s;
+//
+//        // TODO Order of vertices is random. FIX. CCW.
+//        a (*s, sRemain);
+//        b (*s, fRemain);
+//        c (*s, oldDiagonal.b);
+//        s->tC = f;
 }
 
 #if 0

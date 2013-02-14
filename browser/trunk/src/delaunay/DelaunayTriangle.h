@@ -152,6 +152,40 @@ typename TriangleTraits <T>::IndexType getVertex (T const &t, SideEnum side)
         return TriangleTraits <T>::get (t, side);
 }
 
+template <typename T>
+void setVertex (T &t, SideEnum side, typename TriangleTraits <T>::IndexType i)
+{
+        TriangleMutableTraits <T>::set (t, side, i);
+}
+
+template <typename T>
+SideEnum getVertexSide (T const &t, typename TriangleTraits <T>::IndexType i)
+{
+        return static_cast <SideEnum> ((i == a (t)) | ((i == b (t)) << 1) | (i == c (t)) | ((i == c (t)) << 1));
+}
+
+inline
+SideEnum otherThan (SideEnum a, SideEnum b)
+{
+      return static_cast <SideEnum> (6 - static_cast <int> (a) - static_cast <int> (b));
+}
+
+//// TODO to bedzie w klasie DelaunayIndex i będzie inaczej zaimpl.
+//template <typename T>
+//T const *getAdjacentTriangle (T const &t, SideEnum s)
+//{
+//        switch (s) {
+//        case A:
+//                return t.tA;
+//        case B:
+//                return t.tB;
+//        case C:
+//                return t.tC;
+//        }
+//
+//        return 0;
+//}
+
 #if 0
 #ifndef NDEBUG
 template <typename T> // TODO tak nie moze być, bo łapie wszystko
