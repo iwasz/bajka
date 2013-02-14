@@ -71,12 +71,7 @@ struct point_traits<Geometry::Point> {
 }
 }
 
-//std::ostream &operator<< (std::ostream &o, Triangle const &i)
-//{
-//        o << i.a << "," << i.b << "," << i.c;
-//        return o;
-//}
-//
+
 //std::ostream &operator<< (std::ostream &o, TriangleVector const &e)
 //{
 //        size_t cnt = 0;
@@ -147,11 +142,7 @@ struct point_traits<Geometry::Point> {
 //
 //        return o;
 //}
-//std::ostream &operator<< (std::ostream &o, DelaunayTriangulation::Edge const &e)
-//{
-//        o << "(" << e.first << "," << e.second << ")";
-//        return o;
-//}
+
 
 /*##########################################################################*/
 

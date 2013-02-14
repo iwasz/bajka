@@ -9,7 +9,9 @@
 #ifndef DELAUNAYTRIANGLE_H_
 #define DELAUNAYTRIANGLE_H_
 
+#ifndef NDEBUG
 #include <iosfwd>
+#endif
 
 namespace Delaunay {
 
@@ -17,7 +19,7 @@ namespace Delaunay {
  * Numbers triangle edges and vertices. Edge A (first edge) id at the opposite
  * side than vertex A.
  */
-enum SideEnum { A = 1, B = 2, C = 3 };
+enum SideEnum { N = 0, A = 1, B = 2, C = 3 };
 
 /**
  * Default triangle type (index based).
@@ -37,9 +39,10 @@ struct Triangle {
                         return b;
                 case C:
                         return c;
+                default:
+                        return 0;
                 }
 
-                return 0; // warinig fix
         }
 
         void set (SideEnum s, IndexType v)
@@ -53,6 +56,8 @@ struct Triangle {
                         break;
                 case C:
                         c = v;
+                        break;
+                default:
                         break;
                 }
         }
@@ -170,31 +175,12 @@ SideEnum otherThan (SideEnum a, SideEnum b)
       return static_cast <SideEnum> (6 - static_cast <int> (a) - static_cast <int> (b));
 }
 
-//// TODO to bedzie w klasie DelaunayIndex i będzie inaczej zaimpl.
-//template <typename T>
-//T const *getAdjacentTriangle (T const &t, SideEnum s)
-//{
-//        switch (s) {
-//        case A:
-//                return t.tA;
-//        case B:
-//                return t.tB;
-//        case C:
-//                return t.tC;
-//        }
-//
-//        return 0;
-//}
-
-#if 0
 #ifndef NDEBUG
-template <typename T> // TODO tak nie moze być, bo łapie wszystko
-std::ostream &operator<< (std::ostream &o, T const &t)
+std::ostream &operator<< (std::ostream &o, Triangle const &t)
 {
         o << a (t) << "," << b (t) << "," << c (t);
         return o;
 }
-#endif
 #endif
 
 } // namespace Delaunay

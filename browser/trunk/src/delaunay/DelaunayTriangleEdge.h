@@ -11,6 +11,10 @@
 
 #include "DelaunayTriangle.h"
 
+#ifndef NDEBUG
+#include <iosfwd>
+#endif
+
 namespace Delaunay {
 
 /**
@@ -40,7 +44,7 @@ template <typename T>
 SideEnum getEdgeSide (T const &t, TriangleEdge <T> const &e)
 {
         return static_cast <SideEnum> (6 - (((e.a == a (t)) | ((e.a == b (t)) << 1) | (e.a == c (t)) | ((e.a == c (t)) << 1)) +
-                    ((e.b == a (t)) | ((e.b == b (t)) << 1) | (e.b == c (t)) | ((e.b == c (t)) << 1))));
+                                            ((e.b == a (t)) | ((e.b == b (t)) << 1) | (e.b == c (t)) | ((e.b == c (t)) << 1))));
 }
 
 /****************************************************************************/
@@ -55,10 +59,19 @@ TriangleEdge<T> getEdge (T const &t, SideEnum side)
                 return TriangleEdge<T> (c (t), a (t));
         case C:
                 return TriangleEdge<T> (b (t), a (t));
+        default:
+                return TriangleEdge<T> (0, 0);
         }
-
-        return TriangleEdge<T> (0, 0); // warinig fix
 }
+
+#ifndef NDEBUG
+template <typename T>
+std::ostream &operator<< (std::ostream &o, TriangleEdge<T> const &e)
+{
+        o << "(" << e.a << "," << e.b << ")";
+        return o;
+}
+#endif
 
 } // namespace Delaunay
 
