@@ -79,6 +79,7 @@ namespace Delaunay {
 
 /**
  * Input must be in COUNTER CLOCKWISE order.
+ * TODO unit testy różnych małych funkcyjek.
  */
 template <typename Input, typename Traits = DelaunayTriangulationTraits<> >
 class DelaunayTriangulation {
@@ -354,9 +355,9 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                          * - uaktualnic triangleIndex (potrzebny w findCrossing edges).
                          */
                         index.flip (e, &newDiagonal);
-                        break;
-//
-//                        if (intersects (e.get<0> (), newDiagonal)) {
+//                        break;
+
+//                        if (Delaunay::intersects (e.template get<0> (), newDiagonal)) {
 //                                missingConstraints.push_back (newDiagonal);
 //                        }
 //                        else {
