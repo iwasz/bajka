@@ -20,6 +20,12 @@
 
 namespace Delaunay {
 
+/**
+ * TODO operqacje
+ * - addTriangle - dodaje do triangulacji i uaktualnia wszystkie indeksy.
+ * - numTriangles - ile jest aktualnie trójkatów w triangulacji.
+ * -
+ */
 template <typename Input, typename Traits = DelaunayTriangulationTraits <> >
 class DelaunayIndex {
 public:
@@ -49,6 +55,8 @@ public:
         void addTriangle (TriangleType const *triangle);
         TrianglePtrVector const &getTrianglesForIndex (IndexType i) const { return triangleIndex[i]; }
         TrianglePtrVector &getTrianglesForIndex (IndexType i) { return triangleIndex[i]; }
+
+        void setVertex (TriangleType &t, SideEnum s, IndexType v);
 
 /****************************************************************************/
 
@@ -90,6 +98,11 @@ public:
                 return EdgeType (input[e.a], input[e.b]);
         }
 
+        /**
+         *
+         */
+        void getTriaglesForEdge (TriangleEdgeType const &e, TriangleType * const *a, TriangleType  * const *b);
+
 private:
 
         Input const &input;
@@ -111,9 +124,10 @@ DelaunayIndex <Input, Traits>::getAdjacentTriangle (TriangleType const &triangle
                 return triangle.tB;
         case C:
                 return triangle.tC;
+        default:
+                return 0;
         }
 
-        return 0; // warning Fix
 }
 
 template <typename Input, typename Traits>
@@ -128,6 +142,8 @@ void DelaunayIndex <Input, Traits>::setAdjacentTriangle (TriangleType &t, SideEn
                 break;
         case C:
                 t.tC = a;
+                break;
+        default:
                 break;
         }
 }
@@ -316,7 +332,7 @@ void DelaunayIndex<Input, Traits>::flip (CrossingEdge const &cross, TriangleEdge
         std::cerr << "soa : " << (int)soa << ", sob : " << (int)sob << ", sc : " << (int)sc << ", scIndex : " << scIndex << std::endl;
 
         // TODO CCW sort of entire new triangle
-        setVertex (*f, fob, scIndex);
+        this->setVertex (*f, fob, scIndex);
 
 //        krawędź fob - foa (czyli fc) <- trójkąt przylegly do sob - sc, czyli soa
 //      krawędź fob -fc <- s
@@ -324,7 +340,8 @@ void DelaunayIndex<Input, Traits>::flip (CrossingEdge const &cross, TriangleEdge
         setAdjacentTriangle (*f, foa, s);
 
         // TODO CCW sort of entire new triangle
-        setVertex (*s, sob, fcIndex);
+        // TODO wywlić this i upewnic się, że nie bierze globalnej.
+        this->setVertex (*s, sob, fcIndex);
 
         //// Krawędź
         setAdjacentTriangle (*s, sc, getAdjacentTriangle (*f, foa));
@@ -347,6 +364,40 @@ void DelaunayIndex<Input, Traits>::flip (CrossingEdge const &cross, TriangleEdge
 //        b (*s, fRemain);
 //        c (*s, oldDiagonal.b);
 //        s->tC = f;
+}
+
+template <typename Input, typename Traits>
+void DelaunayIndex<Input, Traits>::getTriaglesForEdge (TriangleEdgeType const &e, TriangleType * const *a, TriangleType  * const *b)
+{
+        TrianglePtrVector const &triaglesA = triangleIndex[e.a];
+        *a = *b = NULL;
+
+        for (typename TrianglePtrVector::const_iterator i = triaglesA.begin (); i != triaglesA.end (); ++i) {
+                Triangle const *t = *i;
+                SideEnum s = getVertexSide (*t, e.a);
+                TriangleEdgeType me = getEdge (*t, s);
+
+                if (me.a == e.b || me.b == e.b) {
+                        if (!*a) {
+                                *a = t;
+                        }
+                        else if (!*b) {
+                                *b = t;
+                                return;
+                        }
+                }
+        }
+}
+
+template <typename Input, typename Traits>
+void DelaunayIndex<Input, Traits>::setVertex (TriangleType &t, SideEnum s, IndexType v)
+{
+        IndexType current = getVertex (t, s);
+
+        TrianglePtrVector triangles = triangleIndex[v];
+        triangles.erase (std::remove (triangles.begin (), triangles.end (), &t));
+
+        setVertex (t, s, v);
 }
 
 #if 0
