@@ -398,12 +398,12 @@ void DelaunayIndex<Input, Traits>::getTriaglesForEdge (TriangleEdgeType const &e
 template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::setVertex (TriangleType &t, SideEnum s, IndexType v)
 {
-        IndexType current = getVertex (t, s);
+        IndexType current = Delaunay::getVertex (t, s);
 
         TrianglePtrVector &triangles = triangleIndex[current];
         triangles.erase (std::remove (triangles.begin (), triangles.end (), &t));
 
-        setVertex (t, s, v);
+        Delaunay::setVertex (t, s, v);
         TrianglePtrVector trianglesV = triangleIndex[v];
         trianglesV.push_back (&t);
 }
