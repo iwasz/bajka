@@ -101,7 +101,7 @@ public:
         /**
          *
          */
-        void getTriaglesForEdge (TriangleEdgeType const &e, TriangleType * const *a, TriangleType  * const *b);
+        void getTriaglesForEdge (TriangleEdgeType const &e, TriangleType **a, TriangleType **b);
 
 private:
 
@@ -306,10 +306,15 @@ template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::flip (CrossingEdge const &cross, TriangleEdgeType *newDiagonal)
 {
         TriangleEdgeType oldDiagonal = cross.template get<0> ();
-        TriangleType *f = const_cast <TriangleType *> (cross.template get<1> ()); // TODO get rid of const_cast!
-        TriangleType *s = const_cast <TriangleType *> (cross.template get<2> ()); // TODO get rid of const_cast!
-        TriangleType fCopy = *f;
-        TriangleType sCopy = *s;
+//        TriangleType *f = const_cast <TriangleType *> (cross.template get<1> ()); // TODO get rid of const_cast!
+//        TriangleType *s = const_cast <TriangleType *> (cross.template get<2> ()); // TODO get rid of const_cast!
+//        TriangleType fCopy = *f;
+//        TriangleType sCopy = *s;
+        TriangleType *f = 0;
+        TriangleType *s = 0;
+
+        getTriaglesForEdge (oldDiagonal, &f, &s);
+
 
         std::cerr << "oldDiagonal : " << oldDiagonal << ", f : " << *f << ", s : " << *s << ", ptr : " << f << ", " << s << std::endl;
 //        SideEnum fSide = getEdgeSide (*f, oldDiagonal);
@@ -367,7 +372,7 @@ void DelaunayIndex<Input, Traits>::flip (CrossingEdge const &cross, TriangleEdge
 }
 
 template <typename Input, typename Traits>
-void DelaunayIndex<Input, Traits>::getTriaglesForEdge (TriangleEdgeType const &e, TriangleType * const *a, TriangleType  * const *b)
+void DelaunayIndex<Input, Traits>::getTriaglesForEdge (TriangleEdgeType const &e, TriangleType **a, TriangleType **b)
 {
         TrianglePtrVector const &triaglesA = triangleIndex[e.a];
         *a = *b = NULL;
@@ -379,10 +384,11 @@ void DelaunayIndex<Input, Traits>::getTriaglesForEdge (TriangleEdgeType const &e
 
                 if (me.a == e.b || me.b == e.b) {
                         if (!*a) {
-                                *a = t;
+                                // TODO get rid od cast
+                                *a = const_cast <TriangleType *> (t);
                         }
                         else if (!*b) {
-                                *b = t;
+                                *b = const_cast <TriangleType *> (t);
                                 return;
                         }
                 }
@@ -394,10 +400,12 @@ void DelaunayIndex<Input, Traits>::setVertex (TriangleType &t, SideEnum s, Index
 {
         IndexType current = getVertex (t, s);
 
-        TrianglePtrVector triangles = triangleIndex[v];
+        TrianglePtrVector &triangles = triangleIndex[current];
         triangles.erase (std::remove (triangles.begin (), triangles.end (), &t));
 
         setVertex (t, s, v);
+        TrianglePtrVector trianglesV = triangleIndex[v];
+        trianglesV.push_back (&t);
 }
 
 #if 0
