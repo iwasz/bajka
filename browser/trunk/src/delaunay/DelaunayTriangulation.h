@@ -94,12 +94,10 @@ public:
         typedef typename DelaunayIndexType::TriangleTraitsType TriangleTraitsType;
         typedef typename DelaunayIndexType::IndexType IndexType;
         typedef typename DelaunayIndexType::TriangleEdgeType TriangleEdgeType;
-        typedef std::list <TriangleEdgeType> TriangleEdgeList;
+        typedef typename DelaunayIndexType::TriangleEdgeList TriangleEdgeList;
         typedef typename DelaunayIndexType::TriangleVector TriangleVector;
         typedef typename DelaunayIndexType::TrianglePtrVector TrianglePtrVector;
         typedef typename DelaunayIndexType::TriangleIndex TriangleIndex;
-        typedef typename DelaunayIndexType::CrossingEdge CrossingEdge;
-        typedef typename DelaunayIndexType::CrossingEdgeList CrossingEdgeList;
         typedef typename DelaunayIndexType::IntersectionInfo IntersectionInfo;
 
         typedef triangulation_voronoi_diagram::vertex_type vertex_type;
@@ -300,12 +298,13 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
         for (typename TriangleEdgeList::const_iterator i = missingConstraints.begin (); i != missingConstraints.end (); ++i) {
                 TriangleEdgeType const &missingConstraint = *i;
 
-                if (missingConstraint.a != 450) {
-                        continue;
-                }
+//                if (missingConstraint.a != 450) {
+//                if (missingConstraint.a != 0) {
+//                        continue;
+//                }
                 std::cerr << "Missing constraint : " << missingConstraint << std::endl;
 
-                CrossingEdgeList crossingEdges;
+                TriangleEdgeList crossingEdges;
                 TrianglePtrVector crossingTriangles;
 
                 index.findCrossingEdges (missingConstraint, &crossingEdges, &crossingTriangles);
@@ -326,12 +325,12 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
 #endif
 
                 TriangleEdgeList newEdges;
-                typename CrossingEdgeList::iterator j = crossingEdges.begin ();
+                typename TriangleEdgeList::iterator j = crossingEdges.begin ();
                 while (!crossingEdges.empty ()) {
-                        typename CrossingEdgeList::iterator next = j;
+                        typename TriangleEdgeList::iterator next = j;
                         ++next;
 
-                        CrossingEdge e = *j;
+                        TriangleEdgeType e = *j;
 
                         if (!index.twoTrianglesConvex (e)) {
 

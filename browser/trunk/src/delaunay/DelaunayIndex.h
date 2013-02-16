@@ -38,11 +38,10 @@ public:
         typedef TriangleTraits <TriangleType> TriangleTraitsType;
         typedef typename TriangleTraitsType::IndexType IndexType;
         typedef TriangleEdge<TriangleType> TriangleEdgeType;
+        typedef std::list <TriangleEdgeType> TriangleEdgeList;
         typedef std::vector <TriangleType> TriangleVector;
         typedef std::vector <TriangleType const *> TrianglePtrVector; // TODO Data structure not optimized. Maybe some contiguous memory region can be used to eliminate memory partition and std::vector overhead.
         typedef std::vector <TrianglePtrVector> TriangleIndex;
-        typedef boost::tuple <TriangleEdgeType, TriangleType const *, TriangleType const *> CrossingEdge;
-        typedef std::list <CrossingEdge> CrossingEdgeList;
         typedef boost::tuple <int, SideEnum, SideEnum> IntersectionInfo;
 
         DelaunayIndex (Input const &i) : input (i)
@@ -68,7 +67,7 @@ public:
          * in this->input.
          * Output : list of edges which intersects with edge.
          */
-        void findCrossingEdges (TriangleEdgeType const &edge, CrossingEdgeList *crossingEdges, TrianglePtrVector *crossingTriangles) const;
+        void findCrossingEdges (TriangleEdgeType const &edge, TriangleEdgeList *crossingEdges, TrianglePtrVector *crossingTriangles) const;
 
         /**
          * First tuple element : number of intersections (0, 1 or 2).
@@ -83,12 +82,12 @@ public:
         /**
          * Are two adjacent triangles form quadrilateral which is convex?
          */
-        bool twoTrianglesConvex (CrossingEdge const &c) const;
+        bool twoTrianglesConvex (TriangleEdgeType const &e, TriangleType const &a, TriangleType const &b) const;
 
         /**
          * Perform a flip, and return new diagonal. Triangle index.
          */
-        void flip (CrossingEdge const &c, TriangleEdgeType *newDiagonal);
+        void flip (TriangleEdgeType const &oldDiagonal, TriangleEdgeType *newDiagonal);
 
         /**
          * Index based edge to coordinate based edge.
@@ -195,7 +194,7 @@ DelaunayIndex<Input, Traits>::intersects (TriangleType const &t, EdgeType const 
 /****************************************************************************/
 
 template <typename Input, typename Traits>
-void DelaunayIndex<Input, Traits>::findCrossingEdges (TriangleEdgeType const &edge, CrossingEdgeList *crossingEdges, TrianglePtrVector *crossingTriangles) const
+void DelaunayIndex<Input, Traits>::findCrossingEdges (TriangleEdgeType const &edge, TriangleEdgeList *crossingEdges, TrianglePtrVector *crossingTriangles) const
 {
         TrianglePtrVector const &incidentTriangles = triangleIndex[edge.a];
         EdgeType e = triangleEdgeToEdge (edge);
@@ -227,19 +226,20 @@ void DelaunayIndex<Input, Traits>::findCrossingEdges (TriangleEdgeType const &ed
 
         while (true) {
                 TriangleEdgeType commonEdge = getEdge (*next, commonEdgeNumber);
-                CrossingEdge crossingEdge;
-                crossingEdge.template get<0> () = commonEdge;
-                crossingEdge.template get<1> () = next;
+//                CrossingEdge crossingEdge;
+//                crossingEdge.template get<0> () = commonEdge;
+//                crossingEdge.template get<1> () = next;
                 // TODO - rozwiązać sprawę z const / nie cost.
                 next = const_cast <DelaunayIndex *> (this)->getAdjacentTriangle (*next, commonEdgeNumber);
-                crossingEdge.template get<2> () = next;
+//                crossingEdge.template get<2> () = next;
                 commonEdgeNumber = getEdgeSide (*next, commonEdge);
 
                 // Musi być, bo gdyby nie było, to by znaczyło, że constraint wychodzi poza zbiór punktów (ma jeden koniec gdzieś w powietrzu).
                 assert (next);
 
                 if (crossingTriangles) {
-                        crossingEdges->push_back (crossingEdge);
+//                        crossingEdges->push_back (crossingEdge);
+                        crossingEdges->push_back (commonEdge);
                         crossingTriangles->push_back (next);
                 }
 
@@ -266,16 +266,12 @@ void DelaunayIndex<Input, Traits>::findCrossingEdges (TriangleEdgeType const &ed
 /****************************************************************************/
 
 template <typename Input, typename Traits>
-bool DelaunayIndex<Input, Traits>::twoTrianglesConvex (CrossingEdge const &c) const
+bool DelaunayIndex<Input, Traits>::twoTrianglesConvex (TriangleEdgeType const &firstDiagonal, TriangleType const &a, TriangleType const &b) const
 {
-        TriangleEdgeType firstDiagonal = c.template get<0> ();
-        TriangleType const *a = c.template get<1> ();
-        TriangleType const *b = c.template get<2> ();
+        SideEnum aSide = getEdgeSide (a, firstDiagonal);
+        SideEnum bSide = getEdgeSide (b, firstDiagonal);
 
-        SideEnum aSide = getEdgeSide (*a, firstDiagonal);
-        SideEnum bSide = getEdgeSide (*b, firstDiagonal);
-
-        TriangleEdgeType secondDiagonal = TriangleEdgeType (getVertex (*a, aSide), getVertex (*b, bSide));
+        TriangleEdgeType secondDiagonal = TriangleEdgeType (getVertex (a, aSide), getVertex (b, bSide));
         EdgeType e1 = triangleEdgeToEdge (firstDiagonal);
         EdgeType e2 = triangleEdgeToEdge (secondDiagonal);
         return Delaunay::intersects (e1, e2);
@@ -303,24 +299,24 @@ void DelaunayIndex<Input, Traits>::addTriangle (TriangleType const *triangle)
 /****************************************************************************/
 
 template <typename Input, typename Traits>
-void DelaunayIndex<Input, Traits>::flip (CrossingEdge const &cross, TriangleEdgeType *newDiagonal)
+void DelaunayIndex<Input, Traits>::flip (TriangleEdgeType const &oldDiagonal, TriangleEdgeType *newDiagonal)
 {
-        TriangleEdgeType oldDiagonal = cross.template get<0> ();
-//        TriangleType *f = const_cast <TriangleType *> (cross.template get<1> ()); // TODO get rid of const_cast!
-//        TriangleType *s = const_cast <TriangleType *> (cross.template get<2> ()); // TODO get rid of const_cast!
-//        TriangleType fCopy = *f;
-//        TriangleType sCopy = *s;
         TriangleType *f = 0;
         TriangleType *s = 0;
-
         getTriaglesForEdge (oldDiagonal, &f, &s);
 
+#if 1
+        std::cerr << "oldDiagonal : " << oldDiagonal << ", f : ";
+        if (f) { std::cerr << *f; } else { std::cerr << "NULL"; }
+        std::cerr << ", s : ";
+        if (s) { std::cerr << *s; } else { std::cerr << "NULL"; }
+        std::cerr << ", ptr : " << f << ", " << s << std::endl;
+#endif
 
-        std::cerr << "oldDiagonal : " << oldDiagonal << ", f : " << *f << ", s : " << *s << ", ptr : " << f << ", " << s << std::endl;
-//        SideEnum fSide = getEdgeSide (*f, oldDiagonal);
-//        IndexType fRemain = getVertex (*f, fSide);
-//        SideEnum sSide = getEdgeSide (*s, oldDiagonal);
-//        IndexType sRemain = getVertex (*s, sSide);
+        if (!s) {
+                *newDiagonal = oldDiagonal;
+                return;
+        }
 
         SideEnum foa = getVertexSide (*f, oldDiagonal.a);
         SideEnum fob = getVertexSide (*f, oldDiagonal.b);
@@ -329,8 +325,8 @@ void DelaunayIndex<Input, Traits>::flip (CrossingEdge const &cross, TriangleEdge
 
         std::cerr << "foa : " << (int)foa << ", fob : " << (int)fob << ", fc : " << (int)fc << ", fcIndex : " << fcIndex << std::endl;
 
-        SideEnum soa = getVertexSide (*s, oldDiagonal.a);
-        SideEnum sob = getVertexSide (*s, oldDiagonal.b);
+        SideEnum soa = getVertexSide (*s, oldDiagonal.b);
+        SideEnum sob = getVertexSide (*s, oldDiagonal.a);
         SideEnum sc = otherThan (soa, sob);
         IndexType scIndex = getVertex (*s, sc);
 
@@ -357,28 +353,25 @@ void DelaunayIndex<Input, Traits>::flip (CrossingEdge const &cross, TriangleEdge
         newDiagonal->b = scIndex;
 
         std::cerr << "newDiagonal : " << *newDiagonal << ", f : " << *f << ", s : " << *s << std::endl;
-
-//        // TODO Order of vertices is random. FIX. CCW.
-//        a (*f, fRemain);
-//        b (*f, sRemain);
-//        c (*f, oldDiagonal.a);
-//        f->tC = s;
-//
-//        // TODO Order of vertices is random. FIX. CCW.
-//        a (*s, sRemain);
-//        b (*s, fRemain);
-//        c (*s, oldDiagonal.b);
-//        s->tC = f;
 }
 
+/****************************************************************************/
+
+/*
+ * TODO nieoptymalnie - on iteruje za każdym razem po wszystkich trójkątach przyległych to e.a i
+ * szuka w nich e.b. Możnaby jakiś index, albo żeby triangleIndex zawierał jakąś strukturę, którą
+ * można przeszukiwać.
+ */
 template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::getTriaglesForEdge (TriangleEdgeType const &e, TriangleType **a, TriangleType **b)
 {
         TrianglePtrVector const &triaglesA = triangleIndex[e.a];
-        *a = *b = NULL;
+        *a = *b = 0;
+        std::cerr << "Edge : " << e << std::endl;
 
         for (typename TrianglePtrVector::const_iterator i = triaglesA.begin (); i != triaglesA.end (); ++i) {
                 Triangle const *t = *i;
+                std::cerr << "getTrForE : " << *t;
                 SideEnum s = getVertexSide (*t, e.a);
                 TriangleEdgeType me = getEdge (*t, s);
 
@@ -386,22 +379,27 @@ void DelaunayIndex<Input, Traits>::getTriaglesForEdge (TriangleEdgeType const &e
                         if (!*a) {
                                 // TODO get rid od cast
                                 *a = const_cast <TriangleType *> (t);
+                                std::cerr << " +++a";
                         }
                         else if (!*b) {
                                 *b = const_cast <TriangleType *> (t);
+                                std::cerr << " +++b"  << std::endl;
                                 return;
                         }
                 }
+
+                std::cerr  << std::endl;
         }
 }
+
+/****************************************************************************/
 
 template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::setVertex (TriangleType &t, SideEnum s, IndexType v)
 {
         IndexType current = Delaunay::getVertex (t, s);
-
         TrianglePtrVector &triangles = triangleIndex[current];
-        triangles.erase (std::remove (triangles.begin (), triangles.end (), &t));
+        triangles.erase (std::remove (triangles.begin (), triangles.end (), &t), triangles.end ());
 
         Delaunay::setVertex (t, s, v);
         TrianglePtrVector trianglesV = triangleIndex[v];
