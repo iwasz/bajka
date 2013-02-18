@@ -82,7 +82,7 @@ public:
         /**
          * Are two adjacent triangles form quadrilateral which is convex?
          */
-        bool twoTrianglesConvex (TriangleEdgeType const &e, TriangleType const &a, TriangleType const &b) const;
+        bool twoTrianglesConvex (TriangleEdgeType const &e/*, TriangleType const &a, TriangleType const &b*/) const;
 
         /**
          * Perform a flip, and return new diagonal. Triangle index.
@@ -100,7 +100,7 @@ public:
         /**
          *
          */
-        void getTriaglesForEdge (TriangleEdgeType const &e, TriangleType **a, TriangleType **b);
+        void getTriaglesForEdge (TriangleEdgeType const &e, TriangleType **a, TriangleType **b) const;
 
 private:
 
@@ -266,12 +266,21 @@ void DelaunayIndex<Input, Traits>::findCrossingEdges (TriangleEdgeType const &ed
 /****************************************************************************/
 
 template <typename Input, typename Traits>
-bool DelaunayIndex<Input, Traits>::twoTrianglesConvex (TriangleEdgeType const &firstDiagonal, TriangleType const &a, TriangleType const &b) const
+bool DelaunayIndex<Input, Traits>::twoTrianglesConvex (TriangleEdgeType const &firstDiagonal/*, TriangleType const &a, TriangleType const &b*/) const
 {
-        SideEnum aSide = getEdgeSide (a, firstDiagonal);
-        SideEnum bSide = getEdgeSide (b, firstDiagonal);
+        TriangleType *a = NULL;
+        TriangleType *b = NULL;
 
-        TriangleEdgeType secondDiagonal = TriangleEdgeType (getVertex (a, aSide), getVertex (b, bSide));
+        getTriaglesForEdge (firstDiagonal, &a, &b);
+
+        if (!a || !b) {
+                return true;
+        }
+
+        SideEnum aSide = getEdgeSide (*a, firstDiagonal);
+        SideEnum bSide = getEdgeSide (*b, firstDiagonal);
+
+        TriangleEdgeType secondDiagonal = TriangleEdgeType (getVertex (*a, aSide), getVertex (*b, bSide));
         EdgeType e1 = triangleEdgeToEdge (firstDiagonal);
         EdgeType e2 = triangleEdgeToEdge (secondDiagonal);
         return Delaunay::intersects (e1, e2);
@@ -315,6 +324,7 @@ void DelaunayIndex<Input, Traits>::flip (TriangleEdgeType const &oldDiagonal, Tr
 
         if (!s) {
                 *newDiagonal = oldDiagonal;
+                std::cerr << "!s - return" << std::endl;
                 return;
         }
 
@@ -363,7 +373,7 @@ void DelaunayIndex<Input, Traits>::flip (TriangleEdgeType const &oldDiagonal, Tr
  * można przeszukiwać.
  */
 template <typename Input, typename Traits>
-void DelaunayIndex<Input, Traits>::getTriaglesForEdge (TriangleEdgeType const &e, TriangleType **a, TriangleType **b)
+void DelaunayIndex<Input, Traits>::getTriaglesForEdge (TriangleEdgeType const &e, TriangleType **a, TriangleType **b) const
 {
         TrianglePtrVector const &triaglesA = triangleIndex[e.a];
         *a = *b = 0;
@@ -402,7 +412,7 @@ void DelaunayIndex<Input, Traits>::setVertex (TriangleType &t, SideEnum s, Index
         triangles.erase (std::remove (triangles.begin (), triangles.end (), &t), triangles.end ());
 
         Delaunay::setVertex (t, s, v);
-        TrianglePtrVector trianglesV = triangleIndex[v];
+        TrianglePtrVector &trianglesV = triangleIndex[v];
         trianglesV.push_back (&t);
 }
 
