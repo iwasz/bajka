@@ -83,6 +83,7 @@ public:
          * Are two adjacent triangles form quadrilateral which is convex?
          */
         bool twoTrianglesConvex (TriangleEdgeType const &e/*, TriangleType const &a, TriangleType const &b*/) const;
+        bool twoTrianglesNotDelaunay (TriangleEdgeType const &e) const;
 
         /**
          * Perform a flip, and return new diagonal. Triangle index.
@@ -270,12 +271,27 @@ bool DelaunayIndex<Input, Traits>::twoTrianglesConvex (TriangleEdgeType const &f
 {
         TriangleType *a = NULL;
         TriangleType *b = NULL;
-
         getTriaglesForEdge (firstDiagonal, &a, &b);
+        assert (a && b);
 
-        if (!a || !b) {
-                return true;
-        }
+        SideEnum aSide = getEdgeSide (*a, firstDiagonal);
+        SideEnum bSide = getEdgeSide (*b, firstDiagonal);
+
+        TriangleEdgeType secondDiagonal = TriangleEdgeType (getVertex (*a, aSide), getVertex (*b, bSide));
+        EdgeType e1 = triangleEdgeToEdge (firstDiagonal);
+        EdgeType e2 = triangleEdgeToEdge (secondDiagonal);
+        return Delaunay::intersects (e1, e2);
+}
+
+/****************************************************************************/
+
+template <typename Input, typename Traits>
+bool DelaunayIndex<Input, Traits>::twoTrianglesNotDelaunay (TriangleEdgeType const &firstDiagonal) const
+{
+        TriangleType *a = NULL;
+        TriangleType *b = NULL;
+        getTriaglesForEdge (firstDiagonal, &a, &b);
+        assert (a && b);
 
         SideEnum aSide = getEdgeSide (*a, firstDiagonal);
         SideEnum bSide = getEdgeSide (*b, firstDiagonal);
