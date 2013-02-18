@@ -82,6 +82,7 @@ struct PointMutableTraits {
         }
 };
 
+// TODO get rod of this stupid hamespace
 namespace H {
 
 /**

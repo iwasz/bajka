@@ -299,7 +299,7 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                 TriangleEdgeType const &missingConstraint = *i;
 
 //                if (missingConstraint.a != 450) {
-//                if (missingConstraint.a != 0) {
+//                if (missingConstraint.a != 119) {
 //                        continue;
 //                }
                 std::cerr << "Missing constraint : " << missingConstraint << std::endl;
@@ -307,6 +307,7 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                 TriangleEdgeList crossingEdges;
                 TrianglePtrVector crossingTriangles;
 
+                // Paragraph 2.
                 index.findCrossingEdges (missingConstraint, &crossingEdges, &crossingTriangles);
 
 //                std::cerr << "Constraint " << missingConstraint << " crosses : " << crossingTriangles << std::endl;
@@ -324,15 +325,18 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                 }
 #endif
 
+                // Paragraph 3.
                 TriangleEdgeList newEdges;
-                typename TriangleEdgeList::iterator j = crossingEdges.begin ();
                 while (!crossingEdges.empty ()) {
-                        typename TriangleEdgeList::iterator next = j;
-                        ++next;
 
-                        TriangleEdgeType e = *j;
+                        // Paragraph 3.1
+                        TriangleEdgeType currentCrossingEdge = crossingEdges.front ();
+                        crossingEdges.pop_front ();
 
-                        if (!index.twoTrianglesConvex (e)) {
+                        // Paragraph 3.2
+                        if (!index.twoTrianglesConvex (currentCrossingEdge)) {
+
+                                crossingEdges.push_back (currentCrossingEdge);
 
                                 std::cerr << "####> !CONVEX" << std::endl;
                                 if (crossingEdges.size () == 1) {
@@ -342,14 +346,12 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                                          */
                                 }
 
-                                j = next;
                                 continue;
                         }
 
                         std::cerr << "####> +++CONVEX" << std::endl;
 
                         // Dwa przyległę trójkąty zawierające e tworzą czworobok wypukły.
-                        crossingEdges.erase (j);
                         TriangleEdgeType newDiagonal;
 
                         /*
@@ -358,17 +360,17 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                          * - uaktualnić ich zlinkowane trójkąty.
                          * - uaktualnic triangleIndex (potrzebny w findCrossing edges).
                          */
-                        index.flip (e, &newDiagonal);
-//                        break;
+                        index.flip (currentCrossingEdge, &newDiagonal);
 
-//                        if (Delaunay::intersects (e.template get<0> (), newDiagonal)) {
-//                                missingConstraints.push_back (newDiagonal);
-//                        }
-//                        else {
-//                                newEdges.push_back (newDiagonal);
-//                        }
+                        EdgeType a = index.triangleEdgeToEdge (missingConstraint);
+                        EdgeType b = index.triangleEdgeToEdge (newDiagonal);
 
-                        j = next;
+                        if (Delaunay::intersects (a, b)) {
+                                crossingEdges.push_back (newDiagonal);
+                        }
+                        else {
+                                newEdges.push_back (newDiagonal);
+                        }
                 }
         }
 

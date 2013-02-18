@@ -94,14 +94,14 @@ void TestView::update (Model::IModel *model, Event::UpdateEvent *, View::GLConte
                 glDrawArrays (GL_POINTS, 0, vBuf.numVertices);
 
                 glPointSize (4);
-                glUniform4f (ctx->colorUniformLocation, fg.r, fg.g, fg.b, fg.a);
+//                glUniform4f (ctx->colorUniformLocation, fg.r, fg.g, fg.b, fg.a);
 //                glDrawArrays (GL_POINTS, 0, 3);
-                glDrawArrays (GL_POINTS, 450, 1);
+//                glDrawArrays (GL_POINTS, 450, 1);
 
                 glUniform4f (ctx->colorUniformLocation, 0, 0, 1, 1);
-                glDrawArrays (GL_POINTS, 321, 1);
-                glDrawArrays (GL_POINTS, 450, 1);
-                glDrawArrays (GL_POINTS, 350, 1);
+                glDrawArrays (GL_POINTS, 117, 1);
+//                glDrawArrays (GL_POINTS, 120, 1);
+//                glDrawArrays (GL_POINTS, 350, 1);
 
 //                glDrawArrays (GL_POINTS, 349, 1);
 //                glDrawArrays (GL_POINTS, 321, 1);
