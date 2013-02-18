@@ -372,9 +372,25 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                                 newEdges.push_back (newDiagonal);
                         }
                 }
+
+                // 4. Make CDT from DT.
+                std::cerr << newEdges.size () << std::endl;
+
+                for (typename TriangleEdgeList::iterator i = newEdges.begin (); i != newEdges.end (); ++i) {
+                        TriangleEdgeType &newEdge = *i;
+
+                        if (newEdge == missingConstraint) {
+                                continue;
+                        }
+
+                        if (!index.twoTrianglesNotDelaunay (newEdge)) {
+                                TriangleEdgeType newDiagonal;
+                                index.flip (newEdge, &newDiagonal);
+                                newEdge = newDiagonal; // ?
+                        }
+                }
         }
 
-        // 4. Make CDT from DT.
 
 
         // 5. Create debug output
