@@ -104,6 +104,11 @@ public:
         typedef triangulation_voronoi_diagram::edge_type edge_type;
         typedef triangulation_voronoi_diagram::cell_type cell_type;
 
+        struct TraingleRemovePredicate {
+                bool operator () (TriangleType const &t) { return (&t == value); }
+                TriangleType const *value;
+        };
+
         DelaunayTriangulation (Input const &i) : input (i), index (i)
         {
                 // TODO ***KRYTYCZNE*** ustawić tu tyle ile ma być. Da się to wyliczyć na początku!?
@@ -124,11 +129,18 @@ private:
          * in points other than a and b.
          * This second condition is easy to conform to, since we operate on diagonals generated
          * by triangulation algotihm.
+         * \param a diagonal point a
+         * \param ap point previous to a (in input).
+         * \param an point next to a
+         * \param b diagonal point b
          */
         bool diagonalInside (PointType const& a,
                              PointType const& ap,
                              PointType const& an,
                              PointType const& b) const;
+
+        bool diagonalInside (TriangleEdgeType const &e) const;
+        bool trinagleInside (TriangleType const &t) const;
 
 private:
 
@@ -392,24 +404,22 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
         }
 
 
+        // 5. Remove superfluous triangles
+        typename TriangleVector::iterator end = triangulation.end ();
+        TraingleRemovePredicate pred;
 
-        // 5. Create debug output
-//        Trójkąty
-//        for (TriangleVector::const_iterator i = triangulation.begin (); i != triangulation.end (); ++i) {
-//                delaunay->push_back (input[i->a]);
-//                delaunay->push_back (input[i->b]);
-//                delaunay->push_back (input[i->c]);
-//        }
+        for (IndexType i = 0; i < input.size (); ++i) {
+                TrianglePtrVector &triangles = index.getTrianglesForIndex (i);
 
-//        Krawedzie trójkątów
-//        for (TriangleVector::const_iterator i = triangulation.begin (); i != triangulation.end (); ++i) {
-//                delaunay->push_back (input[i->a]);
-//                delaunay->push_back (input[i->b]);
-//                delaunay->push_back (input[i->b]);
-//                delaunay->push_back (input[i->c]);
-//                delaunay->push_back (input[i->c]);
-//                delaunay->push_back (input[i->a]);
-//        }
+                for (typename TrianglePtrVector::const_iterator j = triangles.begin (); j != triangles.end (); ++j ) {
+                        if (!trinagleInside (**j)) {
+                                pred.value = *j;
+                                end = std::remove_if (triangulation.begin (), end, pred);
+                        }
+                }
+        }
+
+        triangulation.erase (end, triangulation.end ());
 
 #ifndef NDEBUG
         printlog ("Triangulation time (derived from voronoi as its dual) : %f ms", t1.elapsed ().wall / 1000000.0);
@@ -423,7 +433,6 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
 template <typename Input, typename Traits>
 bool DelaunayTriangulation <Input, Traits>::diagonalInside (PointType const &a, PointType const &ap, PointType const &an, PointType const &b) const
 {
-        return true;
         int apx = ap.x - a.x;
         int apy = ap.y - a.y;
         int anx = an.x - a.x;
@@ -436,6 +445,34 @@ bool DelaunayTriangulation <Input, Traits>::diagonalInside (PointType const &a, 
         int bXan = bx * any - by * anx;
 
         return ((apXan >= 0 && apXb >= 0 && bXan >= 0) || (apXan < 0 && !(apXb < 0 && bXan < 0)));
+}
+
+/****************************************************************************/
+
+template <typename Input, typename Traits>
+bool DelaunayTriangulation <Input, Traits>::diagonalInside (TriangleEdgeType const &e) const
+{
+        size_t pointsSize = input.size ();
+        PointType const &a = input[e.a];
+        PointType const &ap = input[(e.a == 0) ? (pointsSize - 1) : (e.a - 1)];
+        PointType const &an = input[(e.a == pointsSize - 1) ? (0) : (e.a + 1)];
+        PointType const &b = input[e.b];
+
+        return diagonalInside (a, ap, an, b);
+}
+
+/****************************************************************************/
+
+template <typename Input, typename Traits>
+bool DelaunayTriangulation <Input, Traits>::trinagleInside (TriangleType const &t) const
+{
+        for (int i = 1; i <= 3; ++i) {
+                if (!diagonalInside (getEdge (t, static_cast <SideEnum> (i)))) {
+                        return false;
+                }
+        }
+
+        return true;
 }
 
 } // namespace
