@@ -411,8 +411,16 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
         for (IndexType i = 0; i < input.size (); ++i) {
                 TrianglePtrVector &triangles = index.getTrianglesForIndex (i);
 
-                for (typename TrianglePtrVector::const_iterator j = triangles.begin (); j != triangles.end (); ++j ) {
-                        if (!trinagleInside (**j)) {
+                for (typename TrianglePtrVector::const_iterator j = triangles.begin (); j != triangles.end (); ++j) {
+                        TriangleType const &triangle = **j;
+//                        SideEnum p = getVertexSide (triangle, i);
+//                        std::pair <SideEnum, SideEnum> otherTwo = otherThan (p);
+//
+//                        IndexType a = getVertex (triangle, otherTwo.first);
+//                        IndexType b = getVertex (triangle, otherTwo.second);
+
+//                        if (!diagonalInside (TriangleEdgeType (i, a)) || !diagonalInside (TriangleEdgeType (i, b))) {
+                        if (!trinagleInside (triangle)) {
                                 pred.value = *j;
                                 end = std::remove_if (triangulation.begin (), end, pred);
                         }
@@ -452,6 +460,11 @@ bool DelaunayTriangulation <Input, Traits>::diagonalInside (PointType const &a, 
 template <typename Input, typename Traits>
 bool DelaunayTriangulation <Input, Traits>::diagonalInside (TriangleEdgeType const &e) const
 {
+        // TODO hack - ona sama powinna wiedziec.
+        if (std::abs (e.a - e.b) == 1) {
+                return true;
+        }
+
         size_t pointsSize = input.size ();
         PointType const &a = input[e.a];
         PointType const &ap = input[(e.a == 0) ? (pointsSize - 1) : (e.a - 1)];
@@ -474,6 +487,18 @@ bool DelaunayTriangulation <Input, Traits>::trinagleInside (TriangleType const &
 
         return true;
 }
+
+//template <typename Input, typename Traits>
+//bool DelaunayTriangulation <Input, Traits>::trinagleInside2 (TriangleType const &t, IndexItem startPoint) const
+//{
+//        for (int i = 1; i <= 3; ++i) {
+//                if (!diagonalInside (getEdge (t, static_cast <SideEnum> (i)))) {
+//                        return false;
+//                }
+//        }
+//
+//        return true;
+//}
 
 } // namespace
 
