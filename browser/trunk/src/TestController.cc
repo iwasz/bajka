@@ -363,6 +363,23 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
                 delaunay.push_back (Geometry::makePoint (a.x, a.y));
         }
 
+        //        Trójkąty
+        //        for (TriangleVector::const_iterator i = triangulation.begin (); i != triangulation.end (); ++i) {
+        //                delaunay->push_back (input[i->a]);
+        //                delaunay->push_back (input[i->b]);
+        //                delaunay->push_back (input[i->c]);
+        //        }
+
+        //        Krawedzie trójkątów
+        //        for (TriangleVector::const_iterator i = triangulation.begin (); i != triangulation.end (); ++i) {
+        //                delaunay->push_back (input[i->a]);
+        //                delaunay->push_back (input[i->b]);
+        //                delaunay->push_back (input[i->b]);
+        //                delaunay->push_back (input[i->c]);
+        //                delaunay->push_back (input[i->c]);
+        //                delaunay->push_back (input[i->a]);
+        //        }
+
 /*--------------------------------------------------------------------------*/
 
         VoronoiRenderer vr (*svg, &voronoi);
