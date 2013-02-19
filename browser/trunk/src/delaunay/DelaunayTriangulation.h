@@ -104,9 +104,14 @@ public:
         typedef triangulation_voronoi_diagram::edge_type edge_type;
         typedef triangulation_voronoi_diagram::cell_type cell_type;
 
+        // TODO możliwe że do usunięcia - sprawdź.
         struct TraingleRemovePredicate {
                 bool operator () (TriangleType const &t) { return (&t == value); }
                 TriangleType const *value;
+        };
+
+        struct TraingleRemovePredicate2 {
+                bool operator () (TriangleType const &t) { return !a (t) && !b (t) && !c (t); }
         };
 
         DelaunayTriangulation (Input const &i) : input (i), index (i)
@@ -140,7 +145,7 @@ private:
                              PointType const& b) const;
 
         bool diagonalInside (TriangleEdgeType const &e) const;
-        bool trinagleInside (TriangleType const &t) const;
+        bool triangleInside (TriangleType const &t) const;
 
 private:
 
@@ -223,7 +228,8 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
         }
 
 #ifndef NDEBUG
-//        std::cerr << "Delaunay triangulation produced : " << triangulation.size () << " triangles." << std::endl;
+        std::cerr << "Delaunay triangulation produced : " << triangulation.size () << " triangles." << std::endl;
+//        std::cerr << triangulation << std::endl;
 #endif
 
         // 2. Link triangles.
@@ -411,26 +417,40 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
         for (IndexType i = 0; i < input.size (); ++i) {
                 TrianglePtrVector &triangles = index.getTrianglesForIndex (i);
 
-                for (typename TrianglePtrVector::const_iterator j = triangles.begin (); j != triangles.end (); ++j) {
-                        TriangleType const &triangle = **j;
+                for (typename TrianglePtrVector::iterator j = triangles.begin (); j != triangles.end (); ++j) {
+                        // TODO wywalić const cast
+                        TriangleType &triangle = const_cast <TriangleType &> (**j);
+
+                        if (a (triangle) == 0 && b (triangle) == 0 && c (triangle) == 0) {
+                                continue;
+                        }
+
 //                        SideEnum p = getVertexSide (triangle, i);
 //                        std::pair <SideEnum, SideEnum> otherTwo = otherThan (p);
 //
 //                        IndexType a = getVertex (triangle, otherTwo.first);
 //                        IndexType b = getVertex (triangle, otherTwo.second);
 
+//                        std::cerr << "pre remove : " << triangle << " | " << i << ", " << a << ", " << b << std::endl;
+
+//
 //                        if (!diagonalInside (TriangleEdgeType (i, a)) || !diagonalInside (TriangleEdgeType (i, b))) {
-                        if (!trinagleInside (triangle)) {
-                                pred.value = *j;
-                                end = std::remove_if (triangulation.begin (), end, pred);
+                        if (!triangleInside (triangle)) {
+                                a (triangle, 0);
+                                b (triangle, 0);
+                                c (triangle, 0);
+//                                pred.value = *j;
+//                                std::cerr << "REMOVE" << std::endl;
+//                                end = std::remove_if (triangulation.begin (), end, pred);
                         }
                 }
         }
 
-        triangulation.erase (end, triangulation.end ());
+        triangulation.erase (std::remove_if (triangulation.begin (), triangulation.end (), TraingleRemovePredicate2 ()), triangulation.end ());
 
 #ifndef NDEBUG
         printlog ("Triangulation time (derived from voronoi as its dual) : %f ms", t1.elapsed ().wall / 1000000.0);
+        std::cerr << "CDT size : " << triangulation.size () << " triangles." << std::endl;
         //        printlog ("Voronoi prim. edges : %d", result);
 //        std::cout << triangulation << std::endl;
 #endif
@@ -460,10 +480,10 @@ bool DelaunayTriangulation <Input, Traits>::diagonalInside (PointType const &a, 
 template <typename Input, typename Traits>
 bool DelaunayTriangulation <Input, Traits>::diagonalInside (TriangleEdgeType const &e) const
 {
-        // TODO hack - ona sama powinna wiedziec.
-        if (std::abs (e.a - e.b) == 1) {
-                return true;
-        }
+//        // TODO hack - ona sama powinna wiedziec.
+//        if (std::abs (e.a - e.b) == 1) {
+//                return true;
+//        }
 
         size_t pointsSize = input.size ();
         PointType const &a = input[e.a];
@@ -477,7 +497,7 @@ bool DelaunayTriangulation <Input, Traits>::diagonalInside (TriangleEdgeType con
 /****************************************************************************/
 
 template <typename Input, typename Traits>
-bool DelaunayTriangulation <Input, Traits>::trinagleInside (TriangleType const &t) const
+bool DelaunayTriangulation <Input, Traits>::triangleInside (TriangleType const &t) const
 {
         for (int i = 1; i <= 3; ++i) {
                 if (!diagonalInside (getEdge (t, static_cast <SideEnum> (i)))) {

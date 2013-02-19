@@ -31,6 +31,7 @@ struct TestController : public Controller::EmptyController {
         TestView *p_ (testView);
         Geometry::LineString voronoi;
         Geometry::LineString delaunay;
+        Geometry::LineString delaunay2;
         Geometry::LineString crossing;
 
         E_ (TestController)
