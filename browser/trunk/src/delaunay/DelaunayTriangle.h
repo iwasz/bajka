@@ -42,7 +42,6 @@ struct Triangle {
                 default:
                         return 0;
                 }
-
         }
 
         void set (SideEnum s, IndexType v)
@@ -173,6 +172,21 @@ inline
 SideEnum otherThan (SideEnum a, SideEnum b)
 {
       return static_cast <SideEnum> (6 - static_cast <int> (a) - static_cast <int> (b));
+}
+
+inline
+std::pair <SideEnum, SideEnum> otherThan (SideEnum s)
+{
+        switch (s) {
+        case A:
+                return std::make_pair (B, C);
+        case B:
+                return std::make_pair (A, C);
+        case C:
+                return std::make_pair (A, B);
+        default:
+                return std::make_pair (N, N);
+        }
 }
 
 #ifndef NDEBUG
