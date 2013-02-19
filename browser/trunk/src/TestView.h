@@ -28,6 +28,7 @@ public:
 
         Geometry::LineString *voronoi;
         Geometry::LineString *delaunay;
+        Geometry::LineString *delaunay2;
         Geometry::LineString *crossing;
 
 private:

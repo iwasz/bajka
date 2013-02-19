@@ -432,18 +432,18 @@ void DelaunayIndex<Input, Traits>::setVertex (TriangleType &t, SideEnum s, Index
         trianglesV.push_back (&t);
 }
 
-#if 0
 #ifndef NDEBUG
 
-template <>
-std::ostream &operator<< (std::ostream &o, TriangleVector const &e)
+std::ostream &operator<< (std::ostream &o, std::vector <Triangle> const &e)
 {
+        typedef std::vector <Triangle> TriangleVector;
+
         size_t cnt = 0;
-        for (TriangleVector::const_iterator i = e.begin (); i != e.end (); ++i, ++cnt) {
+        for (typename TriangleVector::const_iterator i = e.begin (); i != e.end (); ++i, ++cnt) {
                 o << cnt << ". " << *i << " A=";
 
-                if (i->A) {
-                        o << *(i->A);
+                if (i->tA) {
+                        o << *(i->tA);
                 }
                 else {
                         o << "NULL";
@@ -451,8 +451,8 @@ std::ostream &operator<< (std::ostream &o, TriangleVector const &e)
 
                 o << " B=";
 
-                if (i->B) {
-                        o << *(i->B);
+                if (i->tB) {
+                        o << *(i->tB);
                 }
                 else {
                         o << "NULL";
@@ -460,8 +460,8 @@ std::ostream &operator<< (std::ostream &o, TriangleVector const &e)
 
                 o << " C=";
 
-                if (i->C) {
-                        o << *(i->C);
+                if (i->tC) {
+                        o << *(i->tC);
                 }
                 else {
                         o << "NULL";
@@ -474,6 +474,7 @@ std::ostream &operator<< (std::ostream &o, TriangleVector const &e)
 }
 
 
+#if 0
 std::ostream &operator<< (std::ostream &o, TrianglePtrVector const &e)
 {
         size_t cnt = 0;

@@ -355,30 +355,22 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
                 Delaunay::Point const &b = input[Delaunay::b (*i)];
                 Delaunay::Point const &c = input[Delaunay::c (*i)];
 
+                // Wireframe
                 delaunay.push_back (Geometry::makePoint (a.x, a.y));
                 delaunay.push_back (Geometry::makePoint (b.x, b.y));
                 delaunay.push_back (Geometry::makePoint (b.x, b.y));
                 delaunay.push_back (Geometry::makePoint (c.x, c.y));
                 delaunay.push_back (Geometry::makePoint (c.x, c.y));
                 delaunay.push_back (Geometry::makePoint (a.x, a.y));
+
+                // Trójkąty pełne
+                delaunay2.push_back (Geometry::makePoint (a.x, a.y));
+                delaunay2.push_back (Geometry::makePoint (b.x, b.y));
+                delaunay2.push_back (Geometry::makePoint (c.x, c.y));
+//                delaunay2->push_back (input[i->a]);
+//                delaunay2->push_back (input[i->b]);
+//                delaunay2->push_back (input[i->c]);
         }
-
-        //        Trójkąty
-        //        for (TriangleVector::const_iterator i = triangulation.begin (); i != triangulation.end (); ++i) {
-        //                delaunay->push_back (input[i->a]);
-        //                delaunay->push_back (input[i->b]);
-        //                delaunay->push_back (input[i->c]);
-        //        }
-
-        //        Krawedzie trójkątów
-        //        for (TriangleVector::const_iterator i = triangulation.begin (); i != triangulation.end (); ++i) {
-        //                delaunay->push_back (input[i->a]);
-        //                delaunay->push_back (input[i->b]);
-        //                delaunay->push_back (input[i->b]);
-        //                delaunay->push_back (input[i->c]);
-        //                delaunay->push_back (input[i->c]);
-        //                delaunay->push_back (input[i->a]);
-        //        }
 
 /*--------------------------------------------------------------------------*/
 
@@ -391,5 +383,6 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
         TestView *tv = dynamic_cast<TestView *> (v);
         tv->voronoi = &voronoi;
         tv->delaunay = &delaunay;
+        tv->delaunay2 = &delaunay2;
         tv->crossing = &crossing;
 }
