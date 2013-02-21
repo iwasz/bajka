@@ -17,6 +17,7 @@
 #include <vector>
 #include <list>
 #include <boost/tuple/tuple.hpp>
+#include <set>
 
 namespace Delaunay {
 
@@ -47,13 +48,24 @@ public:
         DelaunayIndex (Input const &i) : input (i)
         {
                 triangleIndex.resize (input.size ());
+                edgeIndex.resize (input.size ());
+
+                // TODO ***KRYTYCZNE*** ustawić tu tyle ile ma być. Da się to wyliczyć na początku!?
+                triangulation.reserve (input.size () * 10);
         }
 
-        size_t getTriangleIndexSize () const { return triangleIndex.size (); }
+        TriangleVector const &getTriangulation () const { return triangulation; }
+        size_t getNumTriangles () const { return triangulation.size (); }
         void addTriangle (IndexType index, TriangleType const *triangle);
-        void addTriangle (TriangleType const *triangle);
+        void addEdge (TriangleEdgeType const &edge);
+        void addTriangle (TriangleType const &triangle);
+        TriangleType const &getTriangle (size_t i) const { return triangulation.at (i); }
+        TriangleType &getTriangle (size_t i) { return triangulation.at (i); }
+
+        size_t getTriangleIndexSize () const { return triangleIndex.size (); }
         TrianglePtrVector const &getTrianglesForIndex (IndexType i) const { return triangleIndex[i]; }
         TrianglePtrVector &getTrianglesForIndex (IndexType i) { return triangleIndex[i]; }
+        void clean ();
 
         void setVertex (TriangleType &t, SideEnum s, IndexType v);
 
@@ -110,8 +122,29 @@ public:
 
 private:
 
+        struct PartEdge {
+                PartEdge (IndexType b_) : b (b_), tA (0), tB (0) {}
+                IndexType b;
+                TriangleType *tA, *tB;
+        };
+
+        struct PartEdgeLess {
+                bool operator () (PartEdge const &a, PartEdge const &b) const { return a.b < b.b; }
+        };
+
+        typedef std::set <PartEdge, PartEdgeLess> PartEdgeSet;
+        typedef std::vector <PartEdgeSet> PartEdgeIndex;
+
+        struct TraingleRemovePredicate {
+                bool operator () (TriangleType const &t) { return !a (t) && !b (t) && !c (t); }
+        };
+
+private:
+
         Input const &input;
         TriangleIndex triangleIndex;
+        PartEdgeIndex edgeIndex;
+        TriangleVector triangulation;
 
 };
 
@@ -345,11 +378,27 @@ void DelaunayIndex<Input, Traits>::addTriangle (IndexType index, TriangleType co
 /****************************************************************************/
 
 template <typename Input, typename Traits>
-void DelaunayIndex<Input, Traits>::addTriangle (TriangleType const *triangle)
+void DelaunayIndex<Input, Traits>::addEdge (TriangleEdgeType const &edge)
 {
-        addTriangle (a (*triangle), triangle);
-        addTriangle (b (*triangle), triangle);
-        addTriangle (c (*triangle), triangle);
+        assert (edgeIndex.size () > index);
+        edgeIndex[edge.a].insert (PartEdge (edge.b));
+}
+
+/****************************************************************************/
+
+template <typename Input, typename Traits>
+void DelaunayIndex<Input, Traits>::addTriangle (TriangleType const &triangle)
+{
+        triangulation.push_back (triangle);
+
+        // Update triangle index.
+        TriangleType const *t = &triangulation.back ();
+
+        addTriangle (a (*t), t);
+        addTriangle (b (*t), t);
+        addTriangle (c (*t), t);
+
+        addEdge ();
 }
 
 /****************************************************************************/
@@ -463,8 +512,17 @@ void DelaunayIndex<Input, Traits>::setVertex (TriangleType &t, SideEnum s, Index
         trianglesV.push_back (&t);
 }
 
-#ifndef NDEBUG
+/****************************************************************************/
 
+template <typename Input, typename Traits>
+void DelaunayIndex<Input, Traits>::clean ()
+{
+        triangulation.erase (std::remove_if (triangulation.begin (), triangulation.end (), TraingleRemovePredicate ()), triangulation.end ());
+}
+
+/****************************************************************************/
+
+#ifndef NDEBUG
 std::ostream &operator<< (std::ostream &o, std::vector <Triangle> const &e)
 {
         typedef std::vector <Triangle> TriangleVector;
@@ -503,7 +561,6 @@ std::ostream &operator<< (std::ostream &o, std::vector <Triangle> const &e)
 
         return o;
 }
-
 
 #if 0
 std::ostream &operator<< (std::ostream &o, TrianglePtrVector const &e)
