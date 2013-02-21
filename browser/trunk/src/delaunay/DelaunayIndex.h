@@ -86,6 +86,11 @@ public:
         bool twoTrianglesNotDelaunay (TriangleEdgeType const &e) const;
 
         /**
+         * Based on Cline and Renka
+         */
+        bool pointInCircumcircle (TriangleType const &triangle, IndexType point) const;
+
+        /**
          * Perform a flip, and return new diagonal. Triangle index.
          */
         void flip (TriangleEdgeType const &oldDiagonal, TriangleEdgeType *newDiagonal);
@@ -286,20 +291,46 @@ bool DelaunayIndex<Input, Traits>::twoTrianglesConvex (TriangleEdgeType const &f
 /****************************************************************************/
 
 template <typename Input, typename Traits>
+bool DelaunayIndex<Input, Traits>::pointInCircumcircle (TriangleType const &triangle, IndexType point) const
+{
+        PointType const &ta = input[a (triangle)];
+        PointType const &tb = input[b (triangle)];
+        PointType const &tc = input[c (triangle)];
+        PointType const &tp = input[point];
+
+        double cosa = (ta.x - tc.x) * (tb.x - tc.x) + (ta.y - tc.y) * (tb.y - tc.y);
+        double cosb = (tb.x - tp.x) * (ta.x - tp.x) + (tb.y - tp.y) * (ta.y - tp.y);
+
+        if (cosa >= 0 && cosb >= 0) {
+                return false;
+        }
+
+        if (cosa < 0 && cosb < 0) {
+                return true;
+        }
+
+        double sinab = ((ta.x - tc.x) * (tb.y - tc.y) - (tb.x - tc.x) * (ta.y - tc.y)) * cosb + ((tb.x - tp.x) * (ta.y - tp.y) - (ta.x - tp.x) * (tb.y - tp.y)) * cosa;
+
+        if (sinab < 0) {
+                return true;
+        }
+
+        return false;
+}
+
+/****************************************************************************/
+
+template <typename Input, typename Traits>
 bool DelaunayIndex<Input, Traits>::twoTrianglesNotDelaunay (TriangleEdgeType const &firstDiagonal) const
 {
         TriangleType *a = NULL;
         TriangleType *b = NULL;
         getTriaglesForEdge (firstDiagonal, &a, &b);
-        assert (a && b);
 
         SideEnum aSide = getEdgeSide (*a, firstDiagonal);
         SideEnum bSide = getEdgeSide (*b, firstDiagonal);
 
-        TriangleEdgeType secondDiagonal = TriangleEdgeType (getVertex (*a, aSide), getVertex (*b, bSide));
-        EdgeType e1 = triangleEdgeToEdge (firstDiagonal);
-        EdgeType e2 = triangleEdgeToEdge (secondDiagonal);
-        return Delaunay::intersects (e1, e2);
+        return pointInCircumcircle (*a, getVertex (*b, bSide)) || pointInCircumcircle (*b, getVertex (*a, aSide));
 }
 
 /****************************************************************************/

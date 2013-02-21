@@ -104,13 +104,7 @@ public:
         typedef triangulation_voronoi_diagram::edge_type edge_type;
         typedef triangulation_voronoi_diagram::cell_type cell_type;
 
-        // TODO możliwe że do usunięcia - sprawdź.
         struct TraingleRemovePredicate {
-                bool operator () (TriangleType const &t) { return (&t == value); }
-                TriangleType const *value;
-        };
-
-        struct TraingleRemovePredicate2 {
                 bool operator () (TriangleType const &t) { return !a (t) && !b (t) && !c (t); }
         };
 
@@ -412,7 +406,6 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
 
         // 5. Remove superfluous triangles
         typename TriangleVector::iterator end = triangulation.end ();
-        TraingleRemovePredicate pred;
 
         for (IndexType i = 0; i < input.size (); ++i) {
                 TrianglePtrVector &triangles = index.getTrianglesForIndex (i);
@@ -425,28 +418,15 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                                 continue;
                         }
 
-//                        SideEnum p = getVertexSide (triangle, i);
-//                        std::pair <SideEnum, SideEnum> otherTwo = otherThan (p);
-//
-//                        IndexType a = getVertex (triangle, otherTwo.first);
-//                        IndexType b = getVertex (triangle, otherTwo.second);
-
-//                        std::cerr << "pre remove : " << triangle << " | " << i << ", " << a << ", " << b << std::endl;
-
-//
-//                        if (!diagonalInside (TriangleEdgeType (i, a)) || !diagonalInside (TriangleEdgeType (i, b))) {
                         if (!triangleInside (triangle)) {
                                 a (triangle, 0);
                                 b (triangle, 0);
                                 c (triangle, 0);
-//                                pred.value = *j;
-//                                std::cerr << "REMOVE" << std::endl;
-//                                end = std::remove_if (triangulation.begin (), end, pred);
                         }
                 }
         }
 
-        triangulation.erase (std::remove_if (triangulation.begin (), triangulation.end (), TraingleRemovePredicate2 ()), triangulation.end ());
+        triangulation.erase (std::remove_if (triangulation.begin (), triangulation.end (), TraingleRemovePredicate ()), triangulation.end ());
 
 #ifndef NDEBUG
         printlog ("Triangulation time (derived from voronoi as its dual) : %f ms", t1.elapsed ().wall / 1000000.0);
@@ -507,18 +487,6 @@ bool DelaunayTriangulation <Input, Traits>::triangleInside (TriangleType const &
 
         return true;
 }
-
-//template <typename Input, typename Traits>
-//bool DelaunayTriangulation <Input, Traits>::trinagleInside2 (TriangleType const &t, IndexItem startPoint) const
-//{
-//        for (int i = 1; i <= 3; ++i) {
-//                if (!diagonalInside (getEdge (t, static_cast <SideEnum> (i)))) {
-//                        return false;
-//                }
-//        }
-//
-//        return true;
-//}
 
 } // namespace
 
