@@ -178,12 +178,6 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
         printlog ("Voronoi diagram construction time : %f ms", t0.elapsed ().wall / 1000000.0);
 #endif
 
-        for (triangulation_voronoi_diagram::const_cell_iterator it = vd.cells().begin(); it != vd.cells().end(); ++it) {
-                const triangulation_voronoi_diagram::cell_type &cell = *it;
-                // This is convenient way to iterate edges around Voronoi cell.
-                std::cerr << cell.source_index () << std::endl;
-        }
-
         boost::timer::cpu_timer t1;
 
         // 1. Make triangles from voronoi.
@@ -404,7 +398,9 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                         if (!index.twoTrianglesNotDelaunay (newEdge)) {
                                 TriangleEdgeType newDiagonal;
                                 index.flip (newEdge, &newDiagonal);
-                                newEdge = newDiagonal; // ?
+
+                                // TODO w piśmie napsali, żeby ją zachowac w kolekcji nowych krawędzi - ale po co?
+                                newEdge = newDiagonal;
                         }
                 }
         }
@@ -465,10 +461,10 @@ bool DelaunayTriangulation <Input, Traits>::diagonalInside (PointType const &a, 
 template <typename Input, typename Traits>
 bool DelaunayTriangulation <Input, Traits>::diagonalInside (TriangleEdgeType const &e) const
 {
-//        // TODO hack - ona sama powinna wiedziec.
-//        if (std::abs (e.a - e.b) == 1) {
-//                return true;
-//        }
+        // If e is one of constraints, we don't need to perform furher computations.
+        if (std::abs (e.a - e.b) == 1) {
+                return true;
+        }
 
         size_t pointsSize = input.size ();
         PointType const &a = input[e.a];
