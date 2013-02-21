@@ -104,20 +104,12 @@ public:
         typedef triangulation_voronoi_diagram::edge_type edge_type;
         typedef triangulation_voronoi_diagram::cell_type cell_type;
 
-        struct TraingleRemovePredicate {
-                bool operator () (TriangleType const &t) { return !a (t) && !b (t) && !c (t); }
-        };
-
-        DelaunayTriangulation (Input const &i) : input (i), index (i)
-        {
-                // TODO ***KRYTYCZNE*** ustawić tu tyle ile ma być. Da się to wyliczyć na początku!?
-                triangulation.reserve (input.size () * 10);
-        }
+        DelaunayTriangulation (Input const &i) : input (i), index (i) {}
 
         // TODO remove crossing
         void constructDelaunay (Geometry::LineString *crossing);
 
-        TriangleVector const &getTriangulation () const { return triangulation; }
+        TriangleVector const &getTriangulation () const { return index.getTriangulation (); }
 
 private:
 
@@ -145,12 +137,6 @@ private:
 
         Input const &input;
         DelaunayIndexType index;
-        TriangleVector triangulation;
-
-//        Geometry::LineString *voronoi;
-//        Geometry::LineString *delaunay;
-//        Geometry::LineString *crossing;
-
 };
 
 /****************************************************************************/
@@ -176,9 +162,8 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
 
 #ifndef NDEBUG
         printlog ("Voronoi diagram construction time : %f ms", t0.elapsed ().wall / 1000000.0);
-#endif
-
         boost::timer::cpu_timer t1;
+#endif
 
         // 1. Make triangles from voronoi.
         for (triangulation_voronoi_diagram::const_vertex_iterator it = vd.vertices ().begin (); it != vd.vertices ().end (); ++it) {
@@ -186,7 +171,7 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                 edge_type const *edge = vertex.incident_edge ();
 
                 IndexType triangleVertices[3];
-                IndexType triangleCnt = triangulation.size ();
+                IndexType triangleCnt = index.getNumTriangles ();
                 vertex.color (triangleCnt);
 
                 size_t edgeCnt = 0;
@@ -198,7 +183,7 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                         cell_type const *cell = edge->cell ();
                         size_t index = cell->source_index ();
                         triangleVertices[edgeCnt++] = index;
-                        // Add 1 thus default 0 is invalid.
+                        // Add 1 so that default 0 is invalid.
                         edge->color (triangleCnt + 1);
                         edge = edge->rot_next ();
                 } while (edge != vertex.incident_edge () && edgeCnt < 3);
@@ -208,28 +193,19 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                         a (triangle, triangleVertices[0]);
                         b (triangle, triangleVertices[1]);
                         c (triangle, triangleVertices[2]);
-                        triangulation.push_back (triangle);
-//                        std::cerr << triangulation << std::endl;
-
-                        // Update triangle index.
-                        TriangleType const *t = &triangulation.back ();
-                        index.addTriangle (t);
-
-//                        std::cerr << "Point " << triangle.a << " has incident triangle : " << *t << std::endl;
-//                        std::cerr << "Point " << triangle.b << " has incident triangle : " << *t << std::endl;
-//                        std::cerr << "Point " << triangle.c << " has incident triangle : " << *t << std::endl;
+                        index.addTriangle (triangle);
                 }
         }
 
 #ifndef NDEBUG
-        std::cerr << "Delaunay triangulation produced : " << triangulation.size () << " triangles." << std::endl;
+        std::cerr << "Delaunay triangulation produced : " << index.getNumTriangles () << " triangles." << std::endl;
 //        std::cerr << triangulation << std::endl;
 #endif
 
         // 2. Link triangles.
         for (triangulation_voronoi_diagram::const_vertex_iterator it = vd.vertices ().begin (); it != vd.vertices ().end (); ++it) {
                 vertex_type const &vertex = *it;
-                TriangleType &triangle = triangulation[vertex.color ()];
+                TriangleType &triangle = index.getTriangle (vertex.color ());
                 edge_type const *edge = vertex.incident_edge ();
                 size_t edgeCnt = 0;
 
@@ -246,7 +222,7 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                                 continue;
                         }
 
-                        TriangleType &adjacentTriangle = triangulation[adjacentIndex - 1];
+                        TriangleType &adjacentTriangle = index.getTriangle (adjacentIndex - 1);
 
                         // Sprawdzić którym bokiem się stykają i ustawić.
                         if (!hasVertex (adjacentTriangle, triangle.a)) {
@@ -406,8 +382,6 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
         }
 
         // 5. Remove superfluous triangles
-        typename TriangleVector::iterator end = triangulation.end ();
-
         for (IndexType i = 0; i < input.size (); ++i) {
                 TrianglePtrVector &triangles = index.getTrianglesForIndex (i);
 
@@ -427,12 +401,11 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                 }
         }
 
-        triangulation.erase (std::remove_if (triangulation.begin (), triangulation.end (), TraingleRemovePredicate ()), triangulation.end ());
+        index.clean ();
 
 #ifndef NDEBUG
         printlog ("Triangulation time (derived from voronoi as its dual) : %f ms", t1.elapsed ().wall / 1000000.0);
-        std::cerr << "CDT size : " << triangulation.size () << " triangles." << std::endl;
-        //        printlog ("Voronoi prim. edges : %d", result);
+        std::cerr << "CDT size : " << index.getNumTriangles () << " triangles." << std::endl;
 //        std::cout << triangulation << std::endl;
 #endif
 }
