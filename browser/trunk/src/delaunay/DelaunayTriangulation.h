@@ -178,6 +178,12 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
         printlog ("Voronoi diagram construction time : %f ms", t0.elapsed ().wall / 1000000.0);
 #endif
 
+        for (triangulation_voronoi_diagram::const_cell_iterator it = vd.cells().begin(); it != vd.cells().end(); ++it) {
+                const triangulation_voronoi_diagram::cell_type &cell = *it;
+                // This is convenient way to iterate edges around Voronoi cell.
+                std::cerr << cell.source_index () << std::endl;
+        }
+
         boost::timer::cpu_timer t1;
 
         // 1. Make triangles from voronoi.
@@ -402,7 +408,6 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                         }
                 }
         }
-
 
         // 5. Remove superfluous triangles
         typename TriangleVector::iterator end = triangulation.end ();
