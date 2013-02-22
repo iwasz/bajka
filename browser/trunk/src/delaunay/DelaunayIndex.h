@@ -57,7 +57,6 @@ public:
         TriangleVector const &getTriangulation () const { return triangulation; }
         size_t getNumTriangles () const { return triangulation.size (); }
         void addTriangle (IndexType index, TriangleType const *triangle);
-        void addEdge (TriangleEdgeType const &edge);
         void addTriangle (TriangleType const &triangle);
         TriangleType const &getTriangle (size_t i) const { return triangulation.at (i); }
         TriangleType &getTriangle (size_t i) { return triangulation.at (i); }
@@ -123,21 +122,26 @@ public:
 private:
 
         struct PartEdge {
-                PartEdge (IndexType b_) : b (b_), tA (0), tB (0) {}
+                PartEdge (IndexType b_) : b (b_), left (0), right (0) {}
                 IndexType b;
-                TriangleType *tA, *tB;
+                TriangleType *left, *right;
         };
 
         struct PartEdgeLess {
                 bool operator () (PartEdge const &a, PartEdge const &b) const { return a.b < b.b; }
         };
 
+        /*
+         * http://www.lafstern.org/matt/col1.pdf : Why you shouldn't use set (and what you should use instead) by Matt Austern
+         */
         typedef std::set <PartEdge, PartEdgeLess> PartEdgeSet;
         typedef std::vector <PartEdgeSet> PartEdgeIndex;
 
         struct TraingleRemovePredicate {
                 bool operator () (TriangleType const &t) { return !a (t) && !b (t) && !c (t); }
         };
+
+        PartEdge *addEdge (IndexType a, IndexType b);
 
 private:
 
@@ -378,10 +382,16 @@ void DelaunayIndex<Input, Traits>::addTriangle (IndexType index, TriangleType co
 /****************************************************************************/
 
 template <typename Input, typename Traits>
-void DelaunayIndex<Input, Traits>::addEdge (TriangleEdgeType const &edge)
+typename DelaunayIndex<Input, Traits>::PartEdge *DelaunayIndex<Input, Traits>::addEdge (IndexType a, IndexType b)
 {
-        assert (edgeIndex.size () > index);
-        edgeIndex[edge.a].insert (PartEdge (edge.b));
+        assert (edgeIndex.size () > a);
+        std::pair <typename PartEdgeSet::const_iterator, bool> ret = edgeIndex[a].insert (PartEdge (b));
+        typename PartEdgeSet::iterator i = ret.first;
+        PartEdge *pe = &(*i);
+//        return *ret.first;
+
+
+
 }
 
 /****************************************************************************/
@@ -398,7 +408,13 @@ void DelaunayIndex<Input, Traits>::addTriangle (TriangleType const &triangle)
         addTriangle (b (*t), t);
         addTriangle (c (*t), t);
 
-        addEdge ();
+        addEdge (a (*t), b (*t));
+        addEdge (b (*t), c (*t));
+        addEdge (c (*t), a (*t));
+
+        addEdge (b (*t), a (*t));
+        addEdge (c (*t), b (*t));
+        addEdge (a (*t), c (*t));
 }
 
 /****************************************************************************/
