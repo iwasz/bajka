@@ -197,9 +197,11 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                 }
         }
 
-#ifndef NDEBUG
+        index.sortEdgeIndex ();
+
+#if 0
         std::cerr << "Delaunay triangulation produced : " << index.getNumTriangles () << " triangles." << std::endl;
-//        std::cerr << triangulation << std::endl;
+        std::cerr << triangulation << std::endl;
 #endif
 
         // 2. Link triangles.
@@ -275,7 +277,7 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                 }
 
                 if (!found) {
-#if 1
+#if 0
                         std::cerr << "Constraint (" << i << ", " << j << ") was **NOT** found in triangulation." << std::endl;
 #endif
                         missingConstraints.push_back (TriangleEdgeType (i, j));
@@ -286,11 +288,13 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
         for (typename TriangleEdgeList::const_iterator i = missingConstraints.begin (); i != missingConstraints.end (); ++i) {
                 TriangleEdgeType const &missingConstraint = *i;
 
+#if 0
 //                if (missingConstraint.a != 450) {
 //                if (missingConstraint.a != 119) {
 //                        continue;
 //                }
                 std::cerr << "Missing constraint : " << missingConstraint << std::endl;
+#endif
 
                 TriangleEdgeList crossingEdges;
                 TrianglePtrVector crossingTriangles;
@@ -298,7 +302,9 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                 // Paragraph 2.
                 index.findCrossingEdges (missingConstraint, &crossingEdges, &crossingTriangles);
 
-//                std::cerr << "Constraint " << missingConstraint << " crosses : " << crossingTriangles << std::endl;
+#if 0
+                std::cerr << "Constraint " << missingConstraint << " crosses : " << crossingTriangles << std::endl;
+#endif
 
 #if 1
                 // TODO Debug output - to się może przydac.
@@ -326,7 +332,10 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
 
                                 crossingEdges.push_back (currentCrossingEdge);
 
+#if 0
                                 std::cerr << "####> !CONVEX" << std::endl;
+#endif
+
                                 if (crossingEdges.size () == 1) {
                                         /*
                                          * TODO Jeśli jest tylko jedna przecinająca dany constraint, to jeśli convex,
@@ -337,8 +346,9 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                                 continue;
                         }
 
+#if 0
                         std::cerr << "####> +++CONVEX" << std::endl;
-
+#endif
                         // Dwa przyległę trójkąty zawierające e tworzą czworobok wypukły.
                         TriangleEdgeType newDiagonal;
 
@@ -362,8 +372,9 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                 }
 
                 // 4. Make CDT from DT.
+#if 0
                 std::cerr << newEdges.size () << std::endl;
-
+#endif
                 for (typename TriangleEdgeList::iterator i = newEdges.begin (); i != newEdges.end (); ++i) {
                         TriangleEdgeType &newEdge = *i;
 
@@ -403,7 +414,7 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
 
         index.clean ();
 
-#ifndef NDEBUG
+#if 0
         printlog ("Triangulation time (derived from voronoi as its dual) : %f ms", t1.elapsed ().wall / 1000000.0);
         std::cerr << "CDT size : " << index.getNumTriangles () << " triangles." << std::endl;
 //        std::cout << triangulation << std::endl;

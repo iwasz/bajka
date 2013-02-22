@@ -119,29 +119,45 @@ public:
          */
         void getTriaglesForEdge (TriangleEdgeType const &e, TriangleType **a, TriangleType **b) const;
 
+        /*
+         *
+         */
+        void sortEdgeIndex ();
+
 private:
 
         struct PartEdge {
-                PartEdge (IndexType b_) : b (b_), left (0), right (0) {}
-                IndexType b;
-                TriangleType *left, *right;
+                PartEdge (IndexType b_, TriangleType const *t_) : vertex (b_), triangle (t_) {}
+                IndexType vertex;
+                TriangleType const *triangle;
         };
 
-        struct PartEdgeLess {
-                bool operator () (PartEdge const &a, PartEdge const &b) const { return a.b < b.b; }
+        struct PartEdgeCompare {
+                bool operator () (PartEdge const &e1, PartEdge const &e2) const
+                {
+                        SideEnum c1Side = otherThan (getVertexSide (*e1.triangle, a), getVertexSide (*e1.triangle, e1.vertex));
+                        IndexType c1 = getVertex (*e1.triangle, c1Side);
+
+                        SideEnum c2Side = otherThan (getVertexSide (*e2.triangle, a), getVertexSide (*e2.triangle, e2.vertex));
+                        IndexType c2 = getVertex (*e2.triangle, c2Side);
+
+                        return (e1.vertex < e2.vertex) && (c1 < c2);
+                }
+
+                IndexType a;
         };
 
         /*
          * http://www.lafstern.org/matt/col1.pdf : Why you shouldn't use set (and what you should use instead) by Matt Austern
          */
-        typedef std::set <PartEdge, PartEdgeLess> PartEdgeSet;
-        typedef std::vector <PartEdgeSet> PartEdgeIndex;
+        typedef std::vector <PartEdge> PartEdgeVector;
+        typedef std::vector <PartEdgeVector> PartEdgeIndex;
 
         struct TraingleRemovePredicate {
                 bool operator () (TriangleType const &t) { return !a (t) && !b (t) && !c (t); }
         };
 
-        PartEdge *addEdge (IndexType a, IndexType b);
+        void addPartEdge (IndexType a, IndexType b, TriangleType const &t);
 
 private:
 
@@ -382,16 +398,10 @@ void DelaunayIndex<Input, Traits>::addTriangle (IndexType index, TriangleType co
 /****************************************************************************/
 
 template <typename Input, typename Traits>
-typename DelaunayIndex<Input, Traits>::PartEdge *DelaunayIndex<Input, Traits>::addEdge (IndexType a, IndexType b)
+void DelaunayIndex<Input, Traits>::addPartEdge (IndexType i1, IndexType i2, TriangleType const &t)
 {
-        assert (edgeIndex.size () > a);
-        std::pair <typename PartEdgeSet::const_iterator, bool> ret = edgeIndex[a].insert (PartEdge (b));
-        typename PartEdgeSet::iterator i = ret.first;
-        PartEdge *pe = &(*i);
-//        return *ret.first;
-
-
-
+        assert (edgeIndex.size () > i1);
+        edgeIndex[i1].push_back (PartEdge (i2, &t));
 }
 
 /****************************************************************************/
@@ -408,13 +418,35 @@ void DelaunayIndex<Input, Traits>::addTriangle (TriangleType const &triangle)
         addTriangle (b (*t), t);
         addTriangle (c (*t), t);
 
-        addEdge (a (*t), b (*t));
-        addEdge (b (*t), c (*t));
-        addEdge (c (*t), a (*t));
+        addPartEdge (a (*t), b (*t), *t);
+        addPartEdge (b (*t), c (*t), *t);
+        addPartEdge (c (*t), a (*t), *t);
 
-        addEdge (b (*t), a (*t));
-        addEdge (c (*t), b (*t));
-        addEdge (a (*t), c (*t));
+        addPartEdge (b (*t), a (*t), *t);
+        addPartEdge (c (*t), b (*t), *t);
+        addPartEdge (a (*t), c (*t), *t);
+}
+
+/****************************************************************************/
+
+template <typename Input, typename Traits>
+void DelaunayIndex<Input, Traits>::sortEdgeIndex ()
+{
+        PartEdgeCompare comparator;
+        IndexType cnt = 0;
+        for (typename PartEdgeIndex::iterator i = edgeIndex.begin (); i != edgeIndex.end (); ++i, ++comparator.a) {
+                PartEdgeVector &edgesForIndex = *i;
+                assert (edgesForIndex.size () > 1);
+                std::sort (edgesForIndex.begin (), edgesForIndex.end (), comparator);
+                PartEdge &e1 = edgesForIndex[0];
+                PartEdge &e2 = edgesForIndex[1];
+
+                if (e1.vertex == e2.vertex) {
+                        std::swap (e1, e2);
+                }
+        }
+
+        std::cerr << triangleIndex << std::endl;
 }
 
 /****************************************************************************/
@@ -426,7 +458,7 @@ void DelaunayIndex<Input, Traits>::flip (TriangleEdgeType const &oldDiagonal, Tr
         TriangleType *s = 0;
         getTriaglesForEdge (oldDiagonal, &f, &s);
 
-#if 1
+#if 0
         std::cerr << "oldDiagonal : " << oldDiagonal << ", f : ";
         if (f) { std::cerr << *f; } else { std::cerr << "NULL"; }
         std::cerr << ", s : ";
@@ -444,16 +476,16 @@ void DelaunayIndex<Input, Traits>::flip (TriangleEdgeType const &oldDiagonal, Tr
         SideEnum fob = getVertexSide (*f, oldDiagonal.b);
         SideEnum fc = otherThan (foa, fob);
         IndexType fcIndex = getVertex (*f, fc);
-
+#if 0
         std::cerr << "foa : " << (int)foa << ", fob : " << (int)fob << ", fc : " << (int)fc << ", fcIndex : " << fcIndex << std::endl;
-
+#endif
         SideEnum soa = getVertexSide (*s, oldDiagonal.b);
         SideEnum sob = getVertexSide (*s, oldDiagonal.a);
         SideEnum sc = otherThan (soa, sob);
         IndexType scIndex = getVertex (*s, sc);
-
+#if 0
         std::cerr << "soa : " << (int)soa << ", sob : " << (int)sob << ", sc : " << (int)sc << ", scIndex : " << scIndex << std::endl;
-
+#endif
         // TODO CCW sort of entire new triangle
         this->setVertex (*f, fob, scIndex);
 
@@ -473,8 +505,9 @@ void DelaunayIndex<Input, Traits>::flip (TriangleEdgeType const &oldDiagonal, Tr
         // TODO CCW sort
         newDiagonal->a = fcIndex;
         newDiagonal->b = scIndex;
-
+#if 0
         std::cerr << "newDiagonal : " << *newDiagonal << ", f : " << *f << ", s : " << *s << std::endl;
+#endif
 }
 
 /****************************************************************************/
@@ -489,11 +522,14 @@ void DelaunayIndex<Input, Traits>::getTriaglesForEdge (TriangleEdgeType const &e
 {
         TrianglePtrVector const &triaglesA = triangleIndex[e.a];
         *a = *b = 0;
+#if 0
         std::cerr << "Edge : " << e << std::endl;
-
+#endif
         for (typename TrianglePtrVector::const_iterator i = triaglesA.begin (); i != triaglesA.end (); ++i) {
                 Triangle const *t = *i;
+#if 0
                 std::cerr << "getTrForE : " << *t;
+#endif
                 SideEnum s = getVertexSide (*t, e.a);
                 TriangleEdgeType me = getEdge (*t, s);
 
@@ -501,16 +537,22 @@ void DelaunayIndex<Input, Traits>::getTriaglesForEdge (TriangleEdgeType const &e
                         if (!*a) {
                                 // TODO get rid od cast
                                 *a = const_cast <TriangleType *> (t);
+#if 0
                                 std::cerr << " +++a";
+#endif
                         }
                         else if (!*b) {
                                 *b = const_cast <TriangleType *> (t);
+#if 0
                                 std::cerr << " +++b"  << std::endl;
+#endif
                                 return;
                         }
                 }
 
+#if 0
                 std::cerr  << std::endl;
+#endif
         }
 }
 
@@ -578,11 +620,10 @@ std::ostream &operator<< (std::ostream &o, std::vector <Triangle> const &e)
         return o;
 }
 
-#if 0
-std::ostream &operator<< (std::ostream &o, TrianglePtrVector const &e)
+std::ostream &operator<< (std::ostream &o, std::vector <Triangle const *> const &e)
 {
         size_t cnt = 0;
-        for (TrianglePtrVector::const_iterator i = e.begin (); i != e.end (); ++i, ++cnt) {
+        for (std::vector <Triangle const *>::const_iterator i = e.begin (); i != e.end (); ++i, ++cnt) {
                 o << **i;
 
                 if (i + 1 != e.end ()) {
@@ -593,8 +634,11 @@ std::ostream &operator<< (std::ostream &o, TrianglePtrVector const &e)
         return o;
 }
 
-std::ostream &operator<< (std::ostream &o, TriangleIndex const &e)
+std::ostream &operator<< (std::ostream &o, std::vector <std::vector <Triangle const *> > const &e)
 {
+        typedef std::vector <Triangle const *> TrianglePtrVector;
+        typedef std::vector <TrianglePtrVector> TriangleIndex;
+
         size_t cnt = 0;
         for (TriangleIndex::const_iterator i = e.begin (); i != e.end (); ++i, ++cnt) {
                 TrianglePtrVector const &trianglesForPoint = *i;
@@ -612,7 +656,6 @@ std::ostream &operator<< (std::ostream &o, TriangleIndex const &e)
 
         return o;
 }
-#endif
 #endif
 
 } // namespace
