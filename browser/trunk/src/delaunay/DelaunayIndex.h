@@ -51,6 +51,7 @@ public:
                 edgeIndex.resize (input.size ());
 
                 // TODO ***KRYTYCZNE*** ustawić tu tyle ile ma być. Da się to wyliczyć na początku!?
+                std::cerr << input.size () << std::endl;
                 triangulation.reserve (input.size () * 10);
         }
 
@@ -127,21 +128,31 @@ public:
 private:
 
         struct PartEdge {
-                PartEdge (IndexType b_, TriangleType const *t_) : vertex (b_), triangle (t_) {}
+                PartEdge (IndexType b_ = 0, TriangleType const *t_ = 0) : vertex (b_), triangle (t_) {}
                 IndexType vertex;
                 TriangleType const *triangle;
         };
 
         struct PartEdgeCompare {
+                PartEdgeCompare () : a (0) {}
+
                 bool operator () (PartEdge const &e1, PartEdge const &e2) const
                 {
+//                        std::cerr << a << ", " << e1.triangle << "," << e2.triangle << std::endl;
+
                         SideEnum c1Side = otherThan (getVertexSide (*e1.triangle, a), getVertexSide (*e1.triangle, e1.vertex));
                         IndexType c1 = getVertex (*e1.triangle, c1Side);
 
                         SideEnum c2Side = otherThan (getVertexSide (*e2.triangle, a), getVertexSide (*e2.triangle, e2.vertex));
                         IndexType c2 = getVertex (*e2.triangle, c2Side);
 
-                        return (e1.vertex < e2.vertex) && (c1 < c2);
+//                        std::cerr << a << ", " << *e1.triangle << ", " << *e2.triangle << ", " << e1.vertex << ", " <<  e2.vertex << "|" << c1 << ", " << c2 << "=" << ((e1.vertex < e2.vertex) && (c1 < c2)) << std::endl;
+
+                        if (e1.vertex == e2.vertex) {
+                                return c1 < c2;
+                        }
+
+                        return (e1.vertex < e2.vertex);
                 }
 
                 IndexType a;
@@ -157,7 +168,7 @@ private:
                 bool operator () (TriangleType const &t) { return !a (t) && !b (t) && !c (t); }
         };
 
-        void addPartEdge (IndexType a, IndexType b, TriangleType const &t);
+        void addPartEdge (IndexType a, IndexType b, TriangleType const *t);
 
 private:
 
@@ -398,10 +409,12 @@ void DelaunayIndex<Input, Traits>::addTriangle (IndexType index, TriangleType co
 /****************************************************************************/
 
 template <typename Input, typename Traits>
-void DelaunayIndex<Input, Traits>::addPartEdge (IndexType i1, IndexType i2, TriangleType const &t)
+void DelaunayIndex<Input, Traits>::addPartEdge (IndexType i1, IndexType i2, TriangleType const *t)
 {
         assert (edgeIndex.size () > i1);
-        edgeIndex[i1].push_back (PartEdge (i2, &t));
+//        std::cerr << i1 << ", " << edgeIndex[i1].size () << ", " << edgeIndex[i1].capacity () << ", " <<  t << std::endl;
+//        edgeIndex[i1].reserve (100);
+        edgeIndex[i1].push_back (PartEdge (i2, t));
 }
 
 /****************************************************************************/
@@ -413,18 +426,19 @@ void DelaunayIndex<Input, Traits>::addTriangle (TriangleType const &triangle)
 
         // Update triangle index.
         TriangleType const *t = &triangulation.back ();
+//        std::cerr << triangulation.size () << ", " << triangle << ", " << t << std::endl;
 
         addTriangle (a (*t), t);
         addTriangle (b (*t), t);
         addTriangle (c (*t), t);
 
-        addPartEdge (a (*t), b (*t), *t);
-        addPartEdge (b (*t), c (*t), *t);
-        addPartEdge (c (*t), a (*t), *t);
+        addPartEdge (a (*t), b (*t), t);
+        addPartEdge (b (*t), c (*t), t);
+        addPartEdge (c (*t), a (*t), t);
 
-        addPartEdge (b (*t), a (*t), *t);
-        addPartEdge (c (*t), b (*t), *t);
-        addPartEdge (a (*t), c (*t), *t);
+        addPartEdge (b (*t), a (*t), t);
+        addPartEdge (c (*t), b (*t), t);
+        addPartEdge (a (*t), c (*t), t);
 }
 
 /****************************************************************************/
@@ -433,20 +447,38 @@ template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::sortEdgeIndex ()
 {
         PartEdgeCompare comparator;
-        IndexType cnt = 0;
         for (typename PartEdgeIndex::iterator i = edgeIndex.begin (); i != edgeIndex.end (); ++i, ++comparator.a) {
                 PartEdgeVector &edgesForIndex = *i;
+                std::cerr << "----" << edgesForIndex.size() << std::endl;
                 assert (edgesForIndex.size () > 1);
                 std::sort (edgesForIndex.begin (), edgesForIndex.end (), comparator);
                 PartEdge &e1 = edgesForIndex[0];
                 PartEdge &e2 = edgesForIndex[1];
+
+//                std::cerr << "-------------" << std::endl;
 
                 if (e1.vertex == e2.vertex) {
                         std::swap (e1, e2);
                 }
         }
 
+        std::cerr << "--------TRIANGLE INDEX--------" << std::endl;
         std::cerr << triangleIndex << std::endl;
+        std::cerr << "--------EDGE INDEX--------" << std::endl;
+
+        int cnt = 0;
+        for (typename PartEdgeIndex::const_iterator i = edgeIndex.begin (); i != edgeIndex.end (); ++i, ++cnt) {
+                PartEdgeVector const &edgesForIndex = *i;
+
+                std::cerr << cnt << ". ";
+
+                for (typename PartEdgeVector::const_iterator j = edgesForIndex.begin (); j != edgesForIndex.end (); ++j) {
+                        PartEdge const &edge = *j;
+                        std::cerr << edge.vertex << ":" << *edge.triangle << " | ";
+                }
+
+                std::cerr << std::endl;
+        }
 }
 
 /****************************************************************************/
