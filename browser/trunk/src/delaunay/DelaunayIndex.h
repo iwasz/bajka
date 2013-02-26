@@ -190,6 +190,16 @@ private:
                 bool custom;
         };
 
+//        /*
+//         *
+//         */
+//        struct PartEdgeNonEq {
+//                bool operator () (PartEdge const &e1, PartEdge const &e2) const
+//                {
+//                        return e1.getVertexB () != e2.getVertexB ();
+//                }
+//        };
+
         /*
          * http://www.lafstern.org/matt/col1.pdf : Why you shouldn't use set (and what you should use instead) by Matt Austern
          */
@@ -512,16 +522,38 @@ void DelaunayIndex<Input, Traits>::sortEdgeIndex ()
 /****************************************************************************/
 
 /*
- * TODO Uwzględnić niezamykające się wachlarze trójkątów.
  * TODO Zrobić tak, żeby iteracja po trójkątach wokół punktu zawsze była CW lub zawsze CCW.
  */
 template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::topologicalSort (PartEdgeVector &input, IndexType a)
 {
+#if 0
+        std::cerr << "#### " << a << std::endl;
+#endif
         size_t initialSize = input.size ();
         PartEdgeList lex (input.begin (), input.end ());
         lex.sort (PartEdgeCompare (a));
-#if 1
+
+        // Find first (and the only, if any) pair of consecutive PartEdges whose b-vertices don't match.
+        // Size is always even.
+        typename PartEdgeList::iterator i = lex.begin ();
+        for (; i != lex.end (); ++i, ++i) {
+                typename PartEdgeList::iterator j = i;
+                ++j;
+                if (i->getVertexB () != j->getVertexB ()) {
+                        break;
+                }
+        }
+
+        /*
+         *  If found - that means that this "fan" of triangles is not closed, and we must start
+         *  sorting from one of its ends. If fan is closed (i.e. there is no gap between triangles),
+         *  we can start from any point.
+         */
+        if (i == lex.end ()) {
+                i = lex.begin ();
+        }
+#if 0
         for (typename PartEdgeList::const_iterator j = lex.begin (); j != lex.end (); ++j) {
                 PartEdge const &edge = *j;
                 std::cerr << edge.getVertexB () << ":" << edge.getVertexC (a) << " | ";
@@ -530,29 +562,34 @@ void DelaunayIndex<Input, Traits>::topologicalSort (PartEdgeVector &input, Index
 #endif
         input.clear ();
 
-        PartEdge edge = lex.front ();
+        PartEdge edge = *i;
         input.push_back (edge);
+#if 0
         std::cerr << edge.getVertexB() << "," << edge.getVertexC(a) << std::endl;
-        lex.pop_front (); // at least 2 elements, so OK.
+#endif
+        lex.erase (i);
 
         bool directionDown = true;
         while (true) {
                 typename PartEdgeList::iterator j = std::lower_bound (lex.begin (), lex.end (), PartEdge (), PartEdgeCompare (a, edge.getVertexC (a), edge.getVertexB ()));
                 edge = *j;
                 input.push_back (edge);
+#if 0
                 std::cerr << edge.getVertexB() << "," << edge.getVertexC(a) << std::endl;
-
+#endif
                 if (input.size () >= initialSize) {
                         break;
                 }
 
                 typename PartEdgeList::iterator down = j;
                 ++down;
-                typename PartEdgeList::reverse_iterator up = typename PartEdgeList::reverse_iterator (j);
-//                ++up;
+                typename PartEdgeList::iterator up = (j != lex.begin ()) ? (j) : (lex.end ());
+                --up;
                 lex.erase (j);
 
+#if 0
                 std::cerr << "down : " << down->getVertexB () << ", up : " << up->getVertexB () << std::endl;
+#endif
 
                 retry:
                 // Znajdz następny (up, lub down)
@@ -566,19 +603,21 @@ void DelaunayIndex<Input, Traits>::topologicalSort (PartEdgeVector &input, Index
                         lex.erase (down);
                 }
                 else {
-                        if (up == lex.rend () || up->getVertexB () != edge.getVertexB ()) {
+                        if (up == lex.end () || up->getVertexB () != edge.getVertexB ()) {
                                 directionDown = true;
                                 goto retry;
                         }
 
                         edge = *up;
-                        lex.erase ((++up).base ()); // this is sick.
+                        lex.erase (up);
                 }
 
                 input.push_back (edge);
+#if 0
                 std::cerr << edge.getVertexB() << "," << edge.getVertexC(a) << std::endl;
+#endif
         }
-#if 1
+#if 0
         for (typename PartEdgeVector::const_iterator j = input.begin (); j != input.end (); ++j) {
                 PartEdge const &edge = *j;
                 std::cerr << edge.getVertexB () << ":" << edge.getVertexC (a) << " | ";
