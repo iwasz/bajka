@@ -139,6 +139,9 @@ private:
                         return getVertex (*triangle, cSide);
                 }
 
+                TriangleType const *getTriangle () const { return triangle; }
+
+        private:
                 IndexType vertexB;
                 TriangleType const *triangle;
         };
@@ -189,16 +192,6 @@ private:
                 IndexType c;
                 bool custom;
         };
-
-//        /*
-//         *
-//         */
-//        struct PartEdgeNonEq {
-//                bool operator () (PartEdge const &e1, PartEdge const &e2) const
-//                {
-//                        return e1.getVertexB () != e2.getVertexB ();
-//                }
-//        };
 
         /*
          * http://www.lafstern.org/matt/col1.pdf : Why you shouldn't use set (and what you should use instead) by Matt Austern
@@ -511,7 +504,7 @@ void DelaunayIndex<Input, Traits>::sortEdgeIndex ()
 
                 for (typename PartEdgeVector::const_iterator j = edgesForIndex.begin (); j != edgesForIndex.end (); ++j) {
                         PartEdge const &edge = *j;
-                        std::cerr << edge.vertexB << ":" << *edge.triangle << " | ";
+                        std::cerr << edge.getVertexB () << ":" << *edge.getTriangle () << " | ";
                 }
 
                 std::cerr << std::endl;
