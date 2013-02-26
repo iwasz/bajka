@@ -17,7 +17,6 @@
 #include <vector>
 #include <list>
 #include <boost/tuple/tuple.hpp>
-#include <set>
 
 namespace Delaunay {
 
@@ -127,9 +126,11 @@ public:
 
 private:
 
+        /*
+         *
+         */
         struct PartEdge {
                 PartEdge (IndexType b_ = 0, TriangleType const *t_ = 0) : vertexB (b_), triangle (t_) {}
-                bool operator< (PartEdge const &rhs) const { return vertexB < rhs.vertexB; }
 
                 IndexType getVertexB () const { return vertexB; }
                 IndexType getVertexC (IndexType a) const
@@ -142,37 +143,58 @@ private:
                 TriangleType const *triangle;
         };
 
-#if 0
+        /*
+         *
+         */
         struct PartEdgeCompare {
-                PartEdgeCompare () : a (0) {}
+                PartEdgeCompare (IndexType a_) : a (a_), b (0), c (0), custom (false) {}
+                PartEdgeCompare (IndexType a_, IndexType b_, IndexType c_) : a (a_), b (b_), c (c_), custom (true) {}
 
                 bool operator () (PartEdge const &e1, PartEdge const &e2) const
                 {
-//                        std::cerr << a << ", " << e1.triangle << "," << e2.triangle << std::endl;
+                        if (custom) {
+                                return opCustom (e1, e2);
+                        }
+                        else {
+                                return opRegular (e1, e2);
+                        }
+                }
 
-                        SideEnum c1Side = otherThan (getVertexSide (*e1.triangle, a), getVertexSide (*e1.triangle, e1.vertex));
-                        IndexType c1 = getVertex (*e1.triangle, c1Side);
+                bool opRegular (PartEdge const &e1, PartEdge const &e2) const
+                {
+                        IndexType c1 = e1.getVertexC (a);
+                        IndexType c2 = e2.getVertexC (a);
 
-                        SideEnum c2Side = otherThan (getVertexSide (*e2.triangle, a), getVertexSide (*e2.triangle, e2.vertex));
-                        IndexType c2 = getVertex (*e2.triangle, c2Side);
-
-//                        std::cerr << a << ", " << *e1.triangle << ", " << *e2.triangle << ", " << e1.vertex << ", " <<  e2.vertex << "|" << c1 << ", " << c2 << "=" << ((e1.vertex < e2.vertex) && (c1 < c2)) << std::endl;
-
-                        if (e1.vertex == e2.vertex) {
+                        if (e1.getVertexB () == e2.getVertexB ()) {
                                 return c1 < c2;
                         }
 
-                        return (e1.vertex < e2.vertex);
+                        return e1.getVertexB () < e2.getVertexB ();
                 }
 
+                bool opCustom (PartEdge const &e1, PartEdge const &) const
+                {
+                        IndexType c1 = e1.getVertexC (a);
+
+                        if (e1.getVertexB () == b) {
+                                return c1 < c;
+                        }
+
+                        return e1.getVertexB () < b;
+                }
+
+        private:
                 IndexType a;
+                IndexType b;
+                IndexType c;
+                bool custom;
         };
-#endif
 
         /*
          * http://www.lafstern.org/matt/col1.pdf : Why you shouldn't use set (and what you should use instead) by Matt Austern
          */
         typedef std::vector <PartEdge> PartEdgeVector;
+        typedef std::list <PartEdge> PartEdgeList;
         typedef std::vector <PartEdgeVector> PartEdgeIndex;
 
         struct TraingleRemovePredicate {
@@ -462,28 +484,13 @@ void DelaunayIndex<Input, Traits>::addTriangle (TriangleType const &triangle)
 template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::sortEdgeIndex ()
 {
-//        PartEdgeCompare comparator;
         IndexType a = 0;
-        for (typename PartEdgeIndex::iterator i = edgeIndex.begin (); i != edgeIndex.end (); ++i/*, ++comparator.a*/, ++a) {
-                PartEdgeVector &edgesForIndex = *i;
-                std::cerr << "----" << edgesForIndex.size() << std::endl;
-                assert (edgesForIndex.size () > 1);
-                topologicalSort (edgesForIndex, a);
-//                exit (0);
-#if 0
-                PartEdge &e1 = edgesForIndex[0];
-                PartEdge &e2 = edgesForIndex[1];
-
-//                std::cerr << "-------------" << std::endl;
-
-                if (e1.vertex == e2.vertex) {
-                        std::swap (e1, e2);
-                }
-#endif
+        for (typename PartEdgeIndex::iterator i = edgeIndex.begin (); i != edgeIndex.end (); ++i, ++a) {
+                topologicalSort (*i, a);
         }
 
-        std::cerr << "--------TRIANGLE INDEX--------" << std::endl;
-        std::cerr << triangleIndex << std::endl;
+//        std::cerr << "--------TRIANGLE INDEX--------" << std::endl;
+//        std::cerr << triangleIndex << std::endl;
         std::cerr << "--------EDGE INDEX--------" << std::endl;
 
         int cnt = 0;
@@ -498,120 +505,86 @@ void DelaunayIndex<Input, Traits>::sortEdgeIndex ()
                 }
 
                 std::cerr << std::endl;
+                break;
         }
 }
 
 /****************************************************************************/
 
-#if 0
-template <typename Input, typename Traits>
-void DelaunayIndex<Input, Traits>::topologicalSort (PartEdgeVector &vec, IndexType a)
-{
-        size_t size = vec.size ();
-
-        if (size == 2) {
-                return;
-        }
-
-        assert (!(vec.size () % 2));
-
-//        To nie zapewni kolejności, bo nie wiemy czy po lewej jest większy, czy mniejszy numer.
-//        PartEdge &e1 = vec[0];
-//        PartEdge &e2 = vec[1];
-//
-//        if (e1.getVertexC (a) < e2.getVertexC (a)) {
-//                std::swap (e1, e2);
-//        }
-
-        typedef std::list <PartEdge> List;
-        typedef typename List::iterator Iter;
-        List list (vec.size ());
-        std::copy (vec.begin (), vec.end (), list.begin ());
-
-        for (Iter k = list.begin (); k != list.end ();) {
-                // Size is guaranteed to be at least 4
-                PartEdge &e1 = *k++;
-
-                if (k == list.end ()) {
-                        break;
-                }
-
-                PartEdge &e2 = *k++;
-
-                if (k == list.end ()) {
-                        break;
-                }
-
-                IndexType c;
-                IndexType b;
-
-                if (e1.getVertexB () == e2.getVertexB ()) {
-                        c = e2.getVertexC (a);
-                        b = e2.getVertexB ();
-                }
-                else {
-                        c = e1.getVertexC (a);
-                        b = e1.getVertexB ();
-                        --k;
-                }
-
-                Iter j = k;
-                Iter adj1 = std::lower_bound (k, list.end (), c);
-
-                if (adj1 == list.end ()) {
-                        break;
-                }
-
-                ++j;
-                Iter adj2 = adj1;
-                ++adj2;
-                if (adj2 != list.end () && adj2->getVertexB () == c) {
-                        ++adj2;
-                        ++j;
-                }
-
-                list.splice (k, list, adj1, adj2);
-                k = j;
-        }
-
-        std::copy (list.begin (), list.end (), vec.begin ());
-}
-#endif
-
 /*
- * Please help improve this implementation. For input vector of size N it uses 2*N additional
- * memory, summing up to 3*N. Inplace implementation I came up previously was a total mess...
+ * TODO Uwzględnić niezamykające się wachlarze trójkątów.
+ * TODO Zrobić tak, żeby iteracja po trójkątach wokół punktu zawsze była CW lub zawsze CCW.
  */
 template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::topologicalSort (PartEdgeVector &input, IndexType a)
 {
-        PartEdgeVector &sortedBC = input;
-        size_t size = sortedBC.size ();
-        std::deque <PartEdge> deqe;
-        deque.reserve (size);
-        PartEdgeVector cortedCB (sortedBC);
-
-        // Sort po b + c
-        ComparatorBC compBC (a);
-        std::sort (sortedBC.begin (), sortedBC.end (), compBC);
-
-        // sort po c + b
-        ComparatorCB compCB (a);
-        std::sort (cortedCB.begin (), cortedCB.end (), compCB);
-
-        PartEdge edge = sortedBC.front (), edge2;
-
-        while (deque.size () < size) {
-                deque.push_back (edge);
-                edge2 = lower_bound (cortedCB.begin (), cortedCB.end (), edge, compCB);
-                cortedCB.erase (edge2);
-
-                deque.push_back (edge2);
-                edge = lower_bound (sortedBC.begin (), sortedBC.end (), edge2, compBC);
-                cortedBC.erase (edge);
+        size_t initialSize = input.size ();
+        PartEdgeList lex (input.begin (), input.end ());
+        lex.sort (PartEdgeCompare (a));
+#if 1
+        for (typename PartEdgeList::const_iterator j = lex.begin (); j != lex.end (); ++j) {
+                PartEdge const &edge = *j;
+                std::cerr << edge.getVertexB () << ":" << edge.getVertexC (a) << " | ";
         }
+        std::cerr << std::endl;
+#endif
+        input.clear ();
 
-        std::copy (deque.begin (), deque.end (), input);
+        PartEdge edge = lex.front ();
+        input.push_back (edge);
+        std::cerr << edge.getVertexB() << "," << edge.getVertexC(a) << std::endl;
+        lex.pop_front (); // at least 2 elements, so OK.
+
+        bool directionDown = true;
+        while (true) {
+                typename PartEdgeList::iterator j = std::lower_bound (lex.begin (), lex.end (), PartEdge (), PartEdgeCompare (a, edge.getVertexC (a), edge.getVertexB ()));
+                edge = *j;
+                input.push_back (edge);
+                std::cerr << edge.getVertexB() << "," << edge.getVertexC(a) << std::endl;
+
+                if (input.size () >= initialSize) {
+                        break;
+                }
+
+                typename PartEdgeList::iterator down = j;
+                ++down;
+                typename PartEdgeList::reverse_iterator up = typename PartEdgeList::reverse_iterator (j);
+//                ++up;
+                lex.erase (j);
+
+                std::cerr << "down : " << down->getVertexB () << ", up : " << up->getVertexB () << std::endl;
+
+                retry:
+                // Znajdz następny (up, lub down)
+                if (directionDown) {
+                        if (down == lex.end () || down->getVertexB () != edge.getVertexB ()) {
+                                directionDown = false;
+                                goto retry;
+                        }
+
+                        edge = *down;
+                        lex.erase (down);
+                }
+                else {
+                        if (up == lex.rend () || up->getVertexB () != edge.getVertexB ()) {
+                                directionDown = true;
+                                goto retry;
+                        }
+
+                        edge = *up;
+                        lex.erase ((++up).base ()); // this is sick.
+                }
+
+                input.push_back (edge);
+                std::cerr << edge.getVertexB() << "," << edge.getVertexC(a) << std::endl;
+        }
+#if 1
+        for (typename PartEdgeVector::const_iterator j = input.begin (); j != input.end (); ++j) {
+                PartEdge const &edge = *j;
+                std::cerr << edge.getVertexB () << ":" << edge.getVertexC (a) << " | ";
+        }
+        std::cerr << std::endl;
+#endif
 }
 
 /****************************************************************************/
