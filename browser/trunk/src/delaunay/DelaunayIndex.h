@@ -39,10 +39,38 @@ public:
         typedef typename TriangleTraitsType::IndexType IndexType;
         typedef TriangleEdge<TriangleType> TriangleEdgeType;
         typedef std::list <TriangleEdgeType> TriangleEdgeList;
+        typedef std::vector <TriangleEdgeType> TriangleEdgeVector;
         typedef std::vector <TriangleType> TriangleVector;
         typedef std::vector <TriangleType const *> TrianglePtrVector; // TODO Data structure not optimized. Maybe some contiguous memory region can be used to eliminate memory partition and std::vector overhead.
         typedef std::vector <TrianglePtrVector> TriangleIndex;
         typedef boost::tuple <int, SideEnum, SideEnum> IntersectionInfo;
+
+        /**
+         *
+         */
+        struct HalfEdge {
+                HalfEdge (IndexType b_ = 0, TriangleType const *t_ = 0) : vertexB (b_), triangle (t_) {}
+
+                IndexType getVertexB () const { return vertexB; }
+                IndexType getVertexC (IndexType a) const
+                {
+                        SideEnum cSide = otherThan (getVertexSide (*triangle, a), getVertexSide (*triangle, vertexB));
+                        return getVertex (*triangle, cSide);
+                }
+
+                TriangleType const *getTriangle () const { return triangle; }
+
+        private:
+                IndexType vertexB;
+                TriangleType const *triangle;
+        };
+
+        /*
+         * http://www.lafstern.org/matt/col1.pdf : Why you shouldn't use set (and what you should use instead) by Matt Austern
+         */
+        typedef std::vector <HalfEdge> HalfEdgeVector;
+        typedef std::list <HalfEdge> HalfEdgeList;
+        typedef std::vector <HalfEdgeVector> HalfEdgeIndex;
 
         DelaunayIndex (Input const &i) : input (i)
         {
@@ -62,11 +90,20 @@ public:
         TriangleType &getTriangle (size_t i) { return triangulation.at (i); }
 
         size_t getTriangleIndexSize () const { return triangleIndex.size (); }
-        TrianglePtrVector const &getTrianglesForIndex (IndexType i) const { return triangleIndex[i]; }
-        TrianglePtrVector &getTrianglesForIndex (IndexType i) { return triangleIndex[i]; }
         void clean ();
 
         void setVertex (TriangleType &t, SideEnum s, IndexType v);
+
+        TrianglePtrVector &getTrianglesForPoint (IndexType i) { return triangleIndex[i]; }
+//        std::pair <TriangleType const *, TriangleType const *> getTrianglesForEdge (TriangleEdge const &e) const;
+//        std::pair <TriangleType *, TriangleType *> getTrianglesForEdge (TriangleEdge const &e);
+//
+        HalfEdgeVector &getEdgesForPoint (IndexType i) { return edgeIndex[i]; }
+
+        /**
+         *
+         */
+        void getTriaglesForEdge (TriangleEdgeType const &e, TriangleType **a, TriangleType **b) const;
 
 /****************************************************************************/
 
@@ -114,11 +151,6 @@ public:
                 return EdgeType (input[e.a], input[e.b]);
         }
 
-        /**
-         *
-         */
-        void getTriaglesForEdge (TriangleEdgeType const &e, TriangleType **a, TriangleType **b) const;
-
         /*
          *
          */
@@ -129,31 +161,11 @@ private:
         /*
          *
          */
-        struct PartEdge {
-                PartEdge (IndexType b_ = 0, TriangleType const *t_ = 0) : vertexB (b_), triangle (t_) {}
+        struct HalfEdgeCompare {
+                HalfEdgeCompare (IndexType a_) : a (a_), b (0), c (0), custom (false) {}
+                HalfEdgeCompare (IndexType a_, IndexType b_, IndexType c_) : a (a_), b (b_), c (c_), custom (true) {}
 
-                IndexType getVertexB () const { return vertexB; }
-                IndexType getVertexC (IndexType a) const
-                {
-                        SideEnum cSide = otherThan (getVertexSide (*triangle, a), getVertexSide (*triangle, vertexB));
-                        return getVertex (*triangle, cSide);
-                }
-
-                TriangleType const *getTriangle () const { return triangle; }
-
-        private:
-                IndexType vertexB;
-                TriangleType const *triangle;
-        };
-
-        /*
-         *
-         */
-        struct PartEdgeCompare {
-                PartEdgeCompare (IndexType a_) : a (a_), b (0), c (0), custom (false) {}
-                PartEdgeCompare (IndexType a_, IndexType b_, IndexType c_) : a (a_), b (b_), c (c_), custom (true) {}
-
-                bool operator () (PartEdge const &e1, PartEdge const &e2) const
+                bool operator () (HalfEdge const &e1, HalfEdge const &e2) const
                 {
                         if (custom) {
                                 return opCustom (e1, e2);
@@ -163,7 +175,7 @@ private:
                         }
                 }
 
-                bool opRegular (PartEdge const &e1, PartEdge const &e2) const
+                bool opRegular (HalfEdge const &e1, HalfEdge const &e2) const
                 {
                         IndexType c1 = e1.getVertexC (a);
                         IndexType c2 = e2.getVertexC (a);
@@ -175,7 +187,7 @@ private:
                         return e1.getVertexB () < e2.getVertexB ();
                 }
 
-                bool opCustom (PartEdge const &e1, PartEdge const &) const
+                bool opCustom (HalfEdge const &e1, HalfEdge const &) const
                 {
                         IndexType c1 = e1.getVertexC (a);
 
@@ -193,29 +205,22 @@ private:
                 bool custom;
         };
 
-        /*
-         * http://www.lafstern.org/matt/col1.pdf : Why you shouldn't use set (and what you should use instead) by Matt Austern
-         */
-        typedef std::vector <PartEdge> PartEdgeVector;
-        typedef std::list <PartEdge> PartEdgeList;
-        typedef std::vector <PartEdgeVector> PartEdgeIndex;
-
         struct TraingleRemovePredicate {
                 bool operator () (TriangleType const &t) { return !a (t) && !b (t) && !c (t); }
         };
 
-        void addPartEdge (IndexType a, IndexType b, TriangleType const *t);
+        void addHalfEdge (IndexType a, IndexType b, TriangleType const *t);
 
         /**
          * Sort edges, so thier triangles will be in order. Edges will be stroed in clockwise order.
          */
-        void topologicalSort (PartEdgeVector &sortedBC, IndexType a);
+        void topologicalSort (HalfEdgeVector &sortedBC, IndexType a);
 
 private:
 
         Input const &input;
         TriangleIndex triangleIndex;
-        PartEdgeIndex edgeIndex;
+        HalfEdgeIndex edgeIndex;
         TriangleVector triangulation;
 
 };
@@ -450,12 +455,12 @@ void DelaunayIndex<Input, Traits>::addTriangle (IndexType index, TriangleType co
 /****************************************************************************/
 
 template <typename Input, typename Traits>
-void DelaunayIndex<Input, Traits>::addPartEdge (IndexType i1, IndexType i2, TriangleType const *t)
+void DelaunayIndex<Input, Traits>::addHalfEdge (IndexType i1, IndexType i2, TriangleType const *t)
 {
         assert (edgeIndex.size () > i1);
 //        std::cerr << i1 << ", " << edgeIndex[i1].size () << ", " << edgeIndex[i1].capacity () << ", " <<  t << std::endl;
 //        edgeIndex[i1].reserve (100);
-        edgeIndex[i1].push_back (PartEdge (i2, t));
+        edgeIndex[i1].push_back (HalfEdge (i2, t));
 }
 
 /****************************************************************************/
@@ -473,13 +478,13 @@ void DelaunayIndex<Input, Traits>::addTriangle (TriangleType const &triangle)
         addTriangle (b (*t), t);
         addTriangle (c (*t), t);
 
-        addPartEdge (a (*t), b (*t), t);
-        addPartEdge (b (*t), c (*t), t);
-        addPartEdge (c (*t), a (*t), t);
+        addHalfEdge (a (*t), b (*t), t);
+        addHalfEdge (b (*t), c (*t), t);
+        addHalfEdge (c (*t), a (*t), t);
 
-        addPartEdge (b (*t), a (*t), t);
-        addPartEdge (c (*t), b (*t), t);
-        addPartEdge (a (*t), c (*t), t);
+        addHalfEdge (b (*t), a (*t), t);
+        addHalfEdge (c (*t), b (*t), t);
+        addHalfEdge (a (*t), c (*t), t);
 }
 
 /****************************************************************************/
@@ -488,7 +493,7 @@ template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::sortEdgeIndex ()
 {
         IndexType a = 0;
-        for (typename PartEdgeIndex::iterator i = edgeIndex.begin (); i != edgeIndex.end (); ++i, ++a) {
+        for (typename HalfEdgeIndex::iterator i = edgeIndex.begin (); i != edgeIndex.end (); ++i, ++a) {
                 topologicalSort (*i, a);
         }
 
@@ -497,18 +502,17 @@ void DelaunayIndex<Input, Traits>::sortEdgeIndex ()
         std::cerr << "--------EDGE INDEX--------" << std::endl;
 
         int cnt = 0;
-        for (typename PartEdgeIndex::const_iterator i = edgeIndex.begin (); i != edgeIndex.end (); ++i, ++cnt) {
-                PartEdgeVector const &edgesForIndex = *i;
+        for (typename HalfEdgeIndex::const_iterator i = edgeIndex.begin (); i != edgeIndex.end (); ++i, ++cnt) {
+                HalfEdgeVector const &edgesForIndex = *i;
 
                 std::cerr << cnt << ". ";
 
-                for (typename PartEdgeVector::const_iterator j = edgesForIndex.begin (); j != edgesForIndex.end (); ++j) {
-                        PartEdge const &edge = *j;
+                for (typename HalfEdgeVector::const_iterator j = edgesForIndex.begin (); j != edgesForIndex.end (); ++j) {
+                        HalfEdge const &edge = *j;
                         std::cerr << edge.getVertexB () << ":" << *edge.getTriangle () << " | ";
                 }
 
                 std::cerr << std::endl;
-                break;
         }
 }
 
@@ -518,20 +522,20 @@ void DelaunayIndex<Input, Traits>::sortEdgeIndex ()
  * TODO Zrobić tak, żeby iteracja po trójkątach wokół punktu zawsze była CW lub zawsze CCW.
  */
 template <typename Input, typename Traits>
-void DelaunayIndex<Input, Traits>::topologicalSort (PartEdgeVector &input, IndexType a)
+void DelaunayIndex<Input, Traits>::topologicalSort (HalfEdgeVector &input, IndexType a)
 {
 #if 0
         std::cerr << "#### " << a << std::endl;
 #endif
         size_t initialSize = input.size ();
-        PartEdgeList lex (input.begin (), input.end ());
-        lex.sort (PartEdgeCompare (a));
+        HalfEdgeList lex (input.begin (), input.end ());
+        lex.sort (HalfEdgeCompare (a));
 
-        // Find first (and the only, if any) pair of consecutive PartEdges whose b-vertices don't match.
+        // Find first (and the only, if any) pair of consecutive HalfEdges whose b-vertices don't match.
         // Size is always even.
-        typename PartEdgeList::iterator i = lex.begin ();
+        typename HalfEdgeList::iterator i = lex.begin ();
         for (; i != lex.end (); ++i, ++i) {
-                typename PartEdgeList::iterator j = i;
+                typename HalfEdgeList::iterator j = i;
                 ++j;
                 if (i->getVertexB () != j->getVertexB ()) {
                         break;
@@ -547,15 +551,15 @@ void DelaunayIndex<Input, Traits>::topologicalSort (PartEdgeVector &input, Index
                 i = lex.begin ();
         }
 #if 0
-        for (typename PartEdgeList::const_iterator j = lex.begin (); j != lex.end (); ++j) {
-                PartEdge const &edge = *j;
+        for (typename HalfEdgeList::const_iterator j = lex.begin (); j != lex.end (); ++j) {
+                HalfEdge const &edge = *j;
                 std::cerr << edge.getVertexB () << ":" << edge.getVertexC (a) << " | ";
         }
         std::cerr << std::endl;
 #endif
         input.clear ();
 
-        PartEdge edge = *i;
+        HalfEdge edge = *i;
         input.push_back (edge);
 #if 0
         std::cerr << edge.getVertexB() << "," << edge.getVertexC(a) << std::endl;
@@ -564,7 +568,7 @@ void DelaunayIndex<Input, Traits>::topologicalSort (PartEdgeVector &input, Index
 
         bool directionDown = true;
         while (true) {
-                typename PartEdgeList::iterator j = std::lower_bound (lex.begin (), lex.end (), PartEdge (), PartEdgeCompare (a, edge.getVertexC (a), edge.getVertexB ()));
+                typename HalfEdgeList::iterator j = std::lower_bound (lex.begin (), lex.end (), HalfEdge (), HalfEdgeCompare (a, edge.getVertexC (a), edge.getVertexB ()));
                 edge = *j;
                 input.push_back (edge);
 #if 0
@@ -574,9 +578,9 @@ void DelaunayIndex<Input, Traits>::topologicalSort (PartEdgeVector &input, Index
                         break;
                 }
 
-                typename PartEdgeList::iterator down = j;
+                typename HalfEdgeList::iterator down = j;
                 ++down;
-                typename PartEdgeList::iterator up = (j != lex.begin ()) ? (j) : (lex.end ());
+                typename HalfEdgeList::iterator up = (j != lex.begin ()) ? (j) : (lex.end ());
                 --up;
                 lex.erase (j);
 
@@ -611,8 +615,8 @@ void DelaunayIndex<Input, Traits>::topologicalSort (PartEdgeVector &input, Index
 #endif
         }
 #if 0
-        for (typename PartEdgeVector::const_iterator j = input.begin (); j != input.end (); ++j) {
-                PartEdge const &edge = *j;
+        for (typename HalfEdgeVector::const_iterator j = input.begin (); j != input.end (); ++j) {
+                HalfEdge const &edge = *j;
                 std::cerr << edge.getVertexB () << ":" << edge.getVertexC (a) << " | ";
         }
         std::cerr << std::endl;

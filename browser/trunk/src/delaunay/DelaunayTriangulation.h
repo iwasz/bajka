@@ -249,7 +249,7 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
         // 3. Update triangleVector (data structure for CDT).
         /*
          * TODO This is loop made for simple polygons (without holes). It is also possible to make
-         * loop for dicrete list of constraints (that are not linked).
+         * loop for discrete list of constraints (that are not linked).
          */
         TriangleEdgeList missingConstraints;
         size_t inputSize = input.size ();
@@ -258,7 +258,7 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                 size_t j = (i + 1) % inputSize;
 
                 assert (index.getTriangleIndexSize () > i);
-                TrianglePtrVector const &trianglesForPoint = index.getTrianglesForIndex (i);
+                TrianglePtrVector const &trianglesForPoint = index.getTrianglesForPoint (i);
 
 #if 0
                 if (trianglesForPoint.empty ()) {
@@ -394,7 +394,7 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
 
         // 5. Remove superfluous triangles
         for (IndexType i = 0; i < input.size (); ++i) {
-                TrianglePtrVector &triangles = index.getTrianglesForIndex (i);
+                TrianglePtrVector &triangles = index.getTrianglesForPoint (i);
 
                 for (typename TrianglePtrVector::iterator j = triangles.begin (); j != triangles.end (); ++j) {
                         // TODO wywalić const cast
