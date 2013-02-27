@@ -147,14 +147,6 @@ private:
 
 /****************************************************************************/
 
-//std::ostream &operator<< (std::ostream &o, DelaunayTriangulation::Edge const &e)
-//{
-//        o << "(" << e.first << "," << e.second << ")";
-//        return o;
-//}
-
-/****************************************************************************/
-
 template <typename Input, typename Traits>
 void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineString *crossing)
 {
