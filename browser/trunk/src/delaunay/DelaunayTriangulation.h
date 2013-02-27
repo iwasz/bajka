@@ -80,6 +80,7 @@ namespace Delaunay {
 /**
  * Input must be in COUNTER CLOCKWISE order.
  * TODO unit testy różnych małych funkcyjek.
+ * TODO Zmienić nazwy plików - usunąć przedrostek Delaunay.
  */
 template <typename Input, typename Traits = DelaunayTriangulationTraits<> >
 class DelaunayTriangulation {
@@ -99,6 +100,11 @@ public:
         typedef typename DelaunayIndexType::TrianglePtrVector TrianglePtrVector;
         typedef typename DelaunayIndexType::TriangleIndex TriangleIndex;
         typedef typename DelaunayIndexType::IntersectionInfo IntersectionInfo;
+
+        typedef typename DelaunayIndexType::HalfEdge HalfEdge;
+        typedef typename DelaunayIndexType::HalfEdgeVector HalfEdgeVector;
+        typedef typename DelaunayIndexType::HalfEdgeList HalfEdgeList;
+        typedef typename DelaunayIndexType::HalfEdgeIndex HalfEdgeIndex;
 
         typedef triangulation_voronoi_diagram::vertex_type vertex_type;
         typedef triangulation_voronoi_diagram::edge_type edge_type;
@@ -250,6 +256,7 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
         /*
          * TODO This is loop made for simple polygons (without holes). It is also possible to make
          * loop for discrete list of constraints (that are not linked).
+         * TODO Cały kod w środku zewnętrznej pętli to jest index.getTrianglesForEdge.
          */
         TriangleEdgeList missingConstraints;
         size_t inputSize = input.size ();
@@ -393,22 +400,19 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
         }
 
         // 5. Remove superfluous triangles
-        for (IndexType i = 0; i < input.size (); ++i) {
-                TrianglePtrVector &triangles = index.getTrianglesForPoint (i);
+        TriangleVector const &triangulation = index.getTriangulation ();
 
-                for (typename TrianglePtrVector::iterator j = triangles.begin (); j != triangles.end (); ++j) {
-                        // TODO wywalić const cast
-                        TriangleType &triangle = const_cast <TriangleType &> (**j);
+        for (typename TriangleVector::const_iterator i = triangulation.begin (), e = triangulation.end (); i != e; ++i) {
+                TriangleType &triangle = const_cast <TriangleType &> (*i);
 
-                        if (a (triangle) == 0 && b (triangle) == 0 && c (triangle) == 0) {
-                                continue;
-                        }
+                if (a (triangle) == 0 && b (triangle) == 0 && c (triangle) == 0) {
+                        continue;
+                }
 
-                        if (!triangleInside (triangle)) {
-                                a (triangle, 0);
-                                b (triangle, 0);
-                                c (triangle, 0);
-                        }
+                if (!triangleInside (triangle)) {
+                        a (triangle, 0);
+                        b (triangle, 0);
+                        c (triangle, 0);
                 }
         }
 

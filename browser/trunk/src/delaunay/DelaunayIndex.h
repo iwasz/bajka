@@ -49,7 +49,7 @@ public:
          *
          */
         struct HalfEdge {
-                HalfEdge (IndexType b_ = 0, TriangleType const *t_ = 0) : vertexB (b_), triangle (t_) {}
+                HalfEdge (IndexType b_ = 0, TriangleType const *t_ = 0) : vertexB (b_), triangle (t_), twin (0), next (0) {}
 
                 IndexType getVertexB () const { return vertexB; }
                 IndexType getVertexC (IndexType a) const
@@ -59,10 +59,16 @@ public:
                 }
 
                 TriangleType const *getTriangle () const { return triangle; }
+                HalfEdge const *getTwin () const { return twin; }
+                HalfEdge const *getNext () const { return next; }
 
         private:
+
+                friend class DelaunayIndex;
                 IndexType vertexB;
                 TriangleType const *triangle;
+                HalfEdge *twin;
+                HalfEdge *next;
         };
 
         /*
@@ -99,6 +105,7 @@ public:
 //        std::pair <TriangleType *, TriangleType *> getTrianglesForEdge (TriangleEdge const &e);
 //
         HalfEdgeVector &getEdgesForPoint (IndexType i) { return edgeIndex[i]; }
+        HalfEdge *getEdgeForPoint (IndexType i) { /*return ???;*/ }
 
         /**
          *
@@ -499,28 +506,26 @@ void DelaunayIndex<Input, Traits>::sortEdgeIndex ()
 
 //        std::cerr << "--------TRIANGLE INDEX--------" << std::endl;
 //        std::cerr << triangleIndex << std::endl;
-        std::cerr << "--------EDGE INDEX--------" << std::endl;
-
-        int cnt = 0;
-        for (typename HalfEdgeIndex::const_iterator i = edgeIndex.begin (); i != edgeIndex.end (); ++i, ++cnt) {
-                HalfEdgeVector const &edgesForIndex = *i;
-
-                std::cerr << cnt << ". ";
-
-                for (typename HalfEdgeVector::const_iterator j = edgesForIndex.begin (); j != edgesForIndex.end (); ++j) {
-                        HalfEdge const &edge = *j;
-                        std::cerr << edge.getVertexB () << ":" << *edge.getTriangle () << " | ";
-                }
-
-                std::cerr << std::endl;
-        }
+//        std::cerr << "--------EDGE INDEX--------" << std::endl;
+//
+//        int cnt = 0;
+//        for (typename HalfEdgeIndex::const_iterator i = edgeIndex.begin (); i != edgeIndex.end (); ++i, ++cnt) {
+//                HalfEdgeVector const &edgesForIndex = *i;
+//
+//                std::cerr << cnt << ". ";
+//
+//                for (typename HalfEdgeVector::const_iterator j = edgesForIndex.begin (); j != edgesForIndex.end (); ++j) {
+//                        HalfEdge const &edge = *j;
+//                        std::cerr << edge.getVertexB () << ":" << *edge.getTriangle () << " | ";
+//                }
+//
+//                std::cerr << std::endl;
+//        }
 }
 
 /****************************************************************************/
 
-/*
- * TODO Zrobić tak, żeby iteracja po trójkątach wokół punktu zawsze była CW lub zawsze CCW.
- */
+#if 0
 template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::topologicalSort (HalfEdgeVector &input, IndexType a)
 {
@@ -620,6 +625,148 @@ void DelaunayIndex<Input, Traits>::topologicalSort (HalfEdgeVector &input, Index
                 std::cerr << edge.getVertexB () << ":" << edge.getVertexC (a) << " | ";
         }
         std::cerr << std::endl;
+#endif
+}
+#endif
+
+/**
+ * TODO pozbyć się kolekcji sorted i sortowac inplace w lex. Da się chyba.
+ */
+template <typename Input, typename Traits>
+void DelaunayIndex<Input, Traits>::topologicalSort (HalfEdgeVector &input, IndexType a)
+{
+        size_t initialSize = input.size ();
+        HalfEdgeList lex (input.begin (), input.end ());
+        HalfEdgeVector sorted;
+        sorted.reserve (initialSize);
+        lex.sort (HalfEdgeCompare (a));
+
+        // Find first (and the only, if any) pair of consecutive HalfEdges whose b-vertices don't match.
+        // Size is always even.
+        typename HalfEdgeList::iterator i = lex.begin ();
+        for (; i != lex.end (); ++i, ++i) {
+                typename HalfEdgeList::iterator j = i;
+                ++j;
+                if (i->getVertexB () != j->getVertexB ()) {
+                        break;
+                }
+        }
+
+        /*
+         *  If found - that means that this "fan" of triangles is not closed, and we must start
+         *  sorting from one of its ends. If fan is closed (i.e. there is no gap between triangles),
+         *  we can start from any point.
+         */
+        if (i == lex.end ()) {
+                i = lex.begin ();
+        }
+
+        HalfEdge edge = *i;
+        sorted.push_back (edge);
+        lex.erase (i);
+
+        bool directionDown = true;
+        while (true) {
+                typename HalfEdgeList::iterator j = std::lower_bound (lex.begin (), lex.end (), HalfEdge (), HalfEdgeCompare (a, edge.getVertexC (a), edge.getVertexB ()));
+                edge = *j;
+                sorted.push_back (edge);
+
+                if (sorted.size () >= initialSize) {
+                        break;
+                }
+
+                typename HalfEdgeList::iterator down = j;
+                ++down;
+                typename HalfEdgeList::iterator up = (j != lex.begin ()) ? (j) : (lex.end ());
+                --up;
+                lex.erase (j);
+
+                retry:
+                // Znajdz następny (up, lub down)
+                if (directionDown) {
+                        if (down == lex.end () || down->getVertexB () != edge.getVertexB ()) {
+                                directionDown = false;
+                                goto retry;
+                        }
+
+                        edge = *down;
+                        lex.erase (down);
+                }
+                else {
+                        if (up == lex.end () || up->getVertexB () != edge.getVertexB ()) {
+                                directionDown = true;
+                                goto retry;
+                        }
+
+                        edge = *up;
+                        lex.erase (up);
+                }
+
+                sorted.push_back (edge);
+        }
+
+        std::ostringstream o1, o2;
+
+#if 1
+        std::cerr << "SORTED : ";
+        for (typename HalfEdgeVector::const_iterator j = sorted.begin (); j != sorted.end (); ++j) {
+                HalfEdge const &edge = *j;
+                std::cerr << edge.getVertexB () << ":" << edge.getVertexC (a) << " | ";
+                o1 << edge.getVertexB () << ":" << edge.getVertexC (a) << " | ";
+        }
+        std::cerr << std::endl;
+#endif
+        // 2. Poustawiaj wskaźniki.
+        for (typename HalfEdgeVector::iterator i = sorted.begin (), e = sorted.end (); i != e;) {
+                HalfEdge *current = &*i;
+                HalfEdge *next = (i + 1 != e) ? (&*(i + 1)) : (0);
+
+                if (!next) {
+                        break;
+                }
+
+                // Zwiększanie iteratora
+                bool match = current->getVertexB () == next->getVertexB ();
+                i += (match) ? (2) : (1);
+
+                // Ustawienie nextów:
+                if (i != e) {
+                        current->next = &*i;
+                }
+
+                // Ustawienie twinów:
+                if (match) {
+                        current->twin = next;
+                        next->twin = current;
+                }
+        }
+#if 1
+        {
+                HalfEdgeVector sorted2;
+
+                std::cerr << "DATA   : ";
+                // first
+                HalfEdge *edge = &sorted.front ();
+
+                do {
+                        std::cerr << edge->getVertexB () << ":" << edge->getVertexC (a) << " | ";
+                        o2 << edge->getVertexB () << ":" << edge->getVertexC (a) << " | ";
+                        sorted2.push_back (*edge);
+
+                        if (edge->twin) {
+                                std::cerr << edge->twin->getVertexB () << ":" << edge->twin->getVertexC (a) << " | ";
+                                o2 << edge->twin->getVertexB () << ":" << edge->twin->getVertexC (a) << " | ";
+                                sorted2.push_back (*edge->twin);
+                        }
+                }
+                while ((edge = edge->next));
+                std::cerr << std::endl;
+
+                if (std::string (o1.str ()) !=  std::string (o2.str ())) {
+                        std::cerr << "AAAAAAAAAAAA" << std::endl;
+                        exit (0);
+                }
+        }
 #endif
 }
 
