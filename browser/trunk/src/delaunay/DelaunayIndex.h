@@ -363,6 +363,7 @@ DelaunayIndex<Input, Traits>::intersects (TriangleType const &t, EdgeType const 
 template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::findCrossingEdges (TriangleEdgeType const &edge, TriangleEdgeList *crossingEdges, TrianglePtrVector *crossingTriangles) const
 {
+        // TODO Tu zmienić na edgeIndex
         TrianglePtrVector const &incidentTriangles = triangleIndex[edge.a];
         EdgeType e = triangleEdgeToEdge (edge);
         TriangleType const *start = NULL;
@@ -1000,12 +1001,16 @@ template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::setVertex (TriangleType &t, SideEnum s, IndexType v)
 {
         IndexType current = Delaunay::getVertex (t, s);
+
         TrianglePtrVector &triangles = triangleIndex[current];
         triangles.erase (std::remove (triangles.begin (), triangles.end (), &t), triangles.end ());
 
         Delaunay::setVertex (t, s, v);
         TrianglePtrVector &trianglesV = triangleIndex[v];
         trianglesV.push_back (&t);
+
+// TODO kurwa - ciężko teraz updejtowac ten index!!
+
 }
 
 /****************************************************************************/
