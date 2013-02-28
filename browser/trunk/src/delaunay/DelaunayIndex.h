@@ -92,7 +92,7 @@ public:
 
                 HalfEdge *first;
                 HalfEdge *last;
-                HalfEdgeVector all;
+                HalfEdgeList all;
         };
 
         typedef std::vector <HalfEdgeNode> HalfEdgeIndex;
@@ -683,22 +683,20 @@ void DelaunayIndex<Input, Traits>::topologicalSort (HalfEdgeVector &input, Index
 template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::topologicalSort (HalfEdgeNode &node, IndexType a)
 {
-        HalfEdgeVector &all = node.all;
+        HalfEdgeList &all = node.all;
         size_t initialSize = all.size ();
-        std::sort (all.begin (), all.end (), HalfEdgeCompare (a));
+        all.sort (HalfEdgeCompare (a));
 
-//        HalfEdgeList lex;
         typedef std::list <HalfEdge *> PHalfEdgeList;
         typedef std::vector <HalfEdge *> PHalfEdgeVector;
         PHalfEdgeList lex;
 
-        for (typename HalfEdgeVector::iterator i = all.begin (), e = all.end (); i != e; ++i) {
+        for (typename HalfEdgeList::iterator i = all.begin (), e = all.end (); i != e; ++i) {
                 lex.push_back (&*i);
         }
 
         PHalfEdgeVector sorted;
         sorted.reserve (initialSize);
-//        lex.sort (HalfEdgeCompare (a));
 
         // Find first (and the only, if any) pair of consecutive HalfEdges whose b-vertices don't match.
         // Size is always even.
@@ -946,8 +944,8 @@ void DelaunayIndex<Input, Traits>::getTriaglesForEdge (TriangleEdgeType const &e
 template <typename Input, typename Traits>
 typename DelaunayIndex<Input, Traits>::HalfEdge *DelaunayIndex<Input, Traits>::findEdge (TriangleEdgeType const &e)
 {
-        HalfEdgeVector &all = edgeIndex[e.a].all;
-        typename HalfEdgeVector::iterator i = std::lower_bound (all.begin (), all.end (), HalfEdge (), HalfEdgeCompare (e.a, e.b));
+        HalfEdgeList &all = edgeIndex[e.a].all;
+        typename HalfEdgeList::iterator i = std::lower_bound (all.begin (), all.end (), HalfEdge (), HalfEdgeCompare (e.a, e.b));
 
         if (i == all.end ()) {
                 return 0;
@@ -982,9 +980,9 @@ typename DelaunayIndex<Input, Traits>::TriangleEdgePair DelaunayIndex<Input, Tra
 #if 1
         if (!ret.first || !ret.second) {
                 std::cerr << "!ret.first || !ret.second for edge : " << e << std::endl;
-                HalfEdgeVector &all = edgeIndex[e.a].all;
+                HalfEdgeList &all = edgeIndex[e.a].all;
 
-                for (typename HalfEdgeVector::const_iterator j = all.begin (); j != all.end (); ++j) {
+                for (typename HalfEdgeList::const_iterator j = all.begin (); j != all.end (); ++j) {
                         HalfEdge const &edge = *j;
                         std::cerr << e.a << ":" << edge.getVertexB () << ":" << edge.getVertexC (e.a) << " | ";
                 }
@@ -1002,14 +1000,51 @@ void DelaunayIndex<Input, Traits>::setVertex (TriangleType &t, SideEnum s, Index
 {
         IndexType current = Delaunay::getVertex (t, s);
 
+#if 1 // TODO usunąć.
         TrianglePtrVector &triangles = triangleIndex[current];
         triangles.erase (std::remove (triangles.begin (), triangles.end (), &t), triangles.end ());
 
         Delaunay::setVertex (t, s, v);
         TrianglePtrVector &trianglesV = triangleIndex[v];
         trianglesV.push_back (&t);
+#endif
 
-// TODO kurwa - ciężko teraz updejtowac ten index!!
+        // 1 Znaleźć node dla tego punktu.
+        HalfEdgeNode &node = edgeIndex[current];
+
+        // 2 Usunąć ze starego indexu.
+        // 2.1 Zmienić powiązania w HalfEdgach.
+        HalfEdgeList &all = node.all;
+
+        typename HalfEdgeList::iterator i = std::lower_bound (all.begin (), all.end (), HalfEdge (), HalfEdgeCompare (e.a, e.b));
+        assert (i != all.end ());
+
+        if (i->getTwin ()) {
+                // Twin moze być zaraz za lub na koncu (jesli jesteśmy pierwsi).
+                HalfEdgeList::iterator j;
+                if (i == all.begin ()) {
+                        j = all.end ();
+                        --j;
+                }
+                else {
+                        j = i;
+                        ++j;
+                }
+
+                assert (i->getVertexB () == j->getVertexB ());
+
+                HalfEdge *iN = i->getNext ();
+                HalfEdge *iP = i->getTwin ()->getNext ();
+
+                HalfEdge *jN = j->getNext ();
+                HalfEdge *jP = j->getTwin ()->getNext ();
+        }
+
+        // 2.2 Usunąć 'i' i 'j' z all.
+
+        // 3 Dodać do nowego indeksu.
+        // 3.1 Dodac do nowego all.
+        // 3.2 Uaktualnic powiązania.
 
 }
 
