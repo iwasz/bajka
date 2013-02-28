@@ -244,11 +244,15 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
         std::cout << triangulation << std::endl;
 #endif
 
-        // 3. Update triangleVector (data structure for CDT).
+        // 3. Find missing constraints. Update triangleVector (data structure for CDT).
         /*
          * TODO This is loop made for simple polygons (without holes). It is also possible to make
          * loop for discrete list of constraints (that are not linked).
          * TODO Cały kod w środku zewnętrznej pętli to jest index.getTrianglesForEdge.
+         *
+         * W tym kawałku chodzi o to, żeby znaleźć wszystkie constrainty. Szukamy w triangulacji
+         * krawędzi o wierzchołkach [i, i+1]. Jeśli jakiegoś nie ma, to dodajemy go do listy
+         * brakujących constraintów.
          */
         TriangleEdgeList missingConstraints;
         size_t inputSize = input.size ();

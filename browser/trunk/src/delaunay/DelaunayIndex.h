@@ -1016,29 +1016,29 @@ void DelaunayIndex<Input, Traits>::setVertex (TriangleType &t, SideEnum s, Index
         // 2.1 Zmienić powiązania w HalfEdgach.
         HalfEdgeList &all = node.all;
 
-        typename HalfEdgeList::iterator i = std::lower_bound (all.begin (), all.end (), HalfEdge (), HalfEdgeCompare (e.a, e.b));
-        assert (i != all.end ());
-
-        if (i->getTwin ()) {
-                // Twin moze być zaraz za lub na koncu (jesli jesteśmy pierwsi).
-                HalfEdgeList::iterator j;
-                if (i == all.begin ()) {
-                        j = all.end ();
-                        --j;
-                }
-                else {
-                        j = i;
-                        ++j;
-                }
-
-                assert (i->getVertexB () == j->getVertexB ());
-
-                HalfEdge *iN = i->getNext ();
-                HalfEdge *iP = i->getTwin ()->getNext ();
-
-                HalfEdge *jN = j->getNext ();
-                HalfEdge *jP = j->getTwin ()->getNext ();
-        }
+//        typename HalfEdgeList::iterator i = std::lower_bound (all.begin (), all.end (), HalfEdge (), HalfEdgeCompare (e.a, e.b));
+//        assert (i != all.end ());
+//
+//        if (i->getTwin ()) {
+//                // Twin moze być zaraz za lub na koncu (jesli jesteśmy pierwsi).
+//                HalfEdgeList::iterator j;
+//                if (i == all.begin ()) {
+//                        j = all.end ();
+//                        --j;
+//                }
+//                else {
+//                        j = i;
+//                        ++j;
+//                }
+//
+//                assert (i->getVertexB () == j->getVertexB ());
+//
+//                HalfEdge *iN = i->getNext ();
+//                HalfEdge *iP = i->getTwin ()->getNext ();
+//
+//                HalfEdge *jN = j->getNext ();
+//                HalfEdge *jP = j->getTwin ()->getNext ();
+//        }
 
         // 2.2 Usunąć 'i' i 'j' z all.
 
