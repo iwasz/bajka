@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+
+  <Layer id="scene">
+    <ClearScreenGrid set-as="view" color="6b6b6bff" gridColor="616161ff" density="20" />
+    <LayerProperties set-as="groupProps" />
+
+    <Group set-as="child">
+      <ref bean="myRect" set-as="child" />
+      <ref bean="r2" set-as="child" />
+      <ref bean="sun" set-as="child" />
+    </Group>
+
+    <RelativeGroup set-as="child">
+      <LayerProperties set-as="groupProps" />
+
+      <LinearGroup set-as="child" type="vertical" spacing="10" wrapContentsW="true" wrapContentsH="true">      
+        <RelativeGroupProperties set-as="groupProps" translate="1, 99" hAlign="right" vAlign="bottom"/>
+        
+        <button set-as="child" file="menu.xml" name="scene" text="menu" />
+        
+        <tweenButton set-as="child" text="to">
+          <value set-as="source">
+            {"type":"to", "obj":"myRect", "t":2000, "ease":"QUAD_INOUT", "delay":100, "repeat":3, "targets":[{"X":300}, {"Y":300}, {"ANGLE":180}, {"SCALE":2}]}
+          </value>
+        </tweenButton>
+
+        <tweenButton set-as="child" text="from">
+          <value set-as="source">
+            {"type":"from", "obj":"myRect", "t":2000, "targets":[{"X":300}]}
+          </value>
+        </tweenButton>
+
+        <tweenButton set-as="child" text="timeline">
+          <value set-as="source">
+            {"type":"timeline", "tweens":[
+              {"type":"from", "obj":"myRect", "t":2000, "targets":[{"X":300}]},
+              {"type":"from", "obj":"myRect", "t":2000, "targets":[{"Y":-300}]},
+              {"type":"from", "obj":"myRect", "t":2000, "targets":[{"X":-300}]},
+              {"type":"from", "obj":"myRect", "t":2000, "targets":[{"Y":300}]}
+            ]}
+          </value>
+        </tweenButton>
+        
+        <tweenButton set-as="child" text="multi">
+          <value set-as="source">
+            {"type":"multi", "tweens":[
+              {"type":"to", "obj":"myRect", "t":2000, "targets":[{"ANGLE":180}]},
+              {"type":"to", "obj":"r2", "t":2000, "targets":[{"SCALE":2}]}            
+            ]}
+          </value>
+        </tweenButton>
+        
+        <tweenButton set-as="child" text="sun">
+          <value set-as="source">
+            {"type":"multi", "tweens":[
+              {"type":"to", "obj":"sun", "t":15000, "ease":"LINEAR_INOUT", "repeat":-1, "targets":[{"ANGLE":360}]},
+              {"type":"to", "obj":"sun", "t":500, "repeat":-1, "yoyo":true, "overwrite":"NONE", "targets":[{"SCALE":1.1}]}
+            ]}            
+          </value>
+        </tweenButton>
+
+      </LinearGroup>      
+    </RelativeGroup>
+  </Layer>
+  
+  <rect id="myRect" width="50" height="50" translate="-25, -25"/>  
+  <rect id="r2" width="50" height="50" translate="50, -25"/>  
+  <image id="sun"  path="sunny.png" translate="100, -350" />
+
+  <LinearGroup id="tweenButton" spacing="5" margin="5" wrapContentsW="true" wrapContentsH="true" type="vertical" abstract="true">
+    <label set-as="child" text="Button" view.foreground="@orange" />
+    <Rectangle set-as="view" foreground="@orange" background="00000000" thickness="3" />
+    <TweenButtonController set-as="controller" eventMask="0xffff" clicked="@siusiu"  normal="@orange"  hover="@crimson">
+      <TweenFactory set-as="tweenFactory" container="@#container"/>
+    </TweenButtonController>
+    <prop-alias name="text" value="children.0.view.text" />
+    <prop-alias name="source" value="controller.tweenFactory.source" />
+  </LinearGroup>
+
+  
+</beans>
+
+<!--
+timeline
+setTween
+multiTween
+atomicTween
+ to
+ from (target, duration, ease).
+  rel
+  abs
+ repeat (num)
+ repeat (yoyo)
+ delay (ms)
+  
+-->
