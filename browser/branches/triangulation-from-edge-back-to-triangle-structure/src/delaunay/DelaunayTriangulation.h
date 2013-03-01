@@ -101,11 +101,6 @@ public:
         typedef typename DelaunayIndexType::TriangleIndex TriangleIndex;
         typedef typename DelaunayIndexType::IntersectionInfo IntersectionInfo;
 
-        typedef typename DelaunayIndexType::HalfEdge HalfEdge;
-        typedef typename DelaunayIndexType::HalfEdgeVector HalfEdgeVector;
-        typedef typename DelaunayIndexType::HalfEdgeList HalfEdgeList;
-        typedef typename DelaunayIndexType::HalfEdgeIndex HalfEdgeIndex;
-
         typedef triangulation_voronoi_diagram::vertex_type vertex_type;
         typedef triangulation_voronoi_diagram::edge_type edge_type;
         typedef triangulation_voronoi_diagram::cell_type cell_type;
