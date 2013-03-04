@@ -554,7 +554,8 @@ void DelaunayIndex<Input, Traits>::addTriangle (IndexType index, TriangleType *t
 template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::addTriangle (TriangleType &triangle)
 {
-        sortTriangleCCW (triangle);
+//        TODO odkomentować!
+//        sortTriangleCCW (triangle);
         triangulation.push_back (triangle);
 
         // Update triangle index.
@@ -595,7 +596,6 @@ void DelaunayIndex<Input, Traits>::sortTriangleCCW (TriangleType &triangle)
 template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::sortEdgeIndex ()
 {
-        // TODO Tu będziemy sortować trójkąty zamiast HalfEdgy
         IndexType a = 0;
         for (typename TriangleIndex::iterator i = triangleIndex.begin (), e = triangleIndex.end (); i != e; ++i, ++a) {
                 TrianglePtrVector &trianglesForIndex = *i;
@@ -931,15 +931,18 @@ void DelaunayIndex<Input, Traits>::flip (TriangleEdgeType const &oldDiagonal, Tr
         std::cerr << "soa : " << (int)bottomRightVertexSide << ", sob : " << (int)bottomLeftVertexSide << ", sc : " << (int)bottomBottomVertexSide << ", scIndex : " << bottomBottomVertex << std::endl;
 #endif
 
-        // top becomes left
+        // Store before modification.
+        TriangleType *tmp = getAdjacentTriangle (*top, topLeftVertexSide);
+
+        // top becomes left.
         this->setVertex (*top, topRightVertexSide, bottomBottomVertex);
         setAdjacentTriangle (*top, topTopVertexSide, getAdjacentTriangle (*bottom, bottomRightVertexSide));
         setAdjacentTriangle (*top, topLeftVertexSide, bottom);
 
-        // bottom becomes right
+        // bottom becomes right.
         this->setVertex (*bottom, bottomLeftVertexSide, topTopVertex);
-        setAdjacentTriangle (*bottom, bottomBottomVertexSide, getAdjacentTriangle (*top, topLeftVertexSide));
-        setAdjacentTriangle (*bottom, topLeftVertexSide, top);
+        setAdjacentTriangle (*bottom, bottomBottomVertexSide, tmp);
+        setAdjacentTriangle (*bottom, bottomRightVertexSide, top);
 
         // TODO CCW sort?
         newDiagonal->a = topTopVertex;
@@ -948,6 +951,7 @@ void DelaunayIndex<Input, Traits>::flip (TriangleEdgeType const &oldDiagonal, Tr
         std::cerr << "newDiagonal : " << *newDiagonal << ", top : " << *top << ", bottom : " << *bottom << std::endl;
 #endif
 }
+
 /****************************************************************************/
 
 template <typename Input, typename Traits>
@@ -1021,6 +1025,7 @@ void DelaunayIndex<Input, Traits>::setVertex (TriangleType &t, SideEnum s, Index
         // insert zachowujący porządek sortowania.
         typename TrianglePtrVector::iterator i = std::lower_bound (trianglesV.begin (), trianglesV.end (), &t, TriangleCompare (v));
         trianglesV.insert (i, &t);
+//        trianglesV.push_back (&t);
 }
 
 /****************************************************************************/
@@ -1073,10 +1078,10 @@ std::ostream &operator<< (std::ostream &o, std::vector <Triangle> const &e)
         return o;
 }
 
-std::ostream &operator<< (std::ostream &o, std::vector <Triangle const *> const &e)
+std::ostream &operator<< (std::ostream &o, std::vector <Triangle *> const &e)
 {
         size_t cnt = 0;
-        for (std::vector <Triangle const *>::const_iterator i = e.begin (); i != e.end (); ++i, ++cnt) {
+        for (std::vector <Triangle *>::const_iterator i = e.begin (); i != e.end (); ++i, ++cnt) {
                 o << **i;
 
                 if (i + 1 != e.end ()) {
