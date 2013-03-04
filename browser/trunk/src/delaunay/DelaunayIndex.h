@@ -44,64 +44,62 @@ public:
         typedef std::list <TriangleEdgeType> TriangleEdgeList;
         typedef std::vector <TriangleEdgeType> TriangleEdgeVector;
         typedef std::vector <TriangleType> TriangleVector;
-        typedef std::vector <TriangleType const *> TrianglePtrVector; // TODO Data structure not optimized. Maybe some contiguous memory region can be used to eliminate memory partition and std::vector overhead.
+        typedef std::vector <TriangleType *> TrianglePtrVector; // TODO Data structure not optimized. Maybe some contiguous memory region can be used to eliminate memory partition and std::vector overhead.
         typedef std::vector <TrianglePtrVector> TriangleIndex;
         typedef boost::tuple <int, SideEnum, SideEnum> IntersectionInfo;
 
         /**
          *
          */
-        class HalfEdge {
-        public:
+//        class HalfEdge {
+//        public:
+//
+//                HalfEdge (IndexType b_ = 0, TriangleType *t_ = 0) : vertexB (b_), triangle (t_), twin (0), next (0) {}
+//
+//                IndexType getVertexB () const { return vertexB; }
+//                IndexType getVertexC (IndexType a) const
+//                {
+//                        SideEnum cSide = otherThan (getVertexSide (*triangle, a), getVertexSide (*triangle, vertexB));
+//                        return getVertex (*triangle, cSide);
+//                }
+//
+//                TriangleType const *getTriangle () const { return triangle; }
+//                TriangleType *getTriangle () { return triangle; }
+//
+//                HalfEdge const *getTwin () const { return twin; }
+//                HalfEdge *getTwin () { return twin; }
+//
+//                HalfEdge const *getNext () const { return next; }
+//                HalfEdge *getNext () { return next; }
+//
+//        private:
+//
+//                friend class DelaunayIndex;
+//                IndexType vertexB;
+//                TriangleType *triangle;
+//                HalfEdge *twin;
+//                HalfEdge *next;
+//        };
 
-                HalfEdge (IndexType b_ = 0, TriangleType *t_ = 0) : vertexB (b_), triangle (t_), twin (0), next (0) {}
+//        /*
+//         * http://www.lafstern.org/matt/col1.pdf : Why you shouldn't use set (and what you should use instead) by Matt Austern
+//         */
+//        typedef std::vector <HalfEdge> HalfEdgeVector;
+//        typedef std::list <HalfEdge> HalfEdgeList;
+//
+//        struct HalfEdgeNode {
+//                HalfEdgeNode () : first (0), last (0) {}
+//
+//                HalfEdge *first;
+//                HalfEdge *last;
+//                HalfEdgeList all;
+//        };
 
-                IndexType getVertexB () const { return vertexB; }
-                IndexType getVertexC (IndexType a) const
-                {
-                        SideEnum cSide = otherThan (getVertexSide (*triangle, a), getVertexSide (*triangle, vertexB));
-                        return getVertex (*triangle, cSide);
-                }
-
-                TriangleType const *getTriangle () const { return triangle; }
-                TriangleType *getTriangle () { return triangle; }
-
-                HalfEdge const *getTwin () const { return twin; }
-                HalfEdge *getTwin () { return twin; }
-
-                HalfEdge const *getNext () const { return next; }
-                HalfEdge *getNext () { return next; }
-
-        private:
-
-                friend class DelaunayIndex;
-                IndexType vertexB;
-                TriangleType *triangle;
-                HalfEdge *twin;
-                HalfEdge *next;
-        };
-
-        /*
-         * http://www.lafstern.org/matt/col1.pdf : Why you shouldn't use set (and what you should use instead) by Matt Austern
-         */
-        typedef std::vector <HalfEdge> HalfEdgeVector;
-        typedef std::list <HalfEdge> HalfEdgeList;
-
-        struct HalfEdgeNode {
-                HalfEdgeNode () : first (0), last (0) {}
-
-                HalfEdge *first;
-                HalfEdge *last;
-                HalfEdgeList all;
-        };
-
-        typedef std::vector <HalfEdgeNode> HalfEdgeIndex;
+//        typedef std::vector <HalfEdgeNode> HalfEdgeIndex;
 
         DelaunayIndex (Input const &i) : input (i)
         {
                 triangleIndex.resize (input.size ());
-                edgeIndex.resize (input.size ());
-
                 // TODO ***KRYTYCZNE*** ustawić tu tyle ile ma być. Da się to wyliczyć na początku!?
                 std::cerr << input.size () << std::endl;
                 triangulation.reserve (input.size () * 10);
@@ -109,8 +107,8 @@ public:
 
         TriangleVector const &getTriangulation () const { return triangulation; }
         size_t getNumTriangles () const { return triangulation.size (); }
-        void addTriangle (IndexType index, TriangleType const *triangle);
-        void addTriangle (TriangleType const &triangle);
+        void addTriangle (IndexType index, TriangleType *triangle);
+        void addTriangle (TriangleType &triangle);
         TriangleType const &getTriangle (size_t i) const { return triangulation.at (i); }
         TriangleType &getTriangle (size_t i) { return triangulation.at (i); }
 
@@ -123,21 +121,17 @@ public:
 //        std::pair <TriangleType const *, TriangleType const *> getTrianglesForEdge (TriangleEdge const &e) const;
 //        std::pair <TriangleType *, TriangleType *> getTrianglesForEdge (TriangleEdge const &e);
 //
-        HalfEdgeVector &getAllEdgesForPoint (IndexType i) { return edgeIndex[i].all; }
-        HalfEdge *getFirstEdgeForPoint (IndexType i) { edgeIndex[i].first; }
-        HalfEdge *getLastEdgeForPoint (IndexType i) { edgeIndex[i].last; }
+//        HalfEdge *findEdge (IndexType a, IndexType b);
+//        HalfEdge const *findEdge (IndexType a, IndexType b) const { return const_cast <DelaunayIndex *> (this)->findEdge (a, b); }
+//
+//        HalfEdge *findEdge (IndexType a, IndexType b, IndexType c);
+//        HalfEdge const *findEdge (IndexType a, IndexType b, IndexType c) const { return const_cast <DelaunayIndex *> (this)->findEdge (a, b, c); }
 
-        HalfEdge *findEdge (IndexType a, IndexType b);
-        HalfEdge const *findEdge (IndexType a, IndexType b) const { return const_cast <DelaunayIndex *> (this)->findEdge (a, b); }
+        typedef std::pair <TriangleType const *, TriangleType const *> ConstTrianglePair;
+        typedef std::pair <TriangleType *, TriangleType *> TrianglePair;
 
-        HalfEdge *findEdge (IndexType a, IndexType b, IndexType c);
-        HalfEdge const *findEdge (IndexType a, IndexType b, IndexType c) const { return const_cast <DelaunayIndex *> (this)->findEdge (a, b, c); }
-
-        typedef std::pair <TriangleType const *, TriangleType const *> ConstTriangleEdgePair;
-        typedef std::pair <TriangleType *, TriangleType *> TriangleEdgePair;
-
-        ConstTriangleEdgePair getTrianglesForEdge (TriangleEdgeType const &e) const { return const_cast <DelaunayIndex *> (this)->getTrianglesForEdge (e); }
-        TriangleEdgePair getTrianglesForEdge (TriangleEdgeType const &e);
+        ConstTrianglePair getTrianglesForEdge (TriangleEdgeType const &e) const { return const_cast <DelaunayIndex *> (this)->getTrianglesForEdge (e); }
+        TrianglePair getTrianglesForEdge (TriangleEdgeType const &e);
 
 /****************************************************************************/
 
@@ -193,89 +187,134 @@ public:
 private:
 
         /*
-         *
+         * Sort vertices of triangle so value of index a is < b < c.
          */
-        class HalfEdgeCompare {
-        public:
-                HalfEdgeCompare (IndexType a_) : a (a_), b (0), c (0), mode (REGULAR) {}
-                HalfEdgeCompare (IndexType a_, IndexType b_) : a (a_), b (b_), c (0), mode (CUSTOM_AB) {}
-                HalfEdgeCompare (IndexType a_, IndexType b_, IndexType c_) : a (a_), b (b_), c (c_), mode (CUSTOM_ABC) {}
-
-                bool operator () (HalfEdge const &e1, HalfEdge const &e2) const
-                {
-                        switch (mode) {
-                        default:
-                        case REGULAR:
-                                return opRegular (e1, e2);
-
-                        case CUSTOM_AB:
-                                return opCustomAB (e1, e2);
-
-                        case CUSTOM_ABC:
-                                return opCustomABC (e1, e2);
-                        }
-                }
-
-                bool opRegular (HalfEdge const &e1, HalfEdge const &e2) const
-                {
-                        if (e1.getVertexB () == e2.getVertexB ()) {
-                                IndexType c1 = e1.getVertexC (a);
-                                IndexType c2 = e2.getVertexC (a);
-                                return c1 < c2;
-                        }
-
-                        return e1.getVertexB () < e2.getVertexB ();
-                }
-
-                bool opCustomAB (HalfEdge const &e1, HalfEdge const &) const
-                {
-                        return e1.getVertexB () < b;
-                }
-
-                bool opCustomABC (HalfEdge const &e1, HalfEdge const &) const
-                {
-                        if (e1.getVertexB () == b) {
-                                IndexType c1 = e1.getVertexC (a);
-                                return c1 < c;
-                        }
-
-                        return e1.getVertexB () < b;
-                }
-
-        private:
-                IndexType a;
-                IndexType b;
-                IndexType c;
-                enum Mode { REGULAR, CUSTOM_AB, CUSTOM_ABC } mode;
-        };
+        void sortTriangleCCW (TriangleType &triangle);
 
         /*
          *
          */
-        class PHalfEdgeCompare {
-        public:
-                PHalfEdgeCompare (IndexType a_, IndexType b_, IndexType c_) : impl (a_, b_, c_) {}
-                bool operator () (HalfEdge const *e1, HalfEdge const *e2) const { return impl.operator () (*e1, *e2); }
-        private:
-                HalfEdgeCompare impl;
+//        class HalfEdgeCompare {
+//        public:
+//                HalfEdgeCompare (IndexType a_) : a (a_), b (0), c (0), mode (REGULAR) {}
+//                HalfEdgeCompare (IndexType a_, IndexType b_) : a (a_), b (b_), c (0), mode (CUSTOM_AB) {}
+//                HalfEdgeCompare (IndexType a_, IndexType b_, IndexType c_) : a (a_), b (b_), c (c_), mode (CUSTOM_ABC) {}
+//
+//                bool operator () (HalfEdge const &e1, HalfEdge const &e2) const
+//                {
+//                        switch (mode) {
+//                        default:
+//                        case REGULAR:
+//                                return opRegular (e1, e2);
+//
+//                        case CUSTOM_AB:
+//                                return opCustomAB (e1, e2);
+//
+//                        case CUSTOM_ABC:
+//                                return opCustomABC (e1, e2);
+//                        }
+//                }
+//
+//                bool opRegular (HalfEdge const &e1, HalfEdge const &e2) const
+//                {
+//                        if (e1.getVertexB () == e2.getVertexB ()) {
+//                                IndexType c1 = e1.getVertexC (a);
+//                                IndexType c2 = e2.getVertexC (a);
+//                                return c1 < c2;
+//                        }
+//
+//                        return e1.getVertexB () < e2.getVertexB ();
+//                }
+//
+//                bool opCustomAB (HalfEdge const &e1, HalfEdge const &) const
+//                {
+//                        return e1.getVertexB () < b;
+//                }
+//
+//                bool opCustomABC (HalfEdge const &e1, HalfEdge const &) const
+//                {
+//                        if (e1.getVertexB () == b) {
+//                                IndexType c1 = e1.getVertexC (a);
+//                                return c1 < c;
+//                        }
+//
+//                        return e1.getVertexB () < b;
+//                }
+//
+//        private:
+//                IndexType a;
+//                IndexType b;
+//                IndexType c;
+//                enum Mode { REGULAR, CUSTOM_AB, CUSTOM_ABC } mode;
+//        };
+
+        /*
+         *
+         */
+//        class PHalfEdgeCompare {
+//        public:
+//                PHalfEdgeCompare (IndexType a_, IndexType b_, IndexType c_) : impl (a_, b_, c_) {}
+//                bool operator () (HalfEdge const *e1, HalfEdge const *e2) const { return impl.operator () (*e1, *e2); }
+//        private:
+//                HalfEdgeCompare impl;
+//        };
+
+        /*
+         * Works only if triangles are CCW ordered.
+         */
+        struct TriangleCompare {
+                TriangleCompare (IndexType a_) : a (a_), mode (REGULAR) {}
+                TriangleCompare (IndexType a_, IndexType b_) : a (a_), b (b_), mode (CUSTOM_AB) {}
+
+                bool operator () (TriangleType const *t1, TriangleType const *t2) const
+                {
+                        if (mode == REGULAR) {
+                                return opRegular (t1, t2);
+                        }
+                        else {
+                                return opCustomAB (t1, t2);
+                        }
+                }
+
+                bool opRegular (TriangleType const *t1, TriangleType const *t2) const
+                {
+                        SideEnum t1s = getVertexSide (*t1, a);
+                        IndexType n1 = getVertex (*t1, static_cast <SideEnum> ((t1s + 1) % 3));
+
+                        SideEnum t2s = getVertexSide (*t2, a);
+                        IndexType n2 = getVertex (*t2, static_cast <SideEnum> ((t2s + 1) % 3));
+
+                        return n1 < n2;
+                }
+
+                bool opCustomAB (TriangleType const *t1, TriangleType const *) const
+                {
+                        SideEnum t1s = getVertexSide (*t1, a);
+                        IndexType n1 = getVertex (*t1, static_cast <SideEnum> ((t1s + 1) % 3));
+                        return n1 < b;
+                }
+
+                IndexType a;
+                IndexType b;
+                enum Mode { REGULAR, CUSTOM_AB } mode;
         };
 
         struct TraingleRemovePredicate {
                 bool operator () (TriangleType const &t) { return !a (t) && !b (t) && !c (t); }
         };
 
-        void addHalfEdge (IndexType a, IndexType b, TriangleType *t);
+//        void addHalfEdge (IndexType a, IndexType b, TriangleType *t);
 
-        /**
-         * Sort edges, so thier triangles will be in order. Edges will be stroed in clockwise order.
-         */
-        void topologicalSort (HalfEdgeNode &sortedBC, IndexType a);
+//        /**
+//         * Sort edges, so thier triangles will be in order. Edges will be stroed in clockwise order.
+//         */
+//        void topologicalSort (HalfEdgeNode &sortedBC, IndexType a);
 
 private:
 
         Input const &input;
         TriangleIndex triangleIndex;
-        HalfEdgeIndex edgeIndex;
+//        HalfEdgeIndex edgeIndex;
         TriangleVector triangulation;
 
 };
@@ -367,10 +406,9 @@ DelaunayIndex<Input, Traits>::intersects (TriangleType const &t, EdgeType const 
 template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::findCrossingEdges (TriangleEdgeType const &edge, TriangleEdgeList *crossingEdges, TrianglePtrVector *crossingTriangles) const
 {
-        // TODO Tu zmienić na edgeIndex
         TrianglePtrVector const &incidentTriangles = triangleIndex[edge.a];
         EdgeType e = triangleEdgeToEdge (edge);
-        TriangleType const *start = NULL;
+        TriangleType *start = NULL;
         IntersectionInfo intersections;
 
         for (typename TrianglePtrVector::const_iterator k = incidentTriangles.begin (); k != incidentTriangles.end (); ++k) {
@@ -394,7 +432,7 @@ void DelaunayIndex<Input, Traits>::findCrossingEdges (TriangleEdgeType const &ed
         }
 
         SideEnum commonEdgeNumber = intersections.get<1> ();
-        Triangle const *next = start;
+        Triangle *next = start;
 
         while (true) {
                 TriangleEdgeType commonEdge = getEdge (*next, commonEdgeNumber);
@@ -440,7 +478,7 @@ void DelaunayIndex<Input, Traits>::findCrossingEdges (TriangleEdgeType const &ed
 template <typename Input, typename Traits>
 bool DelaunayIndex<Input, Traits>::twoTrianglesConvex (TriangleEdgeType const &firstDiagonal/*, TriangleType const &a, TriangleType const &b*/) const
 {
-        ConstTriangleEdgePair pair = getTrianglesForEdge (firstDiagonal);
+        ConstTrianglePair pair = getTrianglesForEdge (firstDiagonal);
         TriangleType const *a = pair.first;
         TriangleType const *b = pair.second;
         if (!a || !b) {
@@ -492,7 +530,7 @@ bool DelaunayIndex<Input, Traits>::pointInCircumcircle (TriangleType const &tria
 template <typename Input, typename Traits>
 bool DelaunayIndex<Input, Traits>::twoTrianglesNotDelaunay (TriangleEdgeType const &firstDiagonal) const
 {
-        ConstTriangleEdgePair pair = getTrianglesForEdge (firstDiagonal);
+        ConstTrianglePair pair = getTrianglesForEdge (firstDiagonal);
         TriangleType const *a = pair.first;
         TriangleType const *b = pair.second;
 
@@ -505,7 +543,7 @@ bool DelaunayIndex<Input, Traits>::twoTrianglesNotDelaunay (TriangleEdgeType con
 /****************************************************************************/
 
 template <typename Input, typename Traits>
-void DelaunayIndex<Input, Traits>::addTriangle (IndexType index, TriangleType const *triangle)
+void DelaunayIndex<Input, Traits>::addTriangle (IndexType index, TriangleType *triangle)
 {
         assert (getTriangleIndexSize () > index);
         triangleIndex[index].push_back (triangle);
@@ -514,17 +552,10 @@ void DelaunayIndex<Input, Traits>::addTriangle (IndexType index, TriangleType co
 /****************************************************************************/
 
 template <typename Input, typename Traits>
-void DelaunayIndex<Input, Traits>::addHalfEdge (IndexType i1, IndexType i2, TriangleType *t)
+void DelaunayIndex<Input, Traits>::addTriangle (TriangleType &triangle)
 {
-        assert (edgeIndex.size () > i1);
-        edgeIndex[i1].all.push_back (HalfEdge (i2, t));
-}
-
-/****************************************************************************/
-
-template <typename Input, typename Traits>
-void DelaunayIndex<Input, Traits>::addTriangle (TriangleType const &triangle)
-{
+//        TODO odkomentować!
+//        sortTriangleCCW (triangle);
         triangulation.push_back (triangle);
 
         // Update triangle index.
@@ -534,14 +565,30 @@ void DelaunayIndex<Input, Traits>::addTriangle (TriangleType const &triangle)
         addTriangle (a (*t), t);
         addTriangle (b (*t), t);
         addTriangle (c (*t), t);
+}
 
-        addHalfEdge (a (*t), b (*t), t);
-        addHalfEdge (b (*t), c (*t), t);
-        addHalfEdge (c (*t), a (*t), t);
+/****************************************************************************/
 
-        addHalfEdge (b (*t), a (*t), t);
-        addHalfEdge (c (*t), b (*t), t);
-        addHalfEdge (a (*t), c (*t), t);
+template <typename Input, typename Traits>
+void DelaunayIndex<Input, Traits>::sortTriangleCCW (TriangleType &triangle)
+{
+        IndexType t1 = a (triangle);
+        IndexType t2 = b (triangle);
+        IndexType t3 = c (triangle);
+
+        if (t1 < t2) {
+                std::swap (t1, t2);
+        }
+        if (t2 < t3) {
+                std::swap (t2, t3);
+        }
+        if (t1 < t2) {
+                std::swap (t1, t2);
+        }
+
+        a (triangle, t1);
+        b (triangle, t2);
+        c (triangle, t3);
 }
 
 /****************************************************************************/
@@ -550,8 +597,9 @@ template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::sortEdgeIndex ()
 {
         IndexType a = 0;
-        for (typename HalfEdgeIndex::iterator i = edgeIndex.begin (); i != edgeIndex.end (); ++i, ++a) {
-                topologicalSort (*i, a);
+        for (typename TriangleIndex::iterator i = triangleIndex.begin (), e = triangleIndex.end (); i != e; ++i, ++a) {
+                TrianglePtrVector &trianglesForIndex = *i;
+                std::sort (trianglesForIndex.begin (), trianglesForIndex.end (), TriangleCompare (a));
         }
 
 //        std::cerr << "--------TRIANGLE INDEX--------" << std::endl;
@@ -679,6 +727,7 @@ void DelaunayIndex<Input, Traits>::topologicalSort (HalfEdgeVector &input, Index
 }
 #endif
 
+#if 0
 /**
  * TODO pozbyć się kolekcji sorted i sortowac inplace w lex. Da się chyba.
  * TODO Powiązać HalfEdge w druga stronę (nie wiem po co, ale mają wskaxniki, to powiązać).
@@ -835,67 +884,6 @@ void DelaunayIndex<Input, Traits>::topologicalSort (HalfEdgeNode &node, IndexTyp
         }
 #endif
 }
-
-/****************************************************************************/
-#if 0
-template <typename Input, typename Traits>
-void DelaunayIndex<Input, Traits>::flip (TriangleEdgeType const &oldDiagonal, TriangleEdgeType *newDiagonal)
-{
-        TriangleEdgePair pair = getTrianglesForEdge (oldDiagonal);
-        TriangleType *f = pair.first;
-        TriangleType *s = pair.second;
-
-#if 0
-        std::cerr << "oldDiagonal : " << oldDiagonal << ", f : ";
-        if (f) { std::cerr << *f; } else { std::cerr << "NULL"; }
-        std::cerr << ", s : ";
-        if (s) { std::cerr << *s; } else { std::cerr << "NULL"; }
-        std::cerr << ", ptr : " << f << ", " << s << std::endl;
-#endif
-
-        if (!s) {
-                *newDiagonal = oldDiagonal;
-                std::cerr << "!s - return" << std::endl;
-                return;
-        }
-
-        SideEnum foa = getVertexSide (*f, oldDiagonal.a);
-        SideEnum fob = getVertexSide (*f, oldDiagonal.b);
-        SideEnum fc = otherThan (foa, fob);
-        IndexType fcIndex = getVertex (*f, fc);
-#if 0
-        std::cerr << "foa : " << (int)foa << ", fob : " << (int)fob << ", fc : " << (int)fc << ", fcIndex : " << fcIndex << std::endl;
-#endif
-        SideEnum soa = getVertexSide (*s, oldDiagonal.b);
-        SideEnum sob = getVertexSide (*s, oldDiagonal.a);
-        SideEnum sc = otherThan (soa, sob);
-        IndexType scIndex = getVertex (*s, sc);
-#if 0
-        std::cerr << "soa : " << (int)soa << ", sob : " << (int)sob << ", sc : " << (int)sc << ", scIndex : " << scIndex << std::endl;
-#endif
-        // TODO CCW sort of entire new triangle
-        this->setVertex (*f, fob, scIndex);
-
-//        krawędź fob - foa (czyli fc) <- trójkąt przylegly do sob - sc, czyli soa
-//      krawędź fob -fc <- s
-        setAdjacentTriangle (*f, fc, getAdjacentTriangle (*s, soa));
-        setAdjacentTriangle (*f, foa, s);
-
-        // TODO CCW sort of entire new triangle
-        // TODO wywlić this i upewnic się, że nie bierze globalnej.
-        this->setVertex (*s, sob, fcIndex);
-
-        //// Krawędź
-        setAdjacentTriangle (*s, sc, getAdjacentTriangle (*f, foa));
-        setAdjacentTriangle (*s, foa, f);
-
-        // TODO CCW sort
-        newDiagonal->a = fcIndex;
-        newDiagonal->b = scIndex;
-#if 0
-        std::cerr << "newDiagonal : " << *newDiagonal << ", f : " << *f << ", s : " << *s << std::endl;
-#endif
-}
 #endif
 
 /*
@@ -912,7 +900,7 @@ void DelaunayIndex<Input, Traits>::flip (TriangleEdgeType const &oldDiagonal, Tr
 template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::flip (TriangleEdgeType const &oldDiagonal, TriangleEdgeType *newDiagonal)
 {
-        TriangleEdgePair pair = getTrianglesForEdge (oldDiagonal);
+        TrianglePair pair = getTrianglesForEdge (oldDiagonal);
         TriangleType *top = pair.first;
         TriangleType *bottom = pair.second;
 #if 0
@@ -929,72 +917,68 @@ void DelaunayIndex<Input, Traits>::flip (TriangleEdgeType const &oldDiagonal, Tr
         }
 
         SideEnum topLeftVertexSide = getVertexSide (*top, oldDiagonal.a);
-        IndexType topLeftVertex = oldDiagonal.a;
         SideEnum topRightVertexSide = getVertexSide (*top, oldDiagonal.b);
-        IndexType topRightVertex = oldDiagonal.b;
         SideEnum topTopVertexSide = otherThan (topLeftVertexSide, topRightVertexSide);
         IndexType topTopVertex = getVertex (*top, topTopVertexSide);
 #if 0
         std::cerr << "foa : " << (int)topLeftVertexSide << ", fob : " << (int)topRightVertexSide << ", fc : " << (int)topTopVertexSide << ", fcIndex : " << topTopVertex << std::endl;
 #endif
         SideEnum bottomLeftVertexSide = getVertexSide (*bottom, oldDiagonal.a);
-        IndexType bottomLeftVertex = oldDiagonal.a;
         SideEnum bottomRightVertexSide = getVertexSide (*bottom, oldDiagonal.b);
-        IndexType bottomRightVertex = oldDiagonal.b;
         SideEnum bottomBottomVertexSide = otherThan (bottomRightVertexSide, bottomLeftVertexSide);
         IndexType bottomBottomVertex = getVertex (*bottom, bottomBottomVertexSide);
 #if 0
         std::cerr << "soa : " << (int)bottomRightVertexSide << ", sob : " << (int)bottomLeftVertexSide << ", sc : " << (int)bottomBottomVertexSide << ", scIndex : " << bottomBottomVertex << std::endl;
 #endif
 
-        // Znajdz
-        HalfEdge *heLeft = findEdge (topLeftVertex, topRightVertex, topTopVertex);
-        assert (heLeft);
-        HalfEdge *heRight = heLeft->getTwin ();
-        assert (heRight);
+        // Store before modification.
+        TriangleType *tmp = getAdjacentTriangle (*top, topLeftVertexSide);
 
-        // Styczne
-        HalfEdge *heLeftAdjacent = heLeft->getNext ();
-        HalfEdge *heRightAdjacent = heRight->getNext ();
+        // top becomes left.
+        this->setVertex (*top, topRightVertexSide, bottomBottomVertex);
+        setAdjacentTriangle (*top, topTopVertexSide, getAdjacentTriangle (*bottom, bottomRightVertexSide));
+        setAdjacentTriangle (*top, topLeftVertexSide, bottom);
 
-        // Złącz je - wyrzucając heLeft i heRight z łańcucha.
-        heLeftAdjacent->setNext (heRightAdjacent->getTwin ());
-        heRightAdjacent->setNext (heLeftAdjacent->getTwin ());
+        // bottom becomes right.
+        this->setVertex (*bottom, bottomLeftVertexSide, topTopVertex);
+        setAdjacentTriangle (*bottom, bottomBottomVertexSide, tmp);
+        setAdjacentTriangle (*bottom, bottomRightVertexSide, top);
 
-        // top becomes left
-        setVertex (*top, topRightVertexSide, bottomBottomVertex);
-        TriangleType *left = top;
-
-        // bottom becomes right
-        setVertex (*bottom, bottomLeftVertexSide, topTopVertex);
-        TriangleType *right = bottom;
-
-
-        // TODO CCW sort
+        // TODO CCW sort?
         newDiagonal->a = topTopVertex;
         newDiagonal->b = bottomBottomVertex;
 #if 0
         std::cerr << "newDiagonal : " << *newDiagonal << ", top : " << *top << ", bottom : " << *bottom << std::endl;
 #endif
 }
+
 /****************************************************************************/
 
-#if 0
-/*
- * TODO nieoptymalnie - on iteruje za każdym razem po wszystkich trójkątach przyległych to e.a i
- * szuka w nich e.b. Możnaby jakiś index, albo żeby triangleIndex zawierał jakąś strukturę, którą
- * można przeszukiwać.
- */
 template <typename Input, typename Traits>
-void DelaunayIndex<Input, Traits>::getTriaglesForEdge (TriangleEdgeType const &e, TriangleType **a, TriangleType **b) const
+typename DelaunayIndex<Input, Traits>::TrianglePair DelaunayIndex<Input, Traits>::getTrianglesForEdge (TriangleEdgeType const &e)
 {
+#if 0
+        TrianglePtrVector &trianglesForIndex = triangleIndex[e.a];
+        typename TrianglePtrVector::iterator i = std::lower_bound (trianglesForIndex.begin (), trianglesForIndex.end (), static_cast <TriangleType*> (0), TriangleCompare (e.a, e.b));
+
+        if (i == trianglesForIndex.end ()) {
+                return TrianglePair ();
+        }
+
+        TrianglePair foundTriangles;
+        foundTriangles.first = *i;
+        SideEnum aSide = getVertexSide (*foundTriangles.first, e.a);
+        SideEnum adj = static_cast <SideEnum> ((aSide - 1) % 3);
+        foundTriangles.second = getAdjacentTriangle (*foundTriangles.first, adj);
+        return foundTriangles;
+#else
         TrianglePtrVector const &triaglesA = triangleIndex[e.a];
-        *a = *b = 0;
+        TrianglePair foundTriangles;
 #if 0
         std::cerr << "Edge : " << e << std::endl;
 #endif
         for (typename TrianglePtrVector::const_iterator i = triaglesA.begin (); i != triaglesA.end (); ++i) {
-                Triangle const *t = *i;
+                Triangle *t = *i;
 #if 0
                 std::cerr << "getTrForE : " << *t;
 #endif
@@ -1002,19 +986,18 @@ void DelaunayIndex<Input, Traits>::getTriaglesForEdge (TriangleEdgeType const &e
                 TriangleEdgeType me = getEdge (*t, s);
 
                 if (me.a == e.b || me.b == e.b) {
-                        if (!*a) {
-                                // TODO get rid od cast
-                                *a = const_cast <TriangleType *> (t);
+                        if (!foundTriangles.first) {
+                                foundTriangles.first = t;
 #if 0
                                 std::cerr << " +++a";
 #endif
                         }
-                        else if (!*b) {
-                                *b = const_cast <TriangleType *> (t);
+                        else if (!foundTriangles.second) {
+                                foundTriangles.second = t;
 #if 0
                                 std::cerr << " +++b"  << std::endl;
 #endif
-                                return;
+                                return foundTriangles;
                         }
                 }
 
@@ -1022,74 +1005,9 @@ void DelaunayIndex<Input, Traits>::getTriaglesForEdge (TriangleEdgeType const &e
                 std::cerr  << std::endl;
 #endif
         }
-}
+
+        return foundTriangles;
 #endif
-
-template <typename Input, typename Traits>
-typename DelaunayIndex<Input, Traits>::HalfEdge *DelaunayIndex<Input, Traits>::findEdge (IndexType a, IndexType b)
-{
-        HalfEdgeList &all = edgeIndex[a].all;
-        typename HalfEdgeList::iterator i = std::lower_bound (all.begin (), all.end (), HalfEdge (), HalfEdgeCompare (a, b));
-
-        if (i == all.end ()) {
-                return 0;
-        }
-
-        return &*i;
-}
-
-/****************************************************************************/
-
-template <typename Input, typename Traits>
-typename DelaunayIndex<Input, Traits>::HalfEdge *DelaunayIndex<Input, Traits>::findEdge (IndexType a, IndexType b, IndexType c)
-{
-        HalfEdgeList &all = edgeIndex[a].all;
-        typename HalfEdgeList::iterator i = std::lower_bound (all.begin (), all.end (), HalfEdge (), HalfEdgeCompare (a, b, c));
-
-        if (i == all.end ()) {
-                return 0;
-        }
-
-        return &*i;
-}
-
-/****************************************************************************/
-
-template <typename Input, typename Traits>
-typename DelaunayIndex<Input, Traits>::TriangleEdgePair DelaunayIndex<Input, Traits>::getTrianglesForEdge (TriangleEdgeType const &e)
-{
-        HalfEdge *edge = findEdge (e.a, e.b);
-        TriangleEdgePair ret;
-
-        // Middle
-        if (edge->getTwin ()) {
-                ret.first = edge->getTriangle ();
-                ret.second = edge->getTwin ()->getTriangle ();
-        }
-        else {
-                // First
-                if (edge->getNext ()) {
-                       ret.first = edge->getTriangle ();
-                }
-                // Last
-                else {
-                        ret.second = edge->getTriangle ();
-                }
-        }
-#if 1
-        if (!ret.first || !ret.second) {
-                std::cerr << "!ret.first || !ret.second for edge : " << e << std::endl;
-                HalfEdgeList &all = edgeIndex[e.a].all;
-
-                for (typename HalfEdgeList::const_iterator j = all.begin (); j != all.end (); ++j) {
-                        HalfEdge const &edge = *j;
-                        std::cerr << e.a << ":" << edge.getVertexB () << ":" << edge.getVertexC (e.a) << " | ";
-                }
-                std::cerr << std::endl;
-
-        }
-#endif
-        return ret;
 }
 
 /****************************************************************************/
@@ -1098,52 +1016,16 @@ template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::setVertex (TriangleType &t, SideEnum s, IndexType v)
 {
         IndexType current = Delaunay::getVertex (t, s);
-
-#if 1 // TODO usunąć.
         TrianglePtrVector &triangles = triangleIndex[current];
         triangles.erase (std::remove (triangles.begin (), triangles.end (), &t), triangles.end ());
 
         Delaunay::setVertex (t, s, v);
         TrianglePtrVector &trianglesV = triangleIndex[v];
-        trianglesV.push_back (&t);
-#endif
 
-        // 1 Znaleźć node dla tego punktu.
-//        HalfEdgeNode &node = edgeIndex[current];
-
-        // 2 Usunąć ze starego indexu.
-        // 2.1 Zmienić powiązania w HalfEdgach.
-//        HalfEdgeList &all = node.all;
-
-//        typename HalfEdgeList::iterator i = std::lower_bound (all.begin (), all.end (), HalfEdge (), HalfEdgeCompare (e.a, e.b));
-//        assert (i != all.end ());
-//
-//        if (i->getTwin ()) {
-//                // Twin moze być zaraz za lub na koncu (jesli jesteśmy pierwsi).
-//                HalfEdgeList::iterator j;
-//                if (i == all.begin ()) {
-//                        j = all.end ();
-//                        --j;
-//                }
-//                else {
-//                        j = i;
-//                        ++j;
-//                }
-//
-//                assert (i->getVertexB () == j->getVertexB ());
-//
-//                HalfEdge *iN = i->getNext ();
-//                HalfEdge *iP = i->getTwin ()->getNext ();
-//
-//                HalfEdge *jN = j->getNext ();
-//                HalfEdge *jP = j->getTwin ()->getNext ();
-//        }
-//
-//        // 2.2 Usunąć 'i' i 'j' z all.
-//
-//        // 3 Dodać do nowego indeksu.
-//        // 3.1 Dodac do nowego all.
-//        // 3.2 Uaktualnic powiązania.
+        // insert zachowujący porządek sortowania.
+        typename TrianglePtrVector::iterator i = std::lower_bound (trianglesV.begin (), trianglesV.end (), &t, TriangleCompare (v));
+        trianglesV.insert (i, &t);
+//        trianglesV.push_back (&t);
 }
 
 /****************************************************************************/
@@ -1196,10 +1078,10 @@ std::ostream &operator<< (std::ostream &o, std::vector <Triangle> const &e)
         return o;
 }
 
-std::ostream &operator<< (std::ostream &o, std::vector <Triangle const *> const &e)
+std::ostream &operator<< (std::ostream &o, std::vector <Triangle *> const &e)
 {
         size_t cnt = 0;
-        for (std::vector <Triangle const *>::const_iterator i = e.begin (); i != e.end (); ++i, ++cnt) {
+        for (std::vector <Triangle *>::const_iterator i = e.begin (); i != e.end (); ++i, ++cnt) {
                 o << **i;
 
                 if (i + 1 != e.end ()) {

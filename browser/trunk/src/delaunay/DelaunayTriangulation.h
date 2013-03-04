@@ -101,11 +101,6 @@ public:
         typedef typename DelaunayIndexType::TriangleIndex TriangleIndex;
         typedef typename DelaunayIndexType::IntersectionInfo IntersectionInfo;
 
-        typedef typename DelaunayIndexType::HalfEdge HalfEdge;
-        typedef typename DelaunayIndexType::HalfEdgeVector HalfEdgeVector;
-        typedef typename DelaunayIndexType::HalfEdgeList HalfEdgeList;
-        typedef typename DelaunayIndexType::HalfEdgeIndex HalfEdgeIndex;
-
         typedef triangulation_voronoi_diagram::vertex_type vertex_type;
         typedef triangulation_voronoi_diagram::edge_type edge_type;
         typedef triangulation_voronoi_diagram::cell_type cell_type;
@@ -292,10 +287,10 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                 TriangleEdgeType const &missingConstraint = *i;
 
 #if 0
-//                if (missingConstraint.a != 450) {
+                if (missingConstraint.a != 460) {
 //                if (missingConstraint.a != 119) {
-//                        continue;
-//                }
+                        continue;
+                }
                 std::cerr << "Missing constraint : " << missingConstraint << std::endl;
 #endif
 
@@ -332,7 +327,6 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
 
                         // Paragraph 3.2
                         if (!index.twoTrianglesConvex (currentCrossingEdge)) {
-
                                 crossingEdges.push_back (currentCrossingEdge);
 
 #if 0
@@ -344,6 +338,7 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                                          * TODO Jeśli jest tylko jedna przecinająca dany constraint, to jeśli convex,
                                          * to flip, a jeśli nie, to nie wiem, ale coś trzeba tu zrobić.
                                          */
+                                        assert (0); // not implemented TODO
                                 }
 
                                 continue;
@@ -381,7 +376,7 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                 for (typename TriangleEdgeList::iterator i = newEdges.begin (); i != newEdges.end (); ++i) {
                         TriangleEdgeType &newEdge = *i;
 
-                        if (newEdge == missingConstraint) {
+                        if (newEdge.covers (missingConstraint)) {
                                 continue;
                         }
 
