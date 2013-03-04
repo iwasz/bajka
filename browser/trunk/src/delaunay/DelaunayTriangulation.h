@@ -338,7 +338,7 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                                          * TODO Jeśli jest tylko jedna przecinająca dany constraint, to jeśli convex,
                                          * to flip, a jeśli nie, to nie wiem, ale coś trzeba tu zrobić.
                                          */
-                                        assert (0); // not implemented TODO
+                                        assert (0); // not implemented TODO - swoją drogą - to jest chyab niemożliwe (jeśli program dobrze działa)?!
                                 }
 
                                 continue;

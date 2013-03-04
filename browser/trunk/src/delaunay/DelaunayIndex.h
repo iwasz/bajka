@@ -554,13 +554,11 @@ void DelaunayIndex<Input, Traits>::addTriangle (IndexType index, TriangleType *t
 template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::addTriangle (TriangleType &triangle)
 {
-//        TODO odkomentować!
-//        sortTriangleCCW (triangle);
+        sortTriangleCCW (triangle);
         triangulation.push_back (triangle);
 
         // Update triangle index.
         TriangleType *t = &triangulation.back ();
-//        std::cerr << triangulation.size () << ", " << triangle << ", " << t << std::endl;
 
         addTriangle (a (*t), t);
         addTriangle (b (*t), t);
@@ -576,13 +574,13 @@ void DelaunayIndex<Input, Traits>::sortTriangleCCW (TriangleType &triangle)
         IndexType t2 = b (triangle);
         IndexType t3 = c (triangle);
 
-        if (t1 < t2) {
+        if (t1 > t2) {
                 std::swap (t1, t2);
         }
-        if (t2 < t3) {
+        if (t2 > t3) {
                 std::swap (t2, t3);
         }
-        if (t1 < t2) {
+        if (t1 > t2) {
                 std::swap (t1, t2);
         }
 
@@ -957,7 +955,7 @@ void DelaunayIndex<Input, Traits>::flip (TriangleEdgeType const &oldDiagonal, Tr
 template <typename Input, typename Traits>
 typename DelaunayIndex<Input, Traits>::TrianglePair DelaunayIndex<Input, Traits>::getTrianglesForEdge (TriangleEdgeType const &e)
 {
-#if 0
+#if 1
         TrianglePtrVector &trianglesForIndex = triangleIndex[e.a];
         typename TrianglePtrVector::iterator i = std::lower_bound (trianglesForIndex.begin (), trianglesForIndex.end (), static_cast <TriangleType*> (0), TriangleCompare (e.a, e.b));
 
