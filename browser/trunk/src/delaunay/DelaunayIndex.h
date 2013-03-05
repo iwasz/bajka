@@ -278,13 +278,19 @@ private:
 
                 bool opRegular (TriangleType const *t1, TriangleType const *t2) const
                 {
-                        SideEnum t1s = getVertexSide (*t1, a);
-                        IndexType n1 = getVertex (*t1, static_cast <SideEnum> ((t1s + 1) % 3));
+                        SideEnum a1s = getVertexSide (*t1, a);
+                        IndexType b1 = getVertex (*t1, static_cast <SideEnum> ((a1s + 1) % 3));
 
-                        SideEnum t2s = getVertexSide (*t2, a);
-                        IndexType n2 = getVertex (*t2, static_cast <SideEnum> ((t2s + 1) % 3));
+                        SideEnum a2s = getVertexSide (*t2, a);
+                        IndexType b2 = getVertex (*t2, static_cast <SideEnum> ((a2s + 1) % 3));
 
-                        return n1 < n2;
+                        if (b1 == b2) {
+                                IndexType c1 = getVertex (*t1, static_cast <SideEnum> ((a1s + 2) % 3));
+                                IndexType c2 = getVertex (*t2, static_cast <SideEnum> ((a2s + 2) % 3));
+                                return c1 < c2;
+                        }
+
+                        return b1 < b2;
                 }
 
                 bool opCustomAB (TriangleType const *t1, TriangleType const *) const
