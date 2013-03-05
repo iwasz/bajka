@@ -326,6 +326,7 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                         crossingEdges.pop_front ();
 
                         // Paragraph 3.2
+                        if (currentCrossingEdge.covers (TriangleEdgeType (549, 8)))
                         if (!index.twoTrianglesConvex (currentCrossingEdge)) {
                                 crossingEdges.push_back (currentCrossingEdge);
 
