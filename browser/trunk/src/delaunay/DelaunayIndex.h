@@ -187,9 +187,9 @@ public:
 private:
 
         /*
-         * Sort vertices of triangle so value of index a is < b < c.
+         * Sort vertices of triangle so value of index a is =< b =< c (asc = true), or a >= b >= c otherwise.
          */
-        void sortTriangleCCW (TriangleType &triangle);
+        void sortTriangle (TriangleType &triangle, bool asc = true);
 
         /*
          *
@@ -560,7 +560,8 @@ void DelaunayIndex<Input, Traits>::addTriangle (IndexType index, TriangleType *t
 template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::addTriangle (TriangleType &triangle)
 {
-        sortTriangleCCW (triangle);
+        // TODO sortTriangle powinno korzystać z jakiejs flagi w  DelaunayIndex dotyczacej sortowania CCW/CW.
+        sortTriangle (triangle, true);
         triangulation.push_back (triangle);
 
         // Update triangle index.
@@ -574,20 +575,33 @@ void DelaunayIndex<Input, Traits>::addTriangle (TriangleType &triangle)
 /****************************************************************************/
 
 template <typename Input, typename Traits>
-void DelaunayIndex<Input, Traits>::sortTriangleCCW (TriangleType &triangle)
+void DelaunayIndex<Input, Traits>::sortTriangle (TriangleType &triangle, bool asc)
 {
         IndexType t1 = a (triangle);
         IndexType t2 = b (triangle);
         IndexType t3 = c (triangle);
 
-        if (t1 > t2) {
-                std::swap (t1, t2);
+        if (asc) {
+                if (t1 > t2) {
+                        std::swap (t1, t2);
+                }
+                if (t2 > t3) {
+                        std::swap (t2, t3);
+                }
+                if (t1 > t2) {
+                        std::swap (t1, t2);
+                }
         }
-        if (t2 > t3) {
-                std::swap (t2, t3);
-        }
-        if (t1 > t2) {
-                std::swap (t1, t2);
+        else {
+                if (t1 < t2) {
+                        std::swap (t1, t2);
+                }
+                if (t2 < t3) {
+                        std::swap (t2, t3);
+                }
+                if (t1 < t2) {
+                        std::swap (t1, t2);
+                }
         }
 
         a (triangle, t1);
@@ -961,7 +975,7 @@ void DelaunayIndex<Input, Traits>::flip (TriangleEdgeType const &oldDiagonal, Tr
 template <typename Input, typename Traits>
 typename DelaunayIndex<Input, Traits>::TrianglePair DelaunayIndex<Input, Traits>::getTrianglesForEdge (TriangleEdgeType const &e)
 {
-#if 1
+#if 0
         TrianglePtrVector &trianglesForIndex = triangleIndex[e.a];
         typename TrianglePtrVector::iterator i = std::lower_bound (trianglesForIndex.begin (), trianglesForIndex.end (), static_cast <TriangleType*> (0), TriangleCompare (e.a, e.b));
 
@@ -1004,7 +1018,6 @@ typename DelaunayIndex<Input, Traits>::TrianglePair DelaunayIndex<Input, Traits>
                                 return foundTriangles;
                         }
                 }
-
 #if 0
                 std::cerr  << std::endl;
 #endif
