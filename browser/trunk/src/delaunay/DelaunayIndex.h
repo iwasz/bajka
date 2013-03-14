@@ -17,17 +17,13 @@
 #include <vector>
 #include <list>
 #include <boost/tuple/tuple.hpp>
+#include <map>
 
 namespace Delaunay {
 
 /*
- * TODO operqacje
- * - addTriangle - dodaje do triangulacji i uaktualnia wszystkie indeksy.
- * - numTriangles - ile jest aktualnie trójkatów w triangulacji.
- * -
- *
- * Methods in this calss are non-const because they were not intended to be used by user. It is not
- * a part of an API.
+ * This is mutable, R/W index, thus most of ots methods are non const. It is meant to be a private
+ * implementation detail not accessible to user.
  */
 template <typename Input, typename Traits = DelaunayTriangulationTraits <> >
 class DelaunayIndex {
@@ -44,7 +40,7 @@ public:
         typedef std::list <TriangleEdgeType> TriangleEdgeList;
         typedef std::vector <TriangleEdgeType> TriangleEdgeVector;
         typedef std::vector <TriangleType> TriangleVector;
-        typedef std::vector <TriangleType *> TrianglePtrVector; // TODO Data structure not optimized. Maybe some contiguous memory region can be used to eliminate memory partition and std::vector overhead.
+        typedef std::vector <TriangleType *> TrianglePtrVector;
         typedef std::vector <TrianglePtrVector> TriangleIndex;
         typedef boost::tuple <int, SideEnum, SideEnum> IntersectionInfo;
 
@@ -101,8 +97,8 @@ public:
         {
                 triangleIndex.resize (input.size ());
                 // TODO ***KRYTYCZNE*** ustawić tu tyle ile ma być. Da się to wyliczyć na początku!?
-                std::cerr << input.size () << std::endl;
                 triangulation.reserve (input.size () * 10);
+//                adjacentTrianglesIndex.reserve (triangulation.size ());
         }
 
         TriangleVector const &getTriangulation () const { return triangulation; }
@@ -142,8 +138,9 @@ public:
          * Input : this->triangulation (performed earlier), edge to check for. Edge must have endpoints
          * in this->input.
          * Output : list of edges which intersects with edge.
+         * Non const because it returns R-W data by output parameter 'crossingTriangles'.
          */
-        void findCrossingEdges (TriangleEdgeType const &edge, TriangleEdgeList *crossingEdges, TrianglePtrVector *crossingTriangles) const;
+        void findCrossingEdges (TriangleEdgeType const &edge, TriangleEdgeList *crossingEdges, TrianglePtrVector *crossingTriangles);
 
         /**
          * First tuple element : number of intersections (0, 1 or 2).
@@ -318,10 +315,23 @@ private:
 
 private:
 
+        // Input points.
         Input const &input;
+        // Adjacency list - points -> triangles.
         TriangleIndex triangleIndex;
-//        HalfEdgeIndex edgeIndex;
+        // Triangles in triangulation in random order.
         TriangleVector triangulation;
+
+//        typedef TriangleType *AdjacentTriangles[3];
+
+        struct AdjacentTriangles {
+                AdjacentTriangles () : tA (0), tB (0), tC (0) {}
+                TriangleType *tA, *tB, *tC;
+        };
+        typedef std::map <TriangleType const *, AdjacentTriangles> AdjacentTrianglesIndex;
+
+        // 3 (or less) adjacent triangles for every single triangle.
+        AdjacentTrianglesIndex adjacentTrianglesIndex;
 
 };
 
@@ -329,16 +339,17 @@ private:
 
 template <typename Input, typename Traits>
 typename DelaunayIndex <Input, Traits>::TriangleType *
-DelaunayIndex <Input, Traits>::getAdjacentTriangle (TriangleType const &triangle, SideEnum side)
+DelaunayIndex <Input, Traits>::getAdjacentTriangle (TriangleType const &t, SideEnum side)
 {
-        // TODO infromation about adjacent triangles shall be stored outside the Triangle itself. Some external vector is need.
+        AdjacentTriangles &at = adjacentTrianglesIndex[&t];
+
         switch (side) {
         case A:
-                return triangle.tA;
+                return at.tA;
         case B:
-                return triangle.tB;
+                return at.tB;
         case C:
-                return triangle.tC;
+                return at.tC;
         default:
                 return 0;
         }
@@ -348,15 +359,17 @@ DelaunayIndex <Input, Traits>::getAdjacentTriangle (TriangleType const &triangle
 template <typename Input, typename Traits>
 void DelaunayIndex <Input, Traits>::setAdjacentTriangle (TriangleType &t, SideEnum s, TriangleType *a)
 {
+        AdjacentTriangles &at = adjacentTrianglesIndex[&t];
+
         switch (s) {
         case A:
-                t.tA = a;
+                at.tA = a;
                 break;
         case B:
-                t.tB = a;
+                at.tB = a;
                 break;
         case C:
-                t.tC = a;
+                at.tC = a;
                 break;
         default:
                 break;
@@ -410,7 +423,7 @@ DelaunayIndex<Input, Traits>::intersects (TriangleType const &t, EdgeType const 
 /****************************************************************************/
 
 template <typename Input, typename Traits>
-void DelaunayIndex<Input, Traits>::findCrossingEdges (TriangleEdgeType const &edge, TriangleEdgeList *crossingEdges, TrianglePtrVector *crossingTriangles) const
+void DelaunayIndex<Input, Traits>::findCrossingEdges (TriangleEdgeType const &edge, TriangleEdgeList *crossingEdges, TrianglePtrVector *crossingTriangles)
 {
         TrianglePtrVector const &incidentTriangles = triangleIndex[edge.a];
         EdgeType e = triangleEdgeToEdge (edge);
@@ -442,12 +455,7 @@ void DelaunayIndex<Input, Traits>::findCrossingEdges (TriangleEdgeType const &ed
 
         while (true) {
                 TriangleEdgeType commonEdge = getEdge (*next, commonEdgeNumber);
-//                CrossingEdge crossingEdge;
-//                crossingEdge.template get<0> () = commonEdge;
-//                crossingEdge.template get<1> () = next;
-                // TODO - rozwiązać sprawę z const / nie cost.
-                next = const_cast <DelaunayIndex *> (this)->getAdjacentTriangle (*next, commonEdgeNumber);
-//                crossingEdge.template get<2> () = next;
+                next = getAdjacentTriangle (*next, commonEdgeNumber);
                 commonEdgeNumber = getEdgeSide (*next, commonEdge);
 
                 // Musi być, bo gdyby nie było, to by znaczyło, że constraint wychodzi poza zbiór punktów (ma jeden koniec gdzieś w powietrzu).
@@ -1064,30 +1072,30 @@ std::ostream &operator<< (std::ostream &o, std::vector <Triangle> const &e)
         for (typename TriangleVector::const_iterator i = e.begin (); i != e.end (); ++i, ++cnt) {
                 o << cnt << ". " << *i << " A=";
 
-                if (i->tA) {
-                        o << *(i->tA);
-                }
-                else {
-                        o << "NULL";
-                }
-
-                o << " B=";
-
-                if (i->tB) {
-                        o << *(i->tB);
-                }
-                else {
-                        o << "NULL";
-                }
-
-                o << " C=";
-
-                if (i->tC) {
-                        o << *(i->tC);
-                }
-                else {
-                        o << "NULL";
-                }
+//                if (i->tA) {
+//                        o << *(i->tA);
+//                }
+//                else {
+//                        o << "NULL";
+//                }
+//
+//                o << " B=";
+//
+//                if (i->tB) {
+//                        o << *(i->tB);
+//                }
+//                else {
+//                        o << "NULL";
+//                }
+//
+//                o << " C=";
+//
+//                if (i->tC) {
+//                        o << *(i->tC);
+//                }
+//                else {
+//                        o << "NULL";
+//                }
 
                 o << "\n";
         }

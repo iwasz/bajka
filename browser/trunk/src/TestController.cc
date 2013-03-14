@@ -337,7 +337,7 @@ void TestController::onPreUpdate (Event::UpdateEvent *e, Model::IModel *m, View:
 
         typedef Delaunay::DelaunayTriangulation <Input> MyTriagulation;
         MyTriagulation cdt (input/*, &voronoi, &delaunay, &crossing*/);
-        cdt.constructDelaunay (&crossing);
+        cdt.constructDelaunay (/*&crossing*/);
 
         MyTriagulation::TriangleVector const &triangulation = cdt.getTriangulation ();
 

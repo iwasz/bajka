@@ -10,6 +10,7 @@
 #define DELAUNAYPOINT_H_
 
 #include <boost/polygon/isotropy.hpp>
+#include <boost/polygon/point_concept.hpp>
 #include <boost/math/special_functions/round.hpp>
 
 namespace Delaunay {
@@ -55,12 +56,6 @@ struct PointTraits {
         {
                 return point.get (orient);
         }
-
-        static inline IntCoordinateType get (const T& point, boost::polygon::orientation_2d orient)
-        {
-                return (orient == boost::polygon::HORIZONTAL) ? boost::math::iround (get (point, X)) : boost::math::iround (get (point, Y));
-        }
-
 };
 
 template<typename T>
@@ -82,14 +77,11 @@ struct PointMutableTraits {
         }
 };
 
-// TODO get rod of this stupid hamespace
-namespace H {
-
 /**
  * Helper accessor.
  */
 template <typename T>
-typename PointTraits <T>::CoordinateType x (T const &point)
+typename PointTraits <T>::CoordinateType getX (T const &point)
 {
         return PointTraits <T>::get (point, X);
 }
@@ -98,7 +90,7 @@ typename PointTraits <T>::CoordinateType x (T const &point)
  * Helper accessor.
  */
 template <typename T>
-void x (T const &point, typename PointTraits <T>::CoordinateType p)
+void setX (T const &point, typename PointTraits <T>::CoordinateType p)
 {
         PointMutableTraits <T>::set (point, X, p);
 }
@@ -107,7 +99,7 @@ void x (T const &point, typename PointTraits <T>::CoordinateType p)
  * Helper accessor.
  */
 template <typename T>
-typename PointTraits <T>::CoordinateType y (T const &point)
+typename PointTraits <T>::CoordinateType getY (T const &point)
 {
         return PointTraits <T>::get (point, Y);
 }
@@ -116,12 +108,41 @@ typename PointTraits <T>::CoordinateType y (T const &point)
  * Helper accessor.
  */
 template <typename T>
-void y (T const &point, typename PointTraits <T>::CoordinateType p)
+void setY (T const &point, typename PointTraits <T>::CoordinateType p)
 {
         PointMutableTraits <T>::set (point, Y, p);
 }
 
-} // namespace Helper
+//} // namespace Helper
 } // namespace Delaunay
+
+namespace boost {
+namespace polygon {
+
+template <>
+struct geometry_concept<Delaunay::Point> {
+        typedef point_concept type;
+};
+
+template<>
+struct point_traits<Delaunay::Point> {
+        typedef Delaunay::PointTraits <Delaunay::Point> DelaunayPointTraitsType;
+        typedef DelaunayPointTraitsType::IntCoordinateType coordinate_type;
+
+        /*
+         * TODO sprawdzić jak często to się wykonuje i skąd. Jak tylko w kroku inicjacji, to OK.
+         * Dał bym tutaj też mnożnik, żeby uniknąć sytuacji, kiedy dwa zmiennoprzecinkowe punkty
+         * wejściowe, które są bardzo blisko siebie zostaną przez poniższy get zwróceone jako
+         * ten sam punkt. Można albo mnożyć przez stała (np 1000), albo znaleźć najmniejszą różnicę
+         * mięczy dwoma współrzednymi w danych wejściowych i przeskalować je odpowiednio.
+         */
+        static inline coordinate_type get (const Delaunay::Point& point, orientation_2d orient)
+        {
+                return (orient == HORIZONTAL) ? boost::math::iround (Delaunay::getX (point)) : boost::math::iround (Delaunay::getY (point));
+        }
+};
+
+}
+}
 
 #endif /* DELAUNAYPOINT_H_ */
