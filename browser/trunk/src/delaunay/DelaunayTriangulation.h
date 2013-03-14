@@ -15,39 +15,10 @@
 #include <boost/math/special_functions/round.hpp>
 #ifndef NDEBUG
 #include <boost/timer/timer.hpp>
-// TODO REMOVE THIS!!
-#include <geometry/LineString.h>
+//#include <geometry/LineString.h>
 #endif
 
-namespace boost {
-namespace polygon {
-
-// TODO te traitsy nie mogą tak być!
-template <>
-struct geometry_concept<Delaunay::Point> {
-        typedef point_concept type;
-};
-
-template<>
-struct point_traits<Delaunay::Point> {
-        typedef Delaunay::PointTraits <Delaunay::Point> DelaunayPointTraitsType;
-        typedef DelaunayPointTraitsType::IntCoordinateType coordinate_type;
-
-        /*
-         * TODO sprawdzić jak często to się wykonuje i skąd. Jak tylko w kroku inicjacji, to OK.
-         * Dał bym tutaj też mnożnik, żeby uniknąć sytuacji, kiedy dwa zmiennoprzecinkowe punkty
-         * wejściowe, które są bardzo blisko siebie zostaną przez poniższy get zwróceone jako
-         * ten sam punkt. Można albo mnożyć przez stała (np 1000), albo znaleźć najmniejszą różnicę
-         * mięczy dwoma współrzednymi w danych wejściowych i przeskalować je odpowiednio.
-         */
-        static inline coordinate_type get (const Delaunay::Point& point, orientation_2d orient)
-        {
-                return (orient == HORIZONTAL) ? boost::math::iround (Delaunay::H::x (point)) : boost::math::iround (Delaunay::H::y (point));
-        }
-};
-
-}
-}
+namespace Delaunay {
 
 /**
  *
@@ -72,10 +43,6 @@ struct triangulation_voronoi_diagram_traits {
  *
  */
 typedef boost::polygon::voronoi_diagram<double, triangulation_voronoi_diagram_traits <double> > triangulation_voronoi_diagram;
-
-/*##########################################################################*/
-
-namespace Delaunay {
 
 /**
  * Input must be in COUNTER CLOCKWISE order.
@@ -107,8 +74,7 @@ public:
 
         DelaunayTriangulation (Input const &i) : input (i), index (i) {}
 
-        // TODO remove crossing
-        void constructDelaunay (Geometry::LineString *crossing);
+        void constructDelaunay (/*Geometry::LineString *crossing*/);
 
         TriangleVector const &getTriangulation () const { return index.getTriangulation (); }
 
@@ -143,7 +109,7 @@ private:
 /****************************************************************************/
 
 template <typename Input, typename Traits>
-void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineString *crossing)
+void DelaunayTriangulation<Input, Traits>::constructDelaunay (/*Geometry::LineString *crossing*/)
 {
         triangulation_voronoi_diagram vd;
 
@@ -221,13 +187,13 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
 
                         // Sprawdzić którym bokiem się stykają i ustawić.
                         if (!hasVertex (adjacentTriangle, triangle.a)) {
-                                triangle.tA = &adjacentTriangle; // TODO external index
+                                index.setAdjacentTriangle(triangle, A, &adjacentTriangle);
                         }
                         else if (!hasVertex (adjacentTriangle, triangle.b)) {
-                                triangle.tB = &adjacentTriangle; // TODO external index
+                                index.setAdjacentTriangle(triangle, B, &adjacentTriangle);
                         }
                         else if (!hasVertex (adjacentTriangle, triangle.c)) {
-                                triangle.tC = &adjacentTriangle; // TODO external index
+                                index.setAdjacentTriangle(triangle, C, &adjacentTriangle);
                         }
 
                         ++edgeCnt;
@@ -243,7 +209,6 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
         /*
          * TODO This is loop made for simple polygons (without holes). It is also possible to make
          * loop for discrete list of constraints (that are not linked).
-         * TODO Cały kod w środku zewnętrznej pętli to jest index.getTrianglesForEdge.
          *
          * W tym kawałku chodzi o to, żeby znaleźć wszystkie constrainty. Szukamy w triangulacji
          * krawędzi o wierzchołkach [i, i+1]. Jeśli jakiegoś nie ma, to dodajemy go do listy
@@ -304,8 +269,7 @@ void DelaunayTriangulation<Input, Traits>::constructDelaunay (Geometry::LineStri
                 std::cerr << "Constraint " << missingConstraint << " crosses : " << crossingTriangles << std::endl;
 #endif
 
-#if 1
-                // TODO Debug output - to się może przydac.
+#if 0
                 for (typename TrianglePtrVector::const_iterator i = crossingTriangles.begin (); i != crossingTriangles.end (); ++i) {
                         Delaunay::Point const &a = input[Delaunay::a (**i)];
                         Delaunay::Point const &b = input[Delaunay::b (**i)];

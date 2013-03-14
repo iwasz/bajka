@@ -26,7 +26,7 @@ struct Edge {
 template <typename P>
 float getArea (P const &a, P const &b, P const &c)
 {
-        return (H::x (b) - H::x (a)) * (H::y (c) - H::y (a)) - (H::x (c) - H::x (a)) * (H::y (b) - H::y (a));
+        return (getX (b) - getX (a)) * (getY (c) - getY (a)) - (getX (c) - getX (a)) * (getY (b) - getY (a));
 }
 
 template <typename P>

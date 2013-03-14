@@ -28,7 +28,7 @@ struct Triangle {
 
         typedef unsigned int IndexType;
 
-        Triangle (IndexType x = 0, IndexType y = 0, IndexType z = 0) : a (x), b (y), c (z), tA (0), tB (0), tC (0) {}
+        Triangle (IndexType x = 0, IndexType y = 0, IndexType z = 0) : a (x), b (y), c (z) {}
 
         IndexType get (SideEnum s) const
         {
@@ -63,9 +63,6 @@ struct Triangle {
 
         // Endpoints of a triangle.
         IndexType a, b, c;
-
-        // Adjacent triangles (opposite side of a, b, c). TODO remove
-        Triangle *tA, *tB, *tC;
 };
 
 /**
