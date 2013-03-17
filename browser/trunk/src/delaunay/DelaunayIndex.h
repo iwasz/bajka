@@ -184,9 +184,9 @@ public:
 private:
 
         /*
-         * Sort vertices of triangle so value of index a is =< b =< c (asc = true), or a >= b >= c otherwise.
+         * Sort vertices of triangle in CCW order.
          */
-        void sortTriangle (TriangleType &triangle, bool asc = true);
+        void sortTriangle (TriangleType &triangle);
 
         /*
          *
@@ -568,8 +568,7 @@ void DelaunayIndex<Input, Traits>::addTriangle (IndexType index, TriangleType *t
 template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::addTriangle (TriangleType &triangle)
 {
-        // TODO sortTriangle powinno korzystać z jakiejs flagi w  DelaunayIndex dotyczacej sortowania CCW/CW.
-        sortTriangle (triangle, true);
+        sortTriangle (triangle);
         triangulation.push_back (triangle);
 
         // Update triangle index.
@@ -583,7 +582,7 @@ void DelaunayIndex<Input, Traits>::addTriangle (TriangleType &triangle)
 /****************************************************************************/
 
 template <typename Input, typename Traits>
-void DelaunayIndex<Input, Traits>::sortTriangle (TriangleType &triangle, bool asc)
+void DelaunayIndex<Input, Traits>::sortTriangle (TriangleType &triangle)
 {
         IndexType t1 = a (triangle);
         IndexType t2 = b (triangle);
@@ -595,7 +594,7 @@ void DelaunayIndex<Input, Traits>::sortTriangle (TriangleType &triangle, bool as
 
         double det = getX (ta) * getY (tb) + getX (tb) * getY (tc) + getX (tc) * getY (ta) - getY (tb) * getX (tc) - getY (tc) * getX (ta) - getY (ta) * getX (tb);
 
-        if (det < 0) { // already CCW
+        if (det > 0) { // already CCW
                 return;
         }
 
@@ -908,7 +907,6 @@ void DelaunayIndex<Input, Traits>::topologicalSort (HalfEdgeNode &node, IndexTyp
  *       \/                 \|/
  *     bottom
  *
- * TODO CCW sort of entire new triangle
  */
 template <typename Input, typename Traits>
 void DelaunayIndex<Input, Traits>::flip (TriangleEdgeType const &oldDiagonal, TriangleEdgeType *newDiagonal)
@@ -957,7 +955,6 @@ void DelaunayIndex<Input, Traits>::flip (TriangleEdgeType const &oldDiagonal, Tr
         setAdjacentTriangle (*bottom, bottomBottomVertexSide, tmp);
         setAdjacentTriangle (*bottom, bottomRightVertexSide, top);
 
-        // TODO CCW sort?
         newDiagonal->a = topTopVertex;
         newDiagonal->b = bottomBottomVertex;
 #if 0
