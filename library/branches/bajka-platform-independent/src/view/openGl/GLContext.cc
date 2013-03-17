@@ -67,7 +67,11 @@ void GLContext::init (Util::Config *config)
          * image. To enable and disable elimination of back-facing polygons, call glEnable and glDisable with
          * argument GL_CULL_FACE.
          */
-        glDisable (GL_CULL_FACE);
+        glEnable (GL_CULL_FACE);
+
+        // By default, counterclockwise polygons are taken to be front-facing.
+        glCullFace (GL_FRONT);
+
         glDisable(GL_DEPTH_TEST);
         glEnable (GL_TEXTURE_2D);
         glEnable (GL_BLEND);
