@@ -589,32 +589,19 @@ void DelaunayIndex<Input, Traits>::sortTriangle (TriangleType &triangle, bool as
         IndexType t2 = b (triangle);
         IndexType t3 = c (triangle);
 
-        if (asc) {
-                if (t1 > t2) {
-                        std::swap (t1, t2);
-                }
-                if (t2 > t3) {
-                        std::swap (t2, t3);
-                }
-                if (t1 > t2) {
-                        std::swap (t1, t2);
-                }
-        }
-        else {
-                if (t1 < t2) {
-                        std::swap (t1, t2);
-                }
-                if (t2 < t3) {
-                        std::swap (t2, t3);
-                }
-                if (t1 < t2) {
-                        std::swap (t1, t2);
-                }
+        PointType const &ta = input[t1];
+        PointType const &tb = input[t2];
+        PointType const &tc = input[t3];
+
+        double det = getX (ta) * getY (tb) + getX (tb) * getY (tc) + getX (tc) * getY (ta) - getY (tb) * getX (tc) - getY (tc) * getX (ta) - getY (ta) * getX (tb);
+
+        if (det < 0) { // already CCW
+                return;
         }
 
-        a (triangle, t1);
-        b (triangle, t2);
-        c (triangle, t3);
+        // Not CCW - swap
+        b (triangle, t3);
+        c (triangle, t2);
 }
 
 /****************************************************************************/
