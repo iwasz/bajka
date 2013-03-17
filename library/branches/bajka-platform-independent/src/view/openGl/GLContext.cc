@@ -70,7 +70,7 @@ void GLContext::init (Util::Config *config)
         glEnable (GL_CULL_FACE);
 
         // By default, counterclockwise polygons are taken to be front-facing.
-        glCullFace (GL_FRONT);
+        glCullFace (GL_BACK); // Default, so redundant
 
         glDisable(GL_DEPTH_TEST);
         glEnable (GL_TEXTURE_2D);
